@@ -929,6 +929,7 @@ BOOL ddraw_flip_surface_export ( void )
 		case GUNSHIP_TYPE_HOKUM:
 		case GUNSHIP_TYPE_APACHE:
 		case GUNSHIP_TYPE_BLACKHAWK:
+		case GUNSHIP_TYPE_VIPER:
 		default:
 			dst.left=command_line_export_mfd_left_pos[0];
 			dst.top=command_line_export_mfd_left_pos[1];

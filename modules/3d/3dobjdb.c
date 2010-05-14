@@ -641,7 +641,7 @@ static int get_object ( FILE *fp )
 	sprintf ( new_filename, "%s\\%s.EEO", prefix, ptr );
 	if ( !read_object ( &objects_3d_data[objid], new_filename ) )
 	{
-		debug_log("failed to load object: %s", new_filename);
+		debug_log ( "failed to load object: %s", new_filename );
 		fail = 1;
 	}
 
@@ -681,6 +681,8 @@ int get_subobject ( FILE *fp )
 	for ( i = 1; object_3d_subobject_names[i]; i++ )
 		if ( !strcmp ( name, object_3d_subobject_names[i] + 21 ) )
 			return i;
+
+	debug_fatal ( "Failed to find subobject '%s'", name );
 
 	return -1;
 }

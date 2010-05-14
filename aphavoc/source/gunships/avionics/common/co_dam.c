@@ -155,6 +155,7 @@ void fully_repair_gunship_damage (void)
 		}
 		////Moje 020816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:

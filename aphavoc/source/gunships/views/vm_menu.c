@@ -226,6 +226,7 @@ static const char
 		"All",									// VIEW_TYPE_ALL
 		"AH-1T SeaCobra",						// VIEW_TYPE_AH1T_SEACOBRA
 		"AH-1W SuperCobra",					// VIEW_TYPE_AH1W_SUPERCOBRA
+		"AH-1Z Viper",					// VIEW_TYPE_AH1Z_VIPER
 		"AH-64A Apache",						// VIEW_TYPE_AH64A_APACHE
 		"AH-64D Apache Longbow",			// VIEW_TYPE_AH64D_APACHE_LONGBOW
 		"CH-46E Sea Knight",					// VIEW_TYPE_CH46E_SEA_KNIGHT

@@ -236,6 +236,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
 		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 			blade_factor = 10.0;
 			break;
 
@@ -1079,46 +1080,60 @@ void animate_helicopter_eo (entity *en)
 	{
 		raw = (helicopter *) get_local_entity_data (en);
 
-		if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW)
+		switch (raw->ac.object_3d_shape)
+		{
+		case OBJECT_3D_AH64D_APACHE_LONGBOW:
 		{
 			animate_apache_eo (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC)
+		case OBJECT_3D_MI28N_HAVOC:
 		{
 			animate_havoc_eo (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_RAH66)
+		case OBJECT_3D_RAH66:
 		{
 			animate_comanche_eo (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+		case OBJECT_3D_KA_52:
 		{
 			animate_hokum_eo (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030602 Start
-		else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK)
+		case OBJECT_3D_UH60_BLACKHAWK:
 		{
 			animate_blackhawk_eo (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030602 End
 		////Moje 030619 Start
-		else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
+		case OBJECT_3D_MI24_HIND:
 		{
 			animate_hind_eo (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030619 End
-
 		////Moje 030816 Start
-		else if (raw->ac.object_3d_shape == OBJECT_3D_AH_64A)
+		case OBJECT_3D_AH_64A:
 		{
 			animate_ah64a_eo (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+		case OBJECT_3D_KA_50:
 		{
 			animate_ka50_eo (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030816 End
-
+		case OBJECT_3D_AH1_Z:
+		{
+			animate_default_eo (raw->ac.inst3d);
+			break;
+		}
+		}
 	}
 }
 

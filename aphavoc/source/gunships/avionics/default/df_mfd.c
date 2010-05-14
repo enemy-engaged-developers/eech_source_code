@@ -3475,6 +3475,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 			s = "RKT";
 			break;
 		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+		case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			s = "ATA";
 			break;
 		case ENTITY_SUB_TYPE_WEAPON_NO_WEAPON:
@@ -6850,7 +6851,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER)
 	{
 		if (draw_large_mfd)
 		{
@@ -7638,6 +7639,14 @@ int pylon_start, pylon_end;
 					//sprintf (s, "DF:%2d", number);
 					break;
 				}
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+				{
+					get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+						VIPER_LBHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF,
+						&weapon_sub_type, &number, &damaged);
+					//sprintf (s, "DF:%2d", number);
+					break;
+				}
 				case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
 				{
 					get_local_entity_weapon_hardpoint_info (get_gunship_entity (), 
@@ -7725,6 +7734,14 @@ int pylon_start, pylon_end;
 				{
 					get_local_entity_weapon_hardpoint_info (get_gunship_entity (), 
 						COBRA_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, 
+						&weapon_sub_type, &number, &damaged);
+					//sprintf (s, "DF:%2d", number);
+					break;
+				}
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+				{
+					get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+						VIPER_LBHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
 						&weapon_sub_type, &number, &damaged);
 					//sprintf (s, "DF:%2d", number);
 					break;
@@ -7911,17 +7928,26 @@ int pylon_start, pylon_end;
 		{
 			pylon_start = COBRA_LHS_INNER_PYLON;
 			pylon_end = COBRA_RHS_OUTER_PYLON;
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+		{
+			pylon_start = VIPER_LHS_INNER_PYLON;
+			pylon_end = VIPER_RHS_WING_TIP_MOUNT;
+			break;
 		}
 		default:
 		{
 			pylon_start = APACHE_LHS_INNER_PYLON;
 			pylon_end = APACHE_RHS_WING_TIP_MOUNT;
+			break;
 		}
 	}
 
 	for (pylon = pylon_start; pylon <= pylon_end; pylon++)
 	{
 		float pylon_x, pylon_y;
+		int is_viper = 0;
 
 		
 		pylon_y = -0.35;
@@ -7949,6 +7975,34 @@ int pylon_start, pylon_end;
 		}
 
 			break;
+			}
+
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+			{
+				is_viper = 1;
+
+				switch (pylon)
+				{
+				case VIPER_LHS_INNER_PYLON:
+					pylon_x = -0.42;
+					break;
+				case VIPER_RHS_INNER_PYLON:
+					pylon_x = 0.42;
+					break;
+				case VIPER_LHS_OUTER_PYLON:
+					pylon_x = -0.74;
+					break;
+				case VIPER_RHS_OUTER_PYLON:
+					pylon_x = 0.74;
+					break;
+				case VIPER_LHS_WING_TIP_MOUNT:
+					pylon_x = -0.97;
+					break;
+				case VIPER_RHS_WING_TIP_MOUNT:
+					pylon_x = 0.97;
+					break;
+				}
+				break;
 			}
 			default:
 			{
@@ -7982,16 +8036,19 @@ int pylon_start, pylon_end;
 			pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 			&weapon_sub_type, &number, &damaged))
 		{
-			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+			switch (weapon_sub_type)
+			{
+			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
 			{
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon
 				
-				if (pylon == APACHE_LHS_INNER_PYLON || pylon == APACHE_LHS_OUTER_PYLON)
+				if (is_viper ? pylon == VIPER_LHS_INNER_PYLON || pylon == VIPER_LHS_OUTER_PYLON : pylon == APACHE_LHS_INNER_PYLON || pylon == APACHE_LHS_OUTER_PYLON)
 					last_offset = 0.07;
 				else
 					last_offset = -0.07;
-				
+
 				for (i = 1; i <= number; i++)
 				{
 					float missile_x, missile_y;
@@ -8050,11 +8107,12 @@ int pylon_start, pylon_end;
 					set_mono_font_rel_position (x_adjust, 0.0);
 					print_mono_font_string (s);
 				}
+				break;
 			}
-			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255 ||
-					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261 ||
-					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5 ||
-					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8)
+			case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
+			case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
+			case ENTITY_SUB_TYPE_WEAPON_S5:
+			case ENTITY_SUB_TYPE_WEAPON_S8:
 			{
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
 				rgb_colour text_colour = selected ? MFD_CLEAR_COLOUR : MFD_COLOUR1;
@@ -8103,8 +8161,11 @@ int pylon_start, pylon_end;
 				x_adjust = get_mono_font_string_width (s) * -0.4;
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
+
+				break;
 			}
-			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			{
 
 		switch (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE))
@@ -8157,7 +8218,8 @@ int pylon_start, pylon_end;
 			default:
 			{
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
-				int left_tip = pylon == APACHE_LHS_WING_TIP_MOUNT;
+				// Left or right wingtip
+				int left_tip = pylon == (is_viper ? VIPER_LHS_WING_TIP_MOUNT : APACHE_LHS_WING_TIP_MOUNT);
 				float tip;
 
 				if (number == 2)
@@ -8213,6 +8275,9 @@ int pylon_start, pylon_end;
 
 
 			}
+
+				break;
+			}
 			}
 
 
@@ -8232,7 +8297,7 @@ int pylon_start, pylon_end;
 			default:
 			{
 
-				if (pylon == APACHE_LHS_WING_TIP_MOUNT || pylon == APACHE_RHS_WING_TIP_MOUNT)
+				if (is_viper ? pylon == VIPER_LHS_WING_TIP_MOUNT || pylon == VIPER_RHS_WING_TIP_MOUNT : pylon == APACHE_LHS_WING_TIP_MOUNT || pylon == APACHE_RHS_WING_TIP_MOUNT)
 				{
 					// stingers are narrower and drawn more forward than other pylons
 					y_offset = 0.1;

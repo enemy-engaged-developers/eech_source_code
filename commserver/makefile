@@ -12,8 +12,8 @@ all : .SYMBOLIC
 
 targets = t1 t2 t3 t4
 
-targ_t1 = EECHCommServer.
-targ_t2 = EECHCommClient.
+targ_t1 = EECHCommUDPServer.
+targ_t2 = EECHCommSIOCClient.
 targ_t3 = TestCommClient.
 targ_t4 = TestCommServer.
 

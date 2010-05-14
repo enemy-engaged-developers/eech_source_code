@@ -354,6 +354,7 @@ void display_hud_on_external_view (void)
 			}
 			////Moje 030816 end
 
+			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:

@@ -1069,7 +1069,8 @@ void create_helicopter_rotor_sound_effects (entity *en)
 			break;
 		}
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
-        case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+ 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 		{
 			create_specified_helicopter_rotor_sound_effects
 			(
@@ -1848,6 +1849,7 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:

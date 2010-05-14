@@ -175,7 +175,7 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",aircraft_database[i].scout_weapon_config_type);
 		fprintf(fout,"%d,",aircraft_database[i].default_weapon_type);
 #else
-		fprintf(fout,",,,,,,,");
+		fprintf(fout," , , , , , , ,");
 #endif
 		fprintf(fout,"%d,",aircraft_database[i].target_symbol_type);
 		fprintf(fout,"%d,",aircraft_database[i].target_priority_type);
@@ -297,7 +297,7 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",vehicle_database[i].max_weapon_config_type);
 		fprintf(fout,"%d,",vehicle_database[i].default_weapon_type);
 #else
-		fprintf(fout,",,,,");
+		fprintf(fout," , , , ,");
 #endif
 		fprintf(fout,"%d,",vehicle_database[i].target_type);
 		fprintf(fout,"%d,",vehicle_database[i].target_symbol_type);

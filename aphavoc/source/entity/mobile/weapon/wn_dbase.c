@@ -2603,10 +2603,10 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"AIM-9M Sidewinder",					  							// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"AIM-9",																	// hud_name
+			"AIM-9",																	// mfd_name
+			"AIM-9 SIDEWINDER",																	// weapon_loading_list_name
+			"AIM-9 SIDEWINDER",																	// weapon_loading_name_text
 
 			OBJECT_3D_AIM_9M,	 		 										// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED,					// guidance_type
@@ -5372,6 +5372,7 @@ weapon_package
 		#include "configs/osprey.h"			// ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY
 		#include "configs/seacobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA
 		#include "configs/supcobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA
+		#include "configs/viper.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER
 		#include "configs/stallion.h"			// ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION
 		#include "configs/globe.h"				// ENTITY_SUB_TYPE_AIRCRAFT_C17_GLOBEMASTER_III
 		#include "configs/candid.h"			// ENTITY_SUB_TYPE_AIRCRAFT_IL76MD_CANDID_B

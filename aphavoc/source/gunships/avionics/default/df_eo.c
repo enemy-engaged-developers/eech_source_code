@@ -84,8 +84,8 @@ void initialise_default_eo (void)
 	eo_sensor							= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth							= rad (0.0);
-	eo_min_azimuth						= rad (-120.0);
-	eo_max_azimuth						= rad (120.0);
+	eo_min_azimuth						= rad (-60.0);
+	eo_max_azimuth						= rad (60.0);
 	eo_elevation						= rad (0.0);
 	eo_min_elevation					= rad (-60.0);
 	eo_max_elevation					= rad (30.0);

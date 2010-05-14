@@ -573,6 +573,8 @@ int free_flight_gunship_type_matches(entity_sub_types entity_type)
 			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND;
 		case GUNSHIP_TYPE_KA50:
 			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM;
+		case GUNSHIP_TYPE_VIPER:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER;
 		case NUM_GUNSHIP_TYPES:			// if none other selected, default to comanche or hokum
 			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE || entity_type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B;
 		default:

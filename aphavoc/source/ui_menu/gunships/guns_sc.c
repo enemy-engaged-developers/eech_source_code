@@ -145,6 +145,7 @@ void initialise_gunships_screen (void)
 			case GUNSHIP_TYPE_COMANCHE:
 			case GUNSHIP_TYPE_BLACKHAWK:
 			case GUNSHIP_TYPE_AH64A:
+			case GUNSHIP_TYPE_VIPER:
 			{
 				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 				set_free_flight_gunship_type ( ( gunship_types ) command_line_game_initialisation_phase_gunship_type );
@@ -626,6 +627,10 @@ void gunships_button_function (ui_object *obj, void *arg)
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
 		case GUNSHIP_TYPE_HIND:
+			set_free_flight_gunship_type(GUNSHIP_TYPE_VIPER);
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			break;
+		case GUNSHIP_TYPE_VIPER:
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HAVOC);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
@@ -959,6 +964,10 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		case GUNSHIP_TYPE_HAVOC:
 			apache = construct_temporary_3d_object ( OBJECT_3D_MI28N_HAVOC, FALSE );
 			break;
+		case GUNSHIP_TYPE_VIPER:
+			apache = construct_temporary_3d_object ( OBJECT_3D_AH1_Z, FALSE );
+			pitch = rad(2);
+			break;
 		}
 	}
 	else
@@ -1069,6 +1078,8 @@ char* get_gunship_name(void)
 			return "Mi-24V \"Hind E\"";
 		case GUNSHIP_TYPE_HAVOC:
 			return "Mi-28N \"Havoc B\"";
+		case GUNSHIP_TYPE_VIPER:
+			return "AH-1Z Viper";
 	}
 
 	return "Invalid gunship";

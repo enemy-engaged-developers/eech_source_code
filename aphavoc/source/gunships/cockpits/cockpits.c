@@ -267,6 +267,7 @@ void initialise_cockpits (void)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -426,6 +427,7 @@ void deinitialise_cockpits (void)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -586,6 +588,7 @@ void update_cockpits (void)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -722,6 +725,7 @@ void draw_cockpit (cockpit_panels panel)
 
 		////Moje 030816 End
 /*
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007  for later use 
 		default:

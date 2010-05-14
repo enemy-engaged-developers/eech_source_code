@@ -575,6 +575,7 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 			// start new entities by GCsDriver  08-12-2007
 			case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
 			case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 			case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
 			case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
 			case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:

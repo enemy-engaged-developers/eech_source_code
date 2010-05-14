@@ -72,7 +72,7 @@
 
 #define EECH_INI "EECH.INI"
 
-#define DEFAULT_GWUT_FILE "gwut1120.csv"
+#define DEFAULT_GWUT_FILE "GWUT1130.CSV"
 
 // Casm 09JUN09 Advanced options processing BEGIN
 

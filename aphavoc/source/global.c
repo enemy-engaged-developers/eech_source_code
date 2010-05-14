@@ -120,7 +120,8 @@ const char
 		"Blackhawk Gunship",
 		"Hind Gunship",
 		"AH64A Gunship",
-		"KA50 GUnship",
+		"KA50 Gunship",
+		"Viper Gunship",
 		"NUM_GUNSHIP_TYPES"
 	};
 
@@ -134,10 +135,12 @@ const char*
 		"UH-60 Blackhawk",
 		"Mi-24V Hind",
 		"AH-64A Apache",
-		"Ka-50 Black Shark"
+		"Ka-50 Black Shark",
+		"AH-1Z Viper",
 	};
 
 gunship_types alphabetical_gunship_types[] = {
+		GUNSHIP_TYPE_VIPER,     // AH
 		GUNSHIP_TYPE_AH64A,     // AH
 		GUNSHIP_TYPE_APACHE,    // AH
 	 	GUNSHIP_TYPE_KA50,      // Ka

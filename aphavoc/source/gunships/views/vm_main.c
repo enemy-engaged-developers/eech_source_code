@@ -101,6 +101,9 @@ int get_max_fov ( void )
 		case GUNSHIP_TYPE_KA50:
 			max_fov = command_line_max_fov1;
 			break;
+		case GUNSHIP_TYPE_VIPER:
+			max_fov = command_line_max_fov0;
+			break;
 		default:
 			max_fov = command_line_max_fov0;
 			break;
@@ -1214,6 +1217,7 @@ static void enter_view_mode (view_modes mode)
 			switch (get_global_gunship_type ())
 			{
 				// JB 030313 Fly any aircraft
+				case GUNSHIP_TYPE_VIPER:
 				default:
 				case GUNSHIP_TYPE_APACHE:
 				{

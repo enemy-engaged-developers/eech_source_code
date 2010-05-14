@@ -741,6 +741,67 @@ weapon_config_types get_ka50_weapon_config
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+weapon_config_types get_viper_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon,
+	entity_sub_types wing_tip_weapon
+)
+{
+	weapon_config_types
+		config_type;
+
+	int
+		ok;
+
+	for (config_type = WEAPON_CONFIG_TYPE_AH1Z_VIPER_1; config_type <= WEAPON_CONFIG_TYPE_AH1Z_VIPER_18; config_type = (weapon_config_types) (((int) config_type) + 1))
+	{
+		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			ok = check_hardpoint_clean (config_type, VIPER_LHS_INNER_PYLON);
+		}
+		else
+		{
+			ok = check_weapon_on_hardpoint (config_type, inner_hardpoint_weapon, VIPER_LHS_INNER_PYLON);
+		}
+
+		if (ok)
+		{
+			if (outer_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				ok = check_hardpoint_clean (config_type, VIPER_LHS_OUTER_PYLON);
+			}
+			else
+			{
+				ok = check_weapon_on_hardpoint (config_type, outer_hardpoint_weapon, VIPER_LHS_OUTER_PYLON);
+			}
+
+			if (ok)
+			{
+				if (wing_tip_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				{
+					ok = check_hardpoint_clean (config_type, VIPER_LHS_WING_TIP_MOUNT);
+				}
+				else
+				{
+					ok = check_weapon_on_hardpoint (config_type, wing_tip_weapon, VIPER_LHS_WING_TIP_MOUNT);
+				}
+
+				if (ok)
+				{
+					return (config_type);
+				}
+			}
+		}
+	}
+
+	return (WEAPON_CONFIG_TYPE_UNARMED);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void get_apache_weapons_from_weapon_config
 (
 	weapon_config_types weapon_config_type,
@@ -1161,6 +1222,59 @@ void get_ka50_weapons_from_weapon_config
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void get_viper_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon,
+	entity_sub_types *wing_tip_weapon
+)
+{
+	int
+		package;
+
+	ASSERT
+	(
+		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
+		(
+			(weapon_config_type >= WEAPON_CONFIG_TYPE_AH1Z_VIPER_1) &&
+			(weapon_config_type <= WEAPON_CONFIG_TYPE_AH1Z_VIPER_18)
+		)
+	);
+
+	ASSERT (inner_hardpoint_weapon);
+	ASSERT (outer_hardpoint_weapon);
+	ASSERT (wing_tip_weapon);
+
+	*inner_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*outer_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*wing_tip_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		if (weapon_config_database[weapon_config_type][package].heading_depth == VIPER_LHS_INNER_PYLON)
+		{
+			*inner_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+		else if (weapon_config_database[weapon_config_type][package].heading_depth == VIPER_LHS_OUTER_PYLON)
+		{
+			*outer_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+		else if (weapon_config_database[weapon_config_type][package].heading_depth == VIPER_LHS_WING_TIP_MOUNT)
+		{
+			*wing_tip_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void set_local_entity_weapon_damage (entity *en, int heading_depth, entity_sub_types weapon_sub_type, int damage)
 {

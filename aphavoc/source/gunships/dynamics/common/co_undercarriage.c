@@ -394,6 +394,7 @@ void initialise_undercarriage_database(void)
 	filenames[GUNSHIP_TYPE_HOKUM] = "ka-52-suspension.txt";
 	filenames[GUNSHIP_TYPE_KA50] = "ka-52-suspension.txt";
 	filenames[GUNSHIP_TYPE_HIND] = "mi-24-suspension.txt";
+	filenames[GUNSHIP_TYPE_VIPER] = "ah-1-suspension.txt";
 
 	for (gunship=0; gunship < ARRAY_LENGTH(filenames); gunship++)
 		initialise_landing_gear(&landing_gears[gunship], filenames[gunship]);

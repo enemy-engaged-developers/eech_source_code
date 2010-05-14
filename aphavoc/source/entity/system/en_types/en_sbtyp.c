@@ -104,6 +104,7 @@ const char *entity_sub_type_aircraft_names [] =
 	"AIRCRAFT_IL76MD_CANDID_B",
 	"AIRCRAFT_C130J_HERCULES_II",
 	"AIRCRAFT_AN12B_CUB",
+	"AIRCRAFT_AH1Z_VIPER",
 
 	"NUM_ENTITY_SUB_TYPE_AIRCRAFT"
 };

@@ -215,6 +215,7 @@ void initialise_flight_dynamics (entity *en)
          switch (get_global_gunship_type ())
          {
 						// JB 030313 Fly any aircraft
+						case GUNSHIP_TYPE_VIPER:
 						default:
             case GUNSHIP_TYPE_APACHE:
             {
@@ -1182,6 +1183,7 @@ void update_gunship_dynamics (void)
 	{
 
 		// JB 030313 Fly any aircraft
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		{

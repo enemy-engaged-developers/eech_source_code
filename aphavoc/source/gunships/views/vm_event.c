@@ -171,6 +171,7 @@ static void set_special1_view_mode (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
@@ -339,6 +340,7 @@ static void set_special2_view_mode (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
@@ -1152,6 +1154,7 @@ static void special_cockpit_toggle_event (event *ev)
 		case GUNSHIP_TYPE_AH64A:
 		case GUNSHIP_TYPE_KA50:
 	////Moje 030816 end
+		case GUNSHIP_TYPE_VIPER:
 		{
 			set_global_draw_cockpit_graphics (get_global_draw_cockpit_graphics () ^ 1);
 

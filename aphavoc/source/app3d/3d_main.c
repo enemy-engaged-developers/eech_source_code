@@ -152,6 +152,7 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			////Moje 030816 Start
 			case GUNSHIP_TYPE_AH64A:
 			////Moje 030816 end
+			case GUNSHIP_TYPE_VIPER:
 			{
 //VJ 050818 PNVS brighness levels
 // switched 0 and 2 so high level is default by GCsDriver 08-12-2007

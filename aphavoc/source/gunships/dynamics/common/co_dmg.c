@@ -1380,6 +1380,7 @@ void dynamics_restore_damage_values (void)
 	{
 
 		// JB 030313 Fly any aircraft
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		{

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -98,10 +98,10 @@ static ui_object
 	*player_flight_hours_selection_button,
 	*player_weapon_log_selection_button,
 	*player_medals_selection_button,
-	
+
 	*player_blue_side_selection_button,
 	*player_red_side_selection_button,
-	
+
 	*current_player_rank_text,
 	*player_commision_date_text;
 
@@ -168,7 +168,7 @@ void initialise_select_player_screen (void)
 {
 	int
 		i;
-		
+
 	float
 		x1,
 		y1,
@@ -230,7 +230,7 @@ void initialise_select_player_screen (void)
 	define_flight_hours_page_objects();
 
 	define_weapon_log_page_objects ();
-	
+
 	y2 = 0.038;
 
 	define_medals_page_objects ();
@@ -245,7 +245,7 @@ void initialise_select_player_screen (void)
 	y1 = 0.126;
 	x2 = 0.466;
 	y2 = 0.677;
-	
+
    player_list_bdrop = create_ui_object
 						(
 							UI_TYPE_AREA,
@@ -262,7 +262,7 @@ void initialise_select_player_screen (void)
 	y1 = 0.1;
 	x2 = 0.90;
 	y2 = 0.86;
-	
+
    player_list_area = create_ui_object
 						(
 							UI_TYPE_AREA,
@@ -284,7 +284,7 @@ void initialise_select_player_screen (void)
 	y1 = 0.0;
 	x2 = 0.862;
 	y2 = 0.840;
-	
+
    player_list = create_ui_object
 						(
 							UI_TYPE_LIST_BOX,
@@ -307,7 +307,7 @@ void initialise_select_player_screen (void)
 	// Delete Player Button
 
 	gap_width = 0.04;
-	
+
 	x1 = 0.721;
 	y1 = 0.029;
 	x2 = 0.178;
@@ -338,12 +338,12 @@ void initialise_select_player_screen (void)
 
 	///////////////////////////////////////////////
 	// Rename Player Button
-	
+
 	x2 = 0.197;
 	y2 = 0.038;
 
 	x1 = get_ui_object_virtual_x (change_array[0]) - gap_width - x2 ;
-	
+
 	y1 = 0.029;
 
 	i++;
@@ -371,17 +371,17 @@ void initialise_select_player_screen (void)
 
 	////////////////////////////////////////////////
 	// Add Player Button
-	
+
 	x2 = 0.106;
 	y2 = 0.038;
 
 	x1 = get_ui_object_virtual_x (change_array[1]) - gap_width - x2 ;
-	
+
 //	x1 = 0.379;
 	y1 = 0.029;
 
 	i++;
-	
+
    change_array[i] = create_ui_object
 	(
 		UI_TYPE_BUTTON,
@@ -406,7 +406,7 @@ void initialise_select_player_screen (void)
 
 	////////////////////////////////////////////////
 	// Medals Selection Button
-	
+
 	x1 = 0.82;
 	y1 = 0.112;
 	x2 = 0.165;
@@ -451,7 +451,7 @@ void initialise_select_player_screen (void)
 
 	////////////////////////////////////////////////
 	// Red Selection Button
-	
+
 	x1 = 0.628;
 	y1 = 0.172;
 	x2 = 0.238;
@@ -505,7 +505,7 @@ void initialise_select_player_screen (void)
 
 	////////////////////////////////////////////////
 	// Blue Side Selection Button
-	
+
 	x1 = 0.739;
 	y1 = 0.223;
 	x2 = 0.247;
@@ -648,7 +648,7 @@ void initialise_select_player_screen (void)
 	y1 = 0.850;
 	x2 = 0.220;
 	y2 = 0.042;
-	
+
 	option_bdrop = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -722,7 +722,7 @@ void initialise_select_player_screen (void)
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-			
+
 	set_text_option_backdrop_object (option_bdrop, temp_obj);
 
 	/////////////////////////////////////////////////////////////////
@@ -766,10 +766,10 @@ void initialise_select_player_screen (void)
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-			
+
 	set_text_option_backdrop_object (option_bdrop, temp_obj);
 
-	
+
 	///////////////////////////////////////////
 	// Player name entry area
 
@@ -777,7 +777,7 @@ void initialise_select_player_screen (void)
 	y1 = get_ui_object_virtual_y (player_list);
 	x2 = get_ui_object_virtual_x_size (player_list);
 	y2 = get_ui_object_virtual_y_size (player_list);
-	
+
    player_name_entry_area = create_ui_object
             (
                UI_TYPE_AREA,
@@ -851,7 +851,7 @@ void initialise_select_player_screen (void)
 					UI_ATTR_TEXT (""),
                UI_ATTR_END
             );
-				
+
 	rebuild_player_log_list ();
 
 }
@@ -864,7 +864,7 @@ void display_player_log_page (player_log_pages page)
 {
 	int
 		loop;
-		
+
 	for (loop = 0; loop < NUM_LOG_PAGES; loop ++)
 	{
 		set_ui_object_drawable (log_page [loop], (page == loop));
@@ -911,42 +911,42 @@ void notify_select_player_screen (ui_object *obj, void *arg)
 {
 	if ( get_ui_object_drawable ( obj ) )
 	{
-	
+
 		switch (player_log_current_side)
 		{
-	
+
 			case ENTITY_SIDE_RED_FORCE:
 			{
-	
+
 				set_ui_object_state ( player_red_side_selection_button, UI_OBJECT_STATE_ON );
-	
+
 				break;
 			}
-	
+
 			case ENTITY_SIDE_BLUE_FORCE:
 			{
-	
+
 				set_ui_object_state ( player_blue_side_selection_button, UI_OBJECT_STATE_ON );
-	
+
 				break;
 			}
-	
+
 		}
-	
+
 		if ( player_screen_graphic )
 		{
-	
+
 			destroy_texture_graphic ( player_screen_graphic );
 
 			player_screen_graphic = NULL;
 		}
-	
+
 		player_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\pilots.psd" );
 
 		set_ui_object_texture_graphic ( select_player_screen, player_screen_graphic );
-	
+
 		blit_front_buffer_to_render_buffer ();
-	
+
 		reset_time_values ( select_player_screen );
 
 	}
@@ -955,7 +955,7 @@ void notify_select_player_screen (ui_object *obj, void *arg)
 
 		if ( player_screen_graphic )
 		{
-	
+
 			destroy_texture_graphic ( player_screen_graphic );
 
 			player_screen_graphic = NULL;
@@ -990,7 +990,7 @@ void notify_select_player_exit_button (ui_object *obj, void *arg)
 
 		pop_ui_screen (SCREEN_POP_ACTUAL);
 	}
-	else 
+	else
 	{
 
 		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
@@ -1022,7 +1022,7 @@ void notify_medals_button (ui_object *obj, void *arg)
 void notify_select_player_restore_button(ui_object* obj, void* arg)
 {
 	obj; arg;  // just to silence the compiler
-	
+
 	if (restore_log_from_backup())
 		rebuild_player_log_list();
 }
@@ -1058,7 +1058,7 @@ void player_list_function (ui_object *obj, void *arg)
 	debug_log ( "Locating log %s, %d", player_name, player_unique_id );
 
 	#endif
-	
+
 	if ( ( player_name ) && ( player_unique_id ) )
 	{
 
@@ -1121,7 +1121,7 @@ void player_add_function (ui_object *obj, void *arg)
 
 	if ( count < MAXIMUM_NUMBER_OF_PLAYERS )
 	{
-	
+
 		list_item = add_to_pop_up_list ( "", player_list, NULL, 0, UI_FONT_ARIAL_18, ui_list_text_default_colour );
 
 		set_ui_frontend_list_object_highlightable (list_item);
@@ -1131,30 +1131,30 @@ void player_add_function (ui_object *obj, void *arg)
 		//resize_player_list_size ();
 
 		// slide list to bottom
-		
+
 		slider = get_ui_object_vslider (player_list_area);
 		set_ui_object_vslider_virtual_position (slider, 1.0);
 
 		// move input object to correct position
-		
+
 		x = get_ui_object_virtual_x (list_item);
 
 		y = get_ui_object_virtual_y (list_item);
 
 		set_ui_object_virtual_x (player_name_input, x);
-	
+
 		set_ui_object_virtual_y (player_name_input, y);
 
 		// switch input on
-	
+
 		set_ui_object_drawable (list_item, FALSE);
-	
+
 		set_ui_object_item_number (player_name_input, (int) list_item);
-	
+
 		set_ui_object_drawable (player_name_entry_area, TRUE);
-	
+
 		set_ui_object_state (player_name_input, UI_OBJECT_STATE_ON);
-	
+
 		player_creating_player = TRUE;
 	}
 
@@ -1203,7 +1203,7 @@ void player_name_input_function ( ui_object *obj, void *arg )
 			player = rename_player_log ( get_ui_object_item_number2 ( object ), text );
 
 			set_ui_object_text ( object, player->name );
-	
+
 			set_ui_object_drawable ( object, TRUE);
 		}
 	}
@@ -1274,7 +1274,7 @@ void player_rename_function ( ui_object *obj, void *arg )
 	ASSERT ( list_item );
 
 	y = get_ui_object_virtual_y (list_item);
-	
+
 	y_size = get_ui_object_virtual_y_size (player_list);
 
 	set_ui_object_virtual_y (player_name_input, y);
@@ -1317,68 +1317,68 @@ void player_delete_function ( ui_object *obj, void *arg )
 
 	if ( ( log ) && ( log->next ) )
 	{
-	
+
 		delete_log = get_current_player_log ();
-	
+
 		if ( delete_log )
 		{
-	
+
 			next = delete_log->next;
-	
+
 			prev = NULL;
-	
+
 			log = get_player_log_list ();
 
 			// find log that is previous to delete_log if it exists
 			while ( log )
 			{
-	
+
 				if ( log->next == delete_log )
 				{
-	
+
 					prev = log;
-	
+
 					break;
 				}
-	
+
 				log = log->next;
 			}
 
-			// select previous log if it is valid	
+			// select previous log if it is valid
 			if ( prev )
 			{
-	
+
 				set_current_player_log ( prev );
-			
+
 				prev->next = next;
-	
+
 				rebuild_player_log_list ();
 			}
 			// otherwise, if log has a next, select that
 			else if ( next )
 			{
-	
+
 				set_current_player_log ( next );
-			
+
 				set_player_log_list ( next );
-			
+
 				rebuild_player_log_list ();
 			}
 			// this case should never exist...
 			else
 			{
-			
+
 				direct_play_set_player_name ( "Unnamed Player" );
-				
+
 				set_current_player_log ( NULL );
-			
+
 				set_player_log_list ( NULL );
-			
+
 				rebuild_player_log_list ();
-	
+
 //				set_ui_object_text ( current_player_rank_text, "" );
 			}
-		
+
 			save_player_list ();
 		}
 
@@ -1412,7 +1412,7 @@ void player_select_side_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-		
+
 		case ENTITY_SIDE_BLUE_FORCE:
 		{
 
@@ -1431,7 +1431,7 @@ void player_select_side_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-		
+
 	}
 
 	rebuild_player_log_list ();
@@ -1464,7 +1464,12 @@ void load_player_list (void)
 
 	ui_object_destroy_list_items ( player_list );
 
-	if (file_exist ( "players2.bin" ))
+	if (file_exist ( "playersv.bin" ))
+	{
+		file_ptr = safe_fopen ( "playersv.bin", "rb" );
+		fread ( &version, sizeof (int), 1, file_ptr );
+	}
+	else if (file_exist ( "players2.bin" ))
 	{
 		version = 2;
 		file_ptr = safe_fopen ( "players2.bin", "rb" );
@@ -1496,14 +1501,14 @@ void load_player_list (void)
 			//
 			// Name
 			//
-			
+
 			fread ( &string_length, sizeof ( int ), 1, file_ptr );
 
 			if ( string_length > 0 )
 			{
 
 				new_player->name = ( char * ) malloc_heap_mem ( sizeof ( char ) * (string_length  + 2));
-	
+
 				fread ( new_player->name, 1, string_length, file_ptr );
 			}
 
@@ -1529,12 +1534,12 @@ void load_player_list (void)
 				if (version == 1)
 				{
 					version1_player_side_log_type v1_log;
-					
+
 					fread ( &v1_log, sizeof(v1_log), 1, file_ptr );
 
 					// the first values are in the same positoin so we'll just copy them
 					memcpy(&new_player->side_log[side], &v1_log, sizeof(v1_log));
-					
+
 					// reset the kill values which didn't exist and now have been overwritten by later values
 					new_player->side_log[side].helicopters_lost = new_player->side_log[side].kills.deaths;
 					new_player->side_log[side].kills.fixed_wing = 0;
@@ -1546,6 +1551,20 @@ void load_player_list (void)
 					// recopy weapons usage data
 					memcpy(&new_player->side_log[side].weapon_usage, &v1_log.weapon_usage, sizeof(v1_log.weapon_usage));
 				}
+				else if (version == 2)
+				{
+					player_side_log_type v2_side;
+					const size_t
+						size_1 = (char*)(&v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES - 1]) - (char*)(&v2_side),
+						size_2 = (char*)(&v2_side.gunship_missions[NUM_GUNSHIP_TYPES - 1]) - (char*)(&v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES]),
+						size_3 = sizeof(v2_side) - size_1 - size_2;
+					fread ( &v2_side, size_1, 1, file_ptr );
+					v2_side.gunship_flying_seconds[GUNSHIP_TYPE_VIPER] = 0.0f;
+					fread ( &v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES], size_2, 1, file_ptr );
+					v2_side.gunship_missions[GUNSHIP_TYPE_VIPER] = 0;
+					fread ( &v2_side.gunship_missions[NUM_GUNSHIP_TYPES], size_3, 1, file_ptr );
+					new_player->side_log[side] = v2_side;
+				}
 				else
 					fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
 
@@ -1553,10 +1572,8 @@ void load_player_list (void)
 
 				for ( level = 0; level < NUM_PLAYER_LEVELS; level ++ )
 				{
-	
 					if ( new_player->side_log [side].level [level] < command_line_player_start_rank )
 					{
-	
 						new_player->side_log [side].level [level] = command_line_player_start_rank;
 					}
 				}
@@ -1594,9 +1611,9 @@ void load_player_list (void)
 		new_player = create_empty_player_log ();
 
 		// name
-			
+
 		new_player->name = (char *) malloc_heap_mem (sizeof (char) * (strlen (DEFAULT_LOG_NAME) + 2));
-	
+
 		sprintf ( new_player->name, "%s", DEFAULT_LOG_NAME );
 
 		for (side = 0; side < NUM_ENTITY_SIDES; side++)
@@ -1610,7 +1627,7 @@ void load_player_list (void)
 		}
 
 		set_player_log_list (new_player);
-		
+
 		set_current_player_log (new_player);
 
 		rebuild_player_log_list ();
@@ -1631,22 +1648,27 @@ void save_player_list (void)
 	{
 		FILE
 			*file_ptr;
-	
+
 		player_log_type
 			*current_player;
 
 		int
+			version,
 			side,
 			num_entries,
 			string_length,
 			current_player_index;
-	
-		file_ptr = safe_fopen ("players2.bin", "wb");
-	
+
+		file_ptr = safe_fopen ("playersv.bin", "wb");
+
+		version = 3;
+
+		fwrite (&version, sizeof (int), 1, file_ptr);
+
 		num_entries = 0;
 
 		current_player = get_player_log_list ();
-	
+
 		current_player_index = -1;
 
 		fwrite (&num_entries, sizeof (int), 1, file_ptr);
@@ -1699,7 +1721,7 @@ void save_player_list (void)
 			current_player = get_player_log_next (current_player);
 		}
 
-		fseek (file_ptr, 0, SEEK_SET);
+		fseek (file_ptr, sizeof (int), SEEK_SET);
 
 		fwrite (&num_entries, sizeof (int), 1, file_ptr);
 
@@ -1716,70 +1738,70 @@ void save_player_list (void)
 	{
 		FILE
 			*file_ptr;
-	
+
 		player_log_type
 			*current_player;
-	
+
 		file_ptr = safe_fopen ("players.log", "w");
-	
+
 		//
 		// Start
 		//
-	
+
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 		set_file_tag (file_ptr, FILE_TAG_START);
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-	
+
 		//
 		// Players
 		//
-	
+
 		//current_player = get_ui_object_child (player_list);
-	
+
 		current_player = get_player_log_list ();
-	
+
 		while (current_player)
 		{
-	
+
 			//if (get_ui_object_text (current_player), file_ptr)
 			{
-	
+
 				set_file_new_line (file_ptr, 1);
-		
+
 				set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 				set_file_tag (file_ptr, FILE_TAG_PLAYER);
-	
+
 				set_file_tag (file_ptr, FILE_TAG_NAME);
 				set_file_string (file_ptr, get_player_log_name (current_player));
-	
+
 				set_file_tag (file_ptr, FILE_TAG_PILOT_EXPERIENCE);
 				set_file_int (file_ptr, get_player_log_experience (get_global_gunship_side (), current_player));
-	
+
 				set_file_tag (file_ptr, FILE_TAG_PILOT_LEVEL);
 				set_file_int (file_ptr, get_player_log_level (get_global_gunship_side (), current_player));
-	
+
 				//
 				//
 				//
-	
+
 				if (strcmp (direct_play_get_player_name (direct_play_get_player_id ()), get_player_log_name (current_player)) == 0)
 				{
-	
+
 					set_file_tag (file_ptr, FILE_TAG_CURRENT_PLAYER);
 				}
-	
+
 				set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 			}
-	
+
 			current_player = get_player_log_next (current_player);
 		}
-	
+
 		set_file_new_line (file_ptr, 1);
-	
+
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 		set_file_tag (file_ptr, FILE_TAG_END);
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-	
+
 		fclose (file_ptr);
 	}
 
@@ -1890,7 +1912,7 @@ player_log_type *create_empty_player_log ( void )
 	}
 	else
 	{
-	
+
 		set_player_log_list (new_player_log);
 	}
 
@@ -1980,7 +2002,7 @@ player_log_type *rename_player_log (int id, const char *name)
 void rebuild_player_log_list ( void )
 {
 	#if (!DEMO_VERSION)
-	
+
 	char
 		buf[100];
 
@@ -2025,11 +2047,11 @@ void rebuild_player_log_list ( void )
 			{
 
 				set_ui_object_item_number2 ( list_item, player_log->unique_id );
-		
+
 				// set this log to unselected
-	
+
 				set_ui_object_state (list_item, UI_OBJECT_STATE_OFF);
-	
+
 				if (player_log == get_current_player_log ())
 				{
 					current_log = player_log;
@@ -2062,14 +2084,14 @@ void rebuild_player_log_list ( void )
 
 		rebuild_general_log_list (current_log, player_log_current_side);
 		rebuild_flight_hours_list (current_log, player_log_current_side);
-		rebuild_weapon_log_list (current_log, player_log_current_side);		
+		rebuild_weapon_log_list (current_log, player_log_current_side);
 
 		// set this log to selected
-	
+
 		set_ui_object_state (selected_item, UI_OBJECT_STATE_ON);
-	
+
 		// set text for commission date & rank
-	
+
 		set_ui_object_text ( current_player_rank_text, get_pilot_rank_name ( current_log->side_log[player_log_current_side].rank ));
 
 		d = current_log->date_commissioned.day;
@@ -2198,7 +2220,7 @@ void test_player_scoring (player_log_type *log, int side)
 		{
 			set_player_log_rank (side, log, get_player_rank_from_points (get_player_log_experience (side, log)) );
 		}
-		
+
 		set_player_log_missions_flown (side, log, i);
 
 		if (get_player_log_flying_seconds (side, log) > campaign_threshold)
@@ -2216,7 +2238,7 @@ void test_player_scoring (player_log_type *log, int side)
 		{
 			debug_filtered_log ("Awarded Aviator Wings  %2d score:%8d time:%8f", result, get_player_log_experience (side, log), get_player_log_flying_seconds (side, log));
 		}
-		
+
 		if (award_valour_medal (side, score) != -1)
 		{
 			debug_filtered_log ("Awarded Valour Medal   %2d score:%8d time:%8f", result, get_player_log_experience (side, log), get_player_log_flying_seconds (side, log));

@@ -2303,6 +2303,7 @@ static void draw_target_symbology (void)
 			}
 			////////////////////////////////////////
 			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			////////////////////////////////////////
 			{
 				if ((weapon_lock_type == WEAPON_LOCK_VALID) && target_visible)

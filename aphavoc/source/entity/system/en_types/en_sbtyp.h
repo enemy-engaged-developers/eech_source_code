@@ -124,6 +124,14 @@ enum ENTITY_SUB_TYPE_AIRCRAFT
 	ENTITY_SUB_TYPE_AIRCRAFT_C130J_HERCULES_II,
 	ENTITY_SUB_TYPE_AIRCRAFT_AN12B_CUB,
 
+	////////////////////////////////////////
+	//
+	// CUSTOM
+	//
+	////////////////////////////////////////
+
+	ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER,
+
 	NUM_ENTITY_SUB_TYPE_AIRCRAFT
 };
 

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.12.3</title>
+<title>EECH Community Release Version 1.13.0</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.12.3</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.13.0</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -74,7 +74,7 @@ h4 {
       </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by FireBird: March 3, 2010
+      italic;'>Last edited by FireBird: May 11, 2010
       </p>
 
 
@@ -92,45 +92,22 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.12.3?</h2>
+      <h2>What's NEW in EECH 1.13.0?</h2>
       <ul>
 	<dl>
 	  <dd>Features</dd>
 	  <dt>
-	  <li>Added OpenAL support. Multiple (5.1) speakers may produce surrounding sound.
-		<li>Improved loadout for Hind. Loadout is displayed correctly now (by dfang).
-		Hind may carry
-		<ul>
-			<li>Missiles (Sturm) on wingtip and outer pylons
-			<li>Rockets (S-5, S-8, S-13) on inner and outer pylons
-			<li>Gun pods (UPK) on inner and outer pylons
-		</ul>
-		<li>Canopy sounds amplification control.<br>
-		There are groups of sound effects
-		<ul>
-			<li>Rotor of player's helicopter
-			<li>Rotor of other helicopters
-			<li>Engine of player's helicopter
-			<li>Engine of other helicopters
-			<li>Misc of player's helicopter (gears, for example)
-			<li>Misc of other helicopters
-			<li>Guns
-			<li>Environmental sounds
-		</ul>
-		Each group has three numbers associated used to calculate sound effect volume amplification:<br>
-		amplification = first / 100 + bound(canopy_door_state, 0, second) * third / 10000,<where>
-		where
-		<ul>
-			<li>canopy_door_state varies from 0 (fully closed) to 100 (totally open)
-			<li>bound(x,y,z) produces y if x less than y, or z, if x greater than z, or x otherwise
-		 </ul>
-		 Check canopy_sounds_amp in Sounds section of EECH.INI
+	  <li>Viper is a new and flyable helicopter (by dfang)
+		<li>Improved data export (UDP- and SIOC-compatible ways)
+		<li>In-cockpit sound volumes are adjusted (by Colonel_Kurtz)
 	  </dt>
 
 	  <dd>Bug fixes</dd>
 	  <dt>
-	<li>Turned on cgs (comms guaranteed send) by default
-	<li>Removed demand for slash for command-line arguments
+	<li>Fixed low frame rate in Hind cockpit with the map enabled (map is not moving again)
+	<li>Textures are unloaded always now.
+	<li>Returned "heading follow mode" for chase camera.
+	<li>Added MFD, HUD and arming screen names for TOWs.
 	  </dt>
       </ul>
 
@@ -600,6 +577,47 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.12.3?</h4>
+	<ul>
+	<dl>
+	  <dd>Features</dd>
+	  <dt>
+	  <li>Added OpenAL support. Multiple (5.1) speakers may produce surrounding sound.
+		<li>Improved loadout for Hind. Loadout is displayed correctly now (by dfang).
+		Hind may carry
+		<ul>
+			<li>Missiles (Sturm) on wingtip and outer pylons
+			<li>Rockets (S-5, S-8, S-13) on inner and outer pylons
+			<li>Gun pods (UPK) on inner and outer pylons
+		</ul>
+		<li>Canopy sounds amplification control.<br>
+		There are groups of sound effects
+		<ul>
+			<li>Rotor of player's helicopter
+			<li>Rotor of other helicopters
+			<li>Engine of player's helicopter
+			<li>Engine of other helicopters
+			<li>Misc of player's helicopter (gears, for example)
+			<li>Misc of other helicopters
+			<li>Guns
+			<li>Environmental sounds
+		</ul>
+		Each group has three numbers associated used to calculate sound effect volume amplification:<br>
+		amplification = first / 100 + bound(canopy_door_state, 0, second) * third / 10000,<where>
+		where
+		<ul>
+			<li>canopy_door_state varies from 0 (fully closed) to 100 (totally open)
+			<li>bound(x,y,z) produces y if x less than y, or z, if x greater than z, or x otherwise
+		 </ul>
+		 Check canopy_sounds_amp in Sounds section of EECH.INI
+	  </dt>
+
+	  <dd>Bug fixes</dd>
+	  <dt>
+	<li>Turned on cgs (comms guaranteed send) by default
+	<li>Removed demand for slash for command-line arguments
+	  </dt>
+      </ul>
       <h4>Fixes/features in 1.12.2?</h4>
 	<ul>
 	<dl>

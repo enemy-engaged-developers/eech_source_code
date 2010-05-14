@@ -537,6 +537,7 @@ void set_common_target_acquisition_system_lock_target (int lock)
 		}
 		////Moje 030816 end
 
+		case GUNSHIP_TYPE_VIPER:
 		//  GCsDriver  08-12-2007
 		default:
 		{
@@ -981,6 +982,7 @@ void select_simple_avionics_target_acquisition_system (void)
 		}
 		////Moje 030816 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		//  GCsDriver  08-12-2007
 		default:

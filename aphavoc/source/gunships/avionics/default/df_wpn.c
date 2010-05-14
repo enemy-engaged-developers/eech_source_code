@@ -125,6 +125,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			}
 			////////////////////////////////////////
 			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			////////////////////////////////////////
 			{
 				duration = 0.6;
@@ -271,17 +272,24 @@ void update_default_weapon_systems (void)
 	//
 	////////////////////////////////////////
 
-	if ( ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_IGLA_V)) && (weapon_lock_type == WEAPON_LOCK_VALID))
+	switch (weapon_sub_type)
+	{
+	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+	case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+	case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
+	 if (weapon_lock_type == WEAPON_LOCK_VALID)
 	{
 		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE);
 
 		update_good_tone ();
+		break;
 	}
-	else
+	default:
 	{
 		pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE, 0.5);
 
 		reset_good_tone ();
+	}
 	}
 
 	
@@ -346,6 +354,7 @@ void update_default_weapon_systems (void)
 		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
 		case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
 		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+		case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 		////////////////////////////////////////
 		{
 			if

@@ -162,6 +162,7 @@ void activate_common_threat_warning_system (entity *threat)
 		}
 */
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		//  GCsDriver  08-12-2007
 		default:

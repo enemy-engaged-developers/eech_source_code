@@ -773,10 +773,13 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Gunship Pages
 
-	x1 = 0.4;
-	y1 = 0.0;
-	x2 = 1.0;
-	y2 = 1.0;
+	{
+		float half_width = 0.3 * (4 * application_video_height) / (3 * application_video_width);
+		x1 = 0.7 - half_width;
+		y1 = 0.0;
+		x2 = 0.7 + half_width;
+		y2 = 1.0;
+	}
 
 	for (loop = 0; loop < NUM_GUNSHIP_TYPES; loop ++)
 	{
@@ -937,6 +940,24 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.814, gunship, WEAPON_LOADING_HARDPOINT_INNER);
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
+	/////////////////////////////////////////////////////////////////
+	// VIPER PAGE 
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_VIPER;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payvip.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
 
 	////Moje 030816 end
 	

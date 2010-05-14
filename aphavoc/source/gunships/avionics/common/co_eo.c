@@ -500,6 +500,8 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 			break;
 		}
 		////Moje 030816 end
+
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:

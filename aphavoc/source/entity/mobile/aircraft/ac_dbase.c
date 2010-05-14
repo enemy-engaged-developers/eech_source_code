@@ -2487,6 +2487,82 @@ aircraft_data
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER
+		//
+		////////////////////////////////////////
+      {
+         "AH-1Z Viper",													// full_name
+         "AH-1Z VIPER",													// long_display_name
+         "AH-1Z",																	// short_display_name
+			"HELICOPTER",															// easy_display_name
+
+         OBJECT_3D_AH1_Z,														// default_3d_shape
+			GUNSHIP_TYPE_VIPER,													// gunship_type
+			ENTITY_FORCE_AIR,														// force
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_14,				 			// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_9,				 			// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_14,				 			// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_10,				 			// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_17,				 			// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_9,				 			// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
+			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
+			TARGET_PRIORITY_MEDIUM,												// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
+			THREAT_TYPE_INVALID,			 										// threat_type
+			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
+			VIEW_TYPE_AH1Z_VIPER,											// view_type
+			MAP_ICON_HELICOPTER,													// map icon
+
+         3.75,																		// centre_of_gravity_to_ground_distance
+         3.4,																		// centre_of_gravity_to_ground_distance_destroyed
+         15.0,																		// chase_view_min_distance
+         100.0,	  																// chase_view_max_distance
+			0.5,																		// chase_view_min_distance_test
+         2.0 * KILOMETRE,														// chase_view_max_distance_test
+         knots_to_metres_per_second (110.0),								// cruise_velocity
+         15.0,																		// cruise_altitude
+         7.5,																		// attack_altitude
+			rad (0.0),			 													// destroyed_bank_offset
+			rad (0.0),																// destroyed_pitch_offset
+			rad (0.0),																// fuselage_angle
+			0.0,																		// liftoff_velocity
+			rad (0.0),																// main_rotor_shaft_angle
+			-1.0,																		// main_rotor_direction
+			rad (-0.5),																// main_rotor_blade_droop_angle
+			0.0,																		// propellor_direction
+			rad (200),																// max_turn_rate (deg / sec)
+			rad (180.0),															// max_roll
+			1.0,																		// max_vertical_turn_allowance
+			15.0,																		// avoidance_radius
+			6.0 * G,																	// g_max
+			14.0,																		// power_output
+			-1.0,																		// tail_rotor_direction
+			5000.0,																	// recon_radius
+			10.0,																		// target_scan_delay
+			3000.0,																	// air_scan_range
+			4000.0,																	// surface_scan_range
+			1.0,																		// potential_air_to_air_threat
+			1.0,																		// potential_air_to_surface_threat
+			10.0,																		// Ammo_economy
+			1136.0,																	// Fuel_default_weight
+			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.315,																	// main_rotor_radius
+
+			600,																		// initial_damage_level
+
+			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
+			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
+			TRUE,																		// offensive_capability
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
+			100,																		// points value
+            SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,						// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,			// wind_up_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
+      },
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

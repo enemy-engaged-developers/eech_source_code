@@ -438,6 +438,7 @@ void initialise_avionics (void)
 		}
 		////Moje 030815 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -865,6 +866,7 @@ void deinitialise_avionics (void)
 		}
 		//// Moje 030517 End of insertion 2
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -1109,6 +1111,7 @@ void update_avionics (void)
 		}
 		////Moje 030815 End of 3rd insertion
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:

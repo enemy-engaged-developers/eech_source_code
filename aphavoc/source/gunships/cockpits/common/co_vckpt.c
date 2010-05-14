@@ -211,6 +211,7 @@ void damage_virtual_cockpit_main_rotors (int seed)
 			break;
 		}
 		////Moje 030816 End
+		case GUNSHIP_TYPE_VIPER:
 		// GCsDriver  08-12-2007
 		default:
 		{
@@ -287,6 +288,7 @@ void restore_virtual_cockpit_main_rotors (void)
 			break;
 		}
 		////Moje 030816 End
+		case GUNSHIP_TYPE_VIPER:
 		// GCsDriver  08-12-2007
 		default:
 		{

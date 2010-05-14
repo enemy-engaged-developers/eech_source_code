@@ -98,6 +98,7 @@ void set_default_weapon_damage_status (void)
 	{
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 		{
 
 	set_client_server_entity_weapon_damage (en, COBRA_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.gun_jammed);

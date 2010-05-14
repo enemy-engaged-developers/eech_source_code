@@ -183,6 +183,7 @@ static float get_rotate_left_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -282,6 +283,7 @@ static float get_rotate_right_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -381,6 +383,7 @@ static float get_rotate_up_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -478,6 +481,7 @@ static float get_rotate_down_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -838,6 +842,7 @@ void get_pilot_head_viewpoint (void)
 		{
 			////////////////////////////////////////
 			// JB 030313 Fly any aircraft
+			case GUNSHIP_TYPE_VIPER:
 			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
@@ -1913,6 +1918,7 @@ void draw_virtual_cockpit_3d_view (void)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -2576,6 +2582,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
