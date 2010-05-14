@@ -129,7 +129,7 @@ enum {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // label line 1,    label line 2, page arrow, vertical, box, click handler
-static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
+static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	// main menu buttons
 	{ NULL,	"ADF",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"ASE",		NULL,	TRUE, FALSE, FALSE, set_new_page },
@@ -328,6 +328,10 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"MODE",		"NORM",	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"MODE",		"RIPL",	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"MODE",		"MAN",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TRAJ",		"DIR",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TRAJ",		"HI",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TRAJ",		"LO",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TRAIN",	NULL,	FALSE, FALSE, FALSE, NULL },
 
 	// flight page
 	{ NULL,	"SET", 		NULL, 	FALSE, FALSE, FALSE, NULL },
@@ -397,6 +401,7 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"2182", 	NULL, FALSE, FALSE, FALSE, select_adf_emergency_freqency },
 	{ NULL,	"", 		NULL, FALSE, FALSE, FALSE, select_adf_station },
 
+	{ NULL, "sentry", NULL, FALSE, FALSE, FALSE, NULL }
 	};
 
 
@@ -2587,6 +2592,8 @@ void initialise_apache_pushbuttons(void)
 	current_mfd_focus = pilot_mfd_focus = MFD_LOCATION_PILOT_LHS;
 	co_pilot_mfd_focus = MFD_LOCATION_CPG_LHS;
 	waypoint_to_add = NULL;
+
+	ASSERT(strcmp(mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES].label, "sentry") == 0);
 }
 
 void handle_apache_mfd_click(void)
@@ -2851,6 +2858,24 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 
 				break;
 			case MFD_MODE_WEAPON_MSL:
+				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_ALL];
+				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_AUTO];
+				handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_NONE];
+				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_LOBL_INHIBIT];
+				handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_2ND_TARGET_INHIBIT];
+
+				handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TYPE_RF]; // TODO
+				handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_MODE_NORM]; // TODO
+				handler[BTN_R3] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TRAJ_HI]; // TODO
+				handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TRAIN];
+				handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_LRFD_FIRST];
+
+				button_label_decorations[location][BTN_R1].boxed = 2;
+				button_label_decorations[location][BTN_R2].boxed = 2;
+				button_label_decorations[location][BTN_R3].boxed = 2;
+				button_label_decorations[location][BTN_R4].barriered = TRUE;
+				button_label_decorations[location][BTN_R5].boxed = 2;
+
 				button_label_decorations[location][BTN_B2].boxed = 3;
 
 				break;

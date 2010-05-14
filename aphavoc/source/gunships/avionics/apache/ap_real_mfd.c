@@ -7398,8 +7398,10 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		print_mono_font_string (s);
 	}
 
-	// counter measures mode
-	draw_2d_box(-0.2, -0.17, 0.2, 0.03, FALSE, TRUE, MFD_COLOUR1);
+	// counter measures
+	set_mono_font_type (MONO_FONT_TYPE_12X20);
+
+	draw_2d_box(-0.2, -0.59, 0.2, -0.07 + debug_var_y * 0.01, FALSE, TRUE, MFD_COLOUR1);
 
 	switch (get_global_counter_measures_mode())
 	{
@@ -7417,15 +7419,13 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		break;
 	}
 
-	set_2d_mono_font_position (0.0, -0.02);
+	set_2d_mono_font_position (0.0, -0.5);
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
 
-	set_mono_font_type (MONO_FONT_TYPE_12X20);
-
 	// flare
-	set_2d_mono_font_position (0.0, -0.2);
+	set_2d_mono_font_position (0.0, -0.1);
 
 	s_ptr = "FLARE";
 
@@ -7433,7 +7433,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
 
-	set_2d_mono_font_position (0.0, -0.3);
+	set_2d_mono_font_position (0.0, -0.2);
 
 	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
 		APACHE_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
@@ -7450,7 +7450,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	}
 
 	// chaff
-	set_2d_mono_font_position (0.0, -0.4);
+	set_2d_mono_font_position (0.0, -0.3);
 
 	s_ptr = "CHAFF";
 
@@ -7458,7 +7458,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
 
-	set_2d_mono_font_position (0.0, -0.5);
+	set_2d_mono_font_position (0.0, -0.4);
 
 	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
 		APACHE_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF,
@@ -7843,7 +7843,18 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		draw_2d_half_thick_line(-0.9, -0.6, -0.9, -0.37, MFD_COLOUR1);
 
 		break;
+	case MFD_MODE_WEAPON_MSL:
+		draw_2d_half_thick_line(-1.2, 0.9, -0.88, 0.9, MFD_COLOUR1);
+		draw_2d_half_thick_line(-1.2, 0.0, -0.88, 0.0, MFD_COLOUR1);
+
+		print_vertical_mono_font_string(-0.88, 0.49, "MSL PWR", -0.5, TRUE);
+
+		draw_2d_half_thick_line(-0.88, 0.9, -0.88, 0.8, MFD_COLOUR1);
+		draw_2d_half_thick_line(-0.88, 0.0, -0.88, 0.1, MFD_COLOUR1);
+
+		break;
 	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
