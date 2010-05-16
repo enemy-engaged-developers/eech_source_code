@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import Image, sys
+import Image, sys, os.path
 
 SINGLE_IMAGE = -1
 MASK_IMAGE = -2
@@ -13,7 +13,7 @@ def write_image(img, num, from_x, width, from_y, height, out):
     else:
         out('{\n')
 
-    out('\t%d,\n\t%d,\n\t0,\n\t0,\n' % (width, height))
+    out('\t%d,\n\t%d,\n\t%d,\n\t%d,\n' % (width, height, -width / 2 + 1, -height / 2 + 1))
     
     for y in range(from_y, height):
         out('\t')
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     img = Image.open(name, )
 
     if True:
-        name_stem = name.split('.')[0]
+        name_stem = os.path.basename(name).split('.')[0]
         out_name = '%s.h' % name_stem
         out = file(out_name, 'w')
         
