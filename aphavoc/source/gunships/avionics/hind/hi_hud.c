@@ -95,8 +95,6 @@ static void display_weapon_information (void);
 #define HUD_VIEWPORT_TEXTURE_X_ORG	(HUD_VIEWPORT_SMALL_SIZE / 2)
 #define HUD_VIEWPORT_TEXTURE_Y_ORG	(HUD_VIEWPORT_SMALL_SIZE / 2)
 
-#define SIN60 0.8660254
-
 static env_2d
 	*hud_env;
 

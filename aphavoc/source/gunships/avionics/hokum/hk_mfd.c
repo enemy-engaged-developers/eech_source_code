@@ -942,8 +942,8 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		y_position = -0.8375;
 	}
 
-	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, TRUE, FALSE, MFD_COLOUR_BLUE);
-	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, TRUE, FALSE, 0.0, MFD_COLOUR_BLUE);
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, FALSE, FALSE, 0.0, MFD_COLOUR_LIGHT_BLUE);
 
 	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
 
@@ -4212,8 +4212,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		}
 	}
 
-	draw_2d_box(-1.0, 1.0, 1.0, 0.87, TRUE, FALSE, MFD_BACKGROUND_COLOUR);
-	draw_2d_box(-1.0, -1.0, 1.0, y_origin, TRUE, FALSE, MFD_BACKGROUND_COLOUR);
+	draw_2d_box(-1.0, 1.0, 1.0, 0.87, TRUE, FALSE, 0.0, MFD_BACKGROUND_COLOUR);
+	draw_2d_box(-1.0, -1.0, 1.0, y_origin, TRUE, FALSE, 0.0, MFD_BACKGROUND_COLOUR);
 
 	////////////////////////////////////////
 	//
@@ -6337,8 +6337,8 @@ static void draw_engine_display_mfd (void)
 
 	set_mono_font_colour (MFD_COLOUR1);
 
-	draw_2d_box(-0.9, 0.9, -0.4, -0.9, FALSE, FALSE, MFD_COLOUR1);
-	draw_2d_box( 0.9, 0.9,  0.4, -0.9, FALSE, FALSE, MFD_COLOUR1);
+	draw_2d_box(-0.9, 0.9, -0.4, -0.9, FALSE, FALSE, 0.0, MFD_COLOUR1);
+	draw_2d_box( 0.9, 0.9,  0.4, -0.9, FALSE, FALSE, 0.0, MFD_COLOUR1);
 
 	set_mono_font_type(MONO_FONT_TYPE_6X10);
 
@@ -6922,8 +6922,8 @@ static void draw_altitude_scale (void)
 		displayed_altitude = (int)((barometric_altitude + 5) / 10);
 
 
-	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
-	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, 0.0, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, 0.0, MFD_COLOUR_LIGHT_BLUE);
 
 	// draw scale
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
@@ -7053,8 +7053,8 @@ static void draw_airspeed_scale (void)
 		u1, u2, v1, v2;
 
 
-	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
-	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, 0.0, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, 0.0, MFD_COLOUR_LIGHT_BLUE);
 
 	// draw scale
 	get_2d_float_screen_x_coordinate (-y_centre, &v);

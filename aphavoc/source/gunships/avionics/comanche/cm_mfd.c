@@ -9526,7 +9526,7 @@ static void draw_engine_bar(float f_x1, float f_y1, float f_x2, float f_y2, floa
 {
 	int x1, x2, y1, y2;
 
-	draw_2d_box(f_x1, f_y1, f_x2, f_y2, FALSE, FALSE, MFD_COLOUR1);
+	draw_2d_box(f_x1, f_y1, f_x2, f_y2, FALSE, FALSE, 0.0, MFD_COLOUR1);
 
 	get_2d_int_screen_coordinates (f_x1, f_y2 + (fvalue * (f_y1 - f_y2)), &x1, &y1);
 	get_2d_int_screen_coordinates (f_x2, f_y2, &x2, &y2);

@@ -3160,7 +3160,7 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 									upper_y,
 									x + (1.0 + alignment) * label_width + margin,
 									upper_y - string2mfd_width(height) - margin,
-									TRUE, FALSE, clear_col);
+									TRUE, FALSE, 0.0, clear_col);
 
 					print_vertical_mono_font_string(x, y, label, alignment, TRUE);
 				}
@@ -3183,7 +3183,7 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 										upper_y,
 										x + (1.0 + alignment) * max(label_width, label_width2) + margin,
 										upper_y - string2mfd_width(height + 19.0) - margin,
-										TRUE, FALSE, clear_col);
+										TRUE, FALSE, 0.0, clear_col);
 
 						print_mono_font_string(label);
 
@@ -3198,7 +3198,7 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 										upper_y,
 										x + (1.0 + alignment) * label_width + margin,
 										upper_y - string2mfd_width(height) - margin,
-										TRUE, FALSE, clear_col);
+										TRUE, FALSE, 0.0, clear_col);
 
 						print_mono_font_string(label);
 					}
@@ -3229,7 +3229,7 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 								upper_y,
 								x + (1.0 + alignment) * label_width + margin,
 								upper_y - height - margin,
-								FALSE, TRUE, fg_col);
+								FALSE, TRUE, 0.0, fg_col);
 				}
 			}
 
@@ -3238,16 +3238,16 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 				switch (row)
 				{
 				case BTN_T1:
-					draw_2d_box(x - 0.1, 1.2, x + 0.1, 1.17, TRUE, FALSE, fg_col);
+					draw_2d_box(x - 0.1, 1.2, x + 0.1, 1.17, TRUE, FALSE, 0.0, fg_col);
 					break;
 				case BTN_L1:
-					draw_2d_box(-1.2, y + 0.1, -1.17, y - 0.1, TRUE, FALSE, fg_col);
+					draw_2d_box(-1.2, y + 0.1, -1.17, y - 0.1, TRUE, FALSE, 0.0, fg_col);
 					break;
 				case BTN_R1:
-					draw_2d_box(1.2, y + 0.1, 1.17, y - 0.1, TRUE, FALSE, fg_col);
+					draw_2d_box(1.2, y + 0.1, 1.17, y - 0.1, TRUE, FALSE, 0.0, fg_col);
 					break;
 				case BTN_B1:
-					draw_2d_box(x - 0.1, -1.2, x + 0.1, -1.17, TRUE, FALSE, fg_col);
+					draw_2d_box(x - 0.1, -1.2, x + 0.1, -1.17, TRUE, FALSE, 0.0, fg_col);
 					break;
 				default:
 					ASSERT(FALSE);

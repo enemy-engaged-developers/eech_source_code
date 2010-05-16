@@ -380,7 +380,7 @@ static void draw_field_of_regard_and_view_boxes (avionics_render_target render_t
 		x,
 		y;
 
-	draw_2d_box(-0.3, y_pos, 0.3, y_pos - 0.225, FALSE, TRUE, colour);
+	draw_2d_box(-0.3, y_pos, 0.3, y_pos - 0.225, FALSE, TRUE, 0.0, colour);
 
 	draw_2d_line ( 0.0000, y_pos,  0.0000, y_pos - 0.020, colour);
 	draw_2d_line (-0.2250, y_pos, -0.2250, y_pos - 0.020, colour);
@@ -397,7 +397,7 @@ static void draw_field_of_regard_and_view_boxes (avionics_render_target render_t
 	x = eo_azimuth / eo_max_azimuth * 0.3;
 	y = (eo_elevation / eo_min_elevation * -0.15) + y_pos - 0.075;
 
-	draw_2d_box(x - 0.04, y - 0.03, x + 0.04, y + 0.03, FALSE, TRUE, colour);
+	draw_2d_box(x - 0.04, y - 0.03, x + 0.04, y + 0.03, FALSE, TRUE, 0.0, colour);
 
 	// acquisition source direction
 	multiply_transpose_matrix3x3_vec3d(&acquisition_source_direction, current_flight_dynamics->attitude, cue_relative_position);
@@ -568,8 +568,8 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 #endif
 	if (render_target == RENDER_TARGET_FCR)
 	{
-		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, FALSE, TRUE, colour);
-		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, FALSE, TRUE, colour);
+		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, FALSE, TRUE, 0.02, colour);
+		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, FALSE, TRUE, 0.02, colour);
 	}
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
