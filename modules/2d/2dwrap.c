@@ -546,13 +546,38 @@ void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour c
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int thick_border, rgb_colour colour)
+static float x_3_arc_ratios[] =
+{
+	1.0 - COS90,
+	1.0 - COS60,
+	1.0 - COS30,
+	1.0 - COS0,
+};
+
+static float y_3_arc_ratios[] =
+{
+	1.0 - SIN90,
+	1.0 - SIN60,
+	1.0 - SIN30,
+	1.0 - SIN0,
+};
+
+void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int thick_border, float border_radius, rgb_colour colour)
 {
 	float x1, x2, y1, y2;
 	float x_min, x_max, y_min, y_max;
+	float border_radius_2d;
+	void (*draw_func)(float, float, float, float, rgb_colour);
+
+	if (thick_border)
+		draw_func = draw_half_thick_line;
+	else
+		draw_func = draw_line;
 
 	get_2d_float_screen_coordinates (x1_c, y1_c, &x1, &y1);
 	get_2d_float_screen_coordinates (x2_c, y2_c, &x2, &y2);
+	get_2d_float_screen_x_coordinate(x1_c + border_radius, &border_radius_2d);
+	border_radius_2d -= x1;
 
 	x1 = bound(x1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
 	x2 = bound(x2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
@@ -570,17 +595,39 @@ void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int
 	}
 	else
 	{
-		draw_line(x_min, y_min, x_max, y_min, colour);
-		draw_line(x_min, y_min, x_min, y_max, colour);
-		draw_line(x_min, y_max, x_max, y_max, colour);
-		draw_line(x_max, y_min, x_max, y_max, colour);
-
-		if (thick_border)
+		if (border_radius > 0.0)
 		{
-			draw_line(x_min, y_min-1, x_max, y_min-1, colour);
-			draw_line(x_min-1, y_min, x_min-1, y_max, colour);
-			draw_line(x_min, y_max+1, x_max, y_max+1, colour);
-			draw_line(x_max+1, y_min, x_max+1, y_max, colour);
+			int i;
+
+			// can't have corners larger than the sides (might also happen if box clips at the edge)
+			ASSERT(x_max - x_min > 2 * border_radius_2d && y_max - y_min > 2 * border_radius_2d);
+
+			// draw rounded corner as three segments of straight lines
+			for (i = 0; i < 3; i++)
+			{
+				x1 = border_radius_2d * x_3_arc_ratios[i];
+				y1 = border_radius_2d * y_3_arc_ratios[i];
+
+				x2 = border_radius_2d * x_3_arc_ratios[i + 1];
+				y2 = border_radius_2d * y_3_arc_ratios[i + 1];
+
+				draw_func(x_min + x1, y_min + y1, x_min + x2, y_min + y2, colour);
+				draw_func(x_max - x1, y_min + y1, x_max - x2, y_min + y2, colour);
+				draw_func(x_min + x1, y_max - y1, x_min + x2, y_max - y2, colour);
+				draw_func(x_max - x1, y_max - y1, x_max - x2, y_max - y2, colour);
+			}
+
+			draw_func(x_min + border_radius_2d, y_min, x_max - border_radius_2d, y_min, colour);
+			draw_func(x_min, y_min + border_radius_2d, x_min, y_max - border_radius_2d, colour);
+			draw_func(x_min + border_radius_2d, y_max, x_max - border_radius_2d, y_max, colour);
+			draw_func(x_max, y_min + border_radius_2d, x_max, y_max - border_radius_2d, colour);
+		}
+		else
+		{
+			draw_func(x_min, y_min, x_max, y_min, colour);
+			draw_func(x_min, y_min, x_min, y_max, colour);
+			draw_func(x_min, y_max, x_max, y_max, colour);
+			draw_func(x_max, y_min, x_max, y_max, colour);
 		}
 	}
 }

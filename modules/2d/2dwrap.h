@@ -96,7 +96,7 @@ extern void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const 
 
 extern void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour col);
 
-extern void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int thick_border, rgb_colour colour);
+extern void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int thick_border, float border_radius, rgb_colour colour);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
