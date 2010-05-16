@@ -7747,6 +7747,8 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 				if (!selected)
 					draw_2d_box(pylon_x - 0.10, pylon_y + 0.25, pylon_x + 0.10, pylon_y - 0.25, FALSE, TRUE, 0.0, MFD_COLOUR1);
 
+				draw_2d_half_thick_line(pylon_x + 0.1, pylon_y + 0.23, pylon_x - 0.1, pylon_y + 0.23, text_colour);
+
 				set_mono_font_colour (text_colour);
 
 #if 0
