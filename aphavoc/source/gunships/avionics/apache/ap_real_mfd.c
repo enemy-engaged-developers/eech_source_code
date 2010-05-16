@@ -7351,7 +7351,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 		&weapon_sub_type, &number, &damaged))
 	{
-		int selected = (weapon_sub_type == selected_weapon) && !damaged;
+		int selected = (mfd_mode == MFD_MODE_WEAPON_GUN);
 
 		get_2d_float_screen_coordinates (-0.01, 0.675, &x1, &y1);
 		get_2d_float_screen_x_coordinate (0.01, &x2);
@@ -7401,7 +7401,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	// counter measures
 	set_mono_font_type (MONO_FONT_TYPE_12X20);
 
-	draw_2d_box(-0.2, -0.59, 0.2, -0.07 + debug_var_y * 0.01, FALSE, TRUE, MFD_COLOUR1);
+	draw_2d_box(-0.2, -0.59, 0.2, -0.07, FALSE, TRUE, MFD_COLOUR1);
 
 	switch (get_global_counter_measures_mode())
 	{
@@ -7440,7 +7440,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		&weapon_sub_type, &number, &damaged))
 	{
 		if (!damaged)
-			sprintf (s, "%2d", number);
+			sprintf (s, "%02d", number);
 		else
 			sprintf (s, "XX");
 
@@ -7465,7 +7465,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		&weapon_sub_type, &number, &damaged))
 	{
 		if (!damaged)
-			sprintf (s, "%2d", number);
+			sprintf (s, "%02d", number);
 		else
 			sprintf (s, "XX");
 
@@ -7616,20 +7616,20 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	{
 		float pylon_x, pylon_y;
 
-		pylon_y = -0.05 + debug_var_y * 0.05;
+		pylon_y = -0.03;
 		switch (pylon)
 		{
 		case APACHE_LHS_INNER_PYLON:
-			pylon_x = -0.39 + debug_var_x * 0.05;
+			pylon_x = -0.36;
 			break;
 		case APACHE_RHS_INNER_PYLON:
-			pylon_x = 0.39;
+			pylon_x = 0.36;
 			break;
 		case APACHE_LHS_OUTER_PYLON:
-			pylon_x = -0.62;
+			pylon_x = -0.61;
 			break;
 		case APACHE_RHS_OUTER_PYLON:
-			pylon_x = 0.62;
+			pylon_x = 0.61;
 			break;
 		case APACHE_LHS_WING_TIP_MOUNT:
 			pylon_x = -0.97;
@@ -7645,16 +7645,16 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		{
 			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
 			{
-#if 0
+
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon
 
 				if (pylon == APACHE_LHS_INNER_PYLON || pylon == APACHE_LHS_OUTER_PYLON)
-					last_offset = 0.07;
+					last_offset = 0.061;
 				else
-					last_offset = -0.07;
+					last_offset = -0.061;
 
-				for (i = 1; i <= number; i++)
+				for (i = 1; i <= 4; i++)
 				{
 					float missile_x, missile_y;
 
@@ -7662,62 +7662,82 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 					{
 						case 1:
 							missile_x = pylon_x + last_offset;
-							missile_y = pylon_y - 0.18;
+							missile_y = pylon_y - 0.14;
 							break;
 						case 2:
 							missile_x = pylon_x - last_offset;
-							missile_y = pylon_y - 0.18;
+							missile_y = pylon_y - 0.14;
 							break;
 						case 3:
 							missile_x = pylon_x + last_offset;
-							missile_y = pylon_y + 0.22;
+							missile_y = pylon_y + 0.17;
 							break;
 						case 4:
 							missile_x = pylon_x - last_offset;
-							missile_y = pylon_y + 0.22;
+							missile_y = pylon_y + 0.17;
 							break;
 						default:
 							ASSERT(!"more than 4 hellfires on Apache pylon");
 					}
 
-					// remove wing
-					get_2d_float_screen_x_coordinate(missile_x + 0.06, &x1);
-					get_2d_float_screen_x_coordinate(missile_x - 0.06, &x2);
-
-					if (missile_y > pylon_y)
-						draw_line(x1, forward_wing, x2, forward_wing, clear_mfd_colour);
-					else
-						draw_line(x1, rear_wing, x2, rear_wing, clear_mfd_colour);
-
-					// draw missile
-					if ((weapon_sub_type == selected_weapon) && !damaged)
+					if (i <= number)  // there is a missile at pylon
 					{
-						draw_2d_mono_sprite(inverted_hellfire_missile_data, missile_x, missile_y, MFD_COLOUR1);
-						set_mono_font_colour (clear_mfd_colour);
-					}
-					else
-					{
-						draw_2d_mono_sprite(hellfire_missile_data, missile_x, missile_y, MFD_COLOUR1);
+						float x2d, y2d;
+
+						get_2d_float_screen_x_coordinate(missile_x, &x2d),
+						get_2d_float_screen_y_coordinate(missile_y + 0.09, &y2d);
+
+						// draw missile
+						if (mfd_mode == MFD_MODE_WEAPON_MSL)
+						{
+							draw_2d_mono_sprite(hellfire_missile_icon_inverted, missile_x, missile_y, MFD_COLOUR1);
+							set_mono_font_colour (clear_mfd_colour);
+						}
+						else
+						{
+							draw_2d_box(missile_x - 0.051, missile_y + 0.05, missile_x + 0.051, missile_y - 0.05, TRUE, FALSE, clear_mfd_colour);
+
+							draw_2d_mono_sprite(hellfire_missile_icon, missile_x, missile_y, MFD_COLOUR1);
+							set_mono_font_colour (MFD_COLOUR1);
+						}
+	//					set_mono_font_type (MONO_FONT_TYPE_7X12);
+						if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
+						{
+							draw_half_thick_line(x2d - 11, y2d, x2d, y2d + 11, get_mono_font_colour());
+							draw_half_thick_line(x2d + 11, y2d, x2d, y2d + 11, get_mono_font_colour());
+
+							//sprintf(s, "R");
+						}
+						else
+						{
+							draw_half_thick_line(x2d - 12, y2d, x2d + 12, y2d, get_mono_font_colour());
+							set_2d_mono_font_position (missile_x, missile_y + 0.08);
+							sprintf(s, "L");
+
+							x_adjust = get_mono_font_string_width (s) * -0.4;
+							set_mono_font_rel_position (x_adjust, 0.0);
+							print_mono_font_string (s);
+						}
+
 						set_mono_font_colour (MFD_COLOUR1);
 					}
-					set_mono_font_type (MONO_FONT_TYPE_7X12);
-					set_2d_mono_font_position (missile_x, missile_y-0.05);
-
-					if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
-						sprintf(s, "R");
 					else
-						sprintf(s, "L");
-
-					x_adjust = get_mono_font_string_width (s) * -0.4;
-					set_mono_font_rel_position (x_adjust, 0.0);
-					print_mono_font_string (s);
+					{
+						if (mfd_mode == MFD_MODE_WEAPON_MSL)
+							draw_2d_box(missile_x - 0.01, missile_y + 0.12, missile_x + 0.01, missile_y - 0.12, TRUE, FALSE, MFD_COLOUR1);
+						else
+						{
+							draw_2d_box(missile_x - 0.01, missile_y + 0.12, missile_x + 0.01, missile_y - 0.12, TRUE, FALSE, clear_mfd_colour);
+							draw_2d_box(missile_x - 0.01, missile_y + 0.12, missile_x + 0.01, missile_y - 0.12, FALSE, FALSE, MFD_COLOUR1);
+						}
+					}
 				}
-#endif
+
 			}
 			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255 ||
 					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
 			{
-				int selected = (weapon_sub_type == selected_weapon) && !damaged;
+				int selected = (mfd_mode == MFD_MODE_WEAPON_RKT);
 				rgb_colour text_colour = selected ? clear_mfd_colour : MFD_COLOUR1;
 
 				// draw pod (background)

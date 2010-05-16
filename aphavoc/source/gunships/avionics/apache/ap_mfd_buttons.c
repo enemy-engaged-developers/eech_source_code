@@ -2867,13 +2867,13 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 				handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TYPE_RF]; // TODO
 				handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_MODE_NORM]; // TODO
 				handler[BTN_R3] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TRAJ_HI]; // TODO
-				handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TRAIN];
+//				handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TRAIN];
 				handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_LRFD_FIRST];
 
 				button_label_decorations[location][BTN_R1].boxed = 2;
 				button_label_decorations[location][BTN_R2].boxed = 2;
 				button_label_decorations[location][BTN_R3].boxed = 2;
-				button_label_decorations[location][BTN_R4].barriered = TRUE;
+//				button_label_decorations[location][BTN_R4].barriered = TRUE;
 				button_label_decorations[location][BTN_R5].boxed = 2;
 
 				button_label_decorations[location][BTN_B2].boxed = 3;
