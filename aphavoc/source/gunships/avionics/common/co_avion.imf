@@ -86,6 +86,7 @@ c_object_files    += $+ &
                      $(currentdir)\co_eo.obj &
                      $(currentdir)\co_hms.obj &
                      $(currentdir)\co_hud.obj &
+                     $(currentdir)\co_laser.obj &
                      $(currentdir)\co_mfd.obj &
                      $(currentdir)\co_nvs.obj &
                      $(currentdir)\co_pfz.obj &

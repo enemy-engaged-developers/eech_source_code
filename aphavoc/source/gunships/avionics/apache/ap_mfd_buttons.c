@@ -15,6 +15,7 @@
 
 #include "../common/co_adf.h"
 #include "../common/co_radar.h"
+#include "../common/co_laser.h"
 #include "../../dynamics/common/co_fuel.h"
 #include "entity/tacview/tacview.h"
 
@@ -99,6 +100,7 @@ static int set_burst_limit(mfd_push_button_types page, mfd_button_labels btn);
 static int button_toggle_gun_mode(mfd_push_button_types page, mfd_button_labels btn);
 static int set_rocket_salvo_size(mfd_push_button_types page, mfd_button_labels btn);
 static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn);
+static int select_laser_channel(mfd_push_button_types page, mfd_button_labels btn);
 
 static int select_tpm_sub_menu(mfd_push_button_types page, mfd_button_labels btn);
 static int select_tpm_prof_option(mfd_push_button_types page, mfd_button_labels btn);
@@ -321,6 +323,9 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"AUTO",		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"NONE",		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"SAL",		"AUTO",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"PRI",		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
+	{ NULL,	"ALT",		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
+	{ NULL,	NULL,		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
 	{ NULL,	"LOBL INHIBIT",	NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"2ND TARGET INHIBIT",	NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"TYPE",		"RF", 	FALSE, FALSE, FALSE, NULL },
@@ -1259,6 +1264,42 @@ static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn)
 	return TRUE;
 }
 
+static int select_laser_channel(mfd_push_button_types page, mfd_button_labels btn)
+{
+	if (page == MFD_BUTTON_MSL_PRI)
+		set_apache_mfd_sub_mode(current_mfd_focus, 1);
+	else if (page == MFD_BUTTON_MSL_ALT)
+		set_apache_mfd_sub_mode(current_mfd_focus, 2);
+	else switch(btn)
+	{
+	case BTN_L1:
+	case BTN_L2:
+	case BTN_L3:
+	case BTN_L4:
+	case BTN_L5:
+	{
+		char channel = current_laser_channels[btn - BTN_L1];
+
+		if (btn == BTN_L5)
+			channel = 0;
+
+		if (get_apache_mfd_sub_mode(current_mfd_focus) == 1)
+			set_priority_laser_channel(channel);
+		else
+			set_alternate_laser_channel(channel);
+
+		set_apache_mfd_sub_mode(current_mfd_focus, 0);
+		break;
+	}
+	default:
+		ASSERT(FALSE);
+		break;
+	}
+
+	setup_apache_mfd_buttons(MFD_MODE_WEAPON_MSL, current_mfd_focus, TRUE);
+
+	return TRUE;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2401,6 +2442,42 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			break;
 		}
 
+	case MFD_MODE_WEAPON_MSL:
+		{
+			if (sub_mode == 0)
+			{
+				char chan = get_priority_laser_channel();
+
+				if (!chan)
+					strcpy(button_label_decorations[location][BTN_L1].line2, "NONE");
+				else
+				{
+					button_label_decorations[location][BTN_L1].line2[0] = chan;
+					button_label_decorations[location][BTN_L1].line2[1] = 0;
+				}
+
+				chan = get_alternate_laser_channel();
+				if (!chan)
+					strcpy(button_label_decorations[location][BTN_L2].line2, "NONE");
+				else
+				{
+					button_label_decorations[location][BTN_L2].line2[0] = chan;
+					button_label_decorations[location][BTN_L2].line2[1] = 0;
+				}
+			}
+			else
+			{
+				draw_2d_half_thick_line(-1.2, 0.9, -0.88, 0.9, fg_col);
+				draw_2d_half_thick_line(-1.2, -0.6, -0.88, -0.6, fg_col);
+
+				print_vertical_mono_font_string(-0.88, 0.19, "CHANNEL", -0.5, TRUE);
+
+				draw_2d_half_thick_line(-0.88, 0.9, -0.88, 0.48, fg_col);
+				draw_2d_half_thick_line(-0.88, -0.6, -0.88, -0.17, fg_col);
+			}
+
+			break;
+		}
 	case MFD_MODE_WEAPON_RKT:
 		{
 			if (sub_mode == 1)
@@ -2858,11 +2935,41 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 
 				break;
 			case MFD_MODE_WEAPON_MSL:
+#if 0  // not sure when these will be shown, and when the pri/aalt channel buttons will be shown instead
 				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_ALL];
 				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_AUTO];
 				handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_MSL_POWER_NONE];
-				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_LOBL_INHIBIT];
-				handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_2ND_TARGET_INHIBIT];
+#endif
+				if (sub_mode == 0)
+				{
+					handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_PRI];
+					handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_ALT];
+
+					handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_LOBL_INHIBIT];
+					handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_2ND_TARGET_INHIBIT];
+
+					button_label_decorations[location][BTN_L1].boxed = 2;
+					button_label_decorations[location][BTN_L2].boxed = 2;
+					*button_label_decorations[location][BTN_L1].line1 = 0;
+					*button_label_decorations[location][BTN_L2].line1 = 0;
+					*button_label_decorations[location][BTN_L5].line1 = 0;
+				}
+				else
+				{
+					int i;
+					for (i=0; i<4; i++)
+					{
+						handler[BTN_L1 + i] = &mfd_push_button_definitions[MFD_BUTTON_MSL_CHAN_SEL];
+						button_label_decorations[location][BTN_L1 + i].boxed = 0;
+						button_label_decorations[location][BTN_L1 + i].line1[0] = current_laser_channels[i];
+						button_label_decorations[location][BTN_L1 + i].line1[1] = 0;
+						*button_label_decorations[location][BTN_L1 + i].line2 = 0;
+					}
+
+					handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_MSL_CHAN_SEL];
+					strcpy(button_label_decorations[location][BTN_L5].line1, "NONE");
+					handler[BTN_L6] = NULL;
+				}
 
 				handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_TYPE_RF]; // TODO
 				handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_MODE_NORM]; // TODO

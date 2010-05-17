@@ -494,6 +494,7 @@ void initialise_avionics (void)
 	}
 
 	initialize_common_adf();
+	initialise_common_laser();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,6 +509,8 @@ void deinitialise_avionics (void)
 	}
 
 	initialised = FALSE;
+
+	deinitialise_common_laser();
 
 	switch (gunship_type)
 	{

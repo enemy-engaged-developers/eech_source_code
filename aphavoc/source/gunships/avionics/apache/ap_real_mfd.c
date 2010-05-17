@@ -7868,6 +7868,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 
 		break;
 	case MFD_MODE_WEAPON_MSL:
+#if 0  // only if MSL PWR buttons are shown
 		draw_2d_half_thick_line(-1.2, 0.9, -0.88, 0.9, MFD_COLOUR1);
 		draw_2d_half_thick_line(-1.2, 0.0, -0.88, 0.0, MFD_COLOUR1);
 
@@ -7875,7 +7876,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 
 		draw_2d_half_thick_line(-0.88, 0.9, -0.88, 0.8, MFD_COLOUR1);
 		draw_2d_half_thick_line(-0.88, 0.0, -0.88, 0.1, MFD_COLOUR1);
-
+#endif
 		break;
 	}
 
