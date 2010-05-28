@@ -450,7 +450,7 @@ typedef enum INT_TYPES int_types;
 #define NUM_LOCAL_EFFECT_COUNT_BITS						(4)
 #define NUM_LOCAL_ONLY_GROUP_BITS						(1)
 #define NUM_LOCAL_WEATHER_MODEL_BITS					(1)
-#define NUM_LOCK_ON_AFTER_LAUNCH_BITS					(1)
+#define NUM_LOCK_ON_AFTER_LAUNCH_BITS					(2)
 #define NUM_LOSSES_BITS										(10)
 #define NUM_LOS_TO_TARGET_BITS							(1)
 #define NUM_MAP_ICON_BITS									(6)

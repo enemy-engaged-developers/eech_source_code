@@ -100,6 +100,9 @@ static int set_burst_limit(mfd_push_button_types page, mfd_button_labels btn);
 static int button_toggle_gun_mode(mfd_push_button_types page, mfd_button_labels btn);
 static int set_rocket_salvo_size(mfd_push_button_types page, mfd_button_labels btn);
 static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn);
+
+static int select_missile_laser_channel(mfd_push_button_types page, mfd_button_labels btn);
+static int toggle_lrfd_lst(mfd_push_button_types page, mfd_button_labels btn);
 static int select_laser_channel(mfd_push_button_types page, mfd_button_labels btn);
 
 static int select_tpm_sub_menu(mfd_push_button_types page, mfd_button_labels btn);
@@ -323,9 +326,9 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"AUTO",		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"NONE",		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"SAL",		"AUTO",	FALSE, FALSE, FALSE, NULL },
-	{ NULL,	"PRI",		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
-	{ NULL,	"ALT",		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
-	{ NULL,	NULL,		NULL,	FALSE, FALSE, FALSE, select_laser_channel },
+	{ NULL,	"PRI",		NULL,	FALSE, FALSE, FALSE, select_missile_laser_channel },
+	{ NULL,	"ALT",		NULL,	FALSE, FALSE, FALSE, select_missile_laser_channel },
+	{ NULL,	NULL,		NULL,	FALSE, FALSE, FALSE, select_missile_laser_channel },
 	{ NULL,	"LOBL INHIBIT",	NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"2ND TARGET INHIBIT",	NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"TYPE",		"RF", 	FALSE, FALSE, FALSE, NULL },
@@ -337,6 +340,11 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"TRAJ",		"HI",	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"TRAJ",		"LO",	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"TRAIN",	NULL,	FALSE, FALSE, FALSE, NULL },
+
+	// laser channel page
+	{ NULL,	NULL,	NULL,	FALSE, FALSE, FALSE, select_laser_channel },
+	{ NULL,	NULL,	NULL,	FALSE, FALSE, FALSE, select_laser_channel },
+	{ NULL, "LRFD", "LST",	FALSE, FALSE, FALSE, toggle_lrfd_lst },
 
 	// flight page
 	{ NULL,	"SET", 		NULL, 	FALSE, FALSE, FALSE, NULL },
@@ -423,7 +431,7 @@ static mfd_button_label_decorations button_label_decorations[4][BTN_B5 + 1] = { 
 
 static int select_menu_page(mfd_push_button_types page, mfd_button_labels btn)
 {
-	select_apache_mfd_mode(MFD_MODE_MENU, current_mfd_focus);
+	select_apache_mfd_mode(MFD_MODE_MENU, 0, current_mfd_focus);
 
 	return TRUE;
 }
@@ -445,6 +453,7 @@ static int select_util_page(mfd_push_button_types page, mfd_button_labels btn)
 static int set_new_page(mfd_push_button_types page, mfd_button_labels btn)
 {
 	mfd_modes mode = MFD_MODE_MENU;
+	mfd_modes current_mode = get_apache_current_mfd_mode(current_mfd_focus);
 
 	switch (page)
 	{
@@ -469,11 +478,29 @@ static int set_new_page(mfd_push_button_types page, mfd_button_labels btn)
 	case MFD_BUTTON_ADF:
 		mode = MFD_MODE_ADF;
 		break;
+	case MFD_BUTTON_CHAN:
+		if (current_mode == MFD_MODE_LASER_CHANNEL)
+		{
+			return_to_previous_apache_mfd_mode(current_mfd_focus);
+			return TRUE;
+		}
+		else
+			mode = MFD_MODE_LASER_CHANNEL;
+		break;
+	case MFD_BUTTON_CODE:
+		if (current_mode == MFD_MODE_LASER_CODE)
+		{
+			return_to_previous_apache_mfd_mode(current_mfd_focus);
+			return TRUE;
+		}
+		else
+			mode = MFD_MODE_LASER_CODE;
+		break;
 	}
 
 	if (mode != MFD_MODE_MENU)
 	{
-		select_apache_mfd_mode(mode, current_mfd_focus);
+		select_apache_mfd_mode(mode, 0, current_mfd_focus);
 		return TRUE;
 	}
 
@@ -653,7 +680,7 @@ static int select_tsd_sub_page(mfd_push_button_types page, mfd_button_labels btn
 	if (mode == current_mode)
 		mode = MFD_MODE_TSD;
 
-	select_apache_mfd_mode(mode, current_mfd_focus);
+	select_apache_mfd_mode(mode, 0, current_mfd_focus);
 
 	return TRUE;
 }
@@ -1181,7 +1208,7 @@ static int set_mfd_weapon_mode(mfd_push_button_types page, mfd_button_labels btn
 	if (mode == get_apache_current_mfd_mode(current_mfd_focus))
 		mode = MFD_MODE_WEAPON;  // return to main weapons page
 
-	select_apache_mfd_mode(mode, current_mfd_focus);
+	select_apache_mfd_mode(mode, 0, current_mfd_focus);
 
 	return TRUE;
 }
@@ -1264,7 +1291,11 @@ static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn)
 	return TRUE;
 }
 
-static int select_laser_channel(mfd_push_button_types page, mfd_button_labels btn)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int select_missile_laser_channel(mfd_push_button_types page, mfd_button_labels btn)
 {
 	if (page == MFD_BUTTON_MSL_PRI)
 		set_apache_mfd_sub_mode(current_mfd_focus, 1);
@@ -1305,6 +1336,70 @@ static int select_laser_channel(mfd_push_button_types page, mfd_button_labels bt
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int select_laser_channel(mfd_push_button_types page, mfd_button_labels btn)
+{
+	if (page == MFD_BUTTON_CHAN_GROUP_SELECT)
+	{
+		int channel = btn - BTN_L1 + 1;
+
+		set_apache_mfd_sub_mode(current_mfd_focus, channel);
+		setup_apache_mfd_buttons(MFD_MODE_LASER_CHANNEL, current_mfd_focus, TRUE);
+	}
+	else
+	{
+		int selected;
+		mfd_modes mfd_mode = get_apache_current_mfd_mode(current_mfd_focus);
+		int sub_mode = get_apache_mfd_sub_mode(current_mfd_focus);
+
+		if (btn <= BTN_L6)
+			selected = 'A' + (btn - BTN_L1);
+		else if (btn <= BTN_R6)
+		{
+			selected = 'R' - (btn - BTN_R1);
+			if (selected <= 'O')
+				selected--;
+		}
+		else
+		{
+			selected = 'G' + (btn - BTN_M);
+			if (selected >= 'I')
+				selected++;
+		}
+
+		if (mfd_mode == MFD_MODE_LASER_CHANNEL)
+		{
+			current_laser_channels[sub_mode - 1] = selected;
+
+			set_apache_mfd_sub_mode(current_mfd_focus, 0);
+		}
+		else // LASER_CODE
+		{
+			if (sub_mode == 0)
+				set_laser_range_finder_designator_channel(selected);
+			else
+				set_laser_spot_tracker_channel(selected);
+		}
+
+		setup_apache_mfd_buttons(mfd_mode, current_mfd_focus, TRUE);
+	}
+
+	return TRUE;
+}
+
+static int toggle_lrfd_lst(mfd_push_button_types page, mfd_button_labels btn)
+{
+	int new_mode = !get_apache_mfd_sub_mode(current_mfd_focus);
+	set_apache_mfd_sub_mode(current_mfd_focus, new_mode);
+
+	setup_apache_mfd_buttons(MFD_MODE_LASER_CODE, current_mfd_focus, TRUE);
+
+	return TRUE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // checklist page
 
 static int set_new_checklist_page(mfd_push_button_types page, mfd_button_labels btn)
@@ -1326,7 +1421,7 @@ static int set_new_checklist_page(mfd_push_button_types page, mfd_button_labels 
 			if (get_apache_current_mfd_mode(current_mfd_focus) == mode)
 				mode = MFD_MODE_CHECKLIST;
 
-			select_apache_mfd_mode(mode, current_mfd_focus);
+			select_apache_mfd_mode(mode, 0, current_mfd_focus);
 
 			break;
 		}
@@ -2698,7 +2793,7 @@ void handle_apache_mfd_click(void)
 			}
 		}
 		else if (clicked_btn == BTN_M)
-			select_apache_mfd_mode(MFD_MODE_MENU, current_mfd_focus);
+			select_apache_mfd_mode(MFD_MODE_MENU, 0, current_mfd_focus);
 		last_button_pressed = NO_BTN;
 	}
 	else
@@ -2725,7 +2820,7 @@ void handle_apache_mfd_click(void)
 		}
 
 		if (mode != MFD_MODE_OFF)
-			select_apache_mfd_mode(mode, current_mfd_focus);
+			select_apache_mfd_mode(mode, 0, current_mfd_focus);
 		else if (accepting_waypoint_input)
 		{
 			apache_coordinate_points* wpt = get_apache_clicked_point(current_mfd_focus, pointer_position_x, pointer_position_y, TRUE);
@@ -2746,13 +2841,15 @@ void handle_apache_mfd_click(void)
 void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is_sub_mode)
 {
 	mfd_push_button** handler = mfd_button_handlers[location];
-	unsigned sub_mode = get_apache_mfd_sub_mode(location);
+	unsigned sub_mode;
 
 	ASSERT(location != MFD_LOCATION_ORT);
 
 	clear_buttons(location, !is_sub_mode);
-	if (!is_sub_mode)
-		set_apache_mfd_sub_mode(location, 0);
+//	if (!is_sub_mode)
+//		set_apache_mfd_sub_mode(location, 0);
+
+	sub_mode = get_apache_mfd_sub_mode(location);
 
 	accepting_coordinate_input = accepting_waypoint_input = accepting_target = FALSE;
 	waypoint_to_add = NULL;
@@ -2942,6 +3039,7 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 #endif
 				if (sub_mode == 0)
 				{
+					mfd_button_labels btn;
 					handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_MSL_PRI];
 					handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_MSL_ALT];
 
@@ -2950,9 +3048,9 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 
 					button_label_decorations[location][BTN_L1].boxed = 2;
 					button_label_decorations[location][BTN_L2].boxed = 2;
-					*button_label_decorations[location][BTN_L1].line1 = 0;
-					*button_label_decorations[location][BTN_L2].line1 = 0;
-					*button_label_decorations[location][BTN_L5].line1 = 0;
+
+					for (btn = BTN_L1; btn <= BTN_L6; btn++)
+						*button_label_decorations[location][btn].line1 = 0;
 				}
 				else
 				{
@@ -3023,6 +3121,66 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 				button_label_decorations[location][BTN_R6].boxed = 2;
 			if (handler[BTN_R5] == &mfd_push_button_definitions[MFD_BUTTON_LRFD_FIRST])
 				button_label_decorations[location][BTN_R5].boxed = 2;
+
+			break;
+		}
+	case MFD_MODE_LASER_CHANNEL:
+	case MFD_MODE_LASER_CODE:
+		{
+			int i;
+
+			if (mfd_mode == MFD_MODE_LASER_CHANNEL)
+			{
+				handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_CHAN];
+				handler[BTN_T4] = &mfd_push_button_definitions[MFD_BUTTON_CODE];
+				button_label_decorations[location][BTN_T1].boxed = 3;
+			}
+			else
+			{
+				handler[BTN_T2] = &mfd_push_button_definitions[MFD_BUTTON_LRFD_LST_TOGGLE];
+				handler[BTN_T4] = &mfd_push_button_definitions[MFD_BUTTON_CODE];
+				button_label_decorations[current_mfd_focus][BTN_T2].boxed = sub_mode + 1;
+				button_label_decorations[location][BTN_T4].boxed = 3;
+			}
+
+
+			if (mfd_mode == MFD_MODE_LASER_CHANNEL && sub_mode == 0)
+			{
+				for (i=0; i<4; i++)
+				{
+					mfd_button_labels btn = BTN_L1 + i;
+					handler[btn] = &mfd_push_button_definitions[MFD_BUTTON_CHAN_GROUP_SELECT];
+					sprintf(button_label_decorations[location][btn].line1, "%d", i+1);
+					sprintf(button_label_decorations[location][btn].line2, "%c", current_laser_channels[i]);
+					button_label_decorations[location][btn].boxed = 2;
+				}
+			}
+			else
+			{
+				char channel = 'A';
+				char selected = 0;
+
+				if (mfd_mode == MFD_MODE_LASER_CODE)
+					selected = (sub_mode == 0) ? get_laser_range_finder_designator_channel() : get_laser_spot_tracker_channel();
+
+				for (i=0; i<16; i++, channel++)
+				{
+					mfd_button_labels btn = BTN_L1 + i;
+
+					if (i >= 10)
+						btn = BTN_R1 + (15 - i);
+					else if (i >= 6)
+						btn = BTN_M + i - 6;
+
+					if (channel == 'I' || channel == 'O')
+						channel++;
+
+					handler[btn] = &mfd_push_button_definitions[MFD_BUTTON_CHAN_SELECT];
+					button_label_decorations[location][btn].boxed = (selected == channel) ? 3 : 0;
+					sprintf(button_label_decorations[location][btn].line1, " %c ", channel);
+					get_display_laser_channel_frequency(i, button_label_decorations[location][btn].line2);
+				}
+			}
 
 			break;
 		}

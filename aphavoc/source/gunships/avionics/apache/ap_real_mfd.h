@@ -74,7 +74,7 @@ extern void initialise_apache_mfd (void);
 
 extern void deinitialise_apache_mfd (void);
 
-extern void select_apache_mfd_mode (mfd_modes mode, mfd_locations location);
+extern void select_apache_mfd_mode (mfd_modes mode, int sub_mode, mfd_locations location);
 
 extern void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw_translucent_background, mfd_locations location);
 
@@ -127,6 +127,7 @@ extern void create_apache_pfz(int is_nfz);
 extern void draw_apache_virtual_cockpit_ort_symbology(void);
 
 mfd_modes get_apache_current_mfd_mode(mfd_locations location);
+void return_to_previous_apache_mfd_mode(mfd_locations location);
 
 void set_apache_mfd_sub_mode(mfd_locations location, int sub_mode);
 int get_apache_mfd_sub_mode(mfd_locations location);

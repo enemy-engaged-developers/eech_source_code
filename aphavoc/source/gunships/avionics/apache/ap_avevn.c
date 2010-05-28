@@ -772,7 +772,7 @@ static void select_previous_rhs_mfd_event (event *ev)
 
 static void select_lhs_ground_radar_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_GROUND_RADAR, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_GROUND_RADAR, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,7 +781,7 @@ static void select_lhs_ground_radar_mfd_event (event *ev)
 
 static void select_rhs_ground_radar_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_GROUND_RADAR, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_GROUND_RADAR, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -790,7 +790,7 @@ static void select_rhs_ground_radar_mfd_event (event *ev)
 
 static void select_lhs_air_radar_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_AIR_RADAR, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_AIR_RADAR, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -799,7 +799,7 @@ static void select_lhs_air_radar_mfd_event (event *ev)
 
 static void select_rhs_air_radar_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_AIR_RADAR, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_AIR_RADAR, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -810,15 +810,15 @@ static void select_lhs_tads_mfd_event (event *ev)
 {
 	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
 	{
-		select_apache_mfd_mode (MFD_MODE_FLIR, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_FLIR, 0, MFD_LOCATION_LHS);
 	}
 	else if (eo_sensor == TARGET_ACQUISITION_SYSTEM_DTV)
 	{
-		select_apache_mfd_mode (MFD_MODE_DTV, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_DTV, 0, MFD_LOCATION_LHS);
 	}
 	else
 	{
-		select_apache_mfd_mode (MFD_MODE_DVO, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_DVO, 0, MFD_LOCATION_LHS);
 	}
 }
 
@@ -830,15 +830,15 @@ static void select_rhs_tads_mfd_event (event *ev)
 {
 	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
 	{
-		select_apache_mfd_mode (MFD_MODE_FLIR, MFD_LOCATION_RHS);
+		select_apache_mfd_mode (MFD_MODE_FLIR, 0, MFD_LOCATION_RHS);
 	}
 	else if (eo_sensor == TARGET_ACQUISITION_SYSTEM_DTV)
 	{
-		select_apache_mfd_mode (MFD_MODE_DTV, MFD_LOCATION_RHS);
+		select_apache_mfd_mode (MFD_MODE_DTV, 0, MFD_LOCATION_RHS);
 	}
 	else
 	{
-		select_apache_mfd_mode (MFD_MODE_DVO, MFD_LOCATION_RHS);
+		select_apache_mfd_mode (MFD_MODE_DVO, 0, MFD_LOCATION_RHS);
 	}
 }
 
@@ -848,7 +848,7 @@ static void select_rhs_tads_mfd_event (event *ev)
 
 static void select_lhs_tsd_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_TSD, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -857,7 +857,7 @@ static void select_lhs_tsd_mfd_event (event *ev)
 
 static void select_rhs_tsd_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_TSD, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -866,7 +866,7 @@ static void select_rhs_tsd_mfd_event (event *ev)
 
 static void select_lhs_ase_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_ASE, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_ASE, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -875,7 +875,7 @@ static void select_lhs_ase_mfd_event (event *ev)
 
 static void select_rhs_ase_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_ASE, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_ASE, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -884,7 +884,7 @@ static void select_rhs_ase_mfd_event (event *ev)
 
 static void select_lhs_weapon_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_WEAPON, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_WEAPON, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -893,7 +893,7 @@ static void select_lhs_weapon_mfd_event (event *ev)
 
 static void select_rhs_weapon_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_WEAPON, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_WEAPON, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -902,7 +902,7 @@ static void select_rhs_weapon_mfd_event (event *ev)
 
 static void select_lhs_system_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_SYSTEM, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_SYSTEM, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -911,7 +911,7 @@ static void select_lhs_system_mfd_event (event *ev)
 
 static void select_rhs_system_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_SYSTEM, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_SYSTEM, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -920,7 +920,7 @@ static void select_rhs_system_mfd_event (event *ev)
 
 static void select_lhs_engine_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_ENGINE, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -929,7 +929,7 @@ static void select_lhs_engine_mfd_event (event *ev)
 
 static void select_rhs_engine_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_ENGINE, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -938,7 +938,7 @@ static void select_rhs_engine_mfd_event (event *ev)
 
 static void select_lhs_flight_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_FLIGHT, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (MFD_MODE_FLIGHT, 0, MFD_LOCATION_LHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -947,7 +947,7 @@ static void select_lhs_flight_mfd_event (event *ev)
 
 static void select_rhs_flight_mfd_event (event *ev)
 {
-	select_apache_mfd_mode (MFD_MODE_FLIGHT, MFD_LOCATION_RHS);
+	select_apache_mfd_mode (MFD_MODE_FLIGHT, 0, MFD_LOCATION_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

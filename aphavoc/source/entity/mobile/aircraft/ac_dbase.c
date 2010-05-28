@@ -101,7 +101,9 @@ aircraft_data
          OBJECT_3D_AH64D_APACHE_LONGBOW,									// default_3d_shape
 			GUNSHIP_TYPE_APACHE,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// default_weapon_config_type
+			//WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// default_weapon_config_type
+//			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_19,					// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_8,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1,					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50,					// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_42,					// air_to_air_weapon_config_type
