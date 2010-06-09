@@ -159,6 +159,7 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"VERS",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"VIDEO",	NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"VCR",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"VSEL",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"WCA",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"WPN",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"XPNDS",	NULL,	TRUE, FALSE, FALSE, set_new_page },
@@ -170,6 +171,7 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"FLT", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"FUEL", 	NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"ADF", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
+	{ NULL,	"VCR", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"WPN", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"TADS", 	NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 
@@ -424,6 +426,22 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"2182", 	NULL, FALSE, FALSE, FALSE, select_adf_emergency_freqency },
 	{ NULL,	"", 		NULL, FALSE, FALSE, FALSE, select_adf_station },
 
+	// VCR buttons
+	{ NULL,	"RECORD",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"PLAY",		NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"STANDBY",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"PAUSE",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"REWIND",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"ON", 		"OFF", FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TADS",		NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"CPG SIGHT",NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"CPG HMD",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"PLT SIGHT",NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"PLT HMD",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"FCR", 		NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"EVENT",	NULL, FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"TAPE",		"60MIN", FALSE, FALSE, FALSE, NULL },
+
 	{ NULL, "sentry", NULL, FALSE, FALSE, FALSE, NULL }
 	};
 
@@ -490,6 +508,9 @@ static int set_new_page(mfd_push_button_types page, mfd_button_labels btn)
 		break;
 	case MFD_BUTTON_TSD:
 		mode = MFD_MODE_TSD;
+		break;
+	case MFD_BUTTON_VCR:
+		mode = MFD_MODE_VCR;
 		break;
 	case MFD_BUTTON_WPN:
 		mode = MFD_MODE_WEAPON;
@@ -2623,6 +2644,25 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 
 			break;
 		}
+	case MFD_MODE_VCR:
+		{
+			set_mono_font_type (MONO_FONT_TYPE_12X20);
+			set_mono_font_colour(fg_col);
+
+			draw_2d_half_thick_line(-1.2, 0.9, -0.65, 0.9, fg_col);
+			draw_2d_half_thick_line(-1.2, -0.9, -0.65, -0.9, fg_col);
+			draw_2d_half_thick_line(-0.65, 0.9, -0.65, 0.15, fg_col);
+			draw_2d_half_thick_line(-0.65, -0.9, -0.65, -0.15, fg_col);
+			print_vertical_mono_font_string(-0.65, 0.03, "VCR", -0.5, TRUE);
+
+			draw_2d_half_thick_line(1.2, 0.9, 0.5, 0.9, fg_col);
+			draw_2d_half_thick_line(1.2, -0.9, 0.5, -0.9, fg_col);
+			draw_2d_half_thick_line(0.5, 0.9, 0.5, 0.3, fg_col);
+			draw_2d_half_thick_line(0.5, -0.9, 0.5, -0.3, fg_col);
+			print_vertical_mono_font_string(0.5, 0.03, "RECORD", -0.5, TRUE);
+
+			break;
+		}
 	}
 
 	if (show_acquisition_source[location])
@@ -3364,6 +3404,38 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 		}
 
 		handler[BTN_M] = &mfd_push_button_definitions[MFD_BUTTON_MENU_ADF];
+
+		break;
+	}
+	case MFD_MODE_VCR:
+	{
+		handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_VIDEO];
+		handler[BTN_T6] = &mfd_push_button_definitions[MFD_BUTTON_VSEL];
+
+		handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_RECORD];
+		handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_PLAY];
+		handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_STANDBY];
+		handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_PAUSE];
+		handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_REWIND];
+		handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_ON_OFF];
+
+		handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_TADS];
+		handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_CPG_SIGHT];
+		handler[BTN_R3] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_CPG_HMD];
+		handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_PLT_SIGHT];
+		handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_PLT_HMD];
+		handler[BTN_R6] = &mfd_push_button_definitions[MFD_BUTTON_VSEL_FCR];
+
+		handler[BTN_M]  = &mfd_push_button_definitions[MFD_BUTTON_MENU_VCR];
+		handler[BTN_B1] = &mfd_push_button_definitions[MFD_BUTTON_EVENT];
+		handler[BTN_B4] = &mfd_push_button_definitions[MFD_BUTTON_TAPE_60];
+
+		button_label_decorations[location][BTN_L3].boxed = 3;
+		button_label_decorations[location][BTN_L6].boxed = 1;
+		button_label_decorations[location][BTN_R2].boxed = 3;
+		button_label_decorations[location][BTN_B4].boxed = 2;
+
+		break;
 	}
 	default:
 		break;
