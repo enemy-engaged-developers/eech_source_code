@@ -7135,30 +7135,30 @@ static void draw_fuel_page_mfd(void)
 	if (!get_auto_fuel_transfer())
 	{
 		s = "XFER";
-		set_2d_mono_font_position(0.0, 0.3);
+		set_2d_mono_font_position(0.0, 0.27);
 		set_mono_font_rel_position(-0.5 * get_mono_font_string_width(s), -8.0);
 		print_mono_font_string(s);
 
 		if (get_fuel_transfer(FUEL_TANK_AFT) == FUEL_TANK_FWD)
 		{
-			draw_2d_mono_sprite(fuel_transfer_fwd_open_mask, 0.0, 0.38, MFD_COLOUR5);
-			draw_2d_mono_sprite(fuel_transfer_fwd_open, 0.0, 0.38, MFD_COLOUR1);
+			draw_2d_mono_sprite(fuel_transfer_fwd_open_mask, 0.0, 0.35, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_fwd_open, 0.0, 0.35, MFD_COLOUR1);
 		}
 		else
 		{
-			draw_2d_mono_sprite(fuel_transfer_fwd_closed_mask, 0.0, 0.38, MFD_COLOUR5);
-			draw_2d_mono_sprite(fuel_transfer_fwd_closed, 0.0, 0.38, MFD_COLOUR1);
+			draw_2d_mono_sprite(fuel_transfer_fwd_closed_mask, 0.0, 0.35, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_fwd_closed, 0.0, 0.35, MFD_COLOUR1);
 		}
 
 		if (get_fuel_transfer(FUEL_TANK_FWD) == FUEL_TANK_AFT)
 		{
-			draw_2d_mono_sprite(fuel_transfer_aft_open_mask, 0.0, 0.22, MFD_COLOUR5);
-			draw_2d_mono_sprite(fuel_transfer_aft_open, 0.0, 0.22, MFD_COLOUR1);
+			draw_2d_mono_sprite(fuel_transfer_aft_open_mask, 0.0, 0.19, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_aft_open, 0.0, 0.19, MFD_COLOUR1);
 		}
 		else
 		{
-			draw_2d_mono_sprite(fuel_transfer_aft_closed_mask, 0.0, 0.22, MFD_COLOUR5);
-			draw_2d_mono_sprite(fuel_transfer_aft_closed, 0.0, 0.22, MFD_COLOUR1);
+			draw_2d_mono_sprite(fuel_transfer_aft_closed_mask, 0.0, 0.19, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_aft_closed, 0.0, 0.19, MFD_COLOUR1);
 		}
 
 		draw_2d_half_thick_line(-1.2, 0.90, -0.9, 0.90, MFD_COLOUR1);
