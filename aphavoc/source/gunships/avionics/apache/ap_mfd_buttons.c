@@ -2516,6 +2516,11 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 
 			break;
 		}
+	case MFD_MODE_WEAPON:
+	case MFD_MODE_WEAPON_ATA:
+		sprintf(button_label_decorations[location][BTN_B5].line2, "%4.0f", get_manual_target_range());
+
+		break;
 	case MFD_MODE_WEAPON_GUN:
 		{
 			mfd_push_button_types mode = (get_gun_mode() == GUN_MODE_NORMAL) ? MFD_BUTTON_GUN_MODE_NORM : MFD_BUTTON_GUN_MODE_FXD;
@@ -2549,6 +2554,8 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			}
 
 			button_label_decorations[location][btn].boxed = 3;
+
+			sprintf(button_label_decorations[location][BTN_B5].line2, "%4.0f", get_manual_target_range());
 
 			break;
 		}
@@ -2587,6 +2594,8 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 				draw_2d_half_thick_line(-0.88, -0.6, -0.88, -0.17, fg_col);
 			}
 
+			sprintf(button_label_decorations[location][BTN_B5].line2, "%4.0f", get_manual_target_range());
+
 			break;
 		}
 	case MFD_MODE_WEAPON_RKT:
@@ -2609,6 +2618,8 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			}
 
 			render_rocket_inventory(fg_col);
+
+			sprintf(button_label_decorations[location][BTN_B5].line2, "%4.0f", get_manual_target_range());
 
 			break;
 		}
@@ -3162,7 +3173,7 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 			if (mfd_mode == MFD_MODE_LASER_CHANNEL)
 			{
 				handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_CHAN];
-				handler[BTN_T4] = &mfd_push_button_definitions[MFD_BUTTON_CODE];
+//				handler[BTN_T4] = &mfd_push_button_definitions[MFD_BUTTON_CODE];
 				button_label_decorations[location][BTN_T1].boxed = 3;
 			}
 			else

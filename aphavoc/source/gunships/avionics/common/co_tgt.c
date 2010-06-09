@@ -92,6 +92,9 @@ int
 float
 	cpg_identify_target_delay;
 
+static float
+	manual_target_range;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +191,8 @@ void initialise_common_target_acquisition_systems (void)
 
 	weapon_lock_type = WEAPON_LOCK_NO_ACQUIRE;
 
+	manual_target_range = 0.0;
+
 	reset_common_target_acquisition_system_keys ();
 
 	initialise_common_radar ();
@@ -246,6 +251,20 @@ void deinitialise_common_target_acquisition_systems (void)
 	deinitialise_common_eo ();
 
 	deinitialise_common_hms ();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_manual_target_range(void)
+{
+	return manual_target_range;
+}
+
+void set_manual_target_range(float range)
+{
+	manual_target_range = range;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1137,6 +1156,9 @@ void toggle_designated_target (void)
 
 rangefinding_system get_range_finder(void)
 {
+	if (manual_target_range > 0.0)
+		return RANGEFINDER_MANUAL;
+
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR
 		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
 	{
@@ -1153,11 +1175,14 @@ float get_target_range(vec3d* target_position, rangefinding_system* rf_system)
 	rangefinding_system system = get_range_finder();
 	vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
 
-	if (!target_position)
-		return 0.0;
-
 	if (rf_system)
 		*rf_system = system;
+
+	if (manual_target_range > 0.0)
+		return manual_target_range;
+
+	if (!target_position)
+		return 0.0;
 
 	if (get_range_finder() != RANGEFINDER_TRIANGULATION)
 		return get_3d_range(source_position, target_position);
