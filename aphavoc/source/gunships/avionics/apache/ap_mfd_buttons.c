@@ -141,17 +141,27 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES + 1] = {
 	{ NULL,	"CHAN",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"CHECK",	NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"CODE",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"COM",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"DMS",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"EFT",		NULL,	TRUE, FALSE, FALSE, set_new_page },
-	{ NULL,	"FUEL",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"ENG",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"FM",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"FUEL",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"FCR",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"FLT",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"HF",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"PERF",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"SOI",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"SYS",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"TSD",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"UHF",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"UTIL",		NULL,	TRUE, FALSE, FALSE, select_util_page },
 	{ NULL,	"VERS",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"VIDEO",	NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"VCR",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"WCA",		NULL,	TRUE, FALSE, FALSE, set_new_page },
 	{ NULL,	"WPN",		NULL,	TRUE, FALSE, FALSE, set_new_page },
+	{ NULL,	"XPNDS",	NULL,	TRUE, FALSE, FALSE, set_new_page },
 
 	// buttons returning to main menu
 	{ NULL,	"TSD", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
@@ -457,6 +467,9 @@ static int set_new_page(mfd_push_button_types page, mfd_button_labels btn)
 
 	switch (page)
 	{
+	case MFD_BUTTON_ADF:
+		mode = MFD_MODE_ADF;
+		break;
 	case MFD_BUTTON_ASE:
 		mode = MFD_MODE_ASE;
 		break;
@@ -466,17 +479,20 @@ static int set_new_page(mfd_push_button_types page, mfd_button_labels btn)
 	case MFD_BUTTON_ENG:
 		mode = MFD_MODE_ENGINE;
 		break;
+	case MFD_BUTTON_FCR:
+		mode = MFD_MODE_GROUND_RADAR;
+		break;
 	case MFD_BUTTON_FLT:
 		mode = MFD_MODE_FLIGHT;
 		break;
 	case MFD_BUTTON_FUEL:
 		mode = MFD_MODE_FUEL;
 		break;
+	case MFD_BUTTON_TSD:
+		mode = MFD_MODE_TSD;
+		break;
 	case MFD_BUTTON_WPN:
 		mode = MFD_MODE_WEAPON;
-		break;
-	case MFD_BUTTON_ADF:
-		mode = MFD_MODE_ADF;
 		break;
 	case MFD_BUTTON_CHAN:
 		if (current_mode == MFD_MODE_LASER_CHANNEL)
@@ -2858,18 +2874,32 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 	switch (mfd_mode)
 	{
 	case MFD_MODE_MENU:
-		handler[BTN_T2] = &mfd_push_button_definitions[MFD_BUTTON_ASE];
+		handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_VIDEO];
+		handler[BTN_T2] = &mfd_push_button_definitions[MFD_BUTTON_VCR];
 		handler[BTN_T4] = &mfd_push_button_definitions[MFD_BUTTON_CL];
 		handler[BTN_T5] = &mfd_push_button_definitions[MFD_BUTTON_VERS];
 
 		handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_ADF];
-		handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_WPN];
+		handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_ASE];
+		handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_TSD];
+		handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_WPN];
+		handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_FCR];
 
-		handler[BTN_B1] = &mfd_push_button_definitions[MFD_BUTTON_DMS];
-		handler[BTN_B2] = &mfd_push_button_definitions[MFD_BUTTON_ENG];  // uncertain
-		handler[BTN_B3] = &mfd_push_button_definitions[MFD_BUTTON_FLT];  // unknown
-		handler[BTN_B4] = &mfd_push_button_definitions[MFD_BUTTON_FUEL]; // uncertain
-		handler[BTN_B5] = &mfd_push_button_definitions[MFD_BUTTON_PERF]; // unknown
+		handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_SOI];
+		handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_XPNDR];
+		handler[BTN_R3] = &mfd_push_button_definitions[MFD_BUTTON_UHF];
+		handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_FM];
+		handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_HF];
+		handler[BTN_R6] = &mfd_push_button_definitions[MFD_BUTTON_COM];
+
+		handler[BTN_M] = &mfd_push_button_definitions[MFD_BUTTON_DMS];
+		handler[BTN_B1] = &mfd_push_button_definitions[MFD_BUTTON_ENG];
+		handler[BTN_B2] = &mfd_push_button_definitions[MFD_BUTTON_FLT];
+		handler[BTN_B3] = &mfd_push_button_definitions[MFD_BUTTON_FUEL];
+		handler[BTN_B4] = &mfd_push_button_definitions[MFD_BUTTON_PERF];
+		handler[BTN_B5] = &mfd_push_button_definitions[MFD_BUTTON_UTIL];
+
+		button_label_decorations[location][BTN_M].boxed = 0;
 
 		break;
 	case MFD_MODE_GROUND_RADAR:
@@ -3469,7 +3499,7 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 					}
 				}
 
-				if (button->new_page_arrow && *label && btn != BTN_M && !button_label_decorations[location][btn].boxed)
+				if (button->new_page_arrow && *label && !button_label_decorations[location][btn].boxed)
 					draw_menu_arrow(label_width, string2mfd_width((0.5 + alignment) * width) + x, y + string2mfd_width(4.0 - v_align), fg_col, bg_col);
 
 				if (boxed_status)

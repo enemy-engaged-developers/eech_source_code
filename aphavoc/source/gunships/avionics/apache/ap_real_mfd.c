@@ -10278,16 +10278,16 @@ static void draw_menu_page(void)
 	print_vertical_mono_font_string(-0.9, -0.30, "MISSION", -0.5, TRUE);
 
 	draw_2d_half_thick_line(-0.9, 0.30, -0.9, 0.02, MFD_COLOUR1);
-	draw_2d_half_thick_line(-0.9, -0.90, -0.9, -0.62, MFD_COLOUR1);
+	draw_2d_half_thick_line(-0.9, -0.90, -0.9, -0.65, MFD_COLOUR1);
 
 	// communication box
-	draw_2d_half_thick_line(1.2, 0.90, 0.85, 0.90, MFD_COLOUR1);
-	draw_2d_half_thick_line(1.2, -0.90, 0.85, -0.90, MFD_COLOUR1);
+	draw_2d_half_thick_line(1.2, 0.90, 0.8, 0.90, MFD_COLOUR1);
+	draw_2d_half_thick_line(1.2, -0.90, 0.8, -0.90, MFD_COLOUR1);
 
-	print_vertical_mono_font_string(0.85, 0.0, "COMMUNICATION", -0.5, TRUE);
+	print_vertical_mono_font_string(0.8, 0.0, "COMMUNICATIONS", -0.5, TRUE);
 
-	draw_2d_half_thick_line(0.85, 0.90, 0.85, 0.59, MFD_COLOUR1);
-	draw_2d_half_thick_line(0.85, -0.90, 0.85, -0.59, MFD_COLOUR1);
+	draw_2d_half_thick_line(0.8, 0.90, 0.8, 0.65, MFD_COLOUR1);
+	draw_2d_half_thick_line(0.8, -0.90, 0.8, -0.67, MFD_COLOUR1);
 
 	// aircraft box
 	draw_2d_half_thick_line(-0.60, -1.20, -0.60, -1.00, MFD_COLOUR1);
