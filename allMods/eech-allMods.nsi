@@ -4930,7 +4930,7 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_allMods ${LANG_ENGLISH} "Install EECH 1.11 with mods"
+  LangString DESC_allMods ${LANG_ENGLISH} "Install EECH 1.13 with mods"
   LangString DESC_AH64Cockpit ${LANG_ENGLISH} "Install arneh's 3D AH-64D Longbow cockpit (if you've already installed it and have installed replacement textures you don't want to overwrite, then select no"
   LangString DESC_BettySounds ${LANG_ENGLISH} "Install new co-pilot and betty sounds for blue side"
   LangString DESC_RussianSpeech ${LANG_ENGLISH} "Install russian speech for red side (warning: no subtitles)"
