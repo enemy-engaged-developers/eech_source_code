@@ -1,0 +1,48 @@
+How to make an allMods package
+==============================
+
+First of all, make sure you have installed NSIS (http://nsis.sourceforge.net/Download).
+
+First download the latest available allMods package and install it in this directory (allMods).
+When you've done that you should have the subfolders cohokum, common and Russian Translation
+(plus whatever more folders have been added since these instructions were written).
+
+Just to make sure that everything is working you can try to compile the eech-allMmods.nsi script
+(should work to right click it and select "Compile NSIS script").  If it doesn't work, then
+check that you really have the latest allMods package (it should have the same version number
+as the one defined at the top of the NSIS script).  If the NSIS script is older than the
+allMods package you have installed, and you've made sure you have pulled from git recently, then
+someone hasn't done their job properly and haven't checked in the script after last release.
+If you know who made the previous release you can try to contact him/her and ask if they can
+check in the last version.  Otherwise you have some work ahead of you to figure out what has been
+added since the last script you have...
+
+Adding new and changed files
+============================
+
+When you're creating a new allMods it's probably because there are some new files which have been
+added or files which have been changed since last release.  After all, there wouldn't be much point
+in creating a new package if there were no changes.
+
+If files have been changed, all you have to do is copy the new files to the appropriate sub
+directory.  If files have been added you copy it to the correct sub directory, but you must
+also add it to the NSIS script so that the installer will install it.  Add it in the appropriate
+place in the NSIS file (you see the syntax from the existing entries there), it's sorted 
+alphabethically.  If your files goes to a directory were no files are already being installed
+then you will also have to add a SetOutPath line with the directory before the list of files
+(once again, see how it's done for the previous objects).
+
+Finally
+=======
+
+Make sure you have changed the version number at the top of the NSIS script before you create
+the final package.  Then compile the NSIS script, correct any errors, test the allMods package
+on a clean install of EECH.  If everything works as expected it's probably ready for release! :)
+
+After you've created and released your allMods version, make sure to
+commit and push your latest version of the NSIS script to the git repository so that the next
+person making an allMods package can benefit from your work and not have to re-do it!
+
+=======
+
+arneh 2010-06-26
