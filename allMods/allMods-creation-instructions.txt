@@ -35,7 +35,8 @@ then you will also have to add a SetOutPath line with the directory before the l
 Finally
 =======
 
-Make sure you have changed the version number at the top of the NSIS script before you create
+Make sure you have changed the version number at the top of the NSIS script, in name of the 
+EECH section and at the bottom for the description of the install,  before you create
 the final package.  Then compile the NSIS script, correct any errors, test the allMods package
 on a clean install of EECH.  If everything works as expected it's probably ready for release! :)
 
