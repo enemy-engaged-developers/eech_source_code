@@ -419,6 +419,9 @@ typedef unsigned int FOURCC;         /* a four character code */
 #endif /* __WATCOMC__ */
 
 #ifdef WIN32 /* Windows specific headers follow */
+#ifndef _WIN32
+#define _WIN32
+#endif
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>

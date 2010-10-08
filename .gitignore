@@ -3,7 +3,7 @@
 *.err
 .project
 .cproject
-.ilk
+project.ilk
 project.lnk
 project.map
 project.sym

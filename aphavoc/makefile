@@ -14,7 +14,7 @@
 !   loaddll    hcl1   c1
 !   loaddll    hcl2   hwdll
 !   loaddll    wcc386   wccd386
-!   loaddll    wlink    wlink
+#!   loaddll    wlink    wlink
 !       loaddll    hcl3 mspdb50
 
 #################################################################################################################################
@@ -475,7 +475,7 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files) linkcl
         @ %append $^@ DEBUG ALL
 !endif
         @ %append $^@ NAME $^&
-                @ %append $^@ OPTION INCREMENTAL=$(project).ilk
+                @ %append $^@ OPTION INCREMENTAL=$(projectname).ilk
                 @ %append $^@ OPTION VERSION=1.6
                 @ %append $^@ OPTION STATICS
                 @ %append $^@ OPTION RESOURCE=cohokum.res
