@@ -1,5 +1,7 @@
+#ifndef EET_NO_EXPORT
 // Slashes are correct!
 #define TEXTURES_ROOT ":TEXTURES/"
+#endif
 
 class EET
 {
@@ -8,36 +10,50 @@ class EET
  struct Texture
  {
   char name[64];
+#ifndef EET_NO_EXPORT
   unsigned long index;
+#endif
  };
  struct Animation
  {
   char name[64];
   Array<unsigned> animation;
+#ifndef EET_NO_EXPORT
   unsigned long index;
+#endif
  };
 
  Array<Texture> textures;
  Array<Animation> animations;
+#ifndef EET_NO_EXPORT
  unsigned long index;
  char textures_drive;
  const char* extention;
+#endif
 
  public:
 
+#ifndef EET_NO_EXPORT
  EET(char drive = 'D', const char* ext = "tga");
+#endif
  void LoadAnimations(FILE* file);
  unsigned Append(const char* name);
+#ifndef EET_NO_EXPORT
  void Clear(void);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex, bool animation);
  const char* GetAnimation(unsigned textindex) const;
  void ExportAnimations(void) const;
+#else
+ const char* GetTexture(unsigned index, bool animation, float frame) const;
+#endif
 };
 
+#ifndef EET_NO_EXPORT
 EET::EET(char drive, const char* ext)
  : index(0), textures_drive(drive), extention(ext)
 {
 }
+#endif
 
 void EET::LoadAnimations(FILE* file)
 {
@@ -51,11 +67,15 @@ void EET::LoadAnimations(FILE* file)
    for (int count = 0; count < number_of_texture_animations; count++)
     {
      Animation animation;
+#ifndef EET_NO_EXPORT
      animation.index = ~0u;
+#endif
      fread(&length, sizeof(int), 1, file);
      fread(animation.name, length, 1, file);
      fread(&length, sizeof(int), 1, file);
+#ifndef EET_NO_EXPORT
      animations[count].index = ~0u;
+#endif
      for (int temp = 0; temp < length; temp++)
       {
        unsigned texture;
@@ -67,6 +87,7 @@ void EET::LoadAnimations(FILE* file)
   }
 }
 
+#ifndef EET_NO_EXPORT
 void EET::Clear(void)
 {
  for (unsigned i = 0; i < !textures; i++)
@@ -126,21 +147,27 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animatio
   }
  return 0;
 }
+#endif
 
+#ifndef EET_NO_EXPORT
 const char* EET::GetAnimation(unsigned textindex) const
 {
  return textindex < !animations ? animations[textindex].name : 0;
 }
+#endif
 
 unsigned EET::Append(const char* name)
 {
  Texture texture;
+#ifndef EET_NO_EXPORT
  texture.index = ~0u;
+#endif
  strcpy(texture.name, name);
  textures.Append(texture);
  return !textures - 1;
 }
 
+#ifndef EET_NO_EXPORT
 void EET::ExportAnimations(void) const
 {
  for (unsigned i = 0; i < !animations; i++)
@@ -154,3 +181,9 @@ void EET::ExportAnimations(void) const
    fclose(file);
   }
 }
+#else
+const char* EET::GetTexture(unsigned index, bool animation, float frame) const
+{
+ return animation ? index < !animations ? textures[animations[index].animation[(unsigned)(frame * !animations[index].animation)]].name : NULL : index < !textures ? textures[index].name : NULL;
+}
+#endif

@@ -49,10 +49,11 @@ int main(void)
   }
 
  for (int i = 1; i <= scenes.GetNumberOfScenes(); i++)
- {
-  sprintf(filename, "_OBJECTS/%04X_%s.LWS", i, names.Objects[i]);
-  lwsexp.ExportScene(filename, scenes.GetScene(i));
- }
+  {
+   sprintf(filename, "_OBJECTS/%04X_%s.LWS", i, names.Objects[i]);
+   printf("Exporting scene '%s'\n", filename);
+   lwsexp.ExportScene(filename, scenes.GetScene(i));
+  }
 
  return 0;
 }

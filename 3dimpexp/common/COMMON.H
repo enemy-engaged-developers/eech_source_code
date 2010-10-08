@@ -5,7 +5,7 @@
 #include <math.h>
 
 #ifdef unix
-#define mkdir(x) mkdir((x), 0666)
+#define mkdir(x) mkdir((x), 0777)
 #else
 #include <direct.h>
 #endif
@@ -26,10 +26,14 @@ double rad(double deg)
  return deg * M_PI / 180.0;
 }
 
-#ifndef __WATCOMC__
-#define truncate trunc
-#else
+#ifdef __WATCOMC__
 #define fabsf fabs
+#endif
+#ifdef __GNUC__
+void strupr(char* ptr)
+{
+ for (; (*ptr = toupper(*ptr)); ptr++);
+}
 #endif
 
 #ifdef unix

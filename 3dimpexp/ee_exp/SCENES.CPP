@@ -2,10 +2,7 @@
 
 class LwsExport;
 
-// FIXME!!!!!
-#define OBJECT_3D_LAST 2762
-#define OBJECT_3D_INVALID_SUB_OBJECT_INDEX 0
-#define OBJECT_3D_SUB_OBJECT_LAST (285 + 100)
+#define MAX_NUMBER_OF_SUB_OBJECT_INDICES 512
 
 #include "cameras.cpp"
 
@@ -29,11 +26,26 @@ struct REAL_COLOUR
  };
 };
 
+void print_keyframes(int number_of_keyframes, const struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes)
+{
+ printf(" KeyFrames %i", number_of_keyframes);
+ for (int i = 0; i < number_of_keyframes; i++)
+  printf(" (%i  %i  %f %f %f  %f %f %f  %f %f %f  %f %f %f)", keyframes[i].index, keyframes[i].linear, keyframes[i].x, keyframes[i].y, keyframes[i].z, keyframes[i].heading, keyframes[i].pitch, keyframes[i].roll, keyframes[i].scale_x, keyframes[i].scale_y, keyframes[i].scale_z, keyframes[i].tension, keyframes[i].continuity, keyframes[i].bias);
+}
+
 struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME
 {
  int index, linear;
  float value, tension, continuity, bias;
 };
+
+void print_value_keyframes(int number_of_value_keyframes, const struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *value_keyframes)
+{
+ printf(" ValueKeyFrames %i", number_of_value_keyframes);
+ for (int i = 0; i < number_of_value_keyframes; i++)
+  printf(" (%i  %i  %f  %f %f %f)", value_keyframes[i].index, value_keyframes[i].linear, value_keyframes[i].value, value_keyframes[i].tension, value_keyframes[i].continuity, value_keyframes[i].bias);
+}
+
 
 struct OBJECT_3D_SUB_OBJECT_INDEX
 {
@@ -61,6 +73,29 @@ struct OBJECT_3D_DATABASE_ENTRY
   relative_roll_maximum;
 
  struct OBJECT_3D_DATABASE_ENTRY *parent, *sub_objects;
+
+ void print(int offset) const
+ {
+  printf("% *c", offset * 4, ' ');
+  printf("Index %04X L %i %i CC %i OD %f", index, sub_object_approximation_in_level, sub_object_approximation_out_level, collision_contribution, object_dissolve);
+  if (flag)
+   printf(" L %f %f %f %f %f %f", relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum);
+  print_keyframes(number_of_keyframes, keyframes);
+  printf(" ObjectDissolve");
+  print_value_keyframes(number_of_object_dissolve_keyframes, object_dissolve_keyframes);
+  //unsigned char number_of_sub_object_indices:6;
+  //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
+  printf("\n");
+
+  print_subobjects(offset + 1, number_of_sub_objects, sub_objects);
+ }
+
+ static void print_subobjects(int offset, int number_of_subobjects, const struct OBJECT_3D_DATABASE_ENTRY* sub_objects)
+ {
+  offset++;
+  for (int i = 0; i < number_of_subobjects; i++)
+   sub_objects[i].print(offset);
+ }
 };
 
 struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
@@ -130,6 +165,60 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
  struct OBJECT_3D_DATABASE_ENTRY *scene_sub_object_array;
  struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
  struct OBJECT_3D_DATABASE_ENTRY *sub_objects;
+
+ struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries;
+
+ void print(void) const
+ {
+  printf("Index %04X Shadow %i Collision %i SAI %i\n", index, shadow_polygon_object_index, collision_object_index, shadow_approximation_index);
+
+
+  //struct VEC3D shadow_polygon_object_scale;
+
+  printf("Texture Animations %i\n", number_of_texture_animations);
+  for (int i = 0; i < number_of_texture_animations; i++)
+   printf(" %i", texture_animations[i]);
+  printf("\n");
+
+  printf("Approximations %i\n", number_of_approximations);
+  for (int i = 0; i < number_of_approximations; i++)
+   printf(" (%f, %04X)", approximations[i].distance, approximations[i].object_number);
+  printf("\n");
+
+  print_keyframes(number_of_keyframes, keyframes);
+  printf("\n");
+
+  printf("ObjectDissolve");
+  print_value_keyframes(number_of_object_dissolve_keyframes, object_dissolve_keyframes);
+  printf("\n");
+
+  printf("Displacement");
+  print_value_keyframes(number_of_displacement_amplitude_keyframes, displacement_amplitude_keyframes);
+  printf("\n");
+
+  //number_of_cameras,
+  //struct OBJECT_3D_SCENE_CAMERA_INFO *cameras;
+
+  //number_of_scene_link_objects,
+  //struct OBJECT_3D_SCENE_LINK_OBJECT *scene_link_objects;
+
+  //number_of_sprite_lights;
+  //struct OBJECT_3D_SPRITE_LIGHT *sprite_lights;
+
+  //struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY *sub_object_indices_table;
+
+  //number_of_sub_object_indices,
+  //number_of_sub_object_table_entries,
+  //total_number_of_sub_objects,
+  //total_number_of_sub_object_indices;
+
+  //struct OBJECT_3D_SUB_OBJECT_INDEX *scene_sub_object_indices_array; //Какая-то хрень, грузится. sub_object_index
+  //struct OBJECT_3D_DATABASE_ENTRY *scene_sub_object_array;
+  //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
+  OBJECT_3D_DATABASE_ENTRY::print_subobjects(0, number_of_sub_objects, sub_objects);
+
+  printf("\n\n");
+ }
 };
 
 class QuickSearch
@@ -195,7 +284,7 @@ void initialise_scene_quick_sub_object_search(void)
  // Set the sub object index array to 0
  //
 
- for (index = OBJECT_3D_INVALID_SUB_OBJECT_INDEX; index < OBJECT_3D_SUB_OBJECT_LAST; index++)
+ for (index = 0; index < MAX_NUMBER_OF_SUB_OBJECT_INDICES; index++)
   sub_object_index_count[index] = 0;
 
  //
@@ -218,12 +307,12 @@ void initialise_scene_quick_sub_object_search(void)
 
  total_sub_object_indices = 0;
  number_of_unique_indices = 0;
- for (index = OBJECT_3D_INVALID_SUB_OBJECT_INDEX; index < OBJECT_3D_SUB_OBJECT_LAST; index++)
- {
-  total_sub_object_indices += sub_object_index_count[index];
-  if (sub_object_index_count[index])
-   number_of_unique_indices++;
- }
+ for (index = 0; index < MAX_NUMBER_OF_SUB_OBJECT_INDICES; index++)
+  {
+   total_sub_object_indices += sub_object_index_count[index];
+   if (sub_object_index_count[index])
+    number_of_unique_indices++;
+  }
 
  //
  // We should already have the total number, so check here
@@ -232,77 +321,78 @@ void initialise_scene_quick_sub_object_search(void)
  assert(total_sub_object_indices == scene.total_number_of_sub_object_indices);
 
  if (number_of_unique_indices)
- {
-  struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries, **sub_object_entry_ptr;
-  int table_index;
-
-  number_of_sub_object_table_entries = number_of_unique_indices;
-
-  //
-  // Allocate memory for the table
-  //
-
-  current_sub_object_table = new OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY[number_of_unique_indices];
-  assert(current_sub_object_table);
-
-  //
-  // Record the data in the scene
-  //
-
-  scene.sub_object_indices_table = current_sub_object_table;
-  scene.number_of_sub_object_table_entries = number_of_unique_indices;
-
-  //
-  // Allocate memory for the entries in the table
-  //
-
-  sub_object_table_entries = new OBJECT_3D_DATABASE_ENTRY *[total_sub_object_indices];
-
-  //
-  // Go through initialising the table
-  //
-
-  sub_object_entry_ptr = sub_object_table_entries;
-
-  table_index = 0;
-  for (index = OBJECT_3D_INVALID_SUB_OBJECT_INDEX; index < OBJECT_3D_SUB_OBJECT_LAST; index++)
   {
-   if (sub_object_index_count[index] != 0)
-   {
-    current_sub_object_table[table_index].sub_object_index = index;
-    current_sub_object_table[table_index].number_of_sub_objects = 0;
-    current_sub_object_table[table_index].sub_objects = sub_object_entry_ptr;
-    sub_object_entry_ptr += sub_object_index_count[index];
-    table_index++;
-   }
+   struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries, **sub_object_entry_ptr;
+   int table_index;
+
+   number_of_sub_object_table_entries = number_of_unique_indices;
+
+   //
+   // Allocate memory for the table
+   //
+
+   current_sub_object_table = new OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY[number_of_unique_indices];
+   assert(current_sub_object_table);
+
+   //
+   // Record the data in the scene
+   //
+
+   scene.sub_object_indices_table = current_sub_object_table;
+   scene.number_of_sub_object_table_entries = number_of_unique_indices;
+
+   //
+   // Allocate memory for the entries in the table
+   //
+
+   sub_object_table_entries = new OBJECT_3D_DATABASE_ENTRY *[total_sub_object_indices];
+   scene.sub_object_table_entries = sub_object_table_entries;
+
+   //
+   // Go through initialising the table
+   //
+
+   sub_object_entry_ptr = sub_object_table_entries;
+
+   table_index = 0;
+   for (index = 0; index < MAX_NUMBER_OF_SUB_OBJECT_INDICES; index++)
+    {
+     if (sub_object_index_count[index] != 0)
+      {
+       current_sub_object_table[table_index].sub_object_index = index;
+       current_sub_object_table[table_index].number_of_sub_objects = 0;
+       current_sub_object_table[table_index].sub_objects = sub_object_entry_ptr;
+       sub_object_entry_ptr += sub_object_index_count[index];
+       table_index++;
+      }
+    }
+
+   //
+   // Now go through populating the table with the first level named sub objects
+   //
+
+   for (count = 0; count < scene.number_of_sub_object_indices; count++)
+    {
+     int offset;
+     struct OBJECT_3D_DATABASE_ENTRY *sub_object;
+     index = scene.scene_sub_object_indices_array[count].sub_object_index;
+     offset = scene.scene_sub_object_indices_array[count].object_index;
+     sub_object = &scene.sub_objects[offset];
+     add_sub_object_index_to_table(index, sub_object);
+    }
+
+   //
+   // Now recurse the sub objects doing the same thing
+   //
+
+   for (count = 0; count < scene.number_of_sub_objects; count++)
+    populate_table_with_named_sub_objects(&scene.sub_objects[count]);
   }
-
-  //
-  // Now go through populating the table with the first level named sub objects
-  //
-
-  for (count = 0; count < scene.number_of_sub_object_indices; count++)
-  {
-   int offset;
-   struct OBJECT_3D_DATABASE_ENTRY *sub_object;
-   index = scene.scene_sub_object_indices_array[count].sub_object_index;
-   offset = scene.scene_sub_object_indices_array[count].object_index;
-   sub_object = &scene.sub_objects[offset];
-   add_sub_object_index_to_table(index, sub_object);
-  }
-
-  //
-  // Now recurse the sub objects doing the same thing
-  //
-
-  for (count = 0; count < scene.number_of_sub_objects; count++)
-   populate_table_with_named_sub_objects(&scene.sub_objects[count]);
- }
 }
 
  OBJECT_3D_SCENE_DATABASE_ENTRY& scene;
  int number_of_sub_object_table_entries;
- int sub_object_index_count[OBJECT_3D_SUB_OBJECT_LAST];
+ int sub_object_index_count[MAX_NUMBER_OF_SUB_OBJECT_INDICES];
  struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY *current_sub_object_table;
 };
 
@@ -521,11 +611,11 @@ void LoadInit(FILE* fp)
 
  assert(total_number_of_scenes);
 
- objects_3d_scene_database = new OBJECT_3D_SCENE_DATABASE_ENTRY[OBJECT_3D_LAST];
+ objects_3d_scene_database = new OBJECT_3D_SCENE_DATABASE_ENTRY[total_number_of_scenes + 1];
 
  assert(objects_3d_scene_database);
 
- memset(objects_3d_scene_database, 0,(sizeof(struct OBJECT_3D_SCENE_DATABASE_ENTRY) * OBJECT_3D_LAST));
+ memset(objects_3d_scene_database, 0, sizeof(struct OBJECT_3D_SCENE_DATABASE_ENTRY) * (total_number_of_scenes + 1));
 
  //
  // Read in the memory stats for all the scenes
@@ -1002,6 +1092,8 @@ void LoadAll(void)
   }
 
   fread(&scene_index, sizeof(int), 1, fp);
+  if (scene_index >= total_number_of_scenes + 1)
+   error("invalid scene index %i", scene_index);
 
   LoadScene(fp, &objects_3d_scene_database[scene_index]);
   QuickSearch quick(objects_3d_scene_database[scene_index]);
@@ -1039,6 +1131,22 @@ void LoadAll(void)
 
  ~Scenes(void)
  {
+  delete [] objects_3d_scene_sub_object_dissolve_keyframes_array;
+  delete [] objects_3d_scene_sub_object_keyframes_array;
+  delete [] objects_3d_scene_approximations_array;
+  delete [] objects_3d_scene_texture_animations_array;
+  delete [] objects_3d_scene_sub_object_indices_array;
+  delete [] objects_3d_scene_sub_objects_array;
+  delete [] objects_3d_scene_sprite_light_array;
+  delete [] objects_3d_scene_link_array;
+  delete [] objects_3d_camera_info_array;
+  for (int i = 0; i < total_number_of_scenes + 1; i++)
+   {
+    struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene = &objects_3d_scene_database[i];
+    delete [] scene->sub_object_table_entries;
+    delete [] scene->sub_object_indices_table;
+   }
+  delete [] objects_3d_scene_database;
  }
 
  int GetNumberOfScenes(void) const { return total_number_of_scenes; }

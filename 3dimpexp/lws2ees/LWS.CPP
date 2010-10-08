@@ -541,13 +541,13 @@ class LwsFile : public Lws
 
  void ProcessPlugin(void)
  {
- 	std::string type, name;
+  std::string type, name;
 
- 	findkeyword();
-	type = keyword;
- 	findkeyword();
- 	findkeyword();
-	name = keyword;
+  findkeyword();
+  type = keyword;
+  findkeyword();
+  findkeyword();
+  name = keyword;
 
   if (type == "ObjReplacementHandler" && name == "LW_Level_Of_Detail")
    {
@@ -788,7 +788,7 @@ class LwsFile : public Lws
   ProcessLimits(&Object::b);
  }
 
- MakeName(GeneralObject& general_object, const std::string& name, GeneralObjectNumbers& numbers)
+ void MakeName(GeneralObject& general_object, const std::string& name, GeneralObjectNumbers& numbers)
  {
    char print_name[1024];
    sprintf(print_name, "%08lX:%i [%s (%i)]", general_object.index, line, name.c_str(), ++numbers[name]);

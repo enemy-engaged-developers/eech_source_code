@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+
 class LWO_Chunk
 {
  private:
@@ -15,8 +18,8 @@ class LWO_Chunk
  LWO_Chunk* next;
  unsigned long size;
 
- virtual void WriteSelf(ostream& out);
- void Write(ostream& out);
+ virtual void WriteSelf(std::ostream& out);
+ void Write(std::ostream& out);
 
  public:
 
@@ -35,7 +38,7 @@ class LWO_SubChunk : public LWO_Chunk
 {
  protected:
 
- virtual void WriteSelf(ostream& out);
+ virtual void WriteSelf(std::ostream& out);
 
  public:
 
@@ -82,7 +85,7 @@ unsigned long LWO_Chunk::Calculate(void)
  return size + 4 + 4 + (next ? next->Calculate() : 0);
 }
 
-void LWO_Chunk::WriteSelf(ostream & out)
+void LWO_Chunk::WriteSelf(std::ostream & out)
 {
  out.write(tag, 4);
  unsigned char byte;
@@ -98,7 +101,7 @@ void LWO_Chunk::WriteSelf(ostream & out)
   out.write(data, ndata);
 }
 
-void LWO_Chunk::Write(ostream& out)
+void LWO_Chunk::Write(std::ostream& out)
 {
  WriteSelf(out);
  if (head)
@@ -161,7 +164,7 @@ LWO_SubChunk::LWO_SubChunk(const char* _tag, unsigned long _ndata, const void* _
 {
 }
 
-void LWO_SubChunk::WriteSelf(ostream& out)
+void LWO_SubChunk::WriteSelf(std::ostream& out)
 {
  out.write(tag, 4);
  unsigned char byte;
@@ -191,7 +194,7 @@ void LWO_File::WriteFile(const char* filename)
 {
  Calculate();
 
- ofstream out(filename, ios::out | ios::truncate | ios::binary);
+ std::ofstream out(filename, std::ios::out | std::ios::trunc | std::ios::binary);
 
  if (!out)
   return;

@@ -25,6 +25,12 @@ class Cameras
  {
  }
 
+ ~Cameras(void)
+ {
+  for (unsigned i = 0; i != !objects_3d_camera_database; i++)
+   delete [] objects_3d_camera_database[i].keyframes;
+ }
+
  int GetNumberOfCameras(void) const
  {
   return !objects_3d_camera_database;

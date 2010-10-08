@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-class TexturesExporter
+class BaseTexturesExporter
 {
- private:
+ public:
 
  struct TEXTURE_FLAGS
  {
@@ -19,6 +19,8 @@ class TexturesExporter
   };
  };
 
+ protected:
+
  enum TEXTURE_MAP_TYPES
  {
   TEXTURE_TYPE_INVALID,
@@ -29,40 +31,32 @@ class TexturesExporter
   TEXTURE_TYPE_NOALPHA_NOPALETTE,
  };
 
- int width, height, type;
+ TEXTURE_FLAGS flags;
+ int width, height, type, bpp, number_of_mipmaps;
  unsigned char* texture_image_data;
- char filename[260];
 
- void save_tga(void)
+ void convert(void)
  {
-  int bpp = type == TEXTURE_TYPE_SINGLEALPHA || type == TEXTURE_TYPE_MULTIPLEALPHA ? 4 : 3;
-  {
-   unsigned char* cur = texture_image_data;
-   for (int i = 0; i < width * height; i++)
-    {
-     unsigned char tmp = cur[0];
-     cur[0] = cur[2];
-     cur[2] = tmp;
-     if (bpp == 4)
-      {
-       if (type == TEXTURE_TYPE_SINGLEALPHA)
-        cur[3] = cur[3] ? 255 : 0;
-       else
-        cur[3] = 255 - cur[3];
-      }
-     cur += bpp;
-    }
-  }
-  FILE* file = safe_fopen(filename, "wb");
-  fwrite("\0\0\002\0\0\0\0\0\0\0\0\0", 12, 1, file);
-  fwrite(&width, 2, 1, file);
-  fwrite(&height, 2, 1, file);
-  fwrite(bpp == 3 ? "\030\040" : "\040\040", 2, 1, file);
-  fwrite(texture_image_data, width * height, bpp, file);
-  fclose(file);
+  unsigned char* cur = texture_image_data;
+  for (int i = 0; i < width * height; i++)
+   {
+    unsigned char tmp = cur[0];
+    cur[0] = cur[2];
+    cur[2] = tmp;
+    if (bpp == 4)
+     {
+      if (type == TEXTURE_TYPE_SINGLEALPHA)
+       cur[3] = cur[3] ? 255 : 0;
+      else
+       cur[3] = 255 - cur[3];
+     }
+    cur += bpp;
+   }
  }
 
- void print_flags(const TEXTURE_FLAGS& flags)
+ virtual void use_texture(int count, const char* name, int mip) = 0;
+
+ void print_flags(void)
  {
   if (!flags.flags)
    {
@@ -81,23 +75,24 @@ class TexturesExporter
 
  public:
 
- TexturesExporter(void)
+ BaseTexturesExporter(void)
  {
-  texture_image_data = new unsigned char [1024 * 1024];
+  texture_image_data = new unsigned char [1024 * 1024 * 4];
  }
 
- ~TexturesExporter(void)
+ virtual ~BaseTexturesExporter(void)
  {
   delete [] texture_image_data;
  }
- void export_textures(EET& eet)
+ void export_textures(EET& eet, bool log = true)
  {
   int number_of_textures;
   FILE *fp;
 
   fp = safe_fopen("textures.bin", "rb");
 
-  printf("Exporting textures\n");
+  if (log)
+   printf("Exporting textures\n");
   {
    int tmp;
    fread(&tmp, sizeof(int), 1, fp);
@@ -107,8 +102,7 @@ class TexturesExporter
   fread(&number_of_textures, sizeof(int), 1, fp);
   for (int count = 0; count < number_of_textures; count++)
    {
-    int length, number_of_mipmaps;
-    TEXTURE_FLAGS flags;
+    int length;
     char name[1024];
 
     fread(&flags, sizeof(unsigned int), 1, fp);
@@ -116,7 +110,8 @@ class TexturesExporter
     memset(name, 0, sizeof(name));
     fread(name, length, 1, fp);
     strupr(name);
-    printf("%i %s", count, name);
+    if (log)
+     printf("%i %s", count, name);
 
     if (flags.camoflage_texture)
      strcat(name, "-D");
@@ -124,17 +119,23 @@ class TexturesExporter
 
     if (flags.reserved_texture)
      {
-      print_flags(flags);
+      use_texture(count, name, -1);
+      if (log)
+       print_flags();
       continue;
      }
 
     fread(&type, sizeof(int), 1, fp);
+    bpp = type == TEXTURE_TYPE_SINGLEALPHA || type == TEXTURE_TYPE_MULTIPLEALPHA ? 4 : 3;
     fread(&number_of_mipmaps, sizeof(int), 1, fp);
     fread(&width, sizeof(int), 1, fp);
     fread(&height, sizeof(int), 1, fp);
 
-    printf(" ML:%i%s %ix%i", number_of_mipmaps, type == TEXTURE_TYPE_NOALPHA || type == TEXTURE_TYPE_NOALPHA_NOPALETTE ? "" : " ALPHA", width, height);
-    print_flags(flags);
+    if (log)
+     {
+      printf(" ML:%i%s %ix%i", number_of_mipmaps, type == TEXTURE_TYPE_NOALPHA || type == TEXTURE_TYPE_NOALPHA_NOPALETTE ? "" : " ALPHA", width, height);
+      print_flags();
+     }
 
     for (int temp = 0; temp <= number_of_mipmaps; temp++)
      {
@@ -154,17 +155,41 @@ class TexturesExporter
          break;
        }
 
-      if (temp)
-       sprintf(filename, "\\TEXTURES\\%s@%i.TGA", name, temp);
-      else
-       sprintf(filename, "\\TEXTURES\\%s.TGA", name);
-      save_tga();
+      convert();
+      use_texture(count, name, temp);
 
       width >>= 1;
       height >>= 1;
      }
    }
   fclose(fp);
-  printf("\n");
+  if (log)
+   printf("\n");
+ }
+};
+
+class TexturesExporter : public BaseTexturesExporter
+{
+ virtual void use_texture(int, const char* name, int mip)
+ {
+  char filename[260];
+  if (mip)
+   sprintf(filename, "\\TEXTURES\\%s@%i.TGA", name, mip);
+  else
+   sprintf(filename, "\\TEXTURES\\%s.TGA", name);
+  FILE* file = safe_fopen(filename, "wb");
+  fwrite("\0\0\002\0\0\0\0\0\0\0\0\0", 12, 1, file);
+  fwrite(&width, 2, 1, file);
+  fwrite(&height, 2, 1, file);
+  fwrite(bpp == 3 ? "\030\040" : "\040\040", 2, 1, file);
+  fwrite(texture_image_data, width * height, bpp, file);
+  fclose(file);
+ }
+};
+
+class TexturesExporter_ : public BaseTexturesExporter
+{
+ virtual void use_texture(int, const char*, int)
+ {
  }
 };

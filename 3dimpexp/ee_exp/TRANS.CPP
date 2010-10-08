@@ -2,6 +2,10 @@ class Translator
 {
  public:
 
+ virtual ~Translator(void)
+ {
+ }
+
  virtual const char* operator ()(int number) = 0;
 };
 

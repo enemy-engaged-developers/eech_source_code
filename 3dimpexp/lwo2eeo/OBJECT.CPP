@@ -45,7 +45,7 @@ class OBJECT_3D : private Convert
            AddPoint(normals, norm);
            rs[i].points[j].normal.index = norm.index;
           }
-		}
+        }
      }
     else
      number_of_point_references += 2 * !rs[i].polys;

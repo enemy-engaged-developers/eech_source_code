@@ -171,9 +171,9 @@ class Convert
        if ((int)itor->lods.lods[i - 1].distance >= (int)itor->lods.lods[i].distance)
         error("Invalid distances for LODs %i and %i for object %s", i - 1, i, itor->print_name.c_str());
       if (itor->filename.empty())
-       error("Null object %s with LODs", itor->print_name.c_str());
+       warning("Null object %s with LODs", itor->print_name.c_str());
       if ((itor->lods.lods.size() > 1 || !itor->lods.lods.back().filename.empty()) && !itor->search.empty())
-       error("Object %s has both a label and LODs", itor->print_name.c_str());
+       warning("Object %s has both a label and LODs", itor->print_name.c_str());
      }
 
     {
@@ -521,7 +521,7 @@ class Convert
   fw(static_cast<int>(channel.keys.size()));
   for (Channel::Keys::const_iterator itor(channel.keys.begin()); itor != channel.keys.end(); ++itor)
    {
-    fw(static_cast<int>(itor->time * fps));
+    fw(static_cast<int>(floor(itor->time * fps + 0.5)));
     fw(itor->spantype ? 1 : 0);
     fw(itor->value);
     fw(itor->p[0]);
