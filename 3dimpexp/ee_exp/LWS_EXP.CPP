@@ -487,7 +487,9 @@ struct sub_object
     struct OBJECT_3D_APPROXIMATION_INFO* ap = approximation_info;
     for (; current_lod < number_of_lods; current_lod++, ap++)
      {
-      ap->distance = G_info->scene->approximations[lods[current_lod].sub_object_approximation_in_level - 1].distance;
+		  if (lods[current_lod].sub_object_approximation_in_level < 2)
+			 error("error in approximation in level");
+      ap->distance = G_info->scene->approximations[lods[current_lod].sub_object_approximation_in_level - 2].distance;
       ap->object_number = lods[current_lod].index;
      }
     G_info->ex->LODs(real_number_of_lods, approximation_info);
