@@ -315,9 +315,7 @@ void generate_mouse_events ( void )
 		ret;
 
 	DWORD
-		items;
-
-	int
+		items,
 		count;
 
 	if ( direct_input_mouse )

@@ -90,7 +90,7 @@ extern void draw_2d_mono_sprite (const char *sprite_ptr, float x, float y, const
 
 extern void draw_2d_circle (float x, float y, const float r, const rgb_colour col);
 
-extern void draw_2d_arc (const float x, const float y, const float r, unsigned part, const rgb_colour colour);
+extern void draw_2d_arc (float x, float y, const float r, unsigned part, const rgb_colour colour);
 
 extern void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_colour col);
 

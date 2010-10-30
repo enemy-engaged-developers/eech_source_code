@@ -671,7 +671,9 @@ void initialise_formation_component_database (void)
 			file_ptr = safe_fopen (temp_filename, "r");
 
 		if (file_ptr)
+		{
 			debug_log("formcomp file: %s", temp_filename);
+		}
 	}
 
 	// check if this map has its own formation component database
@@ -682,7 +684,9 @@ void initialise_formation_component_database (void)
 			file_ptr = safe_fopen (temp_filename, "r");
 
 		if (file_ptr)
+		{
 			debug_log("formcomp file: %s", temp_filename);
+		}
 	}
 
 	// use default if there is no specific one

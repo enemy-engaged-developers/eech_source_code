@@ -99,17 +99,21 @@ static void set_local_float_value (entity *en, float_types type, float value)
 
 	raw = (city *) get_local_entity_data (en);
 
+#ifndef __cplusplus
 	switch (type)
 	{
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
+#endif
 			debug_fatal_invalid_float_type (en, type);
 
+#ifndef __cplusplus
 			break;
 		}
 	}
+#endif
 }
 
 #endif

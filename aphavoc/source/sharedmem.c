@@ -21,7 +21,7 @@ int Initialise_Shared_Memory()
 
 	if (gHandleSharedMemory != NULL)
 	{
-		gPtrSharedMemory = MapViewOfFile(gHandleSharedMemory, FILE_MAP_WRITE, 0, 0, 0);
+		gPtrSharedMemory = (shared_memory_t*) MapViewOfFile(gHandleSharedMemory, FILE_MAP_WRITE, 0, 0, 0);
 
 		gPtrSharedMemory->version = SHARED_MEM_DATA_VERSION;
 

@@ -13,7 +13,7 @@
 
 #define DEBUG_MODULE 0
 
-int current_pfz = NO_PFZ;
+unsigned int current_pfz = NO_PFZ;
 unsigned int next_free_pfz = 0, next_free_nfz = 0;
 
 
@@ -187,7 +187,7 @@ void select_previous_pfz(void)
 	{
 		current_pfz--;
 		
-		if (current_pfz <= -1)
+		if (current_pfz >= next_free_pfz)
 			current_pfz = next_free_pfz-1;
 
 		update_common_ground_radar (TRUE);
@@ -211,7 +211,7 @@ void delete_current_pfz(void)
 
 int is_valid_pfz_target(vec3d* target_position)
 {
-	int i;
+	unsigned int i;
 
 	// If we have an active PFZ check that if position is inside it
 	if (current_pfz != NO_PFZ

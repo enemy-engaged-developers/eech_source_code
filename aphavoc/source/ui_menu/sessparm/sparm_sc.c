@@ -1361,6 +1361,7 @@ void session_parameters_text_input_function ( ui_object *obj, void *arg )
 		sscanf ( get_ui_object_text ( text_object ), "%d", &value );
 	}
 
+#if 0
 	switch ( get_ui_object_item_number ( text_object ) )
 	{
 /*
@@ -1402,6 +1403,7 @@ void session_parameters_text_input_function ( ui_object *obj, void *arg )
 		}
 */
 	}
+#endif
 
 	set_ui_object_drawable ( ( ui_object * ) get_ui_object_item_number ( obj ), TRUE );
 

@@ -354,8 +354,8 @@ void brief_initialise_game (void)
 	////////////////////////////////////////
 
 	////////////////////////////////////////
-	debug_watch ("Game status                                           =  %s", MT_STRING_PTR, &game_status_string);
-	debug_watch ("Comms model                                           =  %s", MT_STRING_PTR, &comms_model_string);
+	debug_watch ("Game status                                           =  %s", MT_STRING_PTR, (void*)&game_status_string);
+	debug_watch ("Comms model                                           =  %s", MT_STRING_PTR, (void*)&comms_model_string);
 	////////////////////////////////////////
 
 	////////////////////////////////////////

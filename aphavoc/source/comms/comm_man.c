@@ -118,7 +118,7 @@ int mastersocket = -1;
 int mastersocket2 = -1;
 short MasterPort = 1375;
 int num_multiplayer_refreshes = 0;
-int last_heartbeat_time = 0;
+unsigned int last_heartbeat_time = 0;
 char localplayer[256];
 char ReceiveBuffer[65535];
 char SendBuffer[65535];
@@ -2439,7 +2439,7 @@ void comms_process_data (void)
 void update_ui_comms (void)
 {
 
-static int
+static unsigned int
         update_ticks = 0;
 
     if (update_ticks < get_system_time ())

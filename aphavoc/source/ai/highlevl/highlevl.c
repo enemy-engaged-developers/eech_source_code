@@ -373,12 +373,14 @@ int add_high_level_ai_function (void ((*function) (void)), float frequency, floa
 void create_advance_and_retreat_tasks (void)
 {
 
+	unsigned int
+		node;
+
 	int
 		original_node,
 		count,
 		side,
 		loop,
-		node,
 		x,
 		z,
 		to_node,

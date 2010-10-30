@@ -1602,7 +1602,7 @@ void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 		
 			quicksort_string (indices, count, string_order);
 	
-			free_mem (string_order);
+			free_mem ((void*)string_order);
 
 			break;
 		}

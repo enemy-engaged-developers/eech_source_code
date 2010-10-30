@@ -1056,19 +1056,22 @@ void briefing_add_target_type (entity *task, medal_types medal, pilot_rank_types
 
 		if (target)
 		{
-
+#ifndef __cplusplus
 			switch (get_local_entity_type (target))
 			{
 
 				default:
 				{
+#endif
 	
 					strcpy (*text, get_local_entity_string (target, STRING_TYPE_FULL_NAME));
 					*text += strlen (get_local_entity_string (target, STRING_TYPE_FULL_NAME));
+#ifndef __cplusplus
 	
 					break;
 				}
 			}
+#endif
 		}
 	}
 }

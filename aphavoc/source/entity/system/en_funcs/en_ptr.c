@@ -174,17 +174,21 @@ static void *default_get_entity_ptr_value (entity *en, ptr_types type)
 	entity
 		*ptr;
 
+#ifndef __cplusplus
 	switch (type)
 	{
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
+#endif
 			ptr = NULL;
 
+#ifndef __cplusplus
 			break;
 		}
 	}
+#endif
 
 	return (ptr);
 }

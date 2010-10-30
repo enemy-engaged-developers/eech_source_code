@@ -479,8 +479,10 @@ static void read_indices ( FILE *fp, int *number_of_sub_object_indices, object_3
 		(*sub_object_indices)[index_count].object_index = object_index;
 
 		if ( index_count != 0 )
+		{
 			ASSERT ( (*sub_object_indices)[index_count-1].object_index <
 					(*sub_object_indices)[index_count].object_index );
+		}
 	}
 }
 
@@ -1183,7 +1185,7 @@ static void initialise_custom_scenes(const char* directory)
 void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level)
 {
 	char indent[128];
-	int i, nsubs;
+	unsigned i, nsubs;
 
 	for (i = 0; i < min(level * 2,127u); i++)
 		indent[i] = ' ';

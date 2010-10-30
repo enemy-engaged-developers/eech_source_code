@@ -614,7 +614,7 @@ void session_update_session_list (void)
 	int
 		game_update_time;
 
-	static int
+	static unsigned int
 		update_ticks = 0;
 
 	if (!get_pack_buffer ())

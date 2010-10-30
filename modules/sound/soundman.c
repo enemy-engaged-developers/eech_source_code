@@ -690,7 +690,7 @@ void destroy_system_sound_effect ( system_sound_effect *effect )
 		// Release the duplicated sound buffer
 		//
 
-		dsound_destroy_sound_buffer ( effect->sound_buffer );
+		dsound_destroy_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer );
 
 		effect->sound_buffer = NULL;
 	}
@@ -757,7 +757,7 @@ void update_system_sound_effect_system ( void )
 					// Check the sound buffer really is still playing
 					//
 	
-					if ( dsound_get_sound_buffer_status ( effect->sound_buffer ) == SAMPLE_STATE_FINISHED )
+					if ( dsound_get_sound_buffer_status ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer ) == SAMPLE_STATE_FINISHED )
 					{
 	
 						effect->playing = FALSE;
@@ -770,7 +770,7 @@ void update_system_sound_effect_system ( void )
 					// Check the current sound buffer is still playing
 					//
 	
-					if ( dsound_get_sound_buffer_status ( effect->sound_buffer ) == SAMPLE_STATE_FINISHED )
+					if ( dsound_get_sound_buffer_status ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer ) == SAMPLE_STATE_FINISHED )
 					{
 	
 						if ( effect->current_sequenced_sample_offset == ( effect->number_of_sequenced_samples - 1 ) )
@@ -800,7 +800,7 @@ void update_system_sound_effect_system ( void )
 							// Destroy the current duplicated sound buffer
 							//
 	
-							dsound_destroy_sound_buffer ( effect->sound_buffer );
+							dsound_destroy_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer );
 	
 							//
 							// Duplicate the next sound buffer in the sequence
@@ -817,15 +817,15 @@ void update_system_sound_effect_system ( void )
 							//
 
 							convert_float_to_int (floatrate, &intrate);
-							dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate); //Werewolf
+							dsound_set_sound_buffer_rate ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, intrate); //Werewolf
 	
-							dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
+							dsound_set_sound_buffer_volume ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
-							dsound_set_sound_buffer_pan ( effect->sound_buffer, effect->panning );
+							dsound_set_sound_buffer_pan ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->panning );
 	
-							dsound_set_sound_buffer_position ( effect->sound_buffer, 0 );
+							dsound_set_sound_buffer_position ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, 0 );
 	
-							dsound_play_sound_buffer ( effect->sound_buffer, FALSE );
+							dsound_play_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, FALSE );
 						}
 					}
 				}
@@ -867,7 +867,7 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 			if ( effect->sound_buffer )
 			{
 
-				dsound_destroy_sound_buffer ( effect->sound_buffer );
+				dsound_destroy_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer );
 			}
 
 			//
@@ -896,15 +896,15 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 				convert_float_to_int (rate, &int_rate);
 				convert_float_to_int (position, &buffer_position);
 	
-				dsound_set_sound_buffer_rate ( effect->sound_buffer, int_rate );
+				dsound_set_sound_buffer_rate ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, int_rate );
 				
-				dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
+				dsound_set_sound_buffer_volume ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
-				dsound_set_sound_buffer_pan ( effect->sound_buffer, effect->panning );
+				dsound_set_sound_buffer_pan ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->panning );
 	
-				dsound_set_sound_buffer_position ( effect->sound_buffer, buffer_position );
+				dsound_set_sound_buffer_position ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, buffer_position );
 	
-				dsound_play_sound_buffer ( effect->sound_buffer, FALSE );
+				dsound_play_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, FALSE );
 			}
 		}
 	}
@@ -935,15 +935,15 @@ void play_system_sound_effect ( system_sound_effect *effect, float time_position
 	
 		effect->paused = FALSE;
 	
-		dsound_set_sound_buffer_rate ( effect->sound_buffer, int_rate);
+		dsound_set_sound_buffer_rate ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, int_rate);
 	
-		dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
+		dsound_set_sound_buffer_volume ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
-		dsound_set_sound_buffer_pan ( effect->sound_buffer, effect->panning );
+		dsound_set_sound_buffer_pan ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->panning );
 	
-		dsound_set_sound_buffer_position ( effect->sound_buffer, buffer_position );
+		dsound_set_sound_buffer_position ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, buffer_position );
 	
-		dsound_play_sound_buffer ( effect->sound_buffer, effect->looping );
+		dsound_play_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->looping );
 	}
 }
 
@@ -965,7 +965,7 @@ void pause_system_sound_effect ( system_sound_effect *effect )
 		if ( !sound_system_paused )
 		{
 	
-			dsound_stop_sound_buffer ( effect->sound_buffer );
+			dsound_stop_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer );
 		}
 	}
 }
@@ -994,7 +994,7 @@ void reset_system_sound_effect ( system_sound_effect *effect )
 		// Set the position of the sound buffer now
 		//
 
-		dsound_set_sound_buffer_position ( effect->sound_buffer, 0 );
+		dsound_set_sound_buffer_position ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, 0 );
 	}
 }
 
@@ -1016,7 +1016,7 @@ void continue_system_sound_effect ( system_sound_effect *effect )
 		if ( !sound_system_paused )
 		{
 	
-			dsound_play_sound_buffer ( effect->sound_buffer, effect->looping );
+			dsound_play_sound_buffer ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->looping );
 		}
 	}
 }
@@ -1063,7 +1063,7 @@ void set_system_sound_effect_position ( system_sound_effect *effect, vec3d posit
 
 	effect->panning = panning;
 
-	dsound_set_sound_buffer_pan ( effect->sound_buffer, effect->panning );
+	dsound_set_sound_buffer_pan ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, effect->panning );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1103,7 +1103,7 @@ void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch )
 	convert_float_to_int (floatrate, &intrate);
 //	debug_log ( "sound effect pitch change, pitch=%.2f  effect->pitch=%.2f  intrate=%d", pitch, effect->pitch, intrate);
 
-	dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate);
+	dsound_set_sound_buffer_rate ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, intrate);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1135,7 +1135,7 @@ void set_system_sound_effect_volume ( system_sound_effect *effect, int volume )
 
 	effect->volume = volume;
 
-	dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
+	dsound_set_sound_buffer_volume ( (LPDIRECTSOUNDBUFFER)effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1170,7 +1170,7 @@ void pause_sound_system ( void )
 			if ( ( current_system_sound_effects[count].used ) && ( !current_system_sound_effects[count].paused ) )
 			{
 	
-				dsound_stop_sound_buffer ( current_system_sound_effects[count].sound_buffer );
+				dsound_stop_sound_buffer ( (LPDIRECTSOUNDBUFFER)current_system_sound_effects[count].sound_buffer );
 			}
 		}
 	
@@ -1196,7 +1196,7 @@ void continue_sound_system ( void )
 	
 			if ( ( current_system_sound_effects[count].used ) && ( !current_system_sound_effects[count].paused ) )
 			{
-				dsound_play_sound_buffer ( current_system_sound_effects[count].sound_buffer, current_system_sound_effects[count].looping );
+				dsound_play_sound_buffer ( (LPDIRECTSOUNDBUFFER)current_system_sound_effects[count].sound_buffer, current_system_sound_effects[count].looping );
 			}
 		}
 	

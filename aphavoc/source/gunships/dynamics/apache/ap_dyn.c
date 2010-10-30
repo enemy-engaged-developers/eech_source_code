@@ -1015,9 +1015,8 @@ void update_main_rotor_rpm_dynamics (void)
 				 induced_drag_factor * induced_drag,
 				 profile_drag_factor * profile_drag,
 				 current_flight_dynamics->main_rotor_rpm.delta,
+				bound (current_flight_dynamics->main_rotor_rpm.delta, auto_min_delta, max_delta));
 			#endif
-
-			bound (current_flight_dynamics->main_rotor_rpm.delta, auto_min_delta, max_delta));
 		}
 		else
 		{

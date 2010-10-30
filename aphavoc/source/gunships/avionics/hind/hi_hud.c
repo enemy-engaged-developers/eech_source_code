@@ -425,7 +425,7 @@ void draw_hind_hud_on_texture (void)
 
 		{
 			// move texture UV coordinates to move and scale the texture
-			int i;
+			unsigned i;
 			for (i=0; i<num_texture_coordinates; i++)
 			{
 				float

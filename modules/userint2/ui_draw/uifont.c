@@ -592,6 +592,9 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		char
 			real_type_name[32];
 
+		unsigned
+			count;
+
 		for ( count = 0; count < strlen ( type_name ); count++ )
 		{
 

@@ -2164,10 +2164,12 @@ static void create_debug_advance_task (event *ev)
 	entity_sides
 		side;
 
+	unsigned int
+		node;
+
 	int
 		from_node,
-		to_node,
-		node;
+		to_node;
 
 	vec3d
 		*node_pos;

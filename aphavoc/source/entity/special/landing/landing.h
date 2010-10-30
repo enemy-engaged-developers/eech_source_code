@@ -99,7 +99,7 @@ struct LANDING
 	int
 		route_node;
 
-	int
+	unsigned int
 		reserved_landing_sites,
 		free_landing_sites,
 		total_landing_sites;

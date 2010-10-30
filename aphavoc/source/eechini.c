@@ -84,7 +84,7 @@ struct config_option
 	int* int_value;
 	float* float_value;
 	char* str_value;
-	int flag_length;
+	unsigned flag_length;
 	void ( *parse_function )( const struct config_option *, const char * );
 	void ( *print_function )( const struct config_option *, char * );
 };
@@ -149,13 +149,13 @@ static void get_zero ( const struct config_option *option, char *value )
 
 static void set_position ( const struct config_option *option, const char *value )
 {
-	int who = option->flag_length;
+	unsigned who = option->flag_length;
 	sscanf ( value, "%f,%f,%f,%f", &wide_cockpit_position[who].x, &wide_cockpit_position[who].y, &wide_cockpit_position[who].z, &wide_cockpit_position[who].p );
 }
 
 static void get_position ( const struct config_option *option, char *value )
 {
-	int who = option->flag_length;
+	unsigned who = option->flag_length;
 	sprintf ( value, "%.3f,%.3f,%.3f,%.3f", wide_cockpit_position[who].x, wide_cockpit_position[who].y, wide_cockpit_position[who].z, wide_cockpit_position[who].p );
 }
 

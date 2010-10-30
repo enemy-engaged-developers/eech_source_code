@@ -545,7 +545,7 @@ static void tool_tips_draw_area_ui_object (ui_object *obj)
 
 		//debug_log ("AR_DRAW: %d tool_tips_timer = %f", obj, (float) (timer / TIME_1_SECOND));
 	
-		if (timer < get_system_time ())
+		if (timer < (int)get_system_time ())
 		{
 
 			const char

@@ -113,6 +113,14 @@
 #pragma warning(disable:4103)
 #define snprintf sprintf_s
 #define strcasecmp _stricmp
+#define stricmp _stricmp
+#define strcmpi _stricmp
+#define strnicmp _strnicmp
+#define strupr _strupr
+#define strdup _strdup
+#define unlink _unlink
+#define itoa _itoa
+#define strlcpy(dst, src, size) strcpy_s((dst), (size), (src))
 #endif
 
 #ifdef __cplusplus

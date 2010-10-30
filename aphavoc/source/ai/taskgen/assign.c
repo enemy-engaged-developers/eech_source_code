@@ -412,7 +412,7 @@ entity *get_suitable_registered_group (entity *task, int *idle_group_count)
 		*best_group,
 		*current_group;
 
-	int
+	unsigned int
 		idle_count;
 
 	entity_sub_types
@@ -533,7 +533,9 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 		side,
 		formation,
 		air_threat,
-		enemy_sectors,
+		enemy_sectors;
+
+	unsigned int
 		threat;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);

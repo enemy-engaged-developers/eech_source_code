@@ -103,7 +103,7 @@ extern server_response_types
 extern int mastersocket;
 extern int mastersocket2;
 extern short MasterPort;
-extern int last_heartbeat_time;
+extern unsigned int last_heartbeat_time;
 extern int num_multiplayer_refreshes;
 typedef struct
 {

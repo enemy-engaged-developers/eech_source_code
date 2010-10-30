@@ -2371,7 +2371,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			task
 				*raw;
 
-			int
+			unsigned int
 				loop;
 
 			//
@@ -5067,7 +5067,7 @@ void process_received_entity_comms_messages (void)
 				task
 					*raw;
 
-				int
+				unsigned int
 					loop;
 
 				//

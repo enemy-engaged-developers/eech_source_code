@@ -290,9 +290,7 @@ void generate_keyboard_events ( void )
 		ret;
 
 	DWORD
-		items;
-
-	int
+		items,
 		count;
 
 	if ( direct_input_keyboard )

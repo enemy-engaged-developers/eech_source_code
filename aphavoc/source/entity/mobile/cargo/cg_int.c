@@ -89,17 +89,21 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	raw = (cargo *) get_local_entity_data (en);
 
+#ifndef __cplusplus
 	switch (type)
 	{
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
+#endif
 			debug_fatal_invalid_int_type (en, type);
 
+#ifndef __cplusplus
 			break;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

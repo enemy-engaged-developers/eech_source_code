@@ -3299,12 +3299,16 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 	dest_ddsd.dwSize = sizeof ( dest_ddsd );
 	ddrval=IDirectDrawSurface7_Lock ( dst, &dst_rect, &dest_ddsd, DDLOCK_NOSYSLOCK|DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL );
 	if ( ddrval != DD_OK )
+	{
 		debug_log ( "Unable to lock dst%s", get_ddraw_error_message ( ddrval ) );
+	}
 	debug_log("size:dst %d %d",dest_ddsd.dwHeight,dest_ddsd.dwWidth);	
 	ddrval=IDirectDrawSurface7_Lock ( src, &src_rect, &src_ddsd, DDLOCK_NOSYSLOCK|DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL );
 	debug_log("size:src %d %d",src_ddsd.dwHeight,src_ddsd.dwWidth);	
 	if ( ddrval != DD_OK )
+	{
 		debug_log ( "Unable to lock src%s", get_ddraw_error_message ( ddrval ) );
+	}
 	{
 
 		unsigned char
@@ -3407,11 +3411,15 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 
 	ddrval=IDirectDrawSurface7_Unlock ( dst, NULL );
 	if ( ddrval != DD_OK )
+	{
 		debug_log ( "Unable to unlock dst%s", get_ddraw_error_message ( ddrval ) );
+	}
 					
 	ddrval=IDirectDrawSurface7_Unlock ( src, NULL );
 	if ( ddrval != DD_OK )
+	{
 		debug_log ( "Unable to unlock src%s", get_ddraw_error_message ( ddrval ) );
+	}
 }
 
 void clear_export_mfd_screen()

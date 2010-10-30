@@ -201,17 +201,21 @@ static const char *default_get_entity_string (entity *en, string_types type)
 	char
 		*s;
 
+#ifndef __cplusplus
 	switch (type)
 	{
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
+#endif
 			s = string_type_database[type].default_value;
 
+#ifndef __cplusplus
 			break;
 		}
 	}
+#endif
 
 	return (s);
 }
@@ -262,7 +266,7 @@ void pack_string (entity *en, string_types type, const char *s)
 
 	#endif
 
-	ASSERT (strlen (s) <= get_string_type_max_length (type));
+	ASSERT (strlen (s) <= (unsigned)get_string_type_max_length (type));
 
 	while (*s)
 	{
@@ -294,7 +298,7 @@ void unpack_string (entity *en, string_types type, char *s)
 	}
 	while (*p++);
 
-	ASSERT (strlen (buffer) <= get_string_type_max_length (type));
+	ASSERT (strlen (buffer) <= (unsigned)get_string_type_max_length (type));
 
 	strcpy (s, buffer);
 
