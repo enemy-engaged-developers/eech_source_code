@@ -345,7 +345,7 @@ int get_terrain_3d_alpha ( float z )
 void initialise_3d_terrain_normals ( void )
 {
 
-	double
+	float
 		heading,
 		pitch;
 

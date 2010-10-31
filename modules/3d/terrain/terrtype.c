@@ -1105,13 +1105,13 @@ void initialise_3d_terrain_types ( void )
 	// Forest textures
 	//
 
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_detail, 0, 8.0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
 	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, 8.0, 512, 512, 1024, 1024, 190, 170, 15, terrain_surface_forest );
 
 	//

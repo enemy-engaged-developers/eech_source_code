@@ -44,7 +44,7 @@
 				UseUnicodeResponseFiles="false"
 				Optimization="0"
 				AdditionalIncludeDirectories="\dxsdk\include;.\modules;.\aphavoc\source"
-				PreprocessorDefinitions="WIN32;_DEBUGDEBUG;;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS"
+				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
