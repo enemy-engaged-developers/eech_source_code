@@ -873,6 +873,17 @@ void unload_3d_terrain ( void )
 
 	if ( terrain_tree_sectors )
 	{
+		int
+			z;
+
+		for ( z = 0; z < terrain_3d_tree_map_height; z++ )
+		{
+			if ( terrain_tree_sectors[z] )
+			{
+				safe_free ( terrain_tree_sectors[z] );
+				terrain_tree_sectors[z] = NULL;
+			}
+		}
 
 		safe_free ( terrain_tree_sectors );
 
