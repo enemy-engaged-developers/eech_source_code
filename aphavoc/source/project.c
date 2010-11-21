@@ -446,7 +446,7 @@ void application_main (int argc, char **argv)
 		// These are the supported screen resolutions for windowed mode, where we can't query DirectX for supported screen dimensions
 		//
 
-		number_of_graphics_resolution_modes_available = 11;
+		number_of_graphics_resolution_modes_available = 12;
 
 		graphics_resolution_modes_available[0].width = 640;
 		graphics_resolution_modes_available[0].height = 480;
@@ -485,12 +485,16 @@ void application_main (int argc, char **argv)
 		graphics_resolution_modes_available[8].compressed_texture_mode = FALSE;
 
 		graphics_resolution_modes_available[9].width = 1920;
-		graphics_resolution_modes_available[9].height = 1200;
+		graphics_resolution_modes_available[9].height = 1080;
 		graphics_resolution_modes_available[9].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[10].width = 2048;
-		graphics_resolution_modes_available[10].height = 1536;
+		graphics_resolution_modes_available[10].width = 1920;
+		graphics_resolution_modes_available[10].height = 1200;
 		graphics_resolution_modes_available[10].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[11].width = 2048;
+		graphics_resolution_modes_available[11].height = 1536;
+		graphics_resolution_modes_available[11].compressed_texture_mode = FALSE;
 	}
 
 	//
