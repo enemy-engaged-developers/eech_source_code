@@ -733,6 +733,55 @@ static int read_new_camera ( FILE *fp )
 	return total_number_of_cameras++;
 }
 
+static void add_animation (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *allocated, int animation )
+{
+	int
+		anim,
+		*new_anim;
+
+	for ( anim = 0; anim < scene->number_of_texture_animations; anim++ )
+	{
+		if ( scene->texture_animations[anim] == animation )
+		{
+			return;
+		}
+	}
+
+	if ( *allocated == scene->number_of_texture_animations )
+	{
+		*allocated = *allocated ? *allocated * 2 : 8;
+		new_anim = safe_malloc ( *allocated * sizeof ( int ) );
+		if ( scene->number_of_texture_animations )
+		{
+			memcpy ( new_anim, scene->texture_animations, scene->number_of_texture_animations * sizeof ( int ) );
+			safe_free ( scene->texture_animations );
+		}
+		scene->texture_animations = new_anim;
+	}
+	scene->texture_animations[scene->number_of_texture_animations++] = animation;
+}
+
+static void add_animation_object (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *allocated, int object_id )
+{
+	struct OBJECT_3D
+		*object_3d;
+	int
+		surface;
+
+	object_3d = &objects_3d_data[object_id];
+	for ( surface = 0; surface < object_3d->number_of_surfaces; surface++)
+	{
+		if ( object_3d->surfaces[surface].texture_animation )
+		{
+			add_animation ( scene, allocated, object_3d->surfaces[surface].texture_index );
+		}
+		if ( object_3d->surfaces[surface].luminosity_texture_animation )
+		{
+			add_animation ( scene, allocated, object_3d->surfaces[surface].luminosity_texture_index );
+		}
+	}
+}
+
 static void read_scene ( FILE *fp )
 {
 	int
@@ -1088,6 +1137,25 @@ static void read_scene ( FILE *fp )
 
 	read_subobjects ( fp, &objects_3d_scene_database[scene_index].number_of_sub_objects, &objects_3d_scene_database[scene_index].sub_objects, NULL );
 
+	// Check for animation textures references in the objects of the scene
+	if ( sceneid )
+	{
+		int
+			allocated,
+			count;
+
+		allocated = 0;
+
+		add_animation_object ( &objects_3d_scene_database[scene_index], &allocated, objects_3d_scene_database[scene_index].index );
+		for ( count = 0; count < objects_3d_scene_database[scene_index].number_of_approximations; count++ )
+		{
+			add_animation_object ( &objects_3d_scene_database[scene_index], &allocated, objects_3d_scene_database[scene_index].approximations[count].object_number );
+		}
+		for ( count = 0; count < objects_3d_scene_database[scene_index].total_number_of_sub_objects; count++ )
+		{
+			add_animation_object ( &objects_3d_scene_database[scene_index], &allocated, objects_3d_scene_database[scene_index].sub_objects[count].index );
+		}
+	}
 
 	initialise_scene_quick_sub_object_search ( scene_index );
 
