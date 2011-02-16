@@ -101,6 +101,383 @@ static void initialise_object_explosive_explosion_database();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// 01DEC10 Casm Explosion database import/export begin
+#define META_EXPLOSION_DECLARATION(x)
+#define META_EXPLOSION(x) #x,
+#define META_EXPLOSION_(x) NULL
+const char* meta_explosion_names[] =
+{
+#include "xp_types.h"
+};
+#undef META_EXPLOSION_DECLARATION
+#undef META_EXPLOSION
+#undef META_EXPLOSION_
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define EXPLOSION_DATABASE_FILENAME "EXPLOS.CSV"
+
+static void export_explosion_database(void)
+{
+	FILE
+		*file;
+	int
+		count1,
+		count2;
+	meta_explosion_data
+		*ex;
+	meta_explosion_component
+		*co;
+
+	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "w");
+	fprintf(file, "EXPLOSION;1\n");
+	fprintf(file,
+		"#Explosion index;Explosion name;Damage radius;Show on map\n"
+		"#SPRITES;Animated texture;Sprites count;"
+			"Colour (red;green;blue;alpha);"
+			"Additive;Blast hemisphere only;"
+			"Delay max;Lifetime min;Lifetime max;Scale min;Scale max;"
+			"Blast radius;Animation frequency\n"
+		"#OBJECTS;Object 3D shape;Objects count;"
+			"Colour (red;green;blue;alpha);"
+			"Additive;Blast hemisphere only;"
+			"Delay max;Lifetime min;Lifetime max;Scale min;Scale max;"
+			"Blast radius\n"
+		"#PARTICLES;Trail type;Particle count;"
+			"Initial speed\n"
+		"#SMOKE_TRAILS;Trail type;Trail count;"
+			"Generator lifetime;Frequency;Smoke lifetime;"
+			"Initial velosity (x;y;z)\n"
+		"#SOUND_EFFECT;Sound type;Sound volume\n"
+		);
+	for (count1 = 1; count1 < NUM_META_EXPLOSION_TYPES; count1++)
+	{
+		ex = &meta_explosion_database[count1];
+		fprintf (file,
+			"%i;%s;%f;%i\n",
+			count1, meta_explosion_names[count1], ex->damage_radius, ex->show_on_map);
+		for (count2 = 0; count2 < ex->number_of_components; count2++)
+		{
+			co = &ex->component[count2];
+			switch (co->type)
+			{
+			case EXPLOSION_SPRITES:
+				{
+					fprintf(file,
+						"SPRITES;%s;%i;"
+						"%i;%i;%i;%i;"
+						"%i;%i;"
+						"%f;%f;%f;%f;%f;"
+						"%f;%f\n",
+						texture_animation_names[co->animated_texture], co->sprite_count,
+						co->red, co->green, co->blue, co->alpha,
+						co->additive, co->blast_hemisphere_only,
+						co->delay_max, co->lifetime_min, co->lifetime_max, co->scale_min, co->scale_max,
+						co->blast_radius, co->animation_frequency);
+					break;
+				}
+			case EXPLOSION_OBJECTS:
+				{
+					fprintf(file,
+						"OBJECTS;%s;%i;"
+						"%i;%i;%i;%i;"
+						"%i;%i;"
+						"%f;%f;%f;%f;%f;"
+						"%f\n",
+						object_3d_enumeration_names[co->object_3d_shape], co->object_count,
+						co->red, co->green, co->blue, co->alpha,
+						co->additive, co->blast_hemisphere_only,
+						co->delay_max, co->lifetime_min, co->lifetime_max, co->scale_min, co->scale_max,
+						co->blast_radius);
+					break;
+				}
+			case EXPLOSION_PARTICLES:
+				{
+					fprintf(file,
+						"PARTICLES;%s;%i;"
+						"%f\n",
+						smoke_list_names[co->trail_type], co->particle_count,
+						co->initial_speed);
+					break;
+				}
+			case EXPLOSION_SMOKE_TRAILS:
+				{
+					fprintf(file,
+						"SMOKE_TRAILS;%s;%i;"
+						"%f;%f;%f;"
+						"%f;%f;%f\n",
+						smoke_list_names[co->trail_type], co->trail_count,
+						co->generator_lifetime, co->frequency, co->smoke_lifetime,
+						co->initial_velocity.x, co->initial_velocity.y, co->initial_velocity.z);
+					break;
+				}
+			case EXPLOSION_SOUND_EFFECT:
+				{
+					char
+						buf[128],
+						*ptr;
+					strcpy(buf, application_sound_effects[co->sound_type].name);
+					ptr = strchr(buf, '.');
+					if (ptr)
+					{
+						*ptr = '\0';
+					}
+					strupr(buf);
+					fprintf(file,
+						"SOUND_EFFECT;%s;%f\n",
+						buf, co->sound_volume);
+					break;
+				}
+			default:
+				ASSERT(FALSE);
+			}
+		}
+	}
+	safe_fclose(file);
+}
+
+static void import_explosion_database(void)
+{
+	FILE
+		*file;
+	char
+		buf[2048],
+		*ptr,
+		*name;
+	int
+		count,
+		allocated,
+		type;
+	meta_explosion_data
+		*ex;
+	meta_explosion_component
+		*co;
+	int
+		additive,
+		blast_hemisphere_only;
+
+	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "r");
+	fgets(buf, sizeof(buf), file);
+	if (!strcmp(buf, "EXPLOSION;1\n"))
+	{
+		ex = NULL;
+		while (fgets(buf, sizeof(buf), file))
+		{
+			ptr = strchr(buf, '#');
+			if (ptr)
+			{
+				*ptr = '\0';
+			}
+			ptr = strchr (buf, ';');
+			if (!ptr)
+			{
+				continue;
+			}
+			name = ptr + 1;
+			ptr = strchr (name, ';');
+			if (!ptr)
+			{
+				continue;
+			}
+			*ptr = '\0';
+
+			type = NUM_EXPLOSION_COMPONENT_TYPES;
+			if (!strcmp(buf, "SPRITES"))
+			{
+				type = EXPLOSION_SPRITES;
+			}
+			else if (!strcmp(buf, "OBJECTS"))
+			{
+				type = EXPLOSION_OBJECTS;
+			}
+			else if (!strcmp(buf, "PARTICLES"))
+			{
+				type = EXPLOSION_PARTICLES;
+			}
+			else if (!strcmp(buf, "SMOKE_TRAILS"))
+			{
+				type = EXPLOSION_SMOKE_TRAILS;
+			}
+			else if (!strcmp(buf, "SOUND_EFFECT"))
+			{
+				type = EXPLOSION_SOUND_EFFECT;
+			}
+
+			if (type == NUM_EXPLOSION_COMPONENT_TYPES)
+			{
+				ex = NULL;
+				if (sscanf(buf, "%i", &count) != 1 || count <= 0 || count >= NUM_META_EXPLOSION_TYPES)
+				{
+					continue;
+				}
+				ex = &meta_explosion_database[count];
+				if (sscanf(ptr, "%f;%i", &ex->damage_radius, &ex->show_on_map) != 2)
+				{
+					ex = NULL;
+					continue;
+				}
+				allocated = ex->number_of_components;
+				ex->number_of_components = 0;
+			}
+			else
+			{
+				if (!ex)
+				{
+					continue;
+				}
+
+				if (ex->number_of_components >= allocated)
+				{
+					allocated = allocated ? 2 * allocated : 8;
+					co = safe_malloc(sizeof(meta_explosion_component) * allocated);
+					if (ex->number_of_components)
+					{
+						memcpy(co, ex->component, sizeof(meta_explosion_component) * ex->number_of_components);
+						safe_free(ex->component);
+					}
+					ex->component = co;
+				}
+				co = &ex->component[ex->number_of_components];
+				switch (co->type = type)
+				{
+				case EXPLOSION_SPRITES:
+					{
+						co->animated_texture = get_object_3d_texture_animation_index_from_name(name);
+						if (co->animated_texture < 0)
+						{
+							continue;
+						}
+						if (sscanf(ptr,
+							"%i;"
+							"%i;%i;%i;%i;"
+							"%i;%i;"
+							"%f;%f;%f;%f;%f;"
+							"%f;%f",
+							&co->sprite_count,
+							&co->red, &co->green, &co->blue, &co->alpha,
+							&additive, &blast_hemisphere_only,
+							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, &co->scale_max,
+							&co->blast_radius, &co->animation_frequency) != 14)
+						{
+							continue;
+						}
+						co->additive = additive != 0;
+						co->blast_hemisphere_only = blast_hemisphere_only != 0;
+						break;
+					}
+				case EXPLOSION_OBJECTS:
+					{
+						co->object_3d_shape = get_object_3d_index_from_name(name);
+						if (!co->object_3d_shape)
+						{
+							continue;
+						}
+						if (sscanf(ptr,
+							"%i;"
+							"%i;%i;%i;%i;"
+							"%i;%i;"
+							"%f;%f;%f;%f;%f;"
+							"%f",
+							&co->object_count,
+							&co->red, &co->green, &co->blue, &co->alpha,
+							&additive, &blast_hemisphere_only,
+							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, co->scale_max,
+							&co->blast_radius) != 13)
+						{
+							continue;
+						}
+						co->additive = additive != 0;
+						co->blast_hemisphere_only = blast_hemisphere_only != 0;
+						break;
+					}
+				case EXPLOSION_PARTICLES:
+					{
+						co->trail_type = get_smoke_type_by_name(name);
+						if (co->trail_type < 0)
+						{
+							continue;
+						}
+						if (sscanf(ptr,
+							"%i;"
+							"%f",
+							&co->particle_count,
+							&co->initial_speed) != 2)
+						{
+							continue;
+						}
+						break;
+					}
+				case EXPLOSION_SMOKE_TRAILS:
+					{
+						co->trail_type = get_smoke_type_by_name(name);
+						if (co->trail_type < 0)
+						{
+							continue;
+						}
+						if (sscanf(ptr,
+							"%i;"
+							"%f;%f;%f;"
+							"%f;%f;%f",
+							&co->trail_count,
+							&co->generator_lifetime, &co->frequency, &co->smoke_lifetime,
+							&co->initial_velocity.x, &co->initial_velocity.y, &co->initial_velocity.z) != 7)
+						{
+							continue;
+						}
+						break;
+					}
+				case EXPLOSION_SOUND_EFFECT:
+					{
+						int
+							count;
+						co->sound_type = -1;
+						for (count = 0; count < NUM_SOUND_SAMPLE_INDICES; count++)
+						{
+							char
+								buf[128],
+								*ptr;
+							strcpy(buf, application_sound_effects[count].name);
+							ptr = strchr(buf, '.');
+							if (ptr)
+							{
+								*ptr = '\0';
+							}
+							if (!stricmp(buf, name))
+							{
+								co->sound_type = count;
+								break;
+							}
+						}
+						if (co->sound_type < 0)
+						{
+							continue;
+						}
+						if (!sscanf(ptr,
+							"%f",
+							co->sound_volume) != 1)
+						{
+							continue;
+						}
+						break;
+					}
+				default:
+					ASSERT(FALSE);
+					continue;
+				}
+				ex->number_of_components++;
+			}
+		}
+	}
+	safe_fclose(file);
+}
+// 01DEC10 Casm Explosion database import/export end
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_explosion_database()
 {
 	initialise_misc_explosion_database();
@@ -118,6 +495,16 @@ void initialise_explosion_database()
 	initialise_weapon_explosion_criteria_tables();
 
 	initialise_object_explosive_explosion_database();
+
+	// 01DEC10 Casm Explosion database import/export
+	if (file_exist(EXPLOSION_DATABASE_FILENAME))
+	{
+		import_explosion_database();
+	}
+	else
+	{
+		export_explosion_database();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

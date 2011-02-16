@@ -524,7 +524,7 @@ static void read_camera ( FILE *fp, struct OBJECT_3D_SCENE_CAMERA *camera )
 
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x) #x,
-#define OBJECT_3D_INDEX_(x) NULL
+#define OBJECT_3D_INDEX_(x) NULL,
 #define OBJECT_3D_SUBINDEX(x)
 #define OBJECT_3D_SUBINDEX_(x)
 #define OBJECT_3D_CAMERA(x)
@@ -552,7 +552,7 @@ static int get_scene ( const char *filename )
 	strupr ( name );
 
 	for ( i = 1; object_3d_scene_names[i]; i++ )
-		if ( !strcmp ( name, object_3d_scene_names[i] + 10 ) )
+		if ( !strcmp ( name, object_3d_scene_names[i] ) )
 			return i;
 
 	return 0;
@@ -654,8 +654,8 @@ static int get_object ( FILE *fp )
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x)
 #define OBJECT_3D_INDEX_(x)
-#define OBJECT_3D_SUBINDEX(x) #x ,
-#define OBJECT_3D_SUBINDEX_(x) NULL
+#define OBJECT_3D_SUBINDEX(x) #x,
+#define OBJECT_3D_SUBINDEX_(x) NULL,
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
 const char* object_3d_subobject_names[] = {
@@ -681,7 +681,7 @@ int get_subobject ( FILE *fp )
 		return -1;
 
 	for ( i = 1; object_3d_subobject_names[i]; i++ )
-		if ( !strcmp ( name, object_3d_subobject_names[i] + 21 ) )
+		if ( !strcmp ( name, object_3d_subobject_names[i] ) )
 			return i;
 
 	debug_fatal ( "Failed to find subobject '%s'", name );
@@ -701,8 +701,8 @@ static int get_camera ( FILE *fp )
 #define OBJECT_3D_INDEX_(x)
 #define OBJECT_3D_SUBINDEX(x)
 #define OBJECT_3D_SUBINDEX_(x)
-#define OBJECT_3D_CAMERA(x) #x ,
-#define OBJECT_3D_CAMERA_(x) NULL
+#define OBJECT_3D_CAMERA(x) #x,
+#define OBJECT_3D_CAMERA_(x) NULL,
 	static const char
 		*cameras[] =
 		{
@@ -713,7 +713,7 @@ static int get_camera ( FILE *fp )
 		return 0;
 
 	for ( i = 1; cameras[i]; i++ )
-		if ( !strcmp ( name, cameras[i] + 17 ) )
+		if ( !strcmp ( name, cameras[i]) )
 			return i;
 
 	return 0;

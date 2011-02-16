@@ -84,6 +84,8 @@
 
 #include "3d/textanim.h"
 
+#include "3d/dispanim.h"
+
 #include "3d/displace.h"
 
 #include "3d/3danim.h"

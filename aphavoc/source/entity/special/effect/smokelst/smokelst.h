@@ -59,67 +59,13 @@
 // 
 
 
+#include "sl_types.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef enum SMOKE_LIST_TYPES
-{
-	SMOKE_LIST_TYPE_GREY_TRAIL,
-	SMOKE_LIST_TYPE_WHITE_TRAIL,
-	SMOKE_LIST_TYPE_ADDITIVE_TRAIL,
-	SMOKE_LIST_TYPE_LARGE_ADDITIVE_TRAIL,
-
-	SMOKE_LIST_TYPE_FIRE,
-	SMOKE_LIST_TYPE_SMALL_FIRE,
-	SMOKE_LIST_TYPE_PURPLE_FLARE,
-	SMOKE_LIST_TYPE_LARGE_DUST_CLOUD,
-
-	SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL,
-
-	SMOKE_LIST_TYPE_MEDIUM_EARTH_PARTICLE_TRAIL,
-	SMOKE_LIST_TYPE_MEDIUM_WATER_PARTICLE_TRAIL,
-
-	SMOKE_LIST_TYPE_DUST_TRAIL_1,
-	SMOKE_LIST_TYPE_DUST_TRAIL_2,
-
-	SMOKE_LIST_TYPE_REAR_SHIP_WAKE,
-	SMOKE_LIST_TYPE_FRONT_SHIP_WAKE,
-
-	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_TRAIL,
-	SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE_TRAIL,
-	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_TRAIL,
-	SMOKE_LIST_TYPE_AIRCRAFT_ADDITIVE_DAMAGE_TRAIL,
-
-	SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL,
-	SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL,
-
-	// Xhit: added following for the downwash effects (these are taken from terrain_types) (030328)
-	// Xhit: added SMOKE_LIST_TYPE_DOWNWASH_DESERT for desert campaigns (030515)
-	SMOKE_LIST_TYPE_DOWNWASH_START,				//21
-
-	SMOKE_LIST_TYPE_DOWNWASH_DESERT,				//22
-	SMOKE_LIST_TYPE_DOWNWASH_SAND,				//23
-	SMOKE_LIST_TYPE_DOWNWASH_GRASS,				//24
-	SMOKE_LIST_TYPE_DOWNWASH_ASPHALT,			//25
-	SMOKE_LIST_TYPE_DOWNWASH_WATER,				//26
-	SMOKE_LIST_TYPE_DOWNWASH_SOIL,				//27
-	SMOKE_LIST_TYPE_DOWNWASH_FIELD_LIGHTBROWN,//28
-	SMOKE_LIST_TYPE_DOWNWASH_FIELD_DARKBROWN,	//29	
-	SMOKE_LIST_TYPE_DOWNWASH_FIELD_LIGHTGREEN,//30
-	SMOKE_LIST_TYPE_DOWNWASH_FIELD_DARKGREEN,	//31
-	SMOKE_LIST_TYPE_DOWNWASH_ROCK,				//32
-	SMOKE_LIST_TYPE_DOWNWASH_SNOW,				//33
-	SMOKE_LIST_TYPE_FLAME,		//Werewolf: Additional burning flame for vehicle wrecks
-
-	NUM_SMOKE_LIST_TYPES
-
-} smoke_list_types;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct SMOKE_LIST
 {

@@ -225,11 +225,11 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 		object_3d_scale.y *= scale.y;
 		object_3d_scale.z *= scale.z;
 
-		number_of_frames = displacement_animations[0].number_of_frames;
+		number_of_frames = displacement_animations[DISPLACEMENT_ANIMATION_INDEX_BOMB_D].number_of_frames;
 
 		asm_convert_float_to_int ( ( ( ( float ) ( number_of_frames - 1 ) ) * explosion->animation ), &displacement_frame );
 
-		displacement = &displacement_maps[ displacement_animations[0].texture_indices[displacement_frame] ];
+		displacement = &displacement_maps[ displacement_animations[DISPLACEMENT_ANIMATION_INDEX_BOMB_D].texture_indices[displacement_frame] ];
 	}
 
 	//

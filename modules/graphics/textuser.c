@@ -260,6 +260,7 @@ unsigned char
 //VJ 050814 dynamic water and general directories
 #define TEXTURE_OVERRIDE_DIRECTORY_WATER "TERRAIN\\WATER"
 #define TEXTURE_OVERRIDE_DIRECTORY_GENERAL "GENERAL"
+#define TEXTURE_OVERRIDE_DIRECTORY_ANIMATION "ANIMATION"
 #define TEXTURE_OVERRIDE_DIRECTORY_TEMP "TEMP"
 
 #define BITMAP_ID		(0x4D42)
@@ -3327,6 +3328,8 @@ void load_warzone_override_textures ( void )
 	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
 
 	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_CAMO );
+
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_ANIMATION );
 
 	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 

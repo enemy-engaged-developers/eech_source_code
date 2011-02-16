@@ -101,6 +101,16 @@ int
 // JB 030311 Enable running out of separate directories
 extern char comanche_hokum_installation_path[];
 
+#define TEXTURE_ANIMATION_DECLARATION(x)
+#define TEXTURE_ANIMATION_INDEX(x) #x,
+#define TEXTURE_ANIMATION_INDEX_(x) NULL
+const char* texture_animation_names_[] = {
+#include "textanim.h"
+};
+#undef TEXTURE_ANIMATION_DECLARATION
+#undef TEXTURE_ANIMATION_INDEX
+#undef TEXTURE_ANIMATION_INDEX_
+
 void initialise_3d_objects_info ( const char *directory )
 {
 
@@ -143,16 +153,16 @@ void initialise_3d_objects_info ( const char *directory )
 
 	fread ( &object_3d_number_of_scene_names, sizeof ( int ), 1, fp );
 
+	ASSERT ( object_3d_number_of_scene_names == OBJECT_3D_OLD_LAST );
+
 	if ( object_3d_number_of_scene_names )
 	{
 		const char
 			* const object_invalid_index = "OBJECT_INVALID_INDEX";
-		const char* uninitialized_name = "UNNAMED_CUSTOM_OBJECT";
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
 		length += strlen ( object_invalid_index ) + 1;
-		length += strlen ( uninitialized_name ) + 1;
 
 		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
@@ -163,10 +173,6 @@ void initialise_3d_objects_info ( const char *directory )
 		object_3d_information_database[0].name = ptr;
 
 		strcpy ( ptr, object_invalid_index );
-		ptr += strlen ( ptr ) + 1;
-
-		strcpy ( ptr, uninitialized_name );
-		uninitialized_name = ptr;
 		ptr += strlen ( ptr ) + 1;
 
 		for ( count = 1; count < object_3d_number_of_scene_names; count++ )
@@ -180,16 +186,21 @@ void initialise_3d_objects_info ( const char *directory )
 
 			fread ( ptr, length, 1, fp );
 
+			ASSERT ( !strcmp ( object_3d_enumeration_names[count], object_3d_scene_names[count] ) );
+
 			fread ( &object_3d_information_database[count].maximum_distance, sizeof ( float ), 1, fp );
 
 			ptr += length;
 		}
-		for (; count < OBJECT_3D_LAST; count++)
+
+		for ( ; count < OBJECT_3D_LAST; count++ )
 		{
 			object_3d_enumeration_names[count] = object_3d_scene_names[count];
 			object_3d_information_database[count].name = object_3d_scene_names[count];
 			object_3d_information_database[count].maximum_distance = 1000.0;
 		}
+
+		object_3d_number_of_scene_names = OBJECT_3D_LAST;
 
 		ptr = NULL;
 	}
@@ -200,10 +211,12 @@ void initialise_3d_objects_info ( const char *directory )
 
 	fread ( &object_3d_number_of_sub_object_names, sizeof ( int ), 1, fp );
 
+	ASSERT ( object_3d_number_of_sub_object_names == OBJECT_3D_SUB_OBJECT_OLD_LAST );
+
 	if ( object_3d_number_of_sub_object_names )
 	{
 
-		object_3d_sub_object_names = ( const char * * ) safe_malloc ( object_3d_number_of_sub_object_names * sizeof ( char * ) );
+		object_3d_sub_object_names = ( const char * * ) safe_malloc ( OBJECT_3D_SUB_OBJECT_LAST * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -226,8 +239,17 @@ void initialise_3d_objects_info ( const char *directory )
 
 			fread ( ptr, length, 1, fp );
 
+			ASSERT ( !strcmp ( object_3d_sub_object_names[count], object_3d_subobject_names[count] ) );
+
 			ptr += length;
 		}
+
+		for ( ; count < OBJECT_3D_SUB_OBJECT_LAST; count++ )
+		{
+			object_3d_sub_object_names[count] = object_3d_subobject_names[count];
+		}
+
+		object_3d_number_of_sub_object_names = OBJECT_3D_SUB_OBJECT_LAST;
 
 		ptr = NULL;
 	}
@@ -306,12 +328,14 @@ void initialise_3d_objects_info ( const char *directory )
 
 	fread ( &number_of_texture_animations, sizeof ( int ), 1, fp );
 
+	ASSERT ( number_of_texture_animations == TEXTURE_ANIMATION_INDEX_OLD_LAST );
+
 	if ( number_of_texture_animations )
 	{
 
-		texture_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * number_of_texture_animations );
+		texture_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * TEXTURE_ANIMATION_INDEX_LAST );
 
-		texture_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * number_of_texture_animations );
+		texture_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * TEXTURE_ANIMATION_INDEX_LAST );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -330,6 +354,8 @@ void initialise_3d_objects_info ( const char *directory )
 
 			fread ( ptr, length, 1, fp );
 
+			ASSERT ( !strcmp ( texture_animation_names[count], texture_animation_names_[count] ) );
+
 			ptr += length;
 
 			fread ( &number_of_frames, sizeof ( int ), 1, fp );
@@ -345,8 +371,34 @@ void initialise_3d_objects_info ( const char *directory )
 			}
 		}
 
+		for ( ; count < TEXTURE_ANIMATION_INDEX_KNOWN_LAST; count++ )
+		{
+			length = strlen ( texture_animation_names_[count] ) + 1;
+
+			ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
+
+			memcpy ( ptr, texture_animation_names_[count], length );
+
+			texture_animation_names[count] = ptr;
+
+			texture_animations[count].number_of_frames = 0;
+			texture_animations[count].current_frame = 0;
+			texture_animations[count].texture_indices = NULL;
+		}
+
+		for ( ; count < TEXTURE_ANIMATION_INDEX_LAST; count++ )
+		{
+			texture_animation_names[count] = NULL;
+
+			texture_animations[count].number_of_frames = 0;
+			texture_animations[count].current_frame = 0;
+			texture_animations[count].texture_indices = NULL;
+		}
+
 		ptr = NULL;
 	}
+
+	number_of_texture_animations = TEXTURE_ANIMATION_INDEX_KNOWN_LAST;
 
 	//
 	// Read in the displacement animations
@@ -393,6 +445,93 @@ void initialise_3d_objects_info ( const char *directory )
 	}
 
 	fclose ( fp );
+
+	// 12NOV10 Casm Loading custom textures animation BEGIN
+	{
+		int
+			rc;
+		long
+			handle;
+		struct _finddata_t
+			fi;
+
+		sprintf ( filename, "%s\\..\\GRAPHICS\\TEXTURES\\ANIMATION\\*.TXT", directory );
+		for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
+		{
+			int
+				texture_animation_index;
+
+			if ( fi.attrib & _A_SUBDIR )
+				continue;
+
+			fi.name[strlen(fi.name) - 4] = '\0';
+			strupr ( fi.name );
+
+			texture_animation_index = get_object_3d_texture_animation_index_from_name ( fi.name );
+			if ( texture_animation_index < 0 )
+			{
+				size_t
+					length;
+				char
+					*ptr;
+
+				ASSERT ( number_of_texture_animations < TEXTURE_ANIMATION_INDEX_LAST );
+				texture_animation_index = number_of_texture_animations++;
+				length = strlen ( fi.name ) + 1;
+				ptr = safe_malloc ( length );
+				memcpy ( ptr, fi.name, length );
+				texture_animation_names[texture_animation_index] = ptr;
+			}
+
+			sprintf ( filename, "%s\\..\\GRAPHICS\\TEXTURES\\ANIMATION\\%s.TXT", directory, fi.name );
+
+			{
+				FILE*
+					file;
+				texture_animation_information
+					texture_animation;
+
+				texture_animation.number_of_frames = texture_animation.current_frame = 0;
+				texture_animation.texture_indices = NULL;
+				file = safe_fopen ( filename, "r" );
+				while ( fgets ( filename, sizeof ( filename ), file ) && *filename )
+				{
+					char
+						*last;
+					last = filename + strlen ( filename ) - 1;
+					if ( *last == '\n' )
+						*last = '\0';
+					if ( !*filename )
+						break;
+					if ( texture_animation.number_of_frames == texture_animation.current_frame )
+					{
+						int
+							*new_texture_indices;
+
+						texture_animation.current_frame = texture_animation.current_frame ? texture_animation.current_frame * 2 : 8;
+						new_texture_indices = safe_malloc ( texture_animation.current_frame * sizeof ( int ) );
+						if ( texture_animation.texture_indices )
+						{
+							memcpy ( new_texture_indices, texture_animation.texture_indices, texture_animation.number_of_frames * sizeof ( int ) );
+							safe_free ( texture_animation.texture_indices );
+						}
+						texture_animation.texture_indices = new_texture_indices;
+					}
+					texture_animation.texture_indices[texture_animation.number_of_frames++] = add_new_texture ( filename );
+				}
+				safe_fclose ( file );
+
+				texture_animation.current_frame = 0;
+				if ( texture_animations[texture_animation_index].texture_indices )
+				{
+					safe_free ( texture_animations[texture_animation_index].texture_indices );
+				}
+				texture_animations[texture_animation_index] = texture_animation;
+			}
+		}
+		_findclose ( handle );
+	}
+	// 12NOV10 Casm Loading custom textures animation END
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,6 +725,14 @@ void set_object_3d_texture_camoflage_by_name ( char *name )
 // Casm 24JAN09 Adding textures animation loading for objects
 int add_new_animation(char* animation_name)
 {
-	// FIXME: Need to load animation from the external file
-	return get_object_3d_texture_animation_index_from_name ( animation_name );
+	int
+		texture_animation;
+
+	texture_animation = get_object_3d_texture_animation_index_from_name ( animation_name );
+	if ( texture_animation < 0 )
+	{
+		debug_fatal ( "FAILED to find texture animation '%s'", animation_name );
+	}
+
+	return texture_animation;
 }

@@ -832,6 +832,22 @@ void full_initialise_game (void)
 
 	////////////////////////////////////////
 	//
+	// INITIALISE SOUND SYSTEM
+	//
+	////////////////////////////////////////
+
+	debug_log ( "Initialising sound system" );
+
+	sprintf (buffer, "%s...%s", get_trans ("Loading"), get_trans ("Sound System"));
+
+	set_ui_object_text (initialising_text, buffer);
+
+	ui_force_update ();
+
+	initialise_application_sound_system ();
+
+	////////////////////////////////////////
+	//
 	// INITIALISE 3D SYSTEM
 	//
 	////////////////////////////////////////
@@ -952,22 +968,6 @@ void full_initialise_game (void)
 	////////////////////////////////////////
 
 	initialise_medal_and_promotion_names ();
-
-	////////////////////////////////////////
-	//
-	// INITIALISE SOUND SYSTEM
-	//
-	////////////////////////////////////////
-
-	debug_log ( "Initialising sound system" );
-
-	sprintf (buffer, "%s...%s", get_trans ("Loading"), get_trans ("Sound System"));
-
-	set_ui_object_text (initialising_text, buffer);
-
-	ui_force_update ();
-
-	initialise_application_sound_system ();
 
 	initialise_game_initialisation_phases ();
 

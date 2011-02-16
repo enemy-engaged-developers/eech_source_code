@@ -114,6 +114,8 @@ typedef struct EXPLOSION explosion;
 
 #include "xp_creat.h"
 
+#include "xp_types.h"
+
 #include "xp_dbase.h"
 
 #include "xp_draw.h"
