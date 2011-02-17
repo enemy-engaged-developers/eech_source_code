@@ -1,5 +1,6 @@
 // This was taken from EE sources
 
+#ifndef NATIVE_TYPES
 struct OBJECT_3D_BOUNDS { float xmin, xmax, ymin, ymax, zmin, zmax; };
 struct OBJECT_3D
 {
@@ -47,6 +48,16 @@ struct OBJECT_3D
  struct POINT_3D_PLAIN_REFERENCE /*{ unsigned short int point; }*/ *surface_point_normals;
 #endif
 };
+typedef OBJECT_3D::OBJECT_SHORT_3D_POINT OBJECT_SHORT_3D_POINT;
+typedef OBJECT_3D::OBJECT_3D_FACE OBJECT_3D_FACE;
+typedef OBJECT_3D::POINT_3D_SHORT_REFERENCE POINT_3D_SHORT_REFERENCE;
+typedef OBJECT_3D::FACE_SURFACE_DESCRIPTION FACE_SURFACE_DESCRIPTION;
+typedef OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT OBJECT_3D_SHORT_TEXTURED_POINT;
+typedef OBJECT_3D::POINT_3D_PLAIN_REFERENCE POINT_3D_PLAIN_REFERENCE;
+#ifdef LOAD_NORMALS
+typedef OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL OBJECT_3D_HEADING_PITCH_NORMAL;
+#endif
+#endif
 
 class Objects
 {
@@ -66,18 +77,18 @@ class Objects
 
  int total_number_of_objects;
  OBJECT_3D* objs;
- OBJECT_3D::OBJECT_SHORT_3D_POINT* object_database_points;
- OBJECT_3D::POINT_3D_PLAIN_REFERENCE* object_database_surface_point_list;
+ OBJECT_SHORT_3D_POINT* object_database_points;
+ POINT_3D_PLAIN_REFERENCE* object_database_surface_point_list;
 #ifdef LOAD_NORMALS
- OBJECT_3D::POINT_3D_PLAIN_REFERENCE* object_database_surface_point_normal_list;
+ POINT_3D_PLAIN_REFERENCE* object_database_surface_point_normal_list;
 #endif
- OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT* object_database_surface_point_texture_list;
- OBJECT_3D::OBJECT_3D_FACE* object_database_faces;
+ OBJECT_3D_SHORT_TEXTURED_POINT* object_database_surface_point_texture_list;
+ OBJECT_3D_FACE* object_database_faces;
 #ifdef LOAD_NORMALS
- OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL* object_database_point_normals;
+ OBJECT_3D_HEADING_PITCH_NORMAL* object_database_point_normals;
 #endif
- OBJECT_3D::FACE_SURFACE_DESCRIPTION* object_database_surfaces;
- OBJECT_3D::POINT_3D_SHORT_REFERENCE* object_database_faces_point_list;
+ FACE_SURFACE_DESCRIPTION* object_database_surfaces;
+ POINT_3D_SHORT_REFERENCE* object_database_faces_point_list;
 
  public:
 
@@ -90,27 +101,27 @@ class Objects
 #endif
   int i, j;
 
-  OBJECT_3D::OBJECT_SHORT_3D_POINT* current_points;
-  OBJECT_3D::OBJECT_3D_FACE* current_faces;
+  OBJECT_SHORT_3D_POINT* current_points;
+  OBJECT_3D_FACE* current_faces;
 #ifdef LOAD_NORMALS
-  OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL* current_point_normals;
+  OBJECT_3D_HEADING_PITCH_NORMAL* current_point_normals;
 #endif
-  OBJECT_3D::FACE_SURFACE_DESCRIPTION* current_surfaces;
-  OBJECT_3D::POINT_3D_SHORT_REFERENCE * current_faces_point_list;
-  OBJECT_3D::POINT_3D_PLAIN_REFERENCE * current_object_surface_point_references;
+  FACE_SURFACE_DESCRIPTION* current_surfaces;
+  POINT_3D_SHORT_REFERENCE * current_faces_point_list;
+  POINT_3D_PLAIN_REFERENCE * current_object_surface_point_references;
 #ifdef LOAD_NORMALS
-  OBJECT_3D::POINT_3D_PLAIN_REFERENCE* current_object_surface_point_normal_references;
+  POINT_3D_PLAIN_REFERENCE* current_object_surface_point_normal_references;
 #endif
-  OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT * current_object_surface_point_texture_references;
+  OBJECT_3D_SHORT_TEXTURED_POINT * current_object_surface_point_texture_references;
   FILE* fp;
 
   fp = safe_fopen("3dobjs.bin", "rb");
-  object_database_points = (OBJECT_3D::OBJECT_SHORT_3D_POINT*)loadfile("3dobjs.pts");
-  object_database_surface_point_list = (OBJECT_3D::POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.sp");
+  object_database_points = (OBJECT_SHORT_3D_POINT*)loadfile("3dobjs.pts");
+  object_database_surface_point_list = (POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.sp");
 #ifdef LOAD_NORMALS
-  object_database_surface_point_normal_list = (OBJECT_3D::POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.spn");
+  object_database_surface_point_normal_list = (POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.spn");
 #endif
-  object_database_surface_point_texture_list = (OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT*)loadfile("3dobjs.spt");
+  object_database_surface_point_texture_list = (OBJECT_3D_SHORT_TEXTURED_POINT*)loadfile("3dobjs.spt");
 
   fread(&total_number_of_objects, sizeof(int), 1, fp);
   objs = (OBJECT_3D*)calloc(total_number_of_objects + 1, sizeof(OBJECT_3D));
@@ -132,12 +143,12 @@ class Objects
    fseek(fp, sizeof(int), 1);
    fread(&total_number_of_polygons, sizeof(int), 1, fp);
 
-   object_database_faces =(OBJECT_3D::OBJECT_3D_FACE *) calloc(sizeof(OBJECT_3D::OBJECT_3D_FACE), total_number_of_polygons);
+   object_database_faces =(OBJECT_3D_FACE *) calloc(sizeof(OBJECT_3D_FACE), total_number_of_polygons);
 #ifdef LOAD_NORMALS
-   object_database_point_normals = (OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL *) calloc(sizeof(OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL), total_number_of_point_normals);
+   object_database_point_normals = (OBJECT_3D_HEADING_PITCH_NORMAL *) calloc(sizeof(OBJECT_3D_HEADING_PITCH_NORMAL), total_number_of_point_normals);
 #endif
-   object_database_surfaces =(OBJECT_3D::FACE_SURFACE_DESCRIPTION *) calloc(sizeof(OBJECT_3D::FACE_SURFACE_DESCRIPTION), total_number_of_surfaces);
-   object_database_faces_point_list =(OBJECT_3D::POINT_3D_SHORT_REFERENCE *) calloc(sizeof(OBJECT_3D::POINT_3D_SHORT_REFERENCE), total_number_of_plain_points);
+   object_database_surfaces =(FACE_SURFACE_DESCRIPTION *) calloc(sizeof(FACE_SURFACE_DESCRIPTION), total_number_of_surfaces);
+   object_database_faces_point_list =(POINT_3D_SHORT_REFERENCE *) calloc(sizeof(POINT_3D_SHORT_REFERENCE), total_number_of_plain_points);
   }
 
   current_points = object_database_points;
@@ -227,11 +238,11 @@ class Objects
     fread(&number_of_point_reference, sizeof(int), 1, fp);
     fread(&number_of_normal_reference, sizeof(int), 1, fp);
 
-    fread(current_faces, sizeof(OBJECT_3D::OBJECT_3D_FACE), number_of_real_polygons, fp);
+    fread(current_faces, sizeof(OBJECT_3D_FACE), number_of_real_polygons, fp);
     objs[i].faces = current_faces;
     current_faces += number_of_real_polygons;
 
-    fread(current_faces_point_list, sizeof(OBJECT_3D::POINT_3D_SHORT_REFERENCE), number_of_point_reference, fp);
+    fread(current_faces_point_list, sizeof(POINT_3D_SHORT_REFERENCE), number_of_point_reference, fp);
     objs[i].object_faces_point_plain_list = current_faces_point_list;
     current_faces_point_list += number_of_point_reference;
     fseek(fp, number_of_normal_reference * 2, 1);

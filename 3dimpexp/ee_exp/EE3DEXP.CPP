@@ -20,10 +20,10 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  float value;
  char buf[1024];
 
- const OBJECT_3D::OBJECT_3D_FACE* current_object_3d_faces = obj.faces;
- const OBJECT_3D::POINT_3D_SHORT_REFERENCE* current_object_3d_point_list = obj.object_faces_point_plain_list;
- const OBJECT_3D::POINT_3D_PLAIN_REFERENCE* current_object_3d_surface_point_list = obj.surface_points;
- const OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT* current_object_3d_surface_point_texture_list = obj.surface_texture_points;
+ const OBJECT_3D_FACE* current_object_3d_faces = obj.faces;
+ const POINT_3D_SHORT_REFERENCE* current_object_3d_point_list = obj.object_faces_point_plain_list;
+ const POINT_3D_PLAIN_REFERENCE* current_object_3d_surface_point_list = obj.surface_points;
+ const OBJECT_3D_SHORT_TEXTURED_POINT* current_object_3d_surface_point_texture_list = obj.surface_texture_points;
 
  eet.Clear();
 
@@ -71,7 +71,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  value = 0.0;
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const OBJECT_3D::FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
    int number_of_surface_points = current_surface->number_of_points;
 
    if (number_of_surface_points == 0)
@@ -110,7 +110,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  int cur_poly = 0;
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const OBJECT_3D::FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
    int number_of_surface_points = current_surface->number_of_points;
 
    if (number_of_surface_points == 0)
@@ -200,7 +200,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  unsigned long index = 0;
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const OBJECT_3D::FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
 
    for (j = 0; j < current_surface->number_of_faces; j++)
     {
@@ -211,7 +211,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const OBJECT_3D::FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
 
    if (current_surface->textured)
     eet.GetIndex(lwofile, current_surface->texture_index, current_surface->texture_animation);

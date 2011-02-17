@@ -2,6 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef NATIVE_TYPES
+enum TEXTURE_MAP_TYPES
+{
+ TEXTURE_TYPE_INVALID,
+ TEXTURE_TYPE_NOALPHA,
+ TEXTURE_TYPE_SINGLEALPHA,
+ TEXTURE_TYPE_MULTIPLEALPHA,
+ TEXTURE_TYPE_SCREEN,
+ TEXTURE_TYPE_NOALPHA_NOPALETTE,
+};
+#endif
+
 class BaseTexturesExporter
 {
  public:
@@ -20,16 +32,6 @@ class BaseTexturesExporter
  };
 
  protected:
-
- enum TEXTURE_MAP_TYPES
- {
-  TEXTURE_TYPE_INVALID,
-  TEXTURE_TYPE_NOALPHA,
-  TEXTURE_TYPE_SINGLEALPHA,
-  TEXTURE_TYPE_MULTIPLEALPHA,
-  TEXTURE_TYPE_SCREEN,
-  TEXTURE_TYPE_NOALPHA_NOPALETTE,
- };
 
  TEXTURE_FLAGS flags;
  int width, height, type, bpp, number_of_mipmaps;

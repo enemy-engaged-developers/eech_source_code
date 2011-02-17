@@ -25,6 +25,7 @@ class EET
 
  Array<Texture> textures;
  Array<Animation> animations;
+ Array<Animation> displacement_animations;
 #ifndef EET_NO_EXPORT
  unsigned long index;
  char textures_drive;
@@ -46,6 +47,9 @@ class EET
 #else
  const char* GetTexture(unsigned index, bool animation, float frame) const;
 #endif
+private:
+ void LoadAnimations(FILE* file, Array<Animation>& animations);
+ void ExportAnimations(const Array<Animation>& animations, char* postfix) const;
 };
 
 #ifndef EET_NO_EXPORT
@@ -55,7 +59,7 @@ EET::EET(char drive, const char* ext)
 }
 #endif
 
-void EET::LoadAnimations(FILE* file)
+void EET::LoadAnimations(FILE* file, Array<Animation>& animations)
 {
  int number_of_texture_animations;
  fread(&number_of_texture_animations, sizeof(int), 1, file);
@@ -85,6 +89,12 @@ void EET::LoadAnimations(FILE* file)
      animations[count] = animation;
     }
   }
+}
+
+void EET::LoadAnimations(FILE* file)
+{
+ LoadAnimations(file, animations);
+ LoadAnimations(file, displacement_animations);
 }
 
 #ifndef EET_NO_EXPORT
@@ -168,18 +178,23 @@ unsigned EET::Append(const char* name)
 }
 
 #ifndef EET_NO_EXPORT
-void EET::ExportAnimations(void) const
+void EET::ExportAnimations(const Array<Animation>& animations, char* postfix) const
 {
  for (unsigned i = 0; i < !animations; i++)
   {
    const Animation& animation = animations[i];
    char filename[128];
-   sprintf(filename, "_OBJECTS/%04X_%s.TXT", i, animation.name);
+   sprintf(filename, "_OBJECTS/%04X_%s%s.TXT", i, animation.name, postfix);
    FILE* file = safe_fopen(filename, "w");
    for (unsigned j = 0; j < !animation.animation; j++)
     fprintf(file, "%s\n", textures[animation.animation[j]].name);
    fclose(file);
   }
+}
+void EET::ExportAnimations(void) const
+{
+ ExportAnimations(animations, "");
+ ExportAnimations(displacement_animations, "_DISPLACEMENT");
 }
 #else
 const char* EET::GetTexture(unsigned index, bool animation, float frame) const

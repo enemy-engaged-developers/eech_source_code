@@ -1,3 +1,4 @@
+#ifndef NATIVE_TYPES
 struct OBJECT_3D_SUB_OBJECT_KEYFRAME
 {
  int index, linear;
@@ -15,6 +16,7 @@ struct OBJECT_3D_SCENE_CAMERA
   number_of_keyframes;
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
 };
+#endif
 
 
 class Cameras

@@ -28,7 +28,7 @@ int main(void)
  const Objects objects;
  const Scenes scenes(objects);
  SimpleTranslator translator;
- LwsExport lwsexp(names, scenes.GetCameras(), translator);
+ LwsExport lwsexp(scenes.GetCameras());
 
  mkdir("\\TEXTURES");
  TexturesExporter textures;
@@ -52,7 +52,7 @@ int main(void)
   {
    sprintf(filename, "_OBJECTS/%04X_%s.LWS", i, names.Objects[i]);
    printf("Exporting scene '%s'\n", filename);
-   lwsexp.ExportScene(filename, scenes.GetScene(i));
+   lwsexp.ExportScene(names, translator, filename, scenes.GetScene(i));
   }
 
  return 0;

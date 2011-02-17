@@ -6,6 +6,7 @@ class LwsExport;
 
 #include "cameras.cpp"
 
+#ifndef NATIVE_TYPES
 struct VEC3D
 {
  float x, y, z;
@@ -25,6 +26,7 @@ struct REAL_COLOUR
   unsigned int colour;
  };
 };
+#endif
 
 void print_keyframes(int number_of_keyframes, const struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes)
 {
@@ -33,11 +35,13 @@ void print_keyframes(int number_of_keyframes, const struct OBJECT_3D_SUB_OBJECT_
   printf(" (%i  %i  %f %f %f  %f %f %f  %f %f %f  %f %f %f)", keyframes[i].index, keyframes[i].linear, keyframes[i].x, keyframes[i].y, keyframes[i].z, keyframes[i].heading, keyframes[i].pitch, keyframes[i].roll, keyframes[i].scale_x, keyframes[i].scale_y, keyframes[i].scale_z, keyframes[i].tension, keyframes[i].continuity, keyframes[i].bias);
 }
 
+#ifndef NATIVE_TYPES
 struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME
 {
  int index, linear;
  float value, tension, continuity, bias;
 };
+#endif
 
 void print_value_keyframes(int number_of_value_keyframes, const struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *value_keyframes)
 {
@@ -47,6 +51,7 @@ void print_value_keyframes(int number_of_value_keyframes, const struct OBJECT_3D
 }
 
 
+#ifndef NATIVE_TYPES
 struct OBJECT_3D_SUB_OBJECT_INDEX
 {
  unsigned short int sub_object_index;
@@ -220,6 +225,7 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
   printf("\n\n");
  }
 };
+#endif
 
 class QuickSearch
 {
@@ -346,7 +352,9 @@ void initialise_scene_quick_sub_object_search(void)
    //
 
    sub_object_table_entries = new OBJECT_3D_DATABASE_ENTRY *[total_sub_object_indices];
+#ifndef NATIVE_TYPES
    scene.sub_object_table_entries = sub_object_table_entries;
+#endif
 
    //
    // Go through initialising the table
@@ -471,9 +479,11 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
  sub_object->sub_object_approximation_in_level = sub_object_approximation_in_level;
  sub_object->sub_object_approximation_out_level = sub_object_approximation_out_level;
 
- fread(&sub_object->flag, sizeof(int), 1, fp);
+ int flag;
 
- if (sub_object->flag)
+ fread(&flag, sizeof(int), 1, fp);
+
+ if (flag)
  {
   fread(&sub_object->relative_heading_maximum, sizeof(float), 1, fp);
   fread(&sub_object->relative_heading_minimum, sizeof(float), 1, fp);
@@ -491,6 +501,10 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
   sub_object->relative_roll_maximum = 0.0;
   sub_object->relative_roll_minimum = 0.0;
  }
+
+#ifndef NATIVE_TYPES
+ sub_object->flag = flag;
+#endif
 
  fread(&number_of_keyframes, sizeof(int), 1, fp);
 
@@ -1143,7 +1157,9 @@ void LoadAll(void)
   for (int i = 0; i < total_number_of_scenes + 1; i++)
    {
     struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene = &objects_3d_scene_database[i];
+#ifndef NATIVE_TYPES
     delete [] scene->sub_object_table_entries;
+#endif
     delete [] scene->sub_object_indices_table;
    }
   delete [] objects_3d_scene_database;

@@ -1,6 +1,7 @@
 *.obj
 *.[Ll][Ii][Bb]
 *.err
+*.swp
 .project
 .cproject
 project.ilk
@@ -9,3 +10,12 @@ project.map
 project.sym
 project.exe
 wcc386.pch
+*.vcproj.*
+*.ncb
+*.suo
+BuildLog.htm
+mt.dep
+*.manifest
+*.pch
+*.idb
+*.pdb
