@@ -3594,6 +3594,9 @@ void load_texture_override ( void )
 	int
 		count;
 
+	char
+		missing_textures[4096] = { '\0' };
+
 	// Now that all the screens are loaded we check to see if there is are any overrides
 	for ( count = 0; count < MAX_TEXTURES; count++ )
 	{
@@ -3608,7 +3611,10 @@ void load_texture_override ( void )
 #if DEBUG_MODULE
 				debug_log ("++OVERRIDES++ found bmp file %s", full_override_texture_filename);
 #endif
-				override_screen = load_bmp_file_screen(full_override_texture_filename);
+				if (!*missing_textures)
+				{
+					override_screen = load_bmp_file_screen(full_override_texture_filename);
+				}
 				break;
 			}
 			case TYPE_DDS:
@@ -3616,7 +3622,10 @@ void load_texture_override ( void )
 #if DEBUG_MODULE
 				debug_log ("++OVERRIDES++ found dds file %s", full_override_texture_filename);
 #endif
-				override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
+				if (!*missing_textures)
+				{
+					override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
+				}
 				break;
 			}
 			default:
@@ -3624,7 +3633,7 @@ void load_texture_override ( void )
 				// need to provide all these textures ourselves
 				if ( count >= TEXTURE_INDEX_LAST && count < number_of_system_textures )
 				{
-					debug_fatal ( "Missing texture (%d): %s", count, get_system_texture_name ( count ) );
+					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s", count, get_system_texture_name ( count ) );
 				}
 				break;
 			}
@@ -3646,6 +3655,10 @@ void load_texture_override ( void )
 			//not done, reset flag
 			system_texture_override_names[count].type = TYPE_ORIGINAL;
 		}
+	}
+	if (*missing_textures)
+	{
+		debug_fatal ( "Missing texture(s)%s", missing_textures );
 	}
 }
 
