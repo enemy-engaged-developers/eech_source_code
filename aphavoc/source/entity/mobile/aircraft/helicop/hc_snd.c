@@ -117,7 +117,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	
 			looping = TRUE;
 	
-			raw->ac.sound_effect_data = create_single_system_sound_effect (effect_type, panning, rate, volume, looping, (void *) en);
+			raw->ac.sound_effect_data = create_single_system_sound_effect (effect_type, panning, rate, volume, looping, (void *) en, 0);
 
 			if (raw->ac.sound_effect_data)
 			{

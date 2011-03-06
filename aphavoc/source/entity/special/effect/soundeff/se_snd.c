@@ -121,7 +121,8 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 
 	int
 		volume,
-		maximum_volume;
+		maximum_volume,
+		channel;
 
 	float
 		v,
@@ -319,6 +320,8 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	
 	v *= raw->amplification;
 
+	channel = raw->sound_channel != SOUND_CHANNEL_SOUND_EFFECT ? 1 : 0;
+
 	//
 	// arneh - adjust volume with canopy close/open
 	//
@@ -400,6 +403,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_WARNING_MESSAGE:
 		default:
 			csa_code = CSA_CODES_LAST;
+			channel = 1;
 			break;
 		}
 
@@ -485,7 +489,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 					samples [sample_loop].rate = application_sound_effects [raw->effect_index [sample_loop]].rate;
 				}
 
-				raw->sound_effect_data = create_sequenced_system_sound_effect (raw->sound_effect_sequence_count, samples, volume, (void *) en);
+				raw->sound_effect_data = create_sequenced_system_sound_effect (raw->sound_effect_sequence_count, samples, volume, (void *) en, channel);
 
 				free_mem (samples);
 			}
@@ -495,7 +499,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 				// play single sound
 				//
 
-				raw->sound_effect_data = create_single_system_sound_effect (raw->effect_index [0], volume, raw->looping, (void *) en);
+				raw->sound_effect_data = create_single_system_sound_effect (raw->effect_index [0], volume, raw->looping, (void *) en, channel);
 			}
 
 			if (!raw->sound_effect_data)

@@ -185,9 +185,9 @@ extern void load_source_sound_sample ( int sample_index, void *data );
 // Sound EFFECT routines
 //
 
-extern system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data );
+extern system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data, int context );
 
-extern system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data );
+extern system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data, int context );
 
 extern int get_system_sound_effect_playing ( system_sound_effect *effect );
 

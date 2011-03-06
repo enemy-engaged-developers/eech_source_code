@@ -518,7 +518,7 @@ void load_source_sound_sample ( int sample_index, void *data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data )
+system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data, int context )
 {
 	system_sound_effect
 		*effect;
@@ -590,7 +590,7 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data )
+system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data, int context )
 {
 
 	system_sound_effect

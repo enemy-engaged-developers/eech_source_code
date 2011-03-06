@@ -76,13 +76,17 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define NUMBER_OF_UI_OBJECTS 6
+
 static ui_object
 	*sound_device_area,
+	*sound_device_speech_area,
 	*sound_effect_area,
 	*music_area,
 	*speech_area,
 	*co_pilot_speech_area,
 	*sound_device_option_button,
+	*sound_device_speech_option_button,
 	*sound_effect_option_button,
 	*music_option_button,
 	*speech_option_button,
@@ -94,7 +98,9 @@ static const char
 static int
 	number_of_devices,
 	current_device,
-	original_device;
+	original_device,
+	current_device_speech,
+	original_device_speech;
 
 static const char
 	**devices_array;
@@ -104,6 +110,8 @@ static const char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_sound_device_option_button ( ui_object *obj, void *arg );
+
+void notify_sound_device_speech_option_button ( ui_object *obj, void *arg );
 
 void notify_sound_effect_option_button ( ui_object *obj, void *arg );
 
@@ -122,6 +130,8 @@ void notify_show_sound_page (void)
 	// initialise button text
 
 	set_ui_object_text (sound_device_option_button, devices_array[current_device]);
+
+	set_ui_object_text (sound_device_speech_option_button, devices_array[current_device_speech]);
 
 	set_ui_object_text (sound_effect_option_button, option_boolean_text[get_global_sound_effects_enabled ()]);
 
@@ -166,9 +176,9 @@ void define_options_screen_sound_page_objects (void)
 		*page;
 
 	ui_object
-		*title_change_array [5],
-		*check_array [5],
-		*change_array [5];
+		*title_change_array [NUMBER_OF_UI_OBJECTS],
+		*check_array [NUMBER_OF_UI_OBJECTS],
+		*change_array [NUMBER_OF_UI_OBJECTS];
 
 	// Determine devices to show and select
 
@@ -178,6 +188,7 @@ void define_options_screen_sound_page_objects (void)
 		const char
 			*devices,
 			*default_device,
+			*default_device_speech,
 			*device;
 
 		if ( get_sound_system_devices ( &devices, &default_device ) )
@@ -186,10 +197,11 @@ void define_options_screen_sound_page_objects (void)
 			{
 				default_device = command_line_sound_device;
 			}
+			default_device_speech = *command_line_sound_device_speech ? command_line_sound_device_speech : default_device;
 		}
 		else
 		{
-			devices = default_device = "Default\0\0";
+			devices = default_device = default_device_speech = "Default\0\0";
 		}
 
 		number_of_devices = 0;
@@ -198,7 +210,7 @@ void define_options_screen_sound_page_objects (void)
 			number_of_devices++;
 		}
 		devices_array = ( const char ** ) safe_malloc ( number_of_devices * sizeof ( const char * ) );
-		original_device = -1;
+		original_device = original_device_speech = -1;
 		for ( current_device = 0, device = devices; *device; current_device++, device += strlen ( device ) + 1 )
 		{
 			devices_array[current_device] = device;
@@ -206,9 +218,14 @@ void define_options_screen_sound_page_objects (void)
 			{
 				original_device = current_device;
 			}
+			if ( !strcmp ( devices_array[current_device], default_device_speech ) )
+			{
+				original_device_speech = current_device;
+			}
 		}
 		current_device = original_device;
-		ASSERT ( current_device != -1 );
+		current_device_speech = original_device_speech;
+		ASSERT ( current_device != -1 && current_device_speech != -1 );
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -283,6 +300,56 @@ void define_options_screen_sound_page_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Sound Device")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+
+
+	// sound device speech
+
+	i++;
+
+	x1 = 0.0;
+	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+
+   sound_device_speech_area = create_ui_object
+									(
+										UI_TYPE_AREA,
+										UI_ATTR_PARENT (page),
+										UI_ATTR_VIRTUAL_POSITION (x1, y1),
+										UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+										UI_ATTR_CLEAR (TRUE),
+					               UI_ATTR_COLOUR_START (0,0,0,0),
+            					   UI_ATTR_COLOUR_END (255,255,255,255),
+										UI_ATTR_END
+									);
+
+	x1 = OPTION_TITLE_OFFSET_X;
+	y1 = 0.0;
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (sound_device_speech_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255,255,255,0),
+      UI_ATTR_COLOUR_END (255,255,255,255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Speech Sound Device")),
 		UI_ATTR_END
 	);
 
@@ -529,6 +596,43 @@ void define_options_screen_sound_page_objects (void)
 
 	preprocess_translation_object_size (change_array [i], sound_device_option_button, devices_array, number_of_devices, RESIZE_OPTION_CYCLE_BUTTON);
 
+	//sound device speech
+
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (sound_device_speech_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255,255,255,0),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_small),
+		UI_ATTR_END
+	);
+
+   sound_device_speech_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (sound_device_speech_area),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_sound_device_speech_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], sound_device_speech_option_button, devices_array, number_of_devices, RESIZE_OPTION_CYCLE_BUTTON);
+
 	//sound effects
 
 	i++;
@@ -685,17 +789,17 @@ void define_options_screen_sound_page_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void notify_sound_device_option_button ( ui_object *obj, void *arg )
+void change_device ( ui_object *obj, void *arg, ui_object* option_button, int *current_device, int original_device, char* sound_device, option_page_ok_button_reason reason )
 {
-	if (++current_device == number_of_devices)
+	if (++*current_device == number_of_devices)
 	{
-		current_device = 0;
+		*current_device = 0;
 	}
 
-	strcpy (command_line_sound_device, devices_array[current_device]);
-	set_ui_object_text (sound_device_option_button, devices_array[current_device]);
+	strcpy (sound_device, devices_array[*current_device]);
+	set_ui_object_text (option_button, devices_array[*current_device]);
 
-	set_option_page_ok_button_reason (OPOBR_SOUND_DEVICE, current_device != original_device);
+	set_option_page_ok_button_reason (reason, *current_device != original_device);
 
 	// don't leave text selected
 
@@ -706,6 +810,16 @@ void notify_sound_device_option_button ( ui_object *obj, void *arg )
 	debug_filtered_log ("sound device: %s", command_line_sound_device);
 
 	#endif
+}
+
+void notify_sound_device_option_button ( ui_object *obj, void *arg )
+{
+	change_device ( obj, arg, sound_device_option_button, &current_device, original_device, command_line_sound_device, OPOBR_SOUND_DEVICE );
+}
+
+void notify_sound_device_speech_option_button ( ui_object *obj, void *arg )
+{
+	change_device ( obj, arg, sound_device_speech_option_button, &current_device_speech, original_device_speech, command_line_sound_device_speech, OPOBR_SOUND_DEVICE_SPEECH );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -316,7 +316,7 @@ static void get_sound_device ( const struct config_option *option, char *value )
 {
 	int
 		i;
-	for ( i = 0; value[i] = option->str_value[i] == ' ' ? '_' : option->str_value[i]; i++);
+	for ( i = 0; value[i] = option->str_value[i] == ' ' ? '_' : option->str_value[i]; i++ );
 }
 
 static void set_force_vectors ( const struct config_option *option, const char *value )
@@ -903,6 +903,8 @@ static const struct config_option options[] =
 		INT(command_line_no_sound) },
 	{ "sound_device", "", "sound device name",
 		SPECSTR(command_line_sound_device, set_sound_device, get_sound_device) },
+	{ "sound_device_speech", "", "sound device name for speech",
+		SPECSTR(command_line_sound_device_speech, set_sound_device, get_sound_device) },
 	{ "hdwrbuf", "", "hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)",
 		INT(command_line_sound_hdwrbuf) },
 	{ "canopy_sounds_amp", "", "canopy sounds amplifier controller",
