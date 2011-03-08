@@ -10,13 +10,20 @@
 
 void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 {
+ struct SurfaceInfo
+ {
+  int primary;
+  int index;
+ };
+
+ Array<SurfaceInfo> surfaces;
  LWO_Chunk* chunk;
  LWO_Chunk* vmadt;
  LWO_Chunk* vmadl;
  LWO_SubChunk* subchunk;
  LWO_SubChunk* ssc;
  LWO_SubChunk* sssc;
- int i, j, k;
+ unsigned i, j, k;
  float value;
  char buf[1024];
 
@@ -28,12 +35,44 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  eet.Clear();
 
  chunk = new LWO_Chunk("TAGS", 0, NULL);
- lwofile.AddSubChunk(chunk);
- for (i = 0; i < obj.number_of_surfaces; i++)
-  {
-   sprintf(buf, "Surface%03u", i);
-   chunk->AddBasicData(strlen(buf) + 1, buf);
-  }
+ {
+  unsigned unique = 0;
+  lwofile.AddSubChunk(chunk);
+  for (i = 0; i < obj.number_of_surfaces; i++)
+   {
+    SurfaceInfo surface;
+#ifdef AGGREGATE_SURFACES
+    unsigned index = ~0u;
+    const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
+    for (j = 0; j < i; j++)
+     {
+      const FACE_SURFACE_DESCRIPTION* surface = &obj.surfaces[j];
+#define C(x) (current_surface->x) == (surface->x)
+      if (C(surface_flags & 0x0FFF) && C(texture_index) && C(luminosity_texture_index) && C(additional_surface_information) && C(colour))
+#undef C
+       {
+        index = surfaces[j].index;
+        printf("\tSurface %u: using surface %u (%u) instead\n", i, j, index);
+        break;
+       }
+     }
+
+    if (index != ~0u)
+     {
+      surface.primary = false;
+      surface.index = index;
+     }
+    else
+#endif
+     {
+      sprintf(buf, "Surface%03u", unique);
+      chunk->AddBasicData(strlen(buf) + 1, buf);
+      surface.primary = true;
+      surface.index = unique++;
+     }
+    surfaces[i] = surface;
+   }
+ }
 
  chunk = new LWO_Chunk("LAYR", 18, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0");
  lwofile.AddSubChunk(chunk);
@@ -71,7 +110,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  value = 0.0;
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
    int number_of_surface_points = current_surface->number_of_points;
 
    if (number_of_surface_points == 0)
@@ -200,17 +239,20 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
  unsigned long index = 0;
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   const FACE_SURFACE_DESCRIPTION * current_surface = &obj.surfaces[i];
+   const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
 
    for (j = 0; j < current_surface->number_of_faces; j++)
     {
      chunk->AddIndex(index++);
-     chunk->AddData(2, &i);
+     chunk->AddData(2, &surfaces[i].index);
     }
   }
 
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
+   if (!surfaces[i].primary)
+    continue;
+
    const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
 
    if (current_surface->textured)
@@ -220,7 +262,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
    chunk = new LWO_Chunk("SURF", 0, NULL);
    lwofile.AddSubChunk(chunk);
-   sprintf(buf, "Surface%03u", i);
+   sprintf(buf, "Surface%03u", surfaces[i].index);
    chunk->AddBasicData(strlen(buf) + 1, buf);
    chunk->AddBasicData(2, "\0\0");
 

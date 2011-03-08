@@ -18,7 +18,7 @@ class LwsFileExporter : public LwsExporter
 
  void Begin(void)
  {
-#ifdef SCENE_1
+#ifdef SCENE_3
   fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n"); //FIXME
 #else
   fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n"); //FIXME
@@ -225,8 +225,8 @@ struct sub_object_key
  unsigned short int sub_object_index;
  unsigned char number_of_keyframes, number_of_object_dissolve_keyframes;
  unsigned char collision_contribution:1;
- OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes;
- OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME* object_dissolve_keyframes;
+ const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes;
+ const OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME* object_dissolve_keyframes;
 #ifndef NATIVE_TYPES
  int flag;
 #endif
@@ -269,7 +269,7 @@ struct sub_object
  sub_object(void) : number_of_lods(0), number_of_sub_objects(0) {}
  ~sub_object(void) { for (int i = 0; i < number_of_sub_objects; i++) delete sub_objects[i]; }
 
- int suits(OBJECT_3D_DATABASE_ENTRY* sub, int sub_object_index) const
+ int suits(const OBJECT_3D_DATABASE_ENTRY* sub, int sub_object_index) const
  {
   if (sub->sub_object_approximation_out_level < sub->sub_object_approximation_in_level)
    error("Error in aproximation levels");
@@ -280,7 +280,7 @@ struct sub_object
 
   for (int i = 0; i < number_of_lods; i++)
    if (sub->sub_object_approximation_out_level >= lods[i].sub_object_approximation_in_level && sub->sub_object_approximation_in_level <= lods[i].sub_object_approximation_out_level && sub->index != lods[i].index)
-   return 0;
+    return 0;
 
   if (sub_object_index != key.sub_object_index)
    return 0;
@@ -331,7 +331,7 @@ struct sub_object
   return 1;
  }
 
- void add(int number_of_sub_objects_, OBJECT_3D_DATABASE_ENTRY* sub)
+ void add(int number_of_sub_objects_, const OBJECT_3D_DATABASE_ENTRY* sub)
  {
   for (int i = 0; i < number_of_sub_objects_; i++)
    {
@@ -341,7 +341,7 @@ struct sub_object
     int sub_object_index = 0;
     for (int j = 0; j < G_info->scene->number_of_sub_object_table_entries && !sub_object_index; j++)
      {
-      OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* t = &G_info->scene->sub_object_indices_table[j];
+      const OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* t = &G_info->scene->sub_object_indices_table[j];
       for (int k = 0; k < t->number_of_sub_objects; k++)
        if (t->sub_objects[k] == &sub[i])
         {
@@ -535,14 +535,14 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
  if (scene->shadow_polygon_object_index > 0)
   {
    ex->Object(++current, scene->shadow_polygon_object_index, 0, -1);
-   OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 50, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z, 0, 0, 0 };
+   const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 50, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z, 0, 0, 0 };
    ex->KeyFrames("Object", 7, 3, 1, &keyframe);
   }
 
  if (scene->collision_object_index > 0)
   {
    ex->Object(++current, scene->collision_object_index, 0, -2);
-   OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -50, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 0 };
+   const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -50, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 0 };
    ex->KeyFrames("Object", 7, 3, 1, &keyframe);
   }
 
@@ -551,7 +551,7 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
    const OBJECT_3D_SCENE_LINK_OBJECT* link = &scene->scene_link_objects[i];
 
    ex->Object(++current, 0, 0, link->scene_index, "LINK_OBJECT");
-   OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, link->x, link->y, link->z, link->heading, link->pitch, link->roll, 1.0, 1.0, 1.0, 0, 0, 0 };
+   const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, link->x, link->y, link->z, link->heading, link->pitch, link->roll, 1.0, 1.0, 1.0, 0, 0, 0 };
    ex->KeyFrames("Object", 7, 3, 1, &keyframe);
   }
 
@@ -598,8 +598,8 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
  ex->Ambient();
  for (int i = 0; i < scene->number_of_sprite_lights; i++)
   {
-   OBJECT_3D_SPRITE_LIGHT* s = &scene->sprite_lights[i];
-   OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, s->position.x, s->position.y, s->position.z, 0, 0, 0, s->scale.x, s->scale.y, s->scale.z, 0, 0, 0 };
+   const OBJECT_3D_SPRITE_LIGHT* s = &scene->sprite_lights[i];
+   const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, s->position.x, s->position.y, s->position.z, 0, 0, 0, s->scale.x, s->scale.y, s->scale.z, 0, 0, 0 };
    ex->Light(i);
    ex->KeyFrames("Light", 0, 7, 1, &keyframe);
    ex->LightAttrs(&s->colour);
@@ -608,13 +608,13 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
 #ifndef NO_LWSCAMERAEXPORT
  for (int i = 0; i < scene->number_of_cameras; i++)
   {
-   OBJECT_3D_SCENE_CAMERA_INFO* s = &scene->cameras[i];
+   const OBJECT_3D_SCENE_CAMERA_INFO* s = &scene->cameras[i];
    if (s->camera_index >= cameras.GetNumberOfCameras())
     error("Invalid camera index\n");
    const OBJECT_3D_SCENE_CAMERA* c = &cameras.GetCamera(s->camera_index);
    ex->Camera(i, s->camera_name_index);
    ex->KeyFrames("Camera", 7, 3, c->number_of_keyframes, c->keyframes);
-   ex->CameraAttrs(c->heading_locked, c->pitch_locked, c->roll_locked, root, c->target_sub_object_id ? target_sub_object_index[c->target_sub_object_id] : -1);
+   ex->CameraAttrs(c->heading_locked, c->pitch_locked, c->roll_locked, root, c->target_sub_object_id >= 0 ? target_sub_object_index[c->target_sub_object_id] : -1);
   }
 #endif
 

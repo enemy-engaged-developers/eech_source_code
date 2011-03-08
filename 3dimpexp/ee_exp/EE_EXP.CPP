@@ -21,7 +21,7 @@ int main(void)
 
  char filename[1024];
 
- freopen("EEEXPLOG.TXT", "w", stdout);
+ FILE* redirect = freopen("EEEXPLOG.TXT", "w", stdout);
 
  EET eet(*getcwd(filename, sizeof(filename)));
  const AllNames names(eet);
@@ -54,6 +54,8 @@ int main(void)
    printf("Exporting scene '%s'\n", filename);
    lwsexp.ExportScene(names, translator, filename, scenes.GetScene(i));
   }
+
+ fclose(redirect);
 
  return 0;
 }
