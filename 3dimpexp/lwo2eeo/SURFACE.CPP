@@ -423,17 +423,22 @@ struct RSurface
        {
         unsigned npoly;
         unsigned npolypoints = ~0u;
+        bool cpolypoints = false;
         for (unsigned i = 0; i < !polys; i++)
          if (!bpolys[i])
           {
-           int npoints = 0;
+           unsigned npoints = 0;
+           bool cpoints = false;
            for (unsigned j = 0; j < !polys[i].points; j++)
-            if (!bpoints[polys[i].points[j].index])
+            if (bpoints[polys[i].points[j].index])
+             cpoints = true;
+            else
              npoints++;
-           if (npoints < npolypoints)
+           if (cpolypoints ? cpoints && npoints < npolypoints : cpoints || npoints < npolypoints)
             {
              npoly = i;
              npolypoints = npoints;
+             cpolypoints = cpoints;
             }
           }
 
