@@ -17,45 +17,45 @@ class OBJECT_3D : private Convert
   number_of_point_references = 0;
   number_of_surface_point_references = 0;
   number_of_surface_point_normals = 0;
-  for (unsigned i = 0; i < !rs; i++)
+  for (unsigned i = 0; i < !es; i++)
    {
-    if (!!rs[i].polys)
+    if (!!es[i].polys)
      continue;
     number_of_surfaces++;
-    number_of_faces += !rs[i].polys;
-    if (rs[i].polygons)
+    number_of_faces += !es[i].polys;
+    if (es[i].rs->polygons)
      {
-      number_of_polygoned_faces += !rs[i].polys;
-      if (!rs[i].smoothed)
-       number_of_face_normal_references += !rs[i].polys;
+      number_of_polygoned_faces += !es[i].polys;
+      if (!es[i].rs->smoothed)
+       number_of_face_normal_references += !es[i].polys;
 
-      for (unsigned j = 0; j < !rs[i].polys; j++)
+      for (unsigned j = 0; j < !es[i].polys; j++)
        {
-        number_of_point_references += !rs[i].polys[j].points;
-        if (!rs[i].smoothed)
-         AddPoint(normals, rs[i].polys[j].norm);
+        number_of_point_references += !es[i].polys[j].points;
+        if (!es[i].rs->smoothed)
+         AddPoint(normals, es[i].polys[j].norm);
        }
 
-       if (rs[i].smoothed)
+       if (es[i].rs->smoothed)
         {
-         for (unsigned j = 0; j < !rs[i].points; j++)
+         for (unsigned j = 0; j < !es[i].points; j++)
           {
            RNormal norm;
-           rs[i].points[j].normal.SetTo(norm);
+           es[i].points[j].normal.SetTo(norm);
            AddPoint(normals, norm);
-           rs[i].points[j].normal.index = norm.index;
+           es[i].points[j].normal.index = norm.index;
           }
         }
      }
     else
-     number_of_point_references += 2 * !rs[i].polys;
-    number_of_surface_point_references += !rs[i].points;
-    if (rs[i].smoothed)
-     number_of_surface_point_normals += !rs[i].points;
-    if (rs[i].texture[0] != '\0')
-     number_of_texture_points += !rs[i].points;
-    if (rs[i].ltexture[0] != '\0')
-     number_of_texture_points += !rs[i].points;
+     number_of_point_references += 2 * !es[i].polys;
+    number_of_surface_point_references += !es[i].points;
+    if (es[i].rs->smoothed)
+     number_of_surface_point_normals += !es[i].points;
+    if (es[i].rs->texture[0] != '\0')
+     number_of_texture_points += !es[i].points;
+    if (es[i].rs->ltexture[0] != '\0')
+     number_of_texture_points += !es[i].points;
    }
   number_of_point_normals = !normals;
   number_of_lighting_normals = number_of_point_normals;
@@ -80,14 +80,14 @@ class OBJECT_3D : private Convert
   faces = new OBJECT_3D_FACE[number_of_polygoned_faces];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     if (!rs[i].polygons)
+     if (!es[i].rs->polygons)
       continue;
-     for (unsigned j = 0; j < !rs[i].polys; j++)
-      faces[m++].number_of_points = (unsigned char)!rs[i].polys[j].points;
+     for (unsigned j = 0; j < !es[i].polys; j++)
+      faces[m++].number_of_points = (unsigned char)!es[i].polys[j].points;
     }
    if (m != number_of_polygoned_faces)
     error("number_of_polygoned_faces");
@@ -103,13 +103,13 @@ class OBJECT_3D : private Convert
   object_faces_point_plain_list = new POINT_3D_SHORT_REFERENCE[number_of_point_references];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     for (unsigned j = 0; j < !rs[i].polys; j++)
-      for (unsigned k = 0; k < !rs[i].polys[j].points; k++)
-       object_faces_point_plain_list[m++].point = (unsigned char)rs[i].polys[j].points[k].index;
+     for (unsigned j = 0; j < !es[i].polys; j++)
+      for (unsigned k = 0; k < !es[i].polys[j].points; k++)
+       object_faces_point_plain_list[m++].point = (unsigned char)es[i].polys[j].points[k].index;
     }
    if (m != number_of_point_references)
     error("number_of_point_references");
@@ -121,46 +121,46 @@ class OBJECT_3D : private Convert
   memset(textures, 0, number_of_surfaces * sizeof(*textures));
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
 
      SURFACE_TEXTURE* t = &textures[m];
      FACE_SURFACE_DESCRIPTION* su = &surfaces[m++];
-     const RSurface* s = &rs[i];
+     const ESurface* s = &es[i];
 
-     strcpy(t->texture, s->texture);
-     if (s->camo)
+     strcpy(t->texture, s->rs->texture);
+     if (s->rs->camo)
       strcat(t->texture, "-D");
-     strcpy(t->luminosity, s->ltexture);
-     su->polygons = s->polygons;
-     su->detail = s->detail;
-     su->smoothed = s->smoothed;
+     strcpy(t->luminosity, s->rs->ltexture);
+     su->polygons = s->rs->polygons;
+     su->detail = s->rs->detail;
+     su->smoothed = s->rs->smoothed;
      su->textured = t->texture[0] != '\0';
      su->has_luminosity_texture = t->luminosity[0] != '\0';
-     su->translucent = s->translucent;
-     su->has_specularity = s->has_specularity;
-     su->texture_animation = s->texture_animation != 0;
-     su->texture_filtered = s->texture_filtered;
-     su->texture_mipmapped = s->texture_mipmapped;
-     su->texture_wrapped_u = s->texture_wrapped_u;
-     su->texture_wrapped_v = s->texture_wrapped_v;
-     su->luminosity_texture_animation = s->luminosity_texture_animation != 0;
-     su->luminosity_texture_filtered = s->luminosity_texture_filtered;
-     su->luminosity_texture_mipmapped = s->luminosity_texture_mipmapped;
-     su->luminosity_texture_wrapped_u = s->luminosity_texture_wrapped_u;
-     su->luminosity_texture_wrapped_v = s->luminosity_texture_wrapped_v;
+     su->translucent = s->rs->translucent;
+     su->has_specularity = s->rs->has_specularity;
+     su->texture_animation = s->rs->texture_animation != 0;
+     su->texture_filtered = s->rs->texture_filtered;
+     su->texture_mipmapped = s->rs->texture_mipmapped;
+     su->texture_wrapped_u = s->rs->texture_wrapped_u;
+     su->texture_wrapped_v = s->rs->texture_wrapped_v;
+     su->luminosity_texture_animation = s->rs->luminosity_texture_animation != 0;
+     su->luminosity_texture_filtered = s->rs->luminosity_texture_filtered;
+     su->luminosity_texture_mipmapped = s->rs->luminosity_texture_mipmapped;
+     su->luminosity_texture_wrapped_u = s->rs->luminosity_texture_wrapped_u;
+     su->luminosity_texture_wrapped_v = s->rs->luminosity_texture_wrapped_v;
      su->number_of_points = (unsigned char)!s->points;
      su->texture_index = 0;
      su->luminosity_texture_index = 0;
      su->number_of_faces = (unsigned short)!s->polys;
-     su->reflectivity = s->reflectivity;
-     su->specularity = s->specularity;
-     su->blue = s->blue;
-     su->green = s->green;
-     su->red = s->red;
-     su->alpha = s->alpha;
+     su->reflectivity = s->rs->reflectivity;
+     su->specularity = s->rs->specularity;
+     su->blue = s->rs->blue;
+     su->green = s->rs->green;
+     su->red = s->rs->red;
+     su->alpha = s->rs->alpha;
     }
    if (m != number_of_surfaces)
     error("number_of_surfaces");
@@ -169,16 +169,16 @@ class OBJECT_3D : private Convert
   object_face_normal_references = new POINT_3D_PLAIN_REFERENCE[number_of_face_normal_references];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     if (!rs[i].polygons)
+     if (!es[i].rs->polygons)
       continue;
-     if (rs[i].smoothed)
+     if (es[i].rs->smoothed)
       continue;
-     for (unsigned j = 0; j < !rs[i].polys; j++)
-      object_face_normal_references[m++].point = (unsigned short)rs[i].polys[j].norm.index;
+     for (unsigned j = 0; j < !es[i].polys; j++)
+      object_face_normal_references[m++].point = (unsigned short)es[i].polys[j].norm.index;
     }
    if (m != number_of_face_normal_references)
     error("number_of_face_normal_references");
@@ -187,24 +187,24 @@ class OBJECT_3D : private Convert
   surface_texture_points = new OBJECT_3D_SHORT_TEXTURED_POINT[number_of_texture_points];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     if (rs[i].texture[0] == '\0' && rs[i].ltexture[0] == '\0')
+     if (es[i].rs->texture[0] == '\0' && es[i].rs->ltexture[0] == '\0')
       continue;
-     for (unsigned j = 0; j < !rs[i].points; j++)
+     for (unsigned j = 0; j < !es[i].points; j++)
       {
-       if (rs[i].texture[0] != '\0')
+       if (es[i].rs->texture[0] != '\0')
         {
-         surface_texture_points[m].u = rs[i].points[j].tp.u;
-         surface_texture_points[m].v = rs[i].points[j].tp.v;
+         surface_texture_points[m].u = es[i].points[j].tp.u;
+         surface_texture_points[m].v = es[i].points[j].tp.v;
          m++;
         }
-       if (rs[i].ltexture[0] != '\0')
+       if (es[i].rs->ltexture[0] != '\0')
         {
-         surface_texture_points[m].u = rs[i].points[j].lp.u;
-         surface_texture_points[m].v = rs[i].points[j].lp.v;
+         surface_texture_points[m].u = es[i].points[j].lp.u;
+         surface_texture_points[m].v = es[i].points[j].lp.v;
          m++;
         }
       }
@@ -216,12 +216,12 @@ class OBJECT_3D : private Convert
   surface_points = new POINT_3D_PLAIN_REFERENCE[number_of_surface_point_references];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     for (unsigned j = 0; j < !rs[i].points; j++)
-      surface_points[m++].point = (unsigned short)rs[i].points[j].p.index;
+     for (unsigned j = 0; j < !es[i].points; j++)
+      surface_points[m++].point = (unsigned short)es[i].points[j].p.index;
     }
    if (m != number_of_surface_point_references)
     error("number_of_surface_point_references");
@@ -230,14 +230,14 @@ class OBJECT_3D : private Convert
   surface_point_normals = new POINT_3D_PLAIN_REFERENCE[number_of_surface_point_normals];
   {
    unsigned m = 0;
-   for (unsigned i = 0; i < !rs; i++)
+   for (unsigned i = 0; i < !es; i++)
     {
-     if (!!rs[i].polys)
+     if (!!es[i].polys)
       continue;
-     if (!rs[i].smoothed)
+     if (!es[i].rs->smoothed)
       continue;
-     for (unsigned j = 0; j < !rs[i].points; j++)
-      surface_point_normals[m++].point = (unsigned short)rs[i].points[j].normal.index;
+     for (unsigned j = 0; j < !es[i].points; j++)
+      surface_point_normals[m++].point = (unsigned short)es[i].points[j].normal.index;
     }
    if (m != number_of_surface_point_normals)
     error("number_of_surface_point_references");

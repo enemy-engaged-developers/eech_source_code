@@ -199,6 +199,14 @@ void FindChunks(const LWOFile& lwofile)
 
  struct RSurface;
  friend struct RSurface;
+
+ struct ESurface
+ {
+  RSurface* rs;
+  Array<RPoly> polys;
+  Array<RPolyPoint> points;
+ };
+
 #include "surface.cpp"
 
  Array<LLayer> Layers;
@@ -206,6 +214,7 @@ void FindChunks(const LWOFile& lwofile)
  LWO::Vector BBI, BBA;
  Array<RPoint> Rpoints;
  Array<RSurface> rs;
+ Array<ESurface> es;
  float Radius;
 
  public:

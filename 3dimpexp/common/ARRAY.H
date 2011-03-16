@@ -68,9 +68,9 @@ class Array
   return array[index];
  }
  unsigned operator !(void) const { return used; }
- void Append(const T& t)
+ T& Append(const T& t)
  {
-  operator[](used) = t;
+  return operator[](used) = t;
  }
  T& Append(void)
  {

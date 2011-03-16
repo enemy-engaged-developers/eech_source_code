@@ -391,8 +391,6 @@ struct RSurface
   for (unsigned i = 0; i < !polys; i++)
    for (unsigned j = 0; j < !polys[i].points; j++)
     AddPoint(points, polys[i].points[j]);
-  if (!points > 256)
-   error("Surface '%s': More than 256 different points", &s->name);
 
   if (!polygons)
    smoothed = 0;
@@ -401,6 +399,65 @@ struct RSurface
    for (unsigned i = 0; i < !polys; i++)
     for (unsigned j = 0; j < !polys[i].points; j++)
      points[polys[i].points[j].index].normal += polys[i].norm;
+
+  ESurface* es = &Global->es.Append();
+  es->rs = this;
+
+  if (!points <= 256)
+   {
+    es->points = points;
+    es->polys = polys;
+   }
+  else
+   {
+    Array<bool> bpolys;
+    for (unsigned i = 0; i < !polys; i++)
+     bpolys[i] = false;
+    unsigned left = !polys;
+    while (left)
+     {
+      Array<bool> bpoints;
+      for (unsigned i = 0; i < !points; i++)
+       bpoints[i] = false;
+      do
+       {
+        unsigned npoly;
+        unsigned npolypoints = ~0u;
+        for (unsigned i = 0; i < !polys; i++)
+         if (!bpolys[i])
+          {
+           int npoints = 0;
+           for (unsigned j = 0; j < !polys[i].points; j++)
+            if (!bpoints[polys[i].points[j].index])
+             npoints++;
+           if (npoints < npolypoints)
+            {
+             npoly = i;
+             npolypoints = npoints;
+            }
+          }
+
+        if (!es->points + npolypoints > 256)
+         {
+          es = &Global->es.Append();
+          es->rs = this;
+          break;
+         }
+
+        bpolys[npoly] = true;
+        RPoly* p = &es->polys.Append(polys[npoly]);
+        for (unsigned j = 0; j < !p->points; j++)
+         {
+          bpoints[polys[npoly].points[j].index] = true;
+          AddPoint(es->points, p->points[j]);
+         }
+        left--;
+       }
+      while (left);
+     }
+   }
+  polys = Array<RPoly>();
+  points = Array<RPolyPoint>();
  }
  void UV(const char* vmap, RTPoint RPolyPoint::* tp)
  {

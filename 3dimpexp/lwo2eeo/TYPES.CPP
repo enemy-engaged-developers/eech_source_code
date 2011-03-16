@@ -48,7 +48,7 @@ struct RPoint
  short x, y, z;
  unsigned index;
 
- int operator == (const RPoint& rp)
+ int operator ==(const RPoint& rp)
  {
   return x == rp.x && y == rp.y && z == rp.z;
  }
@@ -182,7 +182,7 @@ struct RANormal
 
  int SetTo(RNormal& normal)
  {
-   return normal.Set((long)(x * 10000), (long)(y * 10000), (long)(z * 10000));
+  return normal.Set((long)(x * 10000), (long)(y * 10000), (long)(z * 10000));
  }
 };
 
