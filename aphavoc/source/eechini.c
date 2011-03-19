@@ -289,7 +289,25 @@ static void set_sound_device ( const struct config_option *option, const char *v
 			*devices,
 			*default_device;
 
-		for ( i = 0; option->str_value[i] = value[i] == '_' ? ' ' : value[i]; i++ );
+		for ( i = 0; ; i++ )
+		{
+			switch ( value[i] )
+			{
+			case '\0':
+				option->str_value[i] = '\0';
+				break;;
+			case '_':
+				option->str_value[i] = ' ';
+				continue;
+			case '%':
+				option->str_value[i] = '#';
+				continue;
+			default:
+				option->str_value[i] = value[i];
+				continue;
+			}
+			break;
+		}
 
 		if ( get_sound_system_devices ( &devices, &default_device ) )
 		{
@@ -316,7 +334,25 @@ static void get_sound_device ( const struct config_option *option, char *value )
 {
 	int
 		i;
-	for ( i = 0; value[i] = option->str_value[i] == ' ' ? '_' : option->str_value[i]; i++ );
+	for ( i = 0; ; i++ )
+	{
+		switch ( option->str_value[i] )
+		{
+		case '\0':
+			value[i] = '\0';
+			break;;
+		case ' ':
+			value[i] = '_';
+			continue;
+		case '#':
+			value[i] = '%';
+			continue;
+		default:
+			value[i] = option->str_value[i];
+			continue;
+		}
+		break;
+	}
 }
 
 static void set_force_vectors ( const struct config_option *option, const char *value )
