@@ -235,15 +235,15 @@ int
 	command_line_shared_mem_export					= 0,	// Retro 14Aug2006
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background
-	global_mipmapping									= 0,  //VJ 050530 mipmapping on/off
-	global_anisotropic								= 0,	//VJ 050530 AF on/off
+	global_mipmapping									= 1,  //VJ 050530 mipmapping on/off
+	global_anisotropic								= 1,	//VJ 050530 AF on/off
 	global_PNVS_level									= 0,  // VJ 050704 light setting for PNVS
-	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures
+	global_dynamic_water								= 1,  // VJ 050817 dynamic water textures
 	global_tsd_detail                   = 0,  //VJ 061213 toggle TSD colour grid detail level
 	command_line_disable_message_text  = FALSE,
 //VJ 060120 OBSOLETE	global_zbuffer										= 0,	//VJ 051011 zbuffer correction //VJ 060120 OBSOLETE
 //VJ 051227 no longer needed, mapinfo structure	global_season										= 1,	//VJ 051011 add winter textures
-	command_line_texture_colour					= 0,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
+	command_line_texture_colour					= 2,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_autosave							= 0,  //Casm 17JUN05 Autosave option
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings
