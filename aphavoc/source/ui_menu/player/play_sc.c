@@ -1530,43 +1530,70 @@ void load_player_list (void)
 
 			for (side = 0; side <= NUM_ENTITY_SIDES; side ++ )
 			{
-				// size of original side log element was 756, it has changed now
-				if (version == 1)
+				struct
 				{
-					version1_player_side_log_type v1_log;
-
-					fread ( &v1_log, sizeof(v1_log), 1, file_ptr );
-
-					// the first values are in the same positoin so we'll just copy them
-					memcpy(&new_player->side_log[side], &v1_log, sizeof(v1_log));
-
-					// reset the kill values which didn't exist and now have been overwritten by later values
-					new_player->side_log[side].helicopters_lost = new_player->side_log[side].kills.deaths;
-					new_player->side_log[side].kills.fixed_wing = 0;
-					new_player->side_log[side].kills.helicopter = new_player->side_log[side].kills.air;  // assume all airkills are helicopters... most probably are
-					new_player->side_log[side].kills.air_defence = 0;
-					new_player->side_log[side].kills.armour = 0;
-					new_player->side_log[side].kills.artillery = 0;
-
-					// recopy weapons usage data
-					memcpy(&new_player->side_log[side].weapon_usage, &v1_log.weapon_usage, sizeof(v1_log.weapon_usage));
+					int
+						gunships,
+						weapons;
 				}
-				else if (version == 2)
+					change = { 0, 0 };
+
+				switch (version)
 				{
-					player_side_log_type v2_side;
-					const size_t
-						size_1 = (char*)(&v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES - 1]) - (char*)(&v2_side),
-						size_2 = (char*)(&v2_side.gunship_missions[NUM_GUNSHIP_TYPES - 1]) - (char*)(&v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES]),
-						size_3 = sizeof(v2_side) - size_1 - size_2;
-					fread ( &v2_side, size_1, 1, file_ptr );
-					v2_side.gunship_flying_seconds[GUNSHIP_TYPE_VIPER] = 0.0f;
-					fread ( &v2_side.gunship_flying_seconds[NUM_GUNSHIP_TYPES], size_2, 1, file_ptr );
-					v2_side.gunship_missions[GUNSHIP_TYPE_VIPER] = 0;
-					fread ( &v2_side.gunship_missions[NUM_GUNSHIP_TYPES], size_3, 1, file_ptr );
-					new_player->side_log[side] = v2_side;
+				case 1:
+					{
+						// size of original side log element was 756, it has changed now
+						version1_player_side_log_type v1_log;
+
+						fread ( &v1_log, sizeof(v1_log), 1, file_ptr );
+
+						// the first values are in the same positoin so we'll just copy them
+						memcpy(&new_player->side_log[side], &v1_log, sizeof(v1_log));
+
+						// reset the kill values which didn't exist and now have been overwritten by later values
+						new_player->side_log[side].helicopters_lost = new_player->side_log[side].kills.deaths;
+						new_player->side_log[side].kills.fixed_wing = 0;
+						new_player->side_log[side].kills.helicopter = new_player->side_log[side].kills.air;  // assume all airkills are helicopters... most probably are
+						new_player->side_log[side].kills.air_defence = 0;
+						new_player->side_log[side].kills.armour = 0;
+						new_player->side_log[side].kills.artillery = 0;
+
+						// recopy weapons usage data
+						memcpy(&new_player->side_log[side].weapon_usage, &v1_log.weapon_usage, sizeof(v1_log.weapon_usage));
+						break;
+					}
+
+				case 2:
+					change.gunships += 1;
+
+					{
+						player_side_log_type v2_side;
+						const size_t
+							size_1 = ( char * ) ( &v2_side.weapon_usage[NUM_ENTITY_SUB_TYPE_WEAPONS - change.weapons] ) - ( char * ) ( &v2_side ),
+							size_2 = ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_flying_seconds ),
+							size_3 = ( ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_missions ) + 3 ) & ~3,
+							size_4 = sizeof ( v2_side ) - ( ( char * ) &v2_side.helicopters_lost - ( char * ) &v2_side );
+						memset ( &v2_side, 0, sizeof ( v2_side ) );
+						fread ( &v2_side, size_1, 1, file_ptr );
+						fread ( v2_side.gunship_flying_seconds, size_2, 1, file_ptr );
+						fread ( v2_side.gunship_missions, size_3, 1, file_ptr );
+						fread ( &v2_side.helicopters_lost, size_4, 1, file_ptr );
+						new_player->side_log[side] = v2_side;
+						break;
+					}
+
+				case 3:
+					{
+						fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
+						break;
+					}
+
+				default:
+					{
+						debug_fatal ( "Unknown players.bin version %i", version );
+						break;
+					}
 				}
-				else
-					fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
 
 				new_player->side_log[side].warzone_log = NULL;
 
