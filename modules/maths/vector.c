@@ -215,7 +215,7 @@ float normalise_any_3d_vector ( vec3d *vector )
 	y = ( ( vector->y ) * ( vector->y ) );
 	z = ( ( vector->z ) * ( vector->z ) );
 
-	length = sqrt ( x + y + z );
+	length = x + y + z;
 
 	if ( length > 0 )
 	{
@@ -223,7 +223,7 @@ float normalise_any_3d_vector ( vec3d *vector )
 		float
 			one_over_length;
 
-		one_over_length = 1.0 / length;
+		one_over_length = 1.0 / sqrt ( length );
 
 		vector->x = ( vector->x * one_over_length );
 		vector->y = ( vector->y * one_over_length );
@@ -1263,8 +1263,8 @@ float get_3d_vector_dot_product( const vec3d *a, const vec3d *b )
 	q.y = b->y;
 	q.z = b->z;
 
-	normalise_3d_vector( &p );
-	normalise_3d_vector( &q );
+	normalise_any_3d_vector( &p );
+	normalise_any_3d_vector( &q );
 
 	return get_3d_unit_vector_dot_product( &p, &q );
 }
