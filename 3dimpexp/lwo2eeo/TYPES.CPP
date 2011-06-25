@@ -106,7 +106,7 @@ struct RNormal
 
  int Set(long x, long y, long z)
  {
-  if (!x && !y && z)
+  if (!x && !y && !z)
    {
     _heading = 0;
     _pitch = 0;
