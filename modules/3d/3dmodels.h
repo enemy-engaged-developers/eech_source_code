@@ -3397,6 +3397,25 @@ OBJECT_3D_DECLARATION(};)
 //typedef enum OBJECT_3D_CAMERA_INDEX_NUMBERS object_3d_camera_index_numbers;
 OBJECT_3D_DECLARATION(typedef int object_3d_camera_index_numbers;)
 
+#ifndef OBJECT_3D_LIGHT
+#define OBJECT_3D_LIGHT(x) OBJECT_3D_LIGHT_##x,
+#define OBJECT_3D_LIGHT_(x) x,
+#endif
+
+OBJECT_3D_DECLARATION(enum OBJECT_3D_LIGHT_INDEX_NUMBERS)
+OBJECT_3D_DECLARATION({)
+	OBJECT_3D_LIGHT_(OBJECT_3D_INVALID_LIGHT_INDEX)
+
+	OBJECT_3D_LIGHT_(OBJECT_3D_LIGHT_LAST)
+OBJECT_3D_DECLARATION(};)
+
+#undef OBJECT_3D_LIGHT
+#undef OBJECT_3D_LIGHT_
+
+//typedef enum OBJECT_3D_LIGHT_INDEX_NUMBERS object_3d_light_index_numbers;
+OBJECT_3D_DECLARATION(typedef int object_3d_light_index_numbers;)
+
+
 #undef OBJECT_3D_DECLARATION
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

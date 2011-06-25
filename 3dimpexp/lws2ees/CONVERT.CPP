@@ -301,12 +301,29 @@ class Convert
    }
 
   for (Lws::Lights::const_iterator itor(lws.lights.begin()); itor != lws.lights.end(); ++itor)
-   if (itor->type == 1)
-    {
-     LightDesc lightdesc;
-     lightdesc.light = &*itor;
-     lights.push_back(lightdesc);
-    }
+   {
+    LightDescs* lights = 0;
+    switch (itor->type)
+     {
+      case 0:
+       lights = &distant_lights;
+       break;
+      case 1:
+       lights = &sprite_lights;
+       break;
+      case 4:
+       lights = &ambient_lights;
+       break;
+      default:
+       break;
+     }
+    if (lights)
+     {
+      LightDesc lightdesc;
+      lightdesc.light = &*itor;
+      lights->push_back(lightdesc);
+     }
+   }
 
   for (Lws::Cameras::const_iterator itor(lws.cameras.begin()); itor != lws.cameras.end(); ++itor)
    {
@@ -616,7 +633,7 @@ class Convert
  void save_scene(void) const
  {
   // Version
-  fw(-1);
+  fw(-2);
 
   fw(static_cast<int>(cameras.size()));
   for (CameraDescs::const_iterator itor(cameras.begin()); itor != cameras.end(); ++itor)
@@ -641,8 +658,8 @@ class Convert
     fw((*itor)->motion.channels[5].keys.front().value);
    }
 
-  fw(static_cast<int>(lights.size()));
-  for (LightDescs::const_iterator itor(lights.begin()); itor != lights.end(); ++itor)
+  fw(static_cast<int>(sprite_lights.size()));
+  for (LightDescs::const_iterator itor(sprite_lights.begin()); itor != sprite_lights.end(); ++itor)
    {
     const Light* light = itor->light;
     fw(light->motion.channels[0].keys.begin()->value);
@@ -655,6 +672,33 @@ class Convert
     fw(static_cast<int>(light->light.red * light->intensity * 255));
     fw(static_cast<int>(light->light.green * light->intensity * 255));
     fw(static_cast<int>(light->light.blue * light->intensity * 255));
+   }
+
+  fw(static_cast<int>(ambient_lights.size()));
+  for (LightDescs::const_iterator itor(ambient_lights.begin()); itor != ambient_lights.end(); ++itor)
+   {
+    const Light* light = itor->light;
+
+    fw(light->light.red * light->intensity);
+    fw(light->light.green * light->intensity);
+    fw(light->light.blue * light->intensity);
+
+    fw(light->name.c_str());
+   }
+
+  fw(static_cast<int>(distant_lights.size()));
+  for (LightDescs::const_iterator itor(distant_lights.begin()); itor != distant_lights.end(); ++itor)
+   {
+    const Light* light = itor->light;
+    fw(light->motion.channels[3].keys.begin()->value);
+    fw(light->motion.channels[4].keys.begin()->value);
+    fw(light->motion.channels[5].keys.begin()->value);
+
+    fw(light->light.red * light->intensity);
+    fw(light->light.green * light->intensity);
+    fw(light->light.blue * light->intensity);
+
+    fw(light->name.c_str());
    }
 
   fw(total_subobjects);
@@ -726,7 +770,7 @@ class Convert
 
  HierObj* root;
  float fps;
- LightDescs lights;
+ LightDescs sprite_lights, ambient_lights, distant_lights;
  CameraDescs cameras;
  Lods lods;
  SubObject main;

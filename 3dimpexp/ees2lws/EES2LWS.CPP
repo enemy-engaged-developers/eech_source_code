@@ -23,7 +23,7 @@ class Scene : public OBJECT_3D_SCENE_DATABASE_ENTRY
   FILE* fp = safe_fopen(filename, "rb");
   int version;
   fread(&version, 1, sizeof(int), fp);
-  read_scene(fp);
+  read_scene(fp, version);
   fclose(fp);
  }
 

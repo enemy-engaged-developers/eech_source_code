@@ -127,6 +127,19 @@ struct OBJECT_3D_SPRITE_LIGHT
  struct REAL_COLOUR colour;
 };
 
+struct OBJECT_3D_AMBIENT_LIGHT
+{
+ struct REAL_COLOUR colour;
+ int light_index;
+};
+
+struct OBJECT_3D_DISTANT_LIGHT
+{
+ float heading, pitch, roll;
+ struct REAL_COLOUR colour;
+ int light_index;
+};
+
 struct OBJECT_3D_APPROXIMATION_INFO
 {
  int object_number;
@@ -146,7 +159,9 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
   number_of_object_dissolve_keyframes,
   number_of_displacement_amplitude_keyframes,
   number_of_scene_link_objects,
-  number_of_sprite_lights;
+  number_of_sprite_lights,
+  number_of_ambient_lights,
+  number_of_distant_lights;
 
  struct VEC3D shadow_polygon_object_scale;
  int *texture_animations;
@@ -154,6 +169,9 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
  struct OBJECT_3D_SCENE_CAMERA_INFO *cameras;
  struct OBJECT_3D_SCENE_LINK_OBJECT *scene_link_objects;
  struct OBJECT_3D_SPRITE_LIGHT *sprite_lights;
+ struct OBJECT_3D_AMBIENT_LIGHT *ambient_lights;
+ struct OBJECT_3D_DISTANT_LIGHT *distant_lights;
+
  struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY *sub_object_indices_table; //”казатели на все sub_objects с данным sub_object_id. »спользуетс€ дл€ поиска
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
  struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *object_dissolve_keyframes, *displacement_amplitude_keyframes;
