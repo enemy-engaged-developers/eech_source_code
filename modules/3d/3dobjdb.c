@@ -692,9 +692,9 @@ int get_subobject ( FILE *fp )
 		if ( !strcmp ( name, object_3d_subobject_names[i] ) )
 			return i;
 
-	debug_fatal ( "Failed to find subobject '%s'", name );
+	debug_log ( "Failed to find subobject '%s'", name );
 
-	return -1;
+	return OBJECT_3D_SUB_OBJECT_UNKNOWN;
 }
 
 #define OBJECT_3D_DECLARATION(x)
