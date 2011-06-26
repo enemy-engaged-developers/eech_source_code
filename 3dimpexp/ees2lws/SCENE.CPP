@@ -51,6 +51,11 @@ int get_camera(FILE* fp)
  return get_name(fp, names.Cameras);
 }
 
+int get_light(FILE* fp)
+{
+  return get_name(fp, names.Lights);
+}
+
 void read_keyframes(FILE *fp, int *number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME **keyframes)
 {
  fread(number_of_keyframes, sizeof(int), 1, fp);
@@ -202,8 +207,10 @@ int read_new_camera(FILE *fp)
  return cameras_.Append(camera);
 }
 
-void read_scene(FILE* fp)
+void read_scene(FILE* fp, int version)
 {
+ if (version > -1 || version < -2)
+  error("Scene file version %d is not supported", version);
  fread(&number_of_cameras, sizeof(int), 1, fp);
  if (number_of_cameras)
   {
@@ -256,6 +263,50 @@ void read_scene(FILE* fp)
      sprite_lights[tmp].colour.red = red;
      sprite_lights[tmp].colour.green = green;
      sprite_lights[tmp].colour.blue = blue;
+    }
+  }
+
+ if (version <= -2)
+  fread(&number_of_ambient_lights, sizeof(int), 1, fp);
+ else
+  number_of_ambient_lights = 0;
+
+ ambient_lights = NULL;
+
+ if (number_of_ambient_lights)
+  {
+   ambient_lights = new OBJECT_3D_AMBIENT_LIGHT[number_of_ambient_lights];
+   for (int tmp = 0; tmp < number_of_ambient_lights; tmp++)
+    {
+     fread(&ambient_lights[tmp].colour.red, sizeof(float), 1, fp);
+     fread(&ambient_lights[tmp].colour.green, sizeof(float), 1, fp);
+     fread(&ambient_lights[tmp].colour.blue, sizeof(float), 1, fp);
+
+     ambient_lights[tmp].light_index = get_light(fp);
+    }
+  }
+
+ if (version <= -2)
+  fread(&number_of_distant_lights, sizeof(int), 1, fp);
+ else
+  number_of_distant_lights = 0;
+
+ distant_lights = NULL;
+
+ if (number_of_distant_lights)
+  {
+   distant_lights = new OBJECT_3D_DISTANT_LIGHT[number_of_distant_lights];
+   for (int tmp = 0; tmp < number_of_distant_lights; tmp++)
+    {
+     fread(&distant_lights[tmp].heading, sizeof(float), 1, fp);
+     fread(&distant_lights[tmp].pitch, sizeof(float), 1, fp);
+     fread(&distant_lights[tmp].roll, sizeof(float), 1, fp);
+
+     fread(&distant_lights[tmp].colour.red, sizeof(float), 1, fp);
+     fread(&distant_lights[tmp].colour.green, sizeof(float), 1, fp);
+     fread(&distant_lights[tmp].colour.blue, sizeof(float), 1, fp);
+
+     distant_lights[tmp].light_index = get_light(fp);
     }
   }
 

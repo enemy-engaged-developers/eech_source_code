@@ -529,6 +529,8 @@ static void read_camera ( FILE *fp, struct OBJECT_3D_SCENE_CAMERA *camera )
 #define OBJECT_3D_SUBINDEX_(x)
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_LIGHT(x)
+#define OBJECT_3D_LIGHT_(x)
 const char* object_3d_scene_names[] = {
 #include "3dmodels.h"
 };
@@ -539,6 +541,8 @@ const char* object_3d_scene_names[] = {
 #undef OBJECT_3D_SUBINDEX_
 #undef OBJECT_3D_CAMERA
 #undef OBJECT_3D_CAMERA_
+#undef OBJECT_3D_LIGHT
+#undef OBJECT_3D_LIGHT_
 
 static int get_scene ( const char *filename )
 {
@@ -658,6 +662,8 @@ static int get_object ( FILE *fp )
 #define OBJECT_3D_SUBINDEX_(x) NULL,
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_LIGHT(x)
+#define OBJECT_3D_LIGHT_(x)
 const char* object_3d_subobject_names[] = {
 	#include "3dmodels.h"
 };
@@ -668,6 +674,8 @@ const char* object_3d_subobject_names[] = {
 #undef OBJECT_3D_SUBINDEX_
 #undef OBJECT_3D_CAMERA
 #undef OBJECT_3D_CAMERA_
+#undef OBJECT_3D_LIGHT
+#undef OBJECT_3D_LIGHT_
 
 int get_subobject ( FILE *fp )
 {
@@ -689,13 +697,6 @@ int get_subobject ( FILE *fp )
 	return -1;
 }
 
-static int get_camera ( FILE *fp )
-{
-	char
-		name[1024];
-	int
-		i;
-
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x)
 #define OBJECT_3D_INDEX_(x)
@@ -703,11 +704,29 @@ static int get_camera ( FILE *fp )
 #define OBJECT_3D_SUBINDEX_(x)
 #define OBJECT_3D_CAMERA(x) #x,
 #define OBJECT_3D_CAMERA_(x) NULL,
-	static const char
-		*cameras[] =
-		{
+#define OBJECT_3D_LIGHT(x)
+#define OBJECT_3D_LIGHT_(x)
+static const char
+	*cameras[] =
+	{
 #include "3dmodels.h"
-		};
+	};
+#undef OBJECT_3D_DECLARATION
+#undef OBJECT_3D_INDEX
+#undef OBJECT_3D_INDEX_
+#undef OBJECT_3D_SUBINDEX
+#undef OBJECT_3D_SUBINDEX_
+#undef OBJECT_3D_CAMERA
+#undef OBJECT_3D_CAMERA_
+#undef OBJECT_3D_LIGHT
+#undef OBJECT_3D_LIGHT_
+
+static int get_camera ( FILE *fp )
+{
+	char
+		name[1024];
+	int
+		i;
 
 	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
 		return 0;
@@ -731,6 +750,47 @@ static int read_new_camera ( FILE *fp )
 	read_camera ( fp, &objects_3d_camera_database[total_number_of_cameras] );
 
 	return total_number_of_cameras++;
+}
+
+#define OBJECT_3D_DECLARATION(x)
+#define OBJECT_3D_INDEX(x)
+#define OBJECT_3D_INDEX_(x)
+#define OBJECT_3D_SUBINDEX(x)
+#define OBJECT_3D_SUBINDEX_(x)
+#define OBJECT_3D_CAMERA(x)
+#define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_LIGHT(x) #x,
+#define OBJECT_3D_LIGHT_(x) NULL,
+static const char
+	*lights[] =
+	{
+#include "3dmodels.h"
+	};
+#undef OBJECT_3D_DECLARATION
+#undef OBJECT_3D_INDEX
+#undef OBJECT_3D_INDEX_
+#undef OBJECT_3D_SUBINDEX
+#undef OBJECT_3D_SUBINDEX_
+#undef OBJECT_3D_CAMERA
+#undef OBJECT_3D_CAMERA_
+#undef OBJECT_3D_LIGHT
+#undef OBJECT_3D_LIGHT_
+
+static int get_light ( FILE *fp )
+{
+	char
+		name[1024];
+	int
+		i;
+
+	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
+		return 0;
+
+	for ( i = 1; lights[i]; i++ )
+		if ( !strcmp ( name, lights[i] ) )
+			return i;
+
+	return 0;
 }
 
 static void add_animation (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *allocated, int animation )
@@ -782,7 +842,7 @@ static void add_animation_object (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, 
 	}
 }
 
-static void read_scene ( FILE *fp )
+static void read_scene ( FILE *fp, int version )
 {
 	int
 		tmp,
@@ -795,6 +855,8 @@ static void read_scene ( FILE *fp )
 		number_of_scene_cameras,
 		number_of_scene_links,
 		number_of_sprite_lights,
+		number_of_ambient_lights,
+		number_of_distant_lights,
 		number_of_scene_named_sub_objects;
 
 	fail = 0;
@@ -993,6 +1055,76 @@ static void read_scene ( FILE *fp )
 	}
 
 	//
+	// Read in the ambient lights
+	//
+
+	if ( version <= -2 )
+		fread ( &number_of_ambient_lights, sizeof ( int ), 1, fp );
+	else
+		number_of_ambient_lights = 0;
+
+	objects_3d_scene_database[scene_index].number_of_ambient_lights = number_of_ambient_lights;
+
+	objects_3d_scene_database[scene_index].ambient_lights = NULL;
+
+	if ( number_of_ambient_lights )
+	{
+		struct OBJECT_3D_AMBIENT_LIGHT
+			*objects_3d_scene_ambient_light_ptr;
+
+		objects_3d_scene_ambient_light_ptr = ( struct OBJECT_3D_AMBIENT_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_AMBIENT_LIGHT ) * number_of_ambient_lights );
+		objects_3d_scene_database[scene_index].ambient_lights = objects_3d_scene_ambient_light_ptr;
+
+		for ( tmp = 0; tmp < number_of_ambient_lights; tmp++ )
+		{
+			fread ( &objects_3d_scene_ambient_light_ptr->colour.red, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_ambient_light_ptr->colour.green, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_ambient_light_ptr->colour.blue, sizeof ( float ), 1, fp );
+
+			objects_3d_scene_ambient_light_ptr->light_index = get_light ( fp );
+
+			objects_3d_scene_ambient_light_ptr++;
+		}
+	}
+
+	//
+	// Read in the distant lights
+	//
+
+	if ( version <= -2 )
+		fread ( &number_of_distant_lights, sizeof ( int ), 1, fp );
+	else
+		number_of_distant_lights = 0;
+
+	objects_3d_scene_database[scene_index].number_of_distant_lights = number_of_distant_lights;
+
+	objects_3d_scene_database[scene_index].distant_lights = NULL;
+
+	if ( number_of_distant_lights )
+	{
+		struct OBJECT_3D_DISTANT_LIGHT
+			*objects_3d_scene_distant_light_ptr;
+
+		objects_3d_scene_distant_light_ptr = ( struct OBJECT_3D_DISTANT_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_DISTANT_LIGHT ) * number_of_distant_lights );
+		objects_3d_scene_database[scene_index].distant_lights = objects_3d_scene_distant_light_ptr;
+
+		for ( tmp = 0; tmp < number_of_distant_lights; tmp++ )
+		{
+			fread ( &objects_3d_scene_distant_light_ptr->heading, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_distant_light_ptr->pitch, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_distant_light_ptr->roll, sizeof ( float ), 1, fp );
+
+			fread ( &objects_3d_scene_distant_light_ptr->colour.red, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_distant_light_ptr->colour.green, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_distant_light_ptr->colour.blue, sizeof ( float ), 1, fp );
+
+			objects_3d_scene_distant_light_ptr->light_index = get_light ( fp );
+
+			objects_3d_scene_distant_light_ptr++;
+		}
+	}
+
+	//
 	// Read in the number of sub objects, and the number of *named* sub objects
 	//
 
@@ -1074,7 +1206,7 @@ static void read_scene ( FILE *fp )
 
 	fread ( &objects_3d_scene_database[scene_index].shadow_approximation_index, sizeof ( int ), 1, fp );
 
-	ASSERT ( !sceneid || !objects_3d_scene_database[scene_index].shadow_approximation_index);
+	ASSERT ( !sceneid || !objects_3d_scene_database[scene_index].shadow_approximation_index );
 
 	//
 	// Read in the shadow polygon object index
@@ -1253,7 +1385,7 @@ static void initialise_custom_scenes(const char* directory)
 void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level)
 {
 	char indent[128];
-	unsigned i, nsubs;
+	int i, nsubs;
 
 	for (i = 0; i < min(level * 2,127u); i++)
 		indent[i] = ' ';
@@ -1331,9 +1463,10 @@ void read_custom_scene ( const char* filename )
 
 	fp = safe_fopen ( filename, "rb" );
 	fread ( &version, sizeof ( int ), 1, fp );
-	if ( version != -1 )
-		return;
-	read_scene ( fp );
+	if ( version <= -1 && version >= -2 )
+	{
+		read_scene ( fp, version );
+	}
 	safe_fclose ( fp );
 }
 
@@ -1968,7 +2101,7 @@ void initialise_3d_objects ( const char *directory )
 
 	// read in all the default scenes
 	for ( count = 0; count < total_number_of_scenes; count++ )
-		read_scene ( fp );
+		read_scene ( fp, 0 );
 
 	//
 	// Read in the camera information

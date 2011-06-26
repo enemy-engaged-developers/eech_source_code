@@ -41,12 +41,14 @@ struct AllNames
  Names Objects;
  Names SubObjects;
  Names Cameras;
+ Names Lights;
 
  AllNames(EET& eet)
  {
   Objects <<= "OBJECT_INVALID_INDEX";
   SubObjects <<= "INVALID_SUB_OBJECT_INDEX";
   Cameras <<= "INVALID_CAMERA_INDEX";
+  Lights <<= "INVALID_LIGHT_INDEX";
 
   FILE* file = safe_fopen("bininfo.bin", "rb");
 
