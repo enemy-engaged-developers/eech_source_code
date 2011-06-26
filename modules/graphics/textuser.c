@@ -270,6 +270,7 @@ enum FILE_TYPE
 	TYPE_ORIGINAL,
 	TYPE_BMP,
 	TYPE_DDS,
+	TYPE_TGA,
 };
 
 typedef enum FILE_TYPE file_type;
@@ -342,6 +343,7 @@ static int initialize_texture_override_names ( const char *mapname );
 void load_texture_override ( void );
 static void clear_texture_override_names ( void );
 static screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
+static screen *load_tga_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
 static screen *load_bmp_file_screen (const char *full_override_texture_filename);
 static void load_texture_water( void );
 static void initialize_terrain_texture_scales ( const char *mapname );
@@ -3262,6 +3264,8 @@ int initialize_texture_override_names ( const char *mapname )
 
 				if (strcmp(extension, ".BMP") == 0)
 					type = TYPE_BMP;
+				else if (strcmp(extension, ".TGA") == 0)
+					type = TYPE_TGA;
 				else if (strcmp(extension, ".DDS") == 0)
 					type = TYPE_DDS;
 				else
@@ -3617,6 +3621,17 @@ void load_texture_override ( void )
 				}
 				break;
 			}
+			case TYPE_TGA:
+			{
+#if DEBUG_MODULE
+				debug_log ("++OVERRIDES++ found tga file %s", full_override_texture_filename);
+#endif
+				if (!*missing_textures)
+				{
+					override_screen = load_tga_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
+				}
+				break;
+			}
 			case TYPE_DDS:
 			{
 #if DEBUG_MODULE
@@ -3820,6 +3835,12 @@ void load_texture_water( void )
 				override_screen = load_bmp_file_screen(filename);
 				break;
 			}
+			case TYPE_TGA:
+			{
+				sprintf(filename,"%s\\%s\\%s.tga", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
+				override_screen = load_tga_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
+				break;
+			}
 			case TYPE_DDS:
 			{
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
@@ -3970,6 +3991,125 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 		}
 
 		safe_fclose (fp);
+
+		return override_screen;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+screen *load_tga_file_screen ( const char *full_override_texture_filename, int step, float gamma_adjustment )
+{
+		FILE
+			*fp;
+
+		texture_map_types
+			type;
+
+		unsigned char
+			header[18],
+			*buffer;
+
+		int
+			width,
+			height,
+			nrbytes,
+			buffer_size,
+			x,
+			y;
+
+		screen
+			*override_screen;
+
+		fp = safe_fopen ( full_override_texture_filename, "rb" );
+
+		fread ( header, sizeof ( header ), 1, fp );
+
+		if ( header[0] || header[1] || header[2] != 2 || ( header[16] != 24 && header[16] != 32 ) || (header[17] & !0x20) )
+		{
+			safe_fclose ( fp );
+			return NULL;
+		}
+
+		if ( header[16] == 32 )
+		{
+			nrbytes = 4;
+			type = TEXTURE_TYPE_MULTIPLEALPHA;
+		}
+		else
+		{
+			nrbytes = 3;
+			type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
+		}
+
+		width = ( ( int ) header[13] << 8 ) | header[12];
+		height = ( ( int ) header[15] << 8 ) | header[14];
+
+		override_screen = create_texture_map (width, height, type, 1, system_texture_palettes[0], system_texture_colour_tables[0]);
+
+		buffer_size = width * height * nrbytes;
+		buffer = ( unsigned char * ) safe_malloc ( buffer_size );
+		fread ( buffer, buffer_size, 1, fp );
+
+		safe_fclose ( fp );
+
+		for ( y = 0; y < height; y++ )
+		{
+			for ( x = 0; x < width; x++ )
+			{
+				int
+					offset;
+				unsigned char
+					tmp;
+
+				offset = ( y * width + x ) * nrbytes;
+
+				tmp = min ( ( int ) ( buffer[offset + 2] * gamma_adjustment ), 255 );
+				buffer[offset + 2] = min ( ( int ) ( buffer[offset + 0] * gamma_adjustment ), 255);
+				buffer[offset + 1] = min ( ( int )( buffer[offset + 1] * gamma_adjustment ), 255);
+				buffer[offset + 0] = tmp;
+				/*if ( nrbyte == 4 )
+					buffer[offset + 3] = min ( ( int ) ( buffer[offset + 3] * gamma_adjustment ), 255 );*/
+			}
+		}
+
+		if ( !( header[17] & 0x20 ) )
+		{
+			for ( y = 0; y < height / 2; y++ )
+			{
+				int
+					offset1,
+					offset2;
+
+				offset1 = y * width * nrbytes;
+				offset2 = (height - y - 1) * width * nrbytes;
+
+				for ( x = 0; x < width * nrbytes; x++ )
+				{
+					unsigned char
+						tmp;
+
+					tmp = buffer[offset1 + x];
+					buffer[offset1 + x] = buffer[offset2 + x];
+					buffer[offset2 + x] = tmp;
+				}
+			}
+		}
+
+		while ( !lock_texture ( override_screen, 0 ) )
+		{
+			Sleep ( 100 );
+		}
+
+		if ( type == TEXTURE_TYPE_NOALPHA_NOPALETTE )
+			convert_no_alpha_24bit_texture_map_data ( buffer, width, height, override_screen, fp );
+		else
+			convert_multiple_alpha_32bit_texture_map_data ( buffer, width, height, override_screen, fp );
+
+		unlock_texture ( override_screen );
+
+		safe_free ( buffer );
 
 		return override_screen;
 }
