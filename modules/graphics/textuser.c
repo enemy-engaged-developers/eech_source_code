@@ -4026,11 +4026,12 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 
 		fread ( header, sizeof ( header ), 1, fp );
 
-		if ( header[0] || header[1] || header[2] != 2 || ( header[16] != 24 && header[16] != 32 ) || (header[17] & !0x20) )
+		if ( header[1] || ( header[2] != 2 && header[2] != 10 ) || ( header[16] != 24 && header[16] != 32 ) || ( header[17] & 0xD0 ) )
 		{
 			safe_fclose ( fp );
 			return NULL;
 		}
+		fseek ( fp, header[0], SEEK_CUR );
 
 		if ( header[16] == 32 )
 		{
@@ -4050,7 +4051,45 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 
 		buffer_size = width * height * nrbytes;
 		buffer = ( unsigned char * ) safe_malloc ( buffer_size );
-		fread ( buffer, buffer_size, 1, fp );
+
+		if ( header[2] == 2 )
+		{
+			fread ( buffer, buffer_size, 1, fp );
+		}
+		else
+		{
+			int
+				offset;
+			unsigned char
+				count,
+				buf[512];
+
+			offset = 0;
+			do
+			{
+				fread ( &count, 1, 1, fp );
+				if ( count++ & 0x80 )
+				{
+					count -= 0x80;
+					fread ( buffer, nrbytes, 1, fp );
+					while ( count-- )
+					{
+						memcpy ( buffer + offset, buf, nrbytes );
+						offset += nrbytes;
+					}
+				}
+				else
+				{
+					int
+						size;
+
+					size = count * nrbytes;
+					fread ( buffer + offset, size, 1, fp );
+					offset += size;
+				}
+			}
+			while ( offset < buffer_size );
+		}
 
 		safe_fclose ( fp );
 
