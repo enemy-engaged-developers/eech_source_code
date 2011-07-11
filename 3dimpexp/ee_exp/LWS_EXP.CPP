@@ -524,12 +524,10 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
 
  if (show_warnings)
   {
-   if (scene->number_of_texture_animations)
-    printf("\tTexture animation not supported\n");
    if (scene->number_of_displacement_amplitude_keyframes)
-    printf("\tDisplacement animation not supported\n");
+    printf("\tDisplacement animation is not exported as a part of LWS file\n");
    if (scene->shadow_approximation_index > 0)
-    printf("\tShadow approximation %i not supported\n", scene->shadow_approximation_index);
+    printf("\tShadow approximation %i not supported yet\n", scene->shadow_approximation_index);
   }
 
  if (scene->shadow_polygon_object_index > 0)

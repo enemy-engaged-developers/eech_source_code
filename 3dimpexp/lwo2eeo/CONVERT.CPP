@@ -219,7 +219,7 @@ void FindChunks(const LWOFile& lwofile)
 
  public:
 
- Convert(const char* lwo)
+ Convert(const char* lwo, const char* log)
  {
   BBI.x = 0.0;
   BBI.y = 0.0;
@@ -230,7 +230,26 @@ void FindChunks(const LWOFile& lwofile)
 
   LWOFile lwofile(lwo);
 
-  //lwofile.Print();
+  if (log)
+   {
+    fflush(stdout);
+    int stdout_dup = dup(STDOUT_FILENO);
+    if (stdout_dup >= 0)
+     {
+      int log_fd = open(log, O_WRONLY | O_TEXT | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IREAD | S_IWRITE);
+      if (log_fd >= 0)
+       {
+        if (dup2(log_fd, STDOUT_FILENO) >= 0)
+         {
+          lwofile.Print();
+          fflush(stdout);
+          dup2(stdout_dup, STDOUT_FILENO);
+         }
+        close(log_fd);
+       }
+      close(stdout_dup);
+     }
+   }
 
   FindChunks(lwofile);
 

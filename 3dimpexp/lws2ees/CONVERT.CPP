@@ -10,10 +10,14 @@ class Convert
 {
  public:
 
- Convert(const Lws& lws, const char* filename)
-  : root(0), collision(0), shadow(0)
+ Convert(const Lws& lws, const char* filename, const char* log_filename)
+  : root(0), collision(0), shadow(0), log(0)
  {
+  if (log_filename)
+    log = safe_fopen(log_filename, "w");
   convert(lws);
+  if (log)
+    fclose(log);
   save(filename);
  }
 
@@ -90,22 +94,36 @@ class Convert
   build_hierarchy(lws);
   if (!root)
    error("No objects in scene");
-  //print(root, 0);
+  if (log)
+   {
+    fprintf(log, "ORIGINAL SCENE:\n");
+    print(root, 0);
+   }
   sort_by_labels(root);
-  //print(root, 0);
+  if (log)
+   {
+    fprintf(log, "\n\nSORTED BY PRIORITY SCENE:\n");
+    print(root, 0);
+   }
   main_lods();
-  //print_lods();
+  if (log)
+   {
+    fprintf(log, "\n\nLOD DISTANCES:");
+    print_lods();
+   }
   set_last_lods(root);
   set_lods(&main, root);
   clear(root);
-  //print(main, 0);
+  if (log)
+   {
+    fprintf(log, "\n\nRESULTED SCENE:\n");
+    print(main, 0);
+   }
  }
 
  void save(const char* filename)
  {
-  fp = fopen(filename, "wb");
-  if (!fp)
-   error("Failed to create %s", filename);
+  fp = safe_fopen(filename, "wb");
   save_scene();
   fclose(fp);
  }
@@ -347,8 +365,8 @@ class Convert
  void print_lods(void)
  {
   for (size_t i = 0; i < lods.size(); i++)
-   printf(" %i: %i", i, lods[i].distance);
-  printf("\n");
+   fprintf(log, " %i: %i (%s)", i + 1, lods[i].distance, lods[i].filename.c_str());
+  fprintf(log, "\n");
  }
 
  void sort_by_labels(HierObj* hierobj)
@@ -501,17 +519,17 @@ class Convert
 
  void print(const HierObj* hierobj, int depth)
  {
-  printf("% *s%s (%s)", 2 * depth++, "", hierobj->object->print_name.c_str(), hierobj->object->search.c_str());
+  fprintf(log, "% *s%s (%s)", 2 * depth++, "", hierobj->object->print_name.c_str(), hierobj->object->search.c_str());
   for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end(); ++lod)
-   printf(" %f '%s'", lod->distance, lod->filename.c_str());
-  printf("\n");
+   fprintf(log, " %f '%s'", lod->distance, lod->filename.c_str());
+  fprintf(log, "\n");
   for (HierObjs::const_iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
    print(*itor, depth);
  }
 
  void print(const SubObject& subobject, int depth)
  {
-  printf("% *s%i %i (%s) '%s'\n", 2 * depth++, "", subobject.lod_min, subobject.lod_max, subobject.object ? subobject.object->search.c_str() : "", subobject.filename.c_str());
+  fprintf(log, "% *s%i %i (%s) '%s'\n", 2 * depth++, "", subobject.lod_min, subobject.lod_max, subobject.object ? subobject.object->search.c_str() : "", subobject.filename.c_str());
   for (SubObjects::const_iterator itor(subobject.subobjects.begin()); itor != subobject.subobjects.end(); ++itor)
    print(*itor, depth);
  }
@@ -704,13 +722,7 @@ class Convert
   fw(total_subobjects);
   fw(total_indices);
 
-#if 1
   fw(0);
-#else
-  fwrite(&number_of_texture_animations, sizeof(int), 1, fp);
-  for (int tmp = 0; tmp < number_of_texture_animations; tmp++)
-   fwrite(&texture_animations[tmp], sizeof(int), 1, fp);
-#endif
 
   fw(static_cast<int>(lods.size()));
   fw(main.object ? main.object->filename.c_str() : "");
@@ -779,4 +791,5 @@ class Convert
  Links links;
  int total_indices, total_subobjects;
  FILE* fp;
+ FILE* log;
 };

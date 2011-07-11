@@ -191,7 +191,7 @@ typedef struct OBJECT_3D_SPRITE_LIGHT object_3d_sprite_light;
 
 struct OBJECT_3D_AMBIENT_LIGHT
 {
-	light_colour
+	rgb_colour
 		colour;
 
 	object_3d_light_index_numbers
@@ -211,7 +211,7 @@ struct OBJECT_3D_DISTANT_LIGHT
 		pitch,
 		roll;
 
-	light_colour
+	rgb_colour
 		colour;
 
 	object_3d_light_index_numbers

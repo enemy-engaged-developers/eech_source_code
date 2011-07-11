@@ -48,6 +48,7 @@ typedef struct VIEWPOINT viewpoint;
 typedef int object_3d_index_numbers;
 typedef int object_3d_sub_object_index_numbers;
 typedef int object_3d_camera_index_numbers;
+typedef int object_3d_light_index_numbers;
 #include "../3dobjdb.h"
 void generate_object_3d_point_normal(object_3d_heading_pitch_normal *normal, vec3d *result);
 

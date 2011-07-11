@@ -201,21 +201,17 @@ static const char *default_get_entity_string (entity *en, string_types type)
 	char
 		*s;
 
-#ifndef __cplusplus
 	switch (type)
 	{
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
-#endif
 			s = string_type_database[type].default_value;
 
-#ifndef __cplusplus
 			break;
 		}
 	}
-#endif
 
 	return (s);
 }
