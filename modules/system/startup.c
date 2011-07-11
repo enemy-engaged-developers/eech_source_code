@@ -458,12 +458,13 @@ void set_application_current_directory ( void )
 #ifdef DEBUG
 
 	HKEY key;
-	char root[1024];
-	DWORD type;
-	long string_length;
 
 	if ( RegOpenKey ( HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &key ) == ERROR_SUCCESS )
 	{
+		char root[1024];
+		DWORD type;
+		DWORD string_length;
+
 		string_length = sizeof ( root );
 		type = REG_SZ;
 		RegQueryValueEx ( key, "Installation Path", NULL, &type, ( LPBYTE ) root, ( LPDWORD ) &string_length );
@@ -473,7 +474,6 @@ void set_application_current_directory ( void )
 		RegCloseKey ( key );
 		return;
 	}
-	RegCloseKey ( key );
 
 #endif
 	// Casm 17JUN05 Using directory from Registry while debugging.

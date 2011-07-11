@@ -40,6 +40,14 @@ void strupr(char* ptr)
 #define stricmp strcasecmp
 #endif
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 template <class T>
 T min(T a, T b)
 {

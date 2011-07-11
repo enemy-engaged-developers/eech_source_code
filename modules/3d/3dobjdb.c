@@ -810,7 +810,7 @@ static void add_animation (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *al
 	if ( *allocated == scene->number_of_texture_animations )
 	{
 		*allocated = *allocated ? *allocated * 2 : 8;
-		new_anim = safe_malloc ( *allocated * sizeof ( int ) );
+		new_anim = ( int * ) safe_malloc ( *allocated * sizeof ( int ) );
 		if ( scene->number_of_texture_animations )
 		{
 			memcpy ( new_anim, scene->texture_animations, scene->number_of_texture_animations * sizeof ( int ) );
@@ -1385,7 +1385,7 @@ static void initialise_custom_scenes(const char* directory)
 void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level)
 {
 	char indent[128];
-	int i, nsubs;
+	unsigned i, nsubs;
 
 	for (i = 0; i < min(level * 2,127u); i++)
 		indent[i] = ' ';

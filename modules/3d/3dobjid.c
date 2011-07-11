@@ -478,7 +478,7 @@ void initialise_3d_objects_info ( const char *directory )
 				ASSERT ( number_of_texture_animations < TEXTURE_ANIMATION_INDEX_LAST );
 				texture_animation_index = number_of_texture_animations++;
 				length = strlen ( fi.name ) + 1;
-				ptr = safe_malloc ( length );
+				ptr = ( char * ) safe_malloc ( length );
 				memcpy ( ptr, fi.name, length );
 				texture_animation_names[texture_animation_index] = ptr;
 			}
@@ -509,7 +509,7 @@ void initialise_3d_objects_info ( const char *directory )
 							*new_texture_indices;
 
 						texture_animation.current_frame = texture_animation.current_frame ? texture_animation.current_frame * 2 : 8;
-						new_texture_indices = safe_malloc ( texture_animation.current_frame * sizeof ( int ) );
+						new_texture_indices = ( int * ) safe_malloc ( texture_animation.current_frame * sizeof ( int ) );
 						if ( texture_animation.texture_indices )
 						{
 							memcpy ( new_texture_indices, texture_animation.texture_indices, texture_animation.number_of_frames * sizeof ( int ) );

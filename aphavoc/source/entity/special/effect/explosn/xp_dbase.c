@@ -331,7 +331,7 @@ static void import_explosion_database(void)
 				if (ex->number_of_components >= allocated)
 				{
 					allocated = allocated ? 2 * allocated : 8;
-					co = safe_malloc(sizeof(meta_explosion_component) * allocated);
+					co = (meta_explosion_component*)safe_malloc(sizeof(meta_explosion_component) * allocated);
 					if (ex->number_of_components)
 					{
 						memcpy(co, ex->component, sizeof(meta_explosion_component) * ex->number_of_components);
@@ -340,11 +340,11 @@ static void import_explosion_database(void)
 					ex->component = co;
 				}
 				co = &ex->component[ex->number_of_components];
-				switch (co->type = type)
+				switch (co->type = (explosion_component_types)type)
 				{
 				case EXPLOSION_SPRITES:
 					{
-						co->animated_texture = get_object_3d_texture_animation_index_from_name(name);
+						co->animated_texture = (texture_animation_indices)get_object_3d_texture_animation_index_from_name(name);
 						if (co->animated_texture < 0)
 						{
 							continue;

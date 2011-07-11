@@ -329,7 +329,7 @@ static void import_smoke_list_database (void)
 			smoke->green_end = (unsigned char)bound (green_end, 0, 255);
 			smoke->blue_end = (unsigned char)bound (blue_end, 0, 255);
 			smoke->alpha_end = (unsigned char)bound (alpha_end, 0, 255);
-			smoke->texture = add_new_animation (texture_animation);
+			smoke->texture = (texture_animation_indices)add_new_animation (texture_animation);
 			smoke->additive = additive != 0;
 			smoke->draw_type = draw_type != 0;
 			smoke->flat = flat != 0;

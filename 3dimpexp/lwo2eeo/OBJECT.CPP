@@ -349,8 +349,8 @@ class OBJECT_3D : private Convert
 
  public:
 
- OBJECT_3D(const char* lwo, const char* eeo)
-   : Convert(lwo)
+ OBJECT_3D(const char* lwo, const char* eeo, const char* log)
+   : Convert(lwo, log)
  {
   Create();
   Write(eeo);
