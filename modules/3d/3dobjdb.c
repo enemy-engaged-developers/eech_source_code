@@ -1089,7 +1089,7 @@ static void read_scene ( FILE *fp, int version )
 			objects_3d_scene_ambient_light_ptr->colour.red = ( unsigned char ) ( red * 255 );
 			objects_3d_scene_ambient_light_ptr->colour.green = ( unsigned char ) ( green * 255 );
 			objects_3d_scene_ambient_light_ptr->colour.blue = ( unsigned char ) ( blue * 255 );
-			objects_3d_scene_ambient_light_ptr->colour.alpha = 1.0;
+			objects_3d_scene_ambient_light_ptr->colour.alpha = 255;
 
 			objects_3d_scene_ambient_light_ptr->light_index = get_light ( fp );
 
@@ -1136,7 +1136,7 @@ static void read_scene ( FILE *fp, int version )
 			objects_3d_scene_distant_light_ptr->colour.red = ( unsigned char ) ( red * 255 );
 			objects_3d_scene_distant_light_ptr->colour.green = ( unsigned char ) ( green * 255 );
 			objects_3d_scene_distant_light_ptr->colour.blue = ( unsigned char ) ( blue * 255 );
-			objects_3d_scene_distant_light_ptr->colour.alpha = 1.0;
+			objects_3d_scene_distant_light_ptr->colour.alpha = 255;
 
 			objects_3d_scene_distant_light_ptr->light_index = get_light ( fp );
 
