@@ -911,7 +911,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 		set_3d_origin ( main_3d_env, application_video_width /2, application_video_height/2 );
 
-		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99 ), rad (59.99) / full_screen_aspect_ratio );
+		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99 ), get_height_view_angle ( rad ( 59.99 ) ) );
 #if RECOGNITION_GUIDE
 		set_3d_view_distances ( main_3d_env, 10000.0, 100.0, 1.0, 0.0 );
 #else
