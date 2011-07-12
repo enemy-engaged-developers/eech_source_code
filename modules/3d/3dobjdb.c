@@ -1077,9 +1077,19 @@ static void read_scene ( FILE *fp, int version )
 
 		for ( tmp = 0; tmp < number_of_ambient_lights; tmp++ )
 		{
-			fread ( &objects_3d_scene_ambient_light_ptr->colour.red, sizeof ( float ), 1, fp );
-			fread ( &objects_3d_scene_ambient_light_ptr->colour.green, sizeof ( float ), 1, fp );
-			fread ( &objects_3d_scene_ambient_light_ptr->colour.blue, sizeof ( float ), 1, fp );
+			float
+				red,
+				green,
+				blue;
+
+			fread ( &red, sizeof ( float ), 1, fp );
+			fread ( &green, sizeof ( float ), 1, fp );
+			fread ( &blue, sizeof ( float ), 1, fp );
+
+			objects_3d_scene_ambient_light_ptr->colour.red = ( unsigned char ) ( red * 255 );
+			objects_3d_scene_ambient_light_ptr->colour.green = ( unsigned char ) ( green * 255 );
+			objects_3d_scene_ambient_light_ptr->colour.blue = ( unsigned char ) ( blue * 255 );
+			objects_3d_scene_ambient_light_ptr->colour.alpha = 1.0;
 
 			objects_3d_scene_ambient_light_ptr->light_index = get_light ( fp );
 
@@ -1110,13 +1120,23 @@ static void read_scene ( FILE *fp, int version )
 
 		for ( tmp = 0; tmp < number_of_distant_lights; tmp++ )
 		{
+			float
+				red,
+				green,
+				blue;
+
 			fread ( &objects_3d_scene_distant_light_ptr->heading, sizeof ( float ), 1, fp );
 			fread ( &objects_3d_scene_distant_light_ptr->pitch, sizeof ( float ), 1, fp );
 			fread ( &objects_3d_scene_distant_light_ptr->roll, sizeof ( float ), 1, fp );
 
-			fread ( &objects_3d_scene_distant_light_ptr->colour.red, sizeof ( float ), 1, fp );
-			fread ( &objects_3d_scene_distant_light_ptr->colour.green, sizeof ( float ), 1, fp );
-			fread ( &objects_3d_scene_distant_light_ptr->colour.blue, sizeof ( float ), 1, fp );
+			fread ( &red, sizeof ( float ), 1, fp );
+			fread ( &green, sizeof ( float ), 1, fp );
+			fread ( &blue, sizeof ( float ), 1, fp );
+
+			objects_3d_scene_distant_light_ptr->colour.red = ( unsigned char ) ( red * 255 );
+			objects_3d_scene_distant_light_ptr->colour.green = ( unsigned char ) ( green * 255 );
+			objects_3d_scene_distant_light_ptr->colour.blue = ( unsigned char ) ( blue * 255 );
+			objects_3d_scene_distant_light_ptr->colour.alpha = 1.0;
 
 			objects_3d_scene_distant_light_ptr->light_index = get_light ( fp );
 
