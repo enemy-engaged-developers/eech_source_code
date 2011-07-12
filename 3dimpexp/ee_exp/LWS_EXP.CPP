@@ -282,6 +282,8 @@ struct sub_object
    if (sub->sub_object_approximation_out_level >= lods[i].sub_object_approximation_in_level && sub->sub_object_approximation_in_level <= lods[i].sub_object_approximation_out_level && sub->index != lods[i].index)
     return 0;
 
+  if (sub_object_index == 28 || key.sub_object_index == 28)
+   return 0;
   if (sub_object_index != key.sub_object_index)
    return 0;
   CH_EQ(number_of_keyframes)

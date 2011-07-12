@@ -2098,22 +2098,16 @@ static void toggle_display_in_flight_intelligence_messages_event (event *ev)
 //		Events to set Low/Med/Hi Field of View, and to recenter mouseview
 static void lo_fov_event(event *ev)
 {
-	full_screen_width_view_angle	= rad (command_line_min_fov);
-	full_screen_height_view_angle	= rad (command_line_min_fov / full_screen_aspect_ratio);
+	set_view_angles (rad (command_line_min_fov));
 }
 static void std_fov_event(event *ev)
 {
-	full_screen_width_view_angle	= rad (DEFAULT_FOV);
-	full_screen_height_view_angle	= rad (DEFAULT_FOV / full_screen_aspect_ratio);
+	set_view_angles (rad (DEFAULT_FOV));
 }
 static void hi_fov_event(event *ev)
 {
 	// Casm 08OCT05 Max fov depends on gunship type
-	int
-		max_fov = get_max_fov ();
-
-	full_screen_width_view_angle	= rad (max_fov);
-	full_screen_height_view_angle	= rad (max_fov / full_screen_aspect_ratio);
+	set_view_angles (get_max_fov ());
 }
 
 static void increase_fov_event(event* ev)
