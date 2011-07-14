@@ -28,6 +28,7 @@ typedef struct {
 
 	float
 		turn_angle,
+		rotation_angle,
 		suspension_compression,  // how much the suspension is compressed, meters
 		resistance_force,
 		brake_force,
@@ -35,9 +36,14 @@ typedef struct {
 		suspension_stiffness,    // kN per meter of suspension movement
 		damper_stiffness,
 		damping,        // resistance to change in compression
-		bump_stiffness;
+		bump_stiffness,
+		radius;
 
-	char name[SUSPENSION_NAME_MAX_LENGTH];
+	char
+		name[SUSPENSION_NAME_MAX_LENGTH];
+
+	object_3d_sub_object_index_numbers
+		sub_index;
 } landing_gear_point;
 
 typedef struct {
@@ -58,6 +64,24 @@ static landing_gear_system
 
 static landing_gear_system
 	*current_landing_gear;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static const struct NAME_SUB_INDEX
+{
+	const char
+		*name;
+	object_3d_sub_object_index_numbers
+		sub_index;
+} name_sub_index[] =
+{
+	{ "name = left main wheel", OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_LEFT },
+	{ "name = right main wheel", OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_RIGHT },
+	{ "name = nose wheel", OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_NOSE },
+	{ "name = tail wheel", OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_TAIL },
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +133,7 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 						break;
 
 					len = strlen(point->name);
-					ASSERT(len < SUSPENSION_NAME_MAX_LENGTH-1);
+					ASSERT(len < SUSPENSION_NAME_MAX_LENGTH - 1);
 					if (point->name[len-1] == '\n')
 						point->name[len-1] = '\0';
 
@@ -123,9 +147,25 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 					nread += fscanf(file, "spring_stiffness = %f\n", &point->suspension_stiffness);
 					nread += fscanf(file, "damper_stiffness = %f\n", &point->damper_stiffness);
 					nread += fscanf(file, "bump_stiffness = %f\n", &point->bump_stiffness);
+					nread += fscanf(file, "radius = %f\n", &point->radius);
 
-					if (nread != 10)
+					if (nread != 11)
 						debug_fatal("error in suspension point %d, value %d", i, nread);
+
+					{
+						unsigned
+							i;
+
+						point->sub_index = OBJECT_3D_INVALID_SUB_OBJECT_INDEX;
+						for ( i = 0; i < ARRAY_LENGTH ( name_sub_index ); i++ )
+						{
+							if ( !strcmp ( point->name, name_sub_index[i].name ) )
+							{
+								point->sub_index = name_sub_index[i].sub_index;
+								break;
+							}
+						}
+					}
 				}
 
 				if (i != gear->num_gear_points)
@@ -436,6 +476,7 @@ void initialise_undercarriage_dynamics(void)
 		current_landing_gear->gear_points[i].damping = 0.0;
 		current_landing_gear->gear_points[i].suspension_compression = 0.0;
 		current_landing_gear->gear_points[i].turn_angle = 0.0;
+		current_landing_gear->gear_points[i].rotation_angle = rand() * PI / RAND_MAX;
 
 		current_landing_gear->gear_points[i].velocity.x = 0.0;
 		current_landing_gear->gear_points[i].velocity.y = 0.0;
@@ -599,4 +640,61 @@ int right_main_wheel_locked_down(void)
 		return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
 	return (!point->damaged && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0));
+}
+
+void rotate_helicopter_wheels(object_3d_instance* inst3d)
+{
+	unsigned
+		i,
+		j;
+	object_3d_sub_object_search_data
+		search;
+
+	ASSERT ( current_landing_gear );
+
+	for ( i = 0; i < current_landing_gear->num_gear_points; i++ )
+	{
+		landing_gear_point
+			*gear_point = current_landing_gear->gear_points + i;
+
+		if ( gear_point->damaged || !gear_point->suspension_compression || gear_point->sub_index == OBJECT_3D_INVALID_SUB_OBJECT_INDEX )
+		{
+			continue;
+		}
+
+		gear_point->rotation_angle += gear_point->velocity.z * get_model_delta_time() / gear_point->radius;
+		if ( gear_point->rotation_angle < 0.0 )
+		{
+			do
+			{
+				gear_point->rotation_angle += PI2;
+			}
+			while ( gear_point->rotation_angle < 0.0 );
+		}
+		else
+		{
+			while ( gear_point->rotation_angle >= PI2 )
+			{
+				gear_point->rotation_angle -= PI2;
+			}
+		}
+
+		search.search_object = inst3d;
+		search.sub_object_index = gear_point->sub_index;
+		for ( j = 0; ; j++ )
+		{
+			search.search_depth = j;
+			if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			{
+				break;
+			}
+
+			{
+				struct OBJECT_3D_SUB_INSTANCE
+					*wheel = search.result_sub_object;
+
+				wheel->relative_pitch = gear_point->rotation_angle;
+			}
+		}
+	}
 }

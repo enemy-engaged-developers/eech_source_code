@@ -76,7 +76,9 @@ extern void animate_helicopter_wipers (entity *en);
 
 extern void animate_helicopter_eo (entity *en);
 
-extern void animate_helicopter_suspension(entity *en);
+extern void animate_helicopter_suspension (entity *en);
+
+extern void animate_helicopter_wheels (entity *en);
 
 extern void damage_helicopter_3d_object (entity *en);
 
