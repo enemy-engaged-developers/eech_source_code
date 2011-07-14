@@ -21,4 +21,6 @@ int weight_on_wheels(void);
 
 void animate_hind_suspension(object_3d_instance* inst3d);
 
+void rotate_helicopter_wheels(object_3d_instance* inst3d);
+
 #endif
