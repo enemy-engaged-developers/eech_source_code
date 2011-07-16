@@ -58,6 +58,15 @@ struct OBJECT_3D_SUB_OBJECT_INDEX
  unsigned short int object_index;
 };
 
+struct OBJECT_3D_DATABASE_ENTRY;
+
+struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
+{
+ int sub_object_index;
+ int number_of_sub_objects;
+ struct OBJECT_3D_DATABASE_ENTRY **sub_objects;
+};
+
 struct OBJECT_3D_DATABASE_ENTRY
 {
  unsigned short int index;
@@ -79,10 +88,38 @@ struct OBJECT_3D_DATABASE_ENTRY
 
  struct OBJECT_3D_DATABASE_ENTRY *parent, *sub_objects;
 
- void print(int offset) const
+ class Labeler
+ {
+  public:
+
+  Labeler(int number_of_sub_object_table_entries, const struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* sub_object_indices_table, const Names& subobjects)
+   : number_of_sub_object_table_entries(number_of_sub_object_table_entries), sub_object_indices_table(sub_object_indices_table), subobjects(subobjects)
+  {
+  }
+
+  const char* label(const struct OBJECT_3D_DATABASE_ENTRY *sub_object)
+  {
+   for (int i = 0; i < number_of_sub_object_table_entries; i++)
+    {
+     const struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY& t = sub_object_indices_table[i];
+     for (int j = 0; j < t.number_of_sub_objects; j++)
+      if (t.sub_objects[j] == sub_object)
+       return subobjects[t.sub_object_index];
+    }
+   return "";
+  }
+
+  private:
+
+  int number_of_sub_object_table_entries;
+  const struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* sub_object_indices_table;
+  const Names& subobjects;
+ };
+
+ void print(int offset, Labeler& labeler) const
  {
   printf("% *c", offset * 4, ' ');
-  printf("Index %04X L %i %i CC %i OD %f", index, sub_object_approximation_in_level, sub_object_approximation_out_level, collision_contribution, object_dissolve);
+  printf("%i %i [%04X] '%s' CC %i OD %f", sub_object_approximation_in_level, sub_object_approximation_out_level, index, labeler.label(this), collision_contribution, object_dissolve);
   if (flag)
    printf(" L %f %f %f %f %f %f", relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum);
   print_keyframes(number_of_keyframes, keyframes);
@@ -92,22 +129,15 @@ struct OBJECT_3D_DATABASE_ENTRY
   //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
   printf("\n");
 
-  print_subobjects(offset + 1, number_of_sub_objects, sub_objects);
+  print_subobjects(offset, number_of_sub_objects, sub_objects, labeler);
  }
 
- static void print_subobjects(int offset, int number_of_subobjects, const struct OBJECT_3D_DATABASE_ENTRY* sub_objects)
+ static void print_subobjects(int offset, int number_of_subobjects, const struct OBJECT_3D_DATABASE_ENTRY* sub_objects, Labeler& labeler)
  {
   offset++;
   for (int i = 0; i < number_of_subobjects; i++)
-   sub_objects[i].print(offset);
+   sub_objects[i].print(offset, labeler);
  }
-};
-
-struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
-{
- int sub_object_index;
- int number_of_sub_objects;
- struct OBJECT_3D_DATABASE_ENTRY **sub_objects;
 };
 
 struct OBJECT_3D_SCENE_CAMERA_INFO
@@ -191,7 +221,7 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 
  struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries;
 
- void print(void) const
+ void print(const Names& names_subobjects) const
  {
   printf("Index %04X Shadow %i Collision %i SAI %i\n", index, shadow_polygon_object_index, collision_object_index, shadow_approximation_index);
 
@@ -228,17 +258,15 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
   //number_of_sprite_lights;
   //struct OBJECT_3D_SPRITE_LIGHT *sprite_lights;
 
-  //struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY *sub_object_indices_table;
-
   //number_of_sub_object_indices,
-  //number_of_sub_object_table_entries,
   //total_number_of_sub_objects,
   //total_number_of_sub_object_indices;
 
   //struct OBJECT_3D_SUB_OBJECT_INDEX *scene_sub_object_indices_array; //Какая-то хрень, грузится. sub_object_index
   //struct OBJECT_3D_DATABASE_ENTRY *scene_sub_object_array;
   //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
-  OBJECT_3D_DATABASE_ENTRY::print_subobjects(0, number_of_sub_objects, sub_objects);
+  OBJECT_3D_DATABASE_ENTRY::Labeler labeler(number_of_sub_object_table_entries, sub_object_indices_table, names_subobjects);
+  OBJECT_3D_DATABASE_ENTRY::print_subobjects(0, number_of_sub_objects, sub_objects, labeler);
 
   printf("\n\n");
  }
