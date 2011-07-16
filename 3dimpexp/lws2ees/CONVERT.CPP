@@ -651,7 +651,8 @@ class Convert
  void save_scene(void) const
  {
   // Version
-  fw(-2);
+ 	int version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
+  fw(version);
 
   fw(static_cast<int>(cameras.size()));
   for (CameraDescs::const_iterator itor(cameras.begin()); itor != cameras.end(); ++itor)
@@ -692,31 +693,34 @@ class Convert
     fw(static_cast<int>(light->light.blue * light->intensity * 255));
    }
 
-  fw(static_cast<int>(ambient_lights.size()));
-  for (LightDescs::const_iterator itor(ambient_lights.begin()); itor != ambient_lights.end(); ++itor)
+  if (version <= -2)
    {
-    const Light* light = itor->light;
+    fw(static_cast<int>(ambient_lights.size()));
+    for (LightDescs::const_iterator itor(ambient_lights.begin()); itor != ambient_lights.end(); ++itor)
+     {
+      const Light* light = itor->light;
 
-    fw(light->light.red * light->intensity);
-    fw(light->light.green * light->intensity);
-    fw(light->light.blue * light->intensity);
+      fw(light->light.red * light->intensity);
+      fw(light->light.green * light->intensity);
+      fw(light->light.blue * light->intensity);
 
-    fw(light->name.c_str());
-   }
+      fw(light->name.c_str());
+     }
 
-  fw(static_cast<int>(distant_lights.size()));
-  for (LightDescs::const_iterator itor(distant_lights.begin()); itor != distant_lights.end(); ++itor)
-   {
-    const Light* light = itor->light;
-    fw(light->motion.channels[3].keys.begin()->value);
-    fw(light->motion.channels[4].keys.begin()->value);
-    fw(light->motion.channels[5].keys.begin()->value);
+    fw(static_cast<int>(distant_lights.size()));
+    for (LightDescs::const_iterator itor(distant_lights.begin()); itor != distant_lights.end(); ++itor)
+     {
+      const Light* light = itor->light;
+      fw(light->motion.channels[3].keys.begin()->value);
+      fw(light->motion.channels[4].keys.begin()->value);
+      fw(light->motion.channels[5].keys.begin()->value);
 
-    fw(light->light.red * light->intensity);
-    fw(light->light.green * light->intensity);
-    fw(light->light.blue * light->intensity);
+      fw(light->light.red * light->intensity);
+      fw(light->light.green * light->intensity);
+      fw(light->light.blue * light->intensity);
 
-    fw(light->name.c_str());
+      fw(light->name.c_str());
+     }
    }
 
   fw(total_subobjects);

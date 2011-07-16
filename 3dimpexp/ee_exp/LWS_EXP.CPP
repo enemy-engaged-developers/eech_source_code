@@ -279,11 +279,9 @@ struct sub_object
 #define CH_EQ(x) if (sub->x != key.x) return 0;
 
   for (int i = 0; i < number_of_lods; i++)
-   if (sub->sub_object_approximation_out_level >= lods[i].sub_object_approximation_in_level && sub->sub_object_approximation_in_level <= lods[i].sub_object_approximation_out_level && sub->index != lods[i].index)
+   if (sub->sub_object_approximation_out_level >= lods[i].sub_object_approximation_in_level && sub->sub_object_approximation_in_level <= lods[i].sub_object_approximation_out_level)
     return 0;
 
-  if (sub_object_index == 28 || key.sub_object_index == 28)
-   return 0;
   if (sub_object_index != key.sub_object_index)
    return 0;
   CH_EQ(number_of_keyframes)
