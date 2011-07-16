@@ -153,8 +153,6 @@ class Convert
    {
     if (itor->search == "SHADOW_OBJECT")
      {
-      if (!itor->layer)
-       continue;
       if (shadow)
        error("Duplicate shadow objects found: %s and %s", shadow->print_name.c_str(), itor->print_name.c_str());
       if (!itor->lods.lods.empty())
@@ -651,7 +649,7 @@ class Convert
  void save_scene(void) const
  {
   // Version
- 	int version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
+  int version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
   fw(version);
 
   fw(static_cast<int>(cameras.size()));
@@ -736,14 +734,9 @@ class Convert
     fw((float)itor->distance);
    }
 
-#if 1
-  fw(0);
-#else
-  fwrite(&shadow_approximation_index, sizeof(int), 1, fp);
-#endif
-
-  if (shadow)
+  if (shadow && shadow->layer)
    {
+    fw(0);
     fw(shadow->filename.c_str());
     fw(shadow->motion.channels[6].keys.front().value);
     fw(shadow->motion.channels[7].keys.front().value);
@@ -751,6 +744,9 @@ class Convert
    }
   else
    {
+    int shadow_approximation_index;
+    shadow_approximation_index = !shadow || shadow->filename.empty() ? 0 : atoi(shadow->filename.c_str() + 1);
+    fwrite(&shadow_approximation_index, sizeof(int), 1, fp);
     fw("");
     fw(1.0f);
     fw(1.0f);

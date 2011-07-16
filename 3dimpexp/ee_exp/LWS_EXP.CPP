@@ -526,13 +526,18 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
   {
    if (scene->number_of_displacement_amplitude_keyframes)
     printf("\tDisplacement animation is not exported as a part of LWS file\n");
-   if (scene->shadow_approximation_index > 0)
-    printf("\tShadow approximation %i not supported yet\n", scene->shadow_approximation_index);
   }
 
- if (scene->shadow_polygon_object_index > 0)
+ if (scene->shadow_polygon_object_index > 0 || scene->shadow_approximation_index > 0)
   {
-   ex->Object(++current, scene->shadow_polygon_object_index, 0, -1);
+   if (scene->shadow_polygon_object_index > 0)
+    ex->Object(++current, scene->shadow_polygon_object_index, 0, -1);
+   else
+    {
+     char num[32];
+     sprintf(num, "L%i", scene->shadow_approximation_index);
+     ex->Object(++current, 0, 0, -1, num);
+    }
    const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 50, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z, 0, 0, 0 };
    ex->KeyFrames("Object", 7, 3, 1, &keyframe);
   }

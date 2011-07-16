@@ -480,7 +480,7 @@ static void read_indices ( FILE *fp, int *number_of_sub_object_indices, object_3
 
 		if ( index_count != 0 )
 		{
-			ASSERT ( (*sub_object_indices)[index_count-1].object_index <
+			ASSERT ( (*sub_object_indices)[index_count - 1].object_index <
 					(*sub_object_indices)[index_count].object_index );
 		}
 	}
@@ -1225,8 +1225,6 @@ static void read_scene ( FILE *fp, int version )
 	//
 
 	fread ( &objects_3d_scene_database[scene_index].shadow_approximation_index, sizeof ( int ), 1, fp );
-
-	ASSERT ( !sceneid || !objects_3d_scene_database[scene_index].shadow_approximation_index );
 
 	//
 	// Read in the shadow polygon object index
