@@ -682,10 +682,8 @@ class LwsFile : public Lws
    }
   else
    object.index = 0xFFFFFFF + objectnumber;
-#if 0
-  if (str[0] && str[1])
+  if (str[0] && str[1] && !isdigit(str[1]))
    object.filename.assign(str + 1, strlen(str) - 2);
-#endif
   object.layer = 0;
   MakeName(object, "NullObject", ObjectNumbers);
   objects.push_back(object);
