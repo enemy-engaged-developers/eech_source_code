@@ -6,8 +6,11 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
+#define SAFE_FOPEN_RB
+
 #include "../ee_exp/ee3dexp.cpp"
 #include "../ee_exp/names.cpp"
+#include "../ee_exp/textures.cpp"
 
 class Object : public OBJECT_3D
 {
@@ -29,7 +32,7 @@ class Object : public OBJECT_3D
   fread(&number_of_faces, 4, 1, file);
   fread(&number_of_polygoned_faces, 4, 1, file);
   if (format_version > 1)
-   fread ( &number_of_face_normals, 4, 1, file );
+   fread(&number_of_face_normals, 4, 1, file);
   else
    number_of_face_normals = number_of_polygoned_faces;
   fread(&number_of_surfaces, 4, 1, file);
@@ -96,12 +99,28 @@ class Object : public OBJECT_3D
     if (!get_nul_string(texture_name, sizeof(texture_name), file))
      break;
     if (*texture_name)
-     surfaces[i].texture_index = /*surfaces[i].texture_animation ? 0 :*/ (unsigned short int)eet.Append(texture_name);
+     if (surfaces[i].texture_animation)
+      {
+       unsigned animation = eet.GetAnimation(texture_name);
+       if (animation == (unsigned)-1)
+        error("Unknown animation '%s'", texture_name);
+        surfaces[i].texture_index = (unsigned short int)animation;
+      }
+     else
+      surfaces[i].texture_index = (unsigned short int)eet.Append(texture_name);
 
     if (!get_nul_string(texture_name, sizeof(texture_name), file))
      break;
     if (*texture_name)
-     surfaces[i].luminosity_texture_index = /*surfaces[i].luminosity_texture_animation ? 0 :*/ (unsigned short int)eet.Append(texture_name);
+     if (surfaces[i].luminosity_texture_animation)
+      {
+       unsigned animation = eet.GetAnimation(texture_name);
+       if (animation == (unsigned)-1)
+        error("Unknown luminosity animation '%s'", texture_name);
+        surfaces[i].luminosity_texture_index = (unsigned short int)animation;
+      }
+     else
+      surfaces[i].luminosity_texture_index = (unsigned short int)eet.Append(texture_name);
    }
 
   fclose (file);
@@ -122,6 +141,8 @@ int main(int argc, char* argv[])
 
  EET eet(*getcwd(filename, sizeof(filename)), argc > 3 ? argv[3] : "tga");
  AllNames names(eet);
+ TexturesExporter_ textures;
+ textures.export_textures(eet, false);
  const Object object(argv[1], eet);
  ExportLWO(eet, argv[2], object);
 

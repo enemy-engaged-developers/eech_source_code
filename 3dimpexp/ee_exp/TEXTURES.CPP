@@ -89,9 +89,8 @@ class BaseTexturesExporter
  void export_textures(EET& eet, bool log = true)
  {
   int number_of_textures;
-  FILE *fp;
 
-  fp = safe_fopen("textures.bin", "rb");
+  FILE *fp = safe_fopen_rb("textures.bin");
 
   if (log)
    printf("Exporting textures\n");
