@@ -593,6 +593,9 @@ class LwsFile : public Lws
        }
       else
        LastObject->search.assign(str + 1, strlen(str) - 2);
+      LastObject->print_name.append(" '");
+      LastObject->print_name.append(LastObject->search);
+      LastObject->print_name.push_back('\'');
      }
     gets();
     if (strcmp(str, "EndPlugin"))

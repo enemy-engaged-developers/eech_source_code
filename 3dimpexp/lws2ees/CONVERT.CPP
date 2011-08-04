@@ -246,8 +246,10 @@ class Convert
          CHECK(p[0], "f")
          CHECK(p[1], "f")
          CHECK(p[2], "f")
+#if 0
          CHECK(p[3], "f")
          CHECK(p[4], "f")
+#endif
          CHECK(p[5], "f")
         }
       }

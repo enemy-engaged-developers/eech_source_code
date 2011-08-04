@@ -19,9 +19,9 @@ class LwsFileExporter : public LwsExporter
  void Begin(void)
  {
 #ifdef SCENE_3
-  fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n"); //FIXME
+  fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n");
 #else
-  fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n"); //FIXME
+  fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n");
 #endif
  }
 
@@ -301,7 +301,6 @@ struct sub_object
   for (int i = 0; i < sub->number_of_keyframes; i++)
    {
     CH_EQ(keyframes[i].index)
-    CH_EQ(keyframes[i].linear)
     CH_EQ(keyframes[i].x)
     CH_EQ(keyframes[i].y)
     CH_EQ(keyframes[i].z)
@@ -311,9 +310,13 @@ struct sub_object
     CH_EQ(keyframes[i].scale_x)
     CH_EQ(keyframes[i].scale_y)
     CH_EQ(keyframes[i].scale_z)
-    CH_EQ(keyframes[i].tension)
-    CH_EQ(keyframes[i].continuity)
-    CH_EQ(keyframes[i].bias)
+    if (sub->number_of_keyframes > 1)
+     {
+      CH_EQ(keyframes[i].linear)
+      CH_EQ(keyframes[i].tension)
+      CH_EQ(keyframes[i].continuity)
+      CH_EQ(keyframes[i].bias)
+     }
    }
 
   for (int i = 0; i < sub->number_of_object_dissolve_keyframes; i++)
@@ -630,7 +633,7 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
 #ifndef NO_LWSFILEEXPORTER
 void LwsExport::ExportScene(const AllNames& names, Translator& translator, const char* filename, const OBJECT_3D_SCENE_DATABASE_ENTRY& scene)
 {
- //scene.print();
+ //scene.print(names.SubObjects);
  LwsFileExporter exporter(names, translator, filename);
  ExportScene(&exporter, &scene, true);
 }
