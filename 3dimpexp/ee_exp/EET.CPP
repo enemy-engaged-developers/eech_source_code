@@ -43,6 +43,7 @@ class EET
  void Clear(void);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex, bool animation);
  const char* GetAnimation(unsigned textindex) const;
+ unsigned GetAnimation(const char* name) const;
  void ExportAnimations(void) const;
 #else
  const char* GetTexture(unsigned index, bool animation, float frame) const;
@@ -163,6 +164,14 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animatio
 const char* EET::GetAnimation(unsigned textindex) const
 {
  return textindex < !animations ? animations[textindex].name : 0;
+}
+
+unsigned EET::GetAnimation(const char* name) const
+{
+ for (unsigned i = 0; i < !animations; i++)
+  if (!strcasecmp(animations[i].name, name))
+   return i;
+ return -1;
 }
 #endif
 

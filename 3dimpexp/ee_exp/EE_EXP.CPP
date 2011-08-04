@@ -6,6 +6,8 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
+#define SAFE_FOPEN_RB
+
 #include "ee3dexp.cpp"
 
 #include "../common/common.h"

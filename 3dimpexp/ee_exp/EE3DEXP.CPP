@@ -192,7 +192,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
       {
        int surface_point_index = current_object_3d_point_list->point;
        int texture_point_index = surface_point_index;
-       int point_index = current_object_3d_surface_point_list [ surface_point_index ].point;
+       int point_index = current_object_3d_surface_point_list[surface_point_index].point;
 
        chunk->AddIndex(point_index);
 
@@ -202,9 +202,9 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
           texture_point_index *= 2;
          vmadt->AddIndex(point_index);
          vmadt->AddIndex(cur_poly);
-         value = current_object_3d_surface_point_texture_list [ texture_point_index ].u;
+         value = current_object_3d_surface_point_texture_list[texture_point_index].u;
          vmadt->AddData(4, &value);
-         value = 1.0f - current_object_3d_surface_point_texture_list [ texture_point_index ].v;
+         value = 1.0f - current_object_3d_surface_point_texture_list[texture_point_index].v;
          vmadt->AddData(4, &value);
         }
        if (current_surface->has_luminosity_texture)
@@ -213,9 +213,9 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
           texture_point_index++;
          vmadl->AddIndex(point_index);
          vmadl->AddIndex(cur_poly);
-         value = current_object_3d_surface_point_texture_list [ texture_point_index ].u;
+         value = current_object_3d_surface_point_texture_list[texture_point_index].u;
          vmadl->AddData(4, &value);
-         value = 1.0f - current_object_3d_surface_point_texture_list [ texture_point_index ].v;
+         value = 1.0f - current_object_3d_surface_point_texture_list[texture_point_index].v;
          vmadl->AddData(4, &value);
         }
 

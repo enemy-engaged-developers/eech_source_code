@@ -143,12 +143,12 @@ class Objects
    fseek(fp, sizeof(int), 1);
    fread(&total_number_of_polygons, sizeof(int), 1, fp);
 
-   object_database_faces =(OBJECT_3D_FACE *) calloc(sizeof(OBJECT_3D_FACE), total_number_of_polygons);
+   object_database_faces = (OBJECT_3D_FACE *)calloc(sizeof(OBJECT_3D_FACE), total_number_of_polygons);
 #ifdef LOAD_NORMALS
-   object_database_point_normals = (OBJECT_3D_HEADING_PITCH_NORMAL *) calloc(sizeof(OBJECT_3D_HEADING_PITCH_NORMAL), total_number_of_point_normals);
+   object_database_point_normals = (OBJECT_3D_HEADING_PITCH_NORMAL *)calloc(sizeof(OBJECT_3D_HEADING_PITCH_NORMAL), total_number_of_point_normals);
 #endif
-   object_database_surfaces =(FACE_SURFACE_DESCRIPTION *) calloc(sizeof(FACE_SURFACE_DESCRIPTION), total_number_of_surfaces);
-   object_database_faces_point_list =(POINT_3D_SHORT_REFERENCE *) calloc(sizeof(POINT_3D_SHORT_REFERENCE), total_number_of_plain_points);
+   object_database_surfaces = (FACE_SURFACE_DESCRIPTION *)calloc(sizeof(FACE_SURFACE_DESCRIPTION), total_number_of_surfaces);
+   object_database_faces_point_list = (POINT_3D_SHORT_REFERENCE *)calloc(sizeof(POINT_3D_SHORT_REFERENCE), total_number_of_plain_points);
   }
 
   current_points = object_database_points;

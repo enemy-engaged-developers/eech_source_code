@@ -50,23 +50,7 @@ struct AllNames
   Cameras <<= "INVALID_CAMERA_INDEX";
   Lights <<= "INVALID_LIGHT_INDEX";
 
-  FILE* file;
-  HKEY key;
-
-  if (RegOpenKey(HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &key ) == ERROR_SUCCESS)
-   {
-    char path[1024];
-    DWORD type;
-    DWORD string_length;
-    string_length = sizeof(path);
-    type = REG_SZ;
-    RegQueryValueEx(key, "Installation Path", NULL, &type, (LPBYTE)path, (LPDWORD)&string_length);
-    strcat(path, "\\COHOKUM\\3DDATA\\bininfo.bin");
-    file = fopen(path, "rb");
-    RegCloseKey ( key );
-   }
-  if (!file)
-   file = safe_fopen("bininfo.bin", "rb");
+  FILE *file = safe_fopen_rb("bininfo.bin");
 
   int total, length;
   char name[1024];
