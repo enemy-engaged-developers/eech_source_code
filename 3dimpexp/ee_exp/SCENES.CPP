@@ -116,10 +116,10 @@ struct OBJECT_3D_DATABASE_ENTRY
   const Names& subobjects;
  };
 
- void print(int offset, Labeler& labeler) const
+ void print(int offset, Translator& translator, Labeler& labeler) const
  {
   printf("% *c", offset * 4, ' ');
-  printf("%i %i [%04X] '%s' CC %i OD %f", sub_object_approximation_in_level, sub_object_approximation_out_level, index, labeler.label(this), collision_contribution, object_dissolve);
+  printf("%i %i [%s] '%s' CC %i OD %f", sub_object_approximation_in_level, sub_object_approximation_out_level, translator(index), labeler.label(this), collision_contribution, object_dissolve);
   if (flag)
    printf(" L %f %f %f %f %f %f", relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum);
   print_keyframes(number_of_keyframes, keyframes);
@@ -129,14 +129,14 @@ struct OBJECT_3D_DATABASE_ENTRY
   //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
   printf("\n");
 
-  print_subobjects(offset, number_of_sub_objects, sub_objects, labeler);
+  print_subobjects(offset, number_of_sub_objects, sub_objects, translator, labeler);
  }
 
- static void print_subobjects(int offset, int number_of_subobjects, const struct OBJECT_3D_DATABASE_ENTRY* sub_objects, Labeler& labeler)
+ static void print_subobjects(int offset, int number_of_subobjects, const struct OBJECT_3D_DATABASE_ENTRY* sub_objects, Translator& translator, Labeler& labeler)
  {
   offset++;
   for (int i = 0; i < number_of_subobjects; i++)
-   sub_objects[i].print(offset, labeler);
+   sub_objects[i].print(offset, translator, labeler);
  }
 };
 
@@ -221,9 +221,9 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 
  struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries;
 
- void print(const Names& names_subobjects) const
+ void print(const Names& names_subobjects, Translator& translator) const
  {
-  printf("Index %04X Shadow %i Collision %i SAI %i\n", index, shadow_polygon_object_index, collision_object_index, shadow_approximation_index);
+  printf("Index %s Shadow %i Collision %i SAI %i\n", translator(index), shadow_polygon_object_index, collision_object_index, shadow_approximation_index);
 
 
   //struct VEC3D shadow_polygon_object_scale;
@@ -235,7 +235,7 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 
   printf("Approximations %i\n", number_of_approximations);
   for (int i = 0; i < number_of_approximations; i++)
-   printf(" (%f, %04X)", approximations[i].distance, approximations[i].object_number);
+   printf(" (%f, %s)", approximations[i].distance, translator(approximations[i].object_number));
   printf("\n");
 
   print_keyframes(number_of_keyframes, keyframes);
@@ -266,7 +266,7 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
   //struct OBJECT_3D_DATABASE_ENTRY *scene_sub_object_array;
   //struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
   OBJECT_3D_DATABASE_ENTRY::Labeler labeler(number_of_sub_object_table_entries, sub_object_indices_table, names_subobjects);
-  OBJECT_3D_DATABASE_ENTRY::print_subobjects(0, number_of_sub_objects, sub_objects, labeler);
+  OBJECT_3D_DATABASE_ENTRY::print_subobjects(0, number_of_sub_objects, sub_objects, translator, labeler);
 
   printf("\n\n");
  }

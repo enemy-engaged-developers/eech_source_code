@@ -157,6 +157,17 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
   fread(&sub_object->relative_roll_maximum, sizeof(float), 1, fp);
   fread(&sub_object->relative_roll_minimum, sizeof(float), 1, fp);
  }
+ else
+ {
+  sub_object->relative_heading_maximum = 0;
+  sub_object->relative_heading_minimum = 0;
+
+  sub_object->relative_pitch_maximum = 0;
+  sub_object->relative_pitch_minimum = 0;
+
+  sub_object->relative_roll_maximum = 0;
+  sub_object->relative_roll_minimum = 0;
+ }
 
  int number_of_keyframes;
  read_keyframes(fp, &number_of_keyframes, &sub_object->keyframes);
