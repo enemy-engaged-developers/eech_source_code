@@ -233,7 +233,7 @@ static const char
 		"Ka-29 Helix B",						// VIEW_TYPE_KA29_HELIX_B
 		"Ka-50 Hokum",							// VIEW_TYPE_KA50_HOKUM
 		"Ka-52 Hokum B",						// VIEW_TYPE_KA52_HOKUM_B
-		"Mi-24D Hind",							// VIEW_TYPE_MI24D_HIND
+		"Mi-24V Hind",							// VIEW_TYPE_MI24D_HIND
 		"Mi-28N Havoc B",						// VIEW_TYPE_MI28N_HAVOC_B
 		"MV-22 Osprey",						// VIEW_TYPE_MV22_OSPREY
 		"OH-58D Kiowa Warrior",				// VIEW_TYPE_OH58D_KIOWA_WARRIOR

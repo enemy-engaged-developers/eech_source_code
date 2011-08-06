@@ -502,7 +502,7 @@ aircraft_data
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
 			THREAT_TYPE_INVALID,													// threat_type
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
-			VIEW_TYPE_MI24D_HIND,												// view_type
+			VIEW_TYPE_MI24V_HIND,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
          3.94,		  																// centre_of_gravity_to_ground_distance
