@@ -2309,8 +2309,22 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 		return -1;
 	}
 
+	if ( *camo != CAMO_REGULAR )
+	{
+		if ( !system_texture_info[index].flags.number_of_camoflage_textures )
+		{
+			// The texture is not marked as not camo, but camo file name is found
+			return -1;
+		}
+
+		if ( *camo == CAMO_DESERT )
+		{
+			index++;
+		}
+	}
+
 	system_textures_referenced[index] = TRUE;
-	return index + (*camo == CAMO_DESERT ? 1 : 0);
+	return index;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

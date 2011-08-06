@@ -501,10 +501,6 @@ long initialise_internal_debug_system ( void * data )
 
 void debug_log (const char *msg, ...)
 {
-#if 0
-	FILE
-		*fp;
-#endif
 	static char
 		buffer[1000];
 
@@ -598,16 +594,20 @@ void debug_log (const char *msg, ...)
 		}
 
 #if 0
-		fp = fopen ( debug_log_file_name, "a" );
-
-		if ( fp )
 		{
+			FILE
+				*fp;
 
-			fwrite ( buffer, 1, strlen ( buffer ), fp );
+			fp = fopen ( debug_log_file_name, "a" );
 
-			fwrite ( "\n", 1, 1, fp );
+			if ( fp )
+			{
+				fwrite ( buffer, 1, strlen ( buffer ), fp );
 
-			fclose ( fp );
+				fwrite ( "\n", 1, 1, fp );
+
+				fclose ( fp );
+			}
 		}
 #endif
 	}
