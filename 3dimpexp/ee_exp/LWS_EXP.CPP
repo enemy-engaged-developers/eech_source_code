@@ -428,7 +428,7 @@ struct sub_object
    int i = 1;
    for (int j = 1; j < number_of_lods; j++)
     {
-     if (lods[j].index == lods[i - 1].index && lods[j].sub_object_approximation_in_level <= lods[i - 1].sub_object_approximation_out_level)
+     if (lods[j].index == lods[i - 1].index && lods[j].sub_object_approximation_in_level == lods[i - 1].sub_object_approximation_out_level + 1)
       {
        if (lods[j].sub_object_approximation_out_level > lods[i - 1].sub_object_approximation_out_level)
         lods[i - 1].sub_object_approximation_out_level = lods[j].sub_object_approximation_out_level;
