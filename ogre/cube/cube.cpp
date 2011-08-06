@@ -16,6 +16,9 @@ void error(const char* msg, ...)
 	abort();
 }
 
+#define safe_fopen_rb(x) safe_fopen(x, "rb")
+
+
 #define snprintf sprintf_s
 
 #define PI (3.14159265359f)
