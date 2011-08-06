@@ -633,7 +633,7 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
 #ifndef NO_LWSFILEEXPORTER
 void LwsExport::ExportScene(const AllNames& names, Translator& translator, const char* filename, const OBJECT_3D_SCENE_DATABASE_ENTRY& scene)
 {
- //scene.print(names.SubObjects);
+ //scene.print(names.SubObjects, translator);
  LwsFileExporter exporter(names, translator, filename);
  ExportScene(&exporter, &scene, true);
 }

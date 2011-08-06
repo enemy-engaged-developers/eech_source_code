@@ -13,8 +13,8 @@
 #include "../common/common.h"
 #include "names.cpp"
 #include "textures.cpp"
-#include "scenes.cpp"
 #include "trans.cpp"
+#include "scenes.cpp"
 #include "lws_exp.cpp"
 
 int main(void)

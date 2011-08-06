@@ -11,8 +11,8 @@
 #include "../common/common.h"
 #include "../ee_exp/ee3dexp.cpp"
 #include "../ee_exp/names.cpp"
-#include "../ee_exp/scenes.cpp"
 #include "../ee_exp/trans.cpp"
+#include "../ee_exp/scenes.cpp"
 #include "../ee_exp/lws_exp.cpp"
 
 class Scene : public OBJECT_3D_SCENE_DATABASE_ENTRY
