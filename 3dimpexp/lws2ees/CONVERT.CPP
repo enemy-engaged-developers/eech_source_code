@@ -452,7 +452,7 @@ class Convert
    }
 
   if (lod == hierobj->object->lods.lods.end())
-   hierobj->last_lod = hierobj->object->filename.empty() ? 0 : lods.size();
+   hierobj->last_lod = hierobj->object->filename.empty() && hierobj->object->lods.lods.empty() ? 0 : lods.size();
   else
    for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
     if (itor->distance == (int)lod->distance)
@@ -495,7 +495,7 @@ class Convert
       subobj.filename = cur->filename;
       subobj.lod_min = cur - slods.begin();
       subobj.lod_max = next - slods.begin() - 1;
-      if (subobj.lod_min <= subobject->lod_max && subobj.lod_max >= subobject->lod_min)
+      if (subobj.lod_min <= subobject->lod_max && subobj.lod_max >= subobject->lod_min && (!subobj.filename.empty() || next == slods.end()))
        {
         subobj.lod_min = std::max(subobj.lod_min, subobject->lod_min);
         subobj.lod_max = std::min(subobj.lod_max, subobject->lod_max);
