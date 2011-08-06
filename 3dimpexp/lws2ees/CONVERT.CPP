@@ -519,7 +519,7 @@ class Convert
 
  void print(const HierObj* hierobj, int depth)
  {
-  fprintf(log, "% *s%s (%s)", 2 * depth++, "", hierobj->object->print_name.c_str(), hierobj->object->search.c_str());
+  fprintf(log, "% *s%s", 2 * depth++, "", hierobj->object->print_name.c_str());
   for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end(); ++lod)
    fprintf(log, " %f '%s'", lod->distance, lod->filename.c_str());
   fprintf(log, "\n");
