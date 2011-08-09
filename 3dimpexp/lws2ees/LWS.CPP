@@ -84,12 +84,12 @@ struct Motion
 
 struct LOD
 {
- float distance;
+ int distance;
  std::string filename;
 
  void Print(void) const
  {
-  printf("%f\n", distance);
+  printf("%i.0\n", distance);
   printf("\"%s\"\n", filename.c_str());
  }
 };
@@ -562,7 +562,7 @@ class LwsFile : public Lws
      {
       LOD lod;
       gets();
-      sscanf(str, "%f", &lod.distance);
+      sscanf(str, "%i", &lod.distance);
       gets();
       if (str[0] && str[1])
        {

@@ -181,10 +181,10 @@ class Convert
 
     if (!itor->lods.lods.empty())
      {
-      if ((int)itor->lods.lods[0].distance <= 0)
+      if (itor->lods.lods[0].distance <= 0)
         error("First LOD is too close for object %s", itor->print_name.c_str());
       for (size_t i = 1; i < itor->lods.lods.size(); i++)
-       if ((int)itor->lods.lods[i - 1].distance >= (int)itor->lods.lods[i].distance)
+       if (itor->lods.lods[i - 1].distance >= itor->lods.lods[i].distance)
         error("Invalid distances for LODs %i and %i for object %s", i - 1, i, itor->print_name.c_str());
       if (itor->filename.empty())
        warning("Null object %s with LODs", itor->print_name.c_str());
@@ -259,7 +259,7 @@ class Convert
     hierobj->object = &*itor;
 
     for (PluginLod::LODs::const_iterator itor(hierobj->object->lods.lods.begin()); itor != hierobj->object->lods.lods.end(); ++itor)
-     distances.insert((int)itor->distance);
+     distances.insert(itor->distance);
 
     if (itor->motion.parent)
      {
@@ -421,7 +421,7 @@ class Convert
 
   for (Lods::iterator itor(lods.begin()); itor != lods.end(); ++itor)
    {
-    for (PluginLod::LODs::const_iterator lod(root->object->lods.lods.begin()); lod != root->object->lods.lods.end() && (int)lod->distance <= itor->distance; ++lod)
+    for (PluginLod::LODs::const_iterator lod(root->object->lods.lods.begin()); lod != root->object->lods.lods.end() && lod->distance <= itor->distance; ++lod)
      filename = lod->filename;
     itor->filename = filename;
    }
@@ -455,7 +455,7 @@ class Convert
    hierobj->last_lod = hierobj->object->filename.empty() && hierobj->object->lods.lods.empty() ? 0 : lods.size();
   else
    for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
-    if (itor->distance == (int)lod->distance)
+    if (itor->distance == lod->distance)
      hierobj->last_lod = itor - lods.begin();
 
   for (HierObjs::const_iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
@@ -480,7 +480,7 @@ class Convert
     std::string filename = hierobj->object->filename;
     for (Lods::iterator itor(slods.begin()); itor != slods.end(); ++itor)
      {
-      for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end() && (int)lod->distance <= itor->distance; ++lod)
+      for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end() && lod->distance <= itor->distance; ++lod)
        filename = lod->filename;
       itor->filename = filename;
      }
@@ -521,7 +521,7 @@ class Convert
  {
   fprintf(log, "% *s%s", 2 * depth++, "", hierobj->object->print_name.c_str());
   for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end(); ++lod)
-   fprintf(log, " %f '%s'", lod->distance, lod->filename.c_str());
+   fprintf(log, " %i '%s'", lod->distance, lod->filename.c_str());
   fprintf(log, "\n");
   for (HierObjs::const_iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
    print(*itor, depth);
@@ -534,10 +534,20 @@ class Convert
    print(*itor, depth);
  }
 
+ int time(float t) const
+ {
+  return static_cast<int>(t * fps + 0.5);
+ }
+
 
  void fw(int num) const
  {
   fwrite(&num, sizeof(num), 1, fp);
+ }
+
+ void fw(size_t num) const
+ {
+  fw(static_cast<int>(num));
  }
 
  void fw(float num) const
@@ -553,10 +563,10 @@ class Convert
  void save_dissolve(const Channel& channel) const
  {
   fw(1.0f);
-  fw(static_cast<int>(channel.keys.size()));
+  fw(channel.keys.size());
   for (Channel::Keys::const_iterator itor(channel.keys.begin()); itor != channel.keys.end(); ++itor)
    {
-    fw(static_cast<int>(floor(itor->time * fps + 0.5)));
+    fw(time(itor->time));
     fw(itor->spantype ? 1 : 0);
     fw(itor->value);
     fw(itor->p[0]);
@@ -572,16 +582,16 @@ class Convert
    error("Empty motion for %s", general_object.print_name.c_str());
   for (int i = 1; i < motion.channels[0].keys.size(); i++)
    {
-    int cur = static_cast<int>(motion.channels[0].keys[i].time * fps);
-    int prev = static_cast<int>(motion.channels[0].keys[i - 1].time * fps);
+    int cur = time(motion.channels[0].keys[i].time);
+    int prev = time(motion.channels[0].keys[i - 1].time);
     if (cur <= prev)
      error("Invalid motion for %s: time is not increasing in channel 0 between keys %i (%i) and %i (%i)", general_object.print_name.c_str(), i - 1, prev, i, cur);
    }
 
-  fw(static_cast<int>(motion.channels[0].keys.size()));
+  fw(motion.channels[0].keys.size());
   for (int i = 0; i < motion.channels[0].keys.size(); i++)
    {
-    fw(static_cast<int>(motion.channels[0].keys[i].time * fps));
+    fw(time(motion.channels[0].keys[i].time));
     fw(motion.channels[0].keys[i].spantype ? 1 : 0);
     fw(motion.channels[0].keys[i].value);
     fw(motion.channels[1].keys[i].value);
@@ -643,7 +653,7 @@ class Convert
  void save_subobjects(const SubObject& subobject) const
  {
   save_indices(subobject);
-  fw(static_cast<int>(subobject.subobjects.size()));
+  fw(subobject.subobjects.size());
   for (SubObjects::const_iterator itor(subobject.subobjects.begin()); itor != subobject.subobjects.end(); ++itor)
    save_subobject(*itor);
  }
@@ -654,7 +664,7 @@ class Convert
   int version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
   fw(version);
 
-  fw(static_cast<int>(cameras.size()));
+  fw(cameras.size());
   for (CameraDescs::const_iterator itor(cameras.begin()); itor != cameras.end(); ++itor)
    {
     fw(itor->camera->name.c_str());
@@ -665,7 +675,7 @@ class Convert
     save_animation(*itor->camera);
    }
 
-  fw(static_cast<int>(links.size()));
+  fw(links.size());
   for (Links::const_iterator itor(links.begin()); itor != links.end(); ++itor)
    {
     fw((*itor)->search.c_str());
@@ -677,7 +687,7 @@ class Convert
     fw((*itor)->motion.channels[5].keys.front().value);
    }
 
-  fw(static_cast<int>(sprite_lights.size()));
+  fw(sprite_lights.size());
   for (LightDescs::const_iterator itor(sprite_lights.begin()); itor != sprite_lights.end(); ++itor)
    {
     const Light* light = itor->light;
@@ -695,7 +705,7 @@ class Convert
 
   if (version <= -2)
    {
-    fw(static_cast<int>(ambient_lights.size()));
+    fw(ambient_lights.size());
     for (LightDescs::const_iterator itor(ambient_lights.begin()); itor != ambient_lights.end(); ++itor)
      {
       const Light* light = itor->light;
@@ -707,7 +717,7 @@ class Convert
       fw(light->name.c_str());
      }
 
-    fw(static_cast<int>(distant_lights.size()));
+    fw(distant_lights.size());
     for (LightDescs::const_iterator itor(distant_lights.begin()); itor != distant_lights.end(); ++itor)
      {
       const Light* light = itor->light;
@@ -728,12 +738,12 @@ class Convert
 
   fw(0);
 
-  fw(static_cast<int>(lods.size()));
+  fw(lods.size());
   fw(main.object ? main.object->filename.c_str() : "");
   for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
    {
     fw(itor->filename.c_str());
-    fw((float)itor->distance);
+    fw(static_cast<float>(itor->distance));
    }
 
   if (shadow && shadow->layer)
