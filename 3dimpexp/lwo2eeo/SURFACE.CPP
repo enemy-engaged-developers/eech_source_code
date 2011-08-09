@@ -579,6 +579,7 @@ struct RSurface
    if (ptr)
     *ptr = '\0';
   }
+  strupr(texture);
  }
  unsigned ProcessAnimation(const char* comment, const char* tag, char* name)
  {

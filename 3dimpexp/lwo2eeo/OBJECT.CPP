@@ -2,6 +2,18 @@ class OBJECT_3D : private Convert
 {
  private:
 
+ void CheckCamo(void)
+ {
+  for (unsigned i = 0; i < !rs; i++)
+   if (rs[i].texture[0])
+    for (unsigned j = i + 1; j < !rs; j++)
+     if (!strcmp(rs[i].texture, rs[j].texture) && rs[i].camo != rs[j].camo)
+      if (rs[i].camo)
+       error("Surface '%s' says texture '%s' is camo but surface '%s' says it's not", &rs[i].s->name, rs[i].texture, &rs[j].s->name);
+      else
+       error("Surface '%s' says texture '%s' is not camo but surface '%s' says it is", &rs[i].s->name, rs[i].texture, &rs[j].s->name);
+ }
+
  void Create(void)
  {
   Array<RNormal> normals;
@@ -352,6 +364,7 @@ class OBJECT_3D : private Convert
  OBJECT_3D(const char* lwo, const char* eeo, const char* log)
    : Convert(lwo, log)
  {
+  CheckCamo();
   Create();
   Write(eeo);
   Clear();
