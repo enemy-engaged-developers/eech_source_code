@@ -1625,12 +1625,12 @@ int read_object ( object_3d *obj, const char* filename )
 			if ( !get_nul_string ( texture_name, sizeof ( texture_name ), file, TRUE ) )
 				break;
 			if ( *texture_name )
-				obj->surfaces[i].texture_index = obj->surfaces[i].texture_animation ? add_new_animation ( texture_name ) : add_new_texture ( texture_name );
+				obj->surfaces[i].texture_index = obj->surfaces[i].texture_animation ? add_new_animation ( texture_name ) : add_new_texture ( texture_name, filename );
 
 			if ( !get_nul_string ( texture_name, sizeof ( texture_name ), file, TRUE ) )
 				break;
 			if ( *texture_name )
-				obj->surfaces[i].luminosity_texture_index = obj->surfaces[i].luminosity_texture_animation ? add_new_animation ( texture_name ) : add_new_texture ( texture_name );
+				obj->surfaces[i].luminosity_texture_index = obj->surfaces[i].luminosity_texture_animation ? add_new_animation ( texture_name ) : add_new_texture ( texture_name, filename );
 		}
 	}
 

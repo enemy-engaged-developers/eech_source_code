@@ -490,18 +490,20 @@ void initialise_3d_objects_info ( const char *directory )
 					file;
 				texture_animation_information
 					texture_animation;
+				char
+					line[1024];
 
 				texture_animation.number_of_frames = texture_animation.current_frame = 0;
 				texture_animation.texture_indices = NULL;
 				file = safe_fopen ( filename, "r" );
-				while ( fgets ( filename, sizeof ( filename ), file ) && *filename )
+				while ( fgets ( line, sizeof ( line ), file ) && *line )
 				{
 					char
 						*last;
-					last = filename + strlen ( filename ) - 1;
+					last = line + strlen ( line ) - 1;
 					if ( *last == '\n' )
 						*last = '\0';
-					if ( !*filename )
+					if ( !*line )
 						break;
 					if ( texture_animation.number_of_frames == texture_animation.current_frame )
 					{
@@ -517,7 +519,7 @@ void initialise_3d_objects_info ( const char *directory )
 						}
 						texture_animation.texture_indices = new_texture_indices;
 					}
-					texture_animation.texture_indices[texture_animation.number_of_frames++] = add_new_texture ( filename );
+					texture_animation.texture_indices[texture_animation.number_of_frames++] = add_new_texture ( line, filename );
 				}
 				safe_fclose ( file );
 

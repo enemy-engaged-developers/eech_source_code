@@ -66,7 +66,7 @@ static void debug_fatal(...)
 #define set_3d_rain_special_snow_flag(x)
 #define set_object_3d_texture_camoflage_by_name(x)
 #define set_object_3d_reflection_texture_map(x)
-#define add_new_texture(x) -1
+#define add_new_texture(x, y) -1
 static struct
 {
 	int gouraud_shading;

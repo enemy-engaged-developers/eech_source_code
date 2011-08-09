@@ -4617,7 +4617,7 @@ void read_map_info_data ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int add_new_texture(char* texture_name)
+int add_new_texture(const char* texture_name, const char* source)
 {
 	int
 		offset,
@@ -4645,11 +4645,11 @@ int add_new_texture(char* texture_name)
 	{
 		if ( camo && !system_texture_info[texture_index].flags.number_of_camoflage_textures )
 		{
-			debug_fatal ( "Clash between new camo texture and existing non-camo one '%s'", name );
+			debug_fatal ( "Clash between new camo texture and existing non-camo one '%s' in %s", name, source );
 		}
 		if ( texture_index > TEXTURE_INDEX_LAST_DEFAULT_INDEX && !camo && system_texture_info[texture_index].flags.number_of_camoflage_textures )
 		{
-			debug_fatal ( "Clash between new non-camo texture and existing camo one '%s'", name );
+			debug_fatal ( "Clash between new non-camo texture and existing camo one '%s' in %s", name, source );
 		}
 		return texture_index;
 	}
