@@ -445,6 +445,8 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
     }
 
    char comment[256] = "";
+   if (current_surface->textured && eet.IsCamo(current_surface->texture_index, current_surface->texture_animation))
+    strcat(comment, "camo= ");
    if (current_surface->detail)
     strcat(comment, "detail= ");
    if (current_surface->texture_animation)

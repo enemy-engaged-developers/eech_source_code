@@ -11,6 +11,7 @@ class EET
  {
   char name[64];
 #ifndef EET_NO_EXPORT
+  bool camo;
   unsigned long index;
 #endif
  };
@@ -41,6 +42,7 @@ class EET
  unsigned Append(const char* name);
 #ifndef EET_NO_EXPORT
  void Clear(void);
+ bool IsCamo(unsigned textindex, bool animation);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex, bool animation);
  const char* GetAnimation(unsigned textindex) const;
  unsigned GetAnimation(const char* name) const;
@@ -106,6 +108,11 @@ void EET::Clear(void)
  for (unsigned i = 0; i < !animations; i++)
   animations[i].index = ~0u;
  index = 0;
+}
+
+bool EET::IsCamo(unsigned textindex, bool animation)
+{
+  return !animation && textures[textindex].camo;
 }
 
 unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animation)
@@ -178,10 +185,17 @@ unsigned EET::GetAnimation(const char* name) const
 unsigned EET::Append(const char* name)
 {
  Texture texture;
+ strcpy(texture.name, name);
 #ifndef EET_NO_EXPORT
+ texture.camo = false;
+ unsigned len = strlen(texture.name);
+ if (len > 2 && !strcmp(texture.name + len - 2, "-D"))
+  {
+   texture.name[len - 2] = '\0';
+   texture.camo = true;
+  }
  texture.index = ~0u;
 #endif
- strcpy(texture.name, name);
  textures.Append(texture);
  return !textures - 1;
 }
