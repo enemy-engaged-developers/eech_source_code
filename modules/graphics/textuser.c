@@ -246,6 +246,8 @@ int
 unsigned char
 	texture_image_data[MAX_TEXTURE_WIDTH*MAX_TEXTURE_HEIGHT*4];
 
+char
+	new_texture_sources[MAX_TEXTURES][260];
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4645,11 +4647,11 @@ int add_new_texture(const char* texture_name, const char* source)
 	{
 		if ( camo && !system_texture_info[texture_index].flags.number_of_camoflage_textures )
 		{
-			debug_fatal ( "Clash between new camo texture and existing non-camo one '%s' in %s", name, source );
+			debug_fatal ( "Texture '%s': %s defined it as non-camo but %s says it's camo", name, new_texture_sources[texture_index], source );
 		}
 		if ( texture_index > TEXTURE_INDEX_LAST_DEFAULT_INDEX && !camo && system_texture_info[texture_index].flags.number_of_camoflage_textures )
 		{
-			debug_fatal ( "Clash between new non-camo texture and existing camo one '%s' in %s", name, source );
+			debug_fatal ( "Texture '%s': %s defined it as camo but %s says it's non-camo", name, new_texture_sources[texture_index], source );
 		}
 		return texture_index;
 	}
@@ -4661,6 +4663,7 @@ int add_new_texture(const char* texture_name, const char* source)
 	}
 
 	strcpy ( system_texture_names[number_of_system_textures], name );
+	strcpy ( new_texture_sources[number_of_system_textures], source );
 	if ( camo )
 	{
 		debug_log ( "Adding texture %i '%s' camo main", number_of_system_textures, name );
@@ -4671,6 +4674,7 @@ int add_new_texture(const char* texture_name, const char* source)
 		add_texture_to_name_hash ( number_of_system_textures++ );
 
 		strcpy ( system_texture_names[number_of_system_textures], name );
+		strcpy ( new_texture_sources[number_of_system_textures], source );
 	}
 
 	debug_log ( "Adding texture %i '%s'", number_of_system_textures, system_texture_names[number_of_system_textures] );
