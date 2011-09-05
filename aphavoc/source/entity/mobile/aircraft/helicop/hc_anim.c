@@ -1164,8 +1164,23 @@ void animate_helicopter_suspension (entity *en)
 	{
 		raw = (helicopter *) get_local_entity_data (en);
 
-		if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
-			animate_hind_suspension(raw->ac.inst3d);
+		switch (raw->ac.object_3d_shape)
+		{
+			case OBJECT_3D_AH64D_APACHE_LONGBOW:
+				{
+					animate_apache_suspension(raw->ac.inst3d);
+					break;
+				}
+			case OBJECT_3D_MI24_HIND:
+				{
+					animate_hind_suspension(raw->ac.inst3d);
+					break;
+				}
+			default:
+				{
+					break;
+				}
+		}
 	}
 }
 

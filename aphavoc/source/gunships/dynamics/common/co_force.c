@@ -734,9 +734,9 @@ void draw_dynamic_forces (void)
 			pos.y += current_flight_dynamics->position.y + 0.25;
 			pos.z += current_flight_dynamics->position.z;
 
-			current_flight_dynamics->dynamic_forces [index].linear_force *= 10;
+			//current_flight_dynamics->dynamic_forces [index].linear_force *= 10;
 
-			size = bound (current_flight_dynamics->dynamic_forces [index].linear_force * 0.25, -4.0, 4.0);
+			size = bound (current_flight_dynamics->dynamic_forces [index].linear_force * 2.5, -4.0, 4.0);
 
 			pos.y += 2.0;
 

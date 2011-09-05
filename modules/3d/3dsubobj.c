@@ -1161,3 +1161,28 @@ object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsig
 
 	return search.result_sub_object;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int find_object_3d_sub_objects ( object_3d_instance *search_object, const object_3d_sub_object_search_batch *search, int number_of_sub_objects )
+{
+	object_3d_sub_object_search_data
+		search_data;
+
+	search_data.search_object = search_object;
+	search_data.search_depth = 0;
+
+	for ( ; number_of_sub_objects--; search++ )
+	{
+		search_data.sub_object_index = search->sub_object_index;
+		if ( find_object_3d_sub_object ( &search_data ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+		{
+			return FALSE;
+		}
+		*search->result_sub_object = search_data.result_sub_object;
+	}
+
+	return TRUE;
+}
