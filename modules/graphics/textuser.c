@@ -3664,7 +3664,7 @@ void load_texture_override ( void )
 				// need to provide all these textures ourselves
 				if ( count >= TEXTURE_INDEX_LAST && count < number_of_system_textures )
 				{
-					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s", count, get_system_texture_name ( count ) );
+					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s (object %s)", count, get_system_texture_name ( count ), new_texture_sources[count] );
 				}
 				break;
 			}
