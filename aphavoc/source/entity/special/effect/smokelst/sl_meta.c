@@ -899,11 +899,12 @@ static void import_meta_smoke_list_database (void)
 							continue;
 						}
 						*ptr = '\0';
-						co->trail_type = get_smoke_type_by_name(name);
-						if (co->trail_type < 0)
+						count = get_smoke_type_by_name(name);
+						if (count < 0)
 						{
 							continue;
 						}
+						co->trail_type = (smoke_list_types)count;
 						co->entity_sub_type = -1;
 						for (count = ENTITY_SUB_TYPE_EFFECT_PARTICLE; count < NUM_ENTITY_SUB_TYPE_EFFECTS; count++)
 						{

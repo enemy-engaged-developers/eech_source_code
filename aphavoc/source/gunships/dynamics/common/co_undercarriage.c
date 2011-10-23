@@ -459,7 +459,7 @@ static void apply_suspension_forces(void)
 						force_diff,
 						max_force_change = get_model_delta_time() * 10.0;
 
-					max_force = min(wheel_load * 2.5f, 0.5 * G);  // depends on load on wheel
+					max_force = min(wheel_load * 2.5f, 0.5f * G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->resistance_force;
@@ -800,9 +800,9 @@ void animate_apache_suspension(object_3d_instance* inst3d)
 	if (!find_object_3d_sub_objects(inst3d, search, ARRAY_LENGTH(search)))
 		return;
 
-	apache_set(&apache_main_gear, min(right->suspension_compression - 0.25, right->max_suspension_compression), right_arm, right_cylinder, right_piston);
-	apache_set(&apache_main_gear, min(left->suspension_compression - 0.25, left->max_suspension_compression), left_arm, left_cylinder, left_piston);
-	apache_set(&apache_tail_gear, min(tail->suspension_compression - 0.3, tail->max_suspension_compression), tail_arm, tail_cylinder, tail_piston);
+	apache_set(&apache_main_gear, min(right->suspension_compression - 0.25f, right->max_suspension_compression), right_arm, right_cylinder, right_piston);
+	apache_set(&apache_main_gear, min(left->suspension_compression - 0.25f, left->max_suspension_compression), left_arm, left_cylinder, left_piston);
+	apache_set(&apache_tail_gear, min(tail->suspension_compression - 0.3f, tail->max_suspension_compression), tail_arm, tail_cylinder, tail_piston);
 	tail_fork->relative_heading = tail->turn_angle;
 }
 

@@ -2107,7 +2107,7 @@ static void std_fov_event(event *ev)
 static void hi_fov_event(event *ev)
 {
 	// Casm 08OCT05 Max fov depends on gunship type
-	set_view_angles (get_max_fov ());
+	set_view_angles ( rad (get_max_fov ()) );
 }
 
 static void increase_fov_event(event* ev)
