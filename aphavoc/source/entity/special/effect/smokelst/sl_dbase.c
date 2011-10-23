@@ -87,6 +87,9 @@ smoke_list_data
 #define SMOKE_LIST_DECLARATION(x)
 #define SMOKE_LIST(x) #x,
 #define SMOKE_LIST_(x) NULL
+#define META_SMOKE_LIST_DECLARATION(x)
+#define META_SMOKE_LIST(x)
+#define META_SMOKE_LIST_(x)
 const char* smoke_list_names[] =
 {
 #include "sl_types.h"
@@ -94,6 +97,9 @@ const char* smoke_list_names[] =
 #undef SMOKE_LIST_DECLARATION
 #undef SMOKE_LIST
 #undef SMOKE_LIST_
+#undef META_SMOKE_LIST_DECLARATION
+#undef META_SMOKE_LIST
+#undef META_SMOKE_LIST_
 
 int get_smoke_type_by_name ( const char *name )
 {
@@ -123,7 +129,7 @@ static void export_smoke_list_database (void)
 		*file;
 	int
 		count;
-	smoke_list_data
+	const smoke_list_data
 		*smoke;
 
 	file = safe_fopen (SMOKE_LIST_DATABASE_FILENAME, "w");

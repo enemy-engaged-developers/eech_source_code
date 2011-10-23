@@ -83,19 +83,19 @@ meta_explosion_data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void initialise_misc_explosion_database();
+static void initialise_misc_explosion_database(void);
 
-static void initialise_armour_piercing_explosion_database();
+static void initialise_armour_piercing_explosion_database(void);
 
-static void initialise_high_explosive_explosion_database();
+static void initialise_high_explosive_explosion_database(void);
 
-static void initialise_earth_explosion_database();
+static void initialise_earth_explosion_database(void);
 
-static void initialise_water_explosion_database();
+static void initialise_water_explosion_database(void);
 
-static void initialise_object_dust_explosion_database();
+static void initialise_object_dust_explosion_database(void);
 
-static void initialise_object_explosive_explosion_database();
+static void initialise_object_explosive_explosion_database(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,9 +126,9 @@ static void export_explosion_database(void)
 	int
 		count1,
 		count2;
-	meta_explosion_data
+	const meta_explosion_data
 		*ex;
-	meta_explosion_component
+	const meta_explosion_component
 		*co;
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "w");
@@ -255,6 +255,10 @@ static void import_explosion_database(void)
 	meta_explosion_component
 		*co;
 	int
+		red,
+		green,
+		blue,
+		alpha,
 		additive,
 		blast_hemisphere_only;
 
@@ -270,18 +274,20 @@ static void import_explosion_database(void)
 			{
 				*ptr = '\0';
 			}
-			ptr = strchr (buf, ';');
-			if (!ptr)
-			{
-				continue;
-			}
-			name = ptr + 1;
-			ptr = strchr (name, ';');
+			ptr = strchr(buf, ';');
 			if (!ptr)
 			{
 				continue;
 			}
 			*ptr = '\0';
+			name = ptr + 1;
+			ptr = strchr(name, ';');
+			if (!ptr)
+			{
+				continue;
+			}
+			*ptr = '\0';
+			ptr++;
 
 			type = NUM_EXPLOSION_COMPONENT_TYPES;
 			if (!strcmp(buf, "SPRITES"))
@@ -356,13 +362,17 @@ static void import_explosion_database(void)
 							"%f;%f;%f;%f;%f;"
 							"%f;%f",
 							&co->sprite_count,
-							&co->red, &co->green, &co->blue, &co->alpha,
+							&red, &green, &blue, &alpha,
 							&additive, &blast_hemisphere_only,
 							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, &co->scale_max,
 							&co->blast_radius, &co->animation_frequency) != 14)
 						{
 							continue;
 						}
+						co->red = (unsigned char)bound (red, 0, 255);
+						co->green = (unsigned char)bound (green, 0, 255);
+						co->blue = (unsigned char)bound (blue, 0, 255);
+						co->alpha = (unsigned char)bound (alpha, 0, 255);
 						co->additive = additive != 0;
 						co->blast_hemisphere_only = blast_hemisphere_only != 0;
 						break;
@@ -381,13 +391,17 @@ static void import_explosion_database(void)
 							"%f;%f;%f;%f;%f;"
 							"%f",
 							&co->object_count,
-							&co->red, &co->green, &co->blue, &co->alpha,
+							&red, &green, &blue, &alpha,
 							&additive, &blast_hemisphere_only,
-							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, co->scale_max,
+							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, &co->scale_max,
 							&co->blast_radius) != 13)
 						{
 							continue;
 						}
+						co->red = (unsigned char)bound (red, 0, 255);
+						co->green = (unsigned char)bound (green, 0, 255);
+						co->blue = (unsigned char)bound (blue, 0, 255);
+						co->alpha = (unsigned char)bound (alpha, 0, 255);
 						co->additive = additive != 0;
 						co->blast_hemisphere_only = blast_hemisphere_only != 0;
 						break;
@@ -435,19 +449,22 @@ static void import_explosion_database(void)
 						co->sound_type = -1;
 						for (count = 0; count < NUM_SOUND_SAMPLE_INDICES; count++)
 						{
-							char
-								buf[128],
-								*ptr;
-							strcpy(buf, application_sound_effects[count].name);
-							ptr = strchr(buf, '.');
-							if (ptr)
+							if (application_sound_effects[count].name)
 							{
-								*ptr = '\0';
-							}
-							if (!stricmp(buf, name))
-							{
-								co->sound_type = count;
-								break;
+								char
+									buf[128],
+									*ptr;
+								strcpy(buf, application_sound_effects[count].name);
+								ptr = strchr(buf, '.');
+								if (ptr)
+								{
+									*ptr = '\0';
+								}
+								if (!stricmp(buf, name))
+								{
+									co->sound_type = count;
+									break;
+								}
 							}
 						}
 						if (co->sound_type < 0)
@@ -456,7 +473,7 @@ static void import_explosion_database(void)
 						}
 						if (!sscanf(ptr,
 							"%f",
-							co->sound_volume) != 1)
+							&co->sound_volume) != 1)
 						{
 							continue;
 						}
@@ -478,7 +495,7 @@ static void import_explosion_database(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_explosion_database()
+void initialise_explosion_database(void)
 {
 	initialise_misc_explosion_database();
 
@@ -511,7 +528,7 @@ void initialise_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_misc_explosion_database()
+void initialise_misc_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -673,7 +690,7 @@ void initialise_misc_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_armour_piercing_explosion_database()
+void initialise_armour_piercing_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -900,7 +917,7 @@ void initialise_armour_piercing_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_high_explosive_explosion_database()
+void initialise_high_explosive_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -1428,7 +1445,7 @@ void initialise_high_explosive_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_earth_explosion_database()
+void initialise_earth_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -1628,7 +1645,7 @@ void initialise_earth_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_water_explosion_database()
+void initialise_water_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -1831,7 +1848,7 @@ void initialise_water_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_object_dust_explosion_database()
+void initialise_object_dust_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -2136,7 +2153,7 @@ void initialise_object_dust_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_object_explosive_explosion_database()
+void initialise_object_explosive_explosion_database(void)
 {
 
 	meta_explosion_component
@@ -2702,7 +2719,7 @@ void initialise_object_explosive_explosion_database()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void deinitialise_explosion_database()
+void deinitialise_explosion_database(void)
 {
 
 	meta_explosion_data
