@@ -281,6 +281,9 @@ void initialise_ui_font (void)
 		debug_log ("UI_FONT: %d %d", current_font_resolution_width, current_font_resolution_height );
 	#endif
 
+	unlink ( UI_FONT_HEADER_FILE );
+	unlink ( UI_FONT_DATA_FILE );
+
 	memset ( ui_fonts, 0, sizeof ( ui_fonts ) );
 
 	//
