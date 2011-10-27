@@ -127,10 +127,10 @@ int
 	half_texture_graphics = FALSE;
 
 // VJ 04/12/12 desert camouflage texture name indicator
-#define DESERTIND_1 "_DESERT"
-#define DESERTIND_2 "-D"
+#define TEXTSUFFIX_SIZE 2
+#define TEXTSUFFIX_DESERT "-D"
 //VJ 051011 add winter textures
-#define DESERTIND_3 "-W"
+#define TEXTSUFFIX_WINTER "-W"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -249,6 +249,8 @@ unsigned char
 char
 	new_texture_sources[MAX_TEXTURES][260];
 
+static int
+	texture_camoflage;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VJ 050618 structures for custom textures
@@ -356,6 +358,11 @@ static void initialize_terrain_texture_scales ( const char *mapname );
 
 //VJ 04/12/12 comment: set = 0 for default or 1 for desert
 void set_texture_camoflage ( int set )
+{
+	texture_camoflage = set;
+}
+
+static void real_set_texture_camoflage ( int set )
 {
 	int
 		count;
@@ -479,8 +486,8 @@ int get_system_texture_index ( const char *name )
 	strupr ( real_name );
 
 	camo = 0;
-	offset = length - ( int ) sizeof ( DESERTIND_2 ) + 1;
-	if ( offset > 0 && !memcmp ( real_name + offset, DESERTIND_2, sizeof ( DESERTIND_2 ) ) )
+	offset = length - TEXTSUFFIX_SIZE;
+	if ( offset > 0 && !memcmp ( real_name + offset, TEXTSUFFIX_DESERT, TEXTSUFFIX_SIZE ) )
 	{
 		real_name[offset] = 0;
 		camo = 1;
@@ -2253,7 +2260,6 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 		real_name[128];
 
 	char
-		*p,
 		*ptr;
 
 	int
@@ -2267,41 +2273,23 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 	}
 	*ptr = '\0';
 
-
-	//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
-	if (p = strstr(real_name, "-BIN"))
-	{
-		*p = '\0';
-	}
-
-	//VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
-	if (p = strstr(real_name, "-PAL"))
-	{
-		*p = '\0';
-	}
-
 	*camo = CAMO_REGULAR;
 
-	//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
-	if ((p = strstr(real_name, DESERTIND_2)))
+	if ( ptr - real_name > TEXTSUFFIX_SIZE )
 	{
-		//check for -D
-		*p = '\0';
-		*camo = CAMO_DESERT;
-	}
-	else if ((p = strstr(real_name, DESERTIND_3)))
-	{
-		if (get_global_season() == SESSION_SEASON_WINTER)
+		ptr -= TEXTSUFFIX_SIZE;
+		if ( !memcmp ( ptr, TEXTSUFFIX_DESERT, TEXTSUFFIX_SIZE ) )
+		{
+			//check for -D
+			*ptr = '\0';
+			*camo = CAMO_DESERT;
+		}
+		else if ( !memcmp ( ptr, TEXTSUFFIX_WINTER, TEXTSUFFIX_SIZE ) )
 		{
 			//VJ 051011 add winter textures
 			//check for -W
-			*p = '\0';
+			*ptr = '\0';
 			*camo = CAMO_WINTER;
-		}
-		else
-		{
-			// Don't load winter textures if season differs from WINTER
-			return -1;
 		}
 	}
 
@@ -2311,15 +2299,14 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 		return -1;
 	}
 
-	if ( *camo == CAMO_DESERT )
+	if ( *camo == CAMO_DESERT && system_texture_info[index].flags.number_of_camoflage_textures )
 	{
-		if ( !system_texture_info[index].flags.number_of_camoflage_textures )
-		{
-			// The texture is not marked as not camo, but camo file name is found
-			return -1;
-		}
 		index++;
 	}
+
+	#if DEBUG_MODULE
+	debug_log("Texture file %s %i %i\n", real_name, index, *camo);
+	#endif
 
 	system_textures_referenced[index] = TRUE;
 	return index;
@@ -3217,9 +3204,21 @@ int initialize_texture_override_names ( const char *mapname )
 	const int
 		is_terrain_directory = strnicmp(mapname, "terrain", 7) == 0;
 
-	const camo_type
-		overrider = get_global_season() == SESSION_SEASON_WINTER ? CAMO_WINTER : CAMO_REGULAR,
-		overridee =  get_global_season() == SESSION_SEASON_WINTER ? CAMO_REGULAR : CAMO_WINTER;
+	camo_type
+		overrider;
+
+	switch (get_global_season())
+	{
+	case SESSION_SEASON_WINTER:
+		overrider = CAMO_WINTER;
+		break;
+	case SESSION_SEASON_DESERT:
+		overrider = CAMO_DESERT;
+		break;
+	default:
+		overrider = CAMO_REGULAR;
+		break;
+	}
 
 	snprintf (directory_search_path, sizeof(directory_search_path), "%s\\%s\\*", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 	directory_listing = get_first_directory_file ( directory_search_path );
@@ -3290,19 +3289,25 @@ int initialize_texture_override_names ( const char *mapname )
 
 				if (index >= 0 && index < MAX_TEXTURES)
 				{
-					if ( system_texture_override_names[index].camo == overrider && camo == overridee )
-						break;
+					file_type
+						old_type;
 
-					system_texture_override_names[index].type = type;
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-					strupr(system_texture_override_names[index].path);
-					strcpy(system_texture_override_names[index].name, filename);
-					system_texture_override_names[index].camo = camo;
-					#if DEBUG_MODULE
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
-					#endif
+					old_type = system_texture_override_names[index].type;
 
-					count++;
+					if (camo == overrider || camo == CAMO_REGULAR && old_type == TYPE_ORIGINAL || camo == CAMO_DESERT && system_texture_info[index].flags.camoflage_texture)
+					{
+						system_texture_override_names[index].type = type;
+						sprintf(system_texture_override_names[index].path, "%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
+						strupr(system_texture_override_names[index].path);
+						strcpy(system_texture_override_names[index].name, filename);
+						system_texture_override_names[index].camo = camo;
+						#if DEBUG_MODULE
+						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
+						#endif
+
+						if (old_type != TYPE_ORIGINAL)
+							count++;
+					}
 				}
 				break;
 			}
@@ -3660,7 +3665,7 @@ void load_texture_override ( void )
 				// need to provide all these textures ourselves
 				if ( count >= TEXTURE_INDEX_LAST && count < number_of_system_textures )
 				{
-					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s (object %s)", count, get_system_texture_name ( count ), new_texture_sources[count] );
+					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s%s (object %s)", count, get_system_texture_name ( count ), system_texture_info[count].flags.camoflage_texture ? TEXTSUFFIX_DESERT : "", new_texture_sources[count] );
 				}
 				break;
 			}
@@ -3687,6 +3692,7 @@ void load_texture_override ( void )
 	{
 		debug_fatal ( "Missing texture(s)%s", missing_textures );
 	}
+	real_set_texture_camoflage ( texture_camoflage );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4631,8 +4637,8 @@ int add_new_texture(const char* texture_name, const char* source)
 	strncpy ( name, texture_name, 127 );
 	name[127] = '\0';
 	strupr ( name );
-	offset = strlen ( name ) - ( int ) sizeof ( DESERTIND_2 ) + 1;
-	camo = offset > 0 && ( !memcmp ( name + offset, DESERTIND_2, sizeof ( DESERTIND_2 ) ) || !memcmp ( name + offset, DESERTIND_3, sizeof ( DESERTIND_3 ) ) );
+	offset = strlen ( name ) - TEXTSUFFIX_SIZE;
+	camo = offset > 0 && ( !memcmp ( name + offset, TEXTSUFFIX_DESERT, sizeof ( TEXTSUFFIX_DESERT ) ) || !memcmp ( name + offset, TEXTSUFFIX_WINTER, sizeof ( TEXTSUFFIX_WINTER ) ) );
 	if ( camo )
 	{
 		name[offset] = '\0';
