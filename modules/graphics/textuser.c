@@ -2311,18 +2311,14 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 		return -1;
 	}
 
-	if ( *camo != CAMO_REGULAR )
+	if ( *camo == CAMO_DESERT )
 	{
 		if ( !system_texture_info[index].flags.number_of_camoflage_textures )
 		{
 			// The texture is not marked as not camo, but camo file name is found
 			return -1;
 		}
-
-		if ( *camo == CAMO_DESERT )
-		{
-			index++;
-		}
+		index++;
 	}
 
 	system_textures_referenced[index] = TRUE;
@@ -3286,7 +3282,7 @@ int initialize_texture_override_names ( const char *mapname )
 					type = TYPE_DDS;
 				else
 				{
-					debug_log("Texture file not BMP or DDS: %s", filename);
+					debug_log("Texture file not BMP, TGA or DDS: %s", filename);
 					continue;
 				}
 
