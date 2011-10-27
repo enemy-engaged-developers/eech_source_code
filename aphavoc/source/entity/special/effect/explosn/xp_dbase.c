@@ -471,7 +471,7 @@ static void import_explosion_database(void)
 						{
 							continue;
 						}
-						if (!sscanf(ptr,
+						if (sscanf(ptr,
 							"%f",
 							&co->sound_volume) != 1)
 						{

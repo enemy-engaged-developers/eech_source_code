@@ -706,7 +706,7 @@ int get_meta_smoke_type_by_name ( const char *name )
 
 	for ( count = 0; meta_smoke_list_names[count]; count++ )
 	{
-		if ( !stricmp ( name, smoke_list_names[count] ) )
+		if ( !stricmp ( name, meta_smoke_list_names[count] ) )
 		{
 			return count;
 		}
