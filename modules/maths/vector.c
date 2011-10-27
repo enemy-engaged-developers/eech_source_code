@@ -215,7 +215,7 @@ float normalise_any_3d_vector ( vec3d *vector )
 	y = ( ( vector->y ) * ( vector->y ) );
 	z = ( ( vector->z ) * ( vector->z ) );
 
-	length = x + y + z;
+	length = sqrt ( x + y + z );
 
 	if ( length > 0 )
 	{
@@ -223,7 +223,7 @@ float normalise_any_3d_vector ( vec3d *vector )
 		float
 			one_over_length;
 
-		one_over_length = 1.0 / sqrt ( length );
+		one_over_length = 1.0 / length;
 
 		vector->x = ( vector->x * one_over_length );
 		vector->y = ( vector->y * one_over_length );
