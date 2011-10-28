@@ -175,6 +175,8 @@ extern void initialise_object_3d_lookup_tables ( void );
 
 extern void set_object_3d_reflection_texture_map ( int texture_index );
 
+extern void apply_object_3d_reflection_texture_map ( void );
+
 extern int get_3d_object_approximation_number ( struct OBJECT_3D_INSTANCE *obj );
 
 extern void pre_render_3d_object ( object_3d_instance *obj );

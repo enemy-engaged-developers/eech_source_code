@@ -3305,7 +3305,7 @@ int initialize_texture_override_names ( const char *mapname )
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
 						#endif
 
-						if (old_type != TYPE_ORIGINAL)
+						if (old_type == TYPE_ORIGINAL)
 							count++;
 					}
 				}
@@ -3693,6 +3693,7 @@ void load_texture_override ( void )
 		debug_fatal ( "Missing texture(s)%s", missing_textures );
 	}
 	real_set_texture_camoflage ( texture_camoflage );
+	apply_object_3d_reflection_texture_map ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

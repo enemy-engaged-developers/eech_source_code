@@ -126,6 +126,9 @@ screen
 	*current_object_3d_luminosity_texture,
 	*current_object_3d_reflection_texture_map;
 
+static int
+	current_object_3d_reflection_texture_map_index;
+
 int
 	current_object_3d_texture_u_address,
 	current_object_3d_texture_v_address,
@@ -222,8 +225,12 @@ void initialise_object_3d_lookup_tables ( void )
 
 void set_object_3d_reflection_texture_map ( int texture_index )
 {
+	current_object_3d_reflection_texture_map_index = texture_index;
+}
 
-	current_object_3d_reflection_texture_map = get_system_texture_ptr ( texture_index );
+void apply_object_3d_reflection_texture_map ( void )
+{
+	current_object_3d_reflection_texture_map = get_system_texture_ptr ( current_object_3d_reflection_texture_map_index );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
