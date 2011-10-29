@@ -502,7 +502,7 @@ long initialise_internal_debug_system ( void * data )
 void debug_log (const char *msg, ...)
 {
 	static char
-		buffer[1000];
+		buffer[4096];
 
 	char
 		time_info[100];
@@ -965,7 +965,7 @@ void debug_fatal ( const char *string, ... )
 		*fp;
 
 	char
-		buffer[1000];
+		buffer[4096];
 
 	//
 	// Work out what to output

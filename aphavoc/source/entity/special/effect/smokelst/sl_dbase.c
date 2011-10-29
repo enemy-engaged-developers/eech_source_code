@@ -308,6 +308,7 @@ static void import_smoke_list_database (void)
 				&smoke->final_vertical_velocity,
 				&smoke->vertical_acceleration,
 				&smoke->initial_velocity_noise,
+
 				&smoke->texture_size,
 				&smoke->animation_rate,
 				&additive,

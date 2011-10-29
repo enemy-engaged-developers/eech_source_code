@@ -331,13 +331,11 @@ static void update_suspension(void)
 			{
 				compression_change = spring_compression - point->suspension_compression;
 
-#if 0
 				if ((fixed_collision_count || moving_collision_count) && compression_change > 0.0)
 				{
 					point->damping = 0.0;
 				}
 				else
-#endif
 				{
 					point->damping = bound(compression_change * inv_delta_time * point->damper_stiffness, -25.0f, 25.0f);
 
@@ -459,7 +457,7 @@ static void apply_suspension_forces(void)
 						force_diff,
 						max_force_change = get_model_delta_time() * 10.0;
 
-					max_force = min(wheel_load * 2.5f, 0.5f * G);  // depends on load on wheel
+					max_force = min(wheel_load * 2.5f, 1.0f * G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->resistance_force;
