@@ -384,6 +384,15 @@ static void set_wut ( const struct config_option *option, const char *value )
 		debug_log ( "wutfile ini [%s]", WUT_filename );
 
 		command_line_wut = file_exist ( WUT_filename );
+
+		if ( *WUT_filename && !command_line_wut )
+		{
+			strcpy ( WUT_filename, DEFAULT_GWUT_FILE );
+
+			debug_log ( "default wutfile ini [%s]", WUT_filename );
+
+			command_line_wut = file_exist ( WUT_filename );
+		}
 	}
 }
 
@@ -1242,6 +1251,7 @@ void initialize_options ( void )
 	initialize_canopy_sound_amp ();
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
+	command_line_wut = file_exist ( WUT_filename );
 
 	strcpy(command_line_themes, "2");
 }
