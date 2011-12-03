@@ -1708,7 +1708,6 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FAN_LINK.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FLOOR.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FRONT_COVER.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FRONT_WINDOW_REFLECTION.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FRONT_WINDOW_REFLECTION.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FUEL_GAUGE.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_FUSE_PANEL.bmp"
@@ -1771,7 +1770,6 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_YELLOW_CABEL.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_YELLOW_WIRE.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HIND_HUD_PROJECTOR.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\mi-24v-cockpit.eeo"
 
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\general"
 
