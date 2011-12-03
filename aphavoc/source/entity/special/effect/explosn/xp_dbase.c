@@ -337,11 +337,11 @@ static void import_explosion_database(void)
 				if (ex->number_of_components >= allocated)
 				{
 					allocated = allocated ? 2 * allocated : 8;
-					co = (meta_explosion_component*)safe_malloc(sizeof(meta_explosion_component) * allocated);
+					co = (meta_explosion_component*)malloc_fast_mem(sizeof(meta_explosion_component) * allocated);
 					if (ex->number_of_components)
 					{
 						memcpy(co, ex->component, sizeof(meta_explosion_component) * ex->number_of_components);
-						safe_free(ex->component);
+						free_mem(ex->component);
 					}
 					ex->component = co;
 				}
