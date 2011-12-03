@@ -136,9 +136,6 @@ Section "EECH ${VERSION} with mods" SectionBase
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\AH-64D Apache Longbow"
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_APACHE_LONGBOW.EES"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_BLACK_ROOT.EEO"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_BLACK_SECTION.EEO"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_BLACK_TIP.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_BLADE_MOVING.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_CANNON.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_CANNON_TURRET.EEO"
@@ -170,7 +167,6 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_WIPER_2.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_WIPER_3.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\AH64D_WIPER_4.EEO"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-64D Apache Longbow\APACHE_VIRTUAL_COCKPIT_MAIN_ROTOR.EES"
 
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\ah-64d-cockpit"
 
@@ -182,13 +178,13 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ah-64d-radio-switches.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ah-64d-throttle-left.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ah-64d-throttle-right.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\AH64D_BLACK_ROOT.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\AH64D_BLACK_SECTION.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\AH64D_BLACK_TIP.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_ADI.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_COMPASS.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_GLASS.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_GLASS.EES"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_INSTRUMENTS_ADI.EES"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_INSTRUMENTS_COMPASS.EES"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_INSTRUMENTS_LARGE_ADI.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_WIPER.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_WIPER.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_COCKPIT.EES"
@@ -196,6 +192,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_INSTRUMENTS_COMPASS.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_INSTRUMENTS_NEEDLES.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT.EES"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_VCKPT_MAIN_ROTOR.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_VCKPT_NOSE.EES"
 
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\AH1-Z_Viper"

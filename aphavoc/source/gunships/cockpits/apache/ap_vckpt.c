@@ -172,7 +172,7 @@ void initialise_apache_virtual_cockpit (void)
 		virtual_cockpit_lights_inst3d = NULL;
 	}
 
-	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_MAIN_ROTOR);
+	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_VCKPT_MAIN_ROTOR);
 
 	virtual_cockpit_large_adi_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_INSTRUMENTS_LARGE_ADI);
 	virtual_cockpit_instrument_large_needles_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_INSTRUMENTS_LARGE_NEEDLES);
