@@ -535,12 +535,13 @@ struct RSurface
        }
      }
     else
-     if (vm)
+     if (vm || dvm)
       {
-       for (unsigned j = 0; j < !vm->mapping; j++)
-        for (unsigned k = 0; k < !polys[i].points; k++)
-         if (polys[i].points[k].p.index == vm->mapping[j].vert)
-          (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
+       if (vm)
+        for (unsigned j = 0; j < !vm->mapping; j++)
+         for (unsigned k = 0; k < !polys[i].points; k++)
+          if (polys[i].points[k].p.index == vm->mapping[j].vert)
+           (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
        if (dvm)
         for (unsigned j = 0; j < !dvm->mapping; j++)
          if (polys[i].index == dvm->mapping[j].poly)
@@ -550,7 +551,7 @@ struct RSurface
        }
       else
        {
-        warning("Surface '%s': No vertex mapping '%s' found", &s->name, vmap);
+        warning("Surface '%s': No vertex mapping '%s' found for poly %u", &s->name, vmap, polys[i].index);
         float zero[2] = { 0, 0 };
         for (unsigned k = 0; k < !polys[i].points; k++)
          (polys[i].points[k].*tp).Set(zero);
