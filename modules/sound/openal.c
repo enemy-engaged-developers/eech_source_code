@@ -7,19 +7,11 @@
 
 #define MAX_NUMBER_OF_CONTEXTS 2
 
-static DWORD
-	context_thread_id;
-
 #ifdef DEBUG
 #define AL_CHECK(x) \
 	do \
 	{ \
 		int al_error; \
-		DWORD thread_id = GetCurrentThreadId(); \
-		if ( thread_id != context_thread_id ) \
-		{ \
-			debug_fatal ( "%s:%u Invalid thread %u for operation %s (%u)", __FILE__, __LINE__, thread_id, #x, context_thread_id ); \
-		} \
 		x; \
 		al_error = alGetError(); \
 		if ( al_error != AL_NO_ERROR ) \
@@ -194,8 +186,6 @@ int initialise_sound_system ( void )
 		contexts[1] = alcCreateContext ( devices[1], NULL );
 	}
 
-	context_thread_id = GetCurrentThreadId();
-
 	for ( context = 0; context < number_of_contexts; context++ )
 	{
 		switch_context ( context );
@@ -351,7 +341,8 @@ void destroy_source_sound_sample ( int sample_index )
 	for ( context = 0; context < number_of_contexts; context++ )
 	{
 		switch_context ( context );
-		AL_CHECK ( alBufferData ( buffers[sample_index].buffer[context], AL_FORMAT_MONO8, NULL, 0, 0 ) );
+		AL_CHECK ( alDeleteBuffers ( 1, &buffers[sample_index].buffer[context] ) );
+		AL_CHECK ( alGenBuffers ( 1, &buffers[sample_index].buffer[context] ) );
 	}
 	buffers[sample_index].size = 0;
 }
