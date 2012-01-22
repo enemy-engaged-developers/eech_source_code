@@ -774,7 +774,7 @@ static void export_meta_smoke_list_database (void)
 					"%s;"
 					"%i;%i;"
 					"%f;%f;%f\n",
-					smoke_list_names[co->trail_type],
+					smoke_list_types_names[co->trail_type],
 					entity_sub_type_effect_names[co->entity_sub_type],
 					co->trail_count, co->infinite,
 					co->generator_lifetime, co->frequency, co->smoke_lifetime);

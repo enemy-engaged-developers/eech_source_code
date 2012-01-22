@@ -149,7 +149,7 @@ static void export_explosion_database(void)
 			"Initial speed\n"
 		"#SMOKE_TRAILS;Trail type;Trail count;"
 			"Generator lifetime;Frequency;Smoke lifetime;"
-			"Initial velosity (x;y;z)\n"
+			"Initial velocity (x;y;z)\n"
 		"#SOUND_EFFECT;Sound type;Sound volume\n"
 		);
 	for (count1 = 1; count1 < NUM_META_EXPLOSION_TYPES; count1++)
@@ -198,7 +198,7 @@ static void export_explosion_database(void)
 					fprintf(file,
 						"PARTICLES;%s;%i;"
 						"%f\n",
-						smoke_list_names[co->trail_type], co->particle_count,
+						smoke_list_types_names[co->trail_type], co->particle_count,
 						co->initial_speed);
 					break;
 				}
@@ -208,7 +208,7 @@ static void export_explosion_database(void)
 						"SMOKE_TRAILS;%s;%i;"
 						"%f;%f;%f;"
 						"%f;%f;%f\n",
-						smoke_list_names[co->trail_type], co->trail_count,
+						smoke_list_types_names[co->trail_type], co->trail_count,
 						co->generator_lifetime, co->frequency, co->smoke_lifetime,
 						co->initial_velocity.x, co->initial_velocity.y, co->initial_velocity.z);
 					break;

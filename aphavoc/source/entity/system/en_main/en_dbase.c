@@ -84,11 +84,11 @@ void initialise_entity_databases (void)
 
 	initialise_segment_database ();
 
-	initialise_explosion_database ();
-
 	initialise_smoke_list_database ();
 
 	initialise_meta_smoke_list_database ();
+
+	initialise_explosion_database ();
 
 	initialise_weapon_loading_gunship_database ();
 
@@ -118,9 +118,9 @@ void deinitialise_entity_databases (void)
 
 	deinitialise_explosion_database ();
 
-	deinitialise_smoke_list_database ();
-
 	deinitialise_meta_smoke_list_database ();
+
+	deinitialise_smoke_list_database ();
 
 	deinitialise_weapon_loading_gunship_database ();
 

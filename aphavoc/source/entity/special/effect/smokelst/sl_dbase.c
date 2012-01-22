@@ -90,7 +90,7 @@ smoke_list_data
 #define META_SMOKE_LIST_DECLARATION(x)
 #define META_SMOKE_LIST(x)
 #define META_SMOKE_LIST_(x)
-const char* smoke_list_names[] =
+static const char* default_smoke_list_types_names[] =
 {
 #include "sl_types.h"
 };
@@ -101,14 +101,63 @@ const char* smoke_list_names[] =
 #undef META_SMOKE_LIST
 #undef META_SMOKE_LIST_
 
+// 07DEC11 Casm Loading any number of custom smoke list types
+static int
+	total_number_of_smoke_list_types,
+	smoke_list_types_available;
+
+char
+	**smoke_list_types_names;
+
+static void initialise_smoke_list_types_names (void)
+{
+	int
+		count,
+		size;
+
+	smoke_list_types_names = (char **)safe_malloc ((total_number_of_smoke_list_types + smoke_list_types_available) * sizeof (char *));
+	for (count = 0; count < NUM_SMOKE_LIST_TYPES; count++)
+	{
+		size = strlen(default_smoke_list_types_names[count]) + 1;
+		smoke_list_types_names[count] = safe_malloc (size);
+		memcpy (smoke_list_types_names[count], default_smoke_list_types_names[count], size);
+	}
+	for (; count < total_number_of_smoke_list_types + smoke_list_types_available; count++)
+	{
+		smoke_list_types_names[count] = NULL;
+	}
+}
+
+static void deinitialise_smoke_list_types_names (void)
+{
+	int
+		count;
+
+	if (!smoke_list_types_names)
+	{
+		return;
+	}
+
+	for (count = 0; count < total_number_of_smoke_list_types + smoke_list_types_available; count++)
+	{
+		if (smoke_list_types_names[count])
+		{
+			safe_free (smoke_list_types_names[count]);
+		}
+	}
+
+	safe_free (smoke_list_types_names);
+	smoke_list_types_names = NULL;
+}
+
 int get_smoke_type_by_name ( const char *name )
 {
 	int
 		count;
 
-	for ( count = 0; smoke_list_names[count]; count++ )
+	for (count = 0; count < total_number_of_smoke_list_types; count++)
 	{
-		if ( !stricmp ( name, smoke_list_names[count] ) )
+		if (!stricmp (name, smoke_list_types_names[count]))
 		{
 			return count;
 		}
@@ -144,14 +193,14 @@ static void export_smoke_list_database (void)
 		"Texture size;Animation rate;"
 		"Additive;Draw type;Flat;Ground based;Lock to parent;Wind affected"
 		"\n");
-	for (count = 0; count < NUM_SMOKE_LIST_TYPES; count++)
+	for (count = 0; count < total_number_of_smoke_list_types; count++)
 	{
 		if (count == SMOKE_LIST_TYPE_DOWNWASH_START)
 		{
 			continue;
 		}
 
-		smoke = &smoke_list_database [count];
+		smoke = &smoke_list_database[count];
 		fprintf (file,
 			"%i;%s;%s;"
 			"%i;%i;%i;%i;%f;"
@@ -160,7 +209,7 @@ static void export_smoke_list_database (void)
 			"%i;%i;%i;%i;%f;"
 			"%f;%f;%f;"
 			"%f;%f;%i;%i;%i;%i;%i;%i\n",
-			count, smoke_list_names[count], texture_animation_names [smoke->texture],
+			count, smoke_list_types_names[count], texture_animation_names[smoke->texture],
 
 			smoke->red_start,
 			smoke->green_start,
@@ -210,6 +259,7 @@ static void import_smoke_list_database (void)
 	char
 		buf[2048],
 		*ptr,
+		*smoke_list_type_name,
 		*texture_animation;
 	int
 		count;
@@ -255,11 +305,13 @@ static void import_smoke_list_database (void)
 			{
 				continue;
 			}
-			ptr = strchr (ptr + 1, ';');
+			smoke_list_type_name = ptr + 1;
+			ptr = strchr (smoke_list_type_name, ';');
 			if (!ptr)
 			{
 				continue;
 			}
+			*ptr = '\0';
 			texture_animation = ptr + 1;
 			ptr = strchr (texture_animation, ';');
 			if (!ptr)
@@ -267,9 +319,18 @@ static void import_smoke_list_database (void)
 				continue;
 			}
 			*ptr = '\0';
-			if (sscanf (buf, "%i", &count) != 1 || count < 0 || count >= NUM_SMOKE_LIST_TYPES)
+			if (sscanf (buf, "%i", &count) != 1 || count < 0)
 			{
 				continue;
+			}
+			count = get_smoke_type_by_name (smoke_list_type_name);
+			if (count < 0)
+			{
+				if (!smoke_list_types_available)
+				{
+					continue;
+				}
+				count = total_number_of_smoke_list_types;
 			}
 			smoke = &smoke_list_database [count];
 			if (sscanf (ptr + 1,
@@ -343,6 +404,15 @@ static void import_smoke_list_database (void)
 			smoke->ground_based = ground_based != 0;
 			smoke->lock_to_parent = lock_to_parent != 0;
 			smoke->wind_affected = wind_affected != 0;
+
+			if (count == total_number_of_smoke_list_types)
+			{
+				count = strlen (smoke_list_type_name) + 1;
+				smoke_list_types_names[total_number_of_smoke_list_types] = safe_malloc (count);
+				memcpy (smoke_list_types_names[total_number_of_smoke_list_types], smoke_list_type_name, count);
+				total_number_of_smoke_list_types++;
+				smoke_list_types_available--;
+			}
 		}
 	}
 	safe_fclose (file);
@@ -358,7 +428,12 @@ void initialise_smoke_list_database (void)
 	smoke_list_data
 		*item;
 
-	smoke_list_database = (smoke_list_data *) safe_malloc (sizeof (smoke_list_data) * NUM_SMOKE_LIST_TYPES);
+	total_number_of_smoke_list_types = NUM_SMOKE_LIST_TYPES;
+	smoke_list_types_available = 50;
+
+	initialise_smoke_list_types_names ();
+
+	smoke_list_database = (smoke_list_data *) safe_malloc (sizeof (smoke_list_data) * (total_number_of_smoke_list_types + smoke_list_types_available));
 
 	////////////////////////////////////////
 	//
@@ -2269,6 +2344,8 @@ void deinitialise_smoke_list_database (void)
 	//
 
 	deinitialise_smoke_list_draw_arrays ();
+
+	deinitialise_smoke_list_types_names ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
