@@ -174,7 +174,7 @@ class TexturesExporter : public BaseTexturesExporter
  virtual void use_texture(int, const char* name, int mip)
  {
   char filename[260];
-  if (mip)
+  if (mip > 0)
    sprintf(filename, "\\TEXTURES\\%s@%i.TGA", name, mip);
   else
    sprintf(filename, "\\TEXTURES\\%s.TGA", name);
