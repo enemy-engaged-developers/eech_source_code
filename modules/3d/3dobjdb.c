@@ -740,14 +740,41 @@ static int get_camera ( FILE *fp )
 
 static int read_new_camera ( FILE *fp )
 {
+	int
+		count;
+
+	object_3d_scene_camera
+		*camera,
+		*current;
+
 	ASSERT ( custom_number_of_cameras );
 
 	if ( !custom_number_of_cameras )
 		return 0;
 
-	custom_number_of_cameras--;
+	current = &objects_3d_camera_database[total_number_of_cameras];
+	read_camera ( fp, current );
 
-	read_camera ( fp, &objects_3d_camera_database[total_number_of_cameras] );
+	for ( count = 1; count < total_number_of_cameras; count++ )
+	{
+		camera = &objects_3d_camera_database[count];
+
+		if ( current->target_sub_object_id != camera->target_sub_object_id || current->heading_locked != camera->heading_locked || current->pitch_locked != camera->pitch_locked || current->roll_locked != camera->roll_locked || current->number_of_keyframes != camera->number_of_keyframes )
+		{
+			continue;
+		}
+
+		if ( memcmp ( current->keyframes, camera->keyframes, current->number_of_keyframes * sizeof ( *current->keyframes ) ) )
+		{
+			continue;
+		}
+
+		safe_free ( current->keyframes );
+
+		return count;
+	}
+
+	custom_number_of_cameras--;
 
 	return total_number_of_cameras++;
 }
