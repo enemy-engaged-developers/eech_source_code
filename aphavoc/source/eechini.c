@@ -412,12 +412,14 @@ static void set_faa ( const struct config_option *option, const char *value )
 
 	set_int ( option, value );
 
-	if ( !value)
+	if ( !value )
 	{
-		aircraft_database[4].player_controllable = FALSE;
-		for ( craft = 6; craft < NUM_ENTITY_SUB_TYPE_AIRCRAFT; craft++ )
+		for ( craft = 0; craft < NUM_ENTITY_SUB_TYPE_AIRCRAFT; craft++ )
 		{
-			aircraft_database[craft].player_controllable = FALSE;
+			if ( aircraft_database[craft].gunship_type == NUM_GUNSHIP_TYPES )
+			{
+				aircraft_database[craft].player_controllable = FALSE;
+			}
 		}
 	}
 }

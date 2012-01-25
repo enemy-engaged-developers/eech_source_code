@@ -20,6 +20,7 @@ enum GUNSHIP_TYPES	// stolen from global.h
 	GUNSHIP_TYPE_HIND,
 	GUNSHIP_TYPE_AH64A,
  	GUNSHIP_TYPE_KA50,
+ 	GUNSHIP_TYPE_VIPER,
 	NUM_GUNSHIP_TYPES
 };
 
@@ -621,6 +622,7 @@ Value GetValue(int command)
 		case GUNSHIP_TYPE_HIND: return GetHindSpecificData(command);
 		case GUNSHIP_TYPE_AH64A: return GetAH64ASpecificData(command);
 		case GUNSHIP_TYPE_KA50: return GetKa50SpecificData(command);
+		case GUNSHIP_TYPE_VIPER: return GetDefaultSpecificData(command);
 		case NUM_GUNSHIP_TYPES: return GetDefaultSpecificData(command);
 		default: break;
 		}

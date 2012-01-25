@@ -118,7 +118,7 @@ static void notify_briefing_button ( ui_object *obj, void *arg );
 
 static void notify_gunships_back_button (ui_object *obj, void *arg);
 
-static char* get_gunship_name(void);
+static const char* get_gunship_name(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,30 +139,10 @@ void initialise_gunships_screen (void)
 	// Casm 11JUN05 Preselect side if requested
 	if ( gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL )
 	{
-		switch ( command_line_game_initialisation_phase_gunship_type )
+		if ( command_line_game_initialisation_phase_gunship_type >= 0 && command_line_game_initialisation_phase_gunship_type < NUM_GUNSHIP_TYPES )
 		{
-			case GUNSHIP_TYPE_APACHE:
-			case GUNSHIP_TYPE_COMANCHE:
-			case GUNSHIP_TYPE_BLACKHAWK:
-			case GUNSHIP_TYPE_AH64A:
-			case GUNSHIP_TYPE_VIPER:
-			{
-				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
-				set_free_flight_gunship_type ( ( gunship_types ) command_line_game_initialisation_phase_gunship_type );
-
-				break;
-			}
-
-			case GUNSHIP_TYPE_HAVOC:
-			case GUNSHIP_TYPE_HOKUM:
-			case GUNSHIP_TYPE_HIND:
-			case GUNSHIP_TYPE_KA50:
-			{
-				gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
-				set_free_flight_gunship_type ( ( gunship_types ) command_line_game_initialisation_phase_gunship_type );
-
-				break;
-			}
+			gunships_screen_side_selected = gunship_sides[command_line_game_initialisation_phase_gunship_type];
+			set_free_flight_gunship_type ( ( gunship_types ) command_line_game_initialisation_phase_gunship_type );
 		}
 	}
 	// Casm 11JUN05 Preselect side if requested
@@ -1102,29 +1082,7 @@ void set_display_gunship_buttons (int flag, char *text)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* get_gunship_name(void)
+const char* get_gunship_name(void)
 {
-	switch (get_free_flight_gunship_type())
-	{
-		case GUNSHIP_TYPE_AH64A:
-			return "AH-64A Apache";
-		case GUNSHIP_TYPE_APACHE:
-			return "AH-64D Longbow";
-		case GUNSHIP_TYPE_COMANCHE:
-			return "RAH-66 Comanche";
-		case GUNSHIP_TYPE_BLACKHAWK:
-			return "UH-60 Blackhawk";
-		case GUNSHIP_TYPE_KA50:
-			return "Ka-50 Black Shark";
-		case GUNSHIP_TYPE_HOKUM:
-			return "Ka-52 Alligator";
-		case GUNSHIP_TYPE_HIND:
-			return "Mi-24V \"Hind E\"";
-		case GUNSHIP_TYPE_HAVOC:
-			return "Mi-28N \"Havoc B\"";
-		case GUNSHIP_TYPE_VIPER:
-			return "AH-1Z Viper";
-	}
-
-	return "Invalid gunship";
+	return gunship_type_names[get_free_flight_gunship_type()];
 }

@@ -139,54 +139,42 @@ void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_lev
 
 void set_pilots_full_screen_params (int night_vision_system_active)
 {
+	display_3d_tints
+		tint;
+	display_3d_light_levels
+		level;
+
 	if (night_vision_system_active)
 	{
-		switch (get_global_gunship_type ())
+		tint = gunship_sides[get_global_gunship_type ()] != ENTITY_SIDE_RED_FORCE ? DISPLAY_3D_TINT_GREEN : DISPLAY_3D_TINT_BLUE;
+//VJ 050818 PNVS brighness levels
+// switched 0 and 2 so high level is default by GCsDriver 08-12-2007
+		switch (global_PNVS_level)
 		{
-			// JB 030313 Fly any aircraft
 			default:
-			case GUNSHIP_TYPE_APACHE:
-			case GUNSHIP_TYPE_COMANCHE:
-			////Moje 030519 Start
-			case GUNSHIP_TYPE_BLACKHAWK:
-			////Moje 030816 Start
-			case GUNSHIP_TYPE_AH64A:
-			////Moje 030816 end
-			case GUNSHIP_TYPE_VIPER:
-			{
-//VJ 050818 PNVS brighness levels
-// switched 0 and 2 so high level is default by GCsDriver 08-12-2007
-				switch (global_PNVS_level){
-					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE); break;
-					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE); break;
-					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+			case 0 :
+				{
+					level = DISPLAY_3D_LIGHT_LEVEL_HIGH;
+					break;
 				}
-				break;
-			}
-			case GUNSHIP_TYPE_HAVOC:
-			case GUNSHIP_TYPE_HOKUM:
-			////Moje 030612 Start
-			case GUNSHIP_TYPE_HIND:
-			////Moje 030612 End
-			////Moje 030816 Start
-			case GUNSHIP_TYPE_KA50:
-			////Moje 030816 End
-			{
-//VJ 050818 PNVS brighness levels
-// switched 0 and 2 so high level is default by GCsDriver 08-12-2007
-				switch (global_PNVS_level){
-					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
-					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE);break;
-					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+			case 1:
+				{
+					level = DISPLAY_3D_LIGHT_LEVEL_MEDIUM;
+					break;
 				}
-				break;
-			}
+			case 2:
+				{
+					level = DISPLAY_3D_LIGHT_LEVEL_LOW;
+					break;
+				}
 		}
 	}
 	else
 	{
-		set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+		tint = DISPLAY_3D_TINT_CLEAR;
+		level = DISPLAY_3D_LIGHT_LEVEL_HIGH;
 	}
+	set_main_3d_full_screen_params (tint, level, DISPLAY_3D_NOISE_LEVEL_NONE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

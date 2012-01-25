@@ -113,15 +113,15 @@ const char *game_status_names [] =
 const char
 	*gunship_type_names [] =
 	{
-		"Apache Gunship",
-		"Havoc Gunship",
-		"Comanche Gunship",
-		"Hokum Gunship",
-		"Blackhawk Gunship",
-		"Hind Gunship",
-		"AH64A Gunship",
-		"KA50 Gunship",
-		"Viper Gunship",
+		"AH-64D Longbow",
+		"Mi-28N \"Havoc B\"",
+		"RAH-66 Comanche",
+		"Ka-52 Alligator",
+		"UH-60 Blackhawk",
+		"Mi-24V \"Hind E\"",
+		"AH-64A Apache",
+		"Ka-50 Black Shark",
+		"AH-1Z Viper",
 		"NUM_GUNSHIP_TYPES"
 	};
 
@@ -137,6 +137,7 @@ const char*
 		"AH-64A Apache",
 		"Ka-50 Black Shark",
 		"AH-1Z Viper",
+		"NUM_GUNSHIP_TYPES"
 	};
 
 gunship_types alphabetical_gunship_types[] = {
@@ -149,6 +150,7 @@ gunship_types alphabetical_gunship_types[] = {
 		GUNSHIP_TYPE_HAVOC,     // Mi
 		GUNSHIP_TYPE_COMANCHE,  // RAH
 		GUNSHIP_TYPE_BLACKHAWK, // UH
+		NUM_GUNSHIP_TYPES
  	};
 
 
@@ -157,7 +159,7 @@ gunship_types alphabetical_gunship_types[] = {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 060211 save hud info to eech.ini
-int hud_code[8][HUD_CODES_LAST];
+int hud_code[NUM_GUNSHIP_TYPES][HUD_CODES_LAST];
 
 int canopy_sound_amp[CSA_CODES_LAST][CSA_VALUES_LAST];
 
@@ -211,6 +213,8 @@ entity_sub_types
 		ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND,
 		ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE,
 		ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM,
+		ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER,
+		NUM_ENTITY_SUB_TYPE_AIRCRAFT
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,6 +235,8 @@ entity_sides
 		ENTITY_SIDE_RED_FORCE,
 		ENTITY_SIDE_BLUE_FORCE,
 		ENTITY_SIDE_RED_FORCE,
+		ENTITY_SIDE_BLUE_FORCE,
+		NUM_ENTITY_SIDES
 	};
 
 installed_custom_3d_models custom_3d_models;
