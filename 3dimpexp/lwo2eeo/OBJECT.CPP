@@ -151,7 +151,9 @@ class OBJECT_3D : private Convert
      su->smoothed = s->rs->smoothed;
      su->textured = t->texture[0] != '\0';
      su->has_luminosity_texture = t->luminosity[0] != '\0';
+     su->additive = s->rs->additive;
      su->translucent = s->rs->translucent;
+     su->luminous = s->rs->luminous;
      su->has_specularity = s->rs->has_specularity;
      su->texture_animation = s->rs->texture_animation != 0;
      su->texture_filtered = s->rs->texture_filtered;

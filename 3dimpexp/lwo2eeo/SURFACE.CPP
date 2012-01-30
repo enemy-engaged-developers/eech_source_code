@@ -11,13 +11,13 @@ struct RSurface
 
  Array<RPolyPoint> points;
 
- unsigned polygons:1, detail:1, smoothed:1, translucent:1, has_specularity:1, texture_animation:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_animation, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1, camo:1;
+ unsigned polygons:1, detail:1, smoothed:1, additive:1, translucent:1, luminous:1, has_specularity:1, texture_animation:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_animation:1, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1, camo:1;
  unsigned char reflectivity, specularity;
  unsigned char blue, green, red, alpha;
 
  RSurface(void)
   : Global(NULL), s(NULL),
-    polygons(0), detail(0), smoothed(0), translucent(0), has_specularity(0), texture_animation(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_animation(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0), camo(0),
+    polygons(0), detail(0), smoothed(0), additive(0), translucent(0), luminous(0), has_specularity(0), texture_animation(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_animation(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0), camo(0),
     reflectivity(0), specularity(0),
     blue(0), green(0), red(0), alpha(0)
  {
@@ -30,25 +30,50 @@ struct RSurface
  {
   enum { NONE, TEXTURE, LUMINOSITY } type = NONE;
 
-  if (!bl->header ||
-      bl->header->blockheadertype != BlockHeader::IMAGEMAPTEXTURE)
+  if (!bl->header || bl->header->blockheadertype != BlockHeader::IMAGEMAPTEXTURE)
    return;
 
   const Channel* bhc = NULL;
+  const Opaque* bho = NULL;
   for (unsigned k = 0; k < !bl->header->attributes; k++)
-   if (bl->header->attributes[k]->blockheaderattributetype == BlockHeaderAttribute::CHANNEL)
+   switch (bl->header->attributes[k]->blockheaderattributetype)
     {
-     bhc = static_cast<const Channel*>(bl->header->attributes[k]);
-     break;
+     case BlockHeaderAttribute::CHANNEL:
+      if (bhc)
+       error("Surface '%s': Duplicate channel in block header", &s->name);
+      bhc = static_cast<const Channel*>(bl->header->attributes[k]);
+      break;
+     case BlockHeaderAttribute::OPAQUE:
+      if (bho)
+       error("Surface '%s': Duplicate opaque in block header", &s->name);
+      bho = static_cast<const Opaque*>(bl->header->attributes[k]);
+      break;
+     default:
+      break;
     }
   if (!bhc)
-   return;
+   error("Surface '%s': No channel in block header", &s->name);
   if (bhc->texture_channel == "COLR")
    type = TEXTURE;
   if (bhc->texture_channel == "LUMI")
    type = LUMINOSITY;
   if (type == NONE)
    return;
+
+  if (type == TEXTURE && bho)
+   {
+    switch (bho->type)
+     {
+      case 0:
+       additive = 0;
+       break;
+      case 7:
+       additive = 1;
+       break;
+      default:
+       error("Surface '%s': Blending mode %u is not supported", &s->name, bho->type);
+     }
+   }
 
   for (unsigned k = 0; k < !bl->attributes; k++)
    switch (bl->attributes[k]->blockattributetype)
@@ -272,6 +297,15 @@ struct RSurface
 
       if (a->max_smoothing_angle > 0.1)
        smoothed = 1;
+     }
+     break;
+
+    case SurfaceAttribute::LUMINOSITY:
+     {
+      const Luminosity* a = static_cast<const Luminosity*>(attr);
+
+      if (a->intensity > 0.1)
+       luminous = 1;
      }
      break;
 

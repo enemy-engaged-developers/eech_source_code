@@ -156,11 +156,6 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
    if (number_of_surface_points == 0)
     number_of_surface_points = 256;
 
-   if (current_surface->additive)
-    printf("\tSurface %u: additive not supported\n", i);
-   if (current_surface->luminous)
-    printf("\tSurface %u: luminous not supported\n", i);
-
    value = 0.0;
    if (current_surface->textured)
     {
@@ -279,7 +274,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
    subchunk = new LWO_SubChunk("LUMI", 0, NULL);
    chunk->AddSubChunk(subchunk);
-   value = 0.0;
+   value = current_surface->luminous ? 1.0 : 0.0;
    subchunk->AddData(4, &value);
    subchunk->AddIndex(0);
 
@@ -318,7 +313,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
      subchunk->AddData(4, &value);
     }
 
-   if (current_surface->textured)
+   if (current_surface->textured || current_surface->additive)
     {
      subchunk = new LWO_SubChunk("BLOK", 0, NULL);
      chunk->AddSubChunk(subchunk);
@@ -328,7 +323,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
      sssc = new LWO_SubChunk("OPAC", 0, NULL);
      ssc->AddSubChunk(sssc);
-     sssc->AddBasicData(2, "\0\0");
+     sssc->AddBasicData(2, current_surface->additive ? "\0\7" : "\0\0");
      value = 1.0;
      sssc->AddData(4, &value);
      sssc->AddBasicData(2, "\0\0");
@@ -336,49 +331,52 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
      sssc = new LWO_SubChunk("CHAN", 4, "COLR");
      ssc->AddSubChunk(sssc);
 
-     ssc = new LWO_SubChunk("TMAP", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     sssc = new LWO_SubChunk("SIZE", 0, NULL);
-     ssc->AddSubChunk(sssc);
-     value = 1.0;
-     sssc->AddData(4, &value);
-     sssc->AddData(4, &value);
-     sssc->AddData(4, &value);
-     sssc->AddData(2, "\0\0");
+     if (current_surface->textured)
+      {
+       ssc = new LWO_SubChunk("TMAP", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       sssc = new LWO_SubChunk("SIZE", 0, NULL);
+       ssc->AddSubChunk(sssc);
+       value = 1.0;
+       sssc->AddData(4, &value);
+       sssc->AddData(4, &value);
+       sssc->AddData(4, &value);
+       sssc->AddData(2, "\0\0");
 
-     ssc = new LWO_SubChunk("PROJ", 2, "\x00\x05");
-     subchunk->AddSubChunk(ssc);
+       ssc = new LWO_SubChunk("PROJ", 2, "\x00\x05");
+       subchunk->AddSubChunk(ssc);
 
-     ssc = new LWO_SubChunk("AXIS", 2, "\x00\x00");
-     subchunk->AddSubChunk(ssc);
+       ssc = new LWO_SubChunk("AXIS", 2, "\x00\x00");
+       subchunk->AddSubChunk(ssc);
 
-     ssc = new LWO_SubChunk("IMAG", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     ssc->AddIndex(eet.GetIndex(lwofile, current_surface->texture_index, current_surface->texture_animation));
+       ssc = new LWO_SubChunk("IMAG", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       ssc->AddIndex(eet.GetIndex(lwofile, current_surface->texture_index, current_surface->texture_animation));
 
-     ssc = new LWO_SubChunk("WRAP", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     j = current_surface->texture_wrapped_u;
-     ssc->AddData(2, &j);
-     j = current_surface->texture_wrapped_v;
-     ssc->AddData(2, &j);
+       ssc = new LWO_SubChunk("WRAP", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       j = current_surface->texture_wrapped_u;
+       ssc->AddData(2, &j);
+       j = current_surface->texture_wrapped_v;
+       ssc->AddData(2, &j);
 
-     ssc = new LWO_SubChunk("VMAP", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     sprintf(buf, "VertexMapTexture%03u", i);
-     ssc->AddBasicData(strlen(buf) + 1, buf);
+       ssc = new LWO_SubChunk("VMAP", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       sprintf(buf, "VertexMapTexture%03u", i);
+       ssc->AddBasicData(strlen(buf) + 1, buf);
 
-     ssc = new LWO_SubChunk("AAST", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     j = current_surface->texture_mipmapped;
-     ssc->AddData(2, &j);
-     value = 1.0;
-     ssc->AddData(4, &value);
+       ssc = new LWO_SubChunk("AAST", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       j = current_surface->texture_mipmapped;
+       ssc->AddData(2, &j);
+       value = 1.0;
+       ssc->AddData(4, &value);
 
-     ssc = new LWO_SubChunk("PIXB", 0, NULL);
-     subchunk->AddSubChunk(ssc);
-     j = current_surface->texture_filtered;
-     ssc->AddData(2, &j);
+       ssc = new LWO_SubChunk("PIXB", 0, NULL);
+       subchunk->AddSubChunk(ssc);
+       j = current_surface->texture_filtered;
+       ssc->AddData(2, &j);
+      }
     }
 
    if (current_surface->has_luminosity_texture)
