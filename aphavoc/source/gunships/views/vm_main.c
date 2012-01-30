@@ -1107,12 +1107,21 @@ static void enter_view_mode (view_modes mode)
 				//VJ 050211 needed for wideview pitch setting
 				//VJ 060910 use correct pitch in comanche and hokum
 				// arneh - adjusted for helicopter types which have several crew positions
-				if (type != GUNSHIP_TYPE_COMANCHE && type != GUNSHIP_TYPE_HOKUM)
+				switch (type)
 				{
-					if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
-						pilot_head_pitch = co_pilot_head_pitch_datum;
-					else
-						pilot_head_pitch = pilot_head_pitch_datum;
+					case GUNSHIP_TYPE_COMANCHE:
+					case GUNSHIP_TYPE_HOKUM:
+					{
+						break;
+					}
+					default:
+					{
+						if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
+							pilot_head_pitch = co_pilot_head_pitch_datum;
+						else
+							pilot_head_pitch = pilot_head_pitch_datum;
+						break;
+					}
 				}
 
 				mode = VIEW_MODE_VIRTUAL_COCKPIT;

@@ -495,7 +495,7 @@ static void draw_layout_grid (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-enum OBJECT_3D_VISIBILITY get_coordinate_of_relative_position(vec3d* relative_position, float* i, float* j)
+static enum OBJECT_3D_VISIBILITY get_coordinate_of_relative_position(vec3d* relative_position, float* i, float* j)
 {
 	vec3d position;
 

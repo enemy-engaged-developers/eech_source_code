@@ -243,6 +243,7 @@ void partially_repair_gunship_damage (void)
 		////////////////////////////////////////
 		////Moje 020817 End
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -327,6 +328,7 @@ void repair_gunship_weapon_damage (void)
 		}
 		////Moje 030817 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -413,6 +415,7 @@ void damage_gunship (gunship_damage_levels damage_level)
 		}
 		////Moje 030817 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -501,6 +504,7 @@ int get_gunship_comms_equipment_ok (void)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -588,6 +592,7 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 		}
 		////Moje 030817 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -712,6 +717,7 @@ void fully_repair_local_entity_avionics (entity *en)
 			}
 			////Moje 030817 end
 
+			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:
@@ -818,6 +824,7 @@ void partially_repair_local_entity_avionics (entity *en)
 			}
 			////Moje 030817 end
 
+			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:
@@ -938,6 +945,7 @@ void load_gunship_avionics_damage (void)
 		}
 		////Moje 030817 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -1043,6 +1051,7 @@ void save_gunship_avionics_damage (void)
 		}
 		////Moje 0300817 end
 
+		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:

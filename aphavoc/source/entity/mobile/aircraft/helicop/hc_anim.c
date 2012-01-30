@@ -1016,43 +1016,50 @@ void animate_helicopter_wipers (entity *en)
 	{
 		raw = (helicopter *) get_local_entity_data (en);
 
-		if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW)
+		switch (raw->ac.object_3d_shape)
+		{
+		case OBJECT_3D_AH64D_APACHE_LONGBOW:
 		{
 			animate_apache_external_wipers (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC)
+		case OBJECT_3D_MI28N_HAVOC:
 		{
 			animate_havoc_external_wipers (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+		case OBJECT_3D_KA_52:
 		{
 			animate_hokum_wipers (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030602 Start
-
-		else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK)
+		case OBJECT_3D_UH60_BLACKHAWK:
 		{
 			animate_blackhawk_external_wipers (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030602 End
 		////Moje 030619 Start
-		else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
+		case OBJECT_3D_MI24_HIND:
 		{
 			animate_hind_external_wipers (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030619 End
 		////Moje 030816 Start
-
-		else if (raw->ac.object_3d_shape == OBJECT_3D_AH_64A)
+		case OBJECT_3D_AH_64A:
 		{
 			animate_ah64a_external_wipers (raw->ac.inst3d);
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+		case OBJECT_3D_KA_50:
 		{
 			animate_ka50_external_wipers (raw->ac.inst3d);
+			break;
 		}
 		////Moje 030619 End
-
+		}
 	}
 }
 

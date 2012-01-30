@@ -58,6 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
+#if 0
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +219,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_filter );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, current_object_3d_texture_mipmap );
 	
-				if ( main_face->number_of_points >= 3 )
+				if ( current_object_3d_surface->polygons )
 				{
 	
 					if ( current_object_3d_surface->smoothed )
@@ -244,7 +245,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 				set_deferred_d3d_texture ( 0, NULL );
 
-				if ( main_face->number_of_points >= 3 )
+				if ( current_object_3d_surface->polygons )
 				{
 	
 					if ( current_object_3d_surface->smoothed )
@@ -308,7 +309,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_filter );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, current_object_3d_texture_mipmap );
 
-				if ( main_face->number_of_points >= 3 )
+				if ( current_object_3d_surface->polygons )
 				{
 	
 					if ( current_object_3d_surface->smoothed )
@@ -334,7 +335,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 				set_deferred_d3d_texture ( 0, NULL );
 
-				if ( main_face->number_of_points >= 3 )
+				if ( current_object_3d_surface->polygons )
 				{
 	
 					if ( current_object_3d_surface->smoothed )
@@ -687,3 +688,5 @@ void insert_z_sorted_3d_face ( object_3d_face *this_face, int z, int surface, in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#endif

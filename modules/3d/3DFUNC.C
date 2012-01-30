@@ -919,6 +919,7 @@ unsigned f3d_pixel_size(void)
 	return ddsd.ddpfPixelFormat.dwRGBBitCount;
 }
 
+#if 0
 static int f3d_test_video_resolution_1(int width, int height, int depth)
 {
 	HRESULT
@@ -1124,6 +1125,12 @@ int f3d_test_video_resolution(int width, int height, int depth)
 	f3d_test_video_resolution_2();
 	return result;
 }
+#else
+int f3d_test_video_resolution(int width, int height, int depth)
+{
+	return TRUE;
+}
+#endif
 
 int f3d_enum_devices(LPDIRECTDRAWX ddraw, LPD3DENUMDEVICESCALLBACK7 enumerate_devices, LPVOID arg)
 {

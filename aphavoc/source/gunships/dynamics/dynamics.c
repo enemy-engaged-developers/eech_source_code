@@ -2055,6 +2055,18 @@ void flight_dynamics_toggle_wheel_brake (event *ev)
 
 void set_current_flight_dynamics_wheel_brake (int flag)
 {
+	switch (get_global_gunship_type ())
+	{
+		case GUNSHIP_TYPE_VIPER:
+			{
+				flag = TRUE;
+				break;
+			}
+		default:
+			{
+				break;
+			}
+	}
 
 	current_flight_dynamics->wheel_brake = flag;
 }

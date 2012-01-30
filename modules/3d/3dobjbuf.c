@@ -95,7 +95,9 @@ scene_slot_drawing_list
 	*middle_scene_slot_sorted_list,
 	*low_zbuffered_scene_slot_sorted_list,
 	*low_nonzbuffered_scene_slot_sorted_list,
+#if 0
 	*near_scene_slot_list,
+#endif
 	*current_scene_slot_list;
 
 float
@@ -111,7 +113,9 @@ static scene_slot_drawing_list
 	*last_middle_scene_slot_insert_point,
 	*last_low_zbuffered_scene_slot_insert_point,
 	*last_low_nonzbuffered_scene_slot_insert_point,
+#if 0
 	*last_near_scene_slot_insert_point,
+#endif
 	scene_slot_order_list[MAX_3D_OBJECTS];
 
 static int
@@ -134,13 +138,17 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void insert_near_3d_scene_slot_into_3d_scene ( scene_slot_drawing_list *object );
+#endif
 
 void draw_normal_scene_objects ( scene_slot_drawing_list *object_order );
 
 void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order );
 
+#if 0
 void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order );
+#endif
 
 static void set_up_tnl_hardware ( void );
 
@@ -825,6 +833,7 @@ void insert_zbiased_coloured_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void *data )
 {
 
@@ -894,6 +903,7 @@ void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void 
 		}
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1594,6 +1604,7 @@ void insert_low_nonzbuffered_scene_slot_into_3d_scene ( scene_slot_drawing_list 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void insert_near_3d_scene_slot_into_3d_scene ( scene_slot_drawing_list *object )
 {
 
@@ -1625,6 +1636,7 @@ void insert_near_3d_scene_slot_into_3d_scene ( scene_slot_drawing_list *object )
 		last_near_scene_slot_insert_point = object;
 	}
 }
+#endif
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1794,6 +1806,7 @@ void draw_3d_scene ( void )
 		}
 	}
 
+#if 0
 	//
 	// Now render any "near" objects in the scene
 	//
@@ -1803,6 +1816,7 @@ void draw_3d_scene ( void )
 
 		draw_z_sorted_scene_objects ( near_scene_slot_list );
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2195,6 +2209,7 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order )
 {
 
@@ -2232,6 +2247,7 @@ void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order )
 	set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, TRUE/*ddraw.use_z_buffer*/ );
 	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2249,14 +2265,18 @@ void clear_3d_scene_objects ( void )
 	middle_scene_slot_sorted_list = NULL;
 	low_zbuffered_scene_slot_sorted_list = NULL;
 	low_nonzbuffered_scene_slot_sorted_list = NULL;
+#if 0
 	near_scene_slot_list = NULL;
+#endif
 
 	last_high_zbuffered_scene_slot_insert_point = NULL;
 	last_high_nonzbuffered_scene_slot_insert_point = NULL;
 	last_middle_scene_slot_insert_point = NULL;
 	last_low_zbuffered_scene_slot_insert_point = NULL;
 	last_low_nonzbuffered_scene_slot_insert_point = NULL;
+#if 0
 	last_near_scene_slot_insert_point = NULL;
+#endif
 
 	scene_slot_order_index = 0;
 
