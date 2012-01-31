@@ -4066,7 +4066,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 		width = ( ( int ) header[13] << 8 ) | header[12];
 		height = ( ( int ) header[15] << 8 ) | header[14];
 
-		override_screen = create_texture_map (width, height, type, 1, system_texture_palettes[0], system_texture_colour_tables[0]);
+		override_screen = create_texture_map ( width, height, type, 1, system_texture_palettes[0], system_texture_colour_tables[0] );
 
 		buffer_size = width * height * nrbytes;
 		buffer = ( unsigned char * ) safe_malloc ( buffer_size );
@@ -4090,7 +4090,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 				if ( count++ & 0x80 )
 				{
 					count -= 0x80;
-					fread ( buffer, nrbytes, 1, fp );
+					fread ( buf, nrbytes, 1, fp );
 					while ( count-- )
 					{
 						memcpy ( buffer + offset, buf, nrbytes );
@@ -4141,7 +4141,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 					offset2;
 
 				offset1 = y * width * nrbytes;
-				offset2 = (height - y - 1) * width * nrbytes;
+				offset2 = ( height - y - 1 ) * width * nrbytes;
 
 				for ( x = 0; x < width * nrbytes; x++ )
 				{
