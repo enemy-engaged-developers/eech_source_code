@@ -611,6 +611,10 @@ void gunships_button_function (ui_object *obj, void *arg)
 			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 			break;
 		case GUNSHIP_TYPE_VIPER:
+			set_free_flight_gunship_type(GUNSHIP_TYPE_KIOWA);
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			break;
+		case GUNSHIP_TYPE_KIOWA:
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HAVOC);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
@@ -946,6 +950,10 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			break;
 		case GUNSHIP_TYPE_VIPER:
 			apache = construct_temporary_3d_object ( OBJECT_3D_AH1_Z, TRUE );
+			pitch = rad(2);
+			break;
+		case GUNSHIP_TYPE_KIOWA:
+			apache = construct_temporary_3d_object ( OBJECT_3D_OH58D, TRUE );
 			pitch = rad(2);
 			break;
 		}

@@ -183,18 +183,35 @@ extern int
 
 //VJ 030318 wideview mod
 extern int
-        wide_cockpit;
+	wide_cockpit;
 
 extern int
-        edit_wide_cockpit;
+	edit_wide_cockpit;
 
-struct COCKPIT_POSITION {
-  float x,y,z,p;
+struct COCKPIT_VIEW
+{
+  float
+		x,
+		y,
+		z,
+		p;
+};
+typedef struct COCKPIT_VIEW cockpit_view;
+
+struct COCKPIT_POSITION
+{
+	const char
+		*cockpit;
+
+	cockpit_view
+		d,
+		c;
 };
 
 typedef struct COCKPIT_POSITION cockpit_position;
 
-extern cockpit_position wide_cockpit_position[];
+extern cockpit_position
+	wide_cockpit_position[];
 
 //VJ 030318 wideview mod
 extern int wide_cockpit_nr;
@@ -211,6 +228,8 @@ enum WIDEVIEW_NRS
 	WIDEVIEW_HAVOC_PILOT,
 	WIDEVIEW_HIND_PILOT,
 	WIDEVIEW_HIND_COPILOT,
+	WIDEVIEW_KIOWA_PILOT,
+	WIDEVIEW_KIOWA_COPILOT,
 	NUM_WIDEVIEW_NRS
 };
 
@@ -226,7 +245,8 @@ typedef enum WIDEVIEW_NRS wideview_nrs;
 #define BASE_Z_HAVOC  0.20
 #define BASE_P_HAVOC  -5.0
 
-extern cockpit_position current_custom_cockpit_viewpoint;				// Retro 6Feb2005
+extern cockpit_view
+	current_custom_cockpit_viewpoint;				// Retro 6Feb2005
 
 //VJ 030324 framerate
 extern float

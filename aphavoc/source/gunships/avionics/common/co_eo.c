@@ -500,6 +500,14 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			get_kiowa_eo_centred_viewpoint (vp);
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////

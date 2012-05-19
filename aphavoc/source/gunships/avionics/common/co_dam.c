@@ -154,7 +154,14 @@ void fully_repair_gunship_damage (void)
 			break;
 		}
 		////Moje 020816 End
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			fully_repair_kiowa_damage ();
 
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
@@ -242,6 +249,13 @@ void partially_repair_gunship_damage (void)
 		}
 		////////////////////////////////////////
 		////Moje 020817 End
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			partially_repair_kiowa_damage ();
+
+			break;
+		}
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -327,6 +341,14 @@ void repair_gunship_weapon_damage (void)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			repair_kiowa_weapon_damage ();
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -414,6 +436,13 @@ void damage_gunship (gunship_damage_levels damage_level)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			damage_kiowa (damage_level);
+
+			break;
+		}
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -504,6 +533,13 @@ int get_gunship_comms_equipment_ok (void)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			status = !kiowa_damage.communications;
+
+			break;
+		}
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
@@ -591,6 +627,14 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			notify_kiowa_avionics_of_dynamics_fault (damage);
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -716,6 +760,16 @@ void fully_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+			case GUNSHIP_TYPE_KIOWA:
+			////////////////////////////////////////
+			{
+				fully_repair_kiowa_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, kiowa_damage.flags);
+
+				break;
+			}
+			////////////////////////////////////////
 
 			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
@@ -823,6 +877,16 @@ void partially_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+			case GUNSHIP_TYPE_KIOWA:
+			////////////////////////////////////////
+			{
+				partially_repair_kiowa_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, kiowa_damage.flags);
+
+				break;
+			}
+			////////////////////////////////////////
 
 			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
@@ -944,6 +1008,18 @@ void load_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			kiowa_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_kiowa_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load Kiowa damage: %x", kiowa_damage.flags);
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -1050,6 +1126,16 @@ void save_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 0300817 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, kiowa_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Kiowa damage: %x", kiowa_damage);
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////

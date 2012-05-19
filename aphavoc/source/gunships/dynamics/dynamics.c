@@ -75,6 +75,7 @@
 #include "hokum/ho_dyn.h"
 #include "hind/hi_dyn.h"
 #include "ka50/hm_dyn.h"
+#include "kiowa/ki_dyn.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,6 +282,14 @@ void initialise_flight_dynamics (entity *en)
                break;
             }
 ////Moje 020816 End
+            case GUNSHIP_TYPE_KIOWA:
+            {
+
+               initialise_kiowa_advanced_dynamics (en);
+
+               break;
+            }
+
          }
 
          break;
@@ -487,6 +496,9 @@ void initialise_flight_dynamics_collision_points (void)
 	helicopter
 		*raw;
 
+	object_3d_index_numbers
+		shape;
+
 	object_3d_sub_object_index_numbers
 		sub_object_type;
 
@@ -513,23 +525,37 @@ void initialise_flight_dynamics_collision_points (void)
 ////Moje 030713 next line
 */
 
-	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
-		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
-		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
-		raw->ac.object_3d_shape == OBJECT_3D_KA_52)
-
+	shape = OBJECT_3D_AH64D_APACHE_LONGBOW;
+	switch (raw->ac.object_3d_shape)
 	{
-		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
+	case OBJECT_3D_AH64D_APACHE_LONGBOW:
+	case OBJECT_3D_MI28N_HAVOC:
+	case OBJECT_3D_RAH66:
+	case OBJECT_3D_KA_52:
+	case OBJECT_3D_OH58D:
+		{
+			shape = raw->ac.object_3d_shape;
+			break;
+		}
+	case OBJECT_3D_MI24_HIND:
+		{
+			if (command_line_dynamics_flight_model >= 2)
+				shape = OBJECT_3D_AH64D_APACHE_LONGBOW;
+			break;
+		}
+	case OBJECT_3D_KA_50:
+		{
+			shape = OBJECT_3D_KA_52;
+			break;
+		}
+	case OBJECT_3D_UH60_BLACKHAWK:
+		{
+			shape = command_line_dynamics_flight_model >= 2 ? OBJECT_3D_RAH66 : OBJECT_3D_AH64D_APACHE_LONGBOW;
+			break;
+		}
 	}
-	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND && command_line_dynamics_flight_model >= 2)
-//		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
-		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
-	else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
-		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
-	else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK && command_line_dynamics_flight_model >= 2)
-		temp_inst3d = construct_3d_object (OBJECT_3D_RAH66);
-	else
-		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
+
+	temp_inst3d = construct_3d_object (shape);
 
 	get_identity_matrix3x3(temp_inst3d->vp.attitude);
 
@@ -837,6 +863,9 @@ void set_dynamics_entity_values (entity *en)
 		air_density,
 		damage_percentage;
 
+	int
+		no_right_engine;
+
 	ASSERT (current_flight_dynamics);
 
 	if (!en)
@@ -860,6 +889,8 @@ void set_dynamics_entity_values (entity *en)
 	current_flight_dynamics->main_rotor_idle_rpm = 70.0;
 	current_flight_dynamics->main_rotor_max_rpm = 100.0;
 	current_flight_dynamics->engine_start_timer = 0.0;
+
+	no_right_engine = get_global_gunship_type() == GUNSHIP_TYPE_KIOWA;
 
 	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
 	{
@@ -891,7 +922,7 @@ void set_dynamics_entity_values (entity *en)
 		current_flight_dynamics->left_engine_torque.value = 0.0;
 		current_flight_dynamics->right_engine_torque.value = 0.0;
 		current_flight_dynamics->left_engine_torque.max = 120.0;
-		current_flight_dynamics->right_engine_torque.max = 120.0;
+		current_flight_dynamics->right_engine_torque.max = no_right_engine ? 0.0 : 120.0;
 		current_flight_dynamics->combined_engine_torque.value = 0.0;
 
 		current_flight_dynamics->apu_rpm.value = 0.0;
@@ -908,22 +939,22 @@ void set_dynamics_entity_values (entity *en)
 		else  // start with engines running
 		{
 			current_flight_dynamics->left_engine_n1_rpm.value = current_flight_dynamics->engine_idle_rpm;
-			current_flight_dynamics->right_engine_n1_rpm.value = current_flight_dynamics->engine_idle_rpm;
+			current_flight_dynamics->right_engine_n1_rpm.value = no_right_engine ? 0.0 : current_flight_dynamics->engine_idle_rpm;
 			current_flight_dynamics->left_engine_n1_rpm.max = 110.0;
-			current_flight_dynamics->right_engine_n1_rpm.max = 110.0;
+			current_flight_dynamics->right_engine_n1_rpm.max = no_right_engine ? 0.0 : 110.0;
 		}
 
 		current_flight_dynamics->left_engine_rpm.value = 0.0;
 		current_flight_dynamics->right_engine_rpm.value = 0.0;
 		current_flight_dynamics->left_engine_rpm.max = 100.0;
-		current_flight_dynamics->right_engine_rpm.max = 100.0;
+		current_flight_dynamics->right_engine_rpm.max = no_right_engine ? 0.0 : 100.0;
 		current_flight_dynamics->main_rotor_rpm.value = 0.0;
 		current_flight_dynamics->tail_rotor_rpm.value = 0.0;
 
 		current_flight_dynamics->left_engine_temp.value = 35.0;
-		current_flight_dynamics->right_engine_temp.value = 35.0;
+		current_flight_dynamics->right_engine_temp.value = no_right_engine ? 0.0 : 35.0;
 		current_flight_dynamics->left_engine_temp.min = 100.0;
-		current_flight_dynamics->right_engine_temp.min = 100.0;
+		current_flight_dynamics->right_engine_temp.min = no_right_engine ? 0.0 : 100.0;
 
 		current_flight_dynamics->input_data.collective.value = 0.0;
 
@@ -935,27 +966,27 @@ void set_dynamics_entity_values (entity *en)
 		// not landed
 
 		current_flight_dynamics->left_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
-		current_flight_dynamics->right_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
+		current_flight_dynamics->right_engine_torque.value = no_right_engine ? 0.0 : get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
 		current_flight_dynamics->combined_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
 		current_flight_dynamics->left_engine_torque.max = 120.0;
-		current_flight_dynamics->right_engine_torque.max = 120.0;
+		current_flight_dynamics->right_engine_torque.max = no_right_engine ? 0.0 : 120.0;
 
 		current_flight_dynamics->apu_rpm.value = 0.0;  // APU only used during start up
 		current_flight_dynamics->left_engine_rpm.value = 100.0;
-		current_flight_dynamics->right_engine_rpm.value = 100.0;
+		current_flight_dynamics->right_engine_rpm.value = no_right_engine ? 0.0 : 100.0;
 		current_flight_dynamics->left_engine_rpm.max = 100.0;
-		current_flight_dynamics->right_engine_rpm.max = 100.0;
+		current_flight_dynamics->right_engine_rpm.max = no_right_engine ? 0.0 : 100.0;
 		current_flight_dynamics->left_engine_n1_rpm.value = 80.0;
-		current_flight_dynamics->right_engine_n1_rpm.value = 80.0;
+		current_flight_dynamics->right_engine_n1_rpm.value = no_right_engine ? 0.0 : 80.0;
 		current_flight_dynamics->main_rotor_rpm.value = 100.0;
 		current_flight_dynamics->tail_rotor_rpm.value = 100.0;
 
 		current_flight_dynamics->input_data.collective.value = 0.0;
 
 		current_flight_dynamics->left_engine_temp.value = 750.0;
-		current_flight_dynamics->right_engine_temp.value = 750.0;
+		current_flight_dynamics->right_engine_temp.value = no_right_engine ? 0.0 : 750.0;
 		current_flight_dynamics->left_engine_temp.min = 700.0;
-		current_flight_dynamics->right_engine_temp.min = 700.0;
+		current_flight_dynamics->right_engine_temp.min = no_right_engine ? 0.0 : 700.0;
 
 		if (get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) != 0.0)
 		{
@@ -1384,6 +1415,34 @@ void update_gunship_dynamics (void)
 			break;
 		}
 ////Moje 030816 End
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+
+			while (current_flight_dynamics->model_iterations --)
+			{
+
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
+				update_kiowa_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
+			}
+
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
+
+			update_dynamics_external_values ();
+
+			break;
+		}
 	}
 
 	if (get_gunship_entity ())
@@ -2058,6 +2117,7 @@ void set_current_flight_dynamics_wheel_brake (int flag)
 	switch (get_global_gunship_type ())
 	{
 		case GUNSHIP_TYPE_VIPER:
+		case GUNSHIP_TYPE_KIOWA:
 			{
 				flag = TRUE;
 				break;
@@ -2156,6 +2216,11 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 
 void set_current_flight_dynamics_auto_pilot (int flag)
 {
+	int
+		no_right_engine;
+
+	no_right_engine = get_global_gunship_type() == GUNSHIP_TYPE_KIOWA;
+
 /*
 	unsigned int
 		damage;
@@ -2406,9 +2471,9 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 			current_flight_dynamics->left_engine_n1_rpm.max = 110.0;
 			current_flight_dynamics->left_engine_torque.max = 120.0;
 
-			current_flight_dynamics->right_engine_rpm.max = 100.0;
-			current_flight_dynamics->right_engine_n1_rpm.max = 110.0;
-			current_flight_dynamics->right_engine_torque.max = 120.0;
+			current_flight_dynamics->right_engine_rpm.max = no_right_engine ? 0.0 : 100.0;
+			current_flight_dynamics->right_engine_n1_rpm.max = no_right_engine ? 0.0 : 110.0;
+			current_flight_dynamics->right_engine_torque.max = no_right_engine ? 0.0 : 120.0;
 		}
 
 		add_flight_path_action (current_flight_dynamics->position.x, current_flight_dynamics->position.z, FLIGHT_PATH_ACTION_USER_NAVIGATING);
@@ -3463,6 +3528,11 @@ void flight_dynamics_start_engine (int engine_number)
 
 	ASSERT (engine_number >= 1 && engine_number <= 2);
 
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	{
+		engine_number = 1;
+	}
+
 	if (engine_number == 1)
 	{
 		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
@@ -3478,6 +3548,7 @@ void flight_dynamics_start_engine (int engine_number)
 
 	switch (get_global_gunship_type())
 	{
+	case GUNSHIP_TYPE_KIOWA:
 	case GUNSHIP_TYPE_HIND:
 	case GUNSHIP_TYPE_HAVOC:
 	case GUNSHIP_TYPE_HOKUM:
@@ -3501,6 +3572,11 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	dynamics_float_variable *engine_rpm, *engine_temp;
 
 	ASSERT (engine_number == 1 || engine_number == 2);
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	{
+		engine_number = 1;
+	}
 
 	if (engine_number == 1)
 	{
@@ -3617,6 +3693,11 @@ void update_engine_temperature_dynamics (int engine_number)
 	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque, *engine_temp;
 
 	ASSERT(engine_number == 1 || engine_number == 2);
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	{
+		engine_number = 1;
+	}
 
 	if (engine_number == 1)
 	{
@@ -3753,6 +3834,11 @@ void update_engine_rpm_dynamics (int engine_number)
 	int starter_active;
 
 	ASSERT(engine_number == 1 || engine_number == 2);
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	{
+		engine_number = 1;
+	}
 
 	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
 	collect = max (1.0f, collect);

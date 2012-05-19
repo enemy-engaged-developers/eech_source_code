@@ -210,10 +210,10 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"12.7mm Round",		 											// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"12.7mm",																	// hud_name
+			"12.7mm",																	// mfd_name
+			"M2 12.7mm",																	// weapon_loading_list_name
+			"Browning M2 12.7mm",																	// weapon_loading_name_text
 
 			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type

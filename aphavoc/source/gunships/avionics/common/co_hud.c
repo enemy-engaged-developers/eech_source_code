@@ -102,11 +102,9 @@ void initialise_common_hud (void)
 	//VJ 060212 save hud info mod ==>
 	int gt=get_global_gunship_type();
 	// happens at initialisation pahse, gunship not known yet
-	if (gt == 8) 
+	if (gt >= NUM_GUNSHIP_TYPES)
 		gt = 0;
 	
-	if (gt == 4 || gt == 6) gt = 0;
-	if (gt == 5 || gt == 7) gt = 1;
 	debug_log("hud colour %d %d",gt,hud_code[gt][HUD_CODES_COLOUR]);
 	set_global_hud_colour((hud_colours) hud_code[gt][HUD_CODES_COLOUR]);
 	global_hud_alpha = hud_code[gt][HUD_CODES_ALPHA];
@@ -353,6 +351,14 @@ void display_hud_on_external_view (void)
 				break;
 			}
 			////Moje 030816 end
+			case GUNSHIP_TYPE_KIOWA:
+			////////////////////////////////////////
+			{
+				
+				draw_kiowa_hud ();
+
+				break;
+			}
 
 			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
@@ -430,10 +436,20 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 			set_d3d_texture_mip_filtering (FALSE);
 		}
 		
-		if (get_global_gunship_type () == GUNSHIP_TYPE_COMANCHE)
-			set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));
-		else
-			set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_COMANCHE_MFD2));
+		switch (get_global_gunship_type ())
+		{
+			case GUNSHIP_TYPE_COMANCHE:
+			case GUNSHIP_TYPE_KIOWA:
+			{
+				set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));
+				break;
+			}
+			default:
+			{
+				set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_COMANCHE_MFD2));
+				break;
+			}
+		}
 
 		////////////////////////////////////////
 		//

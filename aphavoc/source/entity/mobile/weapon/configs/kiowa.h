@@ -66,102 +66,193 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		#define LHS_HARDPOINT1							(0)
-		#define RHS_HARDPOINT1 							(1)
+		#define LHS_HARDPOINT1							(KIOWA_LHS_PYLON)
+		#define RHS_HARDPOINT1 							(KIOWA_RHS_PYLON)
 		#define CHAFF_DISPENSER							(KIOWA_CHAFF_DISPENSER)
 		#define FLARE_DISPENSER							(KIOWA_FLARE_DISPENSER)
 
-		#define HELLFIRE_RACK							(0)
-		#define STINGER_TUBES		  					(0)
+		#define HELLFIRE_RACK								(0)
+		#define STINGER_TUBES		  					(1)
+		#define HYDRA70_M261_POD						(2)
+		#define CHAINGUN_POD								(3)
 		#define CHAFF_VECTOR								(0)
 		#define FLARE_VECTOR								(0)
 
 		#define NUM_HELLFIRE_MISSILES					(2)
 		#define NUM_STINGER_MISSILES					(2)
+		#define NUM_HYDRA70_ROCKETS						(7)
+		#define NUM_CHAINGUN_POD_ROUNDS				(500)
 		#define NUM_CHAFFS								(30)
 		#define NUM_FLARES								(30)
 
-		////////////////////////////////////////
-		//
-		// WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1
-		//
-		////////////////////////////////////////
-		{
-			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,	 	  												// number
-				CHAFF_DISPENSER,												// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,					  												// muzzle_depth
-				FALSE,			  												// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,			  														// heading_share_mask
-				0,			  														// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
-			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,	 													// number
-				FLARE_DISPENSER,												// heading_depth
-				FLARE_VECTOR,			  										// pitch_depth
-				0,					  												// muzzle_depth
-				FALSE,			  												// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,		 															// heading_share_mask
-				0,		 	 														// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
-			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,					// sub_type
-				NUM_STINGER_MISSILES,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				STINGER_TUBES,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_2
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,					// sub_type
-				NUM_HELLFIRE_MISSILES,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				HELLFIRE_RACK,													// pitch_depth
-				0,					  												// muzzle_depth
-				FALSE,			  												// make_weapon_system_ready
-				FALSE,															// rotate
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -172,11 +263,2573 @@
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
-				0,		 	 														// pitch_share_mask
+				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 5
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_3
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_4
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_5
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,	 								// sub_type
+				NUM_CHAINGUN_POD_ROUNDS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				CHAINGUN_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_6
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_7
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_8
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_9
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_10
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,	 								// sub_type
+				NUM_CHAINGUN_POD_ROUNDS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				CHAINGUN_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_11
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_12
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_13
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_14
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_15
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,	 								// sub_type
+				NUM_CHAINGUN_POD_ROUNDS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				CHAINGUN_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_16
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_17
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				NUM_HELLFIRE_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_18
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER,	 								// sub_type
+				NUM_STINGER_MISSILES,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				STINGER_TUBES,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_19
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 6
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 7
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 8
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 9
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 10
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 11
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 12
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 13
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 14
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 15
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 16
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 17
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 18
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 19
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 20
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 21
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 22
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 23
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 24
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 25
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 26
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 27
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 28
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 29
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 30
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 31
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			// WEAPON PACKAGE 32
+			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+		},
+    ////////////////////////////////////////
+    //
+    // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20
+    //
+    ////////////////////////////////////////
+    {
+      // WEAPON PACKAGE 1
+      {
+        ENTITY_SUB_TYPE_WEAPON_CHAFF,               // sub_type
+        NUM_CHAFFS,                             // number
+        CHAFF_DISPENSER,                        // heading_depth
+        CHAFF_VECTOR,                         // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                    // heading_share_mask
+        0,                                    // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+      // WEAPON PACKAGE 2
+      {
+        ENTITY_SUB_TYPE_WEAPON_FLARE,               // sub_type
+        NUM_FLARES,                           // number
+        FLARE_DISPENSER,                        // heading_depth
+        FLARE_VECTOR,                           // pitch_depth
+        0,                                    // muzzle_depth
+        FALSE,                                // make_weapon_system_ready
+        FALSE,                              // rotate
+        1,                                  // salvo_size
+        rad (0.0),                            // heading_rate
+        rad (0.0),                            // min_heading_limit
+        rad (0.0),                            // max_heading_limit
+        rad (0.0),                            // pitch_rate
+        rad (0.0),                            // min_pitch_limit
+        rad (0.0),                            // max_pitch_limit
+        rad (0.0),                            // muzzle_rotate_rate
+        knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
+        0,                                  // heading_share_mask
+        0,                                  // pitch_share_mask
+        MUZZLE_FLASH_INVALID,                   // muzzle_flash_type
+      },
+			// WEAPON PACKAGE 4
+			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,	 								// sub_type
+				NUM_HYDRA70_ROCKETS,	 											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA70_M261_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
+				ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,	 								// sub_type
+				NUM_CHAINGUN_POD_ROUNDS,	 											// number
+				LHS_HARDPOINT1,												// heading_depth
+				CHAINGUN_POD,			  												// pitch_depth
+				0,						  				 							// muzzle_depth
+				FALSE,				  				 							// make_weapon_system_ready
+				FALSE,		 													// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,										// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 6
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 7
@@ -240,10 +2893,14 @@
 
 		#undef HELLFIRE_RACK
 		#undef STINGER_TUBES
+		#undef HYDRA70_M261_POD
+		#undef CHAINGUN_POD
 		#undef CHAFF_VECTOR
 		#undef FLARE_VECTOR
 
 		#undef NUM_HELLFIRE_MISSILES
 		#undef NUM_STINGER_MISSILES
+		#undef NUM_STINGER_MISSILES
+		#undef NUM_HYDRA70_ROCKETS
 		#undef NUM_CHAFFS
 		#undef NUM_FLARES

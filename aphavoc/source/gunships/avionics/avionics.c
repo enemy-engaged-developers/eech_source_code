@@ -438,6 +438,46 @@ void initialise_avionics (void)
 		}
 		////Moje 030815 End
 
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_kiowa_hud ();
+
+			initialise_kiowa_mfd ();
+
+			initialise_kiowa_weapon_systems ();
+
+			initialise_kiowa_target_acquisition_systems ();
+
+			initialise_kiowa_lamp_avionics ();
+
+			initialise_kiowa_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_kiowa_avionics_events, "kiowa avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
@@ -866,6 +906,48 @@ void deinitialise_avionics (void)
 		}
 		//// Moje 030517 End of insertion 2
 
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_kiowa_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_kiowa_hud ();
+
+			deinitialise_kiowa_mfd ();
+
+			deinitialise_kiowa_target_acquisition_systems ();
+
+			deinitialise_kiowa_lamp_avionics ();
+
+			deinitialise_kiowa_threat_warning_system ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
@@ -1111,6 +1193,25 @@ void update_avionics (void)
 		}
 		////Moje 030815 End of 3rd insertion
 
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_kiowa_target_acquisition_system ();
+
+			update_kiowa_weapon_systems ();
+
+			update_kiowa_lamp_avionics ();
+
+			update_kiowa_threat_warning_system ();
+
+			if (command_line_shared_mem_export != 0)
+				update_kiowa_avionics_shared_mem ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007

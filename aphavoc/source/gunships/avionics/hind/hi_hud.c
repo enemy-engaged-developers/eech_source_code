@@ -418,9 +418,9 @@ void draw_hind_hud_on_texture (void)
 			head_offset_y = -getViewpointOffsetY(head_offset_y);
 			head_offset_z = -getViewpointOffsetY(head_offset_z);
 
-			head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
-			head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].y;
-			head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].z;
+			head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].c.x;
+			head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].c.y;
+			head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].c.z;
 		}
 
 		{

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -109,7 +109,7 @@ void pre_initialise_common_virtual_cockpit (void)
 void initialise_common_virtual_cockpit (void)
 {
 	initialise_common_virtual_cockpit_wiper_and_rain_effect ();
-	
+
 	memset(gunship_periscope_position, 0, sizeof(gunship_periscope_position));
 	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].x = -0.05;
 	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].x =  0.05;
@@ -210,6 +210,12 @@ void damage_virtual_cockpit_main_rotors (int seed)
 			damage_ka50_virtual_cockpit_main_rotors (seed);
 			break;
 		}
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			damage_kiowa_virtual_cockpit_main_rotors (seed);
+
+			break;
+		}
 		////Moje 030816 End
 		case GUNSHIP_TYPE_VIPER:
 		// GCsDriver  08-12-2007
@@ -285,6 +291,13 @@ void restore_virtual_cockpit_main_rotors (void)
 		case GUNSHIP_TYPE_KA50:
 		{
 			restore_ka50_virtual_cockpit_main_rotors ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			restore_kiowa_virtual_cockpit_main_rotors ();
+
 			break;
 		}
 		////Moje 030816 End
@@ -312,9 +325,9 @@ int TIR_looking_in_periscope(void)
 	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) != CREW_ROLE_CO_PILOT)
 		return FALSE;
 
-	x = wide_cockpit_position[wide_cockpit_nr].x - current_custom_cockpit_viewpoint.x;
-	y = wide_cockpit_position[wide_cockpit_nr].y - current_custom_cockpit_viewpoint.y;
-	z = wide_cockpit_position[wide_cockpit_nr].z - current_custom_cockpit_viewpoint.z;
+	x = wide_cockpit_position[wide_cockpit_nr].c.x - current_custom_cockpit_viewpoint.x;
+	y = wide_cockpit_position[wide_cockpit_nr].c.y - current_custom_cockpit_viewpoint.y;
+	z = wide_cockpit_position[wide_cockpit_nr].c.z - current_custom_cockpit_viewpoint.z;
 
 	if (pilot_head_heading < rad(-10.0) || pilot_head_heading > rad(10.0)
 		|| pilot_head_pitch < rad(-30.0) || pilot_head_pitch > rad(10.0))
@@ -329,7 +342,7 @@ int TIR_looking_in_periscope(void)
 		gunship_periscope_position[ship][0].z < z &&
 		gunship_periscope_position[ship][1].z > z)
 	{
-		return TRUE;	
+		return TRUE;
 	}
 
 	return FALSE;
@@ -577,7 +590,7 @@ void initialise_switch(cockpit_switch* swch, float* position, float depress_leng
 void press_switch(cockpit_switch* swch)
 {
 	if (swch->timer <= 0.0)
-		swch->timer = swch->depress_time + swch->delay; 
+		swch->timer = swch->depress_time + swch->delay;
 }
 
 void animate_switch(cockpit_switch* swch)
@@ -596,4 +609,69 @@ void animate_switch(cockpit_switch* swch)
 	}
 
 	swch->timer -= get_delta_time();
+}
+
+//VJ wideview mod, date: 18-mar-03
+void print_edit_wide_cockpit (void)
+{
+	char
+		buffer[128];
+
+	if (edit_wide_cockpit)
+	{
+		sprintf(buffer, "%s wide cockpit mod edit (set freelook off):", wide_cockpit_position[wide_cockpit_nr].cockpit);
+		ui_display_text (buffer, 10, 40);
+		ui_display_text ("X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave edit", 10, 60);
+		sprintf (buffer, "x=%.3f, y=%.3f, z=%.3f, pitch=%.3f", wide_cockpit_position[wide_cockpit_nr].c.x, wide_cockpit_position[wide_cockpit_nr].c.y, wide_cockpit_position[wide_cockpit_nr].c.z, wide_cockpit_position[wide_cockpit_nr].c.p);
+		ui_display_text (buffer, 10, 100);
+	}
+}
+
+void move_edit_wide_cockpit (void)
+{
+	////////////////////////////////////////
+	//
+	// wide cockpit position edit
+	//
+	////////////////////////////////////////
+
+	if (edit_wide_cockpit)
+	{
+		if (check_key(DIK_NUMPAD7))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.p += 0.5;
+		}
+		if (check_key(DIK_NUMPAD9))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.p -= 0.5;
+		}
+		if (check_key(DIK_NUMPAD6))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.z += 0.01;
+		}
+		if (check_key(DIK_NUMPAD4))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.z -= 0.01;
+		}
+		if (check_key(DIK_NUMPAD8))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.y += 0.01;
+		}
+		if (check_key(DIK_NUMPAD2))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.y -= 0.01;
+		}
+		if (check_key(DIK_NUMPAD1))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.x -= 0.01;
+		}
+		if (check_key(DIK_NUMPAD3))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c.x += 0.01;
+		}
+		if (check_key(DIK_NUMPAD0))
+		{
+			wide_cockpit_position[wide_cockpit_nr].c = wide_cockpit_position[wide_cockpit_nr].d;
+		}
+	}
 }

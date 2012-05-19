@@ -427,6 +427,12 @@ static void weapons_safe_event (event *ev)
 		}
 		////Moje 030816 End
 
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			break;
+		}
+
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007

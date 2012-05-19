@@ -101,6 +101,9 @@ int get_max_fov ( void )
 		case GUNSHIP_TYPE_KA50:
 			max_fov = command_line_max_fov1;
 			break;
+		case GUNSHIP_TYPE_KIOWA:
+			max_fov = command_line_max_fov5;
+			break;
 		case GUNSHIP_TYPE_VIPER:
 			max_fov = command_line_max_fov0;
 			break;
@@ -1111,6 +1114,7 @@ static void enter_view_mode (view_modes mode)
 				{
 					case GUNSHIP_TYPE_COMANCHE:
 					case GUNSHIP_TYPE_HOKUM:
+					case GUNSHIP_TYPE_KIOWA:
 					{
 						break;
 					}
@@ -1332,6 +1336,16 @@ static void enter_view_mode (view_modes mode)
 					break;
 				}
 				////Moje 030816 End
+				case GUNSHIP_TYPE_KIOWA:
+				{
+					pilot_head_heading = KIOWA_INSTRUMENT_VIEW_HEADING;
+
+					pilot_head_pitch = KIOWA_INSTRUMENT_VIEW_PITCH;
+
+					mode = VIEW_MODE_VIRTUAL_COCKPIT;
+
+					break;
+				}
 			}
 
 			break;

@@ -1000,6 +1000,64 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	//////////////////////////
+	//
+	// KIOWA
+	//
+	//////////////////////////
+
+	gunship_data = &weapon_loading_gunship_database [GUNSHIP_TYPE_KIOWA];
+
+	for (loop = 0; loop < NUM_WEAPON_LOADING_HARDPOINT_TYPES; loop ++)
+	{
+		memset (&(gunship_data->hardpoint_list [loop]), 0, sizeof (weapon_loading_hardpoint_type));
+	}
+
+	// INNER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = KIOWA_LHS_PYLON;
+	hardpoint_data->sub_object_depth2 = -1;
+
+	hardpoint_data->number_of_valid_weapon_types = 5;
+
+	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND;
+	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	// OUTER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = KIOWA_RHS_PYLON;
+	hardpoint_data->sub_object_depth2 = -1;
+
+	hardpoint_data->number_of_valid_weapon_types = 4;
+
+	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1441,6 +1499,20 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 
 			break;
 		}
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			get_kiowa_weapons_from_weapon_config
+			(
+				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
+				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
+			);
+
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
+
+			break;
+		}
 	}
 }
 
@@ -1662,6 +1734,24 @@ void weapon_loading_reload_all_weapons (entity *en)
 										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
 										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
 										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
+									);
+
+			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
+
+			break;
+		}
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			new_config_type = get_kiowa_weapon_config
+									(
+										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
 									);
 
 			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);

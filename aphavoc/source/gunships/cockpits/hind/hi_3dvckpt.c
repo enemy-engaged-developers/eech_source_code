@@ -1111,16 +1111,16 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 	default:
 		// adjust pitch according to user preferance
 		if (edit_wide_cockpit)
-			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
 
 		// rotate head
 		head_object->relative_heading = -pilot_head_heading;
 		head_object->relative_pitch = -pilot_head_pitch;
 
 		// adjust position according to user preferance
-		head_object->relative_position.x = wide_cockpit_position[wide_cockpit_nr].x;
-		head_object->relative_position.y = wide_cockpit_position[wide_cockpit_nr].y;
-		head_object->relative_position.z = wide_cockpit_position[wide_cockpit_nr].z;
+		head_object->relative_position.x = wide_cockpit_position[wide_cockpit_nr].c.x;
+		head_object->relative_position.y = wide_cockpit_position[wide_cockpit_nr].c.y;
+		head_object->relative_position.z = wide_cockpit_position[wide_cockpit_nr].c.z;
 
 		// adjust for track-IR position
 		if (query_TIR_active())
@@ -1188,9 +1188,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 	object_3d_instance
 		*virtual_cockpit_inst3d;
-
-//VJ wideview mod, date: 18-mar-03
-    char buffer[128];
 
 	flags = (unsigned)-1;
 
@@ -1458,16 +1455,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 			draw_3d_scene ();
 
-//VJ wideview mod, date: 18-mar-03
-         if (edit_wide_cockpit)
-       	{
-				sprintf(buffer,"HIND wide cockpit mod edit (set freelook off):");
-				ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
-				ui_display_text (buffer, 10, 60);
-				sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
-				ui_display_text (buffer, 10, 100);
-         }
+			print_edit_wide_cockpit ();
 
 			end_3d_scene ();
 		}
@@ -1883,8 +1871,8 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 //VJ wideview mod, date: 18-mar-03
 				if (get_global_wide_cockpit ())
 				{
-				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
-				    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+				    vp.y = wide_cockpit_position[wide_cockpit_nr].c.y+0.01;
+				    vp.z = wide_cockpit_position[wide_cockpit_nr].c.z;
 				}
 
 				memcpy (&virtual_cockpit_adi_inst3d->vp, &vp, sizeof (viewpoint));
@@ -2107,56 +2095,8 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 			end_3d_scene ();
 		}
 	}
-	//VJ wideview mod, date: 18-mar-03
-	////////////////////////////////////////
-	//
-	// wide cockpit position edit
-	//
-	////////////////////////////////////////
 
-	if (edit_wide_cockpit)
-	{
-		//VJ 50208 added pilot head pitch
-		if (check_key(DIK_NUMPAD7))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
-      }
-		if (check_key(DIK_NUMPAD9))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
-      }
-		if (check_key(DIK_NUMPAD6))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
-      }
-		if (check_key(DIK_NUMPAD4))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD8))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
-      }
-		if (check_key(DIK_NUMPAD2))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD1))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD3))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
-      }
-		if (check_key(DIK_NUMPAD0))
-		{
-			wide_cockpit_position[wide_cockpit_nr].x = 0.0;
-			wide_cockpit_position[wide_cockpit_nr].y = 0.0;
-			wide_cockpit_position[wide_cockpit_nr].z = 0.0;
-			wide_cockpit_position[wide_cockpit_nr].p = -5.0;
-      }
-   }
+	move_edit_wide_cockpit ();
 
 
 

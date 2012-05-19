@@ -147,6 +147,7 @@ extern int
 	command_line_max_fov2,										// Casm 08OCT05
 	command_line_max_fov3,										// Casm 08OCT05
 	command_line_max_fov4,										// Casm 09JUN09
+	command_line_max_fov5,										// Casm 25JAN12
 	command_line_eo_pan_joystick_index,						// loke 030319
 	command_line_eo_pan_vertical_joystick_axis,			// loke 030319
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319

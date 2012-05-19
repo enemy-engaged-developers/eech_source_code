@@ -941,6 +941,8 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
 
+	////Moje 030816 end
+	
 	/////////////////////////////////////////////////////////////////
 	// VIPER PAGE 
 	/////////////////////////////////////////////////////////////////
@@ -959,8 +961,19 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
 
-	////Moje 030816 end
-	
+	/////////////////////////////////////////////////////////////////
+	// KIOWA PAGE 
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_KIOWA;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paykio.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.902, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
 	/////////////////////////////////////////////////////////////////
 	// Member List Box
 

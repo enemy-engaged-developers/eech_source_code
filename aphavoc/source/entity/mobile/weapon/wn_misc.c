@@ -802,6 +802,54 @@ weapon_config_types get_viper_weapon_config
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+weapon_config_types get_kiowa_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon
+)
+{
+	weapon_config_types
+		config_type;
+
+	int
+		ok;
+
+	for (config_type = WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1; config_type <= WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20; config_type = (weapon_config_types) (((int) config_type) + 1))
+	{
+		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			ok = check_hardpoint_clean (config_type, KIOWA_LHS_PYLON);
+		}
+		else
+		{
+			ok = check_weapon_on_hardpoint (config_type, inner_hardpoint_weapon, KIOWA_LHS_PYLON);
+		}
+
+		if (ok)
+		{
+			if (outer_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				ok = check_hardpoint_clean (config_type, KIOWA_RHS_PYLON);
+			}
+			else
+			{
+				ok = check_weapon_on_hardpoint (config_type, outer_hardpoint_weapon, KIOWA_RHS_PYLON);
+			}
+
+			if (ok)
+			{
+				return (config_type);
+			}
+		}
+	}
+
+	return (WEAPON_CONFIG_TYPE_UNARMED);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void get_apache_weapons_from_weapon_config
 (
 	weapon_config_types weapon_config_type,
@@ -1268,6 +1316,54 @@ void get_viper_weapons_from_weapon_config
 		else if (weapon_config_database[weapon_config_type][package].heading_depth == VIPER_LHS_WING_TIP_MOUNT)
 		{
 			*wing_tip_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void get_kiowa_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon
+)
+{
+	int
+		package;
+
+	ASSERT
+	(
+		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
+		(
+			(weapon_config_type >= WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1) &&
+			(weapon_config_type <= WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20)
+		)
+	);
+
+	ASSERT (inner_hardpoint_weapon);
+	ASSERT (outer_hardpoint_weapon);
+
+	*inner_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*outer_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		if (weapon_config_database[weapon_config_type][package].heading_depth == KIOWA_LHS_PYLON)
+		{
+			*inner_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+
+		if (weapon_config_database[weapon_config_type][package].heading_depth == KIOWA_RHS_PYLON)
+		{
+			*outer_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
 		}
 	}
 }

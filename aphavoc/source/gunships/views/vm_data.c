@@ -449,8 +449,8 @@ cockpit_position
 int 
        wide_cockpit_nr;       
 
-cockpit_position
-		current_custom_cockpit_viewpoint;				// Retro 6Feb2005
+cockpit_view
+	current_custom_cockpit_viewpoint;				// Retro 6Feb2005
 
 //VJ 030324 framerate 
 float

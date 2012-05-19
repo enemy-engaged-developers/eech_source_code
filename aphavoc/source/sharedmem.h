@@ -21,7 +21,7 @@ typedef struct
  * please increase this number when changing the layout of the data,
  * it makes life so much easier for those using the data
  *******************************************************************/
-#define SHARED_MEM_DATA_VERSION 2
+#define SHARED_MEM_DATA_VERSION 3
 
 typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 {
@@ -92,6 +92,9 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 	comanche_lamp_flags
 		comanche_lamps;
 
+	kiowa_lamp_flags
+		kiowa_lamps;
+
 // GCsDriver  08-12-2007
 	default_lamp_flags
 		default_lamps;
@@ -119,6 +122,7 @@ void update_havoc_avionics_shared_mem ();
 void update_hind_avionics_shared_mem ();
 void update_hokum_avionics_shared_mem ();
 void update_ka50_avionics_shared_mem ();
+void update_kiowa_avionics_shared_mem ();
 
 // GCsDriver  08-12-2007
 void update_default_avionics_shared_mem ();

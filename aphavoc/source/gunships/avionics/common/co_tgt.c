@@ -536,6 +536,12 @@ void set_common_target_acquisition_system_lock_target (int lock)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			set_kiowa_lock_target (lock);
+
+			break;
+		}
 
 		case GUNSHIP_TYPE_VIPER:
 		//  GCsDriver  08-12-2007
@@ -981,6 +987,12 @@ void select_simple_avionics_target_acquisition_system (void)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////

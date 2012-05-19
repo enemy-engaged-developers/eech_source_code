@@ -150,13 +150,13 @@ static void get_zero ( const struct config_option *option, char *value )
 static void set_position ( const struct config_option *option, const char *value )
 {
 	unsigned who = option->flag_length;
-	sscanf ( value, "%f,%f,%f,%f", &wide_cockpit_position[who].x, &wide_cockpit_position[who].y, &wide_cockpit_position[who].z, &wide_cockpit_position[who].p );
+	sscanf ( value, "%f,%f,%f,%f", &wide_cockpit_position[who].c.x, &wide_cockpit_position[who].c.y, &wide_cockpit_position[who].c.z, &wide_cockpit_position[who].c.p );
 }
 
 static void get_position ( const struct config_option *option, char *value )
 {
 	unsigned who = option->flag_length;
-	sprintf ( value, "%.3f,%.3f,%.3f,%.3f", wide_cockpit_position[who].x, wide_cockpit_position[who].y, wide_cockpit_position[who].z, wide_cockpit_position[who].p );
+	sprintf ( value, "%.3f,%.3f,%.3f,%.3f", wide_cockpit_position[who].c.x, wide_cockpit_position[who].c.y, wide_cockpit_position[who].c.z, wide_cockpit_position[who].c.p );
 }
 
 static void set_hud_code ( const struct config_option *option, const char *value )
@@ -719,6 +719,8 @@ static const struct config_option options[] =
 		INT(command_line_max_fov3) },
 	{ "maxfov4", "", "general field of view maximum for Hind pits",
 		INT(command_line_max_fov4) },
+	{ "maxfov5", "", "general field of view maximum for Kiowa pits",
+		INT(command_line_max_fov5) },
 	{ NULL, "49", "",
 		NONE },
 	{  "g-force_head_movement", "", "amount of head movement caused by gravitational force (wideview only) (n = Gs, 1.0 = normal, 0.0 = off) (default = 0.0)",
@@ -741,6 +743,10 @@ static const struct config_option options[] =
 		SPEC2(WIDEVIEW_HIND_PILOT, set_position, get_position) },
 	{  "hind_copilot", "", "wideview co-pilot position",
 		SPEC2(WIDEVIEW_HIND_COPILOT, set_position, get_position) },
+	{  "kiowa_pilot", "", "wideview pilot position",
+		SPEC2(WIDEVIEW_KIOWA_PILOT, set_position, get_position) },
+	{  "kiowa_copilot", "", "wideview co-pilot position",
+		SPEC2(WIDEVIEW_KIOWA_COPILOT, set_position, get_position) },
 	{  "hud_code", "", "hud code for 4 gunships",
 		SPEC(set_hud_code, get_hud_code) },
 	{ "wobbly-camera", "", "Make external cameras move wobbly and smoother (0 = off, 1 = on) (def = 1)",
@@ -1081,51 +1087,80 @@ int parse_option ( const char *name, const char *value )
 //VJ 050207 use enum definitions from wm_data.h
 static void wide_cockpit_initialize(void)
 {
+	int
+		count;
+
 	//VJ 050205 new wideview init settings
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].z = 0.180;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].p = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].cockpit = "Comanche";
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].d.x = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].d.y = 0.105;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].d.z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].d.p = 0;
 
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z = 0.180;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].cockpit = "Comanche";
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].d.x = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].d.y = 0.105;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].d.z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].d.p = 0;
 
-		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z = 0.200;
-		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].p = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].cockpit = "Hokum";
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].d.z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].d.p = 0.0;
 
-		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
-		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].cockpit = "Hokum";
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].d.z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].d.p = 0.0;
 //VJ 050210 defined in vm_data.h
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = -7.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].cockpit = "Apache";
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].d.p = -7.0;
 
-		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].z = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].p = -10.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].cockpit = "Apache";
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].d.p = -10.0;
 
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = BASE_X_HAVOC;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = BASE_Y_HAVOC;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = BASE_P_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].cockpit = "Havoc";
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].d.x = BASE_X_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].d.y = BASE_Y_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].d.z = BASE_Z_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].d.p = BASE_P_HAVOC;
 
-		wide_cockpit_position[WIDEVIEW_HIND_PILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_PILOT].z = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_PILOT].p = -5.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].cockpit = "Hind";
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].d.p = -5.0;
 
-		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].z = 0.0;
-		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].p = -5.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].cockpit = "Hind";
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].cockpit = "Kiowa";
+		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].d.p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].cockpit = "Kiowa";
+		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.p = -5.0;
+
+	for (count = 0; count < NUM_WIDEVIEW_NRS; count++)
+	{
+		wide_cockpit_position[count].c = wide_cockpit_position[count].d;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

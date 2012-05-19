@@ -105,6 +105,8 @@ extern void update_avionics (void);
 
 #include "ka50/hm_avion.h"
 
+#include "kiowa/ki_avion.h"
+
 // GCsDriver  08-12-2007
 #include "default/df_avion.h"
 
