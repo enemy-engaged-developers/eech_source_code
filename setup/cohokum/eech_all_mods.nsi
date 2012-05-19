@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.14.0"
+	!define VERSION "1.15.0"
 
 	;Name and file
 	Name "EECH Dev release ${VERSION}"
@@ -425,6 +425,35 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\Mi-28 Havoc\MI28N_TAILWHEEL.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\Mi-28 Havoc\MI28N_TAIL_WHEEL_LOD.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\Mi-28 Havoc\MI28N_WHEELESS.EEO"
+
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects\oh-58d-cockpit"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_adi.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_alt_needle.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_cockpit_blade.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_cockpit_blade2.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_cockpit_blurblade.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_compass.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_copilot_kamizelka.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_kokpit.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_pedal1.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_pedal2.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_pilot_glass.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_pilot_kamizelka.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_pilotforearm.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\kiowa_speed_needle.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\oh-58d-cockpit\OH_58D_COCKPIT.ees"
+
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects\OH-58D Kiowa Warrior"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-gunpod.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-m260.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-mast.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-model.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-tailblur.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-tailblur2.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-undermast.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\OH58D.EES"
 
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\RAH-66 Comanche"
 
@@ -1233,6 +1262,19 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\RED_STAR_64X64.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\RUSSIANSTAR_64X64.dds"
 
+	SetOutPath "$INSTDIR\cohokum\graphics\textures\camo\oh-58d"
+
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa-alq144.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa-ammobelt.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa-gunpod.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa-m260.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\oh58d-side.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\oh58d-side-d.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\oh58d-side-w.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa-alq144.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\kiowa_skull.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh-58d\oh58d-side.tga"
+
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit"
 
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\1_FRONT_MFDS.bmp"
@@ -1676,6 +1718,19 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_WIPER_MOTOR.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_WIRE_CUTTER.bmp"
 
+	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit\oh-58d-cockpit"
+
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit_hud.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit_szyna.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit1.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit2.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit3.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit_hud.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit_szyna.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit1.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit2.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\oh-58d-cockpit\kiowa_cockpit3.tga"
+
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit\mi-24v-cockpit"
 
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\mi-24v-cockpit\HINDCKPT_AIRSPEED_INDICATOR.bmp"
@@ -2034,6 +2089,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_UI_DIR}\cohokum\graphics\ui\cohokum\Map\PayBla.psd"
 	File "${EE_UI_DIR}\cohokum\graphics\ui\cohokum\Map\PayHin.psd"
 	File "${EE_UI_DIR}\cohokum\graphics\ui\cohokum\Map\PayKa5.psd"
+	File "${EE_UI_DIR}\cohokum\graphics\ui\cohokum\Map\PayKio.psd"
 	File "${EE_UI_DIR}\cohokum\graphics\ui\cohokum\Map\PayVip.psd"
 
 	SetOutPath "$INSTDIR\cohokum\tacview-logs"
@@ -2050,6 +2106,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_DYN_DIR}\common\data\dyn\ka-52-suspension.txt"
 	File "${EE_DYN_DIR}\common\data\dyn\mi-24-suspension.txt"
 	File "${EE_DYN_DIR}\common\data\dyn\mi-28-suspension.txt"
+	File "${EE_DYN_DIR}\common\data\dyn\oh-58-suspension.txt"
 	File "${EE_DYN_DIR}\common\data\dyn\rah-66-suspension.txt"
 	File "${EE_DYN_DIR}\common\data\dyn\uh-60-suspension.txt"
 

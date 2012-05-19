@@ -266,6 +266,24 @@ void initialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_kiowa_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_kiowa_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -426,6 +444,20 @@ void deinitialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+
+			deinitialise_common_virtual_cockpit ();
+
+			deinitialise_kiowa_cockpits ();
+
+			deinitialise_kiowa_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -587,6 +619,20 @@ void update_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_kiowa_cockpits ();
+
+			update_kiowa_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 
 		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
@@ -722,6 +768,14 @@ void draw_cockpit (cockpit_panels panel)
 
 			break;
 		}
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			debug_fatal ("Attempted to draw Kiowa fixed cockpit");
+
+			break;
+		}
+		////////////////////////////////////////
 
 		////Moje 030816 End
 /*

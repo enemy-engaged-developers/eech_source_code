@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -84,13 +84,13 @@ static object_3d_instance
 	*virtual_cockpit_inst3d_detail_level_medium_inst3d,
 	*virtual_cockpit_inst3d_detail_level_low_inst3d,
 	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
-	
-//ataribaby 27/12/2008 for new head g-force movement	
-static float	
+
+//ataribaby 27/12/2008 for new head g-force movement
+static float
 	x_head_g_movement = 0.0,
   y_head_g_movement = 0.0,
   random_vibration_x = 0.0,
-  random_vibration_y = 0.0;    	
+  random_vibration_y = 0.0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ static int hokum_periscope_box_check ( void )	// Retro 6Feb2005 (whole block)
 int hokum_periscope_check ( int currentlyUsingPeriscope )	// Retro 6Feb2005 (whole block)
 {
 	// later I plan to use hysteresis (hence the argument) but not right now
-	
+
 	// check if we are in the periscope box.. if yes, return TRUE
 	return hokum_periscope_box_check ();
 }
@@ -178,10 +178,10 @@ void initialise_hokum_virtual_cockpit (void)
 
 //VJ 050208 cleaing up wideview
 	wide_cockpit_nr = WIDEVIEW_HOKUM_PILOT;
-	
+
 //VJ wideview mod, date: 20-mar-03
-//start up in normal view because when you switch to wideview the parameters are read	
-	set_global_wide_cockpit (FALSE);		
+//start up in normal view because when you switch to wideview the parameters are read
+	set_global_wide_cockpit (FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ void update_hokum_virtual_cockpit (void)
 
 	object_3d_sub_object_search_data
 		search;
-	
+
 	////////////////////////////////////////
 	//
 	// sort out what to draw
@@ -593,15 +593,12 @@ void pre_render_hokum_virtual_cockpit_displays (void)
 
 void draw_hokum_virtual_cockpit (void)
 {
-//VJ wideview mod, date: 18-mar-03	
-	char buffer[128];
-        
 	int
 		draw_main_rotors;
 
 	float
 		theta;
-		
+
 	object_3d_instance
 		*inst3d;
 
@@ -755,26 +752,26 @@ void draw_hokum_virtual_cockpit (void)
 	   )
 		{
 			get_hokum_crew_viewpoint ();
-		
-			virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].x;
-			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;	
+
+			virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].c.x;
+			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].c.y;
+			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].c.z;
 
       //ataribaby 27/12/2008
-      /* 
+      /*
 			virtual_cockpit_inst3d->vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 			if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
 				virtual_cockpit_inst3d->vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
       */
-      
-		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT)
-	   		pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT)
-	   		co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 
-		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);    	
+		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT)
+	   		pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
+		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT)
+	   		co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
+
+		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 		}
-		
+
 		//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
 		if (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
@@ -783,17 +780,17 @@ void draw_hokum_virtual_cockpit (void)
 		{
 		  if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
       {
-        random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+        random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
         random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
       }
       x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
       y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-      
+
       virtual_cockpit_inst3d->vp.x -= x_head_g_movement;
   		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
   	  virtual_cockpit_inst3d->vp.y -= y_head_g_movement;
     }
-    
+
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 		{
 			////////////////////////////////////////
@@ -840,18 +837,8 @@ void draw_hokum_virtual_cockpit (void)
 
 				draw_3d_scene ();
 
-				//VJ wideview mod, date: 18-mar-03	
-				//VJ 50208 added pilot head pitch
-				if (edit_wide_cockpit)
-				{  
-					sprintf(buffer,"HOKUM wide cockpit mod edit (set freelook off):"); 
-				   ui_display_text (buffer, 10, 40);
-					sprintf(buffer,"X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
-				   ui_display_text (buffer, 10, 60);
-				   sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
-				   ui_display_text (buffer, 10, 100);
-				}
-				
+				print_edit_wide_cockpit ();
+
 				end_3d_scene ();
 			}
 		}
@@ -906,17 +893,7 @@ void draw_hokum_virtual_cockpit (void)
 
 			draw_3d_scene ();
 
-			//VJ wideview mod, date: 18-mar-03	
-			if (edit_wide_cockpit)
-			{
-				sprintf(buffer,"HOKUM wide cockpit mod edit (set freelook off):"); 
-			   ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
-			   ui_display_text (buffer, 10, 60);
-			   sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
-			   ui_display_text (buffer, 10, 100);
-			}
-
+			print_edit_wide_cockpit ();
 
 			end_3d_scene ();
 
@@ -930,57 +907,7 @@ void draw_hokum_virtual_cockpit (void)
 		}
 	}
 
-	////////////////////////////////////////
-	//
-	// wide cockpit position edit
-	//
-	////////////////////////////////////////
-
-//VJ wideview mod, date: 18-mar-03	
-	if (edit_wide_cockpit)
-	{
-		//VJ 50208 added pilot head pitch
-		if (check_key(DIK_NUMPAD7))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
-      }
-		if (check_key(DIK_NUMPAD9))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
-      }
-		if (check_key(DIK_NUMPAD6))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
-      }  
-		if (check_key(DIK_NUMPAD4))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
-      }  
-		if (check_key(DIK_NUMPAD8))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
-      }  
-		if (check_key(DIK_NUMPAD2))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
-      }  
-   		if (check_key(DIK_NUMPAD3))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
-      }  
-		if (check_key(DIK_NUMPAD1))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
-      }  
-//VJ 050131 update on wideview mod, much better movement
-		if (check_key(DIK_NUMPAD0))
-		{
-			wide_cockpit_position[wide_cockpit_nr].x = 0;
-			wide_cockpit_position[wide_cockpit_nr].y = 0;
-			wide_cockpit_position[wide_cockpit_nr].z = 0.300;
-			wide_cockpit_position[wide_cockpit_nr].p = 0;
-      }     
-	}            	
+	move_edit_wide_cockpit ();
 
 
 #if RECOGNITION_GUIDE
@@ -1040,7 +967,7 @@ void get_hokum_crew_viewpoint (void)
 	{
 		search_head.result_sub_object->relative_heading = -pilot_head_heading;
 		search_head.result_sub_object->relative_pitch = head_pitch_datum - pilot_head_pitch;
-		
+
 		if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005
 			search_head.result_sub_object->relative_roll = TIR_GetRoll() / 16383. * PI / 2.;	// Retro 6Feb2005
 		else
@@ -1083,7 +1010,7 @@ void get_hokum_crew_viewpoint (void)
 			// First lets find out the displacement the user wants.. this is in the user's viewsystem coords !!
 			// Now store this info in a temp vect3d..
 			shiftVP.x = current_custom_cockpit_viewpoint.x;
-			shiftVP.y = current_custom_cockpit_viewpoint.y; 
+			shiftVP.y = current_custom_cockpit_viewpoint.y;
 			shiftVP.z = current_custom_cockpit_viewpoint.z;
 
 			// Now we need to convert our vec3d into world coords.. for this we need the inverse of the viewpoint attitude matrix..

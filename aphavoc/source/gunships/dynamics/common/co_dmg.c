@@ -74,6 +74,7 @@
 #include "../hokum/ho_dyn.h"
 #include "../hind/hi_dyn.h"
 #include "../ka50/hm_dyn.h"
+#include "../kiowa/ki_dyn.h"
 
 #define DEBUG_MODULE 0
 
@@ -1444,6 +1445,13 @@ void dynamics_restore_damage_values (void)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		{
+
+			kiowa_restore_damage_values ();
+
+			break;
+		}
 	}
 }
 
@@ -1691,6 +1699,14 @@ void repair_damage_model (unsigned int damage)
 						case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 						{
 							ka50_restore_damage_values ();
+
+							break;
+						}
+						case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+						{
+
+							kiowa_restore_damage_values ();
+
 							break;
 						}
 					////Moje 030816 end

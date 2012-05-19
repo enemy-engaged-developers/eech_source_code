@@ -152,6 +152,14 @@ void activate_common_threat_warning_system (entity *threat)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			activate_kiowa_threat_warning_system (threat);
+
+			break;
+		}
+		////////////////////////////////////////
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
 /*

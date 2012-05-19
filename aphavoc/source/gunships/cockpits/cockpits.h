@@ -153,6 +153,8 @@ extern void draw_cockpit (cockpit_panels panel);
 
 #include "ka50/hm_ckpt.h"
 
+#include "kiowa/ki_ckpt.h"
+
 // GCsDriver  08-12-2007
 #include "default/df_ckpt.h"
 

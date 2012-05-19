@@ -145,6 +145,11 @@ void clear_trim_control (event *ev)
 			if (!get_current_dynamics_options(DYNAMICS_OPTIONS_CROSS_COUPLING))
 				centre_pedal_trim = 49.5;
 			break;
+		case GUNSHIP_TYPE_KIOWA:
+			centre_trim = 2.0;
+			if (!get_current_dynamics_options(DYNAMICS_OPTIONS_CROSS_COUPLING))
+				centre_pedal_trim = -56.0;
+			break;
 		case GUNSHIP_TYPE_VIPER:
 		default:
 			centre_trim = 6.0;

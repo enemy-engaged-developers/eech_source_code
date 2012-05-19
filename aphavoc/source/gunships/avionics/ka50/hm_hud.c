@@ -1247,8 +1247,8 @@ void draw_ka50_hud_on_texture (void)
 		
 		if (get_global_wide_cockpit())
 		{
-			head_offset_x += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x;
-			head_offset_y += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y + 0.02;
+			head_offset_x += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.x;
+			head_offset_y += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.y + 0.02;
 		}
 
 		x_offset = head_offset_x * -HUD_UNIT_RATIO;
@@ -1805,7 +1805,7 @@ static void display_weapon_information (void)
 		if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND
 			|| weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND)
 		{
-			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z : 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.z : 0.0;
 			float left_limit, right_limit, upper_limit;
 			
 			//if (command_line_TIR_6DOF && query_TIR_active())
@@ -1848,7 +1848,7 @@ static void display_weapon_information (void)
 		{
 			float x,y;
 			float angle_of_drop = 0.0;
-			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z : 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.z : 0.0;
 			float drop_hud_distance;
 			float roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 

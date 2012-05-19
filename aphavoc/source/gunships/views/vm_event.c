@@ -327,6 +327,35 @@ static void set_special1_view_mode (void)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			if (get_crew_role () == CREW_ROLE_PILOT)
+			{
+				if (view_mode != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY)
+				{
+					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY);
+				}
+				else
+				{
+					set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+				}
+			}
+			else
+			{
+				if (view_mode != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY)
+				{
+					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY);
+				}
+				else
+				{
+					set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+				}
+			}
+
+			break;
+		}
+		////////////////////////////////////////
 	}
 }
 
@@ -496,6 +525,35 @@ static void set_special2_view_mode (void)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_KIOWA:
+		////////////////////////////////////////
+		{
+			if (get_crew_role () == CREW_ROLE_PILOT)
+			{
+				if (view_mode != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY)
+				{
+					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY);
+				}
+				else
+				{
+					set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+				}
+			}
+			else
+			{
+				if (view_mode != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
+				{
+					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY);
+				}
+				else
+				{
+					set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+				}
+			}
+
+			break;
+		}
+		////////////////////////////////////////
 	}
 }
 
@@ -1100,8 +1158,8 @@ static void toggle_wideview_event (event *ev)
 		if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||
 			 wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
 		{	 
-			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
+			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
 		}	
 	}	
 }
@@ -1162,6 +1220,7 @@ static void special_cockpit_toggle_event (event *ev)
 		}
 		case GUNSHIP_TYPE_COMANCHE:
 		case GUNSHIP_TYPE_HOKUM:
+		case GUNSHIP_TYPE_KIOWA:
 		{
  			set_global_glass_cockpit (get_global_glass_cockpit () ^ 1);
 

@@ -966,7 +966,7 @@ static void draw_flight_path_marker (void)
 	head_pitch = pilot_head_pitch;
 	if (get_global_wide_cockpit () &&
 		(wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT || wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT))
-   		head_pitch -= rad(wide_cockpit_position[wide_cockpit_nr].p);
+   		head_pitch -= rad(wide_cockpit_position[wide_cockpit_nr].c.p);
 
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);

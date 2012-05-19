@@ -122,6 +122,7 @@ const char
 		"AH-64A Apache",
 		"Ka-50 Black Shark",
 		"AH-1Z Viper",
+		"OH-58D Kiowa Warrior",
 		"NUM_GUNSHIP_TYPES"
 	};
 
@@ -137,6 +138,7 @@ const char*
 		"AH-64A Apache",
 		"Ka-50 Black Shark",
 		"AH-1Z Viper",
+		"OH-58D Kiowa Warrior",
 		"NUM_GUNSHIP_TYPES"
 	};
 
@@ -148,6 +150,7 @@ gunship_types alphabetical_gunship_types[] = {
 		GUNSHIP_TYPE_HOKUM,     // Ka
 		GUNSHIP_TYPE_HIND,      // Mi
 		GUNSHIP_TYPE_HAVOC,     // Mi
+		GUNSHIP_TYPE_KIOWA,     // OH
 		GUNSHIP_TYPE_COMANCHE,  // RAH
 		GUNSHIP_TYPE_BLACKHAWK, // UH
 		NUM_GUNSHIP_TYPES
@@ -214,6 +217,7 @@ entity_sub_types
 		ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE,
 		ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM,
 		ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER,
+		ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR,
 		NUM_ENTITY_SUB_TYPE_AIRCRAFT
 	};
 
@@ -235,6 +239,7 @@ entity_sides
 		ENTITY_SIDE_RED_FORCE,
 		ENTITY_SIDE_BLUE_FORCE,
 		ENTITY_SIDE_RED_FORCE,
+		ENTITY_SIDE_BLUE_FORCE,
 		ENTITY_SIDE_BLUE_FORCE,
 		NUM_ENTITY_SIDES
 	};

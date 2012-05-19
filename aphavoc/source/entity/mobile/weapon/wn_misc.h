@@ -141,6 +141,11 @@ extern weapon_config_types get_viper_weapon_config
 	entity_sub_types outer_hardpoint_weapon,
 	entity_sub_types wing_tip_weapon
 );
+extern weapon_config_types get_kiowa_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon
+);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,6 +222,13 @@ extern void get_viper_weapons_from_weapon_config
 	entity_sub_types *inner_hardpoint_weapon,
 	entity_sub_types *outer_hardpoint_weapon,
 	entity_sub_types *wing_tip_weapon
+);
+
+extern void get_kiowa_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon
 );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

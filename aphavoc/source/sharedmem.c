@@ -54,6 +54,7 @@ extern havoc_lamp_flags havoc_lamps;
 extern hind_lamp_flags hind_lamps;
 extern hokum_lamp_flags hokum_lamps;
 extern ka50_lamp_flags ka50_lamps;
+extern kiowa_lamp_flags kiowa_lamps;
 
 // GCsDriver  08-12-2007
 extern default_lamp_flags default_lamps;
@@ -128,6 +129,15 @@ void update_ka50_avionics_shared_mem ()
 
 	gPtrSharedMemory->current_gunship = GUNSHIP_TYPE_KA50;
 	gPtrSharedMemory->cockpit_lamps.ka50_lamps = ka50_lamps;
+}
+
+void update_kiowa_avionics_shared_mem ()
+{
+	if (gPtrSharedMemory == 0)
+		return;
+
+	gPtrSharedMemory->current_gunship = GUNSHIP_TYPE_KIOWA;
+	gPtrSharedMemory->cockpit_lamps.kiowa_lamps = kiowa_lamps;
 }
 
 // GCsDriver  08-12-2007

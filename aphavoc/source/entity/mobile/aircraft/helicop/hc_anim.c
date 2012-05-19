@@ -1140,6 +1140,11 @@ void animate_helicopter_eo (entity *en)
 			animate_default_eo (raw->ac.inst3d);
 			break;
 		}
+		case OBJECT_3D_OH58D:
+		{
+			animate_kiowa_eo (raw->ac.inst3d);
+			break;
+		}
 		}
 	}
 }

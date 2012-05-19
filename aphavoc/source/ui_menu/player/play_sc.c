@@ -1566,6 +1566,9 @@ void load_player_list (void)
 				case 2:
 					change.gunships += 1;
 
+				case 3:
+					change.gunships += 1;
+
 					{
 						player_side_log_type v2_side;
 						const size_t
@@ -1582,7 +1585,7 @@ void load_player_list (void)
 						break;
 					}
 
-				case 3:
+				case 4:
 					{
 						fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
 						break;
@@ -1688,7 +1691,7 @@ void save_player_list (void)
 
 		file_ptr = safe_fopen ("playersv.bin", "wb");
 
-		version = 3;
+		version = 4;
 
 		fwrite (&version, sizeof (int), 1, file_ptr);
 

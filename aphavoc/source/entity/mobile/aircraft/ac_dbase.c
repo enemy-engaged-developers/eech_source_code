@@ -1807,14 +1807,14 @@ aircraft_data
 			"HELICOPTER",															//easy_display_name
 
          OBJECT_3D_OH58D,														//default_3d_shape
-			NUM_GUNSHIP_TYPES,													// gunship_type
+			GUNSHIP_TYPE_KIOWA,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_8,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20,						// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_13,						// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_7,						// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_10,						// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
