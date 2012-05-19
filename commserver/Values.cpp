@@ -21,6 +21,7 @@ enum GUNSHIP_TYPES	// stolen from global.h
 	GUNSHIP_TYPE_AH64A,
 	GUNSHIP_TYPE_KA50,
 	GUNSHIP_TYPE_VIPER,
+	GUNSHIP_TYPE_KIOWA,
 	NUM_GUNSHIP_TYPES
 };
 
@@ -537,6 +538,18 @@ Value GetKa50SpecificData(int command)
 	return "INVALID COMMAND FOR KA50";
 }
 
+Value GetKiowaSpecificData(int command)
+{
+	kiowa_lamp_flags lamp = pMem->cockpit_lamps.kiowa_lamps;
+
+	switch (command)
+	{
+		default: break;
+	}
+
+	return "INVALID COMMAND FOR KIOWA";
+}
+
 Value GetDefaultSpecificData(int command)
 {
 	default_lamp_flags lamp = pMem->cockpit_lamps.default_lamps;
@@ -623,6 +636,7 @@ Value GetValue(int command)
 		case GUNSHIP_TYPE_AH64A: return GetAH64ASpecificData(command);
 		case GUNSHIP_TYPE_KA50: return GetKa50SpecificData(command);
 		case GUNSHIP_TYPE_VIPER: return GetDefaultSpecificData(command);
+		case GUNSHIP_TYPE_KIOWA: return GetKiowaSpecificData(command);
 		case NUM_GUNSHIP_TYPES: return GetDefaultSpecificData(command);
 		default: break;
 		}
