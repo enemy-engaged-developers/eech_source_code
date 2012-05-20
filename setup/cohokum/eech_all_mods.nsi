@@ -2081,6 +2081,12 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\Y__MILITARY_BASE_2.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\Y__MILITARY_BASE_3.dds"
 
+	SetOutPath "$INSTDIR\cohokum\graphics\cockpits\kiowa"
+
+	File "${EE_UI_DIR}\cohokum\graphics\cockpits\kiowa\FOREARM.MOT"
+	File "${EE_UI_DIR}\cohokum\graphics\cockpits\kiowa\JOYSTICK.MOT"
+	File "${EE_UI_DIR}\cohokum\graphics\cockpits\kiowa\SHOULDER.MOT"
+
 	SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum"
 
 	SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\Map"
