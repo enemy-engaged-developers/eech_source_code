@@ -185,6 +185,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_COMPASS.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_GLASS.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_GLASS.EES"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_MAIN_ROTOR.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_VIRTUAL_COCKPIT_WIPER.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\APACHE_WIPER.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ah-64d-cockpit\ARNEH_AH64D_COCKPIT.EES"
