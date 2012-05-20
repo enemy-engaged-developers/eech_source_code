@@ -949,7 +949,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			apache = construct_temporary_3d_object ( OBJECT_3D_MI28N_HAVOC, TRUE );
 			break;
 		case GUNSHIP_TYPE_VIPER:
-			apache = construct_temporary_3d_object ( OBJECT_3D_AH1_Z, TRUE );
+			apache = construct_temporary_3d_object ( OBJECT_3D_AH1Z, TRUE );
 			pitch = rad(2);
 			break;
 		case GUNSHIP_TYPE_KIOWA:

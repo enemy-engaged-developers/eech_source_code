@@ -2498,7 +2498,7 @@ aircraft_data
          "AH-1Z",																	// short_display_name
 			"HELICOPTER",															// easy_display_name
 
-         OBJECT_3D_AH1_Z,														// default_3d_shape
+         OBJECT_3D_AH1Z,														// default_3d_shape
 			GUNSHIP_TYPE_VIPER,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_14,				 			// default_weapon_config_type
