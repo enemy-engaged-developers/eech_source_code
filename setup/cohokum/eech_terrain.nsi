@@ -228,6 +228,24 @@ Section "EECH ${VERSION} terrain textures" SectionTT
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\cuba\TERRAIN_WHEATFIELD.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\cuba\texture_scales.txt"
 
+	SetOutPath "$INSTDIR\cohokum\graphics\textures\terrain\Europe"
+
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\CLOUDDRY.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\GREY_TERRAIN_TREE_CROSS.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\GREY_TERRAIN_TREE_OBJECT.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\LEBANON_TERRAIN_TREE_CROSS.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\LEBANON_TERRAIN_TREE_OBJECT.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\RED_STAR_64X64.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\RUSSIANSTAR_64X64.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_BARE_ROCK2.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_BEACH.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_DETAIL_4.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_GRG_CITY3.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_GRG_CITY4.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_SCRUB.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\TERRAIN_SNOW.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\Europe\texture_scales.txt"
+
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\terrain\georgia"
 
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\georgia\CH_TERRAIN_DRY_MUD1.dds"
