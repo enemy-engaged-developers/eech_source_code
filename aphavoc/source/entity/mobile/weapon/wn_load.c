@@ -1152,6 +1152,226 @@ void deactivate_weapon_payload_markers (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static weapon_config_types get_weapon_config (gunship_types gunship_type, const entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES])
+{
+	const aircraft_data
+		*ac_data;
+
+	weapon_config_types
+		min_weapon_config_type,
+		max_weapon_config_type;
+
+	const weapon_loading_gunship_type
+		*wlgt;
+
+	const weapon_loading_hardpoint_type
+		*wlht;
+
+	int
+		weapon_config_package,
+		hardpoint,
+		ok;
+
+	entity_sub_types
+		hardpoint_weapon;
+
+	ASSERT (gunship_type >= 0 && gunship_type < NUM_GUNSHIP_TYPES);
+
+	ac_data = &aircraft_database[gunship_sub_types[gunship_type]];
+
+	ASSERT (ac_data->gunship_type == gunship_type);
+
+	min_weapon_config_type = ac_data->min_weapon_config_type;
+	max_weapon_config_type = ac_data->max_weapon_config_type;
+
+	wlgt = &weapon_loading_gunship_database[gunship_type];
+
+	for (weapon_config_package = min_weapon_config_type; weapon_config_package <= max_weapon_config_type; weapon_config_package++)
+	{
+		for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
+		{
+			wlht = &wlgt->hardpoint_list[hardpoint];
+
+			if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+			{
+				continue;
+			}
+
+			hardpoint_weapon = current_weapon[hardpoint];
+			ok = hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON ? check_hardpoint_clean (weapon_config_package, wlht->sub_object_depth1) : check_weapon_on_hardpoint (weapon_config_package, hardpoint_weapon, wlht->sub_object_depth1);
+
+			if (!ok)
+			{
+				break;
+			}
+		}
+
+		if (ok)
+		{
+			return (weapon_config_types)weapon_config_package;
+		}
+	}
+
+	return WEAPON_CONFIG_TYPE_UNARMED;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void get_weapons_from_weapon_config (gunship_types gunship_type, weapon_config_types weapon_config_type, entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES] )
+{
+#ifdef DEBUG
+
+	const aircraft_data
+		*ac_data;
+
+	weapon_config_types
+		min_weapon_config_type,
+		max_weapon_config_type;
+
+#endif
+
+	const weapon_loading_gunship_type
+		*wlgt;
+
+	const weapon_loading_hardpoint_type
+		*wlht;
+
+	int
+		package,
+		hardpoint;
+
+
+#ifdef DEBUG
+
+	ASSERT (gunship_type >= 0 && gunship_type < NUM_GUNSHIP_TYPES);
+
+	ac_data = &aircraft_database[gunship_sub_types[gunship_type]];
+
+	ASSERT (ac_data->gunship_type == gunship_type);
+
+	min_weapon_config_type = ac_data->min_weapon_config_type;
+	max_weapon_config_type = ac_data->max_weapon_config_type;
+
+	ASSERT
+	(
+		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
+		(
+			(weapon_config_type >= min_weapon_config_type) &&
+			(weapon_config_type <= max_weapon_config_type)
+		)
+	);
+
+#endif
+
+	wlgt = &weapon_loading_gunship_database[gunship_type];
+
+	for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
+	{
+		wlht = &wlgt->hardpoint_list[hardpoint];
+
+		if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+		{
+			continue;
+		}
+
+		current_weapon[hardpoint] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	}
+
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
+		{
+			wlht = &wlgt->hardpoint_list[hardpoint];
+
+			if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+			{
+				continue;
+			}
+
+			if (weapon_config_database[weapon_config_type][package].heading_depth == wlht->sub_object_depth1)
+			{
+				current_weapon[hardpoint] = weapon_config_database[weapon_config_type][package].sub_type;
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void set_hardpoint_weapons (gunship_types gunship_type, const entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES] )
+{
+	const weapon_loading_gunship_type
+		*wlgt;
+
+	const weapon_loading_hardpoint_type
+		*wlht;
+
+	int
+		hardpoint;
+
+	ASSERT (gunship_type >= 0 && gunship_type < NUM_GUNSHIP_TYPES);
+
+	wlgt = &weapon_loading_gunship_database[gunship_type];
+
+	for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
+	{
+		wlht = &wlgt->hardpoint_list[hardpoint];
+
+		if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+		{
+			continue;
+		}
+
+		weapon_loading_set_current_hardpoint_weapon (gunship_type, hardpoint, current_weapon[hardpoint]);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void get_current_hardpoint_weapon (gunship_types gunship_type, entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES] )
+{
+	const weapon_loading_gunship_type
+		*wlgt;
+
+	const weapon_loading_hardpoint_type
+		*wlht;
+
+	int
+		hardpoint;
+
+	ASSERT (gunship_type >= 0 && gunship_type < NUM_GUNSHIP_TYPES);
+
+	wlgt = &weapon_loading_gunship_database[gunship_type];
+
+	for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
+	{
+		wlht = &wlgt->hardpoint_list[hardpoint];
+
+		if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+		{
+			continue;
+		}
+
+		current_weapon[hardpoint] = wlht->valid_weapon_types[wlht->current_weapon_index];
+		weapon_loading_set_current_hardpoint_weapon (gunship_type, hardpoint, current_weapon[hardpoint]);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void weapon_loading_set_current_hardpoint_weapon (gunship_types gunship_type, weapon_loading_hardpoint_types hardpoint, entity_sub_types weapon_type)
 {
 	weapon_loading_gunship_type
@@ -1348,172 +1568,18 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 
 	gunship_type = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
 
-	switch (gunship_type)
-	{
-		// JB 030313 Fly any aircraft
-		default:
-		case GUNSHIP_TYPE_APACHE:
-		{
-			get_apache_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-			);
+	get_weapons_from_weapon_config
+	(
+		gunship_type,
+		(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
+		current_weapon
+	);
 
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HAVOC:
-		{
-			get_havoc_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-
-			break;
-		}
-		case GUNSHIP_TYPE_COMANCHE:
-		{
-			get_comanche_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_MID],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_MID, current_weapon [WEAPON_LOADING_HARDPOINT_MID]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HOKUM:
-		{
-			get_hokum_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-
-			break;
-		}
-////Moje 030519 Start
-		case GUNSHIP_TYPE_BLACKHAWK:
-		{
-			get_blackhawk_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-
-			break;
-		}
-
-////Moje 030519 End
-////Moje 036013 start
-		case GUNSHIP_TYPE_HIND:
-		{
-			get_hind_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-
-			break;
-		}
-////Moje 030613 end
-////Moje 030817 start
-		case GUNSHIP_TYPE_AH64A:
-		{
-			get_ah64a_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-
-			break;
-		}
-		case GUNSHIP_TYPE_KA50:
-		{
-			// GCsDriver 08-12-2007
-			//get_hokum_weapons_from_weapon_config
-			get_ka50_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-
-			break;
-		}
-////Moje 030817 end
-		case GUNSHIP_TYPE_VIPER:
-		{
-			get_viper_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-
-			break;
-		}
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			get_kiowa_weapons_from_weapon_config
-			(
-				(weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
-				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-			);
-
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
-			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
-
-			break;
-		}
-	}
+	set_hardpoint_weapons 
+	(
+		gunship_type,
+		current_weapon
+	);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1522,12 +1588,6 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 
 void weapon_loading_reload_all_weapons (entity *en)
 {
-	weapon_loading_gunship_type
-		*gunship_data;
-
-	weapon_loading_hardpoint_type
-		*hardpoint_data;
-
 	entity_sub_types
 		current_weapon [NUM_WEAPON_LOADING_HARDPOINT_TYPES];
 
@@ -1541,224 +1601,19 @@ void weapon_loading_reload_all_weapons (entity *en)
 
 	gunship_type = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
 
-	gunship_data = &weapon_loading_gunship_database [gunship_type];
+	get_current_hardpoint_weapon
+	(
+		gunship_type,
+		current_weapon
+	);
 
-	switch (gunship_type)
-	{
-		// JB 030313 Fly any aircraft
-		default:
-		case GUNSHIP_TYPE_APACHE:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+	new_config_type = get_weapon_config
+	(
+		gunship_type,
+		current_weapon
+	);
 
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_apache_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HAVOC:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_havoc_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-		case GUNSHIP_TYPE_COMANCHE:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_MID]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_MID] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_comanche_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP],
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_MID],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HOKUM:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_hokum_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-////Moje 030519 Start
-		case GUNSHIP_TYPE_BLACKHAWK:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_blackhawk_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-
-////Moje 030519 End
-////Moje 030613 start
-		case GUNSHIP_TYPE_HIND:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_hind_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-////Moje 030613 end
-////Moje 030817 start
-		case GUNSHIP_TYPE_AH64A:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_ah64a_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-		case GUNSHIP_TYPE_KA50:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_ka50_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-////Moje 030817 end
-		case GUNSHIP_TYPE_VIPER:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_viper_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
-			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
-
-			new_config_type = get_kiowa_weapon_config
-									(
-										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
-										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
-									);
-
-			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
-
-			break;
-		}
-	}
+	set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
 
 	if (en == get_gunship_entity ())
 	{

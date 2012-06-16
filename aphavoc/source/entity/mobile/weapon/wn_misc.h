@@ -77,160 +77,16 @@ extern int get_local_entity_weapon_count (entity *en, entity_sub_types weapon_su
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern int check_weapon_on_hardpoint (weapon_config_types config_type, entity_sub_types weapon_sub_type, int heading_depth);
+
+extern int check_hardpoint_clean (weapon_config_types config_type, int heading_depth);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern void get_local_entity_weapon_load(entity* en, weapon_count weapon_load[], unsigned max_num_weapons);
 	
-
-extern weapon_config_types get_apache_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon,
-	entity_sub_types wing_tip_weapon
-);
-
-extern weapon_config_types get_havoc_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon
-);
-
-extern weapon_config_types get_comanche_weapon_config
-(
-	entity_sub_types stub_wing_weapon,
-	entity_sub_types inner_bay_door_weapon,
-	entity_sub_types middle_bay_door_weapon,
-	entity_sub_types outer_bay_door_weapon
-);
-
-extern weapon_config_types get_hokum_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon
-);
-////Moje 030525 Start
-extern weapon_config_types get_blackhawk_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon
-);
-////Moje 030525 End
-////Moje 030612 start
-extern weapon_config_types get_hind_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon,
-	entity_sub_types wing_tip_weapon
-);
-////Moje030612 end
-////Moje 030817 start
-
-extern weapon_config_types get_ah64a_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon,
-	entity_sub_types wing_tip_weapon
-);
-extern weapon_config_types get_ka50_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon
-);
-////Moje 030817 end
-extern weapon_config_types get_viper_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon,
-	entity_sub_types wing_tip_weapon
-);
-extern weapon_config_types get_kiowa_weapon_config
-(
-	entity_sub_types inner_hardpoint_weapon,
-	entity_sub_types outer_hardpoint_weapon
-);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-extern void get_apache_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon,
-	entity_sub_types *wing_tip_weapon
-);
-
-extern void get_havoc_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon
-);
-
-extern void get_comanche_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *stub_wing_weapon,
-	entity_sub_types *inner_bay_door_weapon,
-	entity_sub_types *middle_bay_door_weapon,
-	entity_sub_types *outer_bay_door_weapon
-);
-
-extern void get_hokum_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon
-);
-////Moje 030525 Start
-
-extern void get_blackhawk_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon
-);
-////Moje 030525 End
-////Moje 030612 start
-extern void get_hind_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon,
-	entity_sub_types *wing_tip_weapon
-);
-////Moje 030612 end
-////Moje 030817 start
-
-extern void get_ah64a_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon,
-	entity_sub_types *wing_tip_weapon
-);
-extern void get_ka50_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon
-);
-////Moje 030817 end
-
-extern void get_viper_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon,
-	entity_sub_types *wing_tip_weapon
-);
-
-extern void get_kiowa_weapons_from_weapon_config
-(
-	weapon_config_types weapon_config_type,
-	entity_sub_types *inner_hardpoint_weapon,
-	entity_sub_types *outer_hardpoint_weapon
-);
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
