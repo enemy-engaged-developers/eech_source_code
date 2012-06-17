@@ -173,7 +173,7 @@ void initialise_init_screen (void)
 
 //VJ 030807 added wut file name display for startup screen
 	x1 = 0.800;
-	y1 = 0.88;
+	y1 = 0.87;
 	x2 = 0.3;
 	y2 = 0.0625;
 	
