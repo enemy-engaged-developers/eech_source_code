@@ -131,7 +131,7 @@ void initialise_kiowa_advanced_dynamics (entity *en)
 
 	set_dynamics_defaults (en);
 
-	current_flight_dynamics->sub_type = ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE;
+	current_flight_dynamics->sub_type = ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR;
 
 	sprintf (current_flight_dynamics->filename, "..\\common\\data\\kiowa.dyn");
 }
