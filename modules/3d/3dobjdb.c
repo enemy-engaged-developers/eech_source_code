@@ -1670,7 +1670,9 @@ int read_object ( object_3d *obj, const char* filename )
 		{
 			if ( obj->faces[i].number_of_points < 3 )
 			{
-				ASSERT ( FALSE );
+#ifdef DEBUG
+				debug_fatal ( "Object file '%s' contains a polygoned face with less than 3 points", filename );
+#endif
 				return FALSE;
 			}
 		}
@@ -1679,6 +1681,9 @@ int read_object ( object_3d *obj, const char* filename )
 			if ( !obj->surfaces[i].polygons && obj->surfaces[i].smoothed )
 			{
 				ASSERT ( FALSE );
+#ifdef DEBUG
+				debug_fatal ( "Object file '%s' contains a smoothed non-polygon surface", filename );
+#endif
 				return FALSE;
 			}
 		}
