@@ -2027,6 +2027,18 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 				break;
 			}
 
+			// Casm 20MAY12 Cloud puffs
+			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT:
+			{
+
+				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+
+				draw_3d_terrain_cloud_puff_object ( object_order );
+
+				break;
+			}
+
 			case	OBJECT_3D_DRAW_TYPE_CLOUD_SECTOR:
 			{
 
@@ -2138,6 +2150,20 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
 
 				draw_3d_terrain_tree_object ( object_order );
+
+				break;
+			}
+
+			// Casm 20MAY12 Cloud puffs
+			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT:
+			{
+
+				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+
+				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+
+				draw_3d_terrain_cloud_puff_object ( object_order );
 
 				break;
 			}

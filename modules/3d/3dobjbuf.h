@@ -93,6 +93,7 @@ enum OBJECT_3D_DRAWING_TYPES
 	OBJECT_3D_DRAW_TYPE_TERRAIN_TRANSPARENT_2D_CLIPPED_SECTOR,
 	OBJECT_3D_DRAW_TYPE_TERRAIN_TRANSPARENT_UNCLIPPED_SECTOR,
 	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT,
+	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT,
 	OBJECT_3D_DRAW_TYPE_CLOUD_SECTOR,
 	OBJECT_3D_DRAW_TYPE_SPRITE,
 	OBJECT_3D_DRAW_TYPE_SMOKE_TRAIL,
@@ -139,6 +140,30 @@ struct OBJECT_3D_TERRAIN_TREE
 };
 
 typedef struct OBJECT_3D_TERRAIN_TREE object_3d_terrain_tree;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 20MAY12 Cloud puffs
+struct OBJECT_3D_TERRAIN_CLOUD_PUFF
+{
+
+	float
+		x,
+		y,
+		z,
+		scale,
+		dissolve;
+
+	matrix3x3
+		attitude;
+
+	real_colour
+		colour;
+};
+
+typedef struct OBJECT_3D_TERRAIN_CLOUD_PUFF object_3d_terrain_cloud_puff;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,6 +325,9 @@ struct SCENE_SLOT_DRAWING_LIST
 
 		struct OBJECT_3D_TERRAIN_TREE
 			terrain_tree;
+
+		struct OBJECT_3D_TERRAIN_CLOUD_PUFF
+			terrain_cloud_puff;
 
 		struct OBJECT_3D_CLOUD_SECTOR
 			cloud_sector;

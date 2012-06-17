@@ -219,6 +219,11 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-1Z Viper\AH1Z.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\AH-1Z Viper\AH1Z_DESTROYED.EES"
 
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects\CLOUDS"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CLOUDS\CLOUD.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CLOUDS\CLOUD.EES"
+
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\FARP"
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_COLLISION.EEO"
@@ -1982,6 +1987,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\LEBANON_STONE_BLOCKS.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\LEBANON_STONE_DOME.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\MOON.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NEW-CLOUDS.DDS"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_BEACH.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_FIELD.dds"

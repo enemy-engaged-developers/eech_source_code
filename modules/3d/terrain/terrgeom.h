@@ -141,6 +141,8 @@ extern void scan_3d_terrain ( void );
 
 extern void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot );
 
+extern void draw_3d_terrain_cloud_puff_object ( scene_slot_drawing_list *slot );
+
 extern void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot );
 
 extern void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot );

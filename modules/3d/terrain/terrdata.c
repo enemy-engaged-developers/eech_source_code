@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -70,7 +70,7 @@
 
 //VJ 050619 included to check global_anisotropic setting
 #include "cmndline.h"
-//VJ 040206 included for season check 
+//VJ 040206 included for season check
 #include "global.h"
 
 
@@ -139,7 +139,21 @@ float
 
 terrain_3d_file_validation
 	current_terrain_version;
-	
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 20MAY12 Cloud puffs
+terrain_3d_cloud_puff_sector
+	**terrain_cloud_puff_sectors;
+
+object_3d_instance
+	*terrain_3d_cloud_puff_object = NULL;
+
+real_colour
+	*terrain_3d_cloud_puff_colours = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +196,7 @@ int load_3d_terrain ( const char *path )
 	terrain_3d_sector
 		*terrain_sector_ptr;
 
-	memset(white_col, 255, sizeof(white_col)); 
+	memset(white_col, 255, sizeof(white_col));
 
 	ASSERT ( !terrain_initialised );
 
@@ -192,7 +206,7 @@ int load_3d_terrain ( const char *path )
 
 	sprintf ( colour_file, "%s\\default.rgb", path );
 
-	//VJ 040206 read different point colour files when available for winter, 
+	//VJ 040206 read different point colour files when available for winter,
 	// made for skagway etc maps of craigmire and maverick
 	if (get_global_season() == SESSION_SEASON_WINTER)
 	{
@@ -203,7 +217,7 @@ int load_3d_terrain ( const char *path )
 		{
 			sprintf ( sector_file, "%s\\default.sec", path );
 			sprintf ( colour_file, "%s\\default.rgb", path );
-		}	
+		}
 	}
 
 	sprintf ( tree_sector_file, "%s\\tree_pos.sec", path );
@@ -495,11 +509,11 @@ int load_3d_terrain ( const char *path )
 			// Get the offsets into the colours file
 			//
 			offset = get_list_item ( terrain_3d_local_data, int );
-			
+
 			terrain_sectors[z][x].colour_indices = ( terrain_3d_colour_index * ) ( terrain_3d_colour_data + offset );
 
 			offset = get_list_item ( terrain_3d_local_data, int );
-			
+
 			terrain_sectors[z][x].point_colours = ( terrain_3d_colour * ) ( terrain_3d_colour_data + offset );
 
   // Craig start Feb. 2009
@@ -514,15 +528,15 @@ int load_3d_terrain ( const char *path )
 
 			if (command_line_texture_colour && !current_map_info.gouraud_shading)
 			{
-				// the colour is mixed with the textures' colours.  
+				// the colour is mixed with the textures' colours.
 				// This will however darken the texture substantially, so disable it
 				// when texture colour is enabled by setting it to white
-				
+
 				ASSERT(terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col));
 				if (terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col))
 					terrain_sectors[z][x].point_colours = white_col;
 			}
-			
+
 // Craig end
 			//
 			// Set the approximation to off
@@ -743,7 +757,7 @@ int load_3d_terrain ( const char *path )
 
 					switch ( current_terrain_version.map_number )
 					{
-				
+
 						case 6:
 						{
 
@@ -783,6 +797,74 @@ int load_3d_terrain ( const char *path )
 		terrain_3d_sector_data = NULL;
 
 		debug_log ( "Cant find the terrain tree data" );
+	}
+
+	// Casm 20MAY12 Cloud puffs
+	terrain_3d_cloud_puff_object = construct_3d_object_by_name ( "CLOUD" );
+
+	if (command_line_cloud_puffs > 1 || command_line_cloud_puffs == 1 && get_global_season() != SESSION_SEASON_DESERT)
+	{
+		terrain_cloud_puff_sectors = safe_malloc ( terrain_3d_tree_map_height * sizeof ( *terrain_cloud_puff_sectors ) );
+		for ( z = 0; z < terrain_3d_tree_map_height; z++ )
+		{
+			terrain_cloud_puff_sectors[z] = safe_malloc ( terrain_3d_tree_map_width * sizeof ( **terrain_cloud_puff_sectors ) );
+			for ( x = 0; x < terrain_3d_tree_map_width; x++ )
+			{
+				int
+					base,
+					pack;
+
+				int
+					number_of_cloud_puffs;
+				terrain_3d_cloud_puff_data
+					*cloud_puffs;
+
+				float
+					center_x,
+					center_y,
+					center_z;
+
+				base = rand() % 10;
+				pack = rand() % 5 + 1;
+
+				number_of_cloud_puffs = base * pack;
+				cloud_puffs = number_of_cloud_puffs ? safe_malloc ( number_of_cloud_puffs * sizeof ( *cloud_puffs ) ) : NULL;
+
+				terrain_cloud_puff_sectors[z][x].number_of_cloud_puffs = number_of_cloud_puffs;
+				terrain_cloud_puff_sectors[z][x].cloud_puffs = cloud_puffs;
+
+				for ( count = 0; count < number_of_cloud_puffs; count++, cloud_puffs++ )
+				{
+					if ( !( count % pack ) )
+					{
+						do
+						{
+							center_x = (x + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+						}
+						while ( center_x < terrain_3d_min_map_x || center_x > terrain_3d_max_map_x );
+						do
+						{
+							center_z = (z + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+						}
+						while ( center_z < terrain_3d_min_map_z || center_z > terrain_3d_max_map_z );
+						center_y = (float)rand() / RAND_MAX * TERRAIN_3D_CLOUD_Y_CENTER_MAX + TERRAIN_3D_CLOUD_Y_CENTER_MIN + get_3d_terrain_elevation ( center_x, center_z );
+					}
+
+					cloud_puffs->x = center_x + ((float)rand() / RAND_MAX - 0.5) * 100.0;
+					cloud_puffs->y = center_y + ((float)rand() / RAND_MAX - 0.5) * 100.0;
+					cloud_puffs->z = center_z + ((float)rand() / RAND_MAX - 0.5) * TERRAIN_3D_CLOUD_Y_DIFF;
+					cloud_puffs->heading = (float)rand() / RAND_MAX * PI2;
+					cloud_puffs->scale = (float)rand() / RAND_MAX * 20.0;
+					cloud_puffs->colour = rand() % number_of_cloud_puffs_colours;
+				}
+			}
+		}
+		terrain_3d_cloud_puff_colours = safe_malloc ( number_of_cloud_puffs_colours * sizeof ( *terrain_3d_cloud_puff_colours ) );
+	}
+	else
+	{
+		terrain_cloud_puff_sectors = NULL;
+		terrain_3d_cloud_puff_colours = NULL;
 	}
 
 	return ( TRUE );
@@ -826,7 +908,7 @@ void unload_3d_terrain ( void )
 					object = object->next_object;
 				}
 			}
-			
+
 		}
 	}
 
@@ -913,11 +995,49 @@ void unload_3d_terrain ( void )
 	//
 
 	unload_terrain_simple_elevation_grid ();
-	
-	//VJ 060120 flag certain terrtain types to add textures		
+
+	//VJ 060120 flag certain terrtain types to add textures
 	// free structure
 	//free_flag_terrain_types ();
-	
+
+	// Casm 20MAY12 Cloud puffs
+	if ( terrain_3d_cloud_puff_object )
+	{
+
+		destruct_3d_object ( terrain_3d_cloud_puff_object );
+
+		terrain_3d_cloud_puff_object = NULL;
+	}
+
+	if ( terrain_cloud_puff_sectors )
+	{
+		int
+			z,
+			x;
+
+		for ( z = 0; z < terrain_3d_tree_map_height; z++ )
+		{
+			if ( terrain_cloud_puff_sectors[z] )
+			{
+				for ( x = 0; x < terrain_3d_tree_map_width; x++ )
+				{
+					if ( terrain_cloud_puff_sectors[z][x].cloud_puffs )
+					{
+						safe_free ( terrain_cloud_puff_sectors[z][x].cloud_puffs );
+					}
+				}
+				safe_free ( terrain_cloud_puff_sectors[z] );
+			}
+		}
+
+		safe_free ( terrain_cloud_puff_sectors );
+
+		terrain_cloud_puff_sectors = NULL;
+
+		safe_free ( terrain_3d_cloud_puff_colours );
+
+		terrain_3d_cloud_puff_colours = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -997,7 +1117,7 @@ void initialise_3d_terrain ( void )
 		//VJ 050619 if anisotropic is on set higher filter for blending
 		if( global_anisotropic )
 			{ terrain_texture_mip_filter = D3DTFP_LINEAR; }
-		else 
+		else
 			{ terrain_texture_mip_filter = D3DTFP_POINT; }
 //		terrain_texture_mip_filter = D3DTFP_POINT;
 	}
@@ -1010,7 +1130,7 @@ void initialise_3d_terrain ( void )
 		//VJ 050619 if anisotropic is on set higher filter for blending
 		if( global_anisotropic )
 			{ terrain_texture_mip_filter = D3DTFP_LINEAR; }
-		else 
+		else
 			{ terrain_texture_mip_filter = D3DTFP_POINT; }
 //		terrain_texture_mip_filter = D3DTFP_POINT;
 	}*/
@@ -1541,7 +1661,7 @@ int get_terrain_3d_tree_sector_data ( int x, int z, terrain_3d_tree_data **ptr )
 	{
 
 		*ptr = terrain_tree_sectors[z][x].trees;
-	
+
 		return ( terrain_tree_sectors[z][x].number_of_trees );
 	}
 	else
@@ -1752,7 +1872,7 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 		for ( count = sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			if ( current_terrain_type == type )
 			{
 
@@ -1770,41 +1890,41 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 						for ( triangle_count = 0; triangle_count < number_of_triangles; triangle_count++ )
 						{
-	
+
 							int
 								index;
-	
+
 							vec3d
 								vector1,
 								vector2;
-	
+
 							index = terrain_3d_sector_point_byte_references[0].point;
 							triangle->point1.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point1.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point1.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_byte_references[triangle_count+1].point;
 							triangle->point2.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point2.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point2.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_byte_references[triangle_count+2].point;
 							triangle->point3.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point3.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point3.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							vector2.x = triangle->point3.x - triangle->point2.x;
 							vector2.y = triangle->point3.y - triangle->point2.y;
 							vector2.z = triangle->point3.z - triangle->point2.z;
-					
+
 							vector1.x = triangle->point2.x - triangle->point1.x;
 							vector1.y = triangle->point2.y - triangle->point1.y;
 							vector1.z = triangle->point2.z - triangle->point1.z;
-	
+
 							triangle->normal.x = ( vector1.y * vector2.z ) - ( vector1.z * vector2.y );
 							triangle->normal.y = ( vector1.z * vector2.x ) - ( vector1.x * vector2.z );
 							triangle->normal.z = ( vector1.x * vector2.y ) - ( vector1.y * vector2.x );
-	
+
 							normalise_any_3d_vector ( &triangle->normal );
 
 							triangle++;
@@ -1820,24 +1940,24 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 						for ( triangle_count = 0; triangle_count < number_of_triangles; triangle_count++ )
 						{
-	
+
 							int
 								index;
-	
+
 							vec3d
 								vector1,
 								vector2;
-	
+
 							index = terrain_3d_sector_point_byte_references[triangle_count].point;
 							triangle->point1.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point1.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point1.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_byte_references[triangle_count+1].point;
 							triangle->point2.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point2.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point2.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_byte_references[triangle_count+2].point;
 							triangle->point3.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point3.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
@@ -1845,31 +1965,31 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 							if ( flag )
 							{
-	
+
 								vector2.x = triangle->point3.x - triangle->point2.x;
 								vector2.y = triangle->point3.y - triangle->point2.y;
 								vector2.z = triangle->point3.z - triangle->point2.z;
-						
+
 								vector1.x = triangle->point2.x - triangle->point1.x;
 								vector1.y = triangle->point2.y - triangle->point1.y;
 								vector1.z = triangle->point2.z - triangle->point1.z;
 							}
 							else
 							{
-	
+
 								vector2.x = triangle->point1.x - triangle->point2.x;
 								vector2.y = triangle->point1.y - triangle->point2.y;
 								vector2.z = triangle->point1.z - triangle->point2.z;
-						
+
 								vector1.x = triangle->point2.x - triangle->point3.x;
 								vector1.y = triangle->point2.y - triangle->point3.y;
 								vector1.z = triangle->point2.z - triangle->point3.z;
 							}
-	
+
 							triangle->normal.x = ( vector1.y * vector2.z ) - ( vector1.z * vector2.y );
 							triangle->normal.y = ( vector1.z * vector2.x ) - ( vector1.x * vector2.z );
 							triangle->normal.z = ( vector1.x * vector2.y ) - ( vector1.y * vector2.x );
-	
+
 							normalise_any_3d_vector ( &triangle->normal );
 
 							triangle++;
@@ -1879,13 +1999,13 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 					}
 
 					terrain_3d_sector_point_byte_references += polygon->number_of_points;
-			
+
 					polygon++;
 				}
 
 				return;
 			}
-	
+
 			if ( polygon->surface_change )
 			{
 
@@ -1895,7 +2015,7 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 			}
 
 			terrain_3d_sector_point_byte_references += polygon->number_of_points;
-	
+
 			polygon++;
 		}
 	}
@@ -1906,7 +2026,7 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 		for ( count = sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			if ( current_terrain_type == type )
 			{
 
@@ -1924,41 +2044,41 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 						for ( triangle_count = 0; triangle_count < number_of_triangles; triangle_count++ )
 						{
-	
+
 							int
 								index;
-	
+
 							vec3d
 								vector1,
 								vector2;
-	
+
 							index = terrain_3d_sector_point_word_references[0].point;
 							triangle->point1.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point1.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point1.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_word_references[triangle_count+1].point;
 							triangle->point2.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point2.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point2.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_word_references[triangle_count+2].point;
 							triangle->point3.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point3.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point3.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							vector2.x = triangle->point3.x - triangle->point2.x;
 							vector2.y = triangle->point3.y - triangle->point2.y;
 							vector2.z = triangle->point3.z - triangle->point2.z;
-					
+
 							vector1.x = triangle->point2.x - triangle->point1.x;
 							vector1.y = triangle->point2.y - triangle->point1.y;
 							vector1.z = triangle->point2.z - triangle->point1.z;
-	
+
 							triangle->normal.x = ( vector1.y * vector2.z ) - ( vector1.z * vector2.y );
 							triangle->normal.y = ( vector1.z * vector2.x ) - ( vector1.x * vector2.z );
 							triangle->normal.z = ( vector1.x * vector2.y ) - ( vector1.y * vector2.x );
-	
+
 							normalise_any_3d_vector ( &triangle->normal );
 
 							triangle++;
@@ -1974,24 +2094,24 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 						for ( triangle_count = 0; triangle_count < number_of_triangles; triangle_count++ )
 						{
-	
+
 							int
 								index;
-	
+
 							vec3d
 								vector1,
 								vector2;
-	
+
 							index = terrain_3d_sector_point_word_references[triangle_count].point;
 							triangle->point1.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point1.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point1.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_word_references[triangle_count+1].point;
 							triangle->point2.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point2.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
 							triangle->point2.z = ( ( ( float ) points_xz[index].z ) * terrain_3d_xz_scale ) + sector_z_offset;
-	
+
 							index = terrain_3d_sector_point_word_references[triangle_count+2].point;
 							triangle->point3.x = ( ( ( float ) points_xz[index].x ) * terrain_3d_xz_scale ) + sector_x_offset;
 							triangle->point3.y = ( ( ( float ) points_y[index].y ) * terrain_3d_map_scaled_height_difference ) + terrain_3d_map_minimum_height;
@@ -1999,33 +2119,33 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 
 							if ( flag )
 							{
-	
+
 								vector2.x = triangle->point3.x - triangle->point2.x;
 								vector2.y = triangle->point3.y - triangle->point2.y;
 								vector2.z = triangle->point3.z - triangle->point2.z;
-						
+
 								vector1.x = triangle->point2.x - triangle->point1.x;
 								vector1.y = triangle->point2.y - triangle->point1.y;
 								vector1.z = triangle->point2.z - triangle->point1.z;
 							}
 							else
 							{
-	
+
 								vector2.x = triangle->point1.x - triangle->point2.x;
 								vector2.y = triangle->point1.y - triangle->point2.y;
 								vector2.z = triangle->point1.z - triangle->point2.z;
-						
+
 								vector1.x = triangle->point2.x - triangle->point3.x;
 								vector1.y = triangle->point2.y - triangle->point3.y;
 								vector1.z = triangle->point2.z - triangle->point3.z;
 							}
-	
+
 							triangle->normal.x = ( vector1.y * vector2.z ) - ( vector1.z * vector2.y );
 							triangle->normal.y = ( vector1.z * vector2.x ) - ( vector1.x * vector2.z );
 							triangle->normal.z = ( vector1.x * vector2.y ) - ( vector1.y * vector2.x );
 
 							normalise_any_3d_vector ( &triangle->normal );
-	
+
 							triangle++;
 
 							flag ^= 1;
@@ -2033,13 +2153,13 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 					}
 
 					terrain_3d_sector_point_word_references += polygon->number_of_points;
-			
+
 					polygon++;
 				}
 
 				return;
 			}
-	
+
 			if ( polygon->surface_change )
 			{
 
@@ -2049,9 +2169,43 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 			}
 
 			terrain_3d_sector_point_word_references += polygon->number_of_points;
-	
+
 			polygon++;
 		}
 	}
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 20MAY12 Cloud puffs
+void set_terrain_3d_cloud_puffs_colours ( void )
+{
+	float
+		colour_coef,
+		colour_coef_red,
+		colour_coef_green,
+		colour_coef_blue;
+	int
+		count;
+
+	if ( !terrain_3d_cloud_puff_colours )
+	{
+		return;
+	}
+
+	colour_coef = active_3d_environment->render_filter == RENDER_INFRARED ? 6.0 : 6.0;
+	colour_coef_red = bound ( active_3d_environment->ambient_light.red * colour_coef, 0.1, 1.0 );
+	colour_coef_green = bound ( active_3d_environment->ambient_light.green * colour_coef, 0.1, 1.0 );
+	colour_coef_blue = bound ( active_3d_environment->ambient_light.blue * colour_coef, 0.1, 1.0 );
+
+	for ( count = 0; count < number_of_cloud_puffs_colours; count++ )
+	{
+		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red * colour_coef_red, 255.0);
+		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green * colour_coef_green, 255.0);
+		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue * colour_coef_blue, 255.0);
+		terrain_3d_cloud_puff_colours[count].alpha = 255;
+	}
+}

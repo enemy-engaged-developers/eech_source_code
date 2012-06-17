@@ -424,6 +424,90 @@ static void set_faa ( const struct config_option *option, const char *value )
 	}
 }
 
+// Casm 20MAY12 Cloud puffs BEGIN
+static void set_cloud_puffs_colours ( const struct config_option *option, const char *value )
+{
+	int
+		new_number_of_cloud_puffs_colours;
+	real_colour
+		*new_cloud_puffs_colours;
+	int
+		count,
+		cloud_puff_colour;
+	unsigned
+		red,
+		green,
+		blue;
+
+	if ( !value || !*value )
+	{
+		return;
+	}
+
+	new_number_of_cloud_puffs_colours = 1;
+	for ( count = 0; value[count]; count++ )
+	{
+		if ( value[count] == ';' )
+		{
+			new_number_of_cloud_puffs_colours++;
+		}
+	}
+
+	new_cloud_puffs_colours = safe_malloc ( new_number_of_cloud_puffs_colours * sizeof ( *new_cloud_puffs_colours ) );
+	count = 0;
+	cloud_puff_colour = 0;
+	for ( ; ; )
+	{
+		if ( value[count] == ';' || value[count] == '\0' )
+		{
+			if ( sscanf ( value, "%u,%u,%u", &red, &green, &blue ) != 3 || red > 255 || green > 255 || blue > 255 )
+			{
+				safe_free ( new_cloud_puffs_colours );
+				return;
+			}
+			new_cloud_puffs_colours[cloud_puff_colour].red = red;
+			new_cloud_puffs_colours[cloud_puff_colour].green = green;
+			new_cloud_puffs_colours[cloud_puff_colour].blue = blue;
+			cloud_puff_colour++;
+			if ( value[count] == '\0' )
+			{
+				break;
+			}
+			value += count + 1;
+			count = 0;
+		}
+		else
+		{
+			count++;
+		}
+	}
+
+	if ( cloud_puffs_colours )
+	{
+		safe_free ( cloud_puffs_colours );
+	}
+	number_of_cloud_puffs_colours = new_number_of_cloud_puffs_colours;
+	cloud_puffs_colours = new_cloud_puffs_colours;
+}
+
+static void get_cloud_puffs_colours ( const struct config_option *option, char *value )
+{
+	int
+		count;
+
+	*value = '\0';
+	for ( count = 0; count < number_of_cloud_puffs_colours; count++ ) 
+	{
+		sprintf ( value, "%i,%i,%i;", cloud_puffs_colours[count].red, cloud_puffs_colours[count].green, cloud_puffs_colours[count].blue );
+		value += strlen ( value );
+	}
+	if ( number_of_cloud_puffs_colours )
+	{
+		value[-1] = '\0';
+	}
+}
+// Casm 20MAY12 Cloud puffs END
+
 // Casm 21DEC07
 static void set_themes ( const struct config_option *option, const char *themes )
 {
@@ -698,6 +782,10 @@ static const struct config_option options[] =
 		FLOAT(global_night_light_level) },
 	{ "persistent_smoke", "", "Burning targets emitting smoke for a long time. [Warning!] CPU intensive. (0 = off, 1 = on) (def = 1)",
 		INT(command_line_persistent_smoke) },
+	{ "cloud_puffs", "", "Cloud puffs. (0 = off, 1 = all maps except desert, 2 = all maps) (def = 1)",
+		INT(command_line_cloud_puffs) },
+	{  "cloud_puffs_colours", "", "colours for cloud puffs",
+		SPEC(set_cloud_puffs_colours, get_cloud_puffs_colours) },
 	{  "themes", "", "comma-separated list of directories for alternate psd files",
 		SPECSTR(command_line_themes, set_themes, get_string) },
 	{ NULL, NULL, "",
@@ -1291,6 +1379,8 @@ void initialize_options ( void )
 	command_line_wut = file_exist ( WUT_filename );
 
 	strcpy(command_line_themes, "2");
+
+	set_cloud_puffs_colours(NULL, "220,230,255;230,230,255;235,235,255;245,245,255;250,250,255;255,255,255");
 }
 
 void process_ini_file (void)

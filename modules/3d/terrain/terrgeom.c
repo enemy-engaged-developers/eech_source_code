@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -67,6 +67,7 @@
 #include "terrain.h"
 //VJ 051011 global zbuffer optional
 #include "cmndline.h"
+#include "global.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,6 +421,60 @@ void initialise_3d_terrain_normals ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void outcode_3d_terrain ( float x_minimum_offset, float x_maximum_offset, float y_minimum_offset, float y_maximum_offset, float z_minimum_offset, float z_maximum_offset, unsigned int *poutcode1, unsigned int *poutcode2 )
+{
+	unsigned int
+		outcode1,
+		outcode2,
+		outcode;
+
+	outcode = get_3d_point_outcodes ( x_minimum_offset, y_minimum_offset, z_minimum_offset );
+	outcode1 = outcode;
+	outcode2 = outcode;
+
+	outcode = get_3d_point_outcodes ( x_minimum_offset, y_maximum_offset, z_minimum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_minimum_offset, y_minimum_offset, z_maximum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_minimum_offset, y_maximum_offset, z_maximum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_maximum_offset, y_minimum_offset, z_minimum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_maximum_offset, y_maximum_offset, z_minimum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_maximum_offset, y_minimum_offset, z_maximum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	outcode = get_3d_point_outcodes ( x_maximum_offset, y_maximum_offset, z_maximum_offset );
+	outcode1 |= outcode;
+	outcode2 &= outcode;
+
+	if ( poutcode1 )
+	{
+		*poutcode1 = outcode1;
+	}
+
+	if ( poutcode2 )
+	{
+		*poutcode2 = outcode2;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void scan_3d_terrain ( void )
 {
 
@@ -513,12 +568,12 @@ void scan_3d_terrain ( void )
 
 			if ( this_light->type == LIGHT_3D_TYPE_DIRECTIONAL )
 			{
-	
+
 				float
 					temp_intensity;
-	
+
 				temp_intensity = point_normals->x * this_light->lx + point_normals->y * this_light->ly + point_normals->z * this_light->lz;
-	
+
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 				{
 
@@ -588,6 +643,9 @@ void scan_3d_terrain ( void )
 
 	current_sector_z_offset = initial_sector_z_offset;
 
+	// Casm 20MAY12 Cloud puffs
+	set_terrain_3d_cloud_puffs_colours ();
+
 	for ( current_sector_z = minimum_sector_z; current_sector_z <= maximum_sector_z; current_sector_z++ )
 	{
 
@@ -617,28 +675,27 @@ void scan_3d_terrain ( void )
 			sector_relative_centre.z = (	( sector_centre.x - visual_3d_vp->x ) * visual_3d_vp->zv.x +
 													( sector_centre.y - visual_3d_vp->y ) * visual_3d_vp->zv.y +
 													( sector_centre.z - visual_3d_vp->z ) * visual_3d_vp->zv.z );
-	
+
 			if (	( terrain_sectors[current_sector_z][current_sector_x].number_of_points ) ||
 					( ( terrain_tree_sectors ) && ( terrain_tree_sectors[current_sector_z][current_sector_x].number_of_trees ) ) )
 			{
-	
+
 				//
 				// Do a visibility check on the sector.
 				//
-	
+
 				if ( ( sector_relative_centre.z + sector->radius ) < clip_hither )
 				{
-	
+
 					terrain_3d_sectors_trivially_culled++;
 				}
 				else
 				{
-	
+
 					unsigned int
-						outcode,
 						outcode1,
 						outcode2;
-	
+
 					float
 						x_minimum_offset,
 						x_maximum_offset,
@@ -646,47 +703,17 @@ void scan_3d_terrain ( void )
 						y_maximum_offset,
 						z_minimum_offset,
 						z_maximum_offset;
-	
+
 					x_minimum_offset = current_sector_x_offset;
 					x_maximum_offset = current_sector_x_offset + TERRAIN_3D_SECTOR_SIDE_LENGTH;
-	
+
 					y_minimum_offset = ( float ) sector->minimum_height;
 					y_maximum_offset = ( float ) sector->maximum_height;
-	
+
 					z_minimum_offset = current_sector_z_offset;
 					z_maximum_offset = current_sector_z_offset + TERRAIN_3D_SECTOR_SIDE_LENGTH;
-	
-					outcode = get_3d_point_outcodes ( x_minimum_offset, y_minimum_offset, z_minimum_offset );
-					outcode1 = outcode;
-					outcode2 = outcode;
-	
-					outcode = get_3d_point_outcodes ( x_minimum_offset, y_maximum_offset, z_minimum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_minimum_offset, y_minimum_offset, z_maximum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_minimum_offset, y_maximum_offset, z_maximum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_maximum_offset, y_minimum_offset, z_minimum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_maximum_offset, y_maximum_offset, z_minimum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_maximum_offset, y_minimum_offset, z_maximum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
-	
-					outcode = get_3d_point_outcodes ( x_maximum_offset, y_maximum_offset, z_maximum_offset );
-					outcode1 |= outcode;
-					outcode2 &= outcode;
+
+					outcode_3d_terrain ( x_minimum_offset, x_maximum_offset, y_minimum_offset, y_maximum_offset, z_minimum_offset, z_maximum_offset, &outcode1, &outcode2 );
 
 					if ( outcode2 == 0 )
 					{
@@ -704,55 +731,55 @@ void scan_3d_terrain ( void )
 							//
 							// Insert the actual terrain sector into the visual
 							//
-	
+
 							sector_range = sqrt (	( sector_relative_centre.x * sector_relative_centre.x ) +
 															( sector_relative_centre.y * sector_relative_centre.y ) +
 															( sector_relative_centre.z * sector_relative_centre.z ) );
-	
+
 							biased_z = sector_relative_centre.z + ( TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 );
-	
+
 							sorting_slot = get_3d_scene_slot ();
-			
+
 							if ( sorting_slot )
 							{
-	
+
 								//
 								// Use the integer representation of the float value
 								//
-	
+
 								if ( outcode1 == 0 )
 								{
-		
+
 									sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_UNCLIPPED_SECTOR;
 								}
 								else if ( outcode1 & ( CLIP_HITHER | CLIP_YONDER ) )
 								{
-		
+
 									sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLIPPED_SECTOR;
 								}
 								else
 								{
-		
+
 									if ( sector_relative_centre.z < TERRAIN_3D_SECTOR_SIDE_LENGTH )
 									{
-		
+
 										sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLIPPED_SECTOR;
 									}
 									else
 									{
-		
+
 										sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_2D_CLIPPED_SECTOR;
 									}
 								}
-			
+
 								sorting_slot->z = *( ( int * ) &biased_z );
-			
+
 								sorting_slot->sector.range = sector_range;
-	
+
 								sorting_slot->sector.x = current_sector_x;
-			
+
 								sorting_slot->sector.z = current_sector_z;
-			
+
 								insert_low_zbuffered_scene_slot_into_3d_scene ( sorting_slot );
 							}
 						}
@@ -808,15 +835,15 @@ void scan_3d_terrain ( void )
 
 								if ( trees->type )
 								{
-	
+
 									if ( range < ( 4000 * 4000 ) )
 									{
-		
+
 										sorting_slot = get_3d_scene_slot ();
-						
+
 										if ( sorting_slot )
 										{
-	
+
 											float
 												scale;
 
@@ -828,7 +855,7 @@ void scan_3d_terrain ( void )
 											sq_range = range;
 
 											range = sqrt ( range );
-	
+
 											sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT;
 											sorting_slot->z = *( ( int * ) &range );
 											sorting_slot->terrain_tree.dissolve = 255.0;	//255.0 - ( ( sq_range / ( 4000.0 * 4000.0 ) ) * 255.0 );
@@ -839,29 +866,29 @@ void scan_3d_terrain ( void )
 											sorting_slot->terrain_tree.colour.red = colours[trees->colour].red;
 											sorting_slot->terrain_tree.colour.green = colours[trees->colour].green;
 											sorting_slot->terrain_tree.colour.blue = colours[trees->colour].blue;
-					
+
 											insert_low_nonzbuffered_scene_slot_into_3d_scene ( sorting_slot );
 										}
 									}
 								}
 								else
 								{
-	
+
 									if ( range < ( 1000 * 1000 ) )
 									{
-		
+
 										sorting_slot = get_3d_scene_slot ();
-						
+
 										if ( sorting_slot )
 										{
-	
+
 											float
 												scale;
-	
+
 											scale = get_terrain_3d_tree_scale ( trees );
 
 											range = sqrt ( range );
-	
+
 											sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT;
 											sorting_slot->z = *( ( int * ) &range );
 											sorting_slot->terrain_tree.dissolve = 255.0 - ( ( range / 1000.0 ) * 255.0 );
@@ -872,7 +899,7 @@ void scan_3d_terrain ( void )
 											sorting_slot->terrain_tree.colour.red = colours[trees->colour].red;
 											sorting_slot->terrain_tree.colour.green = colours[trees->colour].green;
 											sorting_slot->terrain_tree.colour.blue = colours[trees->colour].blue;
-					
+
 											insert_low_nonzbuffered_scene_slot_into_3d_scene ( sorting_slot );
 										}
 									}
@@ -881,18 +908,93 @@ void scan_3d_terrain ( void )
 								trees++;
 							}
 						}
+
 					}
 					else
 					{
-	
+
 						terrain_3d_sectors_complex_culled++;
+					}
+
+					// Casm 20MAY12 Cloud puffs
+					if ( terrain_cloud_puff_sectors && terrain_cloud_puff_sectors[current_sector_z][current_sector_x].number_of_cloud_puffs )
+					{
+						unsigned
+							outcode2;
+
+						y_minimum_offset += TERRAIN_3D_CLOUD_Y_CENTER_MIN - TERRAIN_3D_CLOUD_Y_DIFF;
+						y_maximum_offset += TERRAIN_3D_CLOUD_Y_CENTER_MAX + TERRAIN_3D_CLOUD_Y_DIFF;
+
+						outcode_3d_terrain ( x_minimum_offset, x_maximum_offset, y_minimum_offset, y_maximum_offset, z_minimum_offset, z_maximum_offset, NULL, &outcode2 );
+
+						if ( outcode2 == 0 )
+						{
+							scene_slot_drawing_list
+								*sorting_slot;
+							int
+								cloud_puff_count;
+
+							terrain_3d_cloud_puff_data
+								*cloud_puffs;
+
+							cloud_puffs = terrain_cloud_puff_sectors[current_sector_z][current_sector_x].cloud_puffs;
+
+							for ( cloud_puff_count = 0; cloud_puff_count < terrain_cloud_puff_sectors[current_sector_z][current_sector_x].number_of_cloud_puffs; cloud_puff_count++ )
+							{
+								float
+									x,
+									y,
+									z,
+									dx,
+									dy,
+									dz,
+									test_range,
+									range;
+
+								x = cloud_puffs->x;
+								y = cloud_puffs->y;
+								z = cloud_puffs->z;
+
+								dx = x - visual_3d_vp->x;
+								dy = y - visual_3d_vp->y;
+								dz = z - visual_3d_vp->z;
+
+								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
+
+								test_range = 4000.0 + 400.0 * min ( cloud_puffs->scale, 10.0 );
+
+								if ( range < test_range * test_range )
+								{
+									sorting_slot = get_3d_scene_slot ();
+
+									if ( sorting_slot )
+									{
+										range = sqrt ( range );
+
+										sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT;
+										sorting_slot->z = *( ( int * ) &range );
+										sorting_slot->terrain_cloud_puff.dissolve = ( 1.0 - range / test_range ) * 255.0;
+										sorting_slot->terrain_cloud_puff.x = x;
+										sorting_slot->terrain_cloud_puff.y = y;
+										sorting_slot->terrain_cloud_puff.z = z;
+										get_3d_transformation_matrix ( sorting_slot->terrain_cloud_puff.attitude, cloud_puffs->heading, 0, 0 );
+										sorting_slot->terrain_cloud_puff.scale = cloud_puffs->scale;
+										sorting_slot->terrain_cloud_puff.colour = terrain_3d_cloud_puff_colours[cloud_puffs->colour];
+
+										insert_low_nonzbuffered_scene_slot_into_3d_scene ( sorting_slot );
+									}
+								}
+
+								cloud_puffs++;
+							}
+						}
 					}
 				}
 			}
 
 			if ( ( sector->objects ) && ( terrain_object_rendering_enabled ) )
 			{
-	
+
 				terrain_3d_object
 					*object;
 
@@ -900,40 +1002,40 @@ void scan_3d_terrain ( void )
 					*sorting_slot;
 
 				object = sector->objects;
-	
+
 				while ( object )
 				{
-	
+
 					enum OBJECT_3D_VISIBILITY
 						visibility;
-	
+
 					set_object_3d_instance_relative_position ( object->object );
-		
+
 					visibility = get_object_3d_instance_visibility ( object->object );
-		
+
 					if ( visibility != OBJECT_3D_NOT_VISIBLE )
 					{
-	
+
 						sorting_slot = get_3d_scene_slot ();
-		
+
 						if ( sorting_slot )
 						{
 
 							float
 								biased_z;
-	
+
 							biased_z = sector_relative_centre.z + ( TERRAIN_3D_SECTOR_SIDE_LENGTH * 2 );
-	
+
 							sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_OBJECT;
-	
+
 							sorting_slot->z = *( ( int * ) &biased_z );
-		
+
 							sorting_slot->object = object->object;
-		
+
 							insert_low_zbuffered_scene_slot_into_3d_scene ( sorting_slot );
 						}
 					}
-	
+
 					object = object->next_object;
 				}
 			}
@@ -1029,6 +1131,48 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Casm 20MAY12 Cloud puffs
+void draw_3d_terrain_cloud_puff_object ( scene_slot_drawing_list *slot )
+{
+
+	enum OBJECT_3D_VISIBILITY
+		visibility;
+
+	terrain_3d_cloud_puff_object->vp.x = slot->terrain_cloud_puff.x;
+	terrain_3d_cloud_puff_object->vp.y = slot->terrain_cloud_puff.y;
+	terrain_3d_cloud_puff_object->vp.z = slot->terrain_cloud_puff.z;
+	terrain_3d_cloud_puff_object->requires_immediate_render = TRUE;
+
+	terrain_3d_cloud_puff_object->relative_scale.x = slot->terrain_cloud_puff.scale;
+	terrain_3d_cloud_puff_object->relative_scale.y = slot->terrain_cloud_puff.scale;
+	terrain_3d_cloud_puff_object->relative_scale.z = slot->terrain_cloud_puff.scale;
+
+	memcpy ( terrain_3d_cloud_puff_object->vp.attitude, slot->terrain_cloud_puff.attitude, sizeof ( matrix3x3 ) );
+
+	terrain_3d_cloud_puff_object->object_dissolve_value = slot->terrain_cloud_puff.dissolve;
+
+	set_object_3d_instance_relative_position ( terrain_3d_cloud_puff_object );
+
+	visibility = get_object_3d_instance_visibility ( terrain_3d_cloud_puff_object );
+
+	if ( visibility != OBJECT_3D_NOT_VISIBLE )
+	{
+		//
+		// Recolour the lights
+		//
+
+		copy_and_recolour_current_3d_lights ( slot->terrain_cloud_puff.colour );
+
+		draw_wbuffered_3d_object ( terrain_3d_cloud_puff_object, FALSE, TRUE );
+
+		restore_uncoloured_current_3d_lights ();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 {
 
@@ -1092,7 +1236,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	float
 		scaled_rotation[3][3];
-		
+
 	//
 	// Set fpu precision
 	//
@@ -1188,31 +1332,31 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 //		set_terrain_y_int_value ( points_y );
 		normal_indices += points_y->normal_change;	//get_3d_terrain_point_y_normal_change ( points_y );
-	
+
 		{
-	
+
 			float
 				r,
 				g,
 				b;
-	
+
 			int
 				ir,
 				ig,
 				ib,
 				colour_index;
-	
+
 			colour_index = colour_indices->index;
 			normal_index = normal_indices->index;
-	
+
 			r = colours[colour_index].red * terrain_3d_transformed_point_normals[normal_index].r + FLOAT_FLOAT_FACTOR;
 			g = colours[colour_index].green * terrain_3d_transformed_point_normals[normal_index].g + FLOAT_FLOAT_FACTOR;
 			b = colours[colour_index].blue * terrain_3d_transformed_point_normals[normal_index].b + FLOAT_FLOAT_FACTOR;
-	
+
 			ir = ( *( int * ) &r ) - INTEGER_FLOAT_FACTOR;
 			ig = ( *( int * ) &g ) - INTEGER_FLOAT_FACTOR;
 			ib = ( *( int * ) &b ) - INTEGER_FLOAT_FACTOR;
-	
+
 			result_colours->red = ir;
 			result_colours->green = ig;
 			result_colours->blue = ib;
@@ -1220,7 +1364,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 		}
 
 		{
-	
+
 			float
 				posx,
 				posy,
@@ -1229,7 +1373,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 			posx = ( ( ( float ) points_xz->x ) * terrain_3d_xz_scale ) + current_sector_x_visual_offset;
 			posz = ( ( ( float ) points_xz->z ) * terrain_3d_xz_scale ) + current_sector_z_visual_offset;
 			posy =  ( ( ( float ) current_terrain_y_int ) * terrain_3d_map_scaled_height_difference ) + current_sector_y_visual_offset;
-	
+
 			result_3d_points->x = posx * scaled_rotation[0][0] + posy * scaled_rotation[0][1] + posz * scaled_rotation[0][2];
 			result_3d_points->y = posx * scaled_rotation[1][0] + posy * scaled_rotation[1][1] + posz * scaled_rotation[1][2];
 			result_2d_points->z = posx * scaled_rotation[2][0] + posy * scaled_rotation[2][1] + posz * scaled_rotation[2][2];
@@ -1253,7 +1397,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 				oxmin = last_transformed_point->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - last_transformed_point->j;
 				oymin = last_transformed_point->j - active_viewport.y_min;
-	
+
 				ixmax = *( ( unsigned int * ) &oxmax );
 				ixmin = *( ( unsigned int * ) &oxmin );
 				iymax = *( ( unsigned int * ) &oymax );
@@ -1262,15 +1406,15 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 #ifdef __WATCOMC__
 
 				start_float_divide ( result_2d_points->z, 1.0 );
-	
+
 				*last_transformed_point_outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
-	
+
 				q = end_float_divide ();
 
 #else
 
 				q = 1.0 / result_2d_points->z;
-	
+
 				ixmin >>= 31;
 				iymin &= 0x80000000;
 				ixmax >>= 29;
@@ -1288,20 +1432,20 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 				last_transformed_point = result_2d_points;
 
 				last_transformed_point_outcode = result_outcodes;
-	
+
 				i = ( result_3d_points->x * q );
 				j = ( result_3d_points->y * q );
-	
+
 				result_2d_points->j = ( active_3d_environment->y_origin - j );
 				result_2d_points->i = ( active_3d_environment->x_origin + i );
 				result_2d_points->q = q;
 			}
 			else
 			{
-	
+
 				result_colours->fog = 0;
 				result_colours->alpha = 0;
-		
+
 				*result_outcodes = CLIP_YONDER;
 			}
 		}
@@ -1310,7 +1454,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 			result_colours->fog = 255;
 			result_colours->alpha = 255;
-	
+
 			*result_outcodes = CLIP_HITHER;
 		}
 
@@ -1396,25 +1540,25 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-	
+
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
 			if ( polygon->surface_change )
 			{
-				
+
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
-				//  
+				//
 				// Flush any buffered polygons
 				//
 
@@ -1426,53 +1570,53 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_byte_polygon ( number_of_points, terrain_3d_sector_point_byte_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_byte_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_byte_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_byte_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
 	}
 	else
 	{
-	
+
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
 			if ( polygon->surface_change )
 			{
-				
+
   			surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
-				// 
+				//
 				// Flush any buffered polygons
 				//
 
@@ -1484,28 +1628,28 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_word_polygon ( number_of_points, terrain_3d_sector_point_word_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_word_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_word_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_word_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
@@ -1601,7 +1745,7 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	float
 		scaled_rotation[3][3];
-		
+
 	//
 	// Set fpu precision
 	//
@@ -1879,22 +2023,22 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-	
+
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
-			if ( polygon->surface_change ) 
+			if ( polygon->surface_change )
 			{
-				
+
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -1909,51 +2053,51 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_byte_polygon ( number_of_points, terrain_3d_sector_point_byte_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_byte_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_byte_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_byte_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
 	}
 	else
 	{
-	
+
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
 
-			if ( polygon->surface_change ) 
+			if ( polygon->surface_change )
 			{
-				
+
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -1968,28 +2112,28 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_word_polygon ( number_of_points, terrain_3d_sector_point_word_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_word_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_word_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_word_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
@@ -2271,22 +2415,22 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-		
+
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
 			if ( polygon->surface_change )
 			{
-				
+
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -2301,30 +2445,30 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
 
 			current_terrain_type_class->render_byte_unclipped ( number_of_points );
-	
+
 			terrain_3d_sector_point_byte_references += number_of_points;
-	
+
 			polygon++;
 		}
 	}
 	else
-	{		
+	{
 
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
-			int 
+
+			int
 				number_of_points;
-				
-			if ( polygon->surface_change ) 
+
+			if ( polygon->surface_change )
 			{
-				
+
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -2339,9 +2483,9 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
 
 			current_terrain_type_class->render_word_unclipped ( number_of_points );
-	
+
 			terrain_3d_sector_point_word_references += number_of_points;
-	
+
 			polygon++;
 		}
 	}
@@ -2533,21 +2677,21 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 //		set_terrain_y_int_value ( points_y );
 		normal_indices += points_y->normal_change;	//get_3d_terrain_point_y_normal_change ( points_y );
-	
+
 		{
-	
+
 			float
 				r,
 				g,
 				b,
 				grey;
-	
+
 			int
 				ir,
 				ig,
 				ib,
 				colour_index;
-	
+
 			colour_index = colour_indices->index;
 			normal_index = normal_indices->index;
 
@@ -2560,15 +2704,15 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			b *= 0.11;
 
 			grey = r * 0.3 + g * 0.59 + b * 0.11;
-	
+
 			r = grey * terrain_3d_transformed_point_normals[normal_index].r;
 			g = grey * terrain_3d_transformed_point_normals[normal_index].g;
 			b = grey * terrain_3d_transformed_point_normals[normal_index].b;
-	
+
 			asm_convert_float_to_int ( r, &ir );
 			asm_convert_float_to_int ( g, &ig );
 			asm_convert_float_to_int ( b, &ib );
-	
+
 			result_colours->red = ir;
 			result_colours->green = ig;
 			result_colours->blue = ib;
@@ -2576,7 +2720,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 		}
 
 		{
-	
+
 			float
 				posx,
 				posy,
@@ -2585,7 +2729,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			posx = ( ( ( float ) points_xz->x ) * terrain_3d_xz_scale ) + current_sector_x_visual_offset;
 			posz = ( ( ( float ) points_xz->z ) * terrain_3d_xz_scale ) + current_sector_z_visual_offset;
 			posy =  ( ( ( float ) current_terrain_y_int ) * terrain_3d_map_scaled_height_difference ) + current_sector_y_visual_offset;
-	
+
 			result_3d_points->x = posx * scaled_rotation[0][0] + posy * scaled_rotation[0][1] + posz * scaled_rotation[0][2];
 			result_3d_points->y = posx * scaled_rotation[1][0] + posy * scaled_rotation[1][1] + posz * scaled_rotation[1][2];
 			result_2d_points->z = posx * scaled_rotation[2][0] + posy * scaled_rotation[2][1] + posz * scaled_rotation[2][2];
@@ -2609,7 +2753,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 				oxmin = last_transformed_point->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - last_transformed_point->j;
 				oymin = last_transformed_point->j - active_viewport.y_min;
-	
+
 				ixmax = *( ( unsigned int * ) &oxmax );
 				ixmin = *( ( unsigned int * ) &oxmin );
 				iymax = *( ( unsigned int * ) &oymax );
@@ -2618,15 +2762,15 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 #ifdef __WATCOMC__
 
 				start_float_divide ( result_2d_points->z, 1.0 );
-	
+
 				*last_transformed_point_outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
-	
+
 				q = end_float_divide ();
 
 #else
 
 				q = 1.0 / result_2d_points->z;
-	
+
 				ixmin >>= 31;
 				iymin &= 0x80000000;
 				ixmax >>= 29;
@@ -2644,20 +2788,20 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 				last_transformed_point = result_2d_points;
 
 				last_transformed_point_outcode = result_outcodes;
-	
+
 				i = ( result_3d_points->x * q );
 				j = ( result_3d_points->y * q );
-	
+
 				result_2d_points->j = ( active_3d_environment->y_origin - j );
 				result_2d_points->i = ( active_3d_environment->x_origin + i );
 				result_2d_points->q = q;
 			}
 			else
 			{
-	
+
 				result_colours->fog = 0;
 				result_colours->alpha = 0;
-		
+
 				*result_outcodes = CLIP_YONDER;
 			}
 		}
@@ -2666,7 +2810,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 			result_colours->fog = 255;
 			result_colours->alpha = 255;
-	
+
 			*result_outcodes = CLIP_HITHER;
 		}
 
@@ -2748,12 +2892,12 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-	
+
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
 
@@ -2763,7 +2907,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -2778,50 +2922,50 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_byte_polygon ( number_of_points, terrain_3d_sector_point_byte_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_byte_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_byte_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_byte_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
 	}
 	else
 	{
-	
+
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
-	
+
 			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
 			{
 
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				draw_terrain_3d_buffered_polygons ();
@@ -2832,28 +2976,28 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_word_polygon ( number_of_points, terrain_3d_sector_point_word_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_word_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_word_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_word_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
@@ -3234,22 +3378,22 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-	
+
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
-	
+
 			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
 			{
 
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-	
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -3264,50 +3408,50 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_byte_polygon ( number_of_points, terrain_3d_sector_point_byte_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_byte_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_byte_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_byte_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
 	}
 	else
 	{
-	
+
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
-	
+
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
-	
+
 			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
 			{
 
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -3322,28 +3466,28 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			{
-		
+
 				if ( outcode_3d_terrain_word_polygon ( number_of_points, terrain_3d_sector_point_word_references, &terrain_3d_face_outcode ) )
 				{
-		
+
 					commit_deferred_state_changes ();
 
 					if ( terrain_3d_face_outcode )
 					{
-	
+
 						current_terrain_type_class->render_word_clipped ( number_of_points );
 					}
 					else
 					{
-	
+
 						current_terrain_type_class->render_word_unclipped ( number_of_points );
 					}
 				}
-		
+
 				terrain_3d_sector_point_word_references += number_of_points;
-		
+
 				polygon++;
 			}
 		}
@@ -3641,17 +3785,17 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
-	
+
 			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
 			{
 
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -3664,11 +3808,11 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			current_terrain_type_class->render_byte_unclipped ( number_of_points );
-	
+
 			terrain_3d_sector_point_byte_references += number_of_points;
-	
+
 			polygon++;
 		}
 	}
@@ -3679,17 +3823,17 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
-	
+
 			int
 				number_of_points;
-	
+
 			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
 			{
 
 				surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
 				//
@@ -3702,11 +3846,11 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			current_terrain_type_class->render_word_unclipped ( number_of_points );
-	
+
 			terrain_3d_sector_point_word_references += number_of_points;
-	
+
 			polygon++;
 		}
 	}
@@ -3984,7 +4128,7 @@ void draw_3d_terrain_sector_point_normals ( scene_slot_drawing_list *slot )
 		result_point_normals++;
 
 		result_points++;
-	
+
 		points_xz++;
 
 		points_y++;
@@ -4024,16 +4168,16 @@ void draw_3d_terrain_sector_point_normals ( scene_slot_drawing_list *slot )
 
 			if ( outcode & CLIP_HITHER )
 			{
-		
+
 				line = hither_clip_3d_polygon ( line, &outcode );
 			}
 
 			if ( line )
 			{
-	
+
 				if ( outcode )
 				{
-			
+
 					line = clip_3d_polygon ( line, outcode );
 				}
 
@@ -4088,7 +4232,7 @@ vertex * construct_3d_terrain_normal_line ( int index, int *polygon_outcode )
 	terrain_transformed_3d_point_normals[index].next_vertex = NULL;
 
 	*polygon_outcode = outcode;
-	
+
 	if ( outcode2 )
 	{
 
