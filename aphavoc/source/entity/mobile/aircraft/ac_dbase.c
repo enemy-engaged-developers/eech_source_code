@@ -411,12 +411,12 @@ aircraft_data
          OBJECT_3D_UH60_BLACKHAWK,							// default_3d_shape
 			GUNSHIP_TYPE_BLACKHAWK,							// gunship_type
 			ENTITY_FORCE_AIR,							// force
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,					// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_3,					// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,					// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_5,					// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,			// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,						// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,							// target_priority_type
