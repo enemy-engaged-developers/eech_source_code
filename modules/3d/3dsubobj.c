@@ -283,6 +283,12 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 			populate_table_with_named_sub_objects ( &objects_3d_scene_database[scene_index].sub_objects[count] );
 		}
 	}
+	else
+	{
+		objects_3d_scene_database[scene_index].sub_object_indices_table = NULL;
+
+		objects_3d_scene_database[scene_index].number_of_sub_object_table_entries = 0;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
