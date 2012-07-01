@@ -215,7 +215,7 @@ void set_crew_view_full_screen_params (void)
 		full_screen_width,
 		full_screen_height,
 		rad (59.99),
-		rad (46.82)
+		get_height_view_angle (rad (59.99))
 	);
 }
 
