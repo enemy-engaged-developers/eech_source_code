@@ -459,6 +459,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-tailblur.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-tailblur2.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-undermast.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\oh58d-wings.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\OH-58D Kiowa Warrior\OH58D.EES"
 
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\RAH-66 Comanche"
