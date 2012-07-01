@@ -142,6 +142,21 @@ const char*
 		"NUM_GUNSHIP_TYPES"
 	};
 
+const char
+	new_gunship[] =
+	{
+		1,
+		0,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1
+	};
+
 gunship_types alphabetical_gunship_types[] = {
 		GUNSHIP_TYPE_VIPER,     // AH
 		GUNSHIP_TYPE_AH64A,     // AH

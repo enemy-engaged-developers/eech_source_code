@@ -2370,12 +2370,6 @@ void set_gunship_view_mode_events (void)
 	if (get_apache_havoc_gunship ())
 	{
 		set_event (DIK_F2, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_draw_overlaid_instruments_event);
-
-		if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
-		{
-			set_event (DIK_F3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, decrease_cockpit_detail_event);
-			set_event (DIK_F4, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, increase_cockpit_detail_event);
-		}
 	}
 	else
 	{
@@ -2395,7 +2389,7 @@ void set_gunship_view_mode_events (void)
 	set_event (DIK_F3, MODIFIER_NONE, KEY_STATE_DOWN, look_at_special1_event);
 	set_event (DIK_F4, MODIFIER_NONE, KEY_STATE_DOWN, look_at_special2_event);
 
-	if (!get_apache_havoc_gunship ())
+	if (get_comanche_hokum_gunship ())
 	{
 		set_event (DIK_LEFT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, look_abs_left_event);
 		set_event (DIK_RIGHT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, look_abs_right_event);
@@ -2410,7 +2404,7 @@ void set_gunship_view_mode_events (void)
 */
 	}
 
-	if (!get_apache_havoc_gunship () || get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
+	if (get_comanche_hokum_gunship ())
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
 		
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
@@ -2457,7 +2451,7 @@ void set_gunship_view_mode_events (void)
 	//
 	////////////////////////////////////////
 
-	if (!get_apache_havoc_gunship ())
+	if (get_comanche_hokum_gunship ())
 	{
 		set_event (DIK_F11, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, crew_camera_event);
 	}

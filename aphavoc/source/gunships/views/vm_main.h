@@ -78,8 +78,7 @@ extern entity *get_viewed_entity (void);
 //Casm 06OCT05 Fixed EEAH install hack
 #define get_apache_havoc_gunship_fixed_cockpit() ( get_apache_havoc_gunship () && (!full_screen_hi_res) && \
                                                  (application_video_colourdepth == 16) && \
-                                                 (get_global_gunship_type() != GUNSHIP_TYPE_HIND) && (get_global_gunship_type() != GUNSHIP_TYPE_APACHE) \
-                                                 && (global_aphavoc_maps) )
+                                                 (global_aphavoc_maps) )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

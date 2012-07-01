@@ -97,7 +97,8 @@ static void draw_local_3d_object (entity *en, float range)
 		*raw;
 
 	int
-		internal_view;
+		internal_view,
+		draw_gunship;
 
 	raw = (helicopter *) get_local_entity_data (en);
 
@@ -113,6 +114,8 @@ static void draw_local_3d_object (entity *en, float range)
 	{
 		internal_view = FALSE;
 	}
+
+	draw_gunship = TRUE;
 
 	////////////////////////////////////////
 	//
@@ -133,7 +136,9 @@ static void draw_local_3d_object (entity *en, float range)
 		object_3d_sub_object_search_data
 			search;
 
-		if (raw->ac.object_3d_shape == OBJECT_3D_RAH66)
+		switch (raw->ac.object_3d_shape)
+		{
+		case OBJECT_3D_RAH66:
 		{
 			////////////////////////////////////////
 			//
@@ -217,8 +222,9 @@ static void draw_local_3d_object (entity *en, float range)
 			{
 				search.result_sub_object->visible_object = draw_loading_doors;
 			}
+			break;
 		}
-		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+		case OBJECT_3D_KA_52:
 		{
 			////////////////////////////////////////
 			//
@@ -345,6 +351,27 @@ static void draw_local_3d_object (entity *en, float range)
 			{
 				search.result_sub_object->visible_object = !ejected;
 			}
+			break;
+		}
+		case OBJECT_3D_OH58D:
+		{
+			draw_virtual_cockpit_parts = internal_view;
+
+			search.search_depth = 0;
+			search.search_object = raw->ac.inst3d;
+			search.sub_object_index = OBJECT_3D_SUB_OBJECT_RAH66_FUSELAGE;
+
+			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			{
+				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
+			}
+			break;
+		}
+		default:
+		{
+			draw_gunship = FALSE;
+			break;
+		}
 		}
 	}
 
@@ -417,7 +444,7 @@ static void draw_local_3d_object (entity *en, float range)
 		}
 		else
 		{
-			if (get_comanche_hokum_gunship ())
+			if (get_comanche_hokum_gunship () && draw_gunship)
 			{
 				if (get_global_draw_cockpit_graphics ())
 				{

@@ -2875,7 +2875,7 @@ void switch_seat_position (void)
 
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (!get_apache_havoc_gunship () || get_global_gunship_type () == GUNSHIP_TYPE_APACHE);
+	ASSERT (get_comanche_hokum_gunship ());
 
 	if (get_time_acceleration () == 0)
 	{
@@ -2961,7 +2961,7 @@ void set_pilot_seat_position (void)
 {
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (!get_apache_havoc_gunship ());
+	ASSERT (get_comanche_hokum_gunship ());
 
 	ASSERT (get_pilot_entity ());
 
@@ -2991,7 +2991,7 @@ void set_co_pilot_seat_position (void)
 {
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (!get_apache_havoc_gunship ());
+	ASSERT (get_comanche_hokum_gunship ());
 
 	ASSERT (get_pilot_entity ());
 
@@ -3023,7 +3023,7 @@ void leave_seat_position (view_modes new_view_mode, view_modes old_view_mode)
 	{
 		if (get_gunship_entity ())
 		{
-			if (!get_apache_havoc_gunship ())
+			if (get_comanche_hokum_gunship ())
 			{
 				if (get_pilot_entity ())
 				{

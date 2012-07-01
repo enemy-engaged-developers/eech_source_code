@@ -141,7 +141,8 @@ extern gunship_types alphabetical_gunship_types[];
 extern const char
 	*game_status_names [],
 	*gunship_type_names [],
-	*long_gunship_names[];
+	*long_gunship_names[],
+	new_gunship[];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1050,9 +1051,9 @@ extern int get_localisation_y_size (game_text_translation_type *list, int button
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030521 Added Blackhawk 030612 Hind 030816 AH64A and KA50
 
-#define get_apache_havoc_gunship() ((get_global_gunship_type () == GUNSHIP_TYPE_APACHE) || (get_global_gunship_type () == GUNSHIP_TYPE_HAVOC) || (get_global_gunship_type () == GUNSHIP_TYPE_BLACKHAWK) || (get_global_gunship_type () == GUNSHIP_TYPE_HIND) || (get_global_gunship_type () == GUNSHIP_TYPE_AH64A) || (get_global_gunship_type () == GUNSHIP_TYPE_KA50) || (get_global_gunship_type () == GUNSHIP_TYPE_VIPER))
+#define get_apache_havoc_gunship() (new_gunship[get_global_gunship_type ()] == 0)
 
-#define get_comanche_hokum_gunship() ((get_global_gunship_type () == GUNSHIP_TYPE_COMANCHE) || (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM))
+#define get_comanche_hokum_gunship() (new_gunship[get_global_gunship_type ()] != 0)
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 
