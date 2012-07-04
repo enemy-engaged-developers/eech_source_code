@@ -19,7 +19,7 @@ public:
 	{
 	}
 
-	void Begin(void)
+	void Begin(int)
 	{
 	}
 

@@ -16,12 +16,12 @@ class LwsFileExporter : public LwsExporter
   fclose(fp);
  }
 
- void Begin(void)
+ void Begin(int max_keyframe_index)
  {
 #ifdef SCENE_3
-  fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n");
+  fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame %i\nFramesPerSecond 30\n", max_keyframe_index);
 #else
-  fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 30\n");
+  fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame %i\nFramesPerSecond 30\n", max_keyframe_index);
 #endif
  }
 
@@ -523,7 +523,15 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
  ex = ex_;
  current = -1;
 
- ex->Begin();
+ int max_keyframe_index = scene->keyframes[scene->number_of_keyframes - 1].index;
+ for (int i = 0; i < scene->total_number_of_sub_objects; i++)
+  {
+   int keyframe_index = scene->scene_sub_object_array[i].keyframes[scene->scene_sub_object_array[i].number_of_keyframes - 1].index;
+   if (keyframe_index > max_keyframe_index)
+    max_keyframe_index = keyframe_index;
+  }
+
+ ex->Begin(max_keyframe_index);
 
  if (show_warnings)
   {

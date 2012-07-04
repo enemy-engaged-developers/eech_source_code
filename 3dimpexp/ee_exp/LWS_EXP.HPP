@@ -6,7 +6,7 @@ class LwsExporter
  {
  }
 
- virtual void Begin(void) = 0;
+ virtual void Begin(int max_keyframe_index) = 0;
  virtual void End(void) = 0;
  virtual void Object(int index, int number, int sub_object_index, int special = 0, const char* null_special = NULL) = 0;
  virtual void Parent(int index) = 0;
