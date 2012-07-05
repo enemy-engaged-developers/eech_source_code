@@ -11,6 +11,7 @@ typedef struct REAL_COLOUR rgb_colour;
 #undef active_3d_environment
 
 
+using std::min;
 #define bound(VALUE,LOWER,UPPER) ( ( VALUE ) < ( LOWER ) ? ( LOWER ) : ( ( VALUE ) > ( UPPER ) ? ( UPPER ) : ( VALUE ) ) )
 enum SESSION_SEASON_SETTINGS
 {
@@ -58,6 +59,9 @@ static void debug_fatal(...)
 #define debug_colour_log debug_log
 #define debug_colour_watch debug_log
 #define command_line_texture_colour 0
+#define command_line_cloud_puffs 0
+#define cloud_puffs_colours ((real_colour*)NULL)
+#define number_of_cloud_puffs_colours 1
 #define command_line_render_tree_shadows 1
 #define global_anisotropic 0
 #define d3d_modulate_alpha 0
@@ -84,6 +88,7 @@ static struct ENV_3D
 int render_filter;
 int infrared_mode;
 float screen_i_scale, screen_j_scale, x_origin, y_origin;
+struct LIGHT_COLOUR ambient_light;
 } a3denv = { 0, 0 }, *active_3d_environment = &a3denv;
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 #define construct_3d_object_by_name(x) NULL

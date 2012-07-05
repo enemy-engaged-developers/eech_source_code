@@ -961,7 +961,7 @@ void scan_3d_terrain ( void )
 
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
-								test_range = 4000.0 + 400.0 * min ( cloud_puffs->scale, 10.0 );
+								test_range = 4000.0 + 400.0 * min ( cloud_puffs->scale, 10.0f );
 
 								if ( range < test_range * test_range )
 								{

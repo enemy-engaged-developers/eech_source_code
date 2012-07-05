@@ -1198,7 +1198,7 @@ static weapon_config_types get_weapon_config (gunship_types gunship_type, const 
 			}
 
 			hardpoint_weapon = current_weapon[hardpoint];
-			ok = hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON ? check_hardpoint_clean (weapon_config_package, wlht->sub_object_depth1) : check_weapon_on_hardpoint (weapon_config_package, hardpoint_weapon, wlht->sub_object_depth1);
+			ok = hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON ? check_hardpoint_clean ((weapon_config_types)weapon_config_package, wlht->sub_object_depth1) : check_weapon_on_hardpoint ((weapon_config_types)weapon_config_package, hardpoint_weapon, wlht->sub_object_depth1);
 
 			if (!ok)
 			{
@@ -1331,7 +1331,7 @@ static void set_hardpoint_weapons (gunship_types gunship_type, const entity_sub_
 			continue;
 		}
 
-		weapon_loading_set_current_hardpoint_weapon (gunship_type, hardpoint, current_weapon[hardpoint]);
+		weapon_loading_set_current_hardpoint_weapon (gunship_type, (weapon_loading_hardpoint_types)hardpoint, current_weapon[hardpoint]);
 	}
 }
 
@@ -1364,7 +1364,7 @@ static void get_current_hardpoint_weapon (gunship_types gunship_type, entity_sub
 		}
 
 		current_weapon[hardpoint] = wlht->valid_weapon_types[wlht->current_weapon_index];
-		weapon_loading_set_current_hardpoint_weapon (gunship_type, hardpoint, current_weapon[hardpoint]);
+		weapon_loading_set_current_hardpoint_weapon (gunship_type, (weapon_loading_hardpoint_types)hardpoint, current_weapon[hardpoint]);
 	}
 }
 

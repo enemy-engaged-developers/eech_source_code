@@ -453,7 +453,7 @@ static void set_cloud_puffs_colours ( const struct config_option *option, const 
 		}
 	}
 
-	new_cloud_puffs_colours = safe_malloc ( new_number_of_cloud_puffs_colours * sizeof ( *new_cloud_puffs_colours ) );
+	new_cloud_puffs_colours = ( real_colour* ) safe_malloc ( new_number_of_cloud_puffs_colours * sizeof ( *new_cloud_puffs_colours ) );
 	count = 0;
 	cloud_puff_colour = 0;
 	for ( ; ; )

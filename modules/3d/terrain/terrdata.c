@@ -804,10 +804,10 @@ int load_3d_terrain ( const char *path )
 
 	if (command_line_cloud_puffs > 1 || command_line_cloud_puffs == 1 && get_global_season() != SESSION_SEASON_DESERT)
 	{
-		terrain_cloud_puff_sectors = safe_malloc ( terrain_3d_tree_map_height * sizeof ( *terrain_cloud_puff_sectors ) );
+		terrain_cloud_puff_sectors = ( terrain_3d_cloud_puff_sector** ) safe_malloc ( terrain_3d_tree_map_height * sizeof ( *terrain_cloud_puff_sectors ) );
 		for ( z = 0; z < terrain_3d_tree_map_height; z++ )
 		{
-			terrain_cloud_puff_sectors[z] = safe_malloc ( terrain_3d_tree_map_width * sizeof ( **terrain_cloud_puff_sectors ) );
+			terrain_cloud_puff_sectors[z] = ( terrain_3d_cloud_puff_sector* ) safe_malloc ( terrain_3d_tree_map_width * sizeof ( **terrain_cloud_puff_sectors ) );
 			for ( x = 0; x < terrain_3d_tree_map_width; x++ )
 			{
 				int
@@ -828,7 +828,7 @@ int load_3d_terrain ( const char *path )
 				pack = rand() % 5 + 1;
 
 				number_of_cloud_puffs = base * pack;
-				cloud_puffs = number_of_cloud_puffs ? safe_malloc ( number_of_cloud_puffs * sizeof ( *cloud_puffs ) ) : NULL;
+				cloud_puffs = number_of_cloud_puffs ? ( terrain_3d_cloud_puff_data* ) safe_malloc ( number_of_cloud_puffs * sizeof ( *cloud_puffs ) ) : NULL;
 
 				terrain_cloud_puff_sectors[z][x].number_of_cloud_puffs = number_of_cloud_puffs;
 				terrain_cloud_puff_sectors[z][x].cloud_puffs = cloud_puffs;
@@ -859,7 +859,7 @@ int load_3d_terrain ( const char *path )
 				}
 			}
 		}
-		terrain_3d_cloud_puff_colours = safe_malloc ( number_of_cloud_puffs_colours * sizeof ( *terrain_3d_cloud_puff_colours ) );
+		terrain_3d_cloud_puff_colours = ( real_colour* ) safe_malloc ( number_of_cloud_puffs_colours * sizeof ( *terrain_3d_cloud_puff_colours ) );
 	}
 	else
 	{
@@ -2203,9 +2203,9 @@ void set_terrain_3d_cloud_puffs_colours ( void )
 
 	for ( count = 0; count < number_of_cloud_puffs_colours; count++ )
 	{
-		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red * colour_coef_red, 255.0);
-		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green * colour_coef_green, 255.0);
-		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue * colour_coef_blue, 255.0);
+		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red * colour_coef_red, 255.0f);
+		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green * colour_coef_green, 255.0f);
+		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue * colour_coef_blue, 255.0f);
 		terrain_3d_cloud_puff_colours[count].alpha = 255;
 	}
 }

@@ -7000,6 +7000,94 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="kiowa"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_avevn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_avevn.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_avion.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_avlmp.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_avlmp.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_cowpn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_cowpn.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_dam.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_dam.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_eo.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_eo.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_hms.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_hms.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_hud.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_hud.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_mfd.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_mfd.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_tgt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_tgt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_thrt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_thrt.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="cockpits"
@@ -7696,6 +7784,82 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="kiowa"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_ckpt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_ckpt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_cpg.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_cpg.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_crew.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_crew.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_doors.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_doors.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_instr.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_instr.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_lamps.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_lamps.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_pilot.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_pilot.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_vckpt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_vckpt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_wiper.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_wiper.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="dynamics"
@@ -7869,6 +8033,18 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\dynamics\ka50\hm_dyn.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="kiowa"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\dynamics\kiowa\ki_dyn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\dynamics\kiowa\ki_dyn.h"
 							>
 						</File>
 					</Filter>

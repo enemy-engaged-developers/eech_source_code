@@ -119,7 +119,7 @@ static void initialise_smoke_list_types_names (void)
 	for (count = 0; count < NUM_SMOKE_LIST_TYPES; count++)
 	{
 		size = strlen(default_smoke_list_types_names[count]) + 1;
-		smoke_list_types_names[count] = safe_malloc (size);
+		smoke_list_types_names[count] = (char*) safe_malloc (size);
 		memcpy (smoke_list_types_names[count], default_smoke_list_types_names[count], size);
 	}
 	for (; count < total_number_of_smoke_list_types + smoke_list_types_available; count++)
@@ -408,7 +408,7 @@ static void import_smoke_list_database (void)
 			if (count == total_number_of_smoke_list_types)
 			{
 				count = strlen (smoke_list_type_name) + 1;
-				smoke_list_types_names[total_number_of_smoke_list_types] = safe_malloc (count);
+				smoke_list_types_names[total_number_of_smoke_list_types] = (char*) safe_malloc (count);
 				memcpy (smoke_list_types_names[total_number_of_smoke_list_types], smoke_list_type_name, count);
 				total_number_of_smoke_list_types++;
 				smoke_list_types_available--;
