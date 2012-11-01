@@ -133,13 +133,14 @@ int main(int argc, char* argv[])
 
  if (argc < 3)
   {
-   printf("Usage: eeo2lwo file_name.eeo file_name.lwo [textures extention]");
+   printf("Usage: eeo2lwo file_name.eeo file_name.lwo [textures directories]");
    return -1;
   }
 
  char filename[1024];
 
- EET eet(*getcwd(filename, sizeof(filename)), argc > 3 ? argv[3] : "tga");
+ FileTexturesFinder textures_finder(*getcwd(filename, sizeof(filename)), argv + 3);
+ EET eet(textures_finder);
  AllNames names(eet);
  TexturesExporter_ textures;
  textures.export_textures(eet, false);

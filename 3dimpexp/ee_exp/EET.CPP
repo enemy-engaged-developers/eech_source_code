@@ -1,6 +1,93 @@
 #ifndef EET_NO_EXPORT
-// Slashes are correct!
-#define TEXTURES_ROOT ":TEXTURES/"
+#include <io.h>
+
+class TexturesFinder
+{
+ public:
+
+ TexturesFinder(char drive, const char* extention = "TGA")
+  : drive(drive), extention(extention)
+ {
+ }
+
+ virtual ~TexturesFinder()
+ {
+ }
+
+ virtual void find(const char* texture, char* file)
+ {
+  sprintf(file, "%c:TEXTURES/%s.%s", drive, texture, extention);
+ }
+
+ private:
+
+ char drive;
+ const char* extention;
+};
+
+class FileTexturesFinder : public TexturesFinder
+{
+ public:
+
+ FileTexturesFinder(char drive, char** dirs)
+  : TexturesFinder(drive), dirs(dirs)
+ {
+ }
+
+ virtual void find(const char* texture, char* file)
+ {
+  for (char** cur = dirs; *cur; cur++)
+   if (search_dir(texture, *cur, file))
+    {
+     file += 3;
+     do
+      file[-1] = *file == '\\' ? '/' : *file;
+     while (*file++);
+     return;
+    }
+
+  TexturesFinder::find(texture, file);
+ }
+
+ private:
+
+ bool search_dir(const char* texture, const char* dir, char* file)
+ {
+  char buf[260];
+  int rc;
+  long handle;
+  struct _finddata_t fd;
+
+  sprintf(buf, "%s\\%s.*", dir, texture);
+	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
+   if (!(fd.attrib & _A_SUBDIR))
+    {
+     const char* ext = fd.name + strlen(fd.name) - 4;
+     if (!stricmp(ext, ".TGA") || !stricmp(ext, ".BMP"))
+      {
+       _findclose(handle);
+       sprintf(file, "%s\\%s", dir, fd.name);
+       return true;
+      }
+    }
+  _findclose(handle);
+
+  sprintf(buf, "%s\\*.*");
+	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
+   if ((fd.attrib & _A_SUBDIR) && fd.name[0] != '.')
+    if (search_dir(texture, buf, file))
+     {
+      _findclose(handle);
+      return true;
+     }
+  _findclose(handle);
+
+  return false;
+ }
+
+ char** dirs;
+};
+
 #endif
 
 class EET
@@ -29,14 +116,13 @@ class EET
  Array<Animation> displacement_animations;
 #ifndef EET_NO_EXPORT
  unsigned long index;
- char textures_drive;
- const char* extention;
+ TexturesFinder& textures_finder;
 #endif
 
  public:
 
 #ifndef EET_NO_EXPORT
- EET(char drive = 'D', const char* ext = "tga");
+ EET(TexturesFinder& textures_finder);
 #endif
  void LoadAnimations(FILE* file);
  unsigned Append(const char* name);
@@ -56,8 +142,8 @@ private:
 };
 
 #ifndef EET_NO_EXPORT
-EET::EET(char drive, const char* ext)
- : index(0), textures_drive(drive), extention(ext)
+EET::EET(TexturesFinder& textures_finder)
+ : index(0), textures_finder(textures_finder)
 {
 }
 #endif
@@ -135,7 +221,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animatio
         {
          subchunk = new LWO_SubChunk("STIL", 0, NULL);
          chunk->AddSubChunk(subchunk);
-         sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[animation.animation[i]].name, extention);
+         textures_finder.find(textures[animation.animation[i]].name, buf);
          subchunk->AddBasicData(strlen(buf) + 1, buf);
         }
        animation.index = index++;
@@ -155,7 +241,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animatio
        chunk->AddData(4, &index);
        subchunk = new LWO_SubChunk("STIL", 0, NULL);
        chunk->AddSubChunk(subchunk);
-       sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[textindex].name, extention);
+       textures_finder.find(textures[textindex].name, buf);
        subchunk->AddBasicData(strlen(buf) + 1, buf);
        textures[textindex].index = index++;
       }

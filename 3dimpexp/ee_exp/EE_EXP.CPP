@@ -25,7 +25,8 @@ int main(void)
 
  FILE* redirect = freopen("EEEXPLOG.TXT", "w", stdout);
 
- EET eet(*getcwd(filename, sizeof(filename)));
+ TexturesFinder textures_finder(*getcwd(filename, sizeof(filename)));
+ EET eet(textures_finder);
  const AllNames names(eet);
  const Objects objects;
  const Scenes scenes(objects);
