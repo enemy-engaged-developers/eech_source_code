@@ -58,6 +58,7 @@ class FileTexturesFinder : public TexturesFinder
   long handle;
   struct _finddata_t fd;
 
+  //warning("Looking for '%s' in '%s'", texture, dir);
   sprintf(buf, "%s\\%s.*", dir, texture);
 	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
    if (!(fd.attrib & _A_SUBDIR))
@@ -72,14 +73,17 @@ class FileTexturesFinder : public TexturesFinder
     }
   _findclose(handle);
 
-  sprintf(buf, "%s\\*.*");
+  sprintf(buf, "%s\\*.*", dir);
 	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
    if ((fd.attrib & _A_SUBDIR) && fd.name[0] != '.')
-    if (search_dir(texture, buf, file))
-     {
-      _findclose(handle);
-      return true;
-     }
+    {
+     sprintf(buf, "%s\\%s", dir, fd.name);
+     if (search_dir(texture, buf, file))
+      {
+       _findclose(handle);
+       return true;
+      }
+    }
   _findclose(handle);
 
   return false;
