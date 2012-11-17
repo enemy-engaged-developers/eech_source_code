@@ -580,7 +580,9 @@ class LwsFile : public Lws
   else
   if (type == "CustomObjHandler" && name == "LW_ItemShape")
    {
-    for (int i = 0; i < 12; i++)
+	 	gets();
+    int more = *str >= '6' ? 2 : 1;
+    for (int i = 0; i < 11; i++)
      gets();
     if (LastObject)
      {
@@ -597,7 +599,8 @@ class LwsFile : public Lws
       LastObject->print_name.append(LastObject->search);
       LastObject->print_name.push_back('\'');
      }
-    gets();
+		while (more--)
+     gets();
     if (strcmp(str, "EndPlugin"))
      gets();
    }
