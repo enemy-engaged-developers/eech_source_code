@@ -50,7 +50,8 @@ int main(int argc, char* argv[])
 
  char filename[1024];
 
- EET eet(*getcwd(filename, sizeof(filename)));
+ TexturesFinder textures_finder(*getcwd(filename, sizeof(filename)));
+ EET eet(textures_finder);
  AllNames names(eet);
  Cameras cameras;
  AggTranslator translator;

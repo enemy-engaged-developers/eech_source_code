@@ -209,6 +209,7 @@ class LwsFileExporter : public LwsExporter
   fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
   if (target_sub_object_index >= 0)
    fprintf(fp, "TargetItem %08X\n", 0x10000000 + target_sub_object_index);
+  fprintf(fp, "ZoomFactor 2.3094\n");
  }
 #endif
 
