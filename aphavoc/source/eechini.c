@@ -220,24 +220,31 @@ static void set_canopy_amp ( const struct config_option *option, const char *val
 		*cur;
 
 	cur = value;
-	for ( i = 0; i < sizeof ( canopy_sound_amp ) / sizeof ( *canopy_sound_amp ) ; i++ )
+	for ( i = 0; i < ARRAY_LENGTH ( canopy_sound_amp ); i++ )
 	{
-		for ( j = 0; j < sizeof ( *canopy_sound_amp ) / sizeof ( **canopy_sound_amp ) ; j++ )
+		for ( j = 0; j < ARRAY_LENGTH ( *canopy_sound_amp ); j++ )
 		{
 			const char
 				*next;
 			for ( next = cur + 1; isdigit ( *next ); next++ );
-			if ( *next == ';' )
-			{
-				cur = next + 1;
-				break;
-			}
 			if ( !sscanf ( cur, "%d", &canopy_sound_amp[i][j] ) || !*next )
 			{
 				return;
 			}
 			cur = next + 1;
+			if ( *next == ';' )
+			{
+				break;
+			}
 		}
+		for (cur--; *cur != ';'; cur++)
+		{
+			if (!*cur)
+			{
+				return;
+			}
+		}
+		cur++;
 	}
 }
 
@@ -1310,49 +1317,6 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Casm 03MAR10 Canopy sound amplification control
-
-void initialize_canopy_sound_amp ()
-{
-	memset ( canopy_sound_amp, 0, sizeof ( canopy_sound_amp ) );
-
-	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MIN] = 450;
-	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_TOP] = 50;
-	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MUL] = 375;
-
-	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MIN] = 80;
-	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_TOP] = 20;
-	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MIN] = 230;
-	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_TOP] = 50;
-	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MIN] = 200;
-	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_TOP] = 50;
-	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MIN] = 180;
-	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_TOP] = 50;
-	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MIN] = 50;
-	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_TOP] = 70;
-	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MIN] = 120;
-	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_TOP] = 30;
-	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MUL] = 100;
-
-	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MIN] = 70;
-	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_TOP] = 30;
-	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MUL] = 100;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void initialize_options ( void )
 {
 	int
@@ -1373,14 +1337,16 @@ void initialize_options ( void )
 		hud_code[i][HUD_CODES_MFD] = 20;
 	}
 
-	initialize_canopy_sound_amp ();
+// Casm 03MAR10 Canopy sound amplification control
+	memset ( canopy_sound_amp, 0, sizeof ( canopy_sound_amp ) );
+	set_canopy_amp ( NULL, "450,50,375;80,20,100;230,50,100;200,50,100;180,50,100;50,70,100;120,30,100;70,30,100;" );
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 	command_line_wut = file_exist ( WUT_filename );
 
-	strcpy(command_line_themes, "2");
+	strcpy ( command_line_themes, "2" );
 
-	set_cloud_puffs_colours(NULL, "220,230,255;230,230,255;235,235,255;245,245,255;250,250,255;255,255,255");
+	set_cloud_puffs_colours ( NULL, "220,230,255;230,230,255;235,235,255;245,245,255;250,250,255;255,255,255" );
 }
 
 void process_ini_file (void)

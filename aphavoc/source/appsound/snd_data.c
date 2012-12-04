@@ -2449,6 +2449,26 @@ void load_application_sound_samples ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+static void load_from_file ( int sound_sample_index, int type, int rate, int size, FILE* fp )
+{
+	unsigned char
+		*ptr;
+
+	application_sound_effects[sound_sample_index].rate = rate;
+	application_sound_effects[sound_sample_index].size = size;
+
+	create_source_sound_sample ( sound_sample_index, type, rate, size );
+	ptr = ( unsigned char * ) safe_malloc ( size );
+	fread ( ptr, 1, size, fp );
+	load_source_sound_sample ( sound_sample_index, ptr );
+	safe_free ( ptr );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 void load_side_dependant_application_sound_samples ( entity_sides side )
 {
 
@@ -2530,24 +2550,33 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 							char
 								filename[256];
 
-							unsigned char
-								*ptr;
-
 							int
-								should_load_sample,
+								sound_sample_index,
 								sound_block_header_index;
+
+							sound_sample_index = application_sound_samples[count].sound_sample_index;
 
 							if (	( application_sound_samples[count].side == sound_system_side_loaded ) ||
 									( application_sound_samples[count].side == ENTITY_SIDE_NEUTRAL ) ||
 									( sound_system_side_loaded == NUM_ENTITY_SIDES ) )
 							{
 
-								should_load_sample = TRUE;
+								if ( is_source_sound_sample_valid ( sound_sample_index ) )
+								{
+
+									continue;
+								}
 							}
 							else
 							{
 
-								should_load_sample = FALSE;
+								if ( is_source_sound_sample_valid ( sound_sample_index ) )
+								{
+
+									destroy_source_sound_sample ( sound_sample_index );
+								}
+
+								continue;
 							}
 
 							if ( application_sound_samples[count].name )
@@ -2555,132 +2584,105 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 
 								sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
 
-								sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
+								sound_block_header_index = get_sound_block_header_index ( filename, sound_sample_index );
+
+								{
+									int
+										size;
+									char
+										wav_filename[260];
+
+									size = strlen ( filename ) - 4;
+									memcpy ( wav_filename, filename, size );
+									memcpy ( wav_filename + size, ".wav", 5 );
+
+									if ( file_exist ( wav_filename ) )
+									{
+										struct WAVEHEADER
+										{
+											char RIFF[4];
+											unsigned long rLength;
+											char WAVE[4];
+											char fmt[4];
+											unsigned long fLength;
+											unsigned short Format;
+											unsigned short Channels;
+											unsigned long Frequency;
+											unsigned long AvgBytesPerSec;
+											unsigned short BlockAlign;
+											unsigned short Specific;
+											char data[4];
+											unsigned long Length;
+										};
+
+										FILE
+											*fp;
+										struct WAVEHEADER
+											wh;
+
+										fp = safe_fopen ( wav_filename, "rb" );
+										if ( fread ( &wh, sizeof ( wh ), 1, fp ) == 1 )
+										{
+											if ( !memcmp ( wh.RIFF, "RIFF", 4 ) && !memcmp ( wh.WAVE, "WAVE", 4 ) && !memcmp ( wh.fmt, "fmt ", 4 ) && !memcmp ( wh.data, "data", 4 ) )
+											{
+												if ( wh.Format != 1 || wh.Channels != 1 || ( wh.Specific != 8 && wh.Specific != 16 ) )
+												{
+													debug_log ( "Encoding %i Channels %i Bits %i not supported", wh.Format, wh.Channels, wh.Specific );
+												}
+												else
+												{
+													debug_log ( "Loading WAV file %s Freq %lu Size %lu", wav_filename, wh.Frequency, wh.Length );
+
+													load_from_file ( sound_sample_index, wh.Specific == 8 ? SAMPLE_TYPE_MONO_8BIT : SAMPLE_TYPE_MONO_16BIT , wh.Frequency, (int)wh.Length, fp );
+
+													fclose ( fp );
+
+													continue;
+												}
+											}
+										}
+
+										debug_log ( "Invalid WAVE file: %s", wav_filename );
+
+										fclose ( fp );
+									}
+								}
 
 								//--Werewolf sound override support
 								if ( file_exist ( filename ) )
 								{
-									int size;
-									FILE *fp;
-
-									#if DEBUG_MODULE
-									debug_log ( "SND_DATA: SOUNDFILE OVERRIDES* found file %s", filename );
-									#endif
-									size = file_size ( filename );
-									application_sound_effects[application_sound_samples[count].sound_sample_index].size = size;
-									if ( should_load_sample )
-									{
-										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
-																SAMPLE_TYPE_MONO_8BIT,
-																application_sound_samples[count].rate,
-																size );
-											// Casm 07DEC09 OpenAL support
-											fp = fopen ( filename, "rb" );
-											ptr = ( unsigned char * ) safe_malloc ( size );
-											fread ( ptr, 1, size, fp );
-											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
-											safe_free ( ptr );
-											fclose ( fp );
-										}
-									}
-									else
-									{
-										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-										}
-									}
-								}
-								//-- END Werewolf sound override support
-
-								else if ( sound_block_header_index == SOUND_SAMPLE_NOT_FOUND )
-								{
 									int
 										size;
-
 									FILE
 										*fp;
 
-									debug_log ( "Sound not found in sound.dat: %s", filename );
-
-									size = file_size ( filename );
-
-									application_sound_effects[application_sound_samples[count].sound_sample_index].size = size;
-
-									if ( should_load_sample )
+									#if DEBUG_MODULE
+									if ( sound_block_header_index == SOUND_SAMPLE_NOT_FOUND )
 									{
 
-										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-
-											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
-																						SAMPLE_TYPE_MONO_8BIT,
-																						application_sound_samples[count].rate,
-																						size );
-
-											// Casm 07DEC09 OpenAL support
-											fp = safe_fopen ( filename, "rb" );
-											ptr = ( unsigned char * ) safe_malloc ( size );
-											fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-											fread ( ptr, 1, size, fp );
-											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
-											safe_free ( ptr );
-											safe_fclose ( fp );
-										}
+										debug_log ( "Sound not found in sound.dat: %s", filename );
 									}
 									else
 									{
 
-										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-
-											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-										}
+										debug_log ( "SND_DATA: SOUNDFILE OVERRIDES* found file %s", filename );
 									}
+									#endif
+
+									size = file_size ( filename );
+									fp = safe_fopen ( filename, "rb" );
+									load_from_file ( sound_sample_index, SAMPLE_TYPE_MONO_8BIT, application_sound_effects[sound_sample_index].original_rate, size, fp );
+									fclose ( fp );
 								}
+								//-- END Werewolf sound override support
 								else
 								{
-									int
-										size;
-
 									#if DEBUG_MODULE
 									debug_log ( "SND_DATA: Sound loading from sound.dat: %s", filename );
 									#endif
 
-									application_sound_effects[application_sound_samples[count].sound_sample_index].size = blocked_sound_samples[sound_block_header_index].sound_data_length;
-
-									if ( should_load_sample )
-									{
-
-										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-
-											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
-																						SAMPLE_TYPE_MONO_8BIT,
-																						application_sound_samples[count].rate,
-																						blocked_sound_samples[sound_block_header_index].sound_data_length );
-
-
-											// Casm 07DEC09 OpenAL support
-											size = blocked_sound_samples[sound_block_header_index].sound_data_length;
-											ptr = ( unsigned char * ) safe_malloc ( size );
-											fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-											fread ( ptr, 1, size, block_sound_sample_data_file );
-											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
-											safe_free ( ptr );
-										}
-									}
-									else
-									{
-
-										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
-										{
-
-											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-										}
-									}
+									fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
+									load_from_file ( sound_sample_index, SAMPLE_TYPE_MONO_8BIT, application_sound_effects[sound_sample_index].original_rate, blocked_sound_samples[sound_block_header_index].sound_data_length, block_sound_sample_data_file );
 								}
 							}
 						}
@@ -3057,7 +3059,7 @@ void initialise_application_sound_effects ( void )
 		item = &application_sound_effects [application_sound_samples[count].sound_sample_index];
 
 		item->name = application_sound_samples[count].name;
-		item->rate = application_sound_samples[count].rate;
+		item->original_rate = item->rate = application_sound_samples[count].rate;
 		item->maximum_volume = application_sound_samples[count].maximum_volume;
 		item->minimum_sound_range = application_sound_samples[count].minimum_sound_range;
 		item->reference_sound_range = application_sound_samples[count].reference_sound_range;

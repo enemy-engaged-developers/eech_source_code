@@ -2360,6 +2360,7 @@ struct SOUND_EFFECT_INFORMATION
 		*name;
 
 	int
+		original_rate,
 		rate,
 		size,
 		maximum_volume;
