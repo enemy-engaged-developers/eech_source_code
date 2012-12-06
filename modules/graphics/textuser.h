@@ -198,6 +198,7 @@ extern struct TEXTURE_GRAPHIC *create_texture_graphic ( const char *filename );
 
 extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 
+extern screen *load_bmp_file_screen (const char *full_override_texture_filename);
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
 
 //VJ 050116 custom texture mod: all functions are in textuser.c except for this one

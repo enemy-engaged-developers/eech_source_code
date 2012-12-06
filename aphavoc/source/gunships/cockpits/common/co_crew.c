@@ -491,182 +491,6 @@ object_3d_camera_index_numbers get_crew_camera_index (crew_roles role)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define BITMAP_ID		(0x4D42)
-
-#undef BI_RGB
-#undef BI_RLE8
-#undef BI_RLE4
-#undef BI_BITFIELDS
-
-#define BI_RGB        0L
-#define BI_RLE8       1L
-#define BI_RLE4       2L
-#define BI_BITFIELDS  3L
-
-typedef unsigned short int LOCAL_WORD;
-
-typedef unsigned int LOCAL_DWORD;
-
-typedef long LOCAL_LONG;
-
-#pragma	pack (2)
-
-typedef struct tagLOCAL_BITMAPFILEHEADER {
-        LOCAL_WORD    bfType;
-        LOCAL_DWORD   bfSize;
-        LOCAL_WORD    bfReserved1;
-        LOCAL_WORD    bfReserved2;
-        LOCAL_DWORD   bfOffBits;
-} LOCAL_BITMAPFILEHEADER;
-
-#pragma	pack (4)
-
-typedef struct tagLOCAL_BITMAPINFOHEADER{
-        LOCAL_DWORD      biSize;
-        LOCAL_LONG       biWidth;
-        LOCAL_LONG       biHeight;
-        LOCAL_WORD       biPlanes;
-        LOCAL_WORD       biBitCount;
-        LOCAL_DWORD      biCompression;
-        LOCAL_DWORD      biSizeImage;
-        LOCAL_LONG       biXPelsPerMeter;
-        LOCAL_LONG       biYPelsPerMeter;
-        LOCAL_DWORD      biClrUsed;
-        LOCAL_DWORD      biClrImportant;
-} LOCAL_BITMAPINFOHEADER;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void load_skin_bitmap (char *filespec, screen *texture, int size)
-{
-	FILE
-		*fp;
-
-	LOCAL_BITMAPFILEHEADER
-		bmfh;
-
-	LOCAL_BITMAPINFOHEADER
-		bmih;
-
-	char
-		*buffer,
-		*p;
-
-	int
-		buffer_size,
-		x,
-		y;
-
-	rgb_colour
-		col;
-
-	ASSERT (filespec);
-
-	ASSERT (texture);
-
-	fp = safe_fopen (filespec, "rb");
-
-	//
-	// file header
-	//
-
-	fread (&bmfh, sizeof (bmfh), 1, fp);
-
-	if (bmfh.bfType != BITMAP_ID)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s is not a BMP file!", filespec);
-	}
-
-	//
-	// info header
-	//
-
-	fread (&bmih, sizeof (bmih), 1, fp);
-
-	if (bmih.biCompression != BI_RGB)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s is not uncompressed RGB!", filespec);
-	}
-
-	if (bmih.biBitCount != 24)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s is not 24 bit!", filespec);
-	}
-
-	if (bmih.biWidth != size)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s is not %d pixels wide", filespec, size);
-	}
-
-	if (bmih.biHeight != size)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s is not %d pixels high", filespec, size);
-	}
-
-	//
-	// texture
-	//
-
-	buffer_size = size * size * 3;
-
-	buffer = (char *) safe_malloc (buffer_size);
-
-	fread (buffer, buffer_size, 1, fp);
-
-	set_active_screen (texture);
-
-	if (lock_screen (texture))
-	{
-		p = buffer;
-
-		for (y = size - 1; y >= 0; y--)
-		{
-			for (x = 0; x < size; x++)
-			{
-				col.b = *p++;
-				col.g = *p++;
-				col.r = *p++;
-				col.a = 255;
-
-				set_pixel (x, y, col);
-			}
-		}
-
-		unlock_screen (texture);
-	}
-
-	set_active_screen (video_screen);
-
-	safe_free (buffer);
-
-	safe_fclose (fp);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define HIGH_DETAIL_FACE_SIZE		(128)
-#define LOW_DETAIL_FACE_SIZE		(32)
-#define NECK_SIZE						(32)
-#define HANDS_SIZE					(8)
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static screen
 	*us_pilot_high_detail_face,
 	*us_pilot_low_detail_face,
@@ -692,26 +516,26 @@ static screen
 void initialise_common_crew_skins (void)
 {
 	//
-	// create textures
+	// load BMPs
 	//
 
-	us_pilot_high_detail_face = create_user_texture_screen (HIGH_DETAIL_FACE_SIZE, HIGH_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_pilot_low_detail_face = create_user_texture_screen (LOW_DETAIL_FACE_SIZE, LOW_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_pilot_neck = create_user_texture_screen (NECK_SIZE, NECK_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_pilot_hands = create_user_texture_screen (HANDS_SIZE, HANDS_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_co_pilot_high_detail_face = create_user_texture_screen (HIGH_DETAIL_FACE_SIZE, HIGH_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_co_pilot_low_detail_face = create_user_texture_screen (LOW_DETAIL_FACE_SIZE, LOW_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_co_pilot_neck = create_user_texture_screen (NECK_SIZE, NECK_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	us_co_pilot_hands = create_user_texture_screen (HANDS_SIZE, HANDS_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
+	us_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\HI_FACE.BMP");
+	us_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\LOW_FACE.BMP");
+	us_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\NECK.BMP");
+	us_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\HANDS.BMP");
+	us_co_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\HI_FACE.BMP");
+	us_co_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\LOW_FACE.BMP");
+	us_co_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\NECK.BMP");
+	us_co_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\HANDS.BMP");
 
-	russian_pilot_high_detail_face = create_user_texture_screen (HIGH_DETAIL_FACE_SIZE, HIGH_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_pilot_low_detail_face = create_user_texture_screen (LOW_DETAIL_FACE_SIZE, LOW_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_pilot_neck = create_user_texture_screen (NECK_SIZE, NECK_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_pilot_hands = create_user_texture_screen (HANDS_SIZE, HANDS_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_co_pilot_high_detail_face = create_user_texture_screen (HIGH_DETAIL_FACE_SIZE, HIGH_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_co_pilot_low_detail_face = create_user_texture_screen (LOW_DETAIL_FACE_SIZE, LOW_DETAIL_FACE_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_co_pilot_neck = create_user_texture_screen (NECK_SIZE, NECK_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-	russian_co_pilot_hands = create_user_texture_screen (HANDS_SIZE, HANDS_SIZE, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
+	russian_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HI_FACE.BMP");
+	russian_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\LOW_FACE.BMP");
+	russian_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\NECK.BMP");
+	russian_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HANDS.BMP");
+	russian_co_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HI_FACE.BMP");
+	russian_co_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\LOW_FACE.BMP");
+	russian_co_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\NECK.BMP");
+	russian_co_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HANDS.BMP");
 
 	//
 	// set texture screens
@@ -734,28 +558,6 @@ void initialise_common_crew_skins (void)
 	set_system_texture_screen (russian_co_pilot_low_detail_face, TEXTURE_INDEX_RUSSIAN_WSO_FACE_LOW_RES);
 	set_system_texture_screen (russian_co_pilot_neck, TEXTURE_INDEX_RUSSIAN_WSO_NECK_01);
 	set_system_texture_screen (russian_co_pilot_hands, TEXTURE_INDEX_RUSSIAN_WSO_SKIN);
-
-	//
-	// load BMPs
-	//
-
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\PILOT\\HI_FACE.BMP", us_pilot_high_detail_face, HIGH_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\PILOT\\LOW_FACE.BMP", us_pilot_low_detail_face, LOW_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\PILOT\\NECK.BMP", us_pilot_neck, NECK_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\PILOT\\HANDS.BMP", us_pilot_hands, HANDS_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\CPG\\HI_FACE.BMP", us_co_pilot_high_detail_face, HIGH_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\CPG\\LOW_FACE.BMP", us_co_pilot_low_detail_face, LOW_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\CPG\\NECK.BMP", us_co_pilot_neck, NECK_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\USA\\CPG\\HANDS.BMP", us_co_pilot_hands, HANDS_SIZE);
-
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HI_FACE.BMP", russian_pilot_high_detail_face, HIGH_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\LOW_FACE.BMP", russian_pilot_low_detail_face, LOW_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\NECK.BMP", russian_pilot_neck, NECK_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HANDS.BMP", russian_pilot_hands, HANDS_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HI_FACE.BMP", russian_co_pilot_high_detail_face, HIGH_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\LOW_FACE.BMP", russian_co_pilot_low_detail_face, LOW_DETAIL_FACE_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\NECK.BMP", russian_co_pilot_neck, NECK_SIZE);
-	load_skin_bitmap ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HANDS.BMP", russian_co_pilot_hands, HANDS_SIZE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

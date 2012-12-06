@@ -348,7 +348,6 @@ void load_texture_override ( void );
 static void clear_texture_override_names ( void );
 static screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
 static screen *load_tga_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
-static screen *load_bmp_file_screen (const char *full_override_texture_filename);
 static void load_texture_water( void );
 static void initialize_terrain_texture_scales ( const char *mapname );
 
