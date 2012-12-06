@@ -113,7 +113,8 @@ struct META_SMOKE_LIST_COMPONENT
 			float
 				animation_frequency,
 				lifetime,
-				scale;
+				scale,
+				rotation_rate;
 
 			unsigned char
 				additive	: 1;

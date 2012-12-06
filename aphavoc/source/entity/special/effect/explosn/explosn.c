@@ -331,6 +331,7 @@ int create_meta_explosion_sprites( meta_explosion_component *explosion_component
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_BLUE, explosion_component->blue),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_ALPHA, explosion_component->alpha),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_ADDITIVE, explosion_component->additive),
+			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_MAX_TURN_RATE, explosion_component->rotation_rate),
 //			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SCALE, scale),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_START_SCALE, scale_min),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_END_SCALE, scale_max),
@@ -549,8 +550,8 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_SMOKE_TYPE, trail_type),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_INFINITE_GENERATOR, TRUE),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, INFINITE_SMOKE_ON),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, 0.1),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, 1.5),
+			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, explosion_component->frequency),
+			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, explosion_component->smoke_lifetime),
 //			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SCALE, explosion_component->trail_scale),
 			ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, position->x, position->y, position->z),
 			ENTITY_ATTR_END

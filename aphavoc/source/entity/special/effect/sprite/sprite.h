@@ -71,6 +71,7 @@ struct SPRITE
 
 	float
 		animation_frequency,
+		rotation_rate,
 		effect_lifetime,			// variable - how long the explosion has left before it expires
 		sprite_lifetime,			// constant - the lifespan of the explosion
 		start_scale,

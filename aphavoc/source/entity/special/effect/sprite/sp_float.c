@@ -100,6 +100,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_MAX_TURN_RATE:
+		////////////////////////////////////////
+		{
+			raw->rotation_rate = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_EFFECT_LIFETIME:
 		////////////////////////////////////////
 		{
@@ -213,6 +221,14 @@ static float get_local_float_value (entity *en, float_types type)
 		////////////////////////////////////////
 		{
 			value = raw->animation_frequency;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_MAX_TURN_RATE:
+		////////////////////////////////////////
+		{
+			value = raw->rotation_rate;
 
 			break;
 		}

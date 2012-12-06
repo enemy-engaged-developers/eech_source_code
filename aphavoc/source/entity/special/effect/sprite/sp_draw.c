@@ -155,8 +155,6 @@ static void draw_local_3d_object (entity *en, float range)
 		spr.red = (unsigned char)red;
 		spr.green = (unsigned char)green;
 		spr.blue = (unsigned char)blue;
-
-		spr.roll = wrap_angle( ( raw->effect_lifetime * PI ) );		//temp
 	}
 	else
 	{
@@ -171,6 +169,8 @@ static void draw_local_3d_object (entity *en, float range)
 		spr.green = raw->colour_green;
 		spr.blue = raw->colour_blue;
 	}
+
+	spr.roll = wrap_angle( ( raw->rotation_rate * raw->effect_lifetime * PI ) );		//temp
 
 	spr.radius = raw->start_scale + ((raw->end_scale - raw->start_scale) * lifescale);
 

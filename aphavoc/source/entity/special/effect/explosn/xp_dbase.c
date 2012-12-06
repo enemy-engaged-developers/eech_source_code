@@ -132,21 +132,21 @@ static void export_explosion_database(void)
 		*co;
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "w");
-	fprintf(file, "EXPLOSION;1\n");
+	fprintf(file, "EXPLOSION;3\n");
 	fprintf(file,
 		"#Explosion index;Explosion name;Damage radius;Show on map\n"
 		"#SPRITES;Animated texture;Sprites count;"
 			"Colour (red;green;blue;alpha);"
 			"Additive;Blast hemisphere only;"
 			"Delay max;Lifetime min;Lifetime max;Scale min;Scale max;"
-			"Blast radius;Animation frequency\n"
+			"Blast radius;Animation frequency;Rotation rate\n"
 		"#OBJECTS;Object 3D shape;Objects count;"
 			"Colour (red;green;blue;alpha);"
 			"Additive;Blast hemisphere only;"
 			"Delay max;Lifetime min;Lifetime max;Scale min;Scale max;"
 			"Blast radius\n"
 		"#PARTICLES;Trail type;Particle count;"
-			"Initial speed\n"
+			"Initial speed;Frequency;Smoke lifetime\n"
 		"#SMOKE_TRAILS;Trail type;Trail count;"
 			"Generator lifetime;Frequency;Smoke lifetime;"
 			"Initial velocity (x;y;z)\n"
@@ -170,12 +170,12 @@ static void export_explosion_database(void)
 						"%i;%i;%i;%i;"
 						"%i;%i;"
 						"%f;%f;%f;%f;%f;"
-						"%f;%f\n",
+						"%f;%f;%f\n",
 						texture_animation_names[co->animated_texture], co->sprite_count,
 						co->red, co->green, co->blue, co->alpha,
 						co->additive, co->blast_hemisphere_only,
 						co->delay_max, co->lifetime_min, co->lifetime_max, co->scale_min, co->scale_max,
-						co->blast_radius, co->animation_frequency);
+						co->blast_radius, co->animation_frequency, co->rotation_rate);
 					break;
 				}
 			case EXPLOSION_OBJECTS:
@@ -197,9 +197,9 @@ static void export_explosion_database(void)
 				{
 					fprintf(file,
 						"PARTICLES;%s;%i;"
-						"%f\n",
+						"%f;%f;%f\n",
 						smoke_list_types_names[co->trail_type], co->particle_count,
-						co->initial_speed);
+						co->initial_speed, co->frequency, co->smoke_lifetime);
 					break;
 				}
 			case EXPLOSION_SMOKE_TRAILS:
@@ -264,7 +264,7 @@ static void import_explosion_database(void)
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "r");
 	fgets(buf, sizeof(buf), file);
-	if (!strcmp(buf, "EXPLOSION;1\n"))
+	if (!strcmp(buf, "EXPLOSION;3\n"))
 	{
 		ex = NULL;
 		while (fgets(buf, sizeof(buf), file))
@@ -360,12 +360,12 @@ static void import_explosion_database(void)
 							"%i;%i;%i;%i;"
 							"%i;%i;"
 							"%f;%f;%f;%f;%f;"
-							"%f;%f",
+							"%f;%f;%f",
 							&co->sprite_count,
 							&red, &green, &blue, &alpha,
 							&additive, &blast_hemisphere_only,
 							&co->delay_max, &co->lifetime_min, &co->lifetime_max, &co->scale_min, &co->scale_max,
-							&co->blast_radius, &co->animation_frequency) != 14)
+							&co->blast_radius, &co->animation_frequency, &co->rotation_rate) != 15)
 						{
 							continue;
 						}
@@ -415,9 +415,9 @@ static void import_explosion_database(void)
 						}
 						if (sscanf(ptr,
 							"%i;"
-							"%f",
+							"%f;%f;%f",
 							&co->particle_count,
-							&co->initial_speed) != 2)
+							&co->initial_speed, &co->frequency, &co->smoke_lifetime) != 4)
 						{
 							continue;
 						}
@@ -602,6 +602,8 @@ void initialise_misc_explosion_database(void)
 
 	explosion_info->animation_frequency		=	1.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 1
 	//
@@ -635,6 +637,8 @@ void initialise_misc_explosion_database(void)
 
 	explosion_info->animation_frequency		=	1.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 2
 	//
@@ -648,6 +652,10 @@ void initialise_misc_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 30.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	////////////////////////////////////////
 	//
@@ -748,6 +756,8 @@ void initialise_armour_piercing_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	////////////////////////////////////////
 	//
 	// MEDIUM A.P. EXPLOSION
@@ -797,6 +807,8 @@ void initialise_armour_piercing_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -829,6 +841,8 @@ void initialise_armour_piercing_explosion_database(void)
 	explosion_info->blast_radius		 		=	2.5;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	0.0;
 
 	////////////////////////////////////////
 	//
@@ -879,6 +893,8 @@ void initialise_armour_piercing_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -911,6 +927,8 @@ void initialise_armour_piercing_explosion_database(void)
 	explosion_info->blast_radius		 		=	4.5;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	0.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -934,7 +952,7 @@ void initialise_high_explosive_explosion_database(void)
 
 	this_explosion = &(meta_explosion_database[ SMALL_HE_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	6;
+	this_explosion->number_of_components	=	5;
 
 	this_explosion->damage_radius				=	10.0;
 
@@ -1004,6 +1022,8 @@ void initialise_high_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 2
 	//
@@ -1065,6 +1085,8 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->blast_radius		 		=	4.0;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
 
 	//
 	// component 4
@@ -1184,6 +1206,8 @@ void initialise_high_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 3
 	//
@@ -1216,6 +1240,8 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->blast_radius		 		=	6.0;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
 
 	//
 	// component 4
@@ -1344,6 +1370,8 @@ void initialise_high_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 3
 	//
@@ -1376,6 +1404,8 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->blast_radius		 		=	17.0;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
 
 	//
 	// component 4
@@ -1430,6 +1460,10 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 30.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// Werewolf: distant explosion sound
@@ -1503,6 +1537,8 @@ void initialise_earth_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1563,6 +1599,8 @@ void initialise_earth_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1576,6 +1614,10 @@ void initialise_earth_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_EARTH_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 15.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	////////////////////////////////////////
 	//
@@ -1626,6 +1668,8 @@ void initialise_earth_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1639,6 +1683,10 @@ void initialise_earth_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_EARTH_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 20.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1683,6 +1731,10 @@ void initialise_water_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_WATER_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 5.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// component 1
@@ -1744,6 +1796,8 @@ void initialise_water_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1757,6 +1811,10 @@ void initialise_water_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_WATER_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 15.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// component 2
@@ -1818,6 +1876,8 @@ void initialise_water_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1831,6 +1891,10 @@ void initialise_water_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_WATER_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 25.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// component 2
@@ -1906,6 +1970,8 @@ void initialise_object_dust_explosion_database(void)
 
 	explosion_info->animation_frequency		=	0.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	////////////////////////////////////////
 	//
 	// MEDIUM DUST EXPLOSION
@@ -1955,6 +2021,8 @@ void initialise_object_dust_explosion_database(void)
 
 	explosion_info->animation_frequency		=	0.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -1987,6 +2055,8 @@ void initialise_object_dust_explosion_database(void)
 	explosion_info->blast_radius		 		=	-1.0;
 
 	explosion_info->animation_frequency		=	0.0;
+
+	explosion_info->rotation_rate		=	0.0;
 
 	//
 	// component 2
@@ -2068,6 +2138,8 @@ void initialise_object_dust_explosion_database(void)
 
 	explosion_info->animation_frequency		=	0.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 1
 	//
@@ -2101,6 +2173,8 @@ void initialise_object_dust_explosion_database(void)
 
 	explosion_info->animation_frequency		=	1.0;
 
+	explosion_info->rotation_rate		=	0.0;
+
 	//
 	// component 2
 	//
@@ -2114,6 +2188,10 @@ void initialise_object_dust_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_DUST_TRAIL_2;
 
 	explosion_info->initial_speed 			= 20.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 //	explosion_info->trail_scale 				= 15.0;
 
@@ -2239,6 +2317,8 @@ void initialise_object_explosive_explosion_database(void)
 	explosion_info->blast_radius		 		=	3.0;
 
 	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
 
 	//
 	// component 2
@@ -2367,6 +2447,8 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 3
 	//
@@ -2380,6 +2462,10 @@ void initialise_object_explosive_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 30.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// component 4
@@ -2577,6 +2663,8 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 3
 	//
@@ -2610,6 +2698,8 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->animation_frequency		=	2.0;
 
+	explosion_info->rotation_rate		=	1.0;
+
 	//
 	// component 4
 	//
@@ -2634,6 +2724,10 @@ void initialise_object_explosive_explosion_database(void)
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 30.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
 
 	//
 	// component 6
@@ -2931,7 +3025,3 @@ void deinitialise_explosion_database(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-

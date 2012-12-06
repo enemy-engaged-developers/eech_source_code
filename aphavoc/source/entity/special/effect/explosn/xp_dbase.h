@@ -134,8 +134,10 @@ struct META_EXPLOSION_COMPONENT
 			float
 				blast_radius;
 
+			// sprites only
 			float
-				animation_frequency;			// sprites only
+				animation_frequency,
+				rotation_rate;
 		};
 
 		struct
@@ -163,7 +165,9 @@ struct META_EXPLOSION_COMPONENT
 				struct
 				{
 					float
-						initial_speed;
+						initial_speed,
+						frequency,
+						smoke_lifetime;
 //						trail_scale;
 				};
 

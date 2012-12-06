@@ -502,6 +502,7 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_BLUE, smoke_list_component->blue),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_ALPHA, smoke_list_component->alpha),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_ADDITIVE, smoke_list_component->additive),
+			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_MAX_TURN_RATE, smoke_list_component->rotation_rate),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_START_SCALE, scale),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_END_SCALE, scale),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SPRITE_LIFETIME, lifetime),
@@ -734,12 +735,12 @@ static void export_meta_smoke_list_database (void)
 		*co;
 
 	file = safe_fopen (META_SMOKE_LIST_DATABASE_FILENAME, "w");
-	fprintf (file, "META_SMOKE;1\n");
+	fprintf (file, "META_SMOKE;2\n");
 	fprintf (file,
 		"#Meta Smoke index;Meta Smoke name\n"
 		"#SPRITES;Animated texture;Sprite count;"
 			"Color (red;green;blue;alpha);"
-			"Animation frequency;Lifetime;Scale;"
+			"Animation frequency;Lifetime;Scale;Rotation rate;"
 			"Additive\n"
 		"#TRAILS;Trail type;"
 			"Effect;"
@@ -761,11 +762,11 @@ static void export_meta_smoke_list_database (void)
 				fprintf (file,
 					"SPRITES;%s;%i;"
 					"%i;%i;%i;%i;"
-					"%f;%f;%f;"
+					"%f;%f;%f;%f;"
 					"%i\n",
 					texture_animation_names[co->animated_texture], co->sprite_count,
 					co->red, co->green, co->blue, co->alpha,
-					co->animation_frequency, co->lifetime, co->scale,
+					co->animation_frequency, co->lifetime, co->scale, co->rotation_rate,
 					co->additive);
 				break;
 			case SMOKE_LIST_TRAILS:
@@ -812,7 +813,7 @@ static void import_meta_smoke_list_database (void)
 
 	file = safe_fopen(META_SMOKE_LIST_DATABASE_FILENAME, "r");
 	fgets(buf, sizeof (buf), file);
-	if (!strcmp(buf, "META_SMOKE;1\n"))
+	if (!strcmp(buf, "META_SMOKE;2\n"))
 	{
 		while (fgets(buf, sizeof (buf), file))
 		{
@@ -872,11 +873,11 @@ static void import_meta_smoke_list_database (void)
 						if (sscanf(ptr + 1,
 							"%i;"
 							"%i;%i;%i;%i;"
-							"%f;%f;%f;"
+							"%f;%f;%f;%f;"
 							"%i",
 							&co->sprite_count,
 							&red, &green, &blue, &alpha,
-							&co->animation_frequency, &co->lifetime, &co->scale,
+							&co->animation_frequency, &co->lifetime, &co->scale, &co->rotation_rate,
 							&additive) != 9)
 						{
 							continue;
@@ -1020,6 +1021,8 @@ void initialise_meta_smoke_list_database(void)
 
 	smoke_list_info->scale 						=	3.0;
 
+	smoke_list_info->rotation_rate 	=	1.0;
+
 	smoke_list_info->additive 					=	TRUE;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1120,6 +1123,8 @@ void initialise_meta_smoke_list_database(void)
 	smoke_list_info->lifetime 					=	5.0;
 
 	smoke_list_info->scale 						=	12.5;
+
+	smoke_list_info->rotation_rate 	=	1.0;
 
 	smoke_list_info->additive 					=	TRUE;
 
