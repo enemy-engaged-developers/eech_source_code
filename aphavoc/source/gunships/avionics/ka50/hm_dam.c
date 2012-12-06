@@ -102,11 +102,11 @@ void set_ka50_weapon_damage_status (void)
 	set_client_server_entity_weapon_damage (en, KA50_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, ka50_damage.rh_outer_pylon);
 	set_client_server_entity_weapon_damage (en, KA50_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, ka50_damage.rh_inner_pylon);
 
-	set_client_server_entity_weapon_damage (en, KA50_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, ka50_damage.lhs_chaff_dispensers);
-	set_client_server_entity_weapon_damage (en, KA50_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, ka50_damage.rhs_chaff_dispensers);
+	set_client_server_entity_weapon_damage (en, KA50_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, ka50_damage.lh_chaff_dispensers);
+	set_client_server_entity_weapon_damage (en, KA50_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, ka50_damage.rh_chaff_dispensers);
 
-	set_client_server_entity_weapon_damage (en, KA50_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, ka50_damage.lhs_flare_dispensers);
-	set_client_server_entity_weapon_damage (en, KA50_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, ka50_damage.rhs_flare_dispensers);
+	set_client_server_entity_weapon_damage (en, KA50_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, ka50_damage.lh_flare_dispensers);
+	set_client_server_entity_weapon_damage (en, KA50_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, ka50_damage.rh_flare_dispensers);
 
 	//
 	// check if selected weapon is still available, if not, select next
@@ -131,13 +131,9 @@ void set_ka50_weapon_damage_status (void)
 
 void fully_repair_ka50_damage (void)
 {
-	set_ka50_ekran_display_text ("", "", NULL, NULL);
+	set_ka50_text_display_text ("", "", "");
 
 	fire_extinguisher_used = FALSE;
-
-	////////////////////////////////////////
-
-	ka50_damage.radar = FALSE;
 
 	////////////////////////////////////////
 
@@ -145,11 +141,7 @@ void fully_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	ka50_damage.llltv = FALSE;
-
-	////////////////////////////////////////
-
-	ka50_damage.laser_range_finder = FALSE;
+	ka50_damage.laser_designator = FALSE;
 
 	////////////////////////////////////////
 
@@ -181,11 +173,21 @@ void fully_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	ka50_damage.tv_display = FALSE;
+	if (ka50_damage.shkval_mfd)
+	{
+		ka50_damage.shkval_mfd = FALSE;
+
+		select_ka50_mfd_mode (KA50_MFD_MODE_OFF, KA50_MFD_LOCATION_SHKVAL);
+	}
 
 	////////////////////////////////////////
 
-	ka50_damage.threat_warning_display = FALSE;
+	if (ka50_damage.abris_mfd)
+	{
+		ka50_damage.abris_mfd = FALSE;
+
+		select_ka50_mfd_mode (KA50_MFD_MODE_OFF, KA50_MFD_LOCATION_ABRIS);
+	}
 
 	////////////////////////////////////////
 
@@ -205,8 +207,6 @@ void fully_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	////////////////////////////////////////
-
 	ka50_damage.rh_outer_pylon = FALSE;
 
 	////////////////////////////////////////
@@ -215,19 +215,19 @@ void fully_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	ka50_damage.lhs_chaff_dispensers = FALSE;
+	ka50_damage.lh_chaff_dispensers = FALSE;
 
 	////////////////////////////////////////
 
-	ka50_damage.rhs_chaff_dispensers = FALSE;
+	ka50_damage.rh_chaff_dispensers = FALSE;
 
 	////////////////////////////////////////
 
-	ka50_damage.lhs_flare_dispensers = FALSE;
+	ka50_damage.lh_flare_dispensers = FALSE;
 
 	////////////////////////////////////////
 
-	ka50_damage.rhs_flare_dispensers = FALSE;
+	ka50_damage.rh_flare_dispensers = FALSE;
 
 	////////////////////////////////////////
 
@@ -240,16 +240,9 @@ void fully_repair_ka50_damage (void)
 
 void partially_repair_ka50_damage (void)
 {
-	set_ka50_ekran_display_text ("", "", NULL, NULL);
+	set_ka50_text_display_text ("", "", "");
 
 	fire_extinguisher_used = FALSE;
-
-	////////////////////////////////////////
-
-	if (ka50_damage.radar)
-	{
-		ka50_damage.radar = frand1 () > 0.90;
-	}
 
 	////////////////////////////////////////
 
@@ -260,16 +253,9 @@ void partially_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	if (ka50_damage.llltv)
+	if (ka50_damage.laser_designator)
 	{
-		ka50_damage.llltv = frand1 () > 0.90;
-	}
-
-	////////////////////////////////////////
-
-	if (ka50_damage.laser_range_finder)
-	{
-		ka50_damage.laser_range_finder = frand1 () > 0.90;
+		ka50_damage.laser_designator = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
@@ -323,16 +309,26 @@ void partially_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	if (ka50_damage.tv_display)
+	if (ka50_damage.shkval_mfd)
 	{
-		ka50_damage.tv_display = frand1 () > 0.90;
+		ka50_damage.shkval_mfd = frand1 () > 0.90;
+
+		if (!ka50_damage.shkval_mfd)
+		{
+			select_ka50_mfd_mode (KA50_MFD_MODE_OFF, KA50_MFD_LOCATION_SHKVAL);
+		}
 	}
 
 	////////////////////////////////////////
 
-	if (ka50_damage.threat_warning_display)
+	if (ka50_damage.abris_mfd)
 	{
-		ka50_damage.threat_warning_display = frand1 () > 0.90;
+		ka50_damage.abris_mfd = frand1 () > 0.90;
+
+		if (!ka50_damage.abris_mfd)
+		{
+			select_ka50_mfd_mode (KA50_MFD_MODE_OFF, KA50_MFD_LOCATION_ABRIS);
+		}
 	}
 
 	////////////////////////////////////////
@@ -379,28 +375,30 @@ void partially_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
-	if (ka50_damage.lhs_chaff_dispensers)
+	if (ka50_damage.lh_chaff_dispensers)
 	{
-		ka50_damage.lhs_chaff_dispensers = frand1 () > 0.90;
+		ka50_damage.lh_chaff_dispensers = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
 
-	if (ka50_damage.rhs_chaff_dispensers)
+	if (ka50_damage.rh_chaff_dispensers)
 	{
-		ka50_damage.rhs_chaff_dispensers = frand1 () > 0.90;
+		ka50_damage.rh_chaff_dispensers = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
-	if (ka50_damage.lhs_flare_dispensers)
+
+	if (ka50_damage.lh_flare_dispensers)
 	{
-		ka50_damage.lhs_flare_dispensers = frand1 () > 0.90;
+		ka50_damage.lh_flare_dispensers = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
-	if (ka50_damage.rhs_flare_dispensers)
+
+	if (ka50_damage.rh_flare_dispensers)
 	{
-		ka50_damage.rhs_flare_dispensers = frand1 () > 0.90;
+		ka50_damage.rh_flare_dispensers = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
@@ -414,17 +412,17 @@ void partially_repair_ka50_damage (void)
 
 void repair_ka50_weapon_damage (void)
 {
-	set_ka50_ekran_display_text ("", "", NULL, NULL);
+	set_ka50_text_display_text ("", "", "");
 
-	ka50_damage.gun_jammed		= FALSE;
-	ka50_damage.lh_outer_pylon	= FALSE;
-	ka50_damage.lh_inner_pylon	= FALSE;
-	ka50_damage.rh_outer_pylon	= FALSE;
-	ka50_damage.rh_inner_pylon	= FALSE;
-	ka50_damage.lhs_chaff_dispensers	= FALSE;
-	ka50_damage.lhs_flare_dispensers	= FALSE;
-	ka50_damage.rhs_chaff_dispensers	= FALSE;
-	ka50_damage.rhs_flare_dispensers	= FALSE;
+	ka50_damage.gun_jammed				= FALSE;
+	ka50_damage.lh_outer_pylon  		= FALSE;
+	ka50_damage.lh_inner_pylon  		= FALSE;
+	ka50_damage.rh_outer_pylon  		= FALSE;
+	ka50_damage.rh_inner_pylon  		= FALSE;
+	ka50_damage.lh_chaff_dispensers	= FALSE;
+	ka50_damage.rh_chaff_dispensers	= FALSE;
+	ka50_damage.lh_flare_dispensers	= FALSE;
+	ka50_damage.rh_flare_dispensers	= FALSE;
 
 	set_ka50_weapon_damage_status ();
 }
@@ -442,44 +440,17 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.radar)
-	{
-		if (!ka50_damage.radar)
-		{
-			activate_ka50_master_caution_lamp ();
-
-			ka50_damage.radar = TRUE;
-
-			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
-
-			set_ka50_ekran_display_text ("RADAR", "FAILURE", NULL, NULL);
-
-			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_FAILURE);
-
-			if
-			(
-				(target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR) ||
-				(target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
-			)
-			{
-				select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
-			}
-		}
-	}
-
-	////////////////////////////////////////
-
 	if (damage.flir)
 	{
 		if (!ka50_damage.flir)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.flir = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("FLIR", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("FLIR", "FAILURE", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_FLIR_FAILURE);
 
@@ -492,42 +463,21 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.llltv)
+	if (damage.laser_designator)
 	{
-		if (!ka50_damage.llltv)
+		if (!ka50_damage.laser_designator)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.llltv = TRUE;
+			ka50_damage.laser_designator = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("LLLTV", "FAILURE", NULL, NULL);
+			set_laser_is_active(FALSE);
 
-			play_client_server_warning_message (en, SPEECH_SYSTEM_LLLTV_FAILURE);
+			set_ka50_text_display_text ("LASER", "DESIGNATOR", "FAILURE");
 
-			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV)
-			{
-				select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
-			}
-		}
-	}
-
-	////////////////////////////////////////
-
-	if (damage.laser_range_finder)
-	{
-		if (!ka50_damage.laser_range_finder)
-		{
-			activate_ka50_master_caution_lamp ();
-
-			ka50_damage.laser_range_finder = TRUE;
-
-			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
-
-			set_ka50_ekran_display_text ("LASER", "FAILURE", NULL, NULL);
-
-			play_client_server_warning_message (en, SPEECH_SYSTEM_LASER_RANGE_FINDER_FAILURE);
+			play_client_server_warning_message (en, SPEECH_SYSTEM_LASER_DESIGNATOR_FAILURE);
 		}
 	}
 
@@ -537,13 +487,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.radar_jammer)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.radar_jammer = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("RD JAMMER", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("RADAR", "JAMMER", "FAILURE");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_JAMMER_FAILURE);
 
@@ -560,13 +510,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.infra_red_jammer)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.infra_red_jammer = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("IR JAMMER", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("IR JAMMER", "FAILURE", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_IR_JAMMER_FAILURE);
 
@@ -583,13 +533,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.navigation_computer)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.navigation_computer = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("NAV COMP", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("NAVIGATION", "COMPUTER", "FAILURE");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_NAV_COMPUTER_FAILURE);
 		}
@@ -601,13 +551,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.communications)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.communications = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("COMMS", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("COMMS", "FAILURE", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_COMMS_FAILURE);
 		}
@@ -619,13 +569,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.radar_warning_system)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.radar_warning_system = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("RWS", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("RADAR", "WARNING", "FAILURE");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_WARNING_FAILURE);
 		}
@@ -639,13 +589,13 @@ static void damage_systems (ka50_damage_flags damage)
 		{
 			if (!ka50_damage.head_up_display)
 			{
-				activate_ka50_master_caution_lamp ();
+				activate_ka50_master_caution ();
 
 				ka50_damage.head_up_display = TRUE;
 
 				dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-				set_ka50_ekran_display_text ("HUD", "FAILURE", NULL, NULL);
+				set_ka50_text_display_text ("HUD", "FAILURE", "");
 
 				play_client_server_warning_message (en, SPEECH_SYSTEM_HUD_FAILURE);
 			}
@@ -660,13 +610,13 @@ static void damage_systems (ka50_damage_flags damage)
 		{
 			if (!ka50_damage.helmet_mounted_sight)
 			{
-				activate_ka50_master_caution_lamp ();
+				activate_ka50_master_caution ();
 
 				ka50_damage.helmet_mounted_sight = TRUE;
 
 				dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-				set_ka50_ekran_display_text ("HMS", "FAILURE", NULL, NULL);
+				set_ka50_text_display_text ("HMS", "FAILURE", "");
 
 				play_client_server_warning_message (en, SPEECH_SYSTEM_HELMET_MOUNTED_SIGHT_FAILURE);
 
@@ -680,37 +630,41 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.tv_display)
+	if (damage.shkval_mfd)
 	{
-		if (!ka50_damage.tv_display)
+		if (!ka50_damage.shkval_mfd)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.tv_display = TRUE;
+			ka50_damage.shkval_mfd = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("TV", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("SHKVAL", "FAILURE", "");
 
-			play_client_server_warning_message (en, SPEECH_SYSTEM_TV_DISPLAY_FAILURE);
+			play_client_server_warning_message (en, SPEECH_SYSTEM_MFD_FAILURE);
+
+			select_ka50_mfd_mode (KA50_MFD_MODE_DAMAGED, KA50_MFD_LOCATION_SHKVAL);
 		}
 	}
 
 	////////////////////////////////////////
 
-	if (damage.threat_warning_display)
+	if (damage.abris_mfd)
 	{
-		if (!ka50_damage.threat_warning_display)
+		if (!ka50_damage.abris_mfd)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.threat_warning_display = TRUE;
+			ka50_damage.abris_mfd = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("TWD", "FAILURE", NULL, NULL);
+			set_ka50_text_display_text ("ABRIS", "FAILURE", "");
 
-			play_client_server_warning_message (en, SPEECH_SYSTEM_THREAT_WARNING_DISPLAY_FAILURE);
+			play_client_server_warning_message (en, SPEECH_SYSTEM_MFD_FAILURE);
+
+			select_ka50_mfd_mode (KA50_MFD_MODE_DAMAGED, KA50_MFD_LOCATION_ABRIS);
 		}
 	}
 
@@ -720,13 +674,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.night_vision_goggles)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.night_vision_goggles = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("NVG", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("NVG", "DAMAGED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_NIGHT_VISION_GOGGLES_FAILURE);
 
@@ -740,13 +694,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.gun_jammed)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.gun_jammed = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("GUN", "JAMMED", NULL, NULL);
+			set_ka50_text_display_text ("GUN", "JAMMED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_GUN_JAMMED);
 		}
@@ -758,13 +712,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.lh_outer_pylon)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.lh_outer_pylon = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("HARDPOINT", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("HARDPOINT", "DAMAGED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_HARDPOINT_DAMAGED);
 		}
@@ -776,13 +730,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.lh_inner_pylon)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.lh_inner_pylon = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("HARDPOINT", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("HARDPOINT", "DAMAGED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_HARDPOINT_DAMAGED);
 		}
@@ -794,13 +748,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.rh_outer_pylon)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.rh_outer_pylon = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("HARDPOINT", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("HARDPOINT", "DAMAGED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_HARDPOINT_DAMAGED);
 		}
@@ -812,13 +766,13 @@ static void damage_systems (ka50_damage_flags damage)
 	{
 		if (!ka50_damage.rh_inner_pylon)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
 			ka50_damage.rh_inner_pylon = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("HARDPOINT", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("HARDPOINT", "DAMAGED", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_HARDPOINT_DAMAGED);
 		}
@@ -826,17 +780,17 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.lhs_chaff_dispensers)
+	if (damage.lh_chaff_dispensers)
 	{
-		if (!ka50_damage.lhs_chaff_dispensers)
+		if (!ka50_damage.lh_chaff_dispensers)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.lhs_chaff_dispensers = TRUE;
+			ka50_damage.lh_chaff_dispensers = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("CHAFF", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("CHAFF", "DISPENSER", "DAMAGED");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_CHAFF_DISPENSER_DAMAGED);
 		}
@@ -844,34 +798,17 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.lhs_flare_dispensers)
+	if (damage.rh_chaff_dispensers)
 	{
-		if (!ka50_damage.lhs_flare_dispensers)
+		if (!ka50_damage.rh_chaff_dispensers)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.lhs_flare_dispensers = TRUE;
+			ka50_damage.rh_chaff_dispensers = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("FLARES", "DAMAGED", NULL, NULL);
-
-			play_client_server_warning_message (en, SPEECH_SYSTEM_FLARE_DISPENSER_DAMAGED);
-		}
-	}
-	////////////////////////////////////////
-
-	if (damage.rhs_chaff_dispensers)
-	{
-		if (!ka50_damage.rhs_chaff_dispensers)
-		{
-			activate_ka50_master_caution_lamp ();
-
-			ka50_damage.rhs_chaff_dispensers = TRUE;
-
-			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
-
-			set_ka50_ekran_display_text ("CHAFF", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("CHAFF", "DISPENSER", "DAMAGED");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_CHAFF_DISPENSER_DAMAGED);
 		}
@@ -879,21 +816,40 @@ static void damage_systems (ka50_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.rhs_flare_dispensers)
+	if (damage.lh_flare_dispensers)
 	{
-		if (!ka50_damage.rhs_flare_dispensers)
+		if (!ka50_damage.lh_flare_dispensers)
 		{
-			activate_ka50_master_caution_lamp ();
+			activate_ka50_master_caution ();
 
-			ka50_damage.rhs_flare_dispensers = TRUE;
+			ka50_damage.lh_flare_dispensers = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_ka50_ekran_display_text ("FLARES", "DAMAGED", NULL, NULL);
+			set_ka50_text_display_text ("FLARE", "DISPENSER", "DAMAGED");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_FLARE_DISPENSER_DAMAGED);
 		}
 	}
+
+	////////////////////////////////////////
+
+	if (damage.rh_flare_dispensers)
+	{
+		if (!ka50_damage.rh_flare_dispensers)
+		{
+			activate_ka50_master_caution ();
+
+			ka50_damage.rh_flare_dispensers = TRUE;
+
+			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_ka50_text_display_text ("FLARE", "DISPENSER", "DAMAGED");
+
+			play_client_server_warning_message (en, SPEECH_SYSTEM_FLARE_DISPENSER_DAMAGED);
+		}
+	}
+
 	////////////////////////////////////////
 
 	set_ka50_weapon_damage_status ();
@@ -917,22 +873,22 @@ void damage_ka50 (gunship_damage_levels damage_level)
 	{
 		case GUNSHIP_DAMAGE_LEVEL_LIGHT:
 		{
-			damage |= 1 << (rand16 () & 0x1f);
+			damage |= 1 << rand16 ();
 
 			break;
 		}
 		case GUNSHIP_DAMAGE_LEVEL_MEDIUM:
 		{
-			damage |= 1 << (rand16 () & 0x1f);
-			damage |= 1 << (rand16 () & 0x1f);
+			damage |= 1 << rand16 ();
+			damage |= 1 << rand16 ();
 
 			break;
 		}
 		case GUNSHIP_DAMAGE_LEVEL_HEAVY:
 		{
-			damage |= 1 << (rand16 () & 0x1f);
-			damage |= 1 << (rand16 () & 0x1f);
-			damage |= 1 << (rand16 () & 0x1f);
+			damage |= 1 << rand16 ();
+			damage |= 1 << rand16 ();
+			damage |= 1 << rand16 ();
 
 			break;
 		}
@@ -957,86 +913,93 @@ void notify_ka50_avionics_of_dynamics_fault (unsigned int damage)
 {
 	if (damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("MAIN RTR", "DAMAGED", NULL, NULL);
+		set_ka50_text_display_text ("MAIN ROTOR", "DAMAGED", "");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_TAIL_ROTOR)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("TAIL RTR", "DAMAGED", NULL, NULL);
+		set_ka50_text_display_text ("TAIL ROTOR", "DAMAGED", "");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_LEFT_ENGINE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("ENGINE 1", "DAMAGED", NULL, NULL);
+		set_ka50_text_display_text ("LEFT", "ENGINE", "DAMAGED");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_RIGHT_ENGINE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("ENGINE 2", "DAMAGED", NULL, NULL);
+		set_ka50_text_display_text ("RIGHT", "ENGINE", "DAMAGED");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("ENGINE 1", "FIRE", NULL, NULL);
+		set_ka50_text_display_text ("LEFT", "ENGINE", "FIRE");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("ENGINE 2", "FIRE", NULL, NULL);
+		set_ka50_text_display_text ("RIGHT", "ENGINE", "FIRE");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_LOW_HYDRAULICS)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("LOW HYDRA", "PRESSURE", NULL, NULL);
+		set_ka50_text_display_text ("HYDRAULICS", "PRESSURE", "LOW");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution();
 
-		set_ka50_ekran_display_text ("SEC HYDR", "DAMAGED", NULL, NULL);
+		set_ka50_text_display_text ("SECONDARY", "HYDRAULICS", "FAILURE");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("STABILISR", "FAILURE", NULL, NULL);
+		set_ka50_text_display_text ("STABILISER", "FAILURE", "");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_FUEL_LEAK)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("FUEL LEAK", "", NULL, NULL);
+		set_ka50_text_display_text ("FUEL LEAK", "", "");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_LOW_OIL_PRESSURE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("LOW OIL", "PRESSURE", NULL, NULL);
+		set_ka50_text_display_text ("LOW OIL", "PRESSURE", "");
 	}
 
 	if (damage & DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE)
 	{
-		activate_ka50_master_caution_lamp ();
+		activate_ka50_master_caution ();
 
-		set_ka50_ekran_display_text ("HIGH OIL", "PRESSURE", NULL, NULL);
+		set_ka50_text_display_text ("HIGH OIL", "PRESSURE", "");
+	}
+
+	if (damage & DYNAMICS_DAMAGE_UNDERCARRIAGE)
+	{
+		activate_ka50_master_caution ();
+
+		set_ka50_text_display_text ("GEAR", "DAMAGED", "");
 	}
 }
 

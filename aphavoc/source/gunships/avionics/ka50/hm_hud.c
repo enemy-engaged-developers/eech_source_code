@@ -123,12 +123,9 @@ static float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define LARGE_HUD_TEXTURE_INDEX (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD)
-#define LARGE_HMS_TEXTURE_INDEX (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD)
-
 static screen
-	*hud_texture_screen,
-	*large_hms_texture_screen;
+	*hud_texture_screen = NULL,
+	*outside_hud_texture_screen;
 
 static rgb_colour
 	clear_hud_colour;
@@ -271,10 +268,9 @@ static char small_hud_command_heading_carat[] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define HUD_UNIT_RATIO 14.6    // ratio of HUD size with distance to HUD
+#define HUD_UNIT_RATIO 12.05    // ratio of HUD size with distance to HUD
 
 static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -478,7 +474,7 @@ static void draw_pitch_scale (void)
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
 }
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -799,37 +795,37 @@ static void display_true_airspeed (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void display_g_scale(void)
-{
-	float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
-
-	draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
-
-	draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
-	draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
-	draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
+	{
+		float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
+		
+		draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
 	
-	if (draw_large_hud)
-		set_mono_font_type(MONO_FONT_TYPE_6X10);
-	else
-		set_mono_font_type(MONO_FONT_TYPE_3X6);
+		draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
+		draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
+		draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
+		
+		if (draw_large_hud)
+			set_mono_font_type(MONO_FONT_TYPE_6X10);
+		else
+			set_mono_font_type(MONO_FONT_TYPE_3X6);
 
-	set_2d_mono_font_position(-0.78, -0.25);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("3");
-	
-	set_2d_mono_font_position(-0.78, -0.55);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("0");
+		set_2d_mono_font_position(-0.78, -0.25);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("3");
+		
+		set_2d_mono_font_position(-0.78, -0.55);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("0");
 
-	set_2d_mono_font_position(-0.78, -0.65);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("1");
+		set_2d_mono_font_position(-0.78, -0.65);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("1");
 
-	if (draw_large_hud)
-		draw_2d_mono_sprite(large_left_carat, -0.7, -0.55 + y_offset, hud_colour);
-	else
-		draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
-}
+		if (draw_large_hud)
+			draw_2d_mono_sprite(large_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+		else
+			draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -938,9 +934,9 @@ static void draw_altitude_scale(float altitude)
 
 	set_2d_mono_font_position(0.6, 0.8);
 	set_mono_font_rel_position (0.0, -2.0);
+
 	print_mono_font_string("50");
-
-
+	
 	if (draw_large_hud)
 		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
 	else
@@ -1078,25 +1074,12 @@ void initialise_ka50_hud (void)
 {
 	hud_env = create_2d_environment ();
 
-	if (command_line_high_res_hud)
-	{
-		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_HVCKPT_HUD_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
-		draw_large_hud = TRUE;
-		hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
-		draw_line_func = draw_2d_half_thick_line;
-	}
+	outside_hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+
+	if (command_line_high_res_hud)	
+		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_HOKUM_COCKPIT_HUD, TEXTURE_TYPE_SINGLEALPHA);
 	else
-	{
-		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SMALL_SIZE, HUD_VIEWPORT_SMALL_SIZE, TEXTURE_INDEX_HVCKPT_HUD_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
-		draw_large_hud = FALSE;
-		hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
-		draw_line_func = draw_2d_line;
-	}
-
-	hud_viewport_x_org = hud_viewport_size / 2;
-	hud_viewport_y_org = hud_viewport_size / 2;
-
-	large_hms_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, LARGE_HMS_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SMALL_SIZE, HUD_VIEWPORT_SMALL_SIZE, TEXTURE_INDEX_HOKUM_COCKPIT_HUD, TEXTURE_TYPE_SINGLEALPHA);
 
 	set_rgb_colour (clear_hud_colour, 255, 255, 255, 0);
 
@@ -1111,118 +1094,71 @@ void deinitialise_ka50_hud (void)
 {
 	destroy_2d_environment (hud_env);
 
-	destroy_screen (hud_texture_screen);
+	destroy_screen (outside_hud_texture_screen);
 
-	destroy_screen (large_hms_texture_screen);
+	destroy_screen (hud_texture_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_ka50_hud_on_cockpit (int hud_enlarge)
+void draw_ka50_hud (void)
 {
-	if (ka50_damage.head_up_display || !electrical_system_active())
+	int
+		draw_hud_on_glass;
+
+	////////////////////////////////////////
+	//
+	// if viewing from the pilot's head then draw a 'projected'
+	// HUD else draw the HUD actually on the glass for effect
+	//
+	////////////////////////////////////////
+
 	{
-		return;
-	}
+		object_3d_sub_object_search_data
+			search;
 
-	//
-	// set active 3D environment now else 2D clipping will be affected
-	//
+		draw_hud_on_glass = TRUE;
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
-
-	set_3d_active_environment (main_3d_env);
-
-	////////////////////////////////////////
-	//
-	// set up HUD 2D environment
-	//
-	////////////////////////////////////////
-
-	set_2d_active_environment (hud_env);
-
-	//
-	// window
-	//
-
-	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
-
-	//
-	// viewport
-	//
-
-	draw_large_hud = hud_enlarge;
-
-	hud_viewport_x_org = full_screen_x_mid;
-	hud_viewport_y_org = full_screen_y_mid;
-
-	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
-	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
-
-	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
-
-	//
-	// get screen co-ords (constant size - does not require scaling)
-	//
-
-	hud_screen_x_min = 0.0;
-	hud_screen_y_min = 0.0;
-
-	hud_screen_x_max = hud_viewport_size - 0.001;
-	hud_screen_y_max = hud_viewport_size - 0.001;
-
-	hud_screen_x_scale = 1.0;
-	hud_screen_y_scale = 1.0;
-
-	////////////////////////////////////////
-	//
-	// draw HUD
-	//
-	////////////////////////////////////////
-
-	if (lock_screen (active_screen))
-	{
-		set_mono_font_colour (hud_colour);
-
-		draw_layout_grid ();
-
-		switch (hud_mode)
+		if (get_crew_role () == CREW_ROLE_PILOT)
 		{
-			case HUD_MODE_NAVIGATION:
+			if
+			(
+				(get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT) ||
+				(get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK) ||
+				(get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET) ||
+				(get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_HUD)
+			)
 			{
-					draw_heading_scale();
-					display_waypoint_information();
-					display_g_scale();
-
-				break;
-			}
-			case HUD_MODE_WEAPON:
-			{
-					display_weapon_information();
-					display_target_information();
-
-				break;
+				draw_hud_on_glass = FALSE;
 			}
 		}
 
-		unlock_screen (active_screen);
+		search.search_depth = 0;
+		search.search_object = virtual_cockpit_inst3d;
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_HUD_DISPLAY;
+
+		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			search.result_sub_object->visible_object = !draw_hud_on_glass;
+		}
+
+		search.search_depth = 0;
+		search.search_object = virtual_cockpit_inst3d;
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_HUD_EFFECT;
+
+		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			search.result_sub_object->visible_object = draw_hud_on_glass;
+		}
 	}
-}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_ka50_hud_on_texture (void)
-{
+	////////////////////////////////////////
 	//
 	// set active 3D environment now else 2D clipping will be affected
 	//
+	////////////////////////////////////////
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
@@ -1236,7 +1172,9 @@ void draw_ka50_hud_on_texture (void)
 
 	set_2d_active_environment (hud_env);
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
-
+	draw_large_hud = FALSE;
+	
+	if (!draw_hud_on_glass)
 	{
 		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
 		float y_offset, x_offset;
@@ -1247,8 +1185,8 @@ void draw_ka50_hud_on_texture (void)
 		
 		if (get_global_wide_cockpit())
 		{
-			head_offset_x += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.x;
-			head_offset_y += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.y + 0.02;
+			head_offset_x += wide_cockpit_position[WIDEVIEW_KA50_PILOT].c.x;
+			head_offset_y += wide_cockpit_position[WIDEVIEW_KA50_PILOT].c.y - 0.04;
 		}
 
 		x_offset = head_offset_x * -HUD_UNIT_RATIO;
@@ -1256,30 +1194,49 @@ void draw_ka50_hud_on_texture (void)
 
 		set_2d_view_offset(hud_env, x_offset, y_offset);
 	}
+	else
+		reset_2d_view_offset(hud_env);
 
-	//
-	// viewport
-	//
+	ASSERT(hud_texture_screen);
+	if (command_line_high_res_hud)
+	{
+		hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
+		draw_large_hud = TRUE;
+		draw_line_func = draw_2d_half_thick_line;
+	}
+	else
+	{
+		hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
+		draw_large_hud = FALSE;
+		draw_line_func = draw_2d_line;
+	}
 
-	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
-	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_x_org = hud_viewport_size * 0.5;
+
+	hud_viewport_y_org = hud_viewport_size * 0.5;
+
+	hud_viewport_x_min = 0.0;
+
+	hud_viewport_y_min = 0.0;
+
+	hud_viewport_x_max = hud_viewport_size - 0.001;
+
+	hud_viewport_y_max = hud_viewport_size - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
 	//
-	// get screen co-ords (vitural cockpit texture - scaling only works near screen centre)
+	// get screen co-ords (this HUD texture is in the virtual cockpit and will scale itself)
 	//
 
-	hud_screen_x_min = full_screen_x_mid - ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width);
-	hud_screen_y_min = full_screen_y_mid - ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height);
+	hud_screen_x_min = 0.0;
+	hud_screen_y_min = 0.0;
 
-	hud_screen_x_max = full_screen_x_mid + ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	hud_screen_x_max = hud_viewport_size - 0.001;
+	hud_screen_y_max = hud_viewport_size - 0.001;
 
-	hud_screen_x_scale = 640.0 / full_screen_width;
-	hud_screen_y_scale = 480.0 / full_screen_height;
+	hud_screen_x_scale = 1.0;
+	hud_screen_y_scale = 1.0;
 
 	////////////////////////////////////////
 	//
@@ -1298,7 +1255,7 @@ void draw_ka50_hud_on_texture (void)
 
 		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
 
-		if (!ka50_damage.head_up_display && electrical_system_active())
+		if (!draw_hud_on_glass && !ka50_damage.head_up_display && electrical_system_active())
 		{
 			set_mono_font_colour (hud_colour);
 
@@ -1321,6 +1278,10 @@ void draw_ka50_hud_on_texture (void)
 				{
 					display_weapon_information();
 					display_target_information();
+					
+//					draw_target_marker();
+//					draw_navigation_mode_hud ();
+//					draw_weapon_mode_hud ();
 
 					break;
 				}
@@ -1384,14 +1345,22 @@ void draw_external_ka50_hud (void)
 
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
-	hud_viewport_x_org = hud_viewport_size * 0.5;
-	hud_viewport_y_org = hud_viewport_size * 0.5;
+	draw_large_hud = TRUE;
+	draw_line_func = draw_2d_half_thick_line;
+
+	hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
+
+	hud_viewport_x_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
+
+	hud_viewport_y_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
 
 	hud_viewport_x_min = 0.0;
+
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = hud_viewport_size - 0.001;
-	hud_viewport_y_max = hud_viewport_size - 0.001;
+	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+
+	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1428,9 +1397,9 @@ void draw_external_ka50_hud (void)
 	//
 	////////////////////////////////////////
 
-	set_active_screen (hud_texture_screen);
+	set_active_screen (outside_hud_texture_screen);
 
-	if (lock_screen (hud_texture_screen))
+	if (lock_screen (outside_hud_texture_screen))
 	{
 	 	store_hud_colour = hud_colour;
 
@@ -1438,7 +1407,7 @@ void draw_external_ka50_hud (void)
 
 		set_mono_font_colour (hud_colour);
 
-		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
+		set_block (0, 0, HUD_VIEWPORT_LARGE_SIZE - 1, HUD_VIEWPORT_LARGE_SIZE - 1, clear_hud_colour);
 
 		draw_layout_grid ();
 
@@ -1466,9 +1435,9 @@ void draw_external_ka50_hud (void)
 
 		hud_colour = store_hud_colour;
 
-		flush_screen_texture_graphics (hud_texture_screen);
+		flush_screen_texture_graphics (outside_hud_texture_screen);
 
-		unlock_screen (hud_texture_screen);
+		unlock_screen (outside_hud_texture_screen);
 	}
 
 	set_active_screen (video_screen);
@@ -1504,7 +1473,7 @@ void draw_external_ka50_hud (void)
 			set_d3d_texture_mip_filtering (FALSE);
 		}
 
-		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_HVCKPT_HUD_DISPLAY));
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));
 
 		////////////////////////////////////////
 		//
@@ -1547,10 +1516,10 @@ void draw_external_ka50_hud (void)
 		quad[3].u				= 0.0;
 		quad[3].v				= 1.0;
 
-		quad[0].next_vertex		= &quad[1];
-		quad[1].next_vertex		= &quad[2];
-		quad[2].next_vertex		= &quad[3];
-		quad[3].next_vertex		= NULL;
+		quad[0].next_vertex 	= &quad[1];
+		quad[1].next_vertex 	= &quad[2];
+		quad[2].next_vertex 	= &quad[3];
+		quad[3].next_vertex 	= NULL;
 
 		//
 		////////////////////////////////////////
@@ -1729,8 +1698,8 @@ static void draw_target_marker (void)
 				target_position = *tracking_point;
 			else
 			{
-				airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
 				get_local_entity_target_point (target, &target_position);
+				airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
 			}
 
 			visibility = get_position_3d_screen_coordinates (&target_position, &i, &j);
@@ -1800,21 +1769,19 @@ static void display_weapon_information (void)
 
 	if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
-		int count = get_local_entity_weapon_count (get_gunship_entity (), weapon_sub_type);
-		
 		if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND
 			|| weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND)
 		{
-			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.z : 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_KA50_PILOT].c.z : 0.0;
 			float left_limit, right_limit, upper_limit;
 			
-			//if (command_line_TIR_6DOF && query_TIR_active())
-			//	head_offset_z = getViewpointOffsetZ(1);
+			if (command_line_TIR_6DOF && query_TIR_active())
+				head_offset_z = getViewpointOffsetZ(1);
 			
 			// adjust box for head position
 			left_limit = atan(rad(-1.0)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
 			right_limit = atan(rad(6.0)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
-			upper_limit = atan(rad(1.5)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
+			upper_limit = atan(rad(3.0)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
 
 			draw_2d_line(left_limit, -1.0, left_limit, upper_limit, hud_colour);
 			draw_2d_line(right_limit, -1.0, right_limit, upper_limit, hud_colour);
@@ -1824,13 +1791,14 @@ static void display_weapon_information (void)
 			set_2d_mono_font_position (-0.9, -0.7);
 			set_mono_font_rel_position (0.0, 0.0);
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND)
-				weapon_type = "HE %03d";
+				weapon_type = "HE";
 			else
-				weapon_type = "AP %03d";
+				weapon_type = "AP";
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR)
 		{
 			float flight_time = get_missile_flight_time ();
+			debug_log("ft: %.1f", flight_time);
 
 			if (flight_time > 0.01)
 			{
@@ -1840,22 +1808,22 @@ static void display_weapon_information (void)
 				set_mono_font_rel_position (1.0, 0.0);
 				print_mono_font_string (s);
 			}
-			weapon_type = "MSL %02d";
+			weapon_type = "MSL";
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_IGLA_V)
-			weapon_type = "ATA %02d";
+			weapon_type = "ATA";
 		else
 		{
 			float x,y;
 			float angle_of_drop = 0.0;
-			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].c.z : 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_KA50_PILOT].c.z : 0.0;
 			float drop_hud_distance;
 			float roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
-				weapon_type = "GUN %03d";
+				weapon_type = "GUN";
 			else
-				weapon_type = "RKT %d";
+				weapon_type = "RKT";
 
 			angle_of_drop = get_weapon_drop(weapon_sub_type);
 
@@ -1864,11 +1832,11 @@ static void display_weapon_information (void)
 				slew_eo_to_direction(-angle_of_drop, 0.0);
 
 			x = 0.0;
-			y = get_global_wide_cockpit() ? 0.26 : 0.0;
+			y = get_global_wide_cockpit() ? 0.38 : 0.80;
 
 			// this magic formula translates the angle to a HUD distance
 			// the magic values are just arrived at by measuring in game
-			drop_hud_distance = atan(angle_of_drop) * ((head_offset_z * 0.82) + 0.56) * HUD_UNIT_RATIO;
+			drop_hud_distance = atan(angle_of_drop) * ((head_offset_z * 0.84) + 0.66) * HUD_UNIT_RATIO;
 			y -= cos(roll) * drop_hud_distance;
 			x += sin(roll) * drop_hud_distance;
 
@@ -1881,25 +1849,9 @@ static void display_weapon_information (void)
 		else
 			set_mono_font_type (MONO_FONT_TYPE_3X6);
 
-		set_2d_mono_font_position (-0.9, -0.1);
+		set_2d_mono_font_position (-0.85, -0.1);
 		set_mono_font_rel_position (0.0, 0.0);
-		sprintf(s, weapon_type, count);
-		print_mono_font_string (s);
-
-		// start salvo info by GCsDriver		
-		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
-		{
-			if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
-			{
-				sprintf (s, "Salvo:ALL");
-			}else{
-				sprintf (s, "Salvo:%d", rocket_salvo_size);
-			}
-			set_2d_mono_font_position (-0.9, -0.2);
-			set_mono_font_rel_position (0.0, 0.0);
-			print_mono_font_string (s);
-		}
-		// end salvo info by GCsDriver
+		print_mono_font_string (weapon_type);
 	}
 }
 
@@ -1932,14 +1884,25 @@ static void display_target_information (void)
 	// Range
 	source = get_gunship_entity ();
 	ASSERT(source);
-	if (has_range)
+	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+	if (target || eo_is_tracking_point())
 	{
 		float min_weapon_range, max_weapon_range, target_range;
 		entity_sub_types selected_weapon_type;
 
-		target_range = get_range_to_target();
+		if (has_range)
+		{
+			vec3d *target_position, *source_position;
 
-		if (target_range > 0.0)
+			source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+			target_position = get_eo_tracking_point();
+			if (!target_position)
+				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+			target_range = get_3d_range (source_position, target_position);
+		}
+
+		if (has_range)
 		{
 			sprintf (buffer, "%2.1f", target_range * 0.001);
 			set_2d_mono_font_position (0.0, -0.65);
@@ -2015,14 +1978,8 @@ static void display_target_information (void)
 	}
 
 	width = get_mono_font_string_width (s);
-
-	// make place for salvo info by GCsDriver
-	//	set_2d_mono_font_position (-0.9, -0.2);
-		set_2d_mono_font_position (-0.9, -0.3);
-	// end salvo info by GCsDriver
-
+	set_2d_mono_font_position (-0.9, -0.2);
 	set_mono_font_rel_position (0.0, 0.0);
-
 	print_mono_font_string (s);
 
 	// laser and radar indicators
@@ -2044,7 +2001,6 @@ static void display_target_information (void)
 	// target name
 	//
 
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 	if (target)
 	{
 		s = get_target_display_name (target, buffer, TRUE);
@@ -2114,14 +2070,14 @@ void draw_ka50_hms (void)
 		{
 			if (d3d_modulate_alpha)
 			{
-				heading_offset = HAVOC_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
+				heading_offset = KA50_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
 
 				if (heading_offset < 0.0)
 				{
 					heading_offset = -heading_offset;
 				}
 
-				pitch_offset = HAVOC_INSTRUMENT_VIEW_PITCH - pilot_head_pitch;
+				pitch_offset = KA50_INSTRUMENT_VIEW_PITCH - pilot_head_pitch;
 
 				if (pitch_offset < 0.0)
 				{
@@ -2139,7 +2095,7 @@ void draw_ka50_hms (void)
 			}
 			else
 			{
-				if ((pilot_head_heading == HAVOC_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == HAVOC_INSTRUMENT_VIEW_PITCH))
+				if ((pilot_head_heading == KA50_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == KA50_INSTRUMENT_VIEW_PITCH))
 				{
 					return;
 				}
@@ -2214,9 +2170,9 @@ void draw_ka50_hms (void)
 	//
 	////////////////////////////////////////
 
-	set_active_screen (large_hms_texture_screen);
+	set_active_screen (outside_hud_texture_screen);
 
-	if (lock_screen (large_hms_texture_screen))
+	if (lock_screen (outside_hud_texture_screen))
 	{
 	 	store_hud_colour = hud_colour;
 
@@ -2240,9 +2196,9 @@ void draw_ka50_hms (void)
 
 		hud_colour = store_hud_colour;
 
-		flush_screen_texture_graphics (large_hms_texture_screen);
+		flush_screen_texture_graphics (outside_hud_texture_screen);
 
-		unlock_screen (large_hms_texture_screen);
+		unlock_screen (outside_hud_texture_screen);
 	}
 
 	set_active_screen (video_screen);
@@ -2278,7 +2234,7 @@ void draw_ka50_hms (void)
 			set_d3d_texture_mip_filtering (FALSE);
 		}
 
-		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (LARGE_HMS_TEXTURE_INDEX));
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));
 
 		////////////////////////////////////////
 		//

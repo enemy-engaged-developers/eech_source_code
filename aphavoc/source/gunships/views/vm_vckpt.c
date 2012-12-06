@@ -746,23 +746,6 @@ void update_virtual_cockpit_view (void)
 		pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
 		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 	} // end Retro 030317
-
-
-//VJ wideview mod, date: 27-mar-03
-//VJ 050131 wideview mod, better
-/*
-	if (get_global_wide_cockpit () &&
-		 !command_line_3d_cockpit &&
-		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
-		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
-		)
-	{
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
-
-   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
-		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
-	}
-	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1135,46 +1118,7 @@ void get_pilot_head_viewpoint (void)
 			case GUNSHIP_TYPE_KA50:
 			////////////////////////////////////////
 			{
-				matrix3x3
-					m;
-
-				vec3d
-					relative_position,
-					world_relative_position;
-
-				//
-				// get aircraft position and attitude
-				//
-
-				get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
-
-				get_local_entity_attitude_matrix (get_gunship_entity (), pilot_head_vp.attitude);
-
-				relative_position.x = 0.0;
-				relative_position.y = -0.86575;
-				relative_position.z = 1.252;
-
-				multiply_matrix3x3_vec3d (&world_relative_position, pilot_head_vp.attitude, &relative_position);
-
-				pilot_head_vp.position.x += world_relative_position.x;
-				pilot_head_vp.position.y += world_relative_position.y;
-				pilot_head_vp.position.z += world_relative_position.z;
-
-				//
-				// rotate view wrt pilot's head heading and pitch
-				//
-
-				get_arbitrary_rotation_matrix (m, &pilot_head_vp.yv, pilot_head_heading);
-
-				multiply_matrix3x3_vec3d (&pilot_head_vp.xv, m, &pilot_head_vp.xv);
-
-				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
-
-				get_arbitrary_rotation_matrix (m, &pilot_head_vp.xv, pilot_head_pitch);
-
-				multiply_matrix3x3_vec3d (&pilot_head_vp.yv, m, &pilot_head_vp.yv);
-
-				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
+				get_ka50_crew_viewpoint ();
 
 				break;
 			}
@@ -1505,6 +1449,14 @@ void draw_virtual_cockpit_3d_view (void)
 		////////////////////////////////////////
 		{
 			pre_render_kiowa_virtual_cockpit_displays ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			pre_render_ka50_virtual_cockpit_displays ();
 
 			break;
 		}
@@ -1914,50 +1866,21 @@ void draw_virtual_cockpit_3d_view (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			if (get_global_draw_cockpit_graphics ())
+			set_pilots_full_screen_params (FALSE);
+
+			draw_ka50_virtual_cockpit ();
+
+			if (!get_global_draw_cockpit_graphics ())
 			{
-				set_pilots_full_screen_params (FALSE);
-
-				draw_ka50_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_ADI |
-					VIRTUAL_COCKPIT_HSI |
-					VIRTUAL_COCKPIT_COMPASS |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
-
-				draw_ka50_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_HUD_GLASS |
-					VIRTUAL_COCKPIT_HUD_DISPLAY |
-					VIRTUAL_COCKPIT_CRT_DISPLAY |
-					VIRTUAL_COCKPIT_EKRAN_DISPLAY |
-					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-				);
-			}
-			else
-			{
-				draw_external_ka50_hud ();
-
-				if(command_line_export_mfd)
+				if (command_line_export_mfd)
 				{
-					draw_ka50_mfd_on_texture();
-					if (get_global_draw_overlaid_instruments ())
-					{
-						draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
-					}
+					draw_ka50_mfd ();
 				}
 				else
 				{
 					if (get_global_draw_overlaid_instruments ())
 					{
-						draw_overlaid_ka50_mfd (68.0, 412.0, 128.0);
-						draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+						draw_overlaid_ka50_mfd ();
 					}
 				}
 			}
@@ -2189,6 +2112,14 @@ void draw_virtual_cockpit_3d_crew_view (void)
 			break;
 		}
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			pre_render_ka50_virtual_cockpit_displays ();
+
+			break;
+		}
+		////////////////////////////////////////
 	}
 
 	//
@@ -2246,6 +2177,14 @@ void draw_virtual_cockpit_3d_crew_view (void)
 		////////////////////////////////////////
 		{
 			draw_kiowa_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			draw_ka50_virtual_cockpit ();
 
 			break;
 		}
@@ -2421,42 +2360,50 @@ void draw_virtual_cockpit_3d_hud_view (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
+			vec3d
+				position;
+
+			ASSERT (virtual_cockpit_inst3d);
+
+			pre_render_hokum_virtual_cockpit_displays ();
+
+			//
+			// get camera viewpoint
+			//
+
+			virtual_cockpit_inst3d->vp.x = 0.0;
+			virtual_cockpit_inst3d->vp.y = 0.0;
+			virtual_cockpit_inst3d->vp.z = 0.0;
+
+			get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
+
+			get_object_3d_camera_position (virtual_cockpit_inst3d, OBJECT_3D_CAMERA_VIEW_STATIC_HUD, 0, 0.0, &main_vp);
+
+			position.x = -main_vp.x;
+			position.y = -main_vp.y;
+			position.z = -main_vp.z;
+
+			multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, main_vp.attitude, &position);
+
+			get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &position);
+
+			main_vp.x += position.x;
+			main_vp.y += position.y;
+			main_vp.z += position.z;
+
+			//
+			// draw view
+			//
+
 			set_pilots_full_screen_params (night_vision_system_active);
 
 			draw_main_3d_scene (&main_vp);
 
-			if (get_global_draw_cockpit_graphics ())
-			{
-				set_pilots_full_screen_params (FALSE);
+			set_pilots_full_screen_params (FALSE);
 
-				draw_ka50_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
+			draw_hokum_virtual_cockpit ();
 
-				draw_ka50_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_HUD_GLASS
-				);
-			}
-			else
-			{
-				if (get_global_draw_overlaid_instruments ())
-				{
-					draw_overlaid_ka50_mfd (68.0, 412.0, 128.0);
-
-					draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
-				}
-			}
-
-			draw_external_ka50_hud ();
-
-			draw_ka50_hms ();
+			draw_hokum_hms ();
 
 			break;
 		}
@@ -2664,14 +2611,15 @@ void draw_virtual_cockpit_3d_display_view (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
+			pre_render_ka50_virtual_cockpit_displays ();
+
 			set_pilots_full_screen_params (FALSE);
 
-			draw_ka50_internal_virtual_cockpit
-			(
-				VIRTUAL_COCKPIT_COCKPIT |
-				VIRTUAL_COCKPIT_CRT_DISPLAY |
-				VIRTUAL_COCKPIT_EKRAN_DISPLAY
-			);
+			get_ka50_display_viewpoint (get_view_mode ());
+
+			draw_ka50_virtual_cockpit ();
+
+			draw_ka50_full_screen_display ();
 
 			break;
 		}
@@ -2875,7 +2823,7 @@ void switch_seat_position (void)
 
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (get_comanche_hokum_gunship ());
+	ASSERT (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50);
 
 	if (get_time_acceleration () == 0)
 	{
@@ -2961,7 +2909,7 @@ void set_pilot_seat_position (void)
 {
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (get_comanche_hokum_gunship ());
+	ASSERT (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50);
 
 	ASSERT (get_pilot_entity ());
 
@@ -2991,7 +2939,7 @@ void set_co_pilot_seat_position (void)
 {
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (get_comanche_hokum_gunship ());
+	ASSERT (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50);
 
 	ASSERT (get_pilot_entity ());
 
@@ -4396,21 +4344,6 @@ void update_virtual_cockpit_padlock_view (void)
 			set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
 		}
 	}
-/*
-//VJ wideview mod, date: 27-mar-03
-//VJ 050131 wideview mod, better
-	if (get_global_wide_cockpit () &&
-		 !command_line_3d_cockpit &&
-		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
-		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
-		)
-	{
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
-
-   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
-		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
-	}
-	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

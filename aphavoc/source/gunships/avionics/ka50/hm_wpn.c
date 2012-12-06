@@ -177,6 +177,8 @@ void update_ka50_weapon_systems (void)
 	entity_sub_types
 		weapon_sub_type;
 
+	gun_is_firing = FALSE;
+
 	en = get_gunship_entity ();
 
 	weapon_sub_type = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
@@ -440,13 +442,13 @@ void update_ka50_weapon_systems (void)
 		}
 		else
 		{
+			gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
+
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
 			{
 				helicopter* raw = (helicopter *) get_local_entity_data(en);
 				unsigned number_of_pods = get_number_of_pods_firing(en, weapon_sub_type);
 				unsigned pre_fire_timer = raw->ac.weapon_salvo_timer;
-
-				gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
 
 				while (number_of_pods--)
 				{

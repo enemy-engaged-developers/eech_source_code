@@ -76,43 +76,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static object_3d_instance
-	*virtual_cockpit_wiper_arm_inst3d,
-	*virtual_cockpit_wiper_rod_inst3d,
-	*virtual_cockpit_large_hud_wiper_arm_inst3d,
-	*virtual_cockpit_large_hud_wiper_rod_inst3d,
-	*virtual_cockpit_rain_effect_inst3d,
-	*virtual_cockpit_large_hud_rain_effect_inst3d;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void initialise_ka50_virtual_cockpit_wiper_and_rain_effect (void)
 {
-	virtual_cockpit_wiper_arm_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_WIPER_ARM);
-
-	virtual_cockpit_wiper_rod_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_WIPER_ROD);
-
-	virtual_cockpit_large_hud_wiper_arm_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_WIPER_ARM_HUD);
-
-	virtual_cockpit_large_hud_wiper_rod_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_WIPER_ROD_HUD);
-
-	virtual_cockpit_rain_effect_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_GLASS);
-
-	virtual_cockpit_large_hud_rain_effect_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_GLASS_HUD);
-
 	pilot_wiper = TRUE;
 
-	pilot_wiped_rain_texture_screen = create_screen_for_system_texture (TEXTURE_INDEX_HAVOC_PILOT_RAIN_WIPE);
+	pilot_wiped_rain_texture_screen = create_screen_for_system_texture (TEXTURE_INDEX_HOKUM_PILOT_RAIN_WIPE);
 
 	pilot_wipe_type = WIPE_TYPE_LEFT_THEN_RIGHT;
 
 	co_pilot_wiper = FALSE;
-
-	co_pilot_wiped_rain_texture_screen = NULL;
-
-	co_pilot_wipe_type = WIPE_TYPE_INVALID;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,18 +93,6 @@ void initialise_ka50_virtual_cockpit_wiper_and_rain_effect (void)
 
 void deinitialise_ka50_virtual_cockpit_wiper_and_rain_effect (void)
 {
-	destruct_3d_object (virtual_cockpit_wiper_arm_inst3d);
-
-	destruct_3d_object (virtual_cockpit_wiper_rod_inst3d);
-
-	destruct_3d_object (virtual_cockpit_large_hud_wiper_arm_inst3d);
-
-	destruct_3d_object (virtual_cockpit_large_hud_wiper_rod_inst3d);
-
-	destruct_3d_object (virtual_cockpit_rain_effect_inst3d);
-
-	destruct_3d_object (virtual_cockpit_large_hud_rain_effect_inst3d);
-
 	destroy_screen (pilot_wiped_rain_texture_screen);
 }
 
@@ -140,165 +100,18 @@ void deinitialise_ka50_virtual_cockpit_wiper_and_rain_effect (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_ka50_virtual_cockpit_wiper (viewpoint *vp, int large_hud)
+void animate_ka50_wipers (object_3d_instance *inst3d)
 {
-	object_3d_instance
-		*wiper_arm_inst3d,
-		*wiper_rod_inst3d;
+	float
+		state;
 
-	object_3d_sub_object_search_data
-		search;
+	ASSERT (inst3d);
 
-	ASSERT (vp);
+	state = (wiper_position - MIN_WIPER_POSITION) * (1.0 / (MAX_WIPER_POSITION - MIN_WIPER_POSITION));
 
-	if (large_hud)
-	{
-		wiper_arm_inst3d = virtual_cockpit_large_hud_wiper_arm_inst3d;
-		wiper_rod_inst3d = virtual_cockpit_large_hud_wiper_rod_inst3d;
-	}
-	else
-	{
-		wiper_arm_inst3d = virtual_cockpit_wiper_arm_inst3d;
-		wiper_rod_inst3d = virtual_cockpit_wiper_rod_inst3d;
-	}
+	state = bound (state, 0.0, 1.0);
 
-	//
-	// rotate wiper arm
-	//
-
-	search.search_depth = 0;
-	search.search_object = wiper_arm_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_WIPER_ARM;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = wiper_position * (rad (65.3756) / MAX_WIPER_POSITION);
-	}
-
-	//
-	// rotate wiper blade
-	//
-
-	search.search_depth = 0;
-	search.search_object = wiper_arm_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_WIPER_BLADE;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = (wiper_position * (rad (-74.7756) / MAX_WIPER_POSITION)) + rad (4.7);
-	}
-
-	//
-	// rotate wiper rod
-	//
-
-	search.search_depth = 0;
-	search.search_object = wiper_rod_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_WIPER_ROD;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = wiper_position * (rad (65.3756) / MAX_WIPER_POSITION);
-	}
-
-	//
-	// draw wiper arm and blade
-	//
-
-	memcpy (&wiper_arm_inst3d->vp, vp, sizeof (viewpoint));
-
-	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &wiper_arm_inst3d->vp.position, wiper_arm_inst3d);
-
-	//
-	// draw wiper rod
-	//
-
-	memcpy (&wiper_rod_inst3d->vp, vp, sizeof (viewpoint));
-
-	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &wiper_rod_inst3d->vp.position, wiper_rod_inst3d);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_ka50_virtual_cockpit_rain_effect (viewpoint *vp, int large_hud)
-{
-	ASSERT (vp);
-
-	if (get_global_graphics_rain_textures_enabled ())
-	{
-		if (large_hud)
-		{
-			memcpy (&virtual_cockpit_large_hud_rain_effect_inst3d->vp, vp, sizeof (viewpoint));
-
-			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_large_hud_rain_effect_inst3d->vp.position, virtual_cockpit_large_hud_rain_effect_inst3d);
-		}
-		else
-		{
-			memcpy (&virtual_cockpit_rain_effect_inst3d->vp, vp, sizeof (viewpoint));
-
-			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rain_effect_inst3d->vp.position, virtual_cockpit_rain_effect_inst3d);
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void animate_ka50_external_wipers (object_3d_instance *inst3d)
-{
-	object_3d_sub_object_search_data
-		search;
-
-	////////////////////////////////////////
-	//
-	// pilot's wipers
-	//
-	////////////////////////////////////////
-
-	search.search_depth = 0;
-	search.search_object = inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WIPER_ARM_PILOT;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = wiper_position * (rad (65.3756) / MAX_WIPER_POSITION);
-	}
-
-	search.search_depth = 0;
-	search.search_object = inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WIPER_BLADE_PILOT;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = (wiper_position * (rad (-74.7756) / MAX_WIPER_POSITION)) + rad (4.7);
-	}
-
-	////////////////////////////////////////
-	//
-	// co-pilot's wipers
-	//
-	////////////////////////////////////////
-
-	search.search_depth = 0;
-	search.search_object = inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WIPER_ARM_COPILOT;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = wiper_position * (rad (90.0) / MAX_WIPER_POSITION);
-	}
-
-	search.search_depth = 0;
-	search.search_object = inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WIPER_BLADE_COPILOT;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->relative_roll = (wiper_position * (rad (-100.0) / MAX_WIPER_POSITION)) + rad (5.0);
-	}
+	animate_keyframed_sub_object_type (inst3d, OBJECT_3D_SUB_OBJECT_WIPER, state);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

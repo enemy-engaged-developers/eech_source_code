@@ -129,11 +129,6 @@ void activate_ka50_threat_warning_system (entity *threat)
 {
 	ASSERT (threat);
 
-	if (ka50_damage.threat_warning_display)
-	{
-		return;
-	}
-
 	switch (get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE))
 	{
 		////////////////////////////////////////
@@ -149,6 +144,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 			if (!ka50_damage.radar_warning_system)
 			{
 				reset_time_accel ();
+
+				auto_page_ka50_ase_mfd ();
 
 				incoming_missile_sound_timer = INCOMING_MISSILE_SOUND_PERIOD;
 
@@ -171,6 +168,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 		{
 			reset_time_accel ();
 
+			auto_page_ka50_ase_mfd ();
+
 			incoming_missile_sound_timer = INCOMING_MISSILE_SOUND_PERIOD;
 
 			resume_local_entity_sound_type (get_gunship_entity (), ENTITY_SUB_TYPE_EFFECT_SOUND_INCOMING_MISSILE_WARNING);
@@ -190,6 +189,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 		////////////////////////////////////////
 		{
 			reset_time_accel ();
+
+			auto_page_ka50_ase_mfd ();
 
 			incoming_missile_sound_timer = INCOMING_MISSILE_SOUND_PERIOD;
 
@@ -212,6 +213,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 			if (!ka50_damage.radar_warning_system)
 			{
 				reset_time_accel ();
+
+				auto_page_ka50_ase_mfd ();
 
 				radar_locked_sound_timer = RADAR_LOCKED_SOUND_PERIOD;
 
@@ -249,6 +252,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 			{
 				reset_time_accel ();
 
+				auto_page_ka50_ase_mfd ();
+
 				radar_locked_sound_timer = RADAR_LOCKED_SOUND_PERIOD;
 
 				resume_local_entity_sound_type (get_gunship_entity (), ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_LOCKED);
@@ -284,6 +289,8 @@ void activate_ka50_threat_warning_system (entity *threat)
 			if (!ka50_damage.radar_warning_system)
 			{
 				reset_time_accel ();
+
+				auto_page_ka50_ase_mfd ();
 
 				radar_locked_sound_timer = RADAR_LOCKED_SOUND_PERIOD;
 

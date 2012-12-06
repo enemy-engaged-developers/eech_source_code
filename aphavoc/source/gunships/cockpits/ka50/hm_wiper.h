@@ -68,11 +68,7 @@ extern void initialise_ka50_virtual_cockpit_wiper_and_rain_effect (void);
 
 extern void deinitialise_ka50_virtual_cockpit_wiper_and_rain_effect (void);
 
-extern void draw_ka50_virtual_cockpit_wiper (viewpoint *vp, int large_hud);
-
-extern void draw_ka50_virtual_cockpit_rain_effect (viewpoint *vp, int large_hud);
-
-extern void animate_ka50_external_wipers (object_3d_instance *inst3d);
+extern void animate_ka50_wipers (object_3d_instance *inst3d);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

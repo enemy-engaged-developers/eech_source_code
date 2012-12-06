@@ -82,12 +82,10 @@ c_object_files		+=	$+ &
 							$(currentdir)\hm_avevn.obj &
 							$(currentdir)\hm_avlmp.obj &
 							$(currentdir)\hm_dam.obj &
-							$(currentdir)\hm_ekran.obj &
 							$(currentdir)\hm_eo.obj &
 							$(currentdir)\hm_hms.obj &
 							$(currentdir)\hm_hud.obj &
 							$(currentdir)\hm_mfd.obj &
-							$(currentdir)\hm_radar.obj &
 							$(currentdir)\hm_tgt.obj &
 							$(currentdir)\hm_thrt.obj &
 							$(currentdir)\hm_wpn.obj &

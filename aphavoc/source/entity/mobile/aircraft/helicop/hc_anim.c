@@ -1055,7 +1055,7 @@ void animate_helicopter_wipers (entity *en)
 		}
 		case OBJECT_3D_KA_50:
 		{
-			animate_ka50_external_wipers (raw->ac.inst3d);
+			animate_ka50_wipers (raw->ac.inst3d);
 			break;
 		}
 		////Moje 030619 End

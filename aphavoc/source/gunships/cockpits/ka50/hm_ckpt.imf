@@ -80,8 +80,11 @@ currentdir = $(projectdir)\source\gunships\cockpits\ka50
 
 c_object_files		+=	$+ &
 							$(currentdir)\hm_ckpt.obj &
+							$(currentdir)\hm_crew.obj &
+							$(currentdir)\hm_doors.obj &
 							$(currentdir)\hm_instr.obj &
 							$(currentdir)\hm_lamps.obj &
+							$(currentdir)\hm_pilot.obj &
 							$(currentdir)\hm_vckpt.obj &
 							$(currentdir)\hm_wiper.obj &
 							$-

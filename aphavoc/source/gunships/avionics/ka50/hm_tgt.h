@@ -74,17 +74,9 @@ extern void update_ka50_target_acquisition_system (void);
 
 extern void centre_ka50_target_acquisition_system (void);
 
-extern void toggle_ka50_show_allied_targets (void);
-
-extern void toggle_ka50_auto_target (void);
-
 extern void toggle_ka50_lock_target (void);
 
 extern void set_ka50_lock_target (int lock);
-
-extern void ka50_target_acquisition_system_misc_function1 (void);
-
-extern void ka50_target_acquisition_system_misc_function2 (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

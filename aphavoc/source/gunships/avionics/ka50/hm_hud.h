@@ -68,9 +68,7 @@ extern void initialise_ka50_hud (void);
 
 extern void deinitialise_ka50_hud (void);
 
-extern void draw_ka50_hud_on_cockpit (int hud_enlarge);
-
-extern void draw_ka50_hud_on_texture (void);
+extern void draw_ka50_hud (void);
 
 extern void draw_external_ka50_hud (void);
 

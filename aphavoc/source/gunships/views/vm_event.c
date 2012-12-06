@@ -2404,9 +2404,9 @@ void set_gunship_view_mode_events (void)
 */
 	}
 
-	if (get_comanche_hokum_gunship ())
+	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50)
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
-		
+
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
 
 //VJ wideview mod, date: 18-mar-03	

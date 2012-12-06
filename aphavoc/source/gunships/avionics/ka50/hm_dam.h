@@ -72,38 +72,27 @@ union KA50_DAMAGE_FLAGS
 	struct
 	{
 		unsigned int
-			radar		  		:1,	// 1
-			flir				:1,	// 2
-			spare_1				:1,	// 3
-			llltv				:1,	// 4
-			laser_range_finder  		:1,	// 5
-			spare_2				:1,	// 6
-			radar_jammer			:1,	// 7
-			infra_red_jammer	  	:1,	// 8
-			spare_3				:1,	// 9
-			navigation_computer 		:1,	// 10
-			spare_4				:1,	// 11
-			communications		  	:1,	// 12
-			spare_5				:1,	// 13
-			radar_warning_system		:1,	// 14
-			spare_6				:1,	// 15
-			head_up_display	  		:1,	// 16
-			spare_7				:1,	// 17
-			helmet_mounted_sight		:1,	// 18
-			tv_display			:1,	// 19
-			threat_warning_display		:1,	// 20
-			night_vision_goggles		:1,	// 21
-			gun_jammed			:1,	// 22
-			spare_8         		:1,	// 23
-			lh_outer_pylon			:1,	// 24
-			lh_inner_pylon			:1,	// 25
-			spare_9         		:1,	// 26
-			rh_outer_pylon			:1,	// 27
-			rh_inner_pylon			:1,	// 28
-			lhs_chaff_dispensers		:1,	// 29
-			rhs_chaff_dispensers		:1,	// 30
-			lhs_flare_dispensers		:1,	// 31
-			rhs_flare_dispensers		:1;	// 32
+			flir						:1,	// 1
+			laser_designator		:1,	// 2
+			radar_jammer			:1,	// 3
+			infra_red_jammer		:1,	// 4
+			navigation_computer	:1,	// 5
+			communications			:1,	// 6
+			radar_warning_system	:1,	// 7
+			head_up_display		:1,	// 8
+			helmet_mounted_sight	:1,	// 9
+			shkval_mfd			:1,	// 10
+			abris_mfd			:1,	// 11
+			night_vision_goggles	:1,	// 12
+			gun_jammed				:1,	// 13
+			lh_outer_pylon			:1,	// 14
+			lh_inner_pylon			:1,	// 15
+			rh_outer_pylon			:1,	// 16
+			rh_inner_pylon			:1,	// 17
+			lh_chaff_dispensers	:1,	// 18
+			rh_chaff_dispensers	:1,	// 19
+			lh_flare_dispensers	:1,	// 20
+			rh_flare_dispensers	:1;	// 21
 	};
 };
 

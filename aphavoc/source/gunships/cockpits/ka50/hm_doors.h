@@ -63,50 +63,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////Moje 030818 This should be "shalsh"+"star" for VJ 030807 radar range adjustable
-#define KA50_RADAR_SCAN_RANGE_1000						((float) 1000.0)
-#define KA50_RADAR_SCAN_RANGE_2000		  				((float) 2000.0)
-#define KA50_RADAR_SCAN_RANGE_4000	  					((float) 4000.0)
-#define KA50_RADAR_SCAN_RANGE_6000		  				((float) 6000.0)
-////Moje 030818 This should be "star"+"shlash"
-//VJ 030807 radar range adjustable
-/* ////Moje 030818 Added "Shlash"+"star" until VJ looks into this                 
-extern float radar_range_ka50[4];                
 
-extern float  	KA50_RADAR_SCAN_RANGE_1000,
-					KA50_RADAR_SCAN_RANGE_2000,
-					KA50_RADAR_SCAN_RANGE_4000,
-					KA50_RADAR_SCAN_RANGE_6000;
-////Moje 030818 added "star"+"shlash" next line until VJ looks into this
-*/
-#define KA50_RADAR_SCAN_ARC_SIZE_360			  		(RADAR_SCAN_ARC_SIZE_360)
-#define KA50_RADAR_SCAN_ARC_SIZE_180	  		  		((float) rad (180.0))
-#define KA50_RADAR_SCAN_ARC_SIZE_90	  		  		((float) rad (90.0))
-#define KA50_RADAR_SCAN_ARC_SIZE_60	  		  		((float) rad (60.0))
-#define KA50_RADAR_SCAN_ARC_SIZE_45	  		  		((float) rad (45.0))
-#define KA50_RADAR_SCAN_ARC_SIZE_30	  		  		((float) rad (30.0))
-#define KA50_RADAR_SCAN_ARC_SIZE_15	  		  		((float) rad (15.0))
-#define KA50_RADAR_SCAN_ARC_SEGMENT_SIZE  	 		((float) rad (5.0))
+extern void initialise_ka50_virtual_cockpit_canopy_doors (void);
 
-#define KA50_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP	((float) KA50_RADAR_SCAN_ARC_SIZE_15 * 0.5)
+extern void animate_ka50_virtual_cockpit_canopy_doors (void);
 
-#define KA50_AIR_RADAR_SCAN_DATUM_ROTATE_STEP 		((float) KA50_RADAR_SCAN_ARC_SIZE_30 * 0.5)
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-extern void initialise_ka50_radar (void);
-
-extern void deinitialise_ka50_radar (void);
-
-extern void update_ka50_ground_radar (void);
-
-extern void centre_ka50_ground_radar (void);
-
-extern void update_ka50_air_radar (void);
-
-extern void centre_ka50_air_radar (void);
+extern void toggle_ka50_canopy_doors(event* ev);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

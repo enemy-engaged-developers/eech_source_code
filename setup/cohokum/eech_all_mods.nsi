@@ -241,6 +241,12 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\FOREST_TREE.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\FOREST_TREE_OBJECT.EES"
 
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects\ka-50-cockpit"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ka-50-cockpit\k50-cockpit.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ka-50-cockpit\k50_hud.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\ka-50-cockpit\KA50_COCKPIT.EES"
+
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\Mi-24 Hind"
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\Mi-24 Hind\MI24_BODY.EEO"
@@ -1477,15 +1483,27 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_SEAT_SIDE_PLATES.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_STRUT_SIDE_RIVETS.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_THROTTLE_GRIP.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_THROTTLE_HANDLE.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_TOP_RIGHT_SIDE.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB_BASE.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB_DARK.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_WIPER_MOTOR.bmp"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\ah-64d-cockpit\AVCKPT_WIRE_CUTTER.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_THROTTLE_HANDLE.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_TOP_RIGHT_SIDE.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB_BASE.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_TWISTKNOB_DARK.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_WIPER_MOTOR.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ah-64d-cockpit\AVCKPT_WIRE_CUTTER.bmp"
 
-	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit\ka-52-cockpit\ka-52-cockpit"
+	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit\ka-50-cockpit"
+
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_1.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_2.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_obicie.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_projektor.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_rura.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_skora.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_spod.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_szybka.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-50-cockpit\k50_cockpit_szyny.bmp"
+
+	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit\ka-52-cockpit"
 
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\HOKUM_COCKPIT_CLOTH.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\cockpit\ka-52-cockpit\HOKUM_COCKPIT_COLLECTIVE_BUTTON_LARGE.bmp"

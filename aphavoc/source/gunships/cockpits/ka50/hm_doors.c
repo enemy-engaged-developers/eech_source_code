@@ -76,26 +76,127 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_ka50_cockpits (void)
+#define CANOPY_DOOR_STATE_UNINITIALISED	((float) (-1000.0))
+
+static float aiming_state;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_ka50_canopy_doors(event* ev)
 {
-	initialise_ka50_lamps ();
+	if (aiming_state == CANOPY_DOOR_STATE_OPEN)
+		aiming_state = CANOPY_DOOR_STATE_CLOSED;
+	else
+		aiming_state = CANOPY_DOOR_STATE_OPEN;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void deinitialise_ka50_cockpits (void)
+static float get_canopy_doors_aiming_state (void)
 {
-	deinitialise_ka50_lamps ();
+	ASSERT (get_gunship_entity ());
+
+	ASSERT (current_flight_dynamics);
+
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		aiming_state = CANOPY_DOOR_STATE_CLOSED;
+
+	return (aiming_state);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_ka50_cockpits (void)
+void initialise_ka50_virtual_cockpit_canopy_doors (void)
 {
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) || !command_line_dynamics_engine_startup)
+		aiming_state = canopy_door_state = CANOPY_DOOR_STATE_CLOSED;
+	else
+		aiming_state = canopy_door_state = CANOPY_DOOR_STATE_OPEN;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void animate_ka50_virtual_cockpit_canopy_doors (void)
+{
+	int
+		ejected;
+
+	float
+		aiming_state;
+
+	object_3d_instance
+		*inst3d;
+
+	object_3d_sub_object_search_data
+		search;
+
+	ASSERT (virtual_cockpit_inst3d);
+	ASSERT (canopy_door_state <= CANOPY_DOOR_STATE_OPEN && canopy_door_state >= CANOPY_DOOR_STATE_CLOSED);
+
+	aiming_state = get_canopy_doors_aiming_state ();
+
+	if (aiming_state > canopy_door_state)
+	{
+		canopy_door_state += get_delta_time () * 0.5;
+
+		if (canopy_door_state > CANOPY_DOOR_STATE_OPEN)
+		{
+			canopy_door_state = CANOPY_DOOR_STATE_OPEN;
+		}
+	}
+	else if (aiming_state < canopy_door_state)
+	{
+		canopy_door_state -= get_delta_time () * 0.5;
+
+		if (canopy_door_state < CANOPY_DOOR_STATE_CLOSED)
+		{
+			canopy_door_state = CANOPY_DOOR_STATE_CLOSED;
+		}
+	}
+
+	animate_keyframed_sub_object_type (virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, canopy_door_state);
+
+	//
+	// keep external 3D model in sync
+	//
+
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+
+	ASSERT (inst3d);
+
+	animate_keyframed_sub_object_type (inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, canopy_door_state);
+
+	//
+	// ejected
+	//
+
+	ejected = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_EJECTED);
+
+	search.search_depth = 0;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		search.result_sub_object->visible_object = !ejected;
+	}
+
+	search.search_depth = 1;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		search.result_sub_object->visible_object = !ejected;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

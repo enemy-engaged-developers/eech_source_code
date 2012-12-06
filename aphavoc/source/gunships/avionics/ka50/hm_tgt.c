@@ -78,8 +78,6 @@
 
 void initialise_ka50_target_acquisition_systems (void)
 {
-	initialise_ka50_radar ();
-
 	initialise_ka50_eo ();
 
 	initialise_ka50_hms ();
@@ -91,8 +89,6 @@ void initialise_ka50_target_acquisition_systems (void)
 
 void deinitialise_ka50_target_acquisition_systems (void)
 {
-	deinitialise_ka50_radar ();
-
 	deinitialise_ka50_eo ();
 
 	deinitialise_ka50_hms ();
@@ -113,35 +109,11 @@ static void deselect_ka50_target_acquisition_system (target_acquisition_systems 
 			// laser is on in all modes but OFF in automatic mode
 			if (!command_line_manual_laser_radar)
 				set_laser_is_active(TRUE);
-			
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			deactivate_common_ground_radar ();
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			deactivate_common_air_radar ();
 
 			break;
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			deactivate_common_eo ();
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
@@ -199,33 +171,8 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 
 			set_gunship_target (NULL);
 
-			select_ka50_mfd_mode (MFD_MODE_OFF);
 			if (!command_line_manual_laser_radar)
-			{
 				set_laser_is_active(FALSE);
-			}
-
-			#if 0
-
-			hud_mode = HUD_MODE_NAVIGATION;
-
-			#endif
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			damaged = ka50_damage.radar;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			damaged = ka50_damage.radar;
 
 			break;
 		}
@@ -239,31 +186,13 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_ka50_mfd_mode (MFD_MODE_FLIR);
+				if (command_line_targeting_system_auto_page)
+					select_ka50_eo_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
 			damaged = ka50_damage.flir;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			if (!ka50_damage.llltv)
-			{
-				target_acquisition_system = system;
-
-				activate_common_eo ();
-
-				select_ka50_mfd_mode (MFD_MODE_LLLTV);
-
-				hud_mode = HUD_MODE_WEAPON;
-			}
-
-			damaged = ka50_damage.llltv;
 
 			break;
 		}
@@ -276,8 +205,6 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 				target_acquisition_system = system;
 
 				activate_common_hms ();
-
-				select_ka50_mfd_mode (MFD_MODE_OFF);
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -313,6 +240,11 @@ void update_ka50_target_acquisition_system (void)
 		}
 	}
 
+	if (ground_radar_is_active())
+		update_common_ground_radar(FALSE);
+	else if (air_radar_is_active())
+		update_common_air_radar();
+
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -325,18 +257,8 @@ void update_ka50_target_acquisition_system (void)
 
 			slave_common_eo_to_current_target ();
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
+			slave_ka50_eo_to_current_target ();
+
 			break;
 		}
 		////////////////////////////////////////
@@ -352,18 +274,6 @@ void update_ka50_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			update_ka50_eo (&ka50_llltv);
-
-			update_common_eo ();
-
-			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_LLLTV);
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_HMS:
 		////////////////////////////////////////
 		{
@@ -374,6 +284,8 @@ void update_ka50_target_acquisition_system (void)
 			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_HMS);
 
 			slave_common_eo_to_current_target ();
+
+			slave_ka50_eo_to_current_target ();
 
 			break;
 		}
@@ -391,7 +303,6 @@ void update_ka50_target_acquisition_system (void)
 			*target;
 
 		int
-			radar_on,
 			laser_on,
 			los_to_target;
 
@@ -400,52 +311,16 @@ void update_ka50_target_acquisition_system (void)
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 		//
-		// radar on/off
-		//
-
-		radar_on = FALSE;
-
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
-		{
-			if (ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
-		else if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
-		{
-			if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
-
-		if (radar_on != get_local_entity_int_value (source, INT_TYPE_RADAR_ON))
-		{
-			set_client_server_entity_int_value (source, INT_TYPE_RADAR_ON, radar_on);
-		}
-
-		//
 		// laser on/off
 		//
 
-		laser_on = laser_is_active() && !ka50_damage.laser_range_finder;
+		laser_on = laser_is_active() && !comanche_damage.laser_designator;
 
-/*
-		laser_on = FALSE;
-
-		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
-		{
-			if (!ka50_damage.laser_range_finder)
-			{
-				laser_on = TRUE;
-			}
-		}
-*/
 		if (laser_on != get_local_entity_int_value (source, INT_TYPE_LASER_ON))
 		{
 			set_client_server_entity_int_value (source, INT_TYPE_LASER_ON, laser_on);
 		}
+
 
 		//
 		// line of sight to target
@@ -461,15 +336,7 @@ void update_ka50_target_acquisition_system (void)
 
 					break;
 				}
-				case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-				case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-				{
-					los_to_target = get_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR);
-
-					break;
-				}
 				case TARGET_ACQUISITION_SYSTEM_FLIR:
-				case TARGET_ACQUISITION_SYSTEM_LLLTV:
 				{
 					los_to_target = TRUE;
 
@@ -510,135 +377,11 @@ void centre_ka50_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			centre_ka50_ground_radar ();
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			centre_ka50_air_radar ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		////////////////////////////////////////
 		{
 			centre_ka50_eo ();
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			centre_ka50_eo ();
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void toggle_ka50_show_allied_targets (void)
-{
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			air_radar.show_allied_targets ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void toggle_ka50_auto_target (void)
-{
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			ground_radar.auto_target ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			air_radar.auto_target ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
 			break;
 		}
 		////////////////////////////////////////
@@ -665,24 +408,7 @@ void toggle_ka50_lock_target (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			ground_radar.target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			air_radar.target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			toggle_eo_lock();
@@ -695,9 +421,9 @@ void toggle_ka50_lock_target (void)
 		{
 			hms_target_locked ^= 1;
 
-			if (hms_target_locked && !query_TIR_active())
+			if (hms_target_locked)
 			{
-				if (in_cockpit)
+				if (in_cockpit && !query_TIR_active())
 				{
 					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET);
 				}
@@ -730,24 +456,7 @@ void set_ka50_lock_target (int lock)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			ground_radar.target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			air_radar.target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			set_eo_lock(lock);
@@ -760,128 +469,6 @@ void set_ka50_lock_target (int lock)
 		{
 			hms_target_locked = lock;
 
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void ka50_target_acquisition_system_misc_function1 (void)
-{
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-			else
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-			else
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void ka50_target_acquisition_system_misc_function2 (void)
-{
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
 			break;
 		}
 	}

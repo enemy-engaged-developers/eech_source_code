@@ -99,7 +99,7 @@ int get_max_fov ( void )
 			max_fov = command_line_max_fov0;
 			break;
 		case GUNSHIP_TYPE_KA50:
-			max_fov = command_line_max_fov1;
+			max_fov = command_line_max_fov7;
 			break;
 		case GUNSHIP_TYPE_KIOWA:
 			max_fov = command_line_max_fov5;
@@ -434,11 +434,20 @@ static int view_mode_available (view_modes mode)
 			{
 				if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
 				{
-					if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
+					switch (get_global_gunship_type ())
 					{
-						if (get_crew_role () == CREW_ROLE_PILOT)
+					case GUNSHIP_TYPE_HOKUM:
+						{
+							if (get_crew_role () == CREW_ROLE_PILOT)
+							{
+								available = TRUE;
+							}
+							break;
+						}
+					case GUNSHIP_TYPE_KA50:
 						{
 							available = TRUE;
+							break;
 						}
 					}
 				}
@@ -1328,10 +1337,7 @@ static void enter_view_mode (view_modes mode)
 
 					pilot_head_pitch = pilot_head_pitch_values[mode];
 
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
+					mode = VIEW_MODE_VIRTUAL_COCKPIT;
 
 					break;
 				}

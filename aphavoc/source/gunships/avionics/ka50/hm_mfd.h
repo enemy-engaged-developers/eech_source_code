@@ -64,19 +64,77 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+enum KA50_MFD_MODES
+{
+	KA50_MFD_MODE_OFF,
+	KA50_MFD_MODE_DAMAGED,
+	KA50_MFD_MODE_FLIR,
+	KA50_MFD_MODE_TSD,
+	KA50_MFD_MODE_ASE,
+	KA50_MFD_MODE_WEAPON,
+	KA50_MFD_MODE_SYSTEM,
+	KA50_MFD_MODE_ENGINE,
+	KA50_MFD_MODE_FLIGHT,
+	KA50_MFD_MODE_MISSION,
+	NUM_KA50_MFD_MODES
+};
+
+typedef enum KA50_MFD_MODES ka50_mfd_modes;
+
+#define ka50_mfd_mode_valid(MODE) (((MODE) >= KA50_MFD_MODE_OFF) && ((MODE) < NUM_KA50_MFD_MODES))
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum KA50_MFD_LOCATIONS
+{
+	KA50_MFD_LOCATION_SHKVAL,
+	KA50_MFD_LOCATION_ABRIS,
+	NUM_KA50_MFD_LOCATIONS
+};
+
+typedef enum KA50_MFD_LOCATIONS ka50_mfd_locations;
+
+#define ka50_mfd_location_valid(LOCATION) (((LOCATION) >= KA50_MFD_LOCATION_SHKVAL) && ((LOCATION) < NUM_KA50_MFD_LOCATIONS))
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern void initialise_ka50_mfd (void);
 
 extern void deinitialise_ka50_mfd (void);
 
-extern void select_ka50_mfd_mode (mfd_modes mode);
+extern void draw_ka50_mfd (void);
 
-extern void draw_ka50_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw_translucent_background);
+extern void set_ka50_text_display_text (char *s1, char *s2, char *s3);
 
-extern void draw_ka50_mfd_on_texture (void);
+extern void draw_ka50_full_screen_display (void);
 
-extern void draw_overlaid_ka50_mfd (float x_org, float y_org, float size);
+extern void draw_overlaid_ka50_mfd (void);
 
-extern int get_ka50_eo_display_visible (void);
+extern void select_ka50_mfd_mode (ka50_mfd_modes mfd_mode, ka50_mfd_locations mfd_location);
+
+extern void select_next_ka50_mfd (ka50_mfd_locations mfd_location);
+
+extern void select_previous_ka50_mfd (ka50_mfd_locations mfd_location);
+
+extern void toggle_ka50_mfd_on_off (ka50_mfd_locations mfd_location);
+
+extern void select_next_ka50_tsd_ase_range (void);
+
+extern void select_previous_ka50_tsd_ase_range (void);
+
+extern void select_next_ka50_tsd_declutter_level (void);
+
+extern void select_previous_ka50_tsd_declutter_level (void);
+
+extern void toggle_ka50_ase_auto_page (void);
+
+extern void auto_page_ka50_ase_mfd (void);
+
+extern void select_ka50_eo_mfd (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

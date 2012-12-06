@@ -601,7 +601,9 @@ void initiate_aircraft_crew_ejection (entity *en)
 	// eject only implemented for Ka-52 Hokum B
 	//
 
-	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B)
+	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+	{
+	case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 	{
 		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
 		{
@@ -633,6 +635,40 @@ void initiate_aircraft_crew_ejection (entity *en)
 				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR);
 			}
 		}
+		break;
+	}
+	case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+	{
+		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+		{
+			if (en == get_gunship_entity ())
+			{
+				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+				exit_game (NULL);
+
+				if (select_view_menu_view_players_gunship ())
+				{
+					set_view_menu_display_visible_status (FALSE);
+
+					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+				}
+				else
+				{
+					debug_fatal ("Cannot view player's gunship");
+				}
+			}
+			else
+			{
+				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE);
+				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
+				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR);
+			}
+		}
+		break;
+	}
 	}
 }
 

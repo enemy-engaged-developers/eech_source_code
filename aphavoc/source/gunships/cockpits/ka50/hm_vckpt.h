@@ -77,9 +77,13 @@ extern void deinitialise_ka50_virtual_cockpit (void);
 
 extern void update_ka50_virtual_cockpit (void);
 
-extern void draw_ka50_internal_virtual_cockpit (unsigned int flags);
+extern void pre_render_ka50_virtual_cockpit_displays (void);
 
-extern void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic);
+extern void draw_ka50_virtual_cockpit (void);
+
+extern void get_ka50_crew_viewpoint (void);
+
+extern void get_ka50_display_viewpoint (view_modes mode);
 
 extern void damage_ka50_virtual_cockpit_main_rotors (int seed);
 

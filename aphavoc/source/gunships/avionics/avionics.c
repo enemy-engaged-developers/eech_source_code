@@ -411,18 +411,11 @@ void initialise_avionics (void)
 
 			initialise_ka50_mfd ();
 
-			initialise_ka50_ekran_display ();
-
 			initialise_ka50_target_acquisition_systems ();
 
 			initialise_ka50_lamp_avionics ();
 
 			initialise_ka50_threat_warning_system ();
-
-			// added by GCsDriver  08-12-2007
-			// Casm 10SEP05 Havoc Instruments - temporary used for Hind too
- 			initialise_havoc_instrument_colours ();
- 			initialise_havoc_instruments ();
 
 			//
 			// push events after avionics have been initialised
@@ -890,17 +883,11 @@ void deinitialise_avionics (void)
 
 			deinitialise_ka50_mfd ();
 
-			deinitialise_ka50_ekran_display ();
-
 			deinitialise_ka50_target_acquisition_systems ();
 
 			deinitialise_ka50_lamp_avionics ();
 
 			deinitialise_ka50_threat_warning_system ();
-
-			// added by GCsDriver  08-12-2007
-			// Casm 10SEP05 Havoc Instruments - temporary used for Hind
- 			deinitialise_havoc_instruments ();
 
 			break;
 		}
@@ -1181,10 +1168,6 @@ void update_avionics (void)
 			update_ka50_lamp_avionics ();
 
 			update_ka50_threat_warning_system ();
-
-			update_ka50_ekran_display ();
-
-			update_ka50_ekran_display ();
 
 			if (command_line_shared_mem_export != 0)
 				update_ka50_avionics_shared_mem ();	// Retro 8Mar2005

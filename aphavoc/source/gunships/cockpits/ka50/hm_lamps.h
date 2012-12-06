@@ -67,138 +67,31 @@
 struct KA50_LAMP_FLAGS
 {
 	unsigned int
-
-		//
-		// master caution
-		//
-
-		master_caution	:1,
-
-		//
-		// weapons management panel
-		//
-
-		weapons_management_lh_outer_pylon_green			:1,
-		weapons_management_lh_inner_pylon_green			:1,
-		weapons_management_rh_inner_pylon_green			:1,
-		weapons_management_rh_outer_pylon_green			:1,
-		weapons_management_armour_piercing_cannon_green	:1,
-		weapons_management_high_explosive_cannon_green	:1,
-		weapons_management_lh_outer_pylon_red				:1,
-		weapons_management_lh_inner_pylon_red				:1,
-		weapons_management_rh_inner_pylon_red				:1,
-		weapons_management_rh_outer_pylon_red				:1,
-		weapons_management_armour_piercing_cannon_red	:1,
-		weapons_management_high_explosive_cannon_red		:1,
-		weapons_management_chaff_green						:1,
-		weapons_management_flare_green						:1,
-		weapons_management_chaff_red							:1,
-		weapons_management_flare_red							:1,
-
-		//
-		// warning panel
-		//
-
-		warning_1	:1,
-		warning_2	:1,
-		warning_3	:1,
-		warning_4	:1,
-		warning_5	:1,
-		warning_6	:1,
-		warning_7	:1,
-		warning_8	:1,
-
-		//
-		// status panel
-		//
-
-		status_1		:1,
-		status_2		:1,
-		status_3		:1,
-		status_4		:1,
-		status_5		:1,
-		status_6		:1,
-		status_7		:1,
-		status_8		:1,
-		status_9		:1,
-		status_10	:1,
-		status_11	:1,
-		status_12	:1,
-		status_13	:1,
-		status_14	:1,
-		status_15	:1,
-		status_16	:1,
-		status_17	:1,
-		status_18	:1,
-
-		//
-		// threat warning display
-		//
-
-		threat_warning_radar_type_1						:1,
-		threat_warning_radar_type_2						:1,
-		threat_warning_radar_type_3						:1,
-		threat_warning_radar_type_4						:1,
-		threat_warning_radar_type_5						:1,
-		threat_warning_radar_type_6						:1,
-		threat_warning_bearing_lh_rear					:1,
-		threat_warning_bearing_rh_rear					:1,
-		threat_warning_close_range_1						:1,
-		threat_warning_close_range_2						:1,
-		threat_warning_close_range_3						:1,
-		threat_warning_close_range_4						:1,
-		threat_warning_close_range_5						:1,
-		threat_warning_close_range_6						:1,
-		threat_warning_close_range_7						:1,
-		threat_warning_close_range_8						:1,
-		threat_warning_close_range_9						:1,
-		threat_warning_close_range_10						:1,
-		threat_warning_close_range_11						:1,
-		threat_warning_close_range_12						:1,
-		threat_warning_close_range_13						:1,
-		threat_warning_close_range_14						:1,
-		threat_warning_close_range_15						:1,
-		threat_warning_bearing_lh_90_close_range		:1,
-		threat_warning_bearing_lh_67_close_range		:1,
-		threat_warning_bearing_lh_45_close_range		:1,
-		threat_warning_bearing_lh_22_close_range		:1,
-		threat_warning_bearing_rh_22_close_range		:1,
-		threat_warning_bearing_rh_45_close_range		:1,
-		threat_warning_bearing_rh_67_close_range		:1,
-		threat_warning_bearing_rh_90_close_range		:1,
-		threat_warning_bearing_lh_90						:1,
-		threat_warning_bearing_lh_67						:1,
-		threat_warning_bearing_lh_45						:1,
-		threat_warning_bearing_lh_22						:1,
-		threat_warning_bearing_rh_22						:1,
-		threat_warning_bearing_rh_45						:1,
-		threat_warning_bearing_rh_67						:1,
-		threat_warning_bearing_rh_90						:1,
-		threat_warning_missile_below						:1,
-		threat_warning_missile_above						:1,
-		threat_warning_missile_lh_lock					:1,
-		threat_warning_missile_rh_lock					:1,
-		threat_warning_bearing_lh_rear_close_range	:1,
-		threat_warning_bearing_rh_rear_close_range	:1,
-
-		//
-		// radio
-		//
-
-		radio	:1,
-
-		//
-		// oil gauges
-		//
-
-		lh_engine_oil_pressure_normal		:1,
-		rh_engine_oil_pressure_normal		:1,
-		lh_engine_oil_pressure_low			:1,
-		rh_engine_oil_pressure_low			:1,
-		lh_engine_oil_temperature_normal	:1,
-		rh_engine_oil_temperature_normal	:1,
-		lh_engine_oil_temperature_high	:1,
-		rh_engine_oil_temperature_high	:1;
+		master_caution				:1,
+		left_engine_fire			:1,
+		apu_fire						:1,
+		right_engine_fire			:1,
+		fire_extinguiser			:1,
+		hydraulic_pressure		:1,
+		oil_pressure				:1,
+		oil_temperature			:1,
+		overtorque					:1,
+		rotor_rpm					:1,
+		fuel_low						:1,
+		rotor_brake					:1,
+		wheel_brake					:1,
+		navigation_lights			:1,
+		hover_hold					:1,
+		altitude_hold				:1,
+		auto_pilot					:1,
+		laser							:1,
+		radar_jammer				:1,
+		ir_jammer					:1,
+		auto_counter_measures	:1,
+		ase_auto_page		 		:1,
+		gear_damaged				:1,
+		gear_status					:1,
+		gear_red,					:1;
 };
 
 typedef struct KA50_LAMP_FLAGS ka50_lamp_flags;
@@ -216,21 +109,9 @@ extern ka50_lamp_flags
 
 extern void initialise_ka50_lamps (void);
 
-extern void draw_ka50_weapons_management_panel_lamps (cockpit_panels panel);
+extern void deinitialise_ka50_lamps (void);
 
-extern void draw_ka50_status_panel_lamps (cockpit_panels panel);
-
-extern void draw_ka50_threat_warning_display (cockpit_panels panel);
-
-extern void draw_ka50_master_caution_lamp (cockpit_panels panel);
-
-extern void draw_ka50_warning_panel_lamps (cockpit_panels panel);
-
-extern void draw_ka50_radio_lamp (cockpit_panels panel);
-
-extern void draw_ka50_oil_gauges (cockpit_panels panel);
-
-extern void draw_overlaid_ka50_threat_warning_display (int x_org, int y_org);
+extern void draw_ka50_virtual_cockpit_lamps (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

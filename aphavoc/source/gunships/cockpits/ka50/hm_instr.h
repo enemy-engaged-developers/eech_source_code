@@ -64,49 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void initialise_ka50_instrument_colours (void);
-
-extern void set_ka50_instrument_colours (void);
-
-extern void draw_ka50_barometric_altimeter (cockpit_panels panel);
-
-extern void draw_ka50_airspeed_indicator (cockpit_panels panel);
-
-extern void draw_ka50_main_rotor_rpm_indicator (cockpit_panels panel);
-
-extern void draw_ka50_g_meter (cockpit_panels panel);
-
-extern void draw_ka50_engine_torque_indicator (cockpit_panels panel);
-
-extern void draw_ka50_engine_temperature_indicator (cockpit_panels panel);
-
-extern void draw_ka50_engine_rpm_indicator (cockpit_panels panel);
-
-extern void draw_ka50_engine_temperature_and_rpm_indicator_ticks (cockpit_panels panel);
-
-extern void draw_ka50_vertical_speed_indicator (cockpit_panels panel);
-
-extern void draw_ka50_clock (cockpit_panels panel);
-
-extern void draw_ka50_radar_altimeter (cockpit_panels panel);
-
-extern void draw_ka50_fuel_gauge (cockpit_panels panel);
-
-extern void draw_ka50_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel);
-
-extern void draw_ka50_fixed_cockpit_hsi_waypoint_identifier (cockpit_panels panel);
-
-extern void get_ka50_virtual_cockpit_adi_angles (matrix3x3 attitude, float *heading, float *pitch, float *roll);
-
-extern void get_ka50_virtual_cockpit_hsi_needle_values (float *direction_finder, float *flight_path, float *drift);
-
-// added by GCsDriver  08-12-2007
-// Casm 10SEP05 Havoc Instruments
-extern void initialise_havoc_instruments (void);
-
-extern void deinitialise_havoc_instruments (void);
-
-extern void draw_havoc_virtual_cockpit_instruments_on_texture (void);
+extern void draw_ka50_virtual_cockpit_instruments (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

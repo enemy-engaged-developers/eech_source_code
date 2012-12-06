@@ -593,11 +593,9 @@ void gunships_button_function (ui_object *obj, void *arg)
 			break;
 #endif
 		case GUNSHIP_TYPE_BLACKHAWK:
-#ifdef DEBUG
 			set_free_flight_gunship_type(GUNSHIP_TYPE_KA50);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
-#endif
 		case GUNSHIP_TYPE_KA50:
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HOKUM);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;

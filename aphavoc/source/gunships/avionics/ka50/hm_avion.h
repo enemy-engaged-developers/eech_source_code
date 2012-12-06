@@ -70,8 +70,6 @@
 
 #include "hm_dam.h"
 
-#include "hm_ekran.h"
-
 #include "hm_eo.h"
 
 #include "hm_hms.h"
@@ -79,8 +77,6 @@
 #include "hm_hud.h"
 
 #include "hm_mfd.h"
-
-#include "hm_radar.h"
 
 #include "hm_tgt.h"
 
