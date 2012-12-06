@@ -9,4 +9,5 @@ typedef void* cockpit_panels;
 #include <gunships/cockpits/blackhawk/bh_lamps.h>
 #include <gunships/cockpits/ka50/hm_lamps.h>
 #include <gunships/cockpits/ah64a/ah_lamps.h>
+#include <gunships/cockpits/kiowa/ki_lamps.h>
 #include <gunships/cockpits/default/df_lamps.h>
