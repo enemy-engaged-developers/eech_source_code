@@ -844,6 +844,8 @@ static const struct config_option options[] =
 		SPEC2(WIDEVIEW_KIOWA_PILOT, set_position, get_position) },
 	{  "kiowa_copilot", "", "wideview co-pilot position",
 		SPEC2(WIDEVIEW_KIOWA_COPILOT, set_position, get_position) },
+	{  "ka50_pilot", "", "wideview pilot position",
+		SPEC2(WIDEVIEW_KA50_PILOT, set_position, get_position) },
 	{  "hud_code", "", "hud code for 4 gunships",
 		SPEC(set_hud_code, get_hud_code) },
 	{ "wobbly-camera", "", "Make external cameras move wobbly and smoother (0 = off, 1 = on) (def = 1)",
@@ -1253,6 +1255,12 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.y = 0.0;
 		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.z = 0.0;
 		wide_cockpit_position[WIDEVIEW_KIOWA_COPILOT].d.p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_KA50_PILOT].cockpit = "Ka-50";
+		wide_cockpit_position[WIDEVIEW_KA50_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_KA50_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_KA50_PILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_KA50_PILOT].d.p = -5.0;
 
 	for (count = 0; count < NUM_WIDEVIEW_NRS; count++)
 	{
