@@ -3279,6 +3279,14 @@ SectionEnd
 
 Section "UI Screens" SectionUIScreens
 
+	SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\dfang's_UI"
+
+	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\dfang's_UI\Combat.psd"
+	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\dfang's_UI\Exit.psd"
+	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\dfang's_UI\Main.psd"
+	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\dfang's_UI\Pilots.psd"
+	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\dfang's_UI\Setup.psd"
+
 	SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\GCsDriver_Apache"
 
 	File "${EE_SCR_DIR}\cohokum\graphics\ui\cohokum\GCsDriver_Apache\Combat.psd"
