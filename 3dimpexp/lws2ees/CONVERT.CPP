@@ -253,6 +253,9 @@ class Convert
          CHECK(p[5], "f")
         }
       }
+
+      if (itor->motion.channels[0].keys.size() > 1 && itor->search.empty())
+       warning("Object %s has animation but has no labels", itor->print_name.c_str());
     }
 
     HierObj* hierobj = new HierObj;
