@@ -1349,7 +1349,7 @@ void initialize_options ( void )
 
 // Casm 03MAR10 Canopy sound amplification control
 	memset ( canopy_sound_amp, 0, sizeof ( canopy_sound_amp ) );
-	set_canopy_amp ( NULL, "450,50,375;80,20,100;230,50,100;200,50,100;180,50,100;50,70,100;120,30,100;70,30,100;" );
+	set_canopy_amp ( NULL, "450,90,375;15,15,100;120,80,100;10,10,100;240,10,100;20,20,100;180,20,100;180,10,100;" );
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 	command_line_wut = file_exist ( WUT_filename );
