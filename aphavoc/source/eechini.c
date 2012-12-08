@@ -720,7 +720,7 @@ static const struct config_option options[] =
 		INT(command_line_pause_server) },
 	{ "game_type", "command_line_game_initialisation_phase_game_type", "available game types (1 = Freeflight, 2 = Campaign, 3 = Skirmish) (def = 0)",
 		INT(command_line_game_initialisation_phase_game_type) },
-	{ "gunship_type", "command_line_game_initialisation_phase_gunship_type", "available gunship types [NOTE!] dummy value (0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum) (def = 8)",
+	{ "gunship_type", "command_line_game_initialisation_phase_gunship_type", "available gunship types (0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum, ...)",
 		INT(command_line_game_initialisation_phase_gunship_type) },
 	{ "path", "command_line_game_initialisation_phase_path", "path to map/campaign/skirmish folder",
 		STR(command_line_game_initialisation_phase_path) },
