@@ -479,6 +479,13 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\RAH-66 Comanche\RAH66_TAILWHEEL.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\RAH-66 Comanche\RAH66_TAILWHEEL_STRUT.EEO"
 
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects\UH-60 Blackhawk"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\UH-60 Blackhawk\UH60_blackhawk_model.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\UH-60 Blackhawk\UH60_l_doors.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\UH-60 Blackhawk\UH60_r_doors.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\UH-60 Blackhawk\UH60_BLACKHAWK.EES"
+
 	SetOutPath "$INSTDIR\cohokum\audio"
 
 	File "${EE_AUDIO_DIR}\cohokum\audio\a10.pcm"
@@ -917,6 +924,12 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\Apache_gray.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\B8V_POD_END.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\B8V_POD_SIDE.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk-floor.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk-seats1.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk-side.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk-side-d.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk-side-w.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\blackhawk_cockpit_mini.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\BMP2_COG-D.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\BMP2_COG-W.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\BMP2_COG_BLUR-D.bmp"
