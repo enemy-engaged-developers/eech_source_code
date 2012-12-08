@@ -311,9 +311,9 @@ void get_hind_virtual_cockpit_hsi_needle_values (float *direction_finder, float 
 
 	get_hsi_needle_values (&direction_finder_needle_value, &flight_path_needle_value, &drift_needle_value);
 
-	*direction_finder += bound(-direction_finder_needle_value - *direction_finder, -max_movement, max_movement);
+	modify_angle(direction_finder, -direction_finder_needle_value, max_movement);
 
-	*flight_path += bound(-direction_finder_needle_value - *flight_path, -max_movement, max_movement);
+	modify_angle(flight_path, -flight_path_needle_value, max_movement);
 
 	*drift = -drift_needle_value;
 }
@@ -432,7 +432,7 @@ void get_mi24_engine_select_switch_value(float* current_val)
 	else if (current_flight_dynamics->right_engine_starter_active)
 		val = -rad(40.0);
 
-	*current_val += bound(val - *current_val, -max_step, max_step);
+	modify_angle(current_val, val, max_step);
 }
 
 float get_mi24_rpm_needle_value(float rpm)
@@ -553,9 +553,9 @@ void get_mi24_hydraulic_pressure_values(float* gear, float* primary, float* seco
 		primary_psi -= get_hydraulic_pressure() * rad(115.0);
 	}
 
-	*gear += bound(gear_psi - *gear, -max_movement, max_movement);
-	*primary += bound(primary_psi - *primary, -max_movement, max_movement);
-	*secondary += bound(secondary_psi - *secondary, -max_movement, max_movement);
+	modify_angle(gear, gear_psi, max_movement);
+	modify_angle(primary, primary_psi, max_movement);
+	modify_angle(secondary, secondary_psi, max_movement);
 }
 
 void update_mi24_waypoint_indicator(float* indicator)
@@ -570,7 +570,7 @@ void update_mi24_waypoint_indicator(float* indicator)
 
 		pitch += (wpnt - 'A') * rad(-360.0 / 26.0);
 
-		*indicator += bound(pitch - *indicator, -max_movement, max_movement);
+		modify_angle(indicator, pitch, max_movement);
 	}
 }
 
@@ -624,10 +624,10 @@ void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_
 		rpres;
 
 	temp = bound(current_flight_dynamics->left_engine_temp.value * 0.001, 0.0, 1.0);
-	*left_temp += bound((rad(100) - rad(70) * temp) - *left_temp, -max_temp_movement, max_temp_movement);
+	modify_angle(left_temp, rad(100) - rad(70) * temp, max_temp_movement);
 
 	temp = bound(current_flight_dynamics->right_engine_temp.value * 0.001, 0.0, 1.0);
-	*right_temp += bound((rad(100) - rad(70) * temp) - *right_temp, -max_temp_movement, max_temp_movement);
+	modify_angle(right_temp, rad(100) - rad(70) * temp, max_temp_movement);
 
 	if (electrical_system_active())
 	{
@@ -652,6 +652,6 @@ void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_
 	else
 		lpres = rpres = 0.0;
 
-	*left_pressure += bound((rad(-150) + rad(100) * lpres) - *left_pressure, -max_pressure_movement*0.9, max_pressure_movement);
-	*right_pressure += bound((rad(-150) + rad(100) * rpres) - *right_pressure, -max_pressure_movement, max_pressure_movement*0.9);
+	modify_angle(left_pressure, rad(-150) + rad(100) * lpres, max_pressure_movement);
+	modify_angle(right_pressure, rad(-150) + rad(100) * rpres, max_pressure_movement);
 }

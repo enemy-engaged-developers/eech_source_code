@@ -159,6 +159,8 @@ static object_3d_sub_instance
 	*clock_second_hand,
 	*waypoint_indicator,
 	*map_background,
+	*map_scale,
+	*map_caret,
 
 	*left_engine_oil_pressure,
 	*left_engine_oil_temperature,
@@ -354,6 +356,8 @@ void initialise_hind_3d_cockpit (void)
 	hud_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FL);
 	map_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FR);
 	map_background = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_CRT_CAMERA);
+	map_scale = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_MAP_SCALE);
+	map_caret = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_MAP_CARET);
 
 	high_detail = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
 	door_high_detail = find_sub_object(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
@@ -687,7 +691,7 @@ static void animate_rotor_brake(int enabled)
 	if (enabled)
 		brake_angle = rad(-35.0);
 
-	rotor_brake->relative_pitch += bound(brake_angle - rotor_brake->relative_pitch, -max_movement, max_movement);
+	modify_angle(&rotor_brake->relative_pitch, brake_angle, max_movement);
 }
 
 static void animate_electrical_instruments(void)
@@ -699,7 +703,7 @@ static void animate_electrical_instruments(void)
 	if (electrical_system_active())
 		angle = rad(-60.0);
 
-	left_battery_ammeter->relative_roll += bound(angle - left_battery_ammeter->relative_roll, -max_movement, max_movement);
+	modify_angle(&left_battery_ammeter->relative_roll, angle, max_movement);
 	right_battery_ammeter->relative_roll = left_battery_ammeter->relative_roll;
 	apu_ammeter->relative_roll = left_battery_ammeter->relative_roll;
 	voltmeter->relative_roll = left_battery_ammeter->relative_roll;
@@ -715,7 +719,7 @@ static void animate_collective_throttle(void)
 				/ (current_flight_dynamics->main_rotor_max_rpm - current_flight_dynamics->main_rotor_idle_rpm),
 		angle = rad(-65.0) * throttle_position;
 
-	collective_throttle->relative_roll += bound(angle - collective_throttle->relative_roll, -max_movement, max_movement);
+	modify_angle(&collective_throttle->relative_roll, angle, max_movement);
 }
 
 static void animate_gear_lever(void)
@@ -729,7 +733,7 @@ static void animate_gear_lever(void)
 	if (uc_state == AIRCRAFT_UNDERCARRIAGE_UP || uc_state == AIRCRAFT_UNDERCARRIAGE_RAISING)
 		angle = rad(75.0);
 
-	gear_lever->relative_roll += bound(angle - gear_lever->relative_roll, -max_movement, max_movement);
+	modify_angle(&gear_lever->relative_roll, angle, max_movement);
 }
 
 static void animate_weapon_switch(entity_sub_types selected_weapon)
@@ -758,7 +762,7 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 		break;
 	}
 
-	weapon_select_switch->relative_roll += bound(angle - weapon_select_switch->relative_roll, -max_movement, max_movement);
+	modify_angle(&weapon_select_switch->relative_roll, angle, max_movement);
 }
 
 void toggle_mi24_cockpit_doors(void)
@@ -1331,6 +1335,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 			animate_weapon_switch(selected_weapon);
 			rocket_salvo_switch->relative_pitch = get_mi24_rocket_salvo_switch_value();
+			get_mi24_map_caret_position(&map_scale->relative_position.x, &map_caret->relative_position.z);
 
 			{
 				int i;
@@ -2191,7 +2196,7 @@ void animate_shutoff_valve(object_3d_sub_instance* inst, int closed)
 	if (!closed)  // idle at -45 deg
 		valve_angle = rad(45.0);
 
-	inst->relative_pitch += bound(valve_angle - inst->relative_pitch, -max_movement, max_movement);
+	modify_angle(&inst->relative_pitch, valve_angle, max_movement);
 }
 
 //ATARIBABY 27/12/2008 move to target value by defined rate

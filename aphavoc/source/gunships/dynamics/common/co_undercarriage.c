@@ -359,7 +359,6 @@ static void update_suspension(void)
 				{
 					float
 						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0f)) * 0.5,
-						angle_diff,
 						new_angle;
 
 
@@ -377,17 +376,7 @@ static void update_suspension(void)
 					else
 						new_angle = -90.0;
 
-					angle_diff = new_angle - point->turn_angle;
-					if (angle_diff > rad(180.0))
-						angle_diff -= rad(360.0);
-					else if (angle_diff < rad(-180.0))
-						angle_diff += rad(360);
-
-					point->turn_angle += bound(angle_diff, -max_turn_rate, max_turn_rate);
-					if (point->turn_angle > rad(180.0))
-						point->turn_angle -= rad(360.0);
-					else if (point->turn_angle < rad(-180.0))
-						point->turn_angle += rad(360);
+					modify_angle(&point->turn_angle, new_angle, max_turn_rate);
  				}
 			}
 			else
@@ -397,11 +386,10 @@ static void update_suspension(void)
 				if (point->can_turn)
 				{
 					float
-						turn_rate = get_model_delta_time() * rad(180.0),
-						angle_diff = 0.0 - point->turn_angle;
+						turn_rate = get_model_delta_time() * rad(180.0);
 
 					// straighten wheel
-					point->turn_angle += bound(angle_diff, -turn_rate, turn_rate);
+					modify_angle(&point->turn_angle, 0.0f, turn_rate);
 				}
 			}
 		}

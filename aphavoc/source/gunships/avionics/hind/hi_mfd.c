@@ -98,9 +98,6 @@ static mfd_modes
 
 #define EO_VIEWPORT_SIZE   			(256)
 
-#define MAP_DISPLAY_WIDTH  0.5
-#define MAP_DISPLAY_HEIGHT 0.35
-
 static env_2d
 	*mfd_env;
 
@@ -131,9 +128,6 @@ static int
 
 rgb_colour
 	clear_mfd_colour;
-
-static object_3d*
-	map_display_model;
 
 static object_3d_short_textured_point
 	*upper_left_texture_uv = NULL,
@@ -462,8 +456,8 @@ void initialise_hind_mfd (void)
 	{
 		mfd_viewport_size = MFD_VIEWPORT_SIZE;
 		mfd_texture_size = MFD_TEXTURE_SIZE;
-		map_range = 50000.0;
-		map_scale = 1.0 / (50000.0 * ROOT2);
+		map_range = 25000.0;
+		map_scale = ROOT2 / 25000.0;
 	}
 	else
 	{
@@ -489,44 +483,6 @@ void initialise_hind_mfd (void)
 	eo_texture_screen = create_system_texture_screen (EO_VIEWPORT_SIZE, EO_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
 	initialize_colours();
-
-	if (objects_3d_scene_database[OBJECT_3D_MI24V_MAP_DISPLAY].index)
-	{
-		map_display_model = &objects_3d_data[objects_3d_scene_database[OBJECT_3D_MI24V_MAP_DISPLAY].index];
-
-		if (map_display_model->surfaces[0].texture_index)
-		{
-			unsigned i;
-
-			if (map_display_model->surfaces[0].number_of_faces != 1)
-				debug_fatal("map with more than one face!");
-
-			if (map_display_model->faces[0].number_of_points != 4)
-				debug_fatal("map polygon with more than four points!");
-
-			for (i=0; i < map_display_model->faces[0].number_of_points; i++)
-			{
-				object_3d_short_textured_point* uv = &map_display_model->surface_texture_points[i];
-
-				if (uv->u < 0.5)  // left
-					if (uv->v < 0.5)
-						upper_left_texture_uv = uv;
-					else
-						lower_left_texture_uv = uv;
-				else // right
-					if (uv->v < 0.5)
-						upper_right_texture_uv = uv;
-					else
-						lower_right_texture_uv = uv;
-			}
-			if (!upper_left_texture_uv || !lower_left_texture_uv || !upper_right_texture_uv || !lower_right_texture_uv)
-				debug_fatal("could not find all corners of map display");
-		}
-		else
-			debug_fatal("Untextured HUD display");
-	}
-	else
-		map_display_model = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -599,7 +555,7 @@ static void draw_layout_grid (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hind_map_waypoints_changed()
+void hind_map_waypoints_changed(void)
 {
 	map_up_to_date = FALSE;
 }
@@ -608,78 +564,25 @@ void hind_map_waypoints_changed()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int scroll_map_to_uv(float u, float v)
-{
-	if (!map_display_model)
-		return FALSE;
-
-	upper_left_texture_uv->u = u - 0.5 * MAP_DISPLAY_WIDTH;
-	upper_left_texture_uv->v = v - 0.5 * MAP_DISPLAY_HEIGHT;
-	upper_right_texture_uv->u = u + 0.5 * MAP_DISPLAY_WIDTH;
-	upper_right_texture_uv->v = v - 0.5 * MAP_DISPLAY_HEIGHT;
-
-	lower_left_texture_uv->u = u - 0.5 * MAP_DISPLAY_WIDTH;
-	lower_left_texture_uv->v = v + 0.5 * MAP_DISPLAY_HEIGHT;
-	lower_right_texture_uv->u = u + 0.5 * MAP_DISPLAY_WIDTH;
-	lower_right_texture_uv->v = v + 0.5 * MAP_DISPLAY_HEIGHT;
-
-	if (upper_left_texture_uv->u < 0.0 || upper_left_texture_uv->v < 0.0)
-		return FALSE;
-
-	if (lower_right_texture_uv->u > 1.0 || lower_right_texture_uv->v > 1.0)
-		return FALSE;
-
-	return TRUE;
-}
-
-static void recentre_map_texture(vec3d* position)
-{
-	map_centre_position = *position;
-
-	scroll_map_to_uv(0.5, 0.5);
-}
-
-static int scroll_map(vec3d* position)
-{
-	float
-		u = 0.5 + ((position->x - map_centre_position.x) * map_scale),
-		v = 0.5 - ((position->z - map_centre_position.z) * map_scale);
-
-	if (hind_damage.navigation_computer)
-		return TRUE;
-	else
-		return scroll_map_to_uv(u, v);
-}
-
 #define RADIUS	(ROOT2 - 0.05)
 
 static void draw_map_display(void)
 {
-	entity_sides
-		source_side;
-
 	float
 		u,
 		v,
-		scale,
-		x_origin,
-		y_origin,
-		source_heading;
+		scale;
 
 	entity
-		*source,
-		*source_target;
+		*source;
 
 	vec3d
 		*source_position;
 
 	source = get_gunship_entity ();
-	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
-	source_heading = 0.0;  // hind map doesn't rotate
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-	source_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-	recentre_map_texture(source_position);
+	map_centre_position = *source_position;
 
 	scale = RADIUS / map_range;
 
@@ -687,10 +590,7 @@ static void draw_map_display(void)
 	// match ground radar origin
 	//
 
-	x_origin = 0.0;
-	y_origin = 0.0;
-
-	get_2d_float_screen_coordinates (x_origin, y_origin, &u, &v);
+	get_2d_float_screen_coordinates (0.0f, 0.0f, &u, &v);
 
 	u -= mfd_viewport_x_min;
 	v -= mfd_viewport_y_min;
@@ -702,8 +602,8 @@ static void draw_map_display(void)
 	////////////////////////////////////////
 
 	{
-		draw_tsd_terrain_map (mfd_env, -y_origin, map_range, scale, source_position, source_heading, TRUE);
-		draw_tsd_contour_map (mfd_env, -y_origin, map_range, scale, source_position, source_heading, TRUE, TRUE);
+		draw_tsd_terrain_map (mfd_env, 0.0f, map_range, scale, source_position, 0.0f, TRUE);
+		draw_tsd_contour_map (mfd_env, 0.0f, map_range, scale, source_position, 0.0f, TRUE, TRUE);
 	}
 
 	// grid and towns
@@ -886,7 +786,7 @@ void draw_hind_mfd_on_texture (void)
 	//
 	////////////////////////////////////////
 
-	if (!map_up_to_date || !scroll_map(get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION)))
+	if (!hind_damage.navigation_computer && !map_up_to_date)
 	{
 		set_active_screen (mfd_texture_screen);
 
@@ -896,7 +796,7 @@ void draw_hind_mfd_on_texture (void)
 
 			draw_layout_grid ();
 
-			draw_map_display();
+			draw_map_display ();
 
 			flush_screen_texture_graphics (mfd_texture_screen);
 
@@ -1590,6 +1490,30 @@ int get_hind_eo_display_visible (void)
 		(mfd_mode == MFD_MODE_LLLTV)
 	);
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void get_mi24_map_caret_position(float *x, float *z)
+{
+	if (!hind_damage.navigation_computer)
+	{
+		vec3d
+			*position;
+		float
+			nx,
+			nz;
+
+		position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+
+		nx = (position->x - map_centre_position.x) * map_scale * 0.125,
+		nz = (position->z - map_centre_position.z) * map_scale * 0.115;
+
+		*x = bound(nx, -0.12, 0.12);
+		*z = bound(nz, -0.075, 0.065);
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
