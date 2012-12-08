@@ -2454,7 +2454,7 @@ static void load_from_file ( int sound_sample_index, int type, int rate, int siz
 	unsigned char
 		*ptr;
 
-	application_sound_effects[sound_sample_index].rate = rate;
+	application_sound_effects[sound_sample_index].rate = rate * ( type == SAMPLE_TYPE_MONO_16BIT ? 2 : 1 );
 	application_sound_effects[sound_sample_index].size = size;
 
 	create_source_sound_sample ( sound_sample_index, type, rate, size );
