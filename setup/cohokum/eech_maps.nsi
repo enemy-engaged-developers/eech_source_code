@@ -945,43 +945,43 @@ Section "EECH ${VERSION} maps" SectionMaps
 
 	SetOutPath "$INSTDIR\common\maps\map32"
 
-	File "$INSTDIR\common\maps\map32\mapinfo.txt"
+	File "${EE_MAPS_DIR}\common\maps\map32\mapinfo.txt"
 
 	SetOutPath "$INSTDIR\common\maps\map32\camp01"
 
-	File "$INSTDIR\common\maps\map32\camp01\Europe.bin"
-	File "$INSTDIR\common\maps\map32\camp01\Europe.chc"
-	File "$INSTDIR\common\maps\map32\camp01\Europe.scr"
-	File "$INSTDIR\common\maps\map32\camp01\Europe.SID"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp01\Europe.bin"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp01\Europe.chc"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp01\Europe.scr"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp01\Europe.SID"
 
 	SetOutPath "$INSTDIR\common\maps\map32\camp02"
 
-	File "$INSTDIR\common\maps\map32\camp02\Europe.bin"
-	File "$INSTDIR\common\maps\map32\camp02\Europe.chc"
-	File "$INSTDIR\common\maps\map32\camp02\Europe.scr"
-	File "$INSTDIR\common\maps\map32\camp02\Europe.SID"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp02\Europe.bin"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp02\Europe.chc"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp02\Europe.scr"
+	File "${EE_MAPS_DIR}\common\maps\map32\camp02\Europe.SID"
 
 	SetOutPath "$INSTDIR\common\maps\map32\ROUTE"
 
-	File "$INSTDIR\common\maps\map32\ROUTE\BRIDGE.DAT"
-	File "$INSTDIR\common\maps\map32\ROUTE\BRIDGE.POP"
-	File "$INSTDIR\common\maps\map32\ROUTE\POPNAME.DAT"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADDATA.DAT"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADDATA.NDE"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADDATA.WP"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADS.DAT"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADS.NDE"
-	File "$INSTDIR\common\maps\map32\ROUTE\ROADS.WP"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\BRIDGE.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\BRIDGE.POP"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\POPNAME.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADDATA.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADDATA.NDE"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADDATA.WP"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADS.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADS.NDE"
+	File "${EE_MAPS_DIR}\common\maps\map32\ROUTE\ROADS.WP"
 
 	SetOutPath "$INSTDIR\common\maps\map32\terrain"
 
-	File "$INSTDIR\common\maps\map32\terrain\2dmapcol.psd"
-	File "$INSTDIR\common\maps\map32\terrain\default.rgb"
-	File "$INSTDIR\common\maps\map32\terrain\default.sec"
-	File "$INSTDIR\common\maps\map32\terrain\terrain.ffp"
-	File "$INSTDIR\common\maps\map32\terrain\terrain.sim"
-	File "$INSTDIR\common\maps\map32\terrain\tree_pos.dat"
-	File "$INSTDIR\common\maps\map32\terrain\tree_pos.sec"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\2dmapcol.psd"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\default.rgb"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\default.sec"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\terrain.ffp"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\terrain.sim"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\tree_pos.dat"
+	File "${EE_MAPS_DIR}\common\maps\map32\terrain\tree_pos.sec"
 
 	SetOutPath "$INSTDIR\common\maps\map35"
 
