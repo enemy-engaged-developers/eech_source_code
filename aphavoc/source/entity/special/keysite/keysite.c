@@ -1380,11 +1380,11 @@ void capture_keysite (entity *en, entity_sides new_side)
 						member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 					}
 	
-					set_client_server_entity_int_value (group, INT_TYPE_GROUP_CALLSIGN, assign_group_callsign (group));
+					free_group_callsign (group);
 	
 					set_client_server_entity_int_value (group, INT_TYPE_SIDE, new_side);
-	
-					assign_group_callsign (group);
+
+					set_client_server_entity_int_value (group, INT_TYPE_GROUP_CALLSIGN, assign_group_callsign (group));
 				}
 			}
 			
