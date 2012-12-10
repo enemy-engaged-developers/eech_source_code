@@ -2662,6 +2662,8 @@ int get_object_shadow_approximation_number ( int scene_index, float distance, in
 		else
 		{
 
+			object_approximation_level = min ( object_approximation_level, total - 1 );
+
 			index = objects_3d_scene_database[scene_index].approximations[object_approximation_level].object_number;
 		}
 	}
