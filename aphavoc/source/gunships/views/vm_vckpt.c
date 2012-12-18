@@ -182,6 +182,15 @@ static float get_rotate_left_limit (void)
 			break;
 		}
 		////Moje 030816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT1);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -190,8 +199,6 @@ static float get_rotate_left_limit (void)
 			break;
 		}
 		////////////////////////////////////////
-		////////////////////////////////////////
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -291,6 +298,14 @@ static float get_rotate_right_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT1);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -299,7 +314,6 @@ static float get_rotate_right_limit (void)
 			break;
 		}
 		////////////////////////////////////////
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -399,6 +413,14 @@ static float get_rotate_up_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			limit = rad (MAX_LOOK_ANGLE_UP1);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -407,7 +429,6 @@ static float get_rotate_up_limit (void)
 			break;
 		}
 		////////////////////////////////////////
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -505,6 +526,14 @@ static float get_rotate_down_limit (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -513,7 +542,6 @@ static float get_rotate_down_limit (void)
 			break;
 		}
 		////////////////////////////////////////
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		////////////////////////////////////////
 		{
@@ -857,7 +885,6 @@ void get_pilot_head_viewpoint (void)
 		{
 			////////////////////////////////////////
 			// JB 030313 Fly any aircraft
-			case GUNSHIP_TYPE_VIPER:
 			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
@@ -1123,6 +1150,14 @@ void get_pilot_head_viewpoint (void)
 				break;
 			}
 			////Moje 030816 End
+			case GUNSHIP_TYPE_VIPER:
+			////////////////////////////////////////
+			{
+//VJ#	this does the proper viepoint?
+				get_viper_crew_viewpoint ();
+
+				break;
+			}
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
@@ -1441,6 +1476,14 @@ void draw_virtual_cockpit_3d_view (void)
 		////////////////////////////////////////
 		{
 			pre_render_hokum_virtual_cockpit_displays ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			pre_render_viper_virtual_cockpit_displays ();
 
 			break;
 		}
@@ -1890,6 +1933,34 @@ void draw_virtual_cockpit_3d_view (void)
 			break;
 		}
 		////Moje 030816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_viper_virtual_cockpit ();
+
+			if (!get_global_draw_cockpit_graphics ())
+			{
+				if (command_line_export_mfd)
+				{
+					draw_viper_mfd ();
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_viper_mfd ();
+					}
+				}
+			}
+
+			draw_viper_hud ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -1899,9 +1970,9 @@ void draw_virtual_cockpit_3d_view (void)
 
 			if (!get_global_draw_cockpit_graphics ())
 			{
-				if(command_line_export_mfd)
+				if (command_line_export_mfd)
 				{
-					draw_kiowa_mfd();
+					draw_kiowa_mfd ();
 				}
 				else
 				{
@@ -1918,7 +1989,6 @@ void draw_virtual_cockpit_3d_view (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -2104,6 +2174,14 @@ void draw_virtual_cockpit_3d_crew_view (void)
 			break;
 		}
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			pre_render_viper_virtual_cockpit_displays ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -2169,6 +2247,14 @@ void draw_virtual_cockpit_3d_crew_view (void)
 		////////////////////////////////////////
 		{
 			draw_hokum_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			draw_viper_virtual_cockpit ();
 
 			break;
 		}
@@ -2625,6 +2711,22 @@ void draw_virtual_cockpit_3d_display_view (void)
 		}
 		////Moje 030816 End
 		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			pre_render_viper_virtual_cockpit_displays ();
+
+			set_pilots_full_screen_params (FALSE);
+//VJ#
+			get_viper_display_viewpoint (get_view_mode ());
+
+			draw_viper_virtual_cockpit ();
+
+			draw_viper_full_screen_display ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -2642,7 +2744,6 @@ void draw_virtual_cockpit_3d_display_view (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -2854,6 +2955,7 @@ void switch_seat_position (void)
 		case WIDEVIEW_HOKUM_PILOT:
 		case WIDEVIEW_APACHE_PILOT:
 		case WIDEVIEW_HIND_PILOT:
+		case WIDEVIEW_VIPER_PILOT:
 		case WIDEVIEW_KIOWA_PILOT:
 			wide_cockpit_nr++;  // swtiches to co-pilot
 			break;
@@ -2892,6 +2994,7 @@ void switch_seat_position (void)
 		case WIDEVIEW_HOKUM_COPILOT:
 		case WIDEVIEW_APACHE_COPILOT:
 		case WIDEVIEW_HIND_COPILOT:
+		case WIDEVIEW_VIPER_COPILOT:
 		case WIDEVIEW_KIOWA_COPILOT:
 			wide_cockpit_nr--;  // swtiches to pilot
 			break;

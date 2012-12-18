@@ -1070,7 +1070,6 @@ void create_helicopter_rotor_sound_effects (entity *en)
 		}
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
  		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 		{
 			create_specified_helicopter_rotor_sound_effects
 			(
@@ -1095,7 +1094,32 @@ void create_helicopter_rotor_sound_effects (entity *en)
 			);
 		   break;
 		}
-	    case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_AH1Z_VIPER_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_AH1Z_VIPER_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_AH1Z_VIPER_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_AH1Z_VIPER_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_AH1Z_VIPER_ROTOR_SLAP
+			);
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
 		{
 			create_specified_helicopter_rotor_sound_effects
 			(

@@ -467,6 +467,43 @@ Value GetKa50SpecificData(int command)
 	return "INVALID COMMAND FOR KA50";
 }
 
+Value GetViperSpecificData(int command)
+{
+	viper_lamp_flags lamp = pMem->cockpit_lamps.viper_lamps;
+
+	switch (command)
+	{
+		case 501: return lamp.master_caution;
+		case 502: return lamp.engine_ignition;
+		case 503: return lamp.apu_ignition;
+		case 504: return lamp.engine_fire;
+		case 505: return lamp.apu_fire;
+		case 506: return lamp.engine_fire_extinguiser;
+		case 507: return lamp.hydraulic_pressure;
+		case 508: return lamp.oil_pressure;
+		case 509: return lamp.oil_temperature;
+		case 510: return lamp.overtorque;
+		case 511: return lamp.rotor_rpm;
+		case 512: return lamp.fuel_low;
+		case 513: return lamp.rotor_brake;
+		case 514: return lamp.navigation_lights;
+		case 515: return lamp.hover_hold;
+		case 516: return lamp.altitude_hold;
+		case 517: return lamp.auto_pilot;
+		case 518: return lamp.laser;
+		case 519: return lamp.ir_jammer;
+		case 520: return lamp.auto_counter_measures;
+		case 521: return lamp.ase_auto_page;
+		case 522: return lamp.pilot_lh_mfd_focus;
+		case 523: return lamp.pilot_rh_mfd_focus;
+		case 524: return lamp.co_pilot_lh_mfd_focus;
+		case 525: return lamp.co_pilot_rh_mfd_focus;
+		default: break;
+	}
+
+	return "INVALID COMMAND FOR DEFAULT";
+}
+
 Value GetKiowaSpecificData(int command)
 {
 	kiowa_lamp_flags lamp = pMem->cockpit_lamps.kiowa_lamps;
@@ -565,7 +602,7 @@ Value GetValue(int command)
 		case GUNSHIP_TYPE_HIND: return GetHindSpecificData(command);
 		case GUNSHIP_TYPE_AH64A: return GetAH64ASpecificData(command);
 		case GUNSHIP_TYPE_KA50: return GetKa50SpecificData(command);
-		case GUNSHIP_TYPE_VIPER: return GetDefaultSpecificData(command);
+		case GUNSHIP_TYPE_VIPER: return GetViperSpecificData(command);
 		case GUNSHIP_TYPE_KIOWA: return GetKiowaSpecificData(command);
 		case NUM_GUNSHIP_TYPES: return GetDefaultSpecificData(command);
 		default: break;

@@ -200,6 +200,10 @@ void fully_repair_kiowa_damage (void)
 
 	////////////////////////////////////////
 
+	kiowa_damage.hud = FALSE;
+
+	////////////////////////////////////////
+
 	set_kiowa_weapon_damage_status ();
 }
 
@@ -329,6 +333,13 @@ void partially_repair_kiowa_damage (void)
 	if (kiowa_damage.flare_dispenser)
 	{
 		kiowa_damage.flare_dispenser = frand1 () > 0.90;
+	}
+
+	////////////////////////////////////////
+
+	if (kiowa_damage.hud)
+	{
+		kiowa_damage.hud = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
@@ -623,6 +634,21 @@ static void damage_systems (kiowa_damage_flags damage)
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_FLARE_DISPENSER_DAMAGED);
+		}
+	}
+	////////////////////////////////////////
+
+	if (damage.hud)
+	{
+		if (!kiowa_damage.hud)
+		{
+			activate_kiowa_master_caution ();
+
+			kiowa_damage.hud = TRUE;
+
+			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			play_client_server_warning_message (en, SPEECH_SYSTEM_HUD_FAILURE);
 		}
 	}
 

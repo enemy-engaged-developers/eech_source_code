@@ -266,6 +266,25 @@ void initialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_viper_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_viper_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -285,7 +304,6 @@ void initialise_cockpits (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -444,6 +462,21 @@ void deinitialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+
+			deinitialise_common_virtual_cockpit ();
+
+			deinitialise_viper_cockpits ();
+
+			deinitialise_viper_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -459,7 +492,6 @@ void deinitialise_cockpits (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -475,8 +507,6 @@ void deinitialise_cockpits (void)
 
 			break;
 		}
-
-
 	}
 
 	if(command_line_export_mfd)
@@ -619,6 +649,21 @@ void update_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_viper_cockpits ();
+
+			update_viper_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -634,7 +679,6 @@ void update_cockpits (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -763,6 +807,15 @@ void draw_cockpit (cockpit_panels panel)
 
 			break;
 		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			debug_fatal ("Attempted to draw Viper fixed cockpit");
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -774,7 +827,6 @@ void draw_cockpit (cockpit_panels panel)
 
 		////Moje 030816 End
 /*
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007  for later use 
 		default:

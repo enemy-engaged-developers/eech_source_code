@@ -115,6 +115,8 @@ asm_object_files	+=	$+ &
 
 !include $(projectdir)\source\gunships\dynamics\ka50\hm_dyn.imf
 
+!include $(projectdir)\source\gunships\dynamics\viper\vi_dyn.imf
+
 !include $(projectdir)\source\gunships\dynamics\kiowa\ki_dyn.imf
 
 #////Moje 030816 End

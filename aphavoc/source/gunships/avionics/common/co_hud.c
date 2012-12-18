@@ -351,6 +351,15 @@ void display_hud_on_external_view (void)
 				break;
 			}
 			////Moje 030816 end
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_VIPER:
+			////////////////////////////////////////
+			{
+				draw_viper_hud ();
+
+				break;
+			}
+			////////////////////////////////////////
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
@@ -360,7 +369,6 @@ void display_hud_on_external_view (void)
 				break;
 			}
 
-			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:
@@ -439,6 +447,7 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 		switch (get_global_gunship_type ())
 		{
 			case GUNSHIP_TYPE_COMANCHE:
+			case GUNSHIP_TYPE_VIPER:
 			case GUNSHIP_TYPE_KIOWA:
 			{
 				set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));

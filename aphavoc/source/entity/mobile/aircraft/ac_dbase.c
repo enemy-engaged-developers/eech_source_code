@@ -2559,9 +2559,9 @@ aircraft_data
 			TRUE,																		// offensive_capability
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
-            SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,						// continuous_sound_effect_index
-			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,			// wind_up_sound_effect_index
-			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
+            SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR,						// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_AH1Z_VIPER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
 	};
 

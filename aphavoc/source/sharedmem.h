@@ -92,13 +92,15 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 	comanche_lamp_flags
 		comanche_lamps;
 
+	viper_lamp_flags
+		viper_lamps;
+
 	kiowa_lamp_flags
 		kiowa_lamps;
 
 // GCsDriver  08-12-2007
 	default_lamp_flags
 		default_lamps;
-
 	} cockpit_lamps;
 
 	waypoint_data_t waypoint_data;
@@ -110,24 +112,25 @@ extern shared_memory_t* gPtrSharedMemory;
 int Initialise_Shared_Memory(void);
 void DeInitialise_Shared_Memory(void);
 
-void update_apache_avionics_shared_mem ();
-void update_ah64a_avionics_shared_mem ();
-void update_blackhawk_avionics_shared_mem ();
-void update_comanche_avionics_shared_mem ();
+void update_apache_avionics_shared_mem (void);
+void update_ah64a_avionics_shared_mem (void);
+void update_blackhawk_avionics_shared_mem (void);
+void update_comanche_avionics_shared_mem (void);
+void update_viper_avionics_shared_mem (void);
+void update_kiowa_avionics_shared_mem (void);
 
 void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4);
 void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4);
 
-void update_havoc_avionics_shared_mem ();
-void update_hind_avionics_shared_mem ();
-void update_hokum_avionics_shared_mem ();
-void update_ka50_avionics_shared_mem ();
-void update_kiowa_avionics_shared_mem ();
+void update_havoc_avionics_shared_mem (void);
+void update_hind_avionics_shared_mem (void);
+void update_hokum_avionics_shared_mem (void);
+void update_ka50_avionics_shared_mem (void);
 
 // GCsDriver  08-12-2007
-void update_default_avionics_shared_mem ();
+void update_default_avionics_shared_mem (void);
 
-void update_dynamics_shared_mem ();
+void update_dynamics_shared_mem (void);
 void update_texture_shared_mem (void* target);
-void update_waypoint_shared_mem();
-void update_weapon_load_shared_mem();
+void update_waypoint_shared_mem(void);
+void update_weapon_load_shared_mem(void);

@@ -171,7 +171,6 @@ static void set_special1_view_mode (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
@@ -327,6 +326,9 @@ static void set_special1_view_mode (void)
 			break;
 		}
 		////Moje 030816 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -369,7 +371,6 @@ static void set_special2_view_mode (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
@@ -525,6 +526,9 @@ static void set_special2_view_mode (void)
 			break;
 		}
 		////Moje 030816 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -1212,7 +1216,6 @@ static void special_cockpit_toggle_event (event *ev)
 		case GUNSHIP_TYPE_AH64A:
 		case GUNSHIP_TYPE_KA50:
 	////Moje 030816 end
-		case GUNSHIP_TYPE_VIPER:
 		{
 			set_global_draw_cockpit_graphics (get_global_draw_cockpit_graphics () ^ 1);
 
@@ -1220,6 +1223,7 @@ static void special_cockpit_toggle_event (event *ev)
 		}
 		case GUNSHIP_TYPE_COMANCHE:
 		case GUNSHIP_TYPE_HOKUM:
+		case GUNSHIP_TYPE_VIPER:
 		case GUNSHIP_TYPE_KIOWA:
 		{
  			set_global_glass_cockpit (get_global_glass_cockpit () ^ 1);
@@ -2405,7 +2409,9 @@ void set_gunship_view_mode_events (void)
 	}
 
 	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50)
+	{
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
+	}
 
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
 

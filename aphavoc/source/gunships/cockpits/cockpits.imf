@@ -115,6 +115,8 @@ asm_object_files	+=	$+ &
 
 !include $(projectdir)\source\gunships\cockpits\ka50\hm_ckpt.imf
 
+!include $(projectdir)\source\gunships\cockpits\viper\vi_ckpt.imf
+
 !include $(projectdir)\source\gunships\cockpits\kiowa\ki_ckpt.imf
 
 # GCsDriver  08-12-2007

@@ -816,6 +816,8 @@ static const struct config_option options[] =
 		INT(command_line_max_fov4) },
 	{ "maxfov5", "", "general field of view maximum for Kiowa pit",
 		INT(command_line_max_fov5) },
+	{ "maxfov6", "", "general field of view maximum for Viper pit",
+		INT(command_line_max_fov6) },
 	{ "maxfov7", "", "general field of view maximum for Ka-50 pit",
 		INT(command_line_max_fov7) },
 	{ NULL, "49", "",
@@ -840,6 +842,10 @@ static const struct config_option options[] =
 		SPEC2(WIDEVIEW_HIND_PILOT, set_position, get_position) },
 	{ "hind_copilot", "", "wideview co-pilot position",
 		SPEC2(WIDEVIEW_HIND_COPILOT, set_position, get_position) },
+	{ "viper_pilot", "", "wideview pilot position",
+		SPEC2(WIDEVIEW_VIPER_PILOT, set_position, get_position) },
+	{ "viper_copilot", "", "wideview co-pilot position",
+		SPEC2(WIDEVIEW_VIPER_COPILOT, set_position, get_position) },
 	{ "kiowa_pilot", "", "wideview pilot position",
 		SPEC2(WIDEVIEW_KIOWA_PILOT, set_position, get_position) },
 	{ "kiowa_copilot", "", "wideview co-pilot position",
@@ -1243,6 +1249,18 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.y = 0.0;
 		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.z = 0.0;
 		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].d.p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_VIPER_PILOT].cockpit = "Viper";
+		wide_cockpit_position[WIDEVIEW_VIPER_PILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_PILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_PILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_PILOT].d.p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_VIPER_COPILOT].cockpit = "Viper";
+		wide_cockpit_position[WIDEVIEW_VIPER_COPILOT].d.x = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_COPILOT].d.y = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_COPILOT].d.z = 0.0;
+		wide_cockpit_position[WIDEVIEW_VIPER_COPILOT].d.p = -5.0;
 
 		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].cockpit = "Kiowa";
 		wide_cockpit_position[WIDEVIEW_KIOWA_PILOT].d.x = 0.0;

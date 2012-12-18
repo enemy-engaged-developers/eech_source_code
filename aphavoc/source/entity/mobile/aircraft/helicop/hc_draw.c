@@ -353,6 +353,20 @@ static void draw_local_3d_object (entity *en, float range)
 			}
 			break;
 		}
+		case OBJECT_3D_AH1Z:
+		{
+			draw_virtual_cockpit_parts = internal_view;
+
+			search.search_depth = 0;
+			search.search_object = raw->ac.inst3d;
+			search.sub_object_index = OBJECT_3D_SUB_OBJECT_RAH66_FUSELAGE;
+
+			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			{
+				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
+			}
+			break;
+		}
 		case OBJECT_3D_OH58D:
 		{
 			draw_virtual_cockpit_parts = internal_view;

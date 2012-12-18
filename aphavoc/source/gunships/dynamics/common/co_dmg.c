@@ -74,6 +74,7 @@
 #include "../hokum/ho_dyn.h"
 #include "../hind/hi_dyn.h"
 #include "../ka50/hm_dyn.h"
+#include "../viper/vi_dyn.h"
 #include "../kiowa/ki_dyn.h"
 
 #define DEBUG_MODULE 0
@@ -1376,12 +1377,9 @@ void update_dynamics_damage (void)
 
 void dynamics_restore_damage_values (void)
 {
-
 	switch (get_global_gunship_type ())
 	{
-
 		// JB 030313 Fly any aircraft
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
@@ -1445,9 +1443,14 @@ void dynamics_restore_damage_values (void)
 			break;
 		}
 		////Moje 030816 end
+		case GUNSHIP_TYPE_VIPER:
+		{
+			viper_restore_damage_values ();
+
+			break;
+		}
 		case GUNSHIP_TYPE_KIOWA:
 		{
-
 			kiowa_restore_damage_values ();
 
 			break;
@@ -1702,9 +1705,14 @@ void repair_damage_model (unsigned int damage)
 
 							break;
 						}
+						case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+						{
+							viper_restore_damage_values ();
+
+							break;
+						}
 						case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
 						{
-
 							kiowa_restore_damage_values ();
 
 							break;

@@ -152,6 +152,15 @@ void activate_common_threat_warning_system (entity *threat)
 			break;
 		}
 		////Moje 030816 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			activate_viper_threat_warning_system (threat);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -170,7 +179,6 @@ void activate_common_threat_warning_system (entity *threat)
 		}
 */
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		//  GCsDriver  08-12-2007
 		default:

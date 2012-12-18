@@ -2618,12 +2618,12 @@ weapon_data
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
-			-1,																	// weapon_selected_cpg_speech
-			-1,																	// weapon_low_cpg_speech
-			-1,																	// weapon_out_cpg_speech
-			-1,																	// weapon_launched_cpg_speech
+			SPEECH_CPG_SWITCHING_TO_STINGERS,																	// weapon_selected_cpg_speech
+			SPEECH_CPG_STINGERS_LOW,																	// weapon_low_cpg_speech
+			SPEECH_CPG_STINGERS_OUT,																	// weapon_out_cpg_speech
+			SPEECH_CPG_FIRING_STINGER,																	// weapon_launched_cpg_speech
 			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,						// weapon_launched_wingman_speech
-			0,																		// report_weapon_low_count
+			1,																		// report_weapon_low_count
 			FALSE,																// gun_shake
 			1000,																	// soft_damage_capability
 			0,																		// hard_damage_capability
@@ -2638,7 +2638,7 @@ weapon_data
             FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			0.0,																	// weight
+			85.3,																	// weight
 			500.0,																// min_range
 			18000.0,																// max_range
 			5000.0,																// effective_range

@@ -1137,7 +1137,7 @@ void animate_helicopter_eo (entity *en)
 		////Moje 030816 End
 		case OBJECT_3D_AH1Z:
 		{
-			animate_default_eo (raw->ac.inst3d);
+			animate_viper_eo (raw->ac.inst3d);
 			break;
 		}
 		case OBJECT_3D_OH58D:

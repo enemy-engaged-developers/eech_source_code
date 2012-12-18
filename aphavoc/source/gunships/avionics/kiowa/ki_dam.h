@@ -86,7 +86,8 @@ union KIOWA_DAMAGE_FLAGS
 			lh_pylon			:1,	// 12
 			rh_pylon			:1,	// 13
 			chaff_dispenser				:1,	// 14
-			flare_dispenser				:1;	// 15
+			flare_dispenser				:1,	// 15
+			hud								:1;	// 16
 	};
 };
 

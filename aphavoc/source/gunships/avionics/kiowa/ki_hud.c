@@ -2375,6 +2375,17 @@ void draw_kiowa_hud (void)
 		colour,
 		specular;
 
+	////////////////////////////////////////
+	//
+	// do not draw damaged HUD
+	//
+	////////////////////////////////////////
+
+	if (kiowa_damage.hud || !electrical_system_active())
+	{
+		return;
+	}
+
 
 	////////////////////////////////////////
 	//

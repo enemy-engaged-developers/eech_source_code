@@ -210,14 +210,21 @@ void damage_virtual_cockpit_main_rotors (int seed)
 			damage_ka50_virtual_cockpit_main_rotors (seed);
 			break;
 		}
+		////Moje 030816 End
+
+		case GUNSHIP_TYPE_VIPER:
+		{
+			damage_viper_virtual_cockpit_main_rotors (seed);
+
+			break;
+		}
+
 		case GUNSHIP_TYPE_KIOWA:
 		{
 			damage_kiowa_virtual_cockpit_main_rotors (seed);
 
 			break;
 		}
-		////Moje 030816 End
-		case GUNSHIP_TYPE_VIPER:
 		// GCsDriver  08-12-2007
 		default:
 		{
@@ -294,14 +301,21 @@ void restore_virtual_cockpit_main_rotors (void)
 
 			break;
 		}
+		////Moje 030816 End
+
+		case GUNSHIP_TYPE_VIPER:
+		{
+			restore_viper_virtual_cockpit_main_rotors ();
+
+			break;
+		}
+
 		case GUNSHIP_TYPE_KIOWA:
 		{
 			restore_kiowa_virtual_cockpit_main_rotors ();
 
 			break;
 		}
-		////Moje 030816 End
-		case GUNSHIP_TYPE_VIPER:
 		// GCsDriver  08-12-2007
 		default:
 		{

@@ -427,13 +427,23 @@ static void weapons_safe_event (event *ev)
 		}
 		////Moje 030816 End
 
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS)
+			{
+				select_viper_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
+			}
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
 			break;
 		}
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -757,7 +767,7 @@ static void select_previous_designated_target_event (event *ev)
 	single_target_acquisition_system_select_previous_designated_key++;
 }
 
-static void toggle_electrical_sytem_event(event* ev)
+static void toggle_electrical_system_event(event* ev)
 {
 	set_electrical_system_active(!electrical_system_active());	
 }
@@ -958,7 +968,7 @@ void set_common_avionics_events (void)
 	set_event (DIK_L, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_high_LOD_event);
 
 // arneh 20070103 - electrical system
-	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_electrical_sytem_event);
+	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_electrical_system_event);
 #ifdef DEBUG
 	set_event (DIK_RIGHT, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var_x);
 	set_event (DIK_RIGHT, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, inc_debug_var_x_fine);

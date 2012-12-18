@@ -115,6 +115,8 @@ asm_object_files	+=	$+ &
 
 !include $(projectdir)\source\gunships\avionics\ka50\hm_avion.imf
 
+!include $(projectdir)\source\gunships\avionics\viper\vi_avion.imf
+
 !include $(projectdir)\source\gunships\avionics\kiowa\ki_avion.imf
 
 # GCsDriver 08-12-2007

@@ -154,6 +154,14 @@ void fully_repair_gunship_damage (void)
 			break;
 		}
 		////Moje 020816 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		{
+			fully_repair_viper_damage ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -161,8 +169,6 @@ void fully_repair_gunship_damage (void)
 
 			break;
 		}
-		////////////////////////////////////////
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -249,6 +255,15 @@ void partially_repair_gunship_damage (void)
 		}
 		////////////////////////////////////////
 		////Moje 020817 End
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			partially_repair_viper_damage ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -257,7 +272,6 @@ void partially_repair_gunship_damage (void)
 			break;
 		}
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -341,6 +355,13 @@ void repair_gunship_weapon_damage (void)
 			break;
 		}
 		////Moje 030817 end
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			repair_viper_weapon_damage ();
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -350,7 +371,6 @@ void repair_gunship_weapon_damage (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -436,6 +456,14 @@ void damage_gunship (gunship_damage_levels damage_level)
 			break;
 		}
 		////Moje 030817 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			damage_viper (damage_level);
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -444,7 +472,6 @@ void damage_gunship (gunship_damage_levels damage_level)
 			break;
 		}
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -533,6 +560,14 @@ int get_gunship_comms_equipment_ok (void)
 			break;
 		}
 		////Moje 030817 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			status = !viper_damage.communications;
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -540,7 +575,6 @@ int get_gunship_comms_equipment_ok (void)
 
 			break;
 		}
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -627,6 +661,14 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 			break;
 		}
 		////Moje 030817 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			notify_viper_avionics_of_dynamics_fault (damage);
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -636,7 +678,6 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -760,6 +801,15 @@ void fully_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_VIPER:
+			////////////////////////////////////////
+			{
+				fully_repair_viper_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, viper_damage.flags);
+				break;
+			}
+			////////////////////////////////////////
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
@@ -771,7 +821,6 @@ void fully_repair_local_entity_avionics (entity *en)
 			}
 			////////////////////////////////////////
 
-			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:
@@ -877,6 +926,15 @@ void partially_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_VIPER:
+			////////////////////////////////////////
+			{
+				partially_repair_viper_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, viper_damage.flags);
+				break;
+			}
+			////////////////////////////////////////
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
@@ -888,7 +946,6 @@ void partially_repair_local_entity_avionics (entity *en)
 			}
 			////////////////////////////////////////
 
-			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			// GCsDriver  08-12-2007
 			default:
@@ -1008,6 +1065,19 @@ void load_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 030817 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			viper_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_viper_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load viper damage: %x", viper_damage.flags);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -1021,7 +1091,6 @@ void load_gunship_avionics_damage (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:
@@ -1126,6 +1195,17 @@ void save_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 0300817 end
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_VIPER:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, viper_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save viper damage: %x", viper_damage);
+
+			break;
+		}
+		////////////////////////////////////////
 		case GUNSHIP_TYPE_KIOWA:
 		////////////////////////////////////////
 		{
@@ -1137,7 +1217,6 @@ void save_gunship_avionics_damage (void)
 		}
 		////////////////////////////////////////
 
-		case GUNSHIP_TYPE_VIPER:
 		////////////////////////////////////////
 		// GCsDriver  08-12-2007
 		default:

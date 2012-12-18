@@ -105,7 +105,7 @@ int get_max_fov ( void )
 			max_fov = command_line_max_fov5;
 			break;
 		case GUNSHIP_TYPE_VIPER:
-			max_fov = command_line_max_fov0;
+			max_fov = command_line_max_fov6;
 			break;
 		default:
 			max_fov = command_line_max_fov0;
@@ -1123,6 +1123,7 @@ static void enter_view_mode (view_modes mode)
 				{
 					case GUNSHIP_TYPE_COMANCHE:
 					case GUNSHIP_TYPE_HOKUM:
+					case GUNSHIP_TYPE_VIPER:
 					case GUNSHIP_TYPE_KIOWA:
 					{
 						break;
@@ -1239,7 +1240,6 @@ static void enter_view_mode (view_modes mode)
 			switch (get_global_gunship_type ())
 			{
 				// JB 030313 Fly any aircraft
-				case GUNSHIP_TYPE_VIPER:
 				default:
 				case GUNSHIP_TYPE_APACHE:
 				{
@@ -1342,6 +1342,16 @@ static void enter_view_mode (view_modes mode)
 					break;
 				}
 				////Moje 030816 End
+				case GUNSHIP_TYPE_VIPER:
+				{
+					pilot_head_heading = VIPER_INSTRUMENT_VIEW_HEADING;
+
+					pilot_head_pitch = VIPER_INSTRUMENT_VIEW_PITCH;
+
+					mode = VIEW_MODE_VIRTUAL_COCKPIT;
+
+					break;
+				}
 				case GUNSHIP_TYPE_KIOWA:
 				{
 					pilot_head_heading = KIOWA_INSTRUMENT_VIEW_HEADING;

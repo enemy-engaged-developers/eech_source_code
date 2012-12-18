@@ -75,6 +75,7 @@
 #include "hokum/ho_dyn.h"
 #include "hind/hi_dyn.h"
 #include "ka50/hm_dyn.h"
+#include "viper/vi_dyn.h"
 #include "kiowa/ki_dyn.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,9 +217,8 @@ void initialise_flight_dynamics (entity *en)
          switch (get_global_gunship_type ())
          {
 						// JB 030313 Fly any aircraft
-						case GUNSHIP_TYPE_VIPER:
 						default:
-            case GUNSHIP_TYPE_APACHE:
+						case GUNSHIP_TYPE_APACHE:
             {
                initialise_apache_advanced_dynamics (en);
 
@@ -282,14 +282,20 @@ void initialise_flight_dynamics (entity *en)
                break;
             }
 ////Moje 020816 End
-            case GUNSHIP_TYPE_KIOWA:
-            {
 
-               initialise_kiowa_advanced_dynamics (en);
+            case GUNSHIP_TYPE_VIPER:
+            {
+               initialise_viper_advanced_dynamics (en);
 
                break;
             }
 
+            case GUNSHIP_TYPE_KIOWA:
+            {
+               initialise_kiowa_advanced_dynamics (en);
+
+               break;
+            }
          }
 
          break;
@@ -1212,9 +1218,7 @@ void update_gunship_dynamics (void)
 
 	switch (get_global_gunship_type ())
 	{
-
 		// JB 030313 Fly any aircraft
-		case GUNSHIP_TYPE_VIPER:
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
@@ -1415,13 +1419,38 @@ void update_gunship_dynamics (void)
 			break;
 		}
 ////Moje 030816 End
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
+		case GUNSHIP_TYPE_VIPER:
+		{
 			while (current_flight_dynamics->model_iterations --)
 			{
 
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
+				update_viper_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
+			}
+
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
+
+			update_dynamics_external_values ();
+
+			break;
+		}
+
+		case GUNSHIP_TYPE_KIOWA:
+		{
+			while (current_flight_dynamics->model_iterations --)
+			{
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_kiowa_advanced_dynamics ();
