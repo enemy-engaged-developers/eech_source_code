@@ -1280,6 +1280,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIP_HELLFIRE_LT.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIP_HELLFIRE_RT.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIPER_BLACK.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIPER_GRAY.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\Viper_Grill.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIPER_GRILL2.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIPER_HOUSING.bmp"

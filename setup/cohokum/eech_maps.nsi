@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.14.0"
+	!define VERSION "1.15.0"
 
 	;Name and file
 	Name "EECH Dev maps release ${VERSION}"
