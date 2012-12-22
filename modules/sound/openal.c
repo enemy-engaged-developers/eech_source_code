@@ -789,7 +789,7 @@ void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch )
 	ASSERT ( effect );
 	ASSERT ( effect->used );
 
-	effect->pitch = bound ( pitch, 0.1, 4.0 );
+	effect->pitch = bound ( pitch, 0.25, 4.0 );
 
 	AL_CHECK ( alSourcef ( get_source ( effect ), AL_PITCH, effect->pitch ) );
 }
