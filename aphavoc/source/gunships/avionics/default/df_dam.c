@@ -98,7 +98,6 @@ void set_default_weapon_damage_status (void)
 	{
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
 		{
 
 	set_client_server_entity_weapon_damage (en, COBRA_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.gun_jammed);
@@ -129,38 +128,6 @@ void set_default_weapon_damage_status (void)
 
 	set_client_server_entity_weapon_damage (en, HELIX_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
 	set_client_server_entity_weapon_damage (en, HELIX_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
-		}
-		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
-		{
-
-	//set_client_server_entity_weapon_damage (en, COBRA_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.gun_jammed);
-
-	//set_client_server_entity_weapon_damage (en, APACHE_LHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_wing_tip_mount);
-	//set_client_server_entity_weapon_damage (en, 2, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_outer_pylon);
-	set_client_server_entity_weapon_damage (en, 0, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_inner_pylon);
-
-	//set_client_server_entity_weapon_damage (en, APACHE_RHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_wing_tip_mount);
-	//set_client_server_entity_weapon_damage (en, 3, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_outer_pylon);
-	set_client_server_entity_weapon_damage (en, 1, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_inner_pylon);
-
-	set_client_server_entity_weapon_damage (en, KIOWA_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
-	set_client_server_entity_weapon_damage (en, KIOWA_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
-		}
-		default:
-		{
-
-	set_client_server_entity_weapon_damage (en, APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.gun_jammed);
-
-	//set_client_server_entity_weapon_damage (en, APACHE_LHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_wing_tip_mount);
-	set_client_server_entity_weapon_damage (en, APACHE_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_outer_pylon);
-	set_client_server_entity_weapon_damage (en, APACHE_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.lh_inner_pylon);
-
-	//set_client_server_entity_weapon_damage (en, APACHE_RHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_wing_tip_mount);
-	set_client_server_entity_weapon_damage (en, APACHE_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_outer_pylon);
-	set_client_server_entity_weapon_damage (en, APACHE_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_inner_pylon);
-
-	set_client_server_entity_weapon_damage (en, APACHE_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
-	set_client_server_entity_weapon_damage (en, APACHE_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
 		}
 	}
 

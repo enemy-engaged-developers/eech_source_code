@@ -538,6 +538,7 @@ void initialise_flight_dynamics_collision_points (void)
 	case OBJECT_3D_MI28N_HAVOC:
 	case OBJECT_3D_RAH66:
 	case OBJECT_3D_KA_52:
+	case OBJECT_3D_AH1Z:
 	case OBJECT_3D_OH58D:
 		{
 			shape = raw->ac.object_3d_shape;

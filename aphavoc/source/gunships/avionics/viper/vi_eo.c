@@ -202,7 +202,7 @@ void get_viper_eo_relative_centred_viewpoint (viewpoint *vp)
 
 		memcpy (&vp->position, &inst3d->vp.position, sizeof (vec3d));
 
-		debug_log ("OBJECT_3D_SUB_OBJECT_COMANCHE_EO_CAMERA missing from Kiowa");
+		debug_log ("OBJECT_3D_SUB_OBJECT_COMANCHE_EO_CAMERA missing from Viper");
 	}
 
 	memcpy (&vp->attitude, &inst3d->vp.attitude, sizeof (matrix3x3));

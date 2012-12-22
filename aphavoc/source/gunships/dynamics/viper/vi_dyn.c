@@ -328,7 +328,7 @@ void set_dynamics_defaults (entity *en)
 
 	current_flight_dynamics->undercarriage_state.damaged = FALSE;
 	current_flight_dynamics->undercarriage_state.value = 1.0;
-	current_flight_dynamics->undercarriage_state.min = 0.0;
+	current_flight_dynamics->undercarriage_state.min = 1.0;
 	current_flight_dynamics->undercarriage_state.max = 1.0;
 
 	current_flight_dynamics->repairing = TRUE;
@@ -383,12 +383,12 @@ void set_dynamics_defaults (entity *en)
 
 	// main rotor characteristics
 
-	current_flight_dynamics->main_rotor_diameter.value = 10.0;
+	current_flight_dynamics->main_rotor_diameter.value = 14.6;
 	current_flight_dynamics->main_rotor_area.value = PI * pow ((current_flight_dynamics->main_rotor_diameter.value / 2.0), 2);
 
 	current_flight_dynamics->main_rotor_induced_air.value = 0.0;
 	current_flight_dynamics->main_rotor_induced_air.min = 0.0;
-	current_flight_dynamics->main_rotor_induced_air.max = 56.0;
+	current_flight_dynamics->main_rotor_induced_air.max = 26.0;
 
 	current_flight_dynamics->main_rotor_induced_vortex_air_flow.min = knots_to_metres_per_second (10.0); // actually used for the max velocity for vortex ring to occur
 
@@ -423,7 +423,7 @@ void set_dynamics_defaults (entity *en)
 
 	// tail rotor characteristics
 
-	current_flight_dynamics->tail_rotor_diameter.value = 1.45;
+	current_flight_dynamics->tail_rotor_diameter.value = 2.9;
 
 	current_flight_dynamics->tail_rotor_rpm.value = 0.0;
 	current_flight_dynamics->tail_rotor_rpm.min = 0.0;
@@ -474,7 +474,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->velocity_z.max = knots_to_metres_per_second (197);
 
 	current_flight_dynamics->power_avaliable.min = 0.0;
-	current_flight_dynamics->power_avaliable.max = 1530.0;
+	current_flight_dynamics->power_avaliable.max = 3600.0;
 
 	current_flight_dynamics->lift.min = -10.0;
 	current_flight_dynamics->lift.max = 20.0;
@@ -512,12 +512,12 @@ void set_dynamics_defaults (entity *en)
 	// mass
 
 	current_flight_dynamics->mass.value = 0.0;
-	current_flight_dynamics->mass.min = 1218.0;
+	current_flight_dynamics->mass.min = 5580.0;
 	current_flight_dynamics->mass.max = 0.0;
 
-	current_flight_dynamics->fuel_weight.value = 321.0;
+	current_flight_dynamics->fuel_weight.value = 1321.0;
 	current_flight_dynamics->fuel_weight.min = 0.0;
-	current_flight_dynamics->fuel_weight.max = 321.0;
+	current_flight_dynamics->fuel_weight.max = 1321.0;
 	current_flight_dynamics->fuel_weight.delta = 0.0950; // kg/s
 
 	// cog
