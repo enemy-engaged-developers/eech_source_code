@@ -107,6 +107,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			//
 
 			pack_float_value (en, FLOAT_TYPE_ANIMATION_FREQUENCY, raw->animation_frequency);
+
 			pack_float_value (en, FLOAT_TYPE_MAX_TURN_RATE, raw->rotation_rate);
 
 			pack_float_value (en, FLOAT_TYPE_EFFECT_LIFETIME, raw->effect_lifetime);
@@ -195,6 +196,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			//
 
 			raw->animation_frequency = unpack_float_value (en, FLOAT_TYPE_ANIMATION_FREQUENCY);
+
+			raw->rotation_rate = unpack_float_value (en, FLOAT_TYPE_MAX_TURN_RATE);
 
 			raw->effect_lifetime = unpack_float_value (en, FLOAT_TYPE_EFFECT_LIFETIME);
 
