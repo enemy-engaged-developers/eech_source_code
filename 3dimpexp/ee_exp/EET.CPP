@@ -285,6 +285,9 @@ unsigned EET::Append(const char* name)
    texture.camo = true;
   }
  texture.index = ~0u;
+ for (unsigned i = 0; i < !textures; i++)
+  if (!strcmp(textures[i].name, texture.name) && textures[i].camo == texture.camo)
+   return i;
 #endif
  textures.Append(texture);
  return !textures - 1;

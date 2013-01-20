@@ -9,15 +9,56 @@
 #include "eet.cpp"
 #include "objects.cpp"
 
+const unsigned NO_PARENT = ~0u;
+
+struct SurfaceInfo
+{
+ unsigned parent;
+ unsigned index;
+ LWO_Chunk* texture;
+ LWO_Chunk* luminosity_texture;
+ LWO_Chunk* vmad_texture;
+ LWO_Chunk* vmad_luminosity_texture;
+};
+
+typedef Array<SurfaceInfo> Surfaces;
+
+LWO_Chunk* create_vma(Surfaces& surfaces, int surface, int has_texture, LWO_File& lwofile, const char* type, const char* name, LWO_Chunk* SurfaceInfo::* member)
+{
+ if (!has_texture)
+  return 0;
+ LWO_Chunk* chunk;
+ if (surfaces[surface].parent != NO_PARENT)
+  chunk = surfaces[surfaces[surface].parent].*member;
+ else
+  {
+   chunk = new LWO_Chunk(type, 6, "TXUV\x00\x02");
+   lwofile.AddSubChunk(chunk);
+   char buf[64];
+   sprintf(buf, "%s%03u", name, surfaces[surface].index);
+   chunk->AddBasicData(strlen(buf) + 1, buf);
+   surfaces[surface].*member = chunk;
+  }
+ return chunk;
+}
+
+void fill_vmap(Surfaces& surfaces, int surface, int has_texture, LWO_File& lwofile, const char* name, unsigned number_of_surface_points, const POINT_3D_PLAIN_REFERENCE* current_object_3d_surface_point_list, LWO_Chunk* SurfaceInfo::* member)
+{
+ LWO_Chunk* chunk = create_vma(surfaces, surface, has_texture, lwofile, "VMAP", name, member);
+ if (!chunk)
+  return;
+ float value = 0.0;
+ for (unsigned j = 0; j < number_of_surface_points; j++)
+  {
+   chunk->AddIndex(current_object_3d_surface_point_list[j].point);
+   chunk->AddData(4, &value);
+   chunk->AddData(4, &value);
+  }
+}
+
 void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 {
- struct SurfaceInfo
- {
-  int primary;
-  int index;
- };
-
- Array<SurfaceInfo> surfaces;
+ Surfaces surfaces;
  LWO_Chunk* chunk;
  LWO_Chunk* vmadt;
  LWO_Chunk* vmadl;
@@ -43,7 +84,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
    {
     SurfaceInfo surface;
 #ifdef AGGREGATE_SURFACES
-    unsigned index = ~0u;
+    unsigned parent = NO_PARENT;
     const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
     for (j = 0; j < i; j++)
      {
@@ -52,23 +93,23 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
       if (C(surface_flags & 0x0FFF) && C(texture_index) && C(luminosity_texture_index) && C(additional_surface_information) && C(colour))
 #undef C
        {
-        index = surfaces[j].index;
-        printf("\tSurface %u: using surface %u (%u) instead\n", i, j, index);
+        parent = j;
+        printf("\tSurface %u: using surface %u (%u) instead\n", i, j, surfaces[parent].index);
         break;
        }
      }
 
-    if (index != ~0u)
+    if (parent != NO_PARENT)
      {
-      surface.primary = false;
-      surface.index = index;
+      surface.parent = parent;
+      surface.index = surfaces[parent].index;
      }
     else
 #endif
      {
       sprintf(buf, "Surface%03u", unique);
       chunk->AddBasicData(strlen(buf) + 1, buf);
-      surface.primary = true;
+      surface.parent = NO_PARENT;
       surface.index = unique++;
      }
     surfaces[i] = surface;
@@ -117,32 +158,8 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
    if (number_of_surface_points == 0)
     number_of_surface_points = 256;
 
-   if (current_surface->textured)
-    {
-     chunk = new LWO_Chunk("VMAP", 6, "TXUV\x00\x02");
-     lwofile.AddSubChunk(chunk);
-     sprintf(buf, "VertexMapTexture%03u", i);
-     chunk->AddBasicData(strlen(buf) + 1, buf);
-     for (j = 0; j < number_of_surface_points; j++)
-      {
-       chunk->AddIndex(current_object_3d_surface_point_list[j].point);
-       chunk->AddData(4, &value);
-       chunk->AddData(4, &value);
-      }
-    }
-   if (current_surface->has_luminosity_texture)
-    {
-     chunk = new LWO_Chunk("VMAP", 6, "TXUV\x00\x02");
-     lwofile.AddSubChunk(chunk);
-     sprintf(buf, "VertexMapLuminosity%03u", i);
-     chunk->AddBasicData(strlen(buf) + 1, buf);
-     for (j = 0; j < number_of_surface_points; j++)
-      {
-       chunk->AddIndex(current_object_3d_surface_point_list[j].point);
-       chunk->AddData(4, &value);
-       chunk->AddData(4, &value);
-      }
-    }
+   fill_vmap(surfaces, i, current_surface->textured, lwofile, "VertexMapTexture", number_of_surface_points, current_object_3d_surface_point_list, &SurfaceInfo::texture);
+   fill_vmap(surfaces, i, current_surface->has_luminosity_texture, lwofile, "VertexMapLuminosity", number_of_surface_points, current_object_3d_surface_point_list, &SurfaceInfo::luminosity_texture);
   }
 
  chunk = new LWO_Chunk("POLS", 4, "FACE");
@@ -157,20 +174,8 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
     number_of_surface_points = 256;
 
    value = 0.0;
-   if (current_surface->textured)
-    {
-     sprintf(buf, "VertexMapTexture%03u", i);
-     vmadt = new LWO_Chunk("VMAD", 6, "TXUV\x00\x02");
-     lwofile.AddSubChunk(vmadt);
-     vmadt->AddBasicData(strlen(buf) + 1, buf);
-    }
-   if (current_surface->has_luminosity_texture)
-    {
-     sprintf(buf, "VertexMapLuminosity%03u", i);
-     vmadl = new LWO_Chunk("VMAD", 6, "TXUV\x00\x02");
-     lwofile.AddSubChunk(vmadl);
-     vmadl->AddBasicData(strlen(buf) + 1, buf);
-    }
+   vmadt = create_vma(surfaces, i, current_surface->textured, lwofile, "VMAD", "VertexMapTexture", &SurfaceInfo::vmad_texture);
+   vmadl = create_vma(surfaces, i, current_surface->has_luminosity_texture, lwofile, "VMAD", "VertexMapLuminosity", &SurfaceInfo::vmad_luminosity_texture);
 
    for (j = 0; j < current_surface->number_of_faces; j++, cur_poly++)
     {
@@ -246,7 +251,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
  for (i = 0; i < obj.number_of_surfaces; i++)
   {
-   if (!surfaces[i].primary)
+   if (surfaces[i].parent != NO_PARENT)
     continue;
 
    const FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
@@ -362,7 +367,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
        ssc = new LWO_SubChunk("VMAP", 0, NULL);
        subchunk->AddSubChunk(ssc);
-       sprintf(buf, "VertexMapTexture%03u", i);
+       sprintf(buf, "VertexMapTexture%03u", surfaces[i].index);
        ssc->AddBasicData(strlen(buf) + 1, buf);
 
        ssc = new LWO_SubChunk("AAST", 0, NULL);
@@ -426,7 +431,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
      ssc = new LWO_SubChunk("VMAP", 0, NULL);
      subchunk->AddSubChunk(ssc);
-     sprintf(buf, "VertexMapLuminosity%03u", i);
+     sprintf(buf, "VertexMapLuminosity%03u", surfaces[i].index);
      ssc->AddBasicData(strlen(buf) + 1, buf);
 
      ssc = new LWO_SubChunk("AAST", 0, NULL);
