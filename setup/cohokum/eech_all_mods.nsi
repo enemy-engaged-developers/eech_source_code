@@ -1338,9 +1338,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\DO NOT PAINT.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\DO NOT PAINT_RT.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\VIPER_LIGHT.tga"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\kiowa-alq144.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\kiowa_skull.tga"
-	File "${EE_TEXT_DIR}\cohokum\graphics\textures\camo\oh58d-side.tga"
 
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\cockpit"
 
