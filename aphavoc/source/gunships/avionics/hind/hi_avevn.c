@@ -642,6 +642,7 @@ static void select_eo_view_event (event *ev)
 	// If ORT is not active then first press activates it
 	if (view_mode != VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
 		set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
+	else if (view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE) set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -364,64 +364,107 @@ void update_hind_eo (eo_params *eo)
 		single_target_acquisition_system_select_previous_designated_key--;
 	}
 
-	// Jabberwock 030930 - Mouse FLIR control functions
+	 // POV flir control thealx 130215
+		
+		if ( (command_line_eo_pan_joystick_index == -1) && (command_line_mouse_look == MOUSELOOK_ON))
+		{						
+			float
+				ROTATE_RATE;
 
-	if (mouse_move_left)
-	{
-		eo_azimuth -= mouse_slew_rate;
+			ROTATE_RATE = (float) command_line_mouse_look_speed / 5.0;
 
-		eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			if (joystick_pov_left)
+			{
+				eo_azimuth -= ROTATE_RATE * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-		mouse_move_left--;
-	}
+				eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			}
+			else if (joystick_pov_right)
+			{
+				eo_azimuth += ROTATE_RATE * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-	if (mouse_move_right)
-	{
-		eo_azimuth += mouse_slew_rate;
+				eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			}
 
-		eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			if (joystick_pov_up)
+			{
+				eo_elevation += ROTATE_RATE * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-		mouse_move_right--;
-	}
+				eo_elevation = min (eo_elevation, eo_max_elevation);
+			}
+			else if (joystick_pov_down)
+			{
+				eo_elevation -= ROTATE_RATE * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-	if (mouse_move_up)
-	{
-		eo_elevation -= medium_slew_rate;
+				eo_elevation = max (eo_elevation, eo_min_elevation);
+			}
+		}
+  
+		// Jabberwock 030930 - Mouse FLIR control functions
+		// Improved mouse control thealx 130215
 
-		eo_elevation = max (eo_elevation, eo_min_elevation);
-
-		mouse_move_up--;
-	}
-
-	if (mouse_move_down)
-	{
-		eo_elevation += medium_slew_rate;
-
-		eo_elevation = min (eo_elevation, eo_max_elevation);
-
-		mouse_move_down--;
-	}
-
-	while (mouse_wheel_down)
-	{
-
-		if (eo->field_of_view < eo->max_field_of_view)
+		else if ((command_line_eo_pan_joystick_index == -1)&&(command_line_mouse_look != MOUSELOOK_ON))
 		{
-			eo->field_of_view++;
+			static int previous_mouse_update_flag = 1;
+			float dh, dp;
+
+			if (previous_mouse_update_flag != get_mouse_update_flag())
+			{
+				dh = get_mouse_move_delta_x() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+				dp = get_mouse_move_delta_y() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+
+				previous_mouse_update_flag = get_mouse_update_flag();
+
+				eo_azimuth += dh;
+				eo_azimuth = bound (eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+				eo_elevation -= dp;
+				eo_elevation = bound (eo_elevation, eo_min_elevation, eo_max_elevation);
+			}
+
 		}
 
-		mouse_wheel_down--;
-	}
+			// "Old EO" Zoom control by Joystick thealx 130215 
 
-	while (mouse_wheel_up)
-	{
-		if (eo->field_of_view > eo->min_field_of_view)
+		if (command_line_eo_zoom_joystick_index != -1)
 		{
-			eo->field_of_view--;
-		}
+			int pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
 
-		mouse_wheel_up--;
-	}
+			if (pos < -5500)
+			{
+				eo->field_of_view = eo->min_field_of_view;
+			}
+			else if ((pos > -5500) && (pos < 5000))
+			{
+				eo->field_of_view = eo->min_field_of_view + 1;
+			}
+			else if (pos > 5000)
+			{
+				eo->field_of_view = eo->max_field_of_view;
+			}
+		}
+		else if ((command_line_mouse_look != MOUSELOOK_ON) || (command_line_field_of_view_joystick_index != -1))
+		{
+				while (mouse_wheel_down)
+				{
+
+								 if (eo->field_of_view < eo->max_field_of_view)
+								{
+										eo->field_of_view++;
+								}
+
+						 mouse_wheel_down--;
+				}
+
+				while (mouse_wheel_up)
+				{
+								 if (eo->field_of_view > eo->min_field_of_view)
+								{
+										eo->field_of_view--;
+								}
+
+						mouse_wheel_up--;
+				}
+		}
 
 	// Jabberwock 030930 ends
 

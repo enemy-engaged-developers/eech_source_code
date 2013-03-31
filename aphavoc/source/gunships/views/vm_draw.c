@@ -349,15 +349,20 @@ static void update_field_of_view(void)
 
 		set_view_angles(fov);
 	}
-	else
+
+	// fov control by mouse wheel thealx 130212
+
+	else if ((command_line_mouse_look == MOUSELOOK_ON) || (command_line_eo_zoom_joystick_index != -1) )
 	{		
-		if (increase_fov_key_down)
+		if (mouse_wheel_up)
 		{
-			set_view_angles(bound(full_screen_width_view_angle + FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov)));
+				set_view_angles(bound((full_screen_width_view_angle - 10 * FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
+				mouse_wheel_up--;
 		}
-		else if (decrease_fov_key_down)
+		else if (mouse_wheel_down)
 		{
-			set_view_angles(bound(full_screen_width_view_angle - FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov)));
+				set_view_angles(bound((full_screen_width_view_angle + 10 * FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
+				mouse_wheel_down--;
 		}
 	}
 }
@@ -383,241 +388,241 @@ void draw_view (void)
 
    switch (view_mode)
    {
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_LEFT90);
+		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_LEFT60);
+		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_LEFT30);
+		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_AHEAD);
+		 draw_cockpit (COCKPIT_PANEL_UP40_AHEAD);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_RIGHT30);
+		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_RIGHT60);
+		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP40_RIGHT90);
+		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_LEFT90);
+		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_LEFT60);
+		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_LEFT30);
+		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_AHEAD);
+		 draw_cockpit (COCKPIT_PANEL_UP20_AHEAD);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_RIGHT30);
+		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_RIGHT60);
+		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_UP20_RIGHT90);
+		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT90);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT60);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT30);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_AHEAD);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_AHEAD);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT30);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT30);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT60);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT90);
+		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT90);
+		 draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT90);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
-         draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT60);
+		 draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT60);
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
-      ////////////////////////////////////////
-      {
-         draw_fixed_cockpit_3d_view ();
+		 break;
+	}
+	////////////////////////////////////////
+	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
+	////////////////////////////////////////
+	{
+		 draw_fixed_cockpit_3d_view ();
 
 			draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT30);
 

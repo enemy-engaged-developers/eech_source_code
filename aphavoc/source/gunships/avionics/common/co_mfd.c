@@ -251,7 +251,14 @@ void update_pointer_position (void)
 {
 	static int previous_mouse_update_flag = 1;
 
-	if (previous_mouse_update_flag != get_mouse_update_flag())
+	
+	// don't move pointer when ah64d's EO is active thealx 130215
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE && command_line_mouse_look  != MOUSELOOK_ON)
+	{
+
+	}
+	else if (previous_mouse_update_flag != get_mouse_update_flag())
 	{
 		float dx, dy;
 

@@ -675,10 +675,8 @@ void update_virtual_cockpit_view (void)
 	// enabled panning by mouse/trackir
 	// trackir only works with mousepanning enabled AND the naturalpoint window
 	// loaded BEFORE EECH is started !
+	// changes for fov control thealx 130212
 
-	if ((command_line_mouse_look == MOUSELOOK_OFF)||	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
-		(command_line_mouse_look == MOUSELOOK_EXTERNAL))
-	{
 		if (command_line_joylook_joystick_index != -1) // Jabberwock 030311 Joystick look
 		{
 			float
@@ -705,43 +703,34 @@ void update_virtual_cockpit_view (void)
 				pilot_head_pitch = (pos);
 			}
 		} // Jabberwock 030311 ends
-		else
+
+		else if ( (query_TIR_active () == TRUE) && (command_line_mouse_look != MOUSELOOK_EXTERNAL) )	// Use mouse/TIR, all by Retro 030317, 030318
 		{
-			if (adjust_view_left_key || joystick_pov_left)
-			{
-				pilot_head_heading += ROTATE_RATE * get_delta_time ();
-
-				pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
-			}
-			else if (adjust_view_right_key || joystick_pov_right)
-			{
-				pilot_head_heading -= ROTATE_RATE * get_delta_time ();
-
-				pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
-			}
-
-			if (adjust_view_up_key || joystick_pov_up)
-			{
-				pilot_head_pitch += ROTATE_RATE * get_delta_time ();
-
-				pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
-			}
-			else if (adjust_view_down_key || joystick_pov_down)
-			{
-				pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
-
-				pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
-			}
-		}
-	}
-	else	// Use mouse/TIR, all by Retro 030317, 030318
-	{
+		
 		float
 			temp_p,
 			temp_h;
+		
+			temp_p = TIR_GetPitch();
+			temp_h = TIR_GetYaw();
 
-		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
-		{									// ..this also means it´s NOT possible to use TIR in relative mode !!
+			temp_p = -45. * temp_p / 16383.;	// Those are the max-possible values as they are restriced above in this file
+			temp_h = MAX_LOOK_ANGLE_LEFT_RIGHT1 * temp_h / 16383.;
+
+			pilot_head_pitch = rad(temp_p);
+			pilot_head_heading = rad(temp_h);
+		
+
+			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
+			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
+
+			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
+			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
+		} // end Retro 030317
+	
+		else if ( command_line_mouse_look  == MOUSELOOK_ON )
+		{
+			
 			static int previous_mouse_update_flag = 1;
 			float dh, dp;
 
@@ -755,27 +744,45 @@ void update_virtual_cockpit_view (void)
 				pilot_head_heading += rad(dh);
 				pilot_head_pitch += rad(dp);
 			}
+
+			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
+			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
+
+			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
+			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
-		else	// TIR
+		
+		else if ( command_line_mouse_look  != MOUSELOOK_ON )
 		{
-			temp_p = TIR_GetPitch();
-			temp_h = TIR_GetYaw();
+		if (adjust_view_left_key || joystick_pov_left)
+		{
+			pilot_head_heading += ROTATE_RATE * get_delta_time ();
 
-			temp_p = -45. * temp_p / 16383.;	// Those are the max-possible values as they are restriced above in this file
-			temp_h = MAX_LOOK_ANGLE_LEFT_RIGHT1 * temp_h / 16383.;
+			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
+		}
+		else if (adjust_view_right_key || joystick_pov_right)
+		{
+			pilot_head_heading -= ROTATE_RATE * get_delta_time ();
 
-			pilot_head_pitch = rad(temp_p);
-			pilot_head_heading = rad(temp_h);
+			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
 		}
 
-		pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
-		pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
+		if (adjust_view_up_key || joystick_pov_up)
+		{
+			pilot_head_pitch += ROTATE_RATE * get_delta_time ();
 
-		pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
-		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
-	} // end Retro 030317
+			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
+		}
+		else if (adjust_view_down_key || joystick_pov_down)
+		{
+			pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
+
+			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
+		}
+		}
+	
+
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

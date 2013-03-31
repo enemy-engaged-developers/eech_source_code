@@ -677,18 +677,16 @@ static void mouse_down_event (event *ev)
 		(query_TIR_active() == TRUE))
 	{
 		mouse_move_up++;
-	}
+}
 }
 
 static void mouse_wheel_down_event (event *ev)
 {
-	if ((command_line_eo_zoom_joystick_index == -1)/*&&(command_line_eo_zoom_joystick_axis == -1)*/)	// Retro 12Dez2004
 		mouse_wheel_down++;
 }
 
 static void mouse_wheel_up_event (event *ev)
 {
-	if ((command_line_eo_zoom_joystick_index == -1)/*&&(command_line_eo_zoom_joystick_axis == -1)*/)	// Retro 12Dez2004
 		mouse_wheel_up++;
 }
 
@@ -706,7 +704,7 @@ static void mouse_left_button_event (event* ev)
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 	case TARGET_ACQUISITION_SYSTEM_LLLTV:
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-		if (get_global_gunship_type() != GUNSHIP_TYPE_APACHE || !command_line_mouse_tsd_target_select)
+		if (get_global_gunship_type() != GUNSHIP_TYPE_APACHE || (get_global_gunship_type() == GUNSHIP_TYPE_APACHE && command_line_mouse_look  != MOUSELOOK_ON))
 		{
 			if (ev->state == BUTTON_STATE_DOWN)
 				mouse_lock_target_event(ev);

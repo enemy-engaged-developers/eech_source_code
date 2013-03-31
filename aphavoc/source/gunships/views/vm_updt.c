@@ -78,7 +78,11 @@ void update_view (void)
 
 	if (in_cockpit)
 	{
-		if (joystick_pov_engage)
+                if ((command_line_mouse_look == MOUSELOOK_ON) && ((view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE) || (view_mode == VIEW_MODE_VIRTUAL_COCKPIT)))
+                {
+                    
+                }
+                else if (joystick_pov_engage)
 		{
 			set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
 		}

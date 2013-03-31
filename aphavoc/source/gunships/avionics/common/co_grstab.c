@@ -73,8 +73,8 @@
 float
 	eo_ground_stabilisation_value_heading,
  	eo_ground_stabilisation_value_pitch,
-        pitch,
-        roll;
+	pitch,
+	roll;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,61 +114,61 @@ void handle_ground_stabilisation (void)
 
 	// loke 030322
 	// handle the ground stabilisation
-        // improved stabilization thealx 130218
+	// improved stabilization thealx 130218
 
 	if (eo_ground_stabilised)
 	{
-                vec3d
-                        *velocity;
-                
-                matrix3x3
+		vec3d
+			*velocity;
+
+		matrix3x3
 			attitude;
-                
+				
 		float
-                        accel,
-                        delta_pitch,
-                        delta_roll,
-                        heading,
-                        anglex,
-                        angley,
-                        correctionx;
-                
+			accel,
+			delta_pitch,
+			delta_roll,
+			heading,
+			anglex,
+			angley,
+			correctionx;
+				
 		float
 			horizontal_pan_offset,
 			vertical_pan_offset;
-                        
-                velocity = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
-                accel = velocity->y * get_entity_movement_delta_time();
-                
-                
-                get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
+						
+		velocity = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
+		accel = velocity->y * get_entity_movement_delta_time();
 
-                heading = atan2 (attitude [2][0], attitude [2][2]);
+
+		get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
+
+		heading = atan2 (attitude [2][0], attitude [2][2]);
 
 		delta_pitch = pitch - asin (attitude [2][1]);
-                pitch = asin (attitude [2][1]);
-                
-                delta_roll = roll - atan2 (-attitude [0][1], attitude [1][1]);
-                roll = atan2 (-attitude [0][1], attitude [1][1]);
-                
-                if (eo_azimuth > (PI / 2))
-                {
-                    anglex = PI - eo_azimuth;
-                    correctionx = - cos (anglex);
-                }
-                else if (eo_azimuth < (- PI / 2))
-                {
-                    anglex = - PI - eo_azimuth;
-                    correctionx = - cos (anglex);
-                }
-                else
-                {
-                    anglex = eo_azimuth;
-                    correctionx = cos (anglex);
-                }
-                
-                angley = eo_elevation;                
-                 
+		pitch = asin (attitude [2][1]);
+
+		delta_roll = roll - atan2 (-attitude [0][1], attitude [1][1]);
+		roll = atan2 (-attitude [0][1], attitude [1][1]);
+
+		if (eo_azimuth > (PI / 2))
+		{
+			anglex = PI - eo_azimuth;
+			correctionx = - cos (anglex);
+		}
+		else if (eo_azimuth < (- PI / 2))
+		{
+			anglex = - PI - eo_azimuth;
+			correctionx = - cos (anglex);
+		}
+		else
+		{
+			anglex = eo_azimuth;
+			correctionx = cos (anglex);
+		}
+
+		angley = eo_elevation;				
+				 
 		// GCsDriver start 180 deg. bug workaround
 
 		// problem :
@@ -187,22 +187,21 @@ void handle_ground_stabilisation (void)
 		if ((eo_ground_stabilisation_value_heading > 0)&&(heading < 0))
 		{
 			eo_ground_stabilisation_value_heading *= -1;
-                        anglex *= -1;
+			anglex *= -1;
  		}
-                else if ((eo_ground_stabilisation_value_heading < 0)&&(heading > 0))
+		else if ((eo_ground_stabilisation_value_heading < 0)&&(heading > 0))
 		{
 			eo_ground_stabilisation_value_heading *= -1;
-                        anglex *= -1;
-                        
+			anglex *= -1;
 		}
-                
+				
 		// GCsDriver end 180 deg. bug workaround
-                    
+					
 		horizontal_pan_offset = (eo_ground_stabilisation_value_heading - heading) * cos(angley) + delta_roll * sin(angley) * correctionx + sin(anglex) * sin(delta_pitch) * eo_elevation;
 		
-                vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex) - 0.00028 * accel;
+		vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex) - 0.00028 * accel;
 
-                eo_azimuth +=  horizontal_pan_offset;
+		eo_azimuth +=  horizontal_pan_offset;
 
 		if (eo_azimuth > 0)
 		{
@@ -212,8 +211,8 @@ void handle_ground_stabilisation (void)
 		{
 			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
 		}
-                
-                eo_elevation += vertical_pan_offset;
+				
+		eo_elevation += vertical_pan_offset;
 
 		if (vertical_pan_offset > 0)
 		{
@@ -229,3 +228,4 @@ void handle_ground_stabilisation (void)
 		eo_ground_stabilisation_value_pitch = pitch;
 	}
 }
+

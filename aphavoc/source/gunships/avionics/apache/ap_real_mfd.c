@@ -498,9 +498,7 @@ int pointer_active (void)
 	if (lhs_mfd_mode != MFD_MODE_TSD && rhs_mfd_mode != MFD_MODE_TSD)
 		return FALSE;
 
-	if ((command_line_mouse_look == MOUSELOOK_ON
-		 || command_line_mouse_look == MOUSELOOK_INTERNAL)
-		&& !query_TIR_active())
+	if (command_line_mouse_look != MOUSELOOK_ON)
 	{
 		return FALSE;
 	}
@@ -4085,10 +4083,11 @@ static void draw_tactical_situation_display_mfd (void)
 //		draw_2d_mono_sprite (large_tsd_pointer_cross_mask, pointer_position_x, pointer_position_y, MFD_COLOUR4);
 //		draw_2d_mono_sprite (large_tsd_pointer_cross, pointer_position_x, pointer_position_y, MFD_COLOUR1);
 
+		// don't use TSD when EO is active thealx 130215
 
-		if (is_holding_left_button())   // is creating a pfz
+		if (is_holding_left_button() && (command_line_mouse_look  == MOUSELOOK_ON))   // is creating a pfz
 			draw_2d_box(clicked_position_x, clicked_position_y, pointer_position_x, pointer_position_y, FALSE, FALSE, MFD_COLOUR_RED);
-		if (is_holding_right_button())  // is creating a nfz
+		if (is_holding_right_button() && (command_line_mouse_look  == MOUSELOOK_ON))  // is creating a nfz
 			draw_2d_box(clicked_position_x, clicked_position_y, pointer_position_x, pointer_position_y, FALSE, FALSE, MFD_COLOUR_BLUE);
 	}
 }
