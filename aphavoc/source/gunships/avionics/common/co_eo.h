@@ -186,6 +186,10 @@ extern float get_range_to_target(void);
 
 extern void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate);
 extern void joystick_slew_eo_system(float slew_rate);
+extern float get_eo_azimuth (float rotate_rate, float coarse_slew_rate, float eo_azimuth, float eo_min_azimuth, float eo_max_azimuth, float mouse_slew_rate);
+extern float get_eo_elevation (float rotate_rate, float coarse_slew_rate, float eo_elevation, float eo_min_elevation, float eo_max_elevation, float mouse_slew_rate);
+extern float get_new_eo_zoom (float zoom);
+extern float get_old_eo_zoom (float fov, float max_fov, float min_fov);
 
 extern int is_using_eo_system(int include_hms);
 extern int eo_is_locked(void);

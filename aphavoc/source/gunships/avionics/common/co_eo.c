@@ -2351,6 +2351,150 @@ void joystick_slew_eo_system(float slew_rate)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+float get_eo_azimuth (float rotate_rate, float coarse_slew_rate, float eo_azimuth, float eo_min_azimuth, float eo_max_azimuth, float mouse_slew_rate)
+{
+	 // POV flir control thealx 130215
+
+			if (command_line_mouse_look == MOUSELOOK_ON)
+			{
+				if (joystick_pov_left)
+				{
+					eo_azimuth -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+					eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+				}
+				else if (joystick_pov_right)
+				{
+					eo_azimuth += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+					eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+				}
+			}
+
+	// Jabberwock 030930 - Mouse FLIR control functions
+	// Improved mouse control thealx 130215
+
+			else if (command_line_mouse_look != MOUSELOOK_ON)
+			{
+				static int previous_mouse_update_flag = 1;
+				float dh;
+
+				if (previous_mouse_update_flag != get_mouse_update_flag())
+				{
+					dh = get_mouse_move_delta_x() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+
+					previous_mouse_update_flag = get_mouse_update_flag();
+
+					eo_azimuth += dh;
+					eo_azimuth = bound (eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+				}
+			}
+				return eo_azimuth;
+}
+
+float get_eo_elevation (float rotate_rate, float coarse_slew_rate, float eo_elevation, float eo_min_elevation, float eo_max_elevation, float mouse_slew_rate)
+{
+	 // POV flir control thealx 130215
+
+			if (command_line_mouse_look == MOUSELOOK_ON)
+			{
+				if (joystick_pov_up)
+				{
+					eo_elevation += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+					eo_elevation = min (eo_elevation, eo_max_elevation);
+				}
+				else if (joystick_pov_down)
+				{
+					eo_elevation -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+					eo_elevation = max (eo_elevation, eo_min_elevation);
+				}
+			}
+
+	// Jabberwock 030930 - Mouse FLIR control functions
+	// Improved mouse control thealx 130215
+
+			else if (command_line_mouse_look != MOUSELOOK_ON)
+			{
+				static int previous_mouse_update_flag = 1;
+				float dp;
+
+				if (previous_mouse_update_flag != get_mouse_update_flag())
+				{
+					dp = get_mouse_move_delta_y() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+
+					previous_mouse_update_flag = get_mouse_update_flag();
+
+					eo_elevation -= dp;
+					eo_elevation = bound (eo_elevation, eo_min_elevation, eo_max_elevation);
+				}
+			}
+				return eo_elevation;
+}
+
+float get_new_eo_zoom (float zoom)
+{
+			if (mouse_wheel_down)
+			{
+				mouse_wheel_down--;
+				if (zoom < 1.0)
+					zoom += 0.1;
+			}
+			else if (mouse_wheel_up)
+			{
+				mouse_wheel_up--;
+				if (zoom > 0.0)
+					zoom -= 0.1;
+			}
+
+			return zoom;
+}
+
+float get_old_eo_zoom (float fov, float max_fov, float min_fov)
+{
+
+		// "Old EO" Zoom control by Joystick thealx 130215 
+
+		if (command_line_eo_zoom_joystick_index != -1 && min_fov != max_fov)
+		{
+			int pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
+
+			if (pos < -5500)
+			{
+				fov = min_fov;
+			}
+			else if ((pos > -5500) && (pos < 5000))
+			{
+				fov = min_fov + 1;
+			}
+			else if (pos > 5000)
+			{
+				fov = max_fov;
+			}
+		}
+		else if ((command_line_mouse_look != MOUSELOOK_ON) || (command_line_field_of_view_joystick_index != -1))
+		{
+			if (mouse_wheel_down)
+			{
+				mouse_wheel_down--;
+					if (fov < max_fov)
+						fov++;
+			}
+			else if (mouse_wheel_up)
+			{
+				mouse_wheel_up--;
+					if (fov > min_fov)
+						fov--;
+			}
+		}
+			return fov;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // start full_eo_range by GCsDriver  08-12-2007
 void update_eo_max_visual_range(void)
 {
