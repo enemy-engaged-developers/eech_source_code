@@ -185,6 +185,7 @@ extern int
 	command_line_autoreturn_to_pilot_after_periscope,									// GCsDriver  08-12-2007
 	command_line_eo_full_range,						// GCsDriver  08-12-2007
 	command_line_render_tree_shadows,						// GCsDriver  08-12-2007
+	command_line_trees_fog,									// thealx 130430
 	command_line_fly_any_airplane,							// VJ 030424
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511

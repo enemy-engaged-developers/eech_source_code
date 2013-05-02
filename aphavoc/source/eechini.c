@@ -755,6 +755,8 @@ static const struct config_option options[] =
 		INT(command_line_eo_full_range) },
 	{ "render-tree-shadows", "", "1=yes 0=no",
 		INT(command_line_render_tree_shadows) },
+	{ "trees-fog", "", "fog affects groups of trees (0 = off, 1 = on, 2 = auto off if fps less then 20, auto on if fps more then 30 ) (def = 2)",
+		INT(command_line_trees_fog) },
 	{ NULL, NULL, "",
 		NONE },
 	{ "high_lod_hack", "", "[EXPERIMENTAL!] Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)",

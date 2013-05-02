@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include	"3d.h"
+#include "cmndline.h" // trees_fog thealx 130430
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +87,8 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 
 static void add_transparent_surface ( int clipped );
 
-int OLD_CURRENT_3D_OBJECT_FACE_FACING ( void );
+int OLD_CURRENT_3D_OBJECT_FACE_FACING ( void ),
+	fog;
 
 void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *surface );
 
@@ -516,18 +518,18 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 			{
 
 				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-
+				
 				draw_3d_translucent_object ( current_object_3d_translucent_surfaces );
 
 				if ( active_3d_environment->fogmode == FOGMODE_OFF )
 				{
 
-					set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
+				set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
 				}
 				else
 				{
 
-					set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
+				set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 				}
 			}
 
@@ -2479,7 +2481,8 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 	zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
 	current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
 
-	set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
+	if ( !command_line_trees_fog || command_line_trees_fog == 2 && (1 / get_delta_time_average() < (20 + 10 * !fog)) ) // clipped trees fog
+		set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 
 	if ( current_object_3d_surface->additive )
 	{

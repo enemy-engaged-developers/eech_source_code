@@ -209,6 +209,7 @@ int
 	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
 	command_line_eo_full_range						= 0,		// GCsDriver  08-12-2007
 	command_line_render_tree_shadows							= 1,     // GCsDriver  08-12-2007
+	command_line_trees_fog										= 2,	// thealx 130430
 	command_line_fly_any_airplane								= TRUE,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511

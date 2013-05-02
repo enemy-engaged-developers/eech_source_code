@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "3d.h"
+#include "cmndline.h" // trees_fog
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,8 @@ scene_slot_drawing_list
 
 float
 	middle_scene_slot_height;
+int
+	fog;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +238,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 							buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT_SHADOW;
 			
 							buffer->z = *( ( int * ) &distance_bias );
-			
+
 							buffer->object = object;
 		
 							if ( get_3d_shadows_translucent () )
@@ -273,7 +276,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT;
 		
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->object = object;
 	
 						if ( object->vp.y > middle_scene_slot_height )
@@ -1849,15 +1852,15 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
 	
-					draw_hardware_3d_object ( object_order->object, FALSE );
+						draw_hardware_3d_object ( object_order->object, FALSE );
 				}
 				else
 				{
 	
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
-	
-					draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
+
+						draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
 				}
 
 #if DRAW_OBJECT_BOUNDING_BOX
@@ -2149,7 +2152,19 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 
 				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
 
-				draw_3d_terrain_tree_object ( object_order );
+			
+				if ( command_line_trees_fog == 1 || command_line_trees_fog == 2 && (1 / get_delta_time_average() >= (20 + 10 * !fog)) ) // trees fog thealx 130501
+				{
+					fog = TRUE;
+					set_d3d_alpha_fog_zbuffer ( TRUE, TRUE, TRUE, FALSE );
+					draw_3d_terrain_tree_object ( object_order ); 
+					set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
+				}
+				else
+				{
+					draw_3d_terrain_tree_object ( object_order ); 
+					fog = FALSE;
+				}
 
 				break;
 			}
@@ -2187,7 +2202,7 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-					draw_3d_translucent_object ( object_order->translucent_surfaces );
+						draw_3d_translucent_object ( object_order->translucent_surfaces );
 				}
 
 				break;

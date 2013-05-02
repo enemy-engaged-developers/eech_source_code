@@ -63,6 +63,7 @@ static void debug_fatal(...)
 #define cloud_puffs_colours ((real_colour*)NULL)
 #define number_of_cloud_puffs_colours 1
 #define command_line_render_tree_shadows 1
+#define command_line_trees_fog 1
 #define global_anisotropic 0
 #define d3d_modulate_alpha 0
 #define d3d_using_hardware_tnl 0
