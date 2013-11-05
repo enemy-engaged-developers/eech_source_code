@@ -1,6 +1,6 @@
 #ifndef LWOFILE_H_INCLUDED
 #define LWOFILE_H_INCLUDED
-
+#define DEBUG 0
 #include <stdio.h>
 #include "lwo.h"
 
@@ -126,8 +126,10 @@ struct Points : public Chunk
   unsigned i;
 
   printf ( "Chunk %s npoints %u\n", &tag, !points );
-  for ( i = 0; i < !points; i++ )
+#ifdef DEBUG
+    for ( i = 0; i < !points; i++ )
    printf ( " %u: %f %f %f\n", i, points[i].x, points[i].y, points[i].z );
+#endif
  }
 };
 
@@ -170,6 +172,7 @@ struct VertexMapping : public Chunk
 
   printf ( "Chunk %s type %s dimention %u name '%s' nmapping %u\n",
            &tag, &type, dimention, &name, !mapping );
+#ifdef DEBUG
   for ( i = 0; i < !mapping; i++ )
    {
     printf ( " %u: %lu", i, mapping[i].vert );
@@ -177,6 +180,7 @@ struct VertexMapping : public Chunk
      printf ( " %f", mapping[i].value[j] );
     printf ( "\n" );
    }
+#endif
  }
 };
 
@@ -212,13 +216,15 @@ struct PolygonList : public Chunk
   unsigned i, j;
 
   printf ( "Chunk %s type %s npolygons %u\n", &tag, &type, !list );
-  for ( i = 0; i < !list; i++ )
+ #ifdef DEBUG
+ for ( i = 0; i < !list; i++ )
    {
     printf ( " %i (%u): ", i, list[i].numvertflags & 0x03FFu );
     for ( j = 0; j < list[i].numvertflags & 0x03FFu; j++ )
      printf ( " %lu", list[i].vert[j] );
     printf ( "\n" );
    }
+#endif
  }
 };
 
@@ -237,8 +243,10 @@ struct Tags : public Chunk
   unsigned i;
 
   printf ( "Chunk %s ntags %u\n", &tag, !tags );
+#ifdef DEBUG
   for ( i = 0; i < !tags; i++ )
    printf ( " %u: %s\n", i, &tags[i] );
+#endif
  }
 };
 
@@ -269,8 +277,10 @@ struct PTags : public Chunk
   unsigned i;
 
   printf ( "Chunk %s type %s nptags %u\n", &tag, &type, !ptags );
+#ifdef DEBUG
   for ( i = 0; i < !ptags; i++ )
    printf ( " %u: %lu %u\n", i, ptags[i].poly, ptags[i].tag );
+#endif
  }
 };
 
@@ -315,6 +325,7 @@ struct DiscontinuousVertexMapping : public Chunk
 
   printf ( "Chunk %s type %s dimention %u name '%s' nmapping %u\n",
            &tag, &type, dimention, &name, !mapping );
+#ifdef DEBUG
   for ( i = 0; i < !mapping; i++ )
    {
     printf ( " %u: %lu %lu", i, mapping[i].vert, mapping[i].poly );
@@ -322,6 +333,7 @@ struct DiscontinuousVertexMapping : public Chunk
      printf ( " %f", mapping[i].value[j] );
     printf ( "\n" );
    }
+#endif
  }
 };
 

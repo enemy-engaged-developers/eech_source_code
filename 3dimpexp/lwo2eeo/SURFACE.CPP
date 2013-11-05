@@ -430,10 +430,16 @@ struct RSurface
    smoothed = 0;
 
   if (smoothed)
-   for (unsigned i = 0; i < !polys; i++)
-    for (unsigned j = 0; j < !polys[i].points; j++)
-     points[polys[i].points[j].index].normal += polys[i].norm;
-
+	{
+	// there we going through all polys and add poly normal to each surface point
+		for (unsigned i = 0; i < !polys; i++)
+		for (unsigned j = 0; j < !polys[i].points; j++)
+			points[polys[i].points[j].index].normal += polys[i].norm;
+	// copy surface points normals back to polys
+		for (unsigned i = 0; i < !polys; i++)
+		for (unsigned j = 0; j < !polys[i].points; j++)
+			polys[i].points[j].normal = points[polys[i].points[j].index].normal;
+	}
   ESurface* es = &Global->es.Append();
   es->rs = this;
 
@@ -476,7 +482,7 @@ struct RSurface
             }
           }
 
-        if (!es->points + npolypoints > 256)
+        if (!es->points + npolypoints > 256) // surface is full - separate, break loop and calc last poly again
          {
           es = &Global->es.Append();
           es->rs = this;
