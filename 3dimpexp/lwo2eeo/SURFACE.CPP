@@ -431,12 +431,14 @@ struct RSurface
 
   if (smoothed)
 	{
-	// there we going through all polys and add poly normal to each surface point
-		for (unsigned i = 0; i < !polys; i++)
+	for (unsigned i = 0; i < !polys; i++) // here we going through all polys and add poly normal to each vertex
 		for (unsigned j = 0; j < !polys[i].points; j++)
-			points[polys[i].points[j].index].normal += polys[i].norm;
-	// copy surface points normals back to polys
-		for (unsigned i = 0; i < !polys; i++)
+			for (unsigned t = 0; t < !polys; t++) // looking for closest polys (maybe it not welded at UV map, going through all polys)
+				for (unsigned y = 0; y < !polys[t].points; y++)
+					if (points[polys[i].points[j].index].p == polys[t].points[y].p)
+						points[polys[i].points[j].index].normal += polys[t].norm;
+
+	for (unsigned i = 0; i < !polys; i++) // copy surface points normals back to polys
 		for (unsigned j = 0; j < !polys[i].points; j++)
 			polys[i].points[j].normal = points[polys[i].points[j].index].normal;
 	}
