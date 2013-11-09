@@ -255,12 +255,12 @@ struct RSurface
      }
      break;
 
-    case SurfaceAttribute::SPECULARGLOSSINESS:
+    case SurfaceAttribute::SPECULAR:
      {
-      const SpecularGlossiness* sg = static_cast<const SpecularGlossiness*>(attr);
+      const Specular* s = static_cast<const Specular*>(attr);
 
       has_specularity = 1;
-      specularity = (unsigned char)(sg->glossiness * 255.0f);
+      specularity = (unsigned char)(s->intensity * 255.0f);
      }
      break;
 
