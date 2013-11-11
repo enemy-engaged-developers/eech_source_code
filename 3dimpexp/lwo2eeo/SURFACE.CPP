@@ -430,18 +430,18 @@ struct RSurface
    smoothed = 0;
 
   if (smoothed)
-	{
-	for (unsigned i = 0; i < !polys; i++) // here we going through all polys and add poly normal to each vertex
-		for (unsigned j = 0; j < !polys[i].points; j++)
-			for (unsigned t = 0; t < !polys; t++) // looking for closest polys (maybe it not welded at UV map, going through all polys)
-				for (unsigned y = 0; y < !polys[t].points; y++)
-					if (points[polys[i].points[j].index].p == polys[t].points[y].p)
-						points[polys[i].points[j].index].normal += polys[t].norm;
+   {
+    for (unsigned i = 0; i < !polys; i++)
+     for (unsigned j = 0; j < !polys[i].points; j++)
+      for (unsigned k = 0; k < !points; k++)
+       if (points[k].p == polys[i].points[j].p)
+        points[k].normal += polys[i].norm;
 
-	for (unsigned i = 0; i < !polys; i++) // copy surface points normals back to polys
-		for (unsigned j = 0; j < !polys[i].points; j++)
-			polys[i].points[j].normal = points[polys[i].points[j].index].normal;
-	}
+    for (unsigned i = 0; i < !polys; i++)
+     for (unsigned j = 0; j < !polys[i].points; j++)
+      polys[i].points[j].normal = points[polys[i].points[j].index].normal;
+   }
+
   ESurface* es = &Global->es.Append();
   es->rs = this;
 
@@ -484,7 +484,7 @@ struct RSurface
             }
           }
 
-        if (!es->points + npolypoints > 256) // surface is full - separate, break loop and calc last poly again
+        if (!es->points + npolypoints > 256)
          {
           es = &Global->es.Append();
           es->rs = this;
@@ -580,24 +580,36 @@ struct RSurface
      if (vm || dvm)
       {
        if (vm)
-        for (unsigned j = 0; j < !vm->mapping; j++)
+        {
+         VertexMapping::Mapping m;
          for (unsigned k = 0; k < !polys[i].points; k++)
-          if (polys[i].points[k].p.index == vm->mapping[j].vert)
-           (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
+          {
+           m.vert = polys[i].points[k].p.index;
+           const VertexMapping::Mapping* p = Convert::Find(vm->mapping, m, Convert::VmComp);
+           if (p)
+            (polys[i].points[k].*tp).Set(&p->value[0]);
+          }
+        }
        if (dvm)
-        for (unsigned j = 0; j < !dvm->mapping; j++)
-         if (polys[i].index == dvm->mapping[j].poly)
-          for (unsigned k = 0; k < !polys[i].points; k++)
-           if (polys[i].points[k].p.index == dvm->mapping[j].vert)
-            (polys[i].points[k].*tp).Set(&dvm->mapping[j].value[0]);
-       }
-      else
-       {
-        warning("Surface '%s': No vertex mapping '%s' found for poly %u", &s->name, vmap, polys[i].index);
-        float zero[2] = { 0, 0 };
-        for (unsigned k = 0; k < !polys[i].points; k++)
-         (polys[i].points[k].*tp).Set(zero);
-       }
+        {
+         DiscontinuousVertexMapping::Mapping m;
+         m.poly = polys[i].index;
+         for (unsigned k = 0; k < !polys[i].points; k++)
+          {
+           m.vert = polys[i].points[k].p.index;
+           const DiscontinuousVertexMapping::Mapping* p = Convert::Find(dvm->mapping, m, Convert::DvmComp);
+           if (p)
+            (polys[i].points[k].*tp).Set(&p->value[0]);
+          }
+        }
+      }
+     else
+      {
+       warning("Surface '%s': No vertex mapping '%s' found for poly %u", &s->name, vmap, polys[i].index);
+       float zero[2] = { 0, 0 };
+       for (unsigned k = 0; k < !polys[i].points; k++)
+        (polys[i].points[k].*tp).Set(zero);
+      }
 
     for (unsigned j = 0; j < !polys[i].points; j++)
      if (!(polys[i].points[j].*tp).set)

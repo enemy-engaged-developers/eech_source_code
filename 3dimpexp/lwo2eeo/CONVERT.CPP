@@ -1,6 +1,50 @@
+#include <algorithm>
+
 class Convert
 {
  private:
+
+ static bool VmComp(const VertexMapping::Mapping& m1, const VertexMapping::Mapping& m2)
+ {
+  return m1.vert < m2.vert;
+ }
+
+ static bool DvmComp(const DiscontinuousVertexMapping::Mapping& m1, const DiscontinuousVertexMapping::Mapping& m2)
+ {
+  return m1.poly < m2.poly || m1.poly == m2.poly && m1.vert < m2.vert;
+ }
+
+ template <typename T, typename Comp>
+ static void Sort(Array<T>& a, Comp comp)
+ {
+  if (!a)
+   std::sort(&a[0], &a[0] + !a, comp);
+ }
+ template <typename T, typename Comp>
+ static const T* Find(const Array<T>& a, const T& value, Comp comp)
+ {
+  int len = !a;
+  if (!len)
+   return NULL;
+  int half;
+  const T* first = &a[0];
+  const T* middle;
+
+  do
+   {
+    half = len >> 1;
+    middle = first + half;
+    if (comp(*middle, value))
+     {
+      first = middle + 1;
+      len -= half + 1;
+     }
+    else
+     len = half;
+   }
+  while (len > 0);
+  return first == &a[0] + !a || comp(value, *first) ? NULL : first;
+ }
 
 void FindChunks(const LWOFile& lwofile)
 {
@@ -248,6 +292,28 @@ void FindChunks(const LWOFile& lwofile)
         close(log_fd);
        }
       close(stdout_dup);
+     }
+   }
+
+  for (unsigned i = 0; i < !lwofile.chunks; i++)
+   {
+    Chunk* chunk = lwofile.chunks[i];
+    switch (chunk->chunktype)
+     {
+      case Chunk::VERTEXMAPPING:
+       {
+        VertexMapping* vm = static_cast<VertexMapping*>(chunk);
+        Sort(vm->mapping, VmComp);
+        break;
+       }
+      case Chunk::DISCONTINUOUSVERTEXMAPPING:
+       {
+        DiscontinuousVertexMapping* dvm = static_cast<DiscontinuousVertexMapping*>(chunk);
+        Sort(dvm->mapping, DvmComp);
+        break;
+       }
+      default:
+       break;
      }
    }
 
