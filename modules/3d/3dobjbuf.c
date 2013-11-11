@@ -1852,7 +1852,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
 	
-						draw_hardware_3d_object ( object_order->object, FALSE );
+					draw_hardware_3d_object ( object_order->object, FALSE );
 				}
 				else
 				{
@@ -1860,7 +1860,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-						draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
+					draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
 				}
 
 #if DRAW_OBJECT_BOUNDING_BOX
@@ -2202,7 +2202,7 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-						draw_3d_translucent_object ( object_order->translucent_surfaces );
+					draw_3d_translucent_object ( object_order->translucent_surfaces );
 				}
 
 				break;

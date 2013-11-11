@@ -1073,7 +1073,7 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 	terrain_3d_tree_object->vp.y = slot->terrain_tree.y;
 	terrain_3d_tree_object->vp.z = slot->terrain_tree.z;
 	terrain_3d_tree_object->requires_immediate_render = TRUE;
-	
+
 	terrain_3d_tree_object->relative_scale.x = slot->terrain_tree.scale;
 	terrain_3d_tree_object->relative_scale.y = slot->terrain_tree.scale;
 	terrain_3d_tree_object->relative_scale.z = slot->terrain_tree.scale;
@@ -1120,7 +1120,7 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 		//
 
 		copy_and_recolour_current_3d_lights ( slot->terrain_tree.colour );
-		
+
 		draw_wbuffered_3d_object ( terrain_3d_tree_object, FALSE, TRUE );
 
 		restore_uncoloured_current_3d_lights ();

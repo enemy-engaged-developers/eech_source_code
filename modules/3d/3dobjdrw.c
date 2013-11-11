@@ -87,7 +87,9 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 
 static void add_transparent_surface ( int clipped );
 
-int OLD_CURRENT_3D_OBJECT_FACE_FACING ( void ),
+int OLD_CURRENT_3D_OBJECT_FACE_FACING ( void );
+
+extern int
 	fog;
 
 void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *surface );
@@ -518,18 +520,18 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 			{
 
 				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-				
+
 				draw_3d_translucent_object ( current_object_3d_translucent_surfaces );
 
 				if ( active_3d_environment->fogmode == FOGMODE_OFF )
 				{
 
-				set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
+					set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
 				}
 				else
 				{
 
-				set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
+					set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 				}
 			}
 
