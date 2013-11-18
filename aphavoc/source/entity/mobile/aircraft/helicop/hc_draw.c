@@ -419,6 +419,8 @@ static void draw_local_3d_object (entity *en, float range)
 
 		animate_helicopter_tail_rotor (en);
 
+		animate_helicopter_controls (en);
+
 		animate_helicopter_wipers (en);
 
 		animate_helicopter_eo (en);
@@ -507,6 +509,8 @@ static void draw_local_3d_object (entity *en, float range)
 		}
 
 		animate_helicopter_tail_rotor (en);
+
+		animate_helicopter_controls (en);
 
 		animate_aircraft_loading_doors (en);
 

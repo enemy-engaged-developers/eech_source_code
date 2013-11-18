@@ -283,7 +283,7 @@ void animate_aircraft_rudder( entity *en )
 	raw = (aircraft *) get_local_entity_data (en);
 
 	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_RUDDER, raw->rudder_state );
-	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, raw->rudder_state );
+//	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, raw->rudder_state ); // doesn't work anyway /thealx/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

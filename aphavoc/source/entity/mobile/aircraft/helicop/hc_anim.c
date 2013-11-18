@@ -85,6 +85,29 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void animate_helicopter_controls ( entity *en )
+{
+	ASSERT(en);
+
+	helicopter
+		*raw;
+
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return;
+
+	raw = (helicopter *) get_local_entity_data (en);
+
+	animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AH64D_TAILPLANE, bound(- raw->ac.mob.velocity / 25 + 1.5, 0, 1));
+	animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_MIL_TAILPLANE, bound(get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_CONING_ANGLE) * 10, 0, 1));
+	animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TILT_ROTOR, bound( raw->ac.mob.velocity / 80, 0, 1));
+	if (en == get_gunship_entity())
+		animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, (100 + current_flight_dynamics->input_data.pedal.value) / 200 );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int animate_virtual_cockpit_main_rotors)
 {
 	helicopter
