@@ -1798,7 +1798,7 @@ static void display_weapon_information (void)
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR)
 		{
 			float flight_time = get_missile_flight_time ();
-			debug_log("ft: %.1f", flight_time);
+//			debug_log("ft: %.1f", flight_time);
 
 			if (flight_time > 0.01)
 			{
