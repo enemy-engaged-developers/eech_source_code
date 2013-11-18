@@ -845,12 +845,13 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		*apache;
 
 	static float
-		heading = rad (180.0),
+		heading = 0,
 		my_heading = 0,
 		pitch = rad (-14);
 
 	static int
-		my_time = 3600*16;
+		my_time = 3600*16,
+		loop = 0;
 
 	set_3d_active_environment ( main_3d_env );
 
@@ -925,7 +926,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			apache = construct_temporary_3d_object ( OBJECT_3D_AH64D_APACHE_LONGBOW, TRUE );
 			break;
 		case GUNSHIP_TYPE_COMANCHE:
-			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, TRUE );
+			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66, TRUE );
 			break;
 		case GUNSHIP_TYPE_BLACKHAWK:
 			apache = construct_temporary_3d_object ( OBJECT_3D_UH60_BLACKHAWK, TRUE );
@@ -936,7 +937,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			pitch = 0;
 			break;
 		case GUNSHIP_TYPE_HOKUM:
-			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, TRUE );
+			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52, TRUE );
 			pitch = 0;
 			break;
 		case GUNSHIP_TYPE_HIND:
@@ -955,85 +956,155 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			pitch = rad(2);
 			break;
 		}
+	}
+	else
+		switch (loop)
+		{
+			case 0:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_RAH66, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_KA_52, TRUE );
+				break;
+			case 1:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_AH64D_APACHE_LONGBOW, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_MI28N_HAVOC, TRUE );
+				break;
+			case 2:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_UH60_BLACKHAWK, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_MI24_HIND, TRUE );
+				break;
+			case 3:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_AH1Z, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_KA29_HELIX_B, TRUE );
+				break;
+			case 4:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_CH47D_CHINOOK, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_MI6_HOOK, TRUE );
+				break;
+			case 5:
+				if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+					apache = construct_temporary_3d_object ( OBJECT_3D_CH_53, TRUE );
+				else
+					apache = construct_temporary_3d_object ( OBJECT_3D_MI17_HIP, TRUE );
+				break;
+		}
 
+	{
+		object_3d_sub_object_search_data
+			result_sub_obj;
+
+		result_sub_obj.search_object = apache;
+		result_sub_obj.search_depth = 0;
+		result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
+
+		// disable weapons
+		
+		while ( find_object_3d_sub_object ( &result_sub_obj ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+		{
+			object_3d_sub_instance
+				*visible;
+			object_3d_sub_object_search_data
+				pitch;
+
+			visible = NULL;
+
+			pitch.search_depth = 0;
+			pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
+
+			while ( find_object_3d_sub_object_from_sub_object ( &result_sub_obj, &pitch ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			{
+				if ( pitch.search_depth < 2 )
+					visible = pitch.result_sub_object;
+				pitch.result_sub_object->visible_object = FALSE;
+				pitch.search_depth++;
+			}
+			if ( visible )
+				visible->visible_object = TRUE;
+
+			result_sub_obj.search_depth++;
+		}
+		
+		// disable moving and adjust static rotor blades
+		
+		result_sub_obj.search_depth = 0;
+		result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
+				
+		while ( find_object_3d_sub_object ( &result_sub_obj ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 			object_3d_sub_object_search_data
-				heading;
+				search_main_rotor_blade_moving,
+				search_main_rotor_blade_root_static,
+				search_main_rotor_blade_section_static;
+			int
+				search_main_rotor_blade_moving_depth = 0,
+				search_main_rotor_blade_root_static_depth = 0,
+				search_main_rotor_blade_section_static_depth = 0;
 
-			heading.search_object = apache;
-			heading.search_depth = 0;
-			heading.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
-
-			while ( find_object_3d_sub_object ( &heading ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			while (TRUE)
 			{
-				object_3d_sub_instance
-					*visible;
-				object_3d_sub_object_search_data
-					pitch;
+				search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
+				search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
 
-				visible = NULL;
+				if (find_object_3d_sub_object_from_sub_object (&result_sub_obj, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE;
 
-				pitch.search_depth = 0;
-				pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
+				search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
+				search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
 
-				while ( find_object_3d_sub_object_from_sub_object ( &heading, &pitch ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+				if (find_object_3d_sub_object_from_sub_object (&result_sub_obj, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
-					if ( pitch.search_depth < 2 )
-						visible = pitch.result_sub_object;
-					pitch.result_sub_object->visible_object = FALSE;
-					pitch.search_depth++;
-				}
-				if ( visible )
-					visible->visible_object = TRUE;
+					search_main_rotor_blade_section_static_depth = 0;
 
-				heading.search_depth++;
+					while (TRUE)
+					{
+						search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
+						search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
+
+						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND && search_main_rotor_blade_section_static.result_sub_object->visible_object)
+							search_main_rotor_blade_section_static.result_sub_object->relative_pitch = rad(-3);
+						else
+							break;
+
+						search_main_rotor_blade_section_static_depth++;
+					}
+				}
+				else
+					break;
+
+				search_main_rotor_blade_moving_depth++;
+				search_main_rotor_blade_root_static_depth++;;
 			}
 
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003, 1 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004, 3 );
-
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
+			result_sub_obj.search_depth++;
 		}
+
+		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
+	
+		animate_entity_simple_keyframed_sub_objects( apache, OBJECT_3D_SUB_OBJECT_UNDERCARRIAGE, 1);
+		
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003, 1 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004, 3 );
+
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
+		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
 	}
-	else
-		if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
-		{
-
-			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, FALSE );
-
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003, 1 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004, 3 );
-		}
-		else
-		{
-
-			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
-
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
-			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
-		}
-
+		
 	apache->vp.x = 0;
-
-	if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
-	{
-		apache->vp.y = 1.5;
-	}
-	else
-	{
-		apache->vp.y = 2.2;
-	}
-
-	apache->vp.z = 18;//12
+	apache->vp.y = 2.2;
+	apache->vp.z = 25;
 
 	get_3d_transformation_matrix ( visual_3d_vp->attitude, 0, rad ( 0 ) , my_heading );
 
@@ -1046,11 +1117,21 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		{
 
 			gunship_just_entered_screen = FALSE;
+			heading = 0;
 		}
 		else
 		{
-
-			heading += ( 0.75 * get_delta_time () );
+			heading += 2 * (fabs(heading - rad(235)) >= 0.1 ? fabs(heading - rad(235)) : 0.1) * get_delta_time ();
+			if (heading >= 2 * PI2)
+				heading = PI;
+			else if (heading >= PI2)
+			{
+				heading -= PI2;
+				if (loop >= 5)
+					loop = 0;
+				else
+					loop++;
+			}
 		}
 	}
 
