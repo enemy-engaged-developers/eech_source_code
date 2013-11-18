@@ -206,6 +206,8 @@ extern int
 	command_line_session_filter,								// Jabberwock 031210 Session filter
 	command_line_pause_server,									// Jabberwock 040220 Pause server
 	command_line_reverse_pedal,									// Retro 17Jul2004
+	command_line_reverse_cyclic_x,								// /thealx/
+	command_line_reverse_cyclic_y,								// /thealx/
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_external_trackir_direction,					// Retro 31Jan2005 (spooky, eh ?)
 	command_line_wobbly_camera,									// arneh - makes external cameras wobbly in movement

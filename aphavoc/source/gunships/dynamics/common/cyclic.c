@@ -476,6 +476,9 @@ void update_cyclic_pressure_inputs (void)
 					joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
 				}
 
+				if (command_line_reverse_cyclic_x == 1)
+					joyval *= -1;
+
 				if (command_line_nonlinear_cyclic)
 				{
 					// in non-linear mode it uses a curve described by f(x) = x*x + x
@@ -513,6 +516,9 @@ void update_cyclic_pressure_inputs (void)
 				{
 					joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 				}
+
+				if (command_line_reverse_cyclic_y == 1)
+					joyval *= -1;
 
 				if (command_line_nonlinear_cyclic)
 				{

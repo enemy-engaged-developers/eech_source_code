@@ -230,6 +230,8 @@ int
 	command_line_session_filter						= 1,  //VJ 050308 changed to true!!! // Jabberwock 031210 Session filter
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
+	command_line_reverse_cyclic_x					= 0,	// /thealx/
+	command_line_reverse_cyclic_y					= 0,	// /thealx/
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005
 	command_line_wobbly_camera				= TRUE,
