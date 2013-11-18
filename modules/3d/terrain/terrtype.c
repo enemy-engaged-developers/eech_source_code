@@ -1195,6 +1195,12 @@ void initialise_3d_terrain_types ( void )
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
 
+   	add_new_texture("REFLECTION_JUNGLE", "");
+   	add_new_texture("REFLECTION_WINTER", "");
+   	add_new_texture("REFLECTION_FOREST", "");
+   	add_new_texture("REFLECTION_ROCKS", "");
+   	add_new_texture("REFLECTION_DESERT", "");
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1352,7 +1358,7 @@ void initialise_3d_thailand_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_JUNGLE" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -1519,7 +1525,7 @@ void initialise_3d_cuba_terrain_types ( void )
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_JUNGLE" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -1685,7 +1691,10 @@ void initialise_3d_georgia_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	if (get_global_season() == SESSION_SEASON_WINTER)
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_WINTER" );
+	else
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_FOREST" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -1849,7 +1858,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_DESERT" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -2013,7 +2022,7 @@ void initialise_3d_yemen_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_DESERT" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -2179,7 +2188,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_JUNGLE" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -2782,7 +2791,7 @@ void initialise_3d_alaska_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_WINTER" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -2870,7 +2879,10 @@ void initialise_3d_aleut_terrain_types ( void )
 */
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	if (get_global_season() == SESSION_SEASON_WINTER)
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_WINTER" );
+	else
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_FOREST" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -2965,7 +2977,7 @@ void initialise_3d_kuwait_terrain_types ( void )
 	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_DESERT" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -3058,7 +3070,7 @@ void initialise_3d_grand_terrain_types ( void )
 	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_ROCKS" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -3134,7 +3146,7 @@ void initialise_3d_mars_terrain_types ( void )
 
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+	reflection_texture_index = get_system_texture_index ( "REFLECTION_ROCKS" );
 
 	if ( reflection_texture_index != -1 )
 	{
@@ -3177,14 +3189,23 @@ void initialise_3d_custom_map_terrain_types ( void )
 	initialise_all_custom_terrain_types ();
 
 	if (get_global_season() == SESSION_SEASON_DESERT)
+	{
 		set_object_3d_texture_camoflage_by_name ( "DESERT" );
-	else
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_DESERT" );
+	}
+	else if (get_global_season() == SESSION_SEASON_WINTER)
+	{
 		set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_WINTER" );
+	}
+	else
+	{
+		set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+		reflection_texture_index = get_system_texture_index ( "REFLECTION_JUNGLE" );
+	}
 
 	//VJ 051224 moved to separate function
 	initialise_surface_types();
-
-	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
 
 	if ( reflection_texture_index != -1 )
 	{
