@@ -183,7 +183,7 @@ int assess_graphic_device_resolutions ( void )
 		//
 		// Set the cooperative mode settings.
 		//
-		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_EXCLUSIVE );
+//		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_EXCLUSIVE ); // doesn't work with latest drivers! /thealx/
 	
 		//
 		// Setup the window style for a fullscreen application
@@ -262,7 +262,7 @@ int assess_graphic_device_resolutions ( void )
 		//
 		// Reset the cooperative mode settings
 		//
-		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_NORMAL );
+//			ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_NORMAL );
 	}
 
 	return ( TRUE );
