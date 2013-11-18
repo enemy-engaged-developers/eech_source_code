@@ -83,6 +83,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int moving_collision_point, repairing_damage_count;
+float damage_repair_time = 0, current_fuel_level = 0, available_fuel = 0;
+
 dynamics_damage_type
 	dynamics_damage_database [] =
 	{
@@ -90,27 +93,27 @@ dynamics_damage_type
 		{
 			"None",
 			DYNAMICS_DAMAGE_NONE,
-			1.0,
-			0.0,
-			0.0 * ONE_SECOND,
-			FALSE,
-			FALSE,
+			1.0, //kickin_value
+			0.0, //damage_severity
+			0.0 * ONE_SECOND, //repair_time
+			FALSE, //store_aggressor_in_debrief
+			FALSE, //repairable
 		},
 		{
 			"Main rotor",
 			DYNAMICS_DAMAGE_MAIN_ROTOR,
 			0.2,
-			0.8,
+			0.2,
 			60.0 * ONE_SECOND,
 			TRUE,
-			FALSE,
+			TRUE,
 		},
 		{
 			"Tail rotor",
 			DYNAMICS_DAMAGE_TAIL_ROTOR,
 			0.3,
-			0.5,
-			50.0 * ONE_SECOND,
+			0.1,
+			30.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
 		},
@@ -118,8 +121,8 @@ dynamics_damage_type
 			"Left engine",
 			DYNAMICS_DAMAGE_LEFT_ENGINE,
 			0.4,
-			0.1,
-			30.0 * ONE_SECOND,
+			0.4,
+			100.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
 		},
@@ -127,8 +130,8 @@ dynamics_damage_type
 			"Right engine",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE,
 			0.4,
-			0.1,
-			30.0 * ONE_SECOND,
+			0.4,
+			100.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
 		},
@@ -136,7 +139,7 @@ dynamics_damage_type
 			"Left engine fire",
 			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE,
 			0.6,
-			0.3,
+			0.2,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -145,7 +148,7 @@ dynamics_damage_type
 			"Right engine fire",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE,
 			0.6,
-			0.3,
+			0.2,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -163,7 +166,7 @@ dynamics_damage_type
 			"Stabiliser",
 			DYNAMICS_DAMAGE_STABILISER,
 			0.75,
-			0.3,
+			0.1,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -218,7 +221,7 @@ dynamics_damage_type
 			DYNAMICS_DAMAGE_UNDERCARRIAGE,
 			0.6,
 			0.1,
-			10.0 * ONE_SECOND,
+			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
 		},
@@ -227,7 +230,7 @@ dynamics_damage_type
 			DYNAMICS_DAMAGE_APU,
 			0.0,
 			0.1,
-			10.0 * ONE_SECOND,
+			30.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
 		},
@@ -235,10 +238,10 @@ dynamics_damage_type
 			"Main rotor blade",
 			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE,
 			0.1,
-			0.2,
+			0.05,
 			10.0 * ONE_SECOND,
 			FALSE,
-			FALSE,
+			TRUE,
 		},
 		{
 			"Secondary hydralics",
@@ -254,6 +257,11 @@ dynamics_damage_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void moving_collision_points_counter (int count)
+{
+	moving_collision_point = count;
+}
 
 void dynamics_damage_model (unsigned int damage, int random)
 {
@@ -320,7 +328,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 	while (this_damage < NUM_DYNAMICS_DAMAGE_TYPES)
 	{
 
-		if ((damage & this_damage) && (!(current_flight_dynamics->dynamics_damage & this_damage)))
+		if ((damage & this_damage) && (!(current_flight_dynamics->dynamics_damage & this_damage) || this_damage == DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE))
 		{
 
 			switch (this_damage)
@@ -385,6 +393,8 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_MAIN_ROTOR_DAMAGED, TRUE);
 
+					damage_helicopter_main_rotors (get_gunship_entity (), -2);
+
 					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_MAIN_ROTOR_DAMAGED);
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
@@ -404,9 +414,12 @@ void dynamics_damage_model (unsigned int damage, int random)
 					en = get_gunship_entity ();
 					type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-					if (    (type != ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B)
-						||(type != ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM)
-						||(type != ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B) )
+					if ((type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B)
+						||(type == ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM)
+						||(type == ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B) 
+						||(type == ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK) 
+						||(type == ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT) 
+						||(type == ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY) )
 					{
 						break;
 					}
@@ -762,15 +775,13 @@ void dynamics_damage_model (unsigned int damage, int random)
 				}
 				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
-					if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
-						break;
-					
 					debug_log ("DYNAMICS: MAIN ROTOR BLADE damaged");
 
-					if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE))
-						play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_MAIN_ROTOR_DAMAGED);
-
 					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE;
+					damage_helicopter_main_rotors(get_gunship_entity (), moving_collision_point);
+
+					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
+					set_current_flight_dynamics_auto_pilot (FALSE);
 
 					break;	
 				}
@@ -1083,166 +1094,96 @@ void update_dynamics_at_keysite (void)
 
 	unsigned int
 		model_damage,
-		damage_count,
 		this_damage;
 
-	if ((!get_keysite_currently_landed_at ()) || (!get_gunship_entity ()))
-	{
-
+	if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE))
 		return;
+		
+	if (current_flight_dynamics->repairing)
+	{
+		if (current_flight_dynamics->repairing_damage != DYNAMICS_DAMAGE_NONE)
+		{
+			debug_log ("DYNAMICS: repairing %s, repair time %f seconds", dynamics_damage_database [repairing_damage_count].name, current_flight_dynamics->damage_repair_time);
+			current_flight_dynamics->damage_repair_time -= get_delta_time ();
+
+			if (current_flight_dynamics->damage_repair_time <= 0.0)
+			{
+				if (current_flight_dynamics->dynamics_damage & current_flight_dynamics->repairing_damage)
+					repair_damage_model (current_flight_dynamics->repairing_damage);
+
+				current_flight_dynamics->repairing_damage = DYNAMICS_DAMAGE_NONE;
+				current_flight_dynamics->damage_repair_time = 0;
+				
+				if (current_flight_dynamics->dynamics_damage == DYNAMICS_DAMAGE_NONE)
+				{
+					debug_log ("DYNAMICS: model fully repaired");
+					restore_helicopter_entity (get_gunship_entity ());
+					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL));
+					transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, get_gunship_entity (), get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION), get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
+				}
+			}
+
+			if (!(current_flight_dynamics->dynamics_damage & current_flight_dynamics->repairing_damage)) // maybe it repaired already
+			{
+				current_flight_dynamics->repairing_damage = DYNAMICS_DAMAGE_NONE;
+				current_flight_dynamics->damage_repair_time = 0;				
+			}
+		}
+		else if (current_flight_dynamics->dynamics_damage != DYNAMICS_DAMAGE_NONE)
+		{
+				// looking for damage
+			this_damage = DYNAMICS_DAMAGE_NONE;
+			repairing_damage_count = 0;
+			model_damage = current_flight_dynamics->dynamics_damage;
+
+			while (this_damage < NUM_DYNAMICS_DAMAGE_TYPES)
+			{
+				if ((model_damage & this_damage) && (dynamics_damage_database [repairing_damage_count].repairable))
+				{
+					current_flight_dynamics->damage_repair_time = damage_repair_time = dynamics_damage_database [repairing_damage_count].repair_time * frand1();
+					current_flight_dynamics->repairing_damage = this_damage;
+
+					break;
+				}
+
+				repairing_damage_count ++;
+				this_damage = this_damage << 1;
+			}
+			
+			if (current_flight_dynamics->repairing_damage == DYNAMICS_DAMAGE_NONE && !get_keysite_currently_landed_at ())
+				current_flight_dynamics->repairing = FALSE;
+		}
 	}
 
-	//
-	// Refuel, only set if inside keysite
-	//
+	// Refuel, only if repaired
 
-	#if !DEMO_VERSION
-
-	if (current_flight_dynamics->refuelling)
+	if (current_flight_dynamics->refueling && current_flight_dynamics->repairing_damage == DYNAMICS_DAMAGE_NONE)
 	{
 		entity
 			*keysite;
 
-		float
-			max_fuel;
+		keysite = get_keysite_currently_landed_at ();
+		available_fuel = current_flight_dynamics->fuel_weight.max;
+		
+		if (keysite)
+			if (get_local_entity_float_value (keysite, FLOAT_TYPE_FUEL_SUPPLY_LEVEL) <= 0.0)
+				if (!get_connection_list_head ())
+					available_fuel = current_flight_dynamics->fuel_weight.max * 0.25;
 
-		if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_FUEL_LEAK))
-		{
-
-			//#if DYNAMICS_DEBUG
-
-//			debug_log ("DYNAMICS: refuelling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, current_flight_dynamics->fuel_weight.max);
-
-			//#endif
-
-			max_fuel = current_flight_dynamics->fuel_weight.max;
-
-			keysite = get_keysite_currently_landed_at ();
-
-			if (keysite)
-			{
-
-				if (get_local_entity_float_value (keysite, FLOAT_TYPE_FUEL_SUPPLY_LEVEL) <= 0.0)
-				{
-
-					if (!get_connection_list_head ())
-					{
-
-						max_fuel *= 0.25;
-					}
-				}
-			}
-
-			if (current_flight_dynamics->fuel_weight.value >= max_fuel)
-			{
-
-				current_flight_dynamics->refuelling = FALSE;
-			}
-			else
-			{
-
-				current_flight_dynamics->fuel_weight.value += REFUELLING_RATE * get_delta_time ();
-			}
-
-			current_flight_dynamics->fuel_weight.value = bound (current_flight_dynamics->fuel_weight.value,
-																				current_flight_dynamics->fuel_weight.min,
-																				current_flight_dynamics->fuel_weight.max);
-		}
+		if (current_flight_dynamics->fuel_weight.value >= available_fuel * 0.99)
+			current_flight_dynamics->refueling = current_fuel_level = available_fuel = FALSE;
 		else
 		{
-
-			debug_log ("DYNAMICS: can't refuel till leak is fixed");
+			if (!current_fuel_level)
+				current_fuel_level = current_flight_dynamics->fuel_weight.value;
+			current_flight_dynamics->fuel_weight.value += REFUELING_RATE * get_delta_time ();
+			debug_log ("DYNAMICS: refueling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, available_fuel);
 		}
-	}
 
-	#endif
-
-	//
-	// Repair, only set if inside keysite
-	//
-
-	if (current_flight_dynamics->repairing)
-	{
-
-		if (current_flight_dynamics->dynamics_damage != DYNAMICS_DAMAGE_NONE)
-		{
-
-			current_flight_dynamics->damage_repair_time -= get_delta_time ();
-
-			current_flight_dynamics->damage_repair_time = max (current_flight_dynamics->damage_repair_time, 0.0f);
-
-			#if DEBUG_MODULE
-
-			debug_log ("DYNAMICS: repairing %s, repair time %f seconds", dynamics_damage_database [damage_count].name, current_flight_dynamics->damage_repair_time);
-
-			#endif
-
-			//
-			// set repair timer to time to repair each part in turn
-			//
-
-			if (current_flight_dynamics->damage_repair_time <= 0.0)
-			{
-
-				// clear repaired damage
-				if ((current_flight_dynamics->repairing_damage != DYNAMICS_DAMAGE_NONE) &&
-					(current_flight_dynamics->dynamics_damage & current_flight_dynamics->repairing_damage))
-				{
-
-					repair_damage_model (current_flight_dynamics->repairing_damage);
-				}
-
-				current_flight_dynamics->repairing_damage = DYNAMICS_DAMAGE_NONE;
-
-				// start repairing next
-				this_damage = DYNAMICS_DAMAGE_NONE;
-
-				damage_count = 0;
-
-				model_damage = current_flight_dynamics->dynamics_damage;
-
-				while (this_damage < NUM_DYNAMICS_DAMAGE_TYPES)
-				{
-
-					if ((model_damage & this_damage) && (dynamics_damage_database [damage_count].repairable))
-					{
-
-						current_flight_dynamics->damage_repair_time = dynamics_damage_database [damage_count].repair_time;
-
-						current_flight_dynamics->repairing_damage = this_damage;
-
-						#if DEBUG_MODULE
-
-						debug_log ("DYNAMICS: repairing %s, repair time %f seconds", dynamics_damage_database [damage_count].name, current_flight_dynamics->damage_repair_time);
-
-						#endif
-
-						break;
-					}
-
-					damage_count ++;
-
-					this_damage = this_damage << 1;
-				}
-
-				if (current_flight_dynamics->repairing_damage == DYNAMICS_DAMAGE_NONE)
-				{
-
-					#if DEBUG_MODULE
-
-					debug_log ("DYNAMICS: model fully repaired");
-
-					#endif
-
-					restore_helicopter_entity (get_gunship_entity (), NULL, (operational_state_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
-
-					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL));
-
-					transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, get_gunship_entity (), get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION), get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
-				}
-			}
-		}
-	}
+		current_flight_dynamics->fuel_weight.value = bound (current_flight_dynamics->fuel_weight.value,
+																			current_flight_dynamics->fuel_weight.min,
+																			current_flight_dynamics->fuel_weight.max);
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1256,11 +1197,7 @@ void update_dynamics_damage (void)
 		damage;
 
 	for (damage = 1; damage < NUM_DYNAMICS_DAMAGE_TYPES; damage = damage << 1)
-	{
-
 		if (current_flight_dynamics->dynamics_damage & damage)
-		{
-
 			switch (damage)
 			{
 
@@ -1330,23 +1267,17 @@ void update_dynamics_damage (void)
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
 
-					//
-					// move cog about ramdomly
-					//
+					vec3d position, direction;
 
-					if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-					{
+					position.z = - 5;
+					position.y = - 1;
+					direction.y = sfrand1();
+					direction.x = sfrand1();
 
-						current_flight_dynamics->centre_of_gravity.z -= current_flight_dynamics->pitch.value * get_model_delta_time ();
-
-						current_flight_dynamics->centre_of_gravity.z = bound (current_flight_dynamics->centre_of_gravity.z, -0.1, 0.1);
-
-						#if DEBUG_MODULE
-
-						debug_log ("DYNAMICS: stabaliser damaged : cog %f, %f", current_flight_dynamics->centre_of_gravity.x, current_flight_dynamics->centre_of_gravity.z);
-
-						#endif
-					}
+					add_dynamic_force ("Damaged stabilizer", bound (current_flight_dynamics->velocity_z.value / 1000, - 0.1, 0.1), 0.0, &position, &direction, FALSE);
+					#if DEBUG_MODULE
+						create_vectored_debug_3d_object (&position, &direction, OBJECT_3D_ARROW_FORCES, 0, 20.0);
+					#endif
 
 					break;
 				}
@@ -1367,8 +1298,6 @@ void update_dynamics_damage (void)
 					break;
 				}
 			}
-		}
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1555,6 +1484,8 @@ void repair_damage_model (unsigned int damage)
 					current_flight_dynamics->tail_rotor_rpm.damaged = FALSE;
 
 					current_flight_dynamics->cross_coupling_effect.damaged = FALSE;
+
+					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_TAIL_ROTOR_DAMAGED, FALSE);
 
 					restore_helicopter_tail_rotors (get_gunship_entity ());
 
@@ -1839,6 +1770,7 @@ void repair_damage_model (unsigned int damage)
 				}
 				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
+					restore_helicopter_main_rotors (get_gunship_entity ());
 					break;	
 				}
 				default:
@@ -1865,6 +1797,8 @@ void damage_entity_to_flight_model (entity *en)
 
 	unsigned int
 		this_damage;
+
+	ASSERT (en);
 
 	if (!current_flight_dynamics)
 	{
@@ -1893,7 +1827,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_MAIN_ROTOR:
 				{
 
-					damage_level += 0.6;
+					damage_level += 0.2;
 
 					#if DYNAMICS_DEBUG
 
@@ -1906,7 +1840,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_TAIL_ROTOR:
 				{
 
-					damage_level += 0.8;
+					damage_level += 0.1;
 
 					#if DYNAMICS_DEBUG
 
@@ -1919,7 +1853,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.6;
 
 					#if DYNAMICS_DEBUG
 
@@ -1932,7 +1866,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.6;
 
 					#if DYNAMICS_DEBUG
 
@@ -1997,7 +1931,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.1;
 
 					#if DYNAMICS_DEBUG
 
@@ -2099,7 +2033,7 @@ void damage_entity_to_flight_model (entity *en)
 				}
 				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
-					damage_level += 0.2;
+					damage_level += 0.1;
 
 					#if DYNAMICS_DEBUG
 
@@ -2141,6 +2075,8 @@ void damage_helicopter_via_damage_level (entity *en, entity *aggressor)
 
 	float
 		en_damage_factor;
+
+	ASSERT (en);
 
 	ASSERT (get_local_entity_int_value (en, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);
 

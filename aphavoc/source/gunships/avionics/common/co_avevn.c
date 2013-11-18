@@ -481,12 +481,6 @@ static void toggle_auto_countermeasures_event (event *ev)
 
 static void rearm_refuel_repair_event (event *ev)
 {
-	#if DEMO_VERSION
-
-	set_status_message ("Feature disabled in demo version", STATUS_MESSAGE_TYPE_NONE);
-
-	#else
-
 	weapon_config_types
 		config_type;
 
@@ -498,34 +492,38 @@ static void rearm_refuel_repair_event (event *ev)
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
-		//
 		// re-arm
-		//
 	
 		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE);
 	
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 	
-		//
-		// refuel
-		//
-	
-		current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max;
-	
-		//
-		// repair
-		//
-	
-		fully_repair_local_entity_avionics (get_gunship_entity ());
-	
-		repair_damage_model (DYNAMICS_DAMAGE_ALL);
+		if (get_local_entity_int_value (get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_AIRCREW), INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_HARD)
+		{
+			current_flight_dynamics->repairing = current_flight_dynamics->refueling = TRUE;
+			
+			debug_log("difficult lvl %i", get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_AIRCREW), INT_TYPE_DIFFICULTY_LEVEL);
+		}
+		else
+		{
+			// refuel
 
-		repair_wheels();
+			current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max;
+	
+			// repair
+	
+			fully_repair_local_entity_avionics (get_gunship_entity ());
 
-		set_status_message (get_trans ("Rearmed, refuelled and repaired"), STATUS_MESSAGE_TYPE_NONE);
+			repair_damage_model (DYNAMICS_DAMAGE_ALL);
+
+			repair_wheels();
+
+			restore_helicopter_entity (get_gunship_entity ());
+		}
+
+		set_status_message (get_trans ("Rearming, refueling and repairing"), STATUS_MESSAGE_TYPE_NONE);
+
 	}
-	
-	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -830,6 +828,56 @@ static void dec_debug_var_z_fine(event* ev)
 	debug_var_z -= 0.1;
 }
 #endif // DEBUG
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//separated gear and door events by GCsDriver 08-12-2007
+
+void toggle_cockpit_doors_event(event* ev)
+{
+	int state;
+	entity *en;
+
+	en = get_gunship_entity ();
+
+	if(en)
+	{
+		state = get_local_entity_loading_door_state (en);
+		if(!state)
+		{
+			if (get_global_gunship_type () == GUNSHIP_TYPE_HIND)
+				toggle_mi24_cockpit_doors();
+			open_client_server_entity_loading_doors(en);
+		}
+		else if (state ==2)
+		{
+			if (get_global_gunship_type () == GUNSHIP_TYPE_HIND)
+				toggle_mi24_cockpit_doors();
+			close_client_server_entity_loading_doors(en);
+		}
+	}
+
+}
+
+void toggle_cargo_doors_event(event* ev)
+{
+	int state;
+	entity *en;
+
+	en = get_gunship_entity ();
+
+	if(en)
+	{
+		state = get_local_entity_cargo_door_state (en);
+
+		if(!state)
+			open_client_server_entity_cargo_doors( en );
+		else if (state ==2)
+			close_client_server_entity_cargo_doors( en );
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

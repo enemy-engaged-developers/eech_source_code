@@ -4759,7 +4759,7 @@ void process_received_entity_comms_messages (void)
 
 				if (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER)
 				{
-					restore_helicopter_entity (en, &pos, (operational_state_types) operational_state);
+					restore_helicopter_entity (en);
 				}
 
 				#if DEBUG_MODULE_MESSAGE_TEXT

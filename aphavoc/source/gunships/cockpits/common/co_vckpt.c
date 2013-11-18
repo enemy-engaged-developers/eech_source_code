@@ -148,188 +148,6 @@ void update_common_virtual_cockpit (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void damage_virtual_cockpit_main_rotors (int seed)
-{
-	switch (get_global_gunship_type ())
-	{
-		// JB 030313 Fly any aircraft
-//		default:
-		case GUNSHIP_TYPE_APACHE:
-		{
-			damage_apache_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HAVOC:
-		{
-			damage_havoc_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		case GUNSHIP_TYPE_COMANCHE:
-		{
-			damage_comanche_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		case GUNSHIP_TYPE_HOKUM:
-		{
-			damage_hokum_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		////Moje 030518 Start
-		case GUNSHIP_TYPE_BLACKHAWK:
-		{
-			damage_blackhawk_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-
-		////Moje 030518 End
-		////Moje 030612 Start
-		case GUNSHIP_TYPE_HIND:
-		{
-			if (custom_3d_models.arneh_mi24v_cockpit)
-				damage_hind_3d_cockpit_main_rotors (seed);
-			else
-				damage_hind_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		////Moje 030612 End
-		////Moje 030816 Start
-		case GUNSHIP_TYPE_AH64A:
-		{
-			damage_ah64a_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		case GUNSHIP_TYPE_KA50:
-		{
-			damage_ka50_virtual_cockpit_main_rotors (seed);
-			break;
-		}
-		////Moje 030816 End
-
-		case GUNSHIP_TYPE_VIPER:
-		{
-			damage_viper_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			damage_kiowa_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-		// GCsDriver  08-12-2007
-		default:
-		{
-			damage_default_virtual_cockpit_main_rotors (seed);
-
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void restore_virtual_cockpit_main_rotors (void)
-{
-	switch (get_global_gunship_type ())
-	{
-		// JB 030313 Fly any aircraft
-//		default:
-		case GUNSHIP_TYPE_APACHE:
-		{
-			restore_apache_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_HAVOC:
-		{
-			restore_havoc_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_COMANCHE:
-		{
-			restore_comanche_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_HOKUM:
-		{
-			restore_hokum_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		////Moje 030518 Start
-		case GUNSHIP_TYPE_BLACKHAWK:
-		{
-			restore_blackhawk_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		////Moje 030518 End
-		////Moje 030612 Start
-		case GUNSHIP_TYPE_HIND:
-		{
-			if (custom_3d_models.arneh_mi24v_cockpit)
-				restore_hind_3d_cockpit_main_rotors ();
-			else
-				restore_hind_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		////Moje 030612 End
-		////Moje 030816 Start
-		case GUNSHIP_TYPE_AH64A:
-		{
-			restore_ah64a_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_KA50:
-		{
-			restore_ka50_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		////Moje 030816 End
-
-		case GUNSHIP_TYPE_VIPER:
-		{
-			restore_viper_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			restore_kiowa_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-		// GCsDriver  08-12-2007
-		default:
-		{
-			restore_default_virtual_cockpit_main_rotors ();
-
-			break;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 int TIR_looking_in_periscope(void)
 {
 	gunship_types ship = get_global_gunship_type();
@@ -623,6 +441,49 @@ void animate_switch(cockpit_switch* swch)
 	}
 
 	swch->timer -= get_delta_time();
+}
+
+void print_repairing_status (void) // by /thealx/
+{
+	char buffer[128];
+	int string_length;
+	float x, progress, length;
+
+	if (current_flight_dynamics->repairing_damage != DYNAMICS_DAMAGE_NONE)
+	{
+		progress = 1 - current_flight_dynamics->damage_repair_time / damage_repair_time;
+		sprintf (buffer, "Repairing: %s", dynamics_damage_database [repairing_damage_count].name);
+	}
+	else if (current_flight_dynamics->refueling)
+	{
+		progress = fabs(current_fuel_level - current_flight_dynamics->fuel_weight.value)/(available_fuel - current_fuel_level);
+		sprintf (buffer, "Refueling");
+	}
+	else
+		return;
+
+	set_ui_font_type (UI_FONT_THICK_ARIAL_18);
+	set_ui_font_colour (ui_colour_cyan);
+
+	string_length = ui_get_string_length ( buffer );
+	x = get_integer_screen_x_mid () - (string_length / 2);
+	ui_display_text (buffer, x, full_screen_height * 1 / 5);
+
+	sprintf (buffer, "%0.0f %%", progress * 100);
+	string_length = ui_get_string_length ( buffer );
+	x = get_integer_screen_x_mid () - (string_length / 2);
+	ui_display_text (buffer, x, full_screen_height * 1 / 5 + 1.5 * ui_get_font_height ());
+
+	for (length = 0; length <= 19; length++)
+	{
+		if ((length / 20) <= progress)
+			sprintf (buffer, "!");
+		else
+			sprintf (buffer, ".");
+
+		ui_display_text (".", get_integer_screen_x_mid () - 50 + 5 * length, full_screen_height * 1 / 5 + 1.5 * ui_get_font_height () + 14);
+		ui_display_text (buffer, get_integer_screen_x_mid () - 50 + 5 * length, full_screen_height * 1 / 5 + 2.5 * ui_get_font_height ());
+	}	
 }
 
 //VJ wideview mod, date: 18-mar-03

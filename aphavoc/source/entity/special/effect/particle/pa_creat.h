@@ -66,7 +66,7 @@
 
 extern void overload_particle_create_functions (void);
 
-extern entity *create_client_server_particle_entity (int particle_count, vec3d *position, float initial_speed, object_3d_index_numbers object_3d_shape);
+extern entity *create_client_server_particle_entity (int particle_count, viewpoint vp, float initial_speed, object_3d_index_numbers object_3d_shape);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

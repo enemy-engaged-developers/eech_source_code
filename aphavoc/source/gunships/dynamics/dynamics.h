@@ -108,15 +108,15 @@ typedef enum DYNAMICS_OPTIONS_TYPES dynamics_options_types;
 
 #define NUMBER_OF_DYNAMIC_FORCES 					32
 
-#define REFUELLING_RATE									18.9  // 60 seconds for 2500lbs of fuel
+#define REFUELING_RATE									18.9  // 60 seconds for 2500lbs of fuel
 
 #define FUEL_LEAK_RATE									0.945  // 1200 seconds for 2500lbs of fuel
 
-#define DYNAMICS_LOW_ROTOR_RPM_SPEECH_TIME		(20 * ONE_SECOND)
+#define DYNAMICS_LOW_ROTOR_RPM_SPEECH_TIME		(60 * ONE_SECOND)
 
-#define DYNAMICS_LOW_FUEL_SPEECH_TIME				(20 * ONE_SECOND)
+#define DYNAMICS_LOW_FUEL_SPEECH_TIME				(60 * ONE_SECOND)
 
-#define DYNAMICS_EXCEEDING_VNE_SPEECH_TIME 		(20 * ONE_SECOND)
+#define DYNAMICS_EXCEEDING_VNE_SPEECH_TIME 		(60 * ONE_SECOND)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -497,7 +497,7 @@ struct DYNAMICS_TYPE
 	unsigned int
 		left_overtorque				: 1,
 		right_overtorque				: 1,
-		refuelling						: 1,
+		refueling						: 1,
 		repairing						: 1,
 		dying								: 1,
 		rotor_brake						: 1,
@@ -599,6 +599,7 @@ extern void flight_dynamics_decrease_altitude_lock (event *ev);
 extern void flight_dynamics_increase_altitude_lock (event *ev);
 
 extern void create_rotor_vibration(float force);
+extern void create_advanced_rotor_vibration(float force, int damaged);
 
 extern void flight_dynamics_start_engine_ev (event* ev);
 extern void flight_dynamics_throttle_engine_ev (event* ev);
@@ -619,9 +620,6 @@ extern void debug_dynamics_event4(event* ev);
 
 extern int
 	flight_dynamics_lock_position_flag;
-
-extern float
-	water_offset;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

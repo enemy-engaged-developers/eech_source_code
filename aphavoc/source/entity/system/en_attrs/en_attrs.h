@@ -117,7 +117,7 @@ extern entity_attribute_data
 
 #define ENTITY_ATTR_END entity_attr_end
 
-#define ENTITY_ATTR_ATTITUDE_ANGLES(HEADING,PITCH,ROLL) entity_attr_attitude_angles, ((float) (HEADING)), ((float) (PITCH)), ((float) (ROLL))
+#define ENTITY_ATTR_ATTITUDE_ANGLES(HEADING,PITCH,ROLL) entity_attr_attitude_angles, ((double) (HEADING)), ((double) (PITCH)), ((double) (ROLL))
 
 #define ENTITY_ATTR_CHAR_VALUE(CHAR_TYPE,VALUE) entity_attr_char_value, ((char_types) (CHAR_TYPE)), ((char) (VALUE))
 

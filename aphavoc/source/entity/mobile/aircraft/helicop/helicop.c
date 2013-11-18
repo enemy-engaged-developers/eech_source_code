@@ -446,7 +446,7 @@ void assign_entity_to_user (entity *en)
 
 		set_current_flight_dynamics_fuel_weight (fuel);
 
-		restore_helicopter_entity (en, NULL, (operational_state_types) get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
+		restore_helicopter_entity (en);
 
 		//
 		// set view mode
@@ -624,13 +624,15 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void restore_helicopter_entity (entity *en, vec3d *pos, operational_state_types operational_state)
+void restore_helicopter_entity (entity *en)
 {
 	ASSERT (en);
 
 	restore_helicopter_main_rotors (en);
+	set_client_server_entity_int_value (en, INT_TYPE_MAIN_ROTOR_DAMAGED, FALSE);
 
 	restore_helicopter_tail_rotors (en);
+	set_client_server_entity_int_value (en, INT_TYPE_TAIL_ROTOR_DAMAGED, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2227,10 +2229,21 @@ int helicopter_within_keysite_area (entity *en)
 				bounding_box = get_object_3d_bounding_box_without_lines (inst3d->object_number);
 
 				// make sure that the keysite is at least 200 m radius
-				xmin = min (bounding_box->xmin, -200.0f);
-				xmax = max (bounding_box->xmax, 200.0f);
-				zmin = min (bounding_box->zmin, -200.0f);
-				zmax = max (bounding_box->zmax, 200.0f);
+					// why? works fine /thealx/
+				if (get_global_gunship_side () == ENTITY_SIDE_BLUE_FORCE)
+				{
+					xmin = min (bounding_box->xmin, -22.0f);
+					xmax = max (bounding_box->xmax, 22.0f);
+					zmin = min (bounding_box->zmin, -126.0f);
+					zmax = max (bounding_box->zmax, 128.0f);
+				}
+				else
+				{
+					xmin = min (bounding_box->xmin, -32.0f);
+					xmax = max (bounding_box->xmax, 20.0f);
+					zmin = min (bounding_box->zmin, -137.0f);
+					zmax = max (bounding_box->zmax, 47.0f);
+				}
 
 				break;
 			}

@@ -70,7 +70,10 @@ struct PARTICLE
 		eff;
 
 	float
-		initial_speed;
+		initial_speed,
+		heading,
+		pitch,
+		roll;
 
 	unsigned char
 		particle_count,

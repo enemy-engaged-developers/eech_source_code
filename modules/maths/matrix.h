@@ -164,6 +164,8 @@ extern void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, const
 
 extern void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, const double_matrix3x3 m, const double_vec3d *v );
 
+extern void multiply_transpose_matrix3x3_double_vec3d ( double_vec3d *result, const matrix3x3 m, const double_vec3d *v );
+
 extern void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b );
 
 extern void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b );

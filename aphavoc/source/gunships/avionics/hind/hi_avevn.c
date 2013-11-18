@@ -593,46 +593,6 @@ static void toggle_gear_event (event *ev)
 	}
 }
 // Retro 18Jul2004 end
-//separated gear and door events by GCsDriver 08-12-2007
-static void toggle_door_event (event *ev)
-{
-	int
-		state;
-
-	entity *en;
-
-	en = get_gunship_entity ();
-
-	state = get_local_entity_loading_door_state (get_gunship_entity ());
-
-	switch ( state )
-	{
-		//////////////////////////////////////////////////
-		case 0:
-		//////////////////////////////////////////////////
-		{
-			open_client_server_entity_loading_doors( en );
-			open_client_server_entity_cargo_doors( en );
-
-			break;
-		}
-		//////////////////////////////////////////////////
-		case 2:
-		//////////////////////////////////////////////////
-		{
-			close_client_server_entity_loading_doors( en );
-			close_client_server_entity_cargo_doors( en );
-
-			break;
-		}
-	}
-}
-
-static void toggle_cockpit_doors_event(event* ev)
-{
-	toggle_mi24_cockpit_doors();
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -682,7 +642,7 @@ void set_hind_avionics_events (void)
 
 	// Retro 18Jul2004
 	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
-	set_event (DIK_D, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_door_event);
+	set_event (DIK_D, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cargo_doors_event);
 	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cockpit_doors_event);
 
 	//

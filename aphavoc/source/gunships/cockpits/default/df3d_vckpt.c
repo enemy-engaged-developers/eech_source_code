@@ -578,6 +578,7 @@ void draw_default_internal_virtual_cockpit_3d (unsigned int flags)
 			draw_3d_scene ();
 
 			print_edit_wide_cockpit ();
+			print_repairing_status();
 
 			end_3d_scene ();
 		}
@@ -1069,9 +1070,6 @@ void draw_default_external_virtual_cockpit_3d (unsigned int flags)
 	object_3d_sub_object_search_data
 		search;
 
-	float
-		theta;
-
 	object_3d_instance
 		*inst3d;
 
@@ -1135,22 +1133,9 @@ void draw_default_external_virtual_cockpit_3d (unsigned int flags)
 			{
 				if (!(get_helicopter_main_rotors_blurred (get_gunship_entity ()) && (!get_global_blurred_main_rotors_visible_from_cockpit ())))
 				{
-					if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_MAIN_ROTOR_DAMAGED))
-					{
-						animate_damaged_helicopter_main_rotors (get_gunship_entity (), TRUE);
-					}
-					else
-					{
-						animate_helicopter_main_rotors (get_gunship_entity (), TRUE, FALSE);
-					}
-
 					inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
-					theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-					set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_main_rotor_inst3d, theta);
-
-					animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d);
+					animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d, inst3d);
 
 					memcpy (&virtual_cockpit_main_rotor_inst3d->vp, &vp, sizeof (viewpoint));
 

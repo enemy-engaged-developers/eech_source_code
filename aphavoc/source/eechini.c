@@ -72,7 +72,7 @@
 
 #define EECH_INI "EECH.INI"
 
-#define DEFAULT_GWUT_FILE "GWUT1140.CSV"
+#define DEFAULT_GWUT_FILE "GWUT1152.CSV"
 
 // Casm 09JUN09 Advanced options processing BEGIN
 
@@ -863,7 +863,7 @@ static const struct config_option options[] =
 
 	{ NULL, "33", "[Dynamics]",
 		NONE },
-	{ "flight_model", "", "0 is default flight model, 1 is werewolf's flight model, 2 is arneh's model with suspension (def = 2)",
+	{ "flight_model", "", "0 is default flight model, 1 is werewolf's adjustments of default flight model  (def = 0)",
 		INT(command_line_dynamics_flight_model) },
 	{ "enginerealism", "", "realistic engine workload simulation model (0 = off, 1 = on) (def = 1)",
 		INT(command_line_dynamics_advanced_engine_model) },

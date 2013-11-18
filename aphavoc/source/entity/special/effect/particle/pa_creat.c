@@ -207,10 +207,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			{
 				raw->inst3d[ loop ] = construct_3d_object (raw->object_3d_shape);
 
-				// okay to use random values as its for visual effect only
-				get_3d_transformation_matrix_fast (rotation_matrix, PI * sfrand1(), PI * sfrand1(), PI * sfrand1());
-
-				memcpy (raw->inst3d [loop]->vp.attitude, rotation_matrix, sizeof (matrix3x3));
+				if (raw->heading || raw->pitch || raw->roll)
+					get_3d_transformation_matrix_fast (rotation_matrix, raw->heading, raw->pitch, raw->roll);
+				else	// okay to use random values as its for visual effect only
+					get_3d_transformation_matrix_fast (rotation_matrix, PI * sfrand1(), PI * sfrand1(), PI * sfrand1());
+				
+					memcpy (raw->inst3d [loop]->vp.attitude, rotation_matrix, sizeof (matrix3x3));
 			}
 			else
 			{
@@ -222,7 +224,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			raw->position[ loop ].z = raw->eff.position.z;
 
 			raw->motion_vector[ loop ].x = ( sfrand1x( &seed ) * raw->initial_speed );
-			raw->motion_vector[ loop ].y = ( frand1x( &seed ) * raw->initial_speed );
+			raw->motion_vector[ loop ].y = ( (0.25 + 0.75 * frand1x( &seed )) * raw->initial_speed );
 			raw->motion_vector[ loop ].z = ( sfrand1x( &seed ) * raw->initial_speed );
 
 		}
@@ -312,7 +314,7 @@ static entity *create_client (entity_types type, int index, char *pargs)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *create_client_server_particle_entity (int particle_count, vec3d *position, float initial_speed, object_3d_index_numbers object_3d_shape)
+entity *create_client_server_particle_entity (int particle_count, viewpoint vp, float initial_speed, object_3d_index_numbers object_3d_shape)
 {
 
 	entity
@@ -335,8 +337,11 @@ entity *create_client_server_particle_entity (int particle_count, vec3d *positio
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_EFFECT_PARTICLE),
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_PARTICLE_COUNT, particle_count),
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_OBJECT_3D_SHAPE, object_3d_shape),
-		ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, position->x, position->y, position->z),
+		ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, vp.x, vp.y, vp.z),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_INITIAL_SPEED, initial_speed),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_HEADING, get_heading_from_attitude_matrix(vp.attitude)),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_PITCH, get_pitch_from_attitude_matrix(vp.attitude)),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_ROLL, get_roll_from_attitude_matrix(vp.attitude)),
 		ENTITY_ATTR_END
 	);
 

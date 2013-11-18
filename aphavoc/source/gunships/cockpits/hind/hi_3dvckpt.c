@@ -283,11 +283,11 @@ static vec3d head_limits[2][2];
 
 static int
 	cockpit_fan_enabled = FALSE,
-	open_door = TRUE;
+	open_door;
 
 static float
 	door_handle_timer = 0.0,
-	door_state = 0.0;
+	door_state;
 
 //ataribaby 27/12/2008 for new head g-force movement
 static float
@@ -571,8 +571,8 @@ void initialise_hind_3d_cockpit (void)
 	head_limits[1][1].z =  0.3;
 #endif
 
-	open_door = !get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) && command_line_dynamics_engine_startup;
-	door_state = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) ? 1.0 : 0.0;
+	open_door = get_local_entity_loading_door_state (get_gunship_entity ()) == 2;
+	door_state = get_local_entity_loading_door_state (get_gunship_entity ()) == 3 || get_local_entity_loading_door_state (get_gunship_entity ()) == 0;
 	canopy_door_state = 1.0 - door_state;
 	animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 	animate_keyframed_sub_object_type(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
@@ -777,7 +777,7 @@ static void animate_doors(void)
 {
 	const float door_movement_rate = 0.7 * get_delta_time();
 	float new_state = door_state;
-
+	
 	if (open_door && door_handle_timer < 0.4)
 		new_state += max(-door_state, -door_movement_rate);
 	else
@@ -1461,6 +1461,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			draw_3d_scene ();
 
 			print_edit_wide_cockpit ();
+			print_repairing_status();
 
 			end_3d_scene ();
 		}
@@ -1741,9 +1742,6 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 	viewpoint
 		vp;
 
-	float
-		theta;
-
 	object_3d_instance
 		*inst3d;
 
@@ -1782,28 +1780,13 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 			{
 				if (!(get_helicopter_main_rotors_blurred (get_gunship_entity ()) && (!get_global_blurred_main_rotors_visible_from_cockpit ())))
 				{
-					if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_MAIN_ROTOR_DAMAGED))
-					{
-						animate_damaged_helicopter_main_rotors (get_gunship_entity (), TRUE);
-					}
-					else
-					{
-						animate_helicopter_main_rotors (get_gunship_entity (), TRUE, FALSE);
-					}
-
 					inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+					
+					animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d, inst3d);
 
-					theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
+					memcpy (&virtual_cockpit_main_rotor_inst3d->vp, &vp, sizeof (viewpoint));
 
-					{
-						set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_main_rotor_inst3d, theta);
-
-						animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d);
-
-						memcpy (&virtual_cockpit_main_rotor_inst3d->vp, &vp, sizeof (viewpoint));
-
-						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_main_rotor_inst3d->vp.position, virtual_cockpit_main_rotor_inst3d);
-					}
+					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_main_rotor_inst3d->vp.position, virtual_cockpit_main_rotor_inst3d);
 				}
 			}
 
@@ -2122,64 +2105,6 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void damage_hind_3d_cockpit_main_rotors (int seed)
-{
-	float
-		theta;
-
-	object_3d_instance
-		*inst3d;
-
-	ASSERT (get_gunship_entity ());
-
-	ASSERT (virtual_cockpit_main_rotor_inst3d);
-
-	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
-
-	ASSERT (inst3d);
-
-	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_main_rotor_inst3d, theta);
-
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d);
-
-	damage_helicopter_main_rotor_inst3d (virtual_cockpit_main_rotor_inst3d, seed);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void restore_hind_3d_cockpit_main_rotors (void)
-{
-	float
-		theta;
-
-	object_3d_instance
-		*inst3d;
-
-	ASSERT (get_gunship_entity ());
-
-	ASSERT (virtual_cockpit_main_rotor_inst3d);
-
-	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
-
-	ASSERT (inst3d);
-
-	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_main_rotor_inst3d, theta);
-
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d);
-
-	restore_helicopter_main_rotor_inst3d (virtual_cockpit_main_rotor_inst3d);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

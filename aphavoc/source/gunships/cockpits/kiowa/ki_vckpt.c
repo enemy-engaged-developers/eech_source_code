@@ -473,9 +473,6 @@ void draw_kiowa_virtual_cockpit (void)
 	int
 		draw_main_rotors;
 
-	float
-		theta;
-
 	object_3d_instance
 		*inst3d;
 
@@ -519,22 +516,9 @@ void draw_kiowa_virtual_cockpit (void)
 	// animate main rotors
 	//
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_MAIN_ROTOR_DAMAGED))
-	{
-		animate_damaged_helicopter_main_rotors (get_gunship_entity (), TRUE);
-	}
-	else
-	{
-		animate_helicopter_main_rotors (get_gunship_entity (), TRUE, FALSE);
-	}
-
 	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
-	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_inst3d, theta);
-
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d);
+	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d, inst3d);
 
 	draw_main_rotors = TRUE;
 
@@ -800,6 +784,8 @@ void draw_kiowa_virtual_cockpit (void)
 
 				draw_3d_scene ();
 
+				print_repairing_status();
+
 				end_3d_scene ();
 
 				remove_light_3d_source_from_3d_scene (cockpit_light);
@@ -817,6 +803,7 @@ void draw_kiowa_virtual_cockpit (void)
 				draw_3d_scene ();
 
 				print_edit_wide_cockpit ();
+				print_repairing_status();
 
 				end_3d_scene ();
 			}
@@ -873,6 +860,7 @@ void draw_kiowa_virtual_cockpit (void)
 			draw_3d_scene ();
 
 			print_edit_wide_cockpit ();
+			print_repairing_status();
 
 			end_3d_scene ();
 
@@ -1175,70 +1163,3 @@ void get_kiowa_display_viewpoint (view_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void damage_kiowa_virtual_cockpit_main_rotors (int seed)
-{
-	float
-		theta;
-
-	object_3d_instance
-		*inst3d;
-
-	ASSERT (get_gunship_entity ());
-
-	ASSERT (virtual_cockpit_inst3d_detail_level_normal_inst3d);
-	ASSERT (virtual_cockpit_inst3d_detail_level_glass_inst3d);
-
-	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
-
-	ASSERT (inst3d);
-
-	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_inst3d_detail_level_normal_inst3d, theta);
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_inst3d_detail_level_glass_inst3d, theta);
-
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d_detail_level_normal_inst3d);
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d_detail_level_glass_inst3d);
-
-	damage_helicopter_main_rotor_inst3d (virtual_cockpit_inst3d_detail_level_normal_inst3d, seed);
-	damage_helicopter_main_rotor_inst3d (virtual_cockpit_inst3d_detail_level_glass_inst3d, seed);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void restore_kiowa_virtual_cockpit_main_rotors (void)
-{
-	float
-		theta;
-
-	object_3d_instance
-		*inst3d;
-
-	ASSERT (get_gunship_entity ());
-
-	ASSERT (virtual_cockpit_inst3d_detail_level_normal_inst3d);
-	ASSERT (virtual_cockpit_inst3d_detail_level_glass_inst3d);
-
-	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
-
-	ASSERT (inst3d);
-
-	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
-
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_inst3d_detail_level_normal_inst3d, theta);
-	set_rotation_angle_of_helicopter_main_rotors (virtual_cockpit_inst3d_detail_level_glass_inst3d, theta);
-
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d_detail_level_normal_inst3d);
-	animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_inst3d_detail_level_glass_inst3d);
-
-	restore_helicopter_main_rotor_inst3d (virtual_cockpit_inst3d_detail_level_normal_inst3d);
-	restore_helicopter_main_rotor_inst3d (virtual_cockpit_inst3d_detail_level_glass_inst3d);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

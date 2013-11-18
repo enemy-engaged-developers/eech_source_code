@@ -135,10 +135,6 @@ extern void deinitialise_common_virtual_cockpit (void);
 
 extern void update_common_virtual_cockpit (void);
 
-extern void damage_virtual_cockpit_main_rotors (int seed);
-
-extern void restore_virtual_cockpit_main_rotors (void);
-
 extern void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular);
 
 extern int TIR_looking_in_periscope(void);
@@ -147,6 +143,7 @@ extern void initialise_switch(cockpit_switch*, float* position, float depress_le
 extern void press_switch(cockpit_switch*);
 extern void animate_switch(cockpit_switch*);
 
+void print_repairing_status (void);
 void print_edit_wide_cockpit (void);
 void move_edit_wide_cockpit (void);
 

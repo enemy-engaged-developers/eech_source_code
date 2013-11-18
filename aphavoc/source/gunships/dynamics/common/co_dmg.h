@@ -133,6 +133,16 @@ typedef struct DYNAMICS_DAMAGE_TYPE dynamics_damage_type;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern int repairing_damage_count;
+
+extern float damage_repair_time;
+
+extern float current_fuel_level;
+
+extern float available_fuel;
+
+extern void moving_collision_points_counter (int count);
+
 extern void dynamics_damage_model (unsigned int damage, int random);
 
 extern int get_current_dynamics_fatal_damage (void);

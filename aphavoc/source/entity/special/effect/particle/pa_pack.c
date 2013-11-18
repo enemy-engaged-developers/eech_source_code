@@ -111,6 +111,12 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			pack_float_value (en, FLOAT_TYPE_INITIAL_SPEED, raw->initial_speed);
 	
+			pack_float_value (en, FLOAT_TYPE_HEADING, raw->heading);
+	
+			pack_float_value (en, FLOAT_TYPE_PITCH, raw->pitch);
+	
+			pack_float_value (en, FLOAT_TYPE_ROLL, raw->roll);
+	
 			pack_int_value (en, INT_TYPE_PARTICLE_COUNT, raw->particle_count);
 
 			pack_int_value (en, INT_TYPE_OBJECT_3D_SHAPE, raw->object_3d_shape);
@@ -197,6 +203,12 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			//
 
 			raw->initial_speed = unpack_float_value (en, FLOAT_TYPE_INITIAL_SPEED);
+
+			raw->heading = unpack_float_value (en, FLOAT_TYPE_HEADING);
+
+			raw->pitch = unpack_float_value (en, FLOAT_TYPE_PITCH);
+
+			raw->roll = unpack_float_value (en, FLOAT_TYPE_ROLL);
 
 			raw->particle_count = unpack_int_value (en, INT_TYPE_PARTICLE_COUNT);
 

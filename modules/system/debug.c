@@ -407,10 +407,10 @@ long initialise_internal_debug_system ( void * data )
 			"DebugLogClass",
 			"Debug Log",
 			WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_VISIBLE | LBS_DISABLENOSCROLL,
-			0,
-			507,
-			648,
-			232,
+			1292,
+			600,
+			600,
+			450,
 			NULL,
 			NULL,
 			application_instance,
@@ -426,10 +426,10 @@ long initialise_internal_debug_system ( void * data )
 			"DebugWatchClass",
 			"Debug Watch",
 			WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_VISIBLE | LBS_DISABLENOSCROLL,
-			648,
+			1292,
 			0,
-			376,
-			507,
+			600,
+			400,
 			NULL,
 			NULL,
 			application_instance,
@@ -445,10 +445,10 @@ long initialise_internal_debug_system ( void * data )
 			"DebugLogFilteredClass",
 			"Debug Log Filter",
 			WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_VISIBLE | LBS_DISABLENOSCROLL,
-			648,
-			507,
-			376,
-			232,
+			1292,
+			400,
+			600,
+			200,
 			NULL,
 			NULL,
 			application_instance,
@@ -593,7 +593,7 @@ void debug_log (const char *msg, ...)
 			}
 		}
 
-#if 0
+#if 1
 		{
 			FILE
 				*fp;
@@ -615,7 +615,7 @@ void debug_log (const char *msg, ...)
 
 void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
-#if 0
+#if 1
 	FILE
 		*fp;
 #endif
@@ -709,7 +709,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 			}
 		}
 
-#if 0
+#if 1
 		fp = fopen ( debug_log_file_name, "a" );
 
 		if ( fp )

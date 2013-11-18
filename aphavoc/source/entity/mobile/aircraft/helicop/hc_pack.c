@@ -442,16 +442,14 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			if (main_rotor_damaged)
 			{
-				damage_helicopter_main_rotors (en);
-
 				raw->main_rotor_damaged = TRUE;
+				damage_helicopter_main_rotors (en, -2);
 			}
 
 			if (tail_rotor_damaged)
 			{
-				damage_helicopter_tail_rotors (en);
-
 				raw->tail_rotor_damaged = TRUE;
+				damage_helicopter_tail_rotors (en);
 			}
 
 			//
@@ -613,16 +611,14 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			if (main_rotor_damaged)
 			{
-				damage_helicopter_main_rotors (en);
-
 				raw->main_rotor_damaged = TRUE;
+				damage_helicopter_main_rotors (en, -2);
 			}
 
 			if (tail_rotor_damaged)
 			{
-				damage_helicopter_tail_rotors (en);
-
 				raw->tail_rotor_damaged = TRUE;
+				damage_helicopter_tail_rotors (en);
 			}
 
 			//

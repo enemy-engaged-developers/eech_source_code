@@ -100,6 +100,30 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_HEADING:
+		////////////////////////////////////////
+		{
+			raw->heading = value;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_PITCH:
+		////////////////////////////////////////
+		{
+			raw->pitch = value;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_ROLL:
+		////////////////////////////////////////
+		{
+			raw->roll = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -185,6 +209,29 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_HEADING:
+		////////////////////////////////////////
+		{
+			value = raw->heading;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_PITCH:
+		////////////////////////////////////////
+		{
+			value = raw->pitch;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_ROLL:
+		////////////////////////////////////////
+		{
+			value = raw->roll;
+
+			break;
+		}		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -218,6 +265,54 @@ void overload_particle_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_INITIAL_SPEED][COMMS_MODEL_CLIENT]		= set_client_float_value;
 
 	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_INITIAL_SPEED]								= get_local_float_value;
+
+	////////////////////////////////////////
+	//
+	// FLOAT_TYPE_HEADING
+	//
+	////////////////////////////////////////
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_HEADING]								= set_local_float_value;
+
+	fn_set_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_HEADING]								= set_local_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_HEADING][COMMS_MODEL_SERVER]		= set_server_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_HEADING][COMMS_MODEL_CLIENT]		= set_client_float_value;
+
+	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_HEADING]								= get_local_float_value;
+
+	////////////////////////////////////////
+	//
+	// FLOAT_TYPE_PITCH
+	//
+	////////////////////////////////////////
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_PITCH]								= set_local_float_value;
+
+	fn_set_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_PITCH]								= set_local_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_PITCH][COMMS_MODEL_SERVER]		= set_server_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_PITCH][COMMS_MODEL_CLIENT]		= set_client_float_value;
+
+	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_PITCH]								= get_local_float_value;
+
+	////////////////////////////////////////
+	//
+	// FLOAT_TYPE_HEADING
+	//
+	////////////////////////////////////////
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL]								= set_local_float_value;
+
+	fn_set_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL]								= set_local_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL][COMMS_MODEL_SERVER]		= set_server_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL][COMMS_MODEL_CLIENT]		= set_client_float_value;
+
+	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL]								= get_local_float_value;
 
 }
 

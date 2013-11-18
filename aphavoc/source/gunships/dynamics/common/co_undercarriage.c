@@ -20,39 +20,49 @@ typedef struct {
 		has_brakes;
 
 	double_vec3d
+		velocity,
 		world_position;
 
 	vec3d
-		velocity,
 		position;   // relative to CoG with suspension fully extended
 
 	float
 		turn_angle,
 		rotation_speed,
 		rotation_angle,
-		suspension_compression,  // how much the suspension is compressed, meters
 		resistance_force,
 		brake_force,
 		max_suspension_compression,
 		suspension_stiffness,    // kN per meter of suspension movement
 		damper_stiffness,
-		damping,        // resistance to change in compression
 		bump_stiffness,
 		radius;
-
+	double
+		suspension_compression,  // how much the suspension is compressed, meters
+		water_immersion, // how deep suspension points under water
+		damping,        // resistance to change in compression
+		last_wheel_load; // interpolation
 	char
 		name[SUSPENSION_NAME_MAX_LENGTH];
 
 	object_3d_sub_object_index_numbers
 		sub_index;
+
 } landing_gear_point;
 
 typedef enum
 {
 	LGPT_RIGHT_MAIN_WHEEL,
 	LGPT_LEFT_MAIN_WHEEL,
+	LGPT_RIGHT_SECONDARY_WHEEL,
+	LGPT_LEFT_SECONDARY_WHEEL,
 	LGPT_NOSE_WHEEL,
 	LGPT_TAIL_WHEEL,
+	LGPT_RIGHT_SKI_BACK,
+	LGPT_RIGHT_SKI_FRONT,
+	LGPT_LEFT_SKI_BACK,
+	LGPT_LEFT_SKI_FRONT,
+	LGPT_TAIL_BUMPER,
 	LGPT_LAST,
 } landing_gear_point_type;
 
@@ -72,10 +82,12 @@ typedef struct {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static landing_gear_system
-	landing_gears[NUM_GUNSHIP_TYPES + 1];
+	landing_gears[NUM_ENTITY_SUB_TYPE_AIRCRAFT + 1];
 
 static landing_gear_system
 	*current_landing_gear;
+static terrain_classes
+	terrain_class;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +114,16 @@ static const struct LANDING_GEAR_INFO
 		OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_RIGHT
 	},
 	{
+		"name = left secondary wheel",
+		LGPT_LEFT_SECONDARY_WHEEL,
+		OBJECT_3D_SUB_OBJECT_ROTATING_SECONDARY_WHEEL_LEFT
+	},
+	{
+		"name = right secondary wheel",
+		LGPT_RIGHT_SECONDARY_WHEEL,
+		OBJECT_3D_SUB_OBJECT_ROTATING_SECONDARY_WHEEL_RIGHT
+	},
+	{
 		"name = nose wheel",
 		LGPT_NOSE_WHEEL,
 		OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_NOSE
@@ -111,28 +133,33 @@ static const struct LANDING_GEAR_INFO
 		LGPT_TAIL_WHEEL,
 		OBJECT_3D_SUB_OBJECT_ROTATING_WHEEL_TAIL
 	},
+	{
+		"name = left ski back end",
+		LGPT_LEFT_SKI_BACK,
+		OBJECT_3D_INVALID_SUB_OBJECT_INDEX
+	},
+	{
+		"name = right ski back end",
+		LGPT_RIGHT_SKI_BACK,
+		OBJECT_3D_INVALID_SUB_OBJECT_INDEX
+	},
+	{
+		"name = left ski front end",
+		LGPT_LEFT_SKI_FRONT,
+		OBJECT_3D_INVALID_SUB_OBJECT_INDEX
+	},
+	{
+		"name = right ski front end",
+		LGPT_RIGHT_SKI_FRONT,
+		OBJECT_3D_INVALID_SUB_OBJECT_INDEX
+	},
+	{
+		"name = tail bumper",
+		LGPT_TAIL_BUMPER,
+		OBJECT_3D_INVALID_SUB_OBJECT_INDEX
+	},
+	
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-typedef struct
-{
-	float
-		ta,
-		ct,
-		tb,
-		stfb,
-		sbtf,
-		ttfb,
-		de,
-		ep;
-} apache_landing_gear;
-
-static apache_landing_gear
-	apache_main_gear, apache_tail_gear;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +188,7 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 		char filepath[256];
 		FILE* file;
 
-		snprintf(filepath, ARRAY_LENGTH(filepath), "..\\common\\data\\dyn\\%s", filename);
+		snprintf(filepath, ARRAY_LENGTH(filepath), "..\\common\\data\\suspension\\%s", filename);
 
 		file = safe_fopen(filepath, "r");
 		if (file)
@@ -248,6 +275,23 @@ static void update_gear_world_position(landing_gear_point* point, matrix3x3 atti
 	point->world_position.z += gear_position.z;
 }
 
+static void update_ai_gear_world_position(landing_gear_point* point, vec3d* position, matrix3x3 attitude, entity* en)
+{
+	vec3d
+		*ac_position,	
+		gear_position;
+
+	ASSERT (en);
+
+	ac_position = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
+	gear_position = point->position;
+	multiply_transpose_matrix3x3_vec3d(&gear_position, attitude, &gear_position);
+
+	position->x = ac_position->x + gear_position.x;
+	position->y = ac_position->y + gear_position.y;
+	position->z = ac_position->z + gear_position.z;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,101 +304,119 @@ static void update_suspension(void)
 
 	unsigned
 		i;
-
-	float
+	double
 		inv_delta_time = 1.0 / get_model_delta_time();
+	helicopter
+		*raw;
+	entity
+		*keysite;
 
+	ASSERT (get_gunship_entity());
+
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
+	terrain_class = get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info));
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(inv_attitude, attitude);
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
+		
+		point->damaged = current_flight_dynamics->undercarriage_state.damaged && point->damaged;
 
-		if (!point->damaged
-			&& (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0))
+		if ((!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0) || 
+				(terrain_class != TERRAIN_CLASS_LAND && get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT)))
 		{
 			double_vec3d
 				old_world_position;
-
-			float
+			
+			double
 				spring_compression,
 				terrain_elevation,
-				compression_change;
+				compression_change,
+				water_immersion = 0;
+			unsigned
+				keysite_area = 0;
 
 			old_world_position = point->world_position;
 
-			if (!fixed_collision_count && !moving_collision_count)
-				update_gear_world_position(point, inv_attitude);
+			update_gear_world_position(point, inv_attitude);
 
 			point->velocity.x = (point->world_position.x - old_world_position.x) * inv_delta_time;
 			point->velocity.y = (point->world_position.y - old_world_position.y) * inv_delta_time;
 			point->velocity.z = (point->world_position.z - old_world_position.z) * inv_delta_time;
 
-			multiply_transpose_matrix3x3_vec3d(&point->velocity, attitude, &point->velocity);
+			multiply_transpose_matrix3x3_double_vec3d(&point->velocity, attitude, &point->velocity);
 
 			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
 			spring_compression = (terrain_elevation - point->world_position.y);
 
-			if (spring_compression > 0.55)
+			if (terrain_class != TERRAIN_CLASS_LAND)
 			{
-				int
-					collisions;
+				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &raw->ac.mob.position, 0.5 * KILOMETRE, NULL, NULL);
 
-				collisions = FALSE;
-				switch ( get_game_type () )
-				{
-					case GAME_TYPE_FREE_FLIGHT:
-					{
-						collisions = get_global_session_free_flight_realism_invulnerable_from_collisions ();
-						break;
-					}
-					case GAME_TYPE_CAMPAIGN:
-					case GAME_TYPE_SKIRMISH:
-					{
-						collisions = get_global_session_campaign_realism_invulnerable_from_collisions ();
-						break;
-					}
-				}
+				if (keysite)
+					if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE && helicopter_within_keysite_area (get_gunship_entity ()))
+						keysite_area = TRUE;
 
-				if (!collisions)
-				{
-					point->damaged = TRUE;
-					//point->suspension_compression = 0.0;
-					continue;
-				}
-
-				spring_compression = 0.55;
-			}
-
-			if (spring_compression > 0.0)
-			{
-				compression_change = spring_compression - point->suspension_compression;
-
-				if ((fixed_collision_count || moving_collision_count) && compression_change > 0.0)
-				{
-					point->damping = 0.0;
-				}
+				if (keysite_area && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0))
+					spring_compression += (get_local_entity_int_value (keysite, INT_TYPE_SIDE) == ENTITY_SIDE_BLUE_FORCE) ? 19.95 : 16.65;	// update it of you will change carrier model! TODO: eliminate gunship side divide /thealx/
 				else
 				{
-					point->damping = bound(compression_change * inv_delta_time * point->damper_stiffness, -25.0f, 25.0f);
+					water_immersion = min (2, spring_compression + point->position.y / 3);
+					spring_compression = 0;
+				}
+//					debug_log("spring %f, immersion %f, airborn %i", spring_compression, water_immersion, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT));			
+			}
+			
+			if (spring_compression > 0.0) // solid
+			{
+				if (spring_compression > point->max_suspension_compression)
+				{
+					int
+						collisions = FALSE;
 
-					if (compression_change < 0.0)
+					switch ( get_game_type () )
 					{
-						// rebound produces more damping than bump
-						point->damping *= 2.0;
+						case GAME_TYPE_FREE_FLIGHT:
+						{
+							collisions = get_global_session_free_flight_realism_invulnerable_from_collisions ();
+							break;
+						}
+						case GAME_TYPE_CAMPAIGN:
+						case GAME_TYPE_SKIRMISH:
+						{
+							collisions = get_global_session_campaign_realism_invulnerable_from_collisions ();
+							break;
+						}
 					}
 
-					if (spring_compression >= point->max_suspension_compression)
+					if (!collisions && spring_compression > (1.5 + frand1()) * point->max_suspension_compression)
 					{
-						// increase damper stiffness on the bump to get this descent stopped quickly
-						if (compression_change > 0.0)  // bump
-							point->damping *= 2.0;
+						point->damaged = TRUE;
+						dynamics_damage_model(DYNAMICS_DAMAGE_UNDERCARRIAGE, FALSE);
 					}
 				}
 
-				point->suspension_compression = spring_compression;
+				compression_change = spring_compression - point->suspension_compression;
 
+				point->damping = bound(compression_change * inv_delta_time * point->damper_stiffness, -25.0f, 25.0f);
+
+				if (compression_change < 0.0)
+					// rebound produces more damping than bump
+					point->damping *= 1.5;
+
+//				if (spring_compression >= point->max_suspension_compression && compression_change > 0.0)
+//					// increase damper stiffness on the bump to get this descent stopped quickly
+//					point->damping *= 2.0;
+
+				point->suspension_compression = spring_compression;
+				point->water_immersion = 0;
+
+					// let's add some roughness of terrain /thealx/
+				if (fabs(point->velocity.z) > 0.1)
+					point->suspension_compression *= 1 + bound(point->velocity.z * sfrand1() / 200, 0, point->max_suspension_compression / 3);
+				
 				if (point->can_turn && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
 				{
 					float
@@ -379,9 +441,18 @@ static void update_suspension(void)
 					modify_angle(&point->turn_angle, new_angle, max_turn_rate);
  				}
 			}
+			else if (water_immersion > 0.0) // liquid
+			{
+				compression_change = water_immersion - point->water_immersion;
+
+				point->damping = - compression_change * inv_delta_time / 10;
+
+				point->water_immersion = water_immersion;
+				point->suspension_compression = 0;
+			}
 			else
 			{
-				point->suspension_compression = 0.0;
+				point->water_immersion = point->suspension_compression = 0.0;
 
 				if (point->can_turn)
 				{
@@ -393,6 +464,9 @@ static void update_suspension(void)
 				}
 			}
 		}
+		else
+			point->water_immersion = point->suspension_compression = 0.0;
+
 	}
 }
 
@@ -406,6 +480,8 @@ static void apply_suspension_forces(void)
 	unsigned
 		i;
 
+	ASSERT (get_gunship_entity());
+
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
 	up_direction.x = 0.0;
@@ -418,72 +494,83 @@ static void apply_suspension_forces(void)
 	{
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
-		float wheel_load;
+		double wheel_load;
 
-		if (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0)
-			if (!point->damaged && point->suspension_compression > 0.0)
-			{
-				position.x = point->position.x;
-				position.y = point->position.y - point->suspension_compression + 3.0;
-				position.z = point->position.z;
+		if (point->suspension_compression > 0 || point->water_immersion > 0)
+		{
+			float suspension_stiffness;
+			
+			if (!point->damaged || point->suspension_compression >= point->max_suspension_compression)
+				suspension_stiffness = point->suspension_stiffness;
+			else if (point->suspension_compression / point->max_suspension_compression >= 0.8) // damaged wheel works only when it close to edge
+				suspension_stiffness = point->suspension_stiffness * (point->suspension_compression / point->max_suspension_compression - 0.8) * 5;
+			else
+				suspension_stiffness = 0;
+			
+			position.x = point->position.x;
+			position.y = point->position.y - (point->suspension_compression + point->water_immersion) + 3.0;
+			position.z = point->position.z;
 
-				if (point->suspension_compression >= point->max_suspension_compression)
-					wheel_load = G * (point->max_suspension_compression * point->suspension_stiffness + (point->suspension_compression - point->max_suspension_compression) * point->bump_stiffness);
-				else
-					wheel_load = G * point->suspension_compression * point->suspension_stiffness;
+			if (point->suspension_compression >= point->max_suspension_compression && !point->damaged)
+				wheel_load = G * (point->max_suspension_compression * suspension_stiffness + (point->suspension_compression - point->max_suspension_compression) * point->bump_stiffness);
+			else
+				wheel_load = G * (point->suspension_compression ? point->suspension_compression * suspension_stiffness : point->water_immersion);
 
-				wheel_load += point->damping;
-
+			wheel_load = (wheel_load + point->damping + point->last_wheel_load) / 2;
+			if (!(point->water_immersion > 0 && !strcmp(point->name, "tail bumper")))
 				add_dynamic_force (point->name, wheel_load, 0.0, &position, &up_direction, TRUE);
 
-				// wheel sideways resistance
-				if (!point->can_turn)
-				{
-					float
-						max_force,
-						force,
-						force_diff,
-						max_force_change = get_model_delta_time() * 10.0;
+			point->last_wheel_load = wheel_load;
+			point->suspension_compression = bound(point->suspension_compression, 0, point->max_suspension_compression);
+
+			// wheel sideways resistance
+			if (!point->can_turn || point->water_immersion > 0 )
+			{
+				float
+					max_force,
+					force,
+					force_diff,
+					max_force_change = get_model_delta_time() * 50.0;
 
 					max_force = min(wheel_load * 2.5f, 1.0f * G);  // depends on load on wheel
 
-					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
-					force_diff = (max_force * force) - point->resistance_force;
+				force = bound(point->velocity.x * 1.0, -1.0, 1.0);
+				force_diff = (max_force * force) - point->resistance_force;
 
-					point->resistance_force += bound(force_diff, -max_force_change, max_force_change);
+				point->resistance_force += bound(force_diff, -max_force_change, max_force_change);
 
-					direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
-					direction.y = 0.0;
-					direction.z = 0.0;
+				direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
+				direction.y = 0.0;
+				direction.z = 0.0;
 
-					add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
-				}
+				add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
+			}
 
-				// wheel longitudinal resistance/brakes
-				{
-					float
-						max_force,
-						force,
-						force_diff,
-						max_force_change = get_model_delta_time() * 20.0;
+			// wheel longitudinal resistance/brakes
+			{
+				float
+					max_force,
+					force,
+					force_diff,
+					max_force_change = get_model_delta_time() * 20.0;
 
-					if (point->has_brakes && current_flight_dynamics->wheel_brake)
-						max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
-					else
-						max_force = min(wheel_load * 0.025f, G);  // general rolling resistance
+				if (point->has_brakes && current_flight_dynamics->wheel_brake || point->water_immersion > 0)
+					max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
+				else
+					max_force = min(wheel_load * 0.025f, G);  // general rolling resistance
 
 					force = bound(point->velocity.z * 2.0, -1.0, 1.0);
-					force_diff = (max_force * force) - point->brake_force;
+				force_diff = (max_force * force) - point->brake_force;
 
-					point->brake_force += bound(force_diff, -max_force_change, max_force_change);
+				point->brake_force += bound(force_diff, -max_force_change, max_force_change);
 
-					direction.x = 0.0;
-					direction.y = 0.0;
-					direction.z = (point->brake_force > 0.0) ? -1.0 : 1.0;
+				direction.x = 0.0;
+				direction.y = 0.0;
+				direction.z = (point->brake_force > 0.0) ? -1.0 : 1.0;
 
-					add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, TRUE);
-				}
+				add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, TRUE);
 			}
+		}
 	}
 }
 
@@ -491,50 +578,40 @@ static void apply_suspension_forces(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void apache_initialise_landing_gear(apache_landing_gear* gear, float b, float c, float t, float a, float u, float f)
-{
-	float
-		sb,
-		stf;
-
-	sb = b * b;
-	stf = t * t + f * f;
-
-	gear->ta = t + a;
-	gear->ct = c / t;
-	gear->tb = 2 * b;
-  gear->stfb = sb + stf;
-  gear->sbtf = sb - stf;
-  gear->ttfb = sqrt(stf) * gear->tb;
-  gear->de = atan2(f, t);
-  gear->ep = acos(gear->ct) + gear->de + acos((gear->stfb - u * u) / gear->ttfb);
-}
-
 void initialise_undercarriage_database(void)
 {
 	const char
-		*filenames[NUM_GUNSHIP_TYPES + 1];
+		*filenames[NUM_ENTITY_SUB_TYPE_AIRCRAFT];
 	unsigned
 		gunship;
 
 	memset(filenames, 0, sizeof(filenames));
 
-	filenames[GUNSHIP_TYPE_APACHE] = "ah-64-suspension.txt";
-	filenames[GUNSHIP_TYPE_AH64A] = "ah-64-suspension.txt";
-	filenames[GUNSHIP_TYPE_COMANCHE] = "rah-66-suspension.txt";
-	filenames[GUNSHIP_TYPE_BLACKHAWK] = "uh-60-suspension.txt";
-	filenames[GUNSHIP_TYPE_HAVOC] = "mi-28-suspension.txt";
-	filenames[GUNSHIP_TYPE_HOKUM] = "ka-52-suspension.txt";
-	filenames[GUNSHIP_TYPE_KA50] = "ka-52-suspension.txt";
-	filenames[GUNSHIP_TYPE_HIND] = "mi-24-suspension.txt";
-	filenames[GUNSHIP_TYPE_VIPER] = "ah-1-suspension.txt";
-	filenames[GUNSHIP_TYPE_KIOWA] = "oh-58-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW] = "ah-64-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE] = "ah-64-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE] = "rah-66-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK] = "uh-60-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER] = "ah-1-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA] = "ah-1-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA] = "ah-1-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR] = "oh-58-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY] = "mv-22-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION] = "ch-53-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT] = "ch-3-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT] = "ch-46-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK] = "ch-47-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B] = "mi-28-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B] = "ka-52-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM] = "ka-52-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND] = "mi-24-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP] = "mi-17-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK] = "mi-6-suspension.txt";
+	filenames[ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B] = "ka-29-suspension.txt";
 
 	for (gunship = 0; gunship < ARRAY_LENGTH(filenames); gunship++)
-		initialise_landing_gear(&landing_gears[gunship], filenames[gunship]);
+		if (filenames[gunship])
+			initialise_landing_gear(&landing_gears[gunship], filenames[gunship]);
 
-	apache_initialise_landing_gear(&apache_main_gear, 0.58, 0.46, 0.79, 0.62, 1.13, 0.09);
-	apache_initialise_landing_gear(&apache_tail_gear, 0.40, 0.27, 0.62, 0.39, 0.79, 0.31);
 }
 
 void deinitialise_undercarriage_database(void)
@@ -556,14 +633,16 @@ void deinitialise_undercarriage_database(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_undercarriage_dynamics(void)
+void initialise_undercarriage_dynamics(entity* en)
 {
 	matrix3x3
 		attitude;
 	unsigned
 		i;
 
-	current_landing_gear = &landing_gears[get_global_gunship_type()];
+	ASSERT (en);
+
+	current_landing_gear = &landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)];
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(attitude, attitude);
@@ -575,6 +654,7 @@ void initialise_undercarriage_dynamics(void)
 		current_landing_gear->gear_points[i].brake_force = 0.0;
 		current_landing_gear->gear_points[i].damping = 0.0;
 		current_landing_gear->gear_points[i].suspension_compression = 0.0;
+		current_landing_gear->gear_points[i].water_immersion = 0.0;
 		current_landing_gear->gear_points[i].turn_angle = 0.0;
 		current_landing_gear->gear_points[i].rotation_speed = 0.0;
 		current_landing_gear->gear_points[i].rotation_angle = rand() * PI / RAND_MAX;
@@ -592,16 +672,19 @@ void deinitialise_undercarriage_dynamics(void)
 
 }
 
-void reset_undercarriage_world_position(void)
+void reset_undercarriage_world_position(entity* en)
 {
 	matrix3x3
 		attitude;
 	unsigned
 		i;
 
+	ASSERT (en);
+	ASSERT (get_gunship_entity());
+
 //	debug_log("resetting gear position");
 
-	current_landing_gear = &landing_gears[get_global_gunship_type()];
+	current_landing_gear = &landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)];
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(attitude, attitude);
@@ -612,18 +695,12 @@ void reset_undercarriage_world_position(void)
 
 void repair_wheels(void)
 {
-	unsigned
-		i;
+	unsigned i;
+
+	ASSERT (get_gunship_entity());
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
-	{
 		current_landing_gear->gear_points[i].damaged = FALSE;
-	}
-}
-
-int helicopter_has_undercarriage_modelling(void)
-{
-	return command_line_dynamics_flight_model >= 2 && current_landing_gear->num_gear_points > 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -634,12 +711,11 @@ int weight_on_wheels(void)
 {
 	unsigned int i;
 
-	if (command_line_dynamics_flight_model < 2)
-		return FALSE;
-
+	ASSERT (get_gunship_entity());
+	
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
-		if (!current_landing_gear->gear_points[i].damaged && current_landing_gear->gear_points[i].suspension_compression > 0.0)
+		if (current_landing_gear->gear_points[i].suspension_compression > 0.0)
 		{
 			return TRUE;
 			break;
@@ -651,73 +727,12 @@ int weight_on_wheels(void)
 
 void update_undercarriage_dynamics(void)
 {
-	ASSERT(get_gunship_entity());
-
-	current_flight_dynamics->undercarriage_state.value = get_undercarriage_state();
-
-	update_suspension();
-	apply_suspension_forces();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void animate_hind_suspension(object_3d_instance* inst3d)
-{
-	landing_gear_point
-		*nose,
-		*left,
-		*right;
-
-	static object_3d_sub_instance
-		*left_wheel,
-		*right_wheel,
-		*nose_wheel,
-		*nose_strut;
-
-	static const object_3d_sub_object_search_batch
-		search[] =
-			{
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_WHEEL, &left_wheel },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_WHEEL, &right_wheel },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_WHEEL, &nose_wheel },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT, &nose_strut },
-			};
-
-	nose = landing_gears[GUNSHIP_TYPE_HIND].gear_points_types[LGPT_NOSE_WHEEL];
-	left = landing_gears[GUNSHIP_TYPE_HIND].gear_points_types[LGPT_LEFT_MAIN_WHEEL];
-	right = landing_gears[GUNSHIP_TYPE_HIND].gear_points_types[LGPT_RIGHT_MAIN_WHEEL];
-
-	if (!nose || !left || !right)
+	if(get_gunship_entity())
 	{
-		return;
-	}
+		current_flight_dynamics->undercarriage_state.value = get_undercarriage_state();
 
-	if (!find_object_3d_sub_objects(inst3d, search, ARRAY_LENGTH(search)))
-		return;
-
-	{
-		float
-			uc_state = get_undercarriage_state(),
-			turn_angle = nose->turn_angle,
-			front_compression = min(nose->suspension_compression, nose->max_suspension_compression);
-
-		left_wheel->relative_pitch = (rad(-13.0) + min(left->suspension_compression, left->max_suspension_compression) * rad(70)) * uc_state;
-		right_wheel->relative_pitch = (rad(-13.0) + min(right->suspension_compression, right->max_suspension_compression) * rad(70)) * uc_state;
-
-		nose_strut->relative_position.z = (-0.15 + front_compression * 0.85) * uc_state;
-
-		nose_wheel->relative_position.y = sin(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
-		nose_wheel->relative_position.z = cos(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
-
-		nose_wheel->relative_pitch = (rad(-15) + front_compression * rad(70)) * uc_state;
-
-		nose_wheel->relative_heading = turn_angle;
-		nose_wheel->relative_roll = sin(nose_wheel->relative_heading) * rad(40);
-		nose_wheel->relative_pitch += rad(-30) + cos(nose_wheel->relative_heading) * rad(30);
-
-		nose_wheel->relative_position.z += cos(nose_wheel->relative_heading) * 0.05 - 0.05;
+		update_suspension();
+		apply_suspension_forces();
 	}
 }
 
@@ -725,83 +740,243 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void apache_set(const apache_landing_gear* gear, float h, object_3d_sub_instance* arm, object_3d_sub_instance* cylinder, object_3d_sub_instance* piston)
+void animate_aircraft_suspension(entity* en)
 {
+	object_3d_instance
+		*inst3d;
+	matrix3x3
+		attitude,
+		inv_attitude;
 	float
-		l,
-		l2,
-		al,
-		be;
-
-  be = gear->ep - acos(gear->ct - h / gear->ta);
-  l2 = gear->stfb - gear->ttfb * cos(be - gear->de);
-  l = sqrt(l2);
-  al = acos((l2 + gear->sbtf) / (l * gear->tb));
-
-	arm->relative_pitch = - be;
-	cylinder->relative_pitch = al;
-	piston->relative_pitch = al + be;
-}
-
-void animate_apache_suspension(object_3d_instance* inst3d)
-{
+		ter_elevation[5],
+		left_compression = 0,
+		right_compression = 0,
+		left_secondary_compression = 0,
+		right_secondary_compression = 0,
+		third_compression = 0,
+		nose_turn_angle = 0,
+		tail_turn_angle = 0,
+		left_secondary_turn_angle = 0,
+		right_secondary_turn_angle = 0;
+	int i;
 	landing_gear_point
-		*tail,
+		*third,
 		*left,
-		*right;
+		*left_secondary,
+		*right,
+		*right_secondary;
+	vec3d
+		point_world_position[5];
+	
+	helicopter
+		*raw;
 
-	static object_3d_sub_instance
-		*right_cylinder,
-		*right_arm,
-		*right_piston,
-		*left_cylinder,
-		*left_arm,
-		*left_piston,
-		*tail_cylinder,
-		*tail_arm,
-		*tail_piston,
-		*tail_fork;
+	ASSERT (en);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return;
+	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+		return;
 
-	static const object_3d_sub_object_search_batch
-		search[] =
+	raw = (helicopter *) get_local_entity_data (en);
+	inst3d = raw->ac.inst3d;
+			
+	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+	{
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
+		{
+			left = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_MAIN_WHEEL];
+			right = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_MAIN_WHEEL];
+			third = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_NOSE_WHEEL];
+			if (!right || !left || !third)
 			{
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_WHEEL, &right_arm },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_PISTON, &right_piston },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_CYLINDER, &right_cylinder },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_WHEEL, &left_arm },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_PISTON, &left_piston },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_CYLINDER, &left_cylinder },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_WHEEL, &tail_arm },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_PISTON, &tail_piston },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_CYLINDER, &tail_cylinder },
-				{ OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT, &tail_fork },
-			};
+				debug_log("Can't find suspension, aircraft sub type %i", get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE));
+				return;
+			}
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+		{
+			left = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_MAIN_WHEEL];
+			right = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_MAIN_WHEEL];
+			third = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_TAIL_WHEEL];
+			if (!right || !left || !third)
+			{
+				debug_log("Can't find suspension, aircraft sub type %i", get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE));
+				return;
+			}
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+		{
+			left = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_MAIN_WHEEL];
+			left_secondary = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_SECONDARY_WHEEL];
+			right = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_MAIN_WHEEL];
+			right_secondary = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_SECONDARY_WHEEL];
+			if (!right || !right_secondary || !left || !left_secondary)
+			{
+				debug_log("Can't find suspension, aircraft sub type %i", get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE));
+				return;
+			}
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+		{
+			right = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_SKI_FRONT];
+			right_secondary = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_RIGHT_SKI_BACK];
+			left = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_SKI_FRONT];
+			left_secondary = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_LEFT_SKI_BACK];
+			third = landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points_types[LGPT_TAIL_BUMPER];
+			if (!right || !right_secondary || !left || !left_secondary || !third)
+			{
+				debug_log("Can't find suspension, aircraft sub type %i", get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE));
+				return;
+			}
+			break;
+		}
+		default:
+			return;
+	}
 
-	left = landing_gears[GUNSHIP_TYPE_APACHE].gear_points_types[LGPT_LEFT_MAIN_WHEEL];
-	right = landing_gears[GUNSHIP_TYPE_APACHE].gear_points_types[LGPT_RIGHT_MAIN_WHEEL];
-	tail = landing_gears[GUNSHIP_TYPE_APACHE].gear_points_types[LGPT_TAIL_WHEEL];
+	if (en != get_gunship_entity ())
+	{
+		get_local_entity_attitude_matrix (en, attitude);
+		get_inverse_matrix(inv_attitude, attitude);
+		for (i = 0; i < landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].num_gear_points; i++)
+		{
+			update_ai_gear_world_position(&landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points[i], &point_world_position[i], inv_attitude, en);
+			ter_elevation[i] = get_3d_terrain_elevation(point_world_position[i].x, point_world_position[i].z);
+		}
 
-	if (!tail || !left || !right)
-		return;
+		switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+			{
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+				case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+				{
+					right_compression = bound(max(ter_elevation[0] - point_world_position[0].y, ter_elevation[2] - point_world_position[2].y), 0, (left->max_suspension_compression + left_secondary->max_suspension_compression) / 2);
+					left_compression = bound(max(ter_elevation[1] - point_world_position[1].y, ter_elevation[3] - point_world_position[3].y), 0, (right->max_suspension_compression + right_secondary->max_suspension_compression) / 2);
+					break;
+				}
+				case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+				case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+				{
+					right_compression = bound(ter_elevation[0] - point_world_position[0].y, 0, right->max_suspension_compression);
+					left_compression = bound(ter_elevation[1] - point_world_position[1].y, 0, left->max_suspension_compression);
+					right_secondary_compression = bound(ter_elevation[2] - point_world_position[2].y, 0, right_secondary->max_suspension_compression);
+					left_secondary_compression = bound(ter_elevation[3] - point_world_position[3].y, 0, left_secondary->max_suspension_compression);
+					break;
+				}
+				default:
+				{
+					right_compression = bound(ter_elevation[0] - point_world_position[0].y, 0, right->max_suspension_compression);
+					left_compression = bound(ter_elevation[1] - point_world_position[1].y, 0, left->max_suspension_compression);
+					third_compression = bound(ter_elevation[2] - point_world_position[2].y, 0, third->max_suspension_compression);
+					break;
+				}
+			}
 
-	if (!find_object_3d_sub_objects(inst3d, search, ARRAY_LENGTH(search)))
-		return;
+		nose_turn_angle = tail_turn_angle = left_secondary_turn_angle = right_secondary_turn_angle = 0;
+	}
+	else
+	{
+		switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+			{
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+				case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+				case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+				{
+					left_compression = max(left->suspension_compression, left_secondary->suspension_compression);
+					right_compression = max(right->suspension_compression, right_secondary->suspension_compression);
+					break;
+				}
+				case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+				case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+				{
+					left_compression = left->suspension_compression;
+					left_secondary_compression = left_secondary->suspension_compression;
+					tail_turn_angle = left_secondary->turn_angle;
+					right_compression = right->suspension_compression;
+					right_secondary_compression = right_secondary->suspension_compression;
+					nose_turn_angle = right_secondary->turn_angle;
+					break;
+				}
+				default:
+				{
+					left_compression = left->suspension_compression;
+					right_compression = right->suspension_compression;
+					third_compression = third->suspension_compression;
+					nose_turn_angle = tail_turn_angle = third->turn_angle;	
+					break;
+				}
+			}
+	}
 
-	apache_set(&apache_main_gear, min(right->suspension_compression - 0.25f, right->max_suspension_compression), right_arm, right_cylinder, right_piston);
-	apache_set(&apache_main_gear, min(left->suspension_compression - 0.25f, left->max_suspension_compression), left_arm, left_cylinder, left_piston);
-	apache_set(&apache_tail_gear, min(tail->suspension_compression - 0.3f, tail->max_suspension_compression), tail_arm, tail_cylinder, tail_piston);
-	tail_fork->relative_heading = tail->turn_angle;
+	if (left_compression || right_compression || left_secondary_compression || right_secondary_compression || third_compression || nose_turn_angle || tail_turn_angle)
+	{
+		object_3d_sub_object_search_data
+			result_sub_obj;
+
+		result_sub_obj.search_object = inst3d;
+
+		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT));
+		{
+			result_sub_obj.search_depth = 0;
+			result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT;
+			while (find_object_3d_sub_object (&result_sub_obj) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			{
+				result_sub_obj.result_sub_object->relative_heading = nose_turn_angle;
+				result_sub_obj.search_depth++;
+			}
+		}
+		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT)); // not "else if"! ch-47 and ka-29 use both
+		{
+			result_sub_obj.search_depth = 0;
+			result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT;
+			while (find_object_3d_sub_object (&result_sub_obj) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			{
+				result_sub_obj.result_sub_object->relative_heading = tail_turn_angle;
+				result_sub_obj.search_depth++;
+			}
+		}
+
+		animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_WHEEL, bound(min(right_compression, right->max_suspension_compression) / left->max_suspension_compression, 0, 1));
+		animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_WHEEL, bound(min(left_compression, left->max_suspension_compression) / left->max_suspension_compression, 0, 1));
+
+		if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK || get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B)
+		{
+			animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_WHEEL, bound(min(right_secondary_compression, right_secondary->max_suspension_compression) / right_secondary->max_suspension_compression, 0, 1));
+			animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_WHEEL, bound(min(left_secondary_compression, left_secondary->max_suspension_compression) / left_secondary->max_suspension_compression, 0, 1));
+		}
+		else
+		{
+			animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_WHEEL, bound( min(third_compression, third->max_suspension_compression) / third->max_suspension_compression, 0, 1));
+			animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_WHEEL, bound( min(third_compression, third->max_suspension_compression) / third->max_suspension_compression, 0, 1));
+		}
+	}
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static int wheel_locked_down(const landing_gear_point* point)
 {
-	if (command_line_dynamics_flight_model < 2)
-		return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
-
 	return !point || (!point->damaged && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0));
 }
 
@@ -829,58 +1004,44 @@ void rotate_helicopter_wheels(object_3d_instance* inst3d)
 		search;
 
 	ASSERT ( current_landing_gear );
+	ASSERT (get_gunship_entity());
 
 	for ( i = 0; i < current_landing_gear->num_gear_points; i++ )
 	{
-		landing_gear_point
-			*gear_point = current_landing_gear->gear_points + i;
+		if ( current_landing_gear->gear_points[i].sub_index == OBJECT_3D_INVALID_SUB_OBJECT_INDEX )
+			return;
 
-		if ( gear_point->damaged || gear_point->sub_index == OBJECT_3D_INVALID_SUB_OBJECT_INDEX )
+		if ( current_landing_gear->gear_points[i].suspension_compression == 0.0 )
 		{
-			continue;
-		}
-
-		if ( gear_point->suspension_compression == 0.0 )
-		{
-			if ( gear_point->rotation_speed == 0.0 )
-			{
+			if ( current_landing_gear->gear_points[i].rotation_speed == 0.0 )
 				continue;
-			}
-			gear_point->rotation_speed = gear_point->rotation_speed < 0.0 ? min(gear_point->rotation_speed + 0.1, 0.0) : max(gear_point->rotation_speed - 0.1, 0.0);
-		}
-		else
-		{
-			gear_point->rotation_speed = (gear_point->can_turn ? sqrt(gear_point->velocity.x * gear_point->velocity.x + gear_point->velocity.z * gear_point->velocity.z) : gear_point->velocity.z) / gear_point->radius;
-		}
 
-		gear_point->rotation_angle += gear_point->rotation_speed * get_model_delta_time();
-		if ( gear_point->rotation_angle < 0.0 )
-		{
-			do
-			{
-				gear_point->rotation_angle += PI2;
-			}
-			while ( gear_point->rotation_angle < 0.0 );
+			current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].rotation_speed < 0.0) ?
+				min(current_landing_gear->gear_points[i].rotation_speed + 0.1 + (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0) : 
+					max(current_landing_gear->gear_points[i].rotation_speed - 0.1 - (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0);
 		}
 		else
-		{
-			while ( gear_point->rotation_angle >= PI2 )
-			{
-				gear_point->rotation_angle -= PI2;
-			}
-		}
+			current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].can_turn ? sqrt(current_landing_gear->gear_points[i].velocity.x * current_landing_gear->gear_points[i].velocity.x + current_landing_gear->gear_points[i].velocity.z * current_landing_gear->gear_points[i].velocity.z) : current_landing_gear->gear_points[i].velocity.z) / current_landing_gear->gear_points[i].radius;
+
+		current_landing_gear->gear_points[i].rotation_angle += current_landing_gear->gear_points[i].rotation_speed * get_model_delta_time();
+
+		if ( current_landing_gear->gear_points[i].rotation_angle < 0.0 )
+			do
+				current_landing_gear->gear_points[i].rotation_angle += PI2;
+			while ( current_landing_gear->gear_points[i].rotation_angle < 0.0 );
+		else
+			while ( current_landing_gear->gear_points[i].rotation_angle >= PI2 )
+				current_landing_gear->gear_points[i].rotation_angle -= PI2;
 
 		search.search_object = inst3d;
-		search.sub_object_index = gear_point->sub_index;
+		search.sub_object_index = current_landing_gear->gear_points[i].sub_index;
 		for ( j = 0; ; j++ )
 		{
 			search.search_depth = j;
 			if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
-			{
 				break;
-			}
 
-			search.result_sub_object->relative_pitch = gear_point->rotation_angle;
+			search.result_sub_object->relative_pitch = current_landing_gear->gear_points[i].rotation_angle;
 		}
 	}
 }

@@ -80,10 +80,6 @@ extern void draw_apache_internal_virtual_cockpit (unsigned int flags);
 
 extern void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic);
 
-extern void damage_apache_virtual_cockpit_main_rotors (int seed);
-
-extern void restore_apache_virtual_cockpit_main_rotors (void);
-
 //VJ 050101 3d cockpit mod, in development
 
 extern void initialise_apache_virtual_cockpit_3d (void);

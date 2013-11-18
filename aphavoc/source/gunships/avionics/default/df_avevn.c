@@ -1188,48 +1188,6 @@ en = get_gunship_entity ();
 	}
 }
 
-static void toggle_door_event (event *ev)
-{
-	int
-		state;
-
-	entity *en;
-
-	en = get_gunship_entity ();
-
-	// orientate on loading door as stallion cargo is closed but loading open at start
-	state = get_local_entity_loading_door_state (get_gunship_entity ());
-
-	switch ( state )
-	{
-		//////////////////////////////////////////////////
-		case 0:
-		//////////////////////////////////////////////////
-		{
-			open_client_server_entity_loading_doors( en );
-			open_client_server_entity_cargo_doors( en );
-
-			break;
-		}
-		//////////////////////////////////////////////////
-		case 2:
-		//////////////////////////////////////////////////
-		{
-			close_client_server_entity_loading_doors( en );
-			close_client_server_entity_cargo_doors( en );
-
-			break;
-		}
-	}
-
-	//aus ac_anim.c
-	//update_aircraft_loading_doors( get_gunship_entity () );
-	//update_aircraft_cargo_doors( get_gunship_entity () );
-	//update_aircraft_undercarriage( get_gunship_entity () );
-
-}
-// Retro 18Jul2004 end
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1248,7 +1206,8 @@ void set_default_avionics_events (void)
 	////////////////////////////////////////
 
 	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
-	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_door_event);
+	set_event (DIK_D, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cargo_doors_event);
+	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cockpit_doors_event);
 	//
 	// select target acquisition system
 	//

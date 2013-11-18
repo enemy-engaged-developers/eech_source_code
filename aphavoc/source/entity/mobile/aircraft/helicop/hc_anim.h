@@ -66,11 +66,9 @@
 
 extern void animate_helicopter_controls ( entity *en );
 
-extern void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int animate_virtual_cockpit_main_rotors);
+extern void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once);
 
-extern void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once);
-
-extern void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_instance *virtual_cockpit_main_rotor_inst3d);
+extern void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_instance *cockpit_main_rotor_inst3d, object_3d_instance *inst3d);
 
 extern void animate_helicopter_tail_rotor (entity *en);
 
@@ -78,21 +76,13 @@ extern void animate_helicopter_wipers (entity *en);
 
 extern void animate_helicopter_eo (entity *en);
 
-extern void animate_helicopter_suspension (entity *en);
-
 extern void animate_helicopter_wheels (entity *en);
 
 extern void damage_helicopter_3d_object (entity *en);
 
-extern int damage_helicopter_main_rotors (entity *en);
+extern int damage_helicopter_main_rotors (entity *en, int blade_number);
 
-extern int damage_helicopter_main_rotor_inst3d (object_3d_instance *inst3d, int seed);
-
-extern int damage_helicopter_tail_rotors (entity *en);
-
-extern void create_main_rotor_fragments (entity *en, int count);
-
-extern void create_tail_rotor_fragments (entity *en, int count);
+extern void damage_helicopter_tail_rotors (entity *en);
 
 extern int restore_helicopter_main_rotors (entity *en);
 

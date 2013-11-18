@@ -296,7 +296,7 @@ void update_common_attitude_dynamics (void)
 	position.y = current_flight_dynamics->position.y;
 	position.z = current_flight_dynamics->position.z;
 
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND))
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND) && !model_landed)
 	{
 
 		get_session_wind_velocity_at_point (&position, &wind);
@@ -317,7 +317,7 @@ void update_common_attitude_dynamics (void)
 	//////////////////////////////////////////////////////////
 	// safey check
 	//////////////////////////////////////////////////////////
-	if (motion_vector_magnitude > 1000)
+	if (motion_vector_magnitude > 1000 || current_flight_dynamics->angular_pitch_velocity.value > 50 || current_flight_dynamics->angular_roll_velocity.value > 50 || current_flight_dynamics->angular_heading_velocity.value > 50)
 	{
 
 		debug_log ("DYNAMICS: UNSTABLE");
@@ -928,7 +928,7 @@ void update_common_attitude_dynamics (void)
 		direction.y = -1.0;
 		direction.z = 0.0;
 
-		add_dynamic_force ("Pitch resistance", reaction_force, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Pitch resistance", reaction_force * current_flight_dynamics->main_rotor_rpm.value / 100, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Rotor Resistance to movement (Roll)
@@ -942,7 +942,7 @@ void update_common_attitude_dynamics (void)
 		position.y = 0.0;
 		position.z = 0.0;
 
-		add_dynamic_force ("Roll resistance", reaction_force, 0.0, &position, &rotor_direction, FALSE);
+		add_dynamic_force ("Roll resistance", reaction_force * current_flight_dynamics->main_rotor_rpm.value / 100, 0.0, &position, &rotor_direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Tail Rotor Resistance to movement. raw delta heading resistance
@@ -988,10 +988,10 @@ void update_common_attitude_dynamics (void)
 		if (current_flight_dynamics->tail_rotor_rpm.damaged)
 		{
 
-			reaction_force *= 0.25 + 0.65 * (velocity_z_value / current_flight_dynamics->velocity_z.max);
+			reaction_force *= 1 - velocity_z_value / current_flight_dynamics->velocity_z.max; 
 		}
 
-		add_dynamic_force ("Yaw resistance", reaction_force, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Yaw resistance", reaction_force * current_flight_dynamics->tail_rotor_rpm.value / 100, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Fuselage aerodynamics motion_vector -> attitude realignment force in the y axis
@@ -1130,7 +1130,7 @@ void update_common_attitude_dynamics (void)
 	// apply "drag" we're actually creating a force which moves the helicopter in the
 	// opposite direction.  So disable the drag if we're in contact with something else
 	// (most commonly the ground)
-	if (!fixed_collision_count && !moving_collision_count)
+	if (!fixed_collision_count)
 	{
 
 		float
@@ -1475,7 +1475,7 @@ void update_common_attitude_dynamics (void)
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
-		if (vibration_limit > 0.0 && !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE) && velocity_factor > 0.0)
+		if (vibration_limit > 0.0 &&  velocity_factor > 0.0)
 			create_rotor_vibration(bound(vibration_limit * 0.3 * velocity_factor, 0.0, 1.0));
 
 		if (air_over_rotor > 0.0)     //model_motion_vector.y < -fabs (main_rotor_induced_air_value))
@@ -1536,7 +1536,7 @@ void update_common_attitude_dynamics (void)
 	// If colliding with something, then the collision will move the helicopter. Combined with gravity
 	// and no drag this can make the helicopter fall down hillsides very rapidly.  So add some "friction"
 	// so it won't move as fast.
-	if (fixed_collision_count || moving_collision_count)
+	if (fixed_collision_count)
 	{
 
 		float
@@ -1576,47 +1576,14 @@ void update_common_attitude_dynamics (void)
 
 		#endif
 	}
-
-	if (current_flight_dynamics_landed_at_keysite
-		&& get_local_entity_int_value(current_flight_dynamics_landed_at_keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE)
+		// arneh - add vibration if rotor damaged
+	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
+		create_advanced_rotor_vibration(1, TRUE);
+		// rotor spin up/spin down /thealex/
+	else if (current_flight_dynamics->main_rotor_rpm.value > 10 && current_flight_dynamics->main_rotor_rpm.value < 90)
 	{
-		// cludge to make carrier landings possible.  New suspension doesn't work there,
-		// but at least don't let the helicopter roll off the deck
-		if (current_flight_dynamics->wheel_brake)
-		{
-			if (current_flight_dynamics->world_motion_vector.x > 0)
-				current_flight_dynamics->world_motion_vector.x -= min(20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
-			else
-				current_flight_dynamics->world_motion_vector.x -= max(-20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
-
-			if (current_flight_dynamics->world_motion_vector.z > 0)
-				current_flight_dynamics->world_motion_vector.z -= min(5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
-			else
-				current_flight_dynamics->world_motion_vector.z -= max(-5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
-
-			if (current_flight_dynamics->world_motion_vector.y < 0.0)
-				current_flight_dynamics->world_motion_vector.y = 0.0;
-		}
+		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);
+		if (rpm > 0)
+			create_advanced_rotor_vibration(rpm / 100, FALSE);
 	}
-/*	else if (current_flight_dynamics->wheel_brake && weight_on_wheels())  // cludge to stop helicopter completetly
-	{
-		float load = get_load_on_wheels();
-		debug_log("load: %.2f, x: %.3f, y: %.3f", load, current_flight_dynamics->world_motion_vector.x, current_flight_dynamics->world_motion_vector.z);
-
-		if (fabs(current_flight_dynamics->world_motion_vector.x) < 0.2)
-			if (current_flight_dynamics->world_motion_vector.x > 0)
-				current_flight_dynamics->world_motion_vector.x -= min(2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
-			else
-				current_flight_dynamics->world_motion_vector.x -= max(-2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
-
-		if (fabs(current_flight_dynamics->world_motion_vector.z) < 0.2)
-			if (current_flight_dynamics->world_motion_vector.z > 0)
-				current_flight_dynamics->world_motion_vector.z -= min(1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
-			else
-				current_flight_dynamics->world_motion_vector.z -= max(-1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
-	}
-*/
-	// arneh - add vibration if rotor damaged
-	if (!model_landed && current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
-		create_rotor_vibration(1.2);
 }

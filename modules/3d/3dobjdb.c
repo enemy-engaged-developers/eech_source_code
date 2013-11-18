@@ -3307,7 +3307,7 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 		*main_object;
 
 	int
-		count;
+		count = -1;
 
 	float
 		x,
@@ -3320,17 +3320,12 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 	matrix3x3
 		attitude;
 
-	count = 0;
-
-	objects[0] = object;
-
-	this_object = object->parent;
+	this_object = object;
 
 	while ( this_object->parent )
 	{
-
-		objects[++count] = this_object;
-
+		count++;
+		objects[count] = this_object;
 		this_object = this_object->parent;
 	}
 
@@ -3382,6 +3377,124 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 	vp->x = x;
 	vp->y = y;
 	vp->z = z;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// You should provide correct vp.attitude and vp.position in case of wrong work of original code /thealx/
+
+void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp, int global)
+{
+
+	object_3d_sub_instance
+		*this_object,
+		*objects[256];
+
+	object_3d_instance
+		*main_object;
+
+	int
+		count = -1;
+
+	float
+		x = 0,
+		y = 0,
+		z = 0,
+		x_scale = 1,
+		y_scale = 1,
+		z_scale = 1;
+
+	matrix3x3
+		attitude;
+
+	this_object = object;
+
+	while ( this_object->parent )
+	{
+		count++;
+		objects[count] = this_object;
+		this_object = this_object->parent;
+	}
+
+	main_object = ( object_3d_instance * ) this_object;
+
+	if (main_object->vp.x < 100 && main_object->vp.z < 100 && global) // sometimes we don't get world coords, will make it manually
+	{
+		float
+			sub_x = main_object->vp.x,
+			sub_y = main_object->vp.y,
+			sub_z = main_object->vp.z;
+
+		x = vp->position.x + ( ( sub_x * vp->attitude[0][0] ) + ( sub_y * vp->attitude[1][0] ) + ( sub_z * vp->attitude[2][0] ) );
+		y = vp->position.y + ( ( sub_x * vp->attitude[0][1] ) + ( sub_y * vp->attitude[1][1] ) + ( sub_z * vp->attitude[2][1] ) );
+		z = vp->position.z + ( ( sub_x * vp->attitude[0][2] ) + ( sub_y * vp->attitude[1][2] ) + ( sub_z * vp->attitude[2][2] ) );
+
+		multiply_matrix3x3_matrix3x3 ( attitude, vp->attitude, main_object->vp.attitude );
+
+		x_scale = main_object->relative_scale.x;
+		y_scale = main_object->relative_scale.y;
+		z_scale = main_object->relative_scale.z;
+	}
+	else
+	{
+		x = main_object->vp.x;
+		y = main_object->vp.y;
+		z = main_object->vp.z;
+
+		memcpy ( attitude, main_object->vp.attitude, sizeof ( matrix3x3 ) );
+
+		x_scale = main_object->relative_scale.x;
+		y_scale = main_object->relative_scale.y;
+		z_scale = main_object->relative_scale.z;
+	}
+
+	for ( ; count >= 0; count-- )
+	{
+
+		float
+			sub_x,
+			sub_y,
+			sub_z;
+
+		matrix3x3
+			result_attitude,
+			sub_attitude;
+
+		sub_x = objects[count]->relative_position.x * x_scale;
+		sub_y = objects[count]->relative_position.y * y_scale;
+		sub_z = objects[count]->relative_position.z * z_scale;
+
+		x += ( ( sub_x * attitude[0][0] ) + ( sub_y * attitude[1][0] ) + ( sub_z * attitude[2][0] ) );
+		y += ( ( sub_x * attitude[0][1] ) + ( sub_y * attitude[1][1] ) + ( sub_z * attitude[2][1] ) );
+		z += ( ( sub_x * attitude[0][2] ) + ( sub_y * attitude[1][2] ) + ( sub_z * attitude[2][2] ) );
+
+		x_scale *= objects[count]->relative_scale.x;
+		y_scale *= objects[count]->relative_scale.y;
+		z_scale *= objects[count]->relative_scale.z;
+
+		get_3d_transformation_matrix ( sub_attitude, objects[count]->relative_heading, -objects[count]->relative_pitch, -objects[count]->relative_roll );
+
+		multiply_matrix3x3_matrix3x3 ( result_attitude, sub_attitude, attitude );
+
+		memcpy ( attitude, result_attitude, sizeof ( matrix3x3 ) );
+	}
+
+	memcpy ( vp->attitude, attitude, sizeof ( matrix3x3 ) );
+
+	vp->x = x;
+	vp->y = y;
+	vp->z = z;
+
+	if (global)
+	{
+		debug_log("world sub obj position x %f y %f z %f", vp->x, vp->y, vp->z);
+	}
+	else
+	{
+		debug_log("local sub obj position x %f y %f z %f", vp->x, vp->y, vp->z);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

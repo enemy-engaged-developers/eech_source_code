@@ -77,8 +77,11 @@ enum DYNAMICS_COLLISION_POINT_TYPES
 
 	DYNAMICS_COLLISION_POINT_MAIN_ROTOR,
 	DYNAMICS_COLLISION_POINT_TAIL_ROTOR,
+	DYNAMICS_COLLISION_POINT_STABILISER,
 	DYNAMICS_COLLISION_POINT_FUSELAGE,
+	DYNAMICS_COLLISION_POINT_ENGINE,
 	DYNAMICS_COLLISION_POINT_NOSE_GUN,
+	DYNAMICS_COLLISION_POINT_AVIONICS,
 	DYNAMICS_COLLISION_POINT_WHEEL,
 	DYNAMICS_COLLISION_POINT_WING_TIP,
 	NUM_DYNAMICS_COLLISION_POINT_TYPES
@@ -164,7 +167,7 @@ typedef struct DYNAMIC_FORCE_TYPE dynamic_force_type;
 
 extern void initialise_dynamic_forces (void);
 
-extern void initialise_flight_dynamics_collision_points (void);
+extern void initialise_flight_dynamics_collision_points (int update_points_position);
 
 extern void deinitialise_dynamic_forces (void);
 
@@ -184,7 +187,7 @@ extern void add_dynamic_weapon_launch_force (vec3d *position, vec3d *direction, 
 
 extern void resolve_moments (float x, float y, float z, float *x_axis_moment, float *y_axis_moment, float *z_axis_moment);
 
-extern void assess_landing(void);
+extern void assess_landing(entity *en);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1558,7 +1558,7 @@ static void restore_external_view_entity_main_rotors_event (event *ev)
 		{
 			debug_colour_log (DEBUG_COLOUR_RED, "Restore external view entity main rotors");
 
-			restore_helicopter_entity (en, NULL, (operational_state_types) get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
+			restore_helicopter_entity (en);
 
 			transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, en, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
 		}
@@ -2346,7 +2346,7 @@ void set_flight_debug_events (void)
 
 	set_event (DIK_B, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, medium_damage_gunship_event);
 
-	set_event (DIK_B, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, light_damage_gunship_event);
+	set_event (DIK_B, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, toggle_draw_collision_boxes_event);
 
 	////////////////////////////////////////
 

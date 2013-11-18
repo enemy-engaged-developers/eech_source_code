@@ -146,7 +146,7 @@ extern void set_raw_gunship_entity (entity *en);
 
 extern void set_gunship_entity_to_external_view_entity (event *ev);
 
-extern void restore_helicopter_entity (entity *en, vec3d *pos, operational_state_types operational_state);
+extern void restore_helicopter_entity (entity *en);
 
 extern void notify_gunship_entity_mission_completed (entity *en, entity *task);
 

@@ -81,6 +81,8 @@ static void set_local_int_value (entity *en, int_types type, int value)
 	helicopter
 		*raw;
 
+	ASSERT (en);
+	
 	#if DEBUG_MODULE
 
 	debug_log_entity_args (ENTITY_DEBUG_LOCAL, ENTITY_DEBUG_INT_VALUE, en, type, value);
@@ -145,15 +147,9 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		{
 			if ((value) && (!raw->main_rotor_damaged))
 			{
-				int
-					count;
-
-				count = damage_helicopter_main_rotors (en);
-
-				create_main_rotor_fragments (en, count);
+				raw->main_rotor_damaged = value;
+				damage_helicopter_main_rotors (en, -2);
 			}
-
-			raw->main_rotor_damaged = value;
 
 			break;
 		}
@@ -288,12 +284,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		{
 			if ((value) && (!raw->tail_rotor_damaged))
 			{
-				int
-					count;
-
-				count = damage_helicopter_tail_rotors (en);
-
-				create_tail_rotor_fragments (en, count);
+				damage_helicopter_tail_rotors (en);
 			}
 
 			raw->tail_rotor_damaged = value;
@@ -338,6 +329,7 @@ static void set_remote_int_value (entity *en, int_types type, int value)
 	debug_log_entity_args (ENTITY_DEBUG_REMOTE, ENTITY_DEBUG_INT_VALUE, en, type, value);
 
 	#endif
+	ASSERT (en);
 
 	transmit_entity_comms_message (ENTITY_COMMS_INT_VALUE, en, type, value);
 }
@@ -348,6 +340,8 @@ static void set_remote_int_value (entity *en, int_types type, int value)
 
 static void set_server_int_value (entity *en, int_types type, int value)
 {
+	ASSERT (en);
+
 	validate_client_server_local_fn ();
 
 	set_local_int_value (en, type, value);
@@ -363,6 +357,8 @@ static void set_server_int_value (entity *en, int_types type, int value)
 
 static void set_client_int_value (entity *en, int_types type, int value)
 {
+	ASSERT (en);
+
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{
 		validate_client_server_remote_fn ();
@@ -388,6 +384,8 @@ static int get_local_int_value (entity *en, int_types type)
 
 	int
 		value;
+
+	ASSERT (en);
 
 	raw = (helicopter *) get_local_entity_data (en);
 

@@ -97,9 +97,6 @@ dynamics_type
 int
 	flight_dynamics_lock_position_flag;
 
-float
-	water_offset = -2.0;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +177,8 @@ static void flight_dynamics_start_apu (void);
 
 void initialise_flight_dynamics (entity *en)
 {
+
+	ASSERT (en);
 
 	#if DEBUG_DYNAMICS
 
@@ -346,11 +345,11 @@ void initialise_flight_dynamics (entity *en)
 
 	push_event_overlay (set_flight_dynamics_events, "flight_dynamics");
 
-	initialise_undercarriage_dynamics();
+	initialise_undercarriage_dynamics(en);
 
 	initialise_dynamic_forces ();
 
-	initialise_flight_dynamics_collision_points ();
+	initialise_flight_dynamics_collision_points (FALSE);
 
 	initialise_flight_dynamics_input_devices ();
 
@@ -478,7 +477,7 @@ void initialise_flight_dynamics (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_flight_dynamics_collision_points (void)
+void initialise_flight_dynamics_collision_points (int update_points_position)
 {
 
 	dynamics_collision_type
@@ -497,13 +496,11 @@ void initialise_flight_dynamics_collision_points (void)
 		search;
 
 	int
-		depth;
+		depth,
+			i;
 
 	helicopter
 		*raw;
-
-	object_3d_index_numbers
-		shape;
 
 	object_3d_sub_object_index_numbers
 		sub_object_type;
@@ -516,242 +513,197 @@ void initialise_flight_dynamics_collision_points (void)
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
-	// JB 030313 Fly any aircraft HACK HACK HACK
-/*     ////Moje030713 The code should look like the following lines, but then the added choppers sink through the ground
-	////		The reason could be incomplete 3D-model in the database-files
+		temp_inst3d = raw->ac.inst3d;
+		get_identity_matrix3x3(temp_inst3d->vp.attitude);
 
-	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
-		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
-		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
-		raw->ac.object_3d_shape == OBJECT_3D_KA_52 ||
-                raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK ||
-                raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND ||
-		raw->ac.object_3d_shape == OBJECT_3D_AH_64A ||
-                raw->ac.object_3d_shape == OBJECT_3D_KA_50)
-////Moje 030713 next line
-*/
+		temp_inst3d->vp.position.x = 0.0;
+		temp_inst3d->vp.position.y = 0.0;
+		temp_inst3d->vp.position.z = 0.0;
 
-	shape = OBJECT_3D_AH64D_APACHE_LONGBOW;
-	switch (raw->ac.object_3d_shape)
-	{
-	case OBJECT_3D_AH64D_APACHE_LONGBOW:
-	case OBJECT_3D_MI28N_HAVOC:
-	case OBJECT_3D_RAH66:
-	case OBJECT_3D_KA_52:
-	case OBJECT_3D_AH1Z:
-	case OBJECT_3D_OH58D:
+		current_flight_dynamics->number_of_fixed_collision_points = 0;
+		current_flight_dynamics->number_of_moving_collision_points = 0;
+
+		if (!update_points_position)
 		{
-			shape = raw->ac.object_3d_shape;
-			break;
+			debug_log("%i blade roots, %i rotor shafts,  %i bank nulls, %i heading nulls found", count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC), 
+					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT), 
+					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL), 
+					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL));
 		}
-	case OBJECT_3D_MI24_HIND:
-		{
-			if (command_line_dynamics_flight_model >= 2)
-				shape = OBJECT_3D_AH64D_APACHE_LONGBOW;
-			break;
-		}
-	case OBJECT_3D_KA_50:
-		{
-			shape = OBJECT_3D_KA_52;
-			break;
-		}
-	case OBJECT_3D_UH60_BLACKHAWK:
-		{
-			shape = command_line_dynamics_flight_model >= 2 ? OBJECT_3D_RAH66 : OBJECT_3D_AH64D_APACHE_LONGBOW;
-			break;
-		}
-	}
 
-	temp_inst3d = construct_3d_object (shape);
-
-	get_identity_matrix3x3(temp_inst3d->vp.attitude);
-
-	temp_inst3d->vp.position.x = 0.0;
-	temp_inst3d->vp.position.y = 0.0;
-	temp_inst3d->vp.position.z = 0.0;
-
-	current_flight_dynamics->number_of_fixed_collision_points = 0;
-	current_flight_dynamics->number_of_moving_collision_points = 0;
-
-	for (collision_type = DYNAMICS_COLLISION_POINT_MAIN_ROTOR; collision_type < NUM_DYNAMICS_COLLISION_POINT_TYPES; collision_type ++)
-	{
-
-		if (!dynamics_collision_point_info [collision_type].moving)
+		for (collision_type = DYNAMICS_COLLISION_POINT_MAIN_ROTOR; collision_type < NUM_DYNAMICS_COLLISION_POINT_TYPES; collision_type ++)
 		{
 
-			//
-			// Fixed
-			//
-
-			sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
-
-			depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
-
-			if (depth > 0)
+			if (!dynamics_collision_point_info [collision_type].moving)
 			{
 
-				fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
+				//
+				// Fixed
+				//
 
-				last_frame_fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
+				sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
 
-				if (current_flight_dynamics->fixed_collision_points)
+				depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
+
+				if (depth > 0)
 				{
-
-					memcpy (fixed_collision_points, current_flight_dynamics->fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
-
-					memcpy (last_frame_fixed_collision_points, current_flight_dynamics->last_frame_fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
-
-					free_mem (current_flight_dynamics->fixed_collision_points);
-
-					free_mem (current_flight_dynamics->last_frame_fixed_collision_points);
-				}
-
-				current_flight_dynamics->fixed_collision_points = fixed_collision_points;
-
-				current_flight_dynamics->last_frame_fixed_collision_points = last_frame_fixed_collision_points;
-
-				current_flight_dynamics->valid_last_frame_fixed_collision_points = FALSE;
-
-				current_flight_dynamics->number_of_fixed_collision_points += depth;
-
-				while (depth >= 0)
-				{
-
-					search.search_depth = depth;
-					search.search_object = temp_inst3d;
-					search.sub_object_index = sub_object_type;
-
-					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					if (!update_points_position)
 					{
+						fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
 
-						viewpoint
-							vp;
+						last_frame_fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
 
-						get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+						if (current_flight_dynamics->fixed_collision_points)
+						{
 
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.x = vp.position.x;
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y = vp.position.y;
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.z = vp.position.z;
+							memcpy (fixed_collision_points, current_flight_dynamics->fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
 
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type = (dynamics_collision_point_types) collision_type;
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].terrain_elevation = 0.0;
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].violated = FALSE;
+							memcpy (last_frame_fixed_collision_points, current_flight_dynamics->last_frame_fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
 
-						// for flight_model >= 2 we have separate modelling for the suspension, so don't let the collision points of the, old fixed wheels get in the way.  Raise them by 0.5 m
-						if (helicopter_has_undercarriage_modelling() && collision_type == DYNAMICS_COLLISION_POINT_WHEEL)
-							current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y += 0.5;
+							free_mem (current_flight_dynamics->fixed_collision_points);
 
-						#if DEBUG_DYNAMICS >= 2
+							free_mem (current_flight_dynamics->last_frame_fixed_collision_points);
+						}
 
-						debug_log ("DYNAMICS: Found fixed collision point %s (%d) at %f, %f, %f",
-										dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type].name,
-										current_flight_dynamics->number_of_fixed_collision_points - depth - 1,
-										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.x,
-										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y,
-										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.z);
+						current_flight_dynamics->fixed_collision_points = fixed_collision_points;
 
-						#endif
+						current_flight_dynamics->last_frame_fixed_collision_points = last_frame_fixed_collision_points;
+
+						current_flight_dynamics->valid_last_frame_fixed_collision_points = FALSE;
 					}
 
-					depth --;
+					for (i = 0; i < depth; i++)
+					{
+
+						search.search_depth = i;
+						search.search_object = temp_inst3d;
+						search.sub_object_index = sub_object_type;
+
+						if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
+							viewpoint vp;
+							int point_number = i + current_flight_dynamics->number_of_fixed_collision_points;
+
+							get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+
+							current_flight_dynamics->fixed_collision_points [point_number].model_point.x = vp.position.x;
+							current_flight_dynamics->fixed_collision_points [point_number].model_point.y = vp.position.y;
+							current_flight_dynamics->fixed_collision_points [point_number].model_point.z = vp.position.z;
+
+							if (!update_points_position)
+							{
+								current_flight_dynamics->fixed_collision_points [point_number].collision_point_type = (dynamics_collision_point_types) collision_type;
+								current_flight_dynamics->fixed_collision_points [point_number].terrain_elevation = 0.0;
+								current_flight_dynamics->fixed_collision_points [point_number].violated = FALSE;
+
+								debug_log ("DYNAMICS: Found fixed collision point %s (%d) at %f, %f, %f",
+											dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [point_number].collision_point_type].name,
+											point_number,
+											current_flight_dynamics->fixed_collision_points [point_number].model_point.x,
+											current_flight_dynamics->fixed_collision_points [point_number].model_point.y,
+											current_flight_dynamics->fixed_collision_points [point_number].model_point.z);
+							}
+
+//						  we have separate modelling for the suspension, so don't let the collision points of the old fixed wheels get in the way. Raise them by 0.5 m
+							if (collision_type == DYNAMICS_COLLISION_POINT_WHEEL)
+								current_flight_dynamics->fixed_collision_points [point_number].model_point.y += 0.2 + 0.3 * !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT);
+
+						}
+					}
+
+					current_flight_dynamics->number_of_fixed_collision_points += depth;
+
+				}
+				else if (!update_points_position)
+				{
+					debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
+						// triggers for important points
+					ASSERT(strcmp(dynamics_collision_point_info [collision_type].name, "DYNAMICS_COLLISION_POINT_ENGINE"));
+					ASSERT(strcmp(dynamics_collision_point_info [collision_type].name, "DYNAMICS_COLLISION_POINT_MAIN_ROTOR"));
 				}
 			}
 			else
 			{
 
-				debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
-			}
-		}
-		else
-		{
+				//
+				// Moving
+				//
 
-			//
-			// Moving
-			//
+				sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
 
-			sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
+				depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
 
-			depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
-
-			if (depth > 0)
-			{
-
-				moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
-
-				last_frame_moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
-
-				if (current_flight_dynamics->moving_collision_points)
+				if (depth > 0)
 				{
 
-					memcpy (moving_collision_points, current_flight_dynamics->moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
+					if (!update_points_position)
+					{
+						moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
 
-					memcpy (last_frame_moving_collision_points, current_flight_dynamics->last_frame_moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
+						last_frame_moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
 
-					free_mem (current_flight_dynamics->moving_collision_points);
+						if (current_flight_dynamics->moving_collision_points)
+						{
 
-					free_mem (current_flight_dynamics->last_frame_moving_collision_points);
-				}
+							memcpy (moving_collision_points, current_flight_dynamics->moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
 
-				current_flight_dynamics->moving_collision_points = moving_collision_points;
+							memcpy (last_frame_moving_collision_points, current_flight_dynamics->last_frame_moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
 
-				current_flight_dynamics->last_frame_moving_collision_points = last_frame_moving_collision_points;
+							free_mem (current_flight_dynamics->moving_collision_points);
 
-				current_flight_dynamics->valid_last_frame_moving_collision_points = FALSE;
+							free_mem (current_flight_dynamics->last_frame_moving_collision_points);
+						}
 
-				current_flight_dynamics->number_of_moving_collision_points += depth;
+						current_flight_dynamics->moving_collision_points = moving_collision_points;
 
-				while (depth >= 0)
-				{
+						current_flight_dynamics->last_frame_moving_collision_points = last_frame_moving_collision_points;
 
-					search.search_depth = depth;
-					search.search_object = temp_inst3d;
-					search.sub_object_index = sub_object_type;
-
-					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						current_flight_dynamics->valid_last_frame_moving_collision_points = FALSE;
+					}
+					
+					for (i = 0; i < depth; i++)
 					{
 
-						viewpoint
-							vp;
+						search.search_depth = i;
+						search.search_object = temp_inst3d;
+						search.sub_object_index = sub_object_type;
 
-						get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+						if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
 
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.x = vp.position.x;
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.y = vp.position.y;
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.z = vp.position.z;
+							viewpoint
+								vp;
 
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type = (dynamics_collision_point_types) collision_type;
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].terrain_elevation = 0.0;
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].violated = FALSE;
+							get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
 
-						if (helicopter_has_undercarriage_modelling() && collision_type == DYNAMICS_COLLISION_POINT_WHEEL)
-							current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y += 0.5;
+							current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.x = vp.position.x;
+							current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.y = vp.position.y;
+							current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.z = vp.position.z;
 
-						#if 1 || DEBUG_DYNAMICS >= 2
+							if (!update_points_position)
+							{
+								current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].collision_point_type = (dynamics_collision_point_types) collision_type;
+								current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].terrain_elevation = 0.0;
+								current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].violated = FALSE;
 
-						debug_log ("DYNAMICS: Found moving collision point %s (%d) at %f, %f, %f",
-										dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type].name,
-										current_flight_dynamics->number_of_moving_collision_points - depth - 1,
-										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.x,
-										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.y,
-										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.z);
-
-						#endif
+								debug_log ("DYNAMICS: Found moving collision point %s (%d) at %f, %f, %f",
+											dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].collision_point_type].name,
+											i + current_flight_dynamics->number_of_moving_collision_points,
+											current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.x,
+											current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.y,
+											current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.z);
+							}
+						}
 					}
 
-					depth --;
+					current_flight_dynamics->number_of_moving_collision_points += depth;
+				}
+				else if (!update_points_position)
+				{
+					debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
 				}
 			}
-			else
-			{
-
-				debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
-			}
 		}
-	}
-
-//	ASSERT(FALSE);
-
-	destruct_3d_object (temp_inst3d);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1177,11 +1129,14 @@ void update_flight_dynamics (void)
 		}
 	}
 
-	if (get_gunship_entity ())
+	if (get_gunship_entity () && get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE))
 	{
 		update_dynamics_at_keysite ();
 
 		update_dynamics_damage ();
+
+		if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE))
+			return;
 
 		current_flight_dynamics->velocity_z.value = bound (current_flight_dynamics->velocity_z.value, knots (-100), knots (200));
 
@@ -1206,8 +1161,6 @@ void update_gunship_dynamics (void)
 	helicopter
 		*raw;
 
-	int check_collisions_each_frame = helicopter_has_undercarriage_modelling();
-
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 	ASSERT(raw);
 	if (!raw)
@@ -1225,23 +1178,15 @@ void update_gunship_dynamics (void)
 		{
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_apache_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1249,53 +1194,35 @@ void update_gunship_dynamics (void)
 		}
 		case GUNSHIP_TYPE_HAVOC:
 		{
-			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
-
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_havoc_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
+				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 			}
 
-			if (!check_collisions_each_frame)
-				update_collision_dynamics ();
+			update_dynamics_external_values ();
 
 			break;
 		}
 		case GUNSHIP_TYPE_COMANCHE:
 		{
-			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
-
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_comanche_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1303,27 +1230,17 @@ void update_gunship_dynamics (void)
 		}
 		case GUNSHIP_TYPE_HOKUM:
 		{
-			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
-
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hokum_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1333,16 +1250,17 @@ void update_gunship_dynamics (void)
 
 		case GUNSHIP_TYPE_BLACKHAWK:
 		{
-
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_blackhawk_advanced_dynamics ();
-			}
 
-			update_collision_dynamics ();
+				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1353,27 +1271,20 @@ void update_gunship_dynamics (void)
 ////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
-			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
-
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hind_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1386,23 +1297,15 @@ void update_gunship_dynamics (void)
 		{
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_ah64a_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1413,10 +1316,17 @@ void update_gunship_dynamics (void)
 			while (current_flight_dynamics->model_iterations --)
 			{
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
 				update_ka50_advanced_dynamics ();
+
+				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 			}
-			update_collision_dynamics ();
+
 			update_dynamics_external_values ();
+
 			break;
 		}
 ////Moje 030816 End
@@ -1425,23 +1335,15 @@ void update_gunship_dynamics (void)
 		{
 			while (current_flight_dynamics->model_iterations --)
 			{
-
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_viper_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1456,18 +1358,11 @@ void update_gunship_dynamics (void)
 
 				update_kiowa_advanced_dynamics ();
 
-				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (check_collisions_each_frame)
-				{
-					update_collision_dynamics ();
-					// may get killed, so abort further calculations if so
-					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-						break;
-				}
-			}
-
-			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
+				// may get killed, so abort further calculations if so
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
+			}
 
 			update_dynamics_external_values ();
 
@@ -1647,25 +1542,7 @@ void update_dynamics_external_values (void)
 		set_local_entity_attitude_matrix (get_gunship_entity (), current_flight_dynamics->attitude);
 
 		if (get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_LAND)
-		{
-
 			current_flight_dynamics->position.y = bound (current_flight_dynamics->position.y, 0.0, MAX_MAP_Y);
-		}
-		else
-		{
-
-			//
-			// allow model to go 1m into water/forest and then blow up
-			//
-
-			current_flight_dynamics->position.y = bound (current_flight_dynamics->position.y, water_offset, MAX_MAP_Y);
-
-			if (current_flight_dynamics->position.y <= water_offset + 0.5)
-			{
-
-				dynamics_kill_model (DYNAMICS_DESTROY_WATER_CRASH, NULL);
-			}
-		}
 	}
 }
 
@@ -2484,17 +2361,6 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 
 		current_flight_dynamics->valid_last_frame_fixed_collision_points = FALSE;
 
-		/*
-		 * arneh, june 06 - removed this as setting the rpm to 0 is just wrong
-		 * rather let rotors spin themselves down
-		if (get_current_flight_dynamics_rotor_brake ())
-		{
-
-			current_flight_dynamics->main_rotor_rpm.value = 0.0;
-			current_flight_dynamics->tail_rotor_rpm.value = 0.0;
-		}
-		*/
-
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{
 			current_flight_dynamics->left_engine_rpm.max = 100.0;  // engine is always trying for 100% N2 RPM
@@ -2680,9 +2546,11 @@ void dynamics_takeoff (void)
 
 	current_flight_dynamics_landed_at_keysite = NULL;
 
-	current_flight_dynamics->refuelling = FALSE;
+	current_flight_dynamics->refueling = current_fuel_level = available_fuel = FALSE;
 
-	current_flight_dynamics->repairing = FALSE;
+	current_flight_dynamics->repairing = current_flight_dynamics->damage_repair_time = FALSE;
+
+	current_flight_dynamics->repairing_damage = DYNAMICS_DAMAGE_NONE;
 
 	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_NAVIGATING);
 
@@ -2729,11 +2597,7 @@ void dynamics_land (void)
 		return;
 	}
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
-
-		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_TAXIING);
-	}
+	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_TAXIING);
 
 	set_current_flight_dynamics_auto_pilot (FALSE);
 
@@ -2844,61 +2708,12 @@ void dynamics_land (void)
 		if (((model_position.x > bounding_box->xmin + xmin) && (model_position.x < bounding_box->xmax + xmax)) &&
 			((model_position.z > bounding_box->zmin + zmin) && (model_position.z < bounding_box->zmax + zmax)))
 		{
-
-			//entity
-				//*landed_wp,
-				//*task;
-
-			debug_log ("DYNAMICS: model within keysite area, repairing and refuelling");
+			debug_log ("DYNAMICS: model within keysite area, repairing and refueling");
 
 			current_flight_dynamics_landed_at_keysite = keysite;
 
-			current_flight_dynamics->refuelling = TRUE;
+			current_flight_dynamics->refueling = TRUE;
 			current_flight_dynamics->repairing = TRUE;
-
-		//if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-		//{
-
-			//set_current_flight_dynamics_rotor_brake (TRUE);
-
-			//current_flight_dynamics->input_data.collective.value = 0.0;
-		//}
-
-			//
-			// notify landed waypoint
-			//
-/*
-			landed_wp = get_local_entity_current_waypoint (get_gunship_entity ());
-
-			if (landed_wp)
-			{
-
-				task = get_local_entity_parent (landed_wp, LIST_TYPE_WAYPOINT);
-
-				if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_LANDING)
-				{
-
-					while (get_local_entity_child_succ (landed_wp, LIST_TYPE_WAYPOINT))
-					{
-
-						landed_wp = get_local_entity_child_succ (landed_wp, LIST_TYPE_WAYPOINT);
-					}
-
-					ASSERT (get_local_entity_int_value (landed_wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED);
-
-					notify_local_entity (ENTITY_MESSAGE_WAYPOINT_LANDED_REACHED, get_gunship_entity (), landed_wp);
-
-					return;
-				}
-			}
-			else
-			{
-
-				//exit_flight_loop_event (NULL);
-			}
-			*/
-
-			debug_log ("DYMAMICS: landed in base but not on landing route");
 		}
 	}
 }
@@ -3089,6 +2904,8 @@ entity *get_keysite_currently_landed_at (void)
 void set_keysite_currently_landed_at (entity *en)
 {
 
+	ASSERT (en);
+
 	current_flight_dynamics_landed_at_keysite = en;
 }
 
@@ -3119,9 +2936,7 @@ void update_current_flight_dynamics_fuel_weight (void)
 		return;
 	}
 
-	#if !DEMO_VERSION
 	if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_INFINITE_FUEL))
-	#endif
 	{
 		float fuel_delta = current_flight_dynamics->fuel_weight.delta * get_delta_time ();
 		// arneh - adjust for engine RPM.  Adjusted to 1 at 85% N1 RPM on both engines
@@ -3188,6 +3003,7 @@ void update_current_flight_dynamics_flight_time (void)
 
 void dynamics_kill_model (dynamics_destroy_types type, entity	*aggressor)
 {
+	ASSERT (get_gunship_entity ());
 
 	// if aggressor check if inv from weapons... otherwise check inv from collisions
 
@@ -3999,31 +3815,37 @@ void create_rotor_vibration(float force)
 {
 	static float time = 0;
 	static int step = 0;
+	float rpm, rotor_radius;
 
 	float interval = 0.125;
 
 	vec3d position,	direction;
 
-	if (!get_gunship_entity () || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+	if (!get_gunship_entity ())
+		return;
+	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		return;
 
-	force = bound (force, -2.5, 2.5);
+	rpm = current_flight_dynamics->main_rotor_rpm.value / 100;
+	rotor_radius = aircraft_database [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius;	
+		
+	force = bound (force, -2.5, 2.5) * rpm;
 
 	// to create vibration we rotate a force around the rotor disk, moving it
 	// a quarter rotation every step
 	if (step == 0 || step == 2)
-		position.x = current_flight_dynamics->main_rotor_diameter.value * 0.5;
+		position.x = rotor_radius;
 	else
-		position.x = -current_flight_dynamics->main_rotor_diameter.value * 0.5;
+		position.x = -rotor_radius;
 
 	if (step < 2)
-		position.z = current_flight_dynamics->main_rotor_diameter.value * 0.5;
+		position.z = rotor_radius;
 	else
-		position.z = -current_flight_dynamics->main_rotor_diameter.value * 0.5;
+		position.z = -rotor_radius;
 
 	position.y = 0.0;
 
-	time += get_delta_time();
+	time += get_model_delta_time() * rpm;
 	// increase step every 0.125 seconds
 	if (time > interval)
 	{
@@ -4039,6 +3861,43 @@ void create_rotor_vibration(float force)
 	direction.z = 0.0;
 
 	add_dynamic_force ("vibration", force, 0.0, &position, &direction, FALSE);
+}
+
+	// smooth vibrations /thealx/
+void create_advanced_rotor_vibration(float force, int damaged)
+{
+	vec3d position,	direction;
+	static float loop;
+	float rpm, rotor_radius;
+
+	if (!get_gunship_entity ())
+		return;
+
+	rpm = current_flight_dynamics->main_rotor_rpm.value / 100;
+	rotor_radius = aircraft_database [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius;	
+	
+	if (damaged)
+		force = bound (force, -2.5, 2.5) * rpm * rpm / rotor_radius * 10;
+
+	loop += get_model_delta_time() * current_flight_dynamics->main_rotor_rpm.value * current_flight_dynamics->rotor_rotation_direction / 3;
+
+	if (loop > PI2)
+		loop -= PI2;
+	else if (loop < - PI2)
+		loop += PI2;
+
+	position.x = sin(loop) * rotor_radius;
+	position.z = cos(loop) * rotor_radius;
+	position.y = 0.0;
+
+	direction.x = position.x;
+	direction.y = - damaged * rotor_radius / (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) ? 2 : 10);
+	direction.z = position.z;
+
+	add_dynamic_force ("Main rotor vibration", force, 0.0, &position, &direction, FALSE);
+	
+	if (frand1() < (0.0001 * rpm) && damaged == TRUE)
+		dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
 }
 
 #ifdef DEBUG

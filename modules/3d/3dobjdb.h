@@ -620,6 +620,8 @@ extern void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d 
 
 extern void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp );
 
+extern void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp, int global);
+
 extern int get_number_of_3d_scene_cameras ( object_3d_index_numbers scene_index, object_3d_camera_index_numbers camera_index );
 
 extern int get_number_of_3d_object_cameras ( struct OBJECT_3D_INSTANCE *object, object_3d_camera_index_numbers camera_index );

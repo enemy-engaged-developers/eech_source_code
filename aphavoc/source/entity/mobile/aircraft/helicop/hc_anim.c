@@ -81,14 +81,19 @@
 
 #define TAIL_ROTOR_RPM_MOTION_BLUR_THRESHOLD	(25.0)
 
+static void create_rotor_blade_fragment (entity *en, viewpoint blade_vp, int main_rotor);
+
+int
+	quantity_of_roots[NUM_ENTITY_SUB_TYPE_AIRCRAFT],
+	quantity_of_shafts[NUM_ENTITY_SUB_TYPE_AIRCRAFT],
+	quantity_of_sections[NUM_ENTITY_SUB_TYPE_AIRCRAFT];
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void animate_helicopter_controls ( entity *en )
 {
-	ASSERT(en);
-
 	helicopter
 		*raw;
 
@@ -108,14 +113,14 @@ void animate_helicopter_controls ( entity *en )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int animate_virtual_cockpit_main_rotors)
+void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 {
 	helicopter
 		*raw;
 
 	object_3d_instance
 		*inst3d;
-
+	
 	object_3d_sub_object_search_data
 		search_main_rotor_shaft,
 		search_main_rotor_pitch_bank_null,
@@ -126,469 +131,15 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		search_main_rotor_hub;
 
 	int
-		start_wind_down_sound,
-		main_rotor_motion_blurred,
+		start_wind_down_sound = FALSE,
 		search_main_rotor_shaft_depth,
 		search_main_rotor_blade_root_static_depth,
 		search_main_rotor_blade_section_static_depth,
 		search_main_rotor_blade_moving_depth,
-		ejected;
-
-	float
-		main_rotor_direction,
-		main_rotor_rpm,
-		main_rotor_pitch,
-		main_rotor_roll,
-		main_rotor_delta_heading,
-		main_rotor_blade_coning_angle,
-		main_rotor_blade_droop_angle;
-
-	ASSERT (en);
-
-	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-
-	if (!ignore_drawn_once)
-	{
-		if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
-		{
-			return;
-		}
-	}
-
-	raw = (helicopter *) get_local_entity_data (en);
-
-	inst3d = raw->ac.inst3d;
-
-	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
-
-	start_wind_down_sound = FALSE;
-
-	//
-	// main rotor articulation test
-	//
-
-	if ((in_flight_articulation_test) && (get_external_view_entity () == en))
-	{
-		static float
-			test_main_rotor_inc = 2.0,
-			test_main_rotor_rpm = 0.0;
-
-		test_main_rotor_rpm += test_main_rotor_inc;
-
-		//
-		// whilst test_main_rotor_rpm < 0.0 the main rotor blades are stationary
-		//
-
-		if ((test_main_rotor_rpm <= -10.0) || (test_main_rotor_rpm >= 100.0))
-		{
-			test_main_rotor_inc = -test_main_rotor_inc;
-		}
-
-		main_rotor_rpm = bound (test_main_rotor_rpm, 0.0, 100.0);
-
-		if (main_rotor_rpm >= MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)
-		{
-			main_rotor_blade_coning_angle = ((main_rotor_rpm - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) / (100.0 - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)) * rad (10.0);
-		}
-		else
-		{
-			main_rotor_blade_coning_angle = 0.0;
-		}
-	}
-	else
-	{
-		main_rotor_rpm = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
-
-		main_rotor_blade_coning_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_CONING_ANGLE);
-	}
-
-	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
-
-	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0f);
-
-	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
-
-	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
-
-	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE);
-
-	if
-	(
-		(main_rotor_rpm < MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) &&
-		(
-			(en == get_gunship_entity ()) ||
-			(
-				(get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_LANDING) ||
-				(get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_LANDED) ||
-				(get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_TAKEOFF)
-			)
-		)
-	)
-	{
-		main_rotor_motion_blurred = FALSE;
-
-		main_rotor_delta_heading = rad (180.0) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
-
-		main_rotor_blade_droop_angle *= 1.0 - (main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD));
-	}
-	else
-	{
-		// arneh, june 06 - speed up main rotor (was 90 deg per second, now depending on rotor 
-		// rpm and number of blades is between 180 and 900 deg per second))
-		float rotor_angular_speed, blade_factor;
-		entity_sub_types sub_type;
-		
-		main_rotor_motion_blurred = TRUE;
-
-		sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
-		switch (sub_type)
-		{
-		// Five or more rotor blades
-		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
-		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
-		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
-		case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
-		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
-		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
-		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
-			blade_factor = 7.0;
-			break;
-
-		// four rotor blades
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
-		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
-		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
-			blade_factor = 10.0;
-			break;
-
-		// coaxial three rotor blades
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-			blade_factor = 11.0;
-			break;
+		ejected,
+		last_moving_blade_state;
 	
-		// three rotor blades		
-		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
-		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
-		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
-			blade_factor = 15.0;
-			break;
-
-		// two rotor blades
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
-		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
-			blade_factor = 25.0;
-			break;
-		
-		default:
-			blade_factor = 15.0;
-		}
-
-		rotor_angular_speed = bound(blade_factor * main_rotor_rpm, 180, blade_factor*100);
-		main_rotor_delta_heading = rad(rotor_angular_speed) * get_delta_time ();
-		// end rotor speed fix
-	}
-
-	//
-	// stop rotors from spinning if paused ( but must still switch the correct objects on and off )
-	//
-
-   if (get_time_acceleration () == TIME_ACCELERATION_PAUSE)
-	{
-		main_rotor_delta_heading = 0.0;
-	}
-
-	//
-	// if animating virtual cockpit main rotors then do not rotate
-	//
-
-	if (animate_virtual_cockpit_main_rotors)
-	{
-		main_rotor_delta_heading = 0.0;
-	}
-
-	//
-	// if ejected then disable all main rotor blades
-	//
-
-	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
-
-	if (ejected)
-	{
-		main_rotor_motion_blurred = FALSE;
-
-		main_rotor_delta_heading = 0.0;
-	}
-
-	//
-	// locate rotor shaft
-	//
-
-	search_main_rotor_shaft_depth = 0;
-
-	while (TRUE)
-	{
-		search_main_rotor_shaft.search_depth = search_main_rotor_shaft_depth;
-		search_main_rotor_shaft.search_object = inst3d;
-		search_main_rotor_shaft.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT;
-
-		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		{
-			//
-			// locate pitch and bank null
-			//
-
-			search_main_rotor_pitch_bank_null.search_depth = 0;
-			search_main_rotor_pitch_bank_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL;
-
-			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				//
-				// set pitch and bank
-				//
-
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = main_rotor_pitch;
-
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_roll = main_rotor_roll;
-
-				//
-				// locate heading null
-				//
-
-				search_main_rotor_heading_null.search_depth = 0;
-				search_main_rotor_heading_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
-
-				if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_pitch_bank_null, &search_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-				{
-					//
-					// set heading
-					//
-
-					search_main_rotor_heading_null.result_sub_object->relative_heading = wrap_angle (search_main_rotor_heading_null.result_sub_object->relative_heading + (main_rotor_delta_heading * main_rotor_direction));
-
-					if (!main_rotor_motion_blurred)
-					{
-						//
-						// disable moving blades
-						//
-
-						search_main_rotor_blade_moving_depth = 0;
-
-						while (TRUE)
-						{
-							search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
-							search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
-
-							if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-							{
-								if (search_main_rotor_blade_moving.result_sub_object->visible_object)
-								{
-									start_wind_down_sound = TRUE;
-								}
-
-								search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE;
-							}
-							else
-							{
-								break;
-							}
-
-							search_main_rotor_blade_moving_depth++;
-						}
-
-						//
-						// enable static blade roots and set blade droop angle
-						//
-
-						search_main_rotor_blade_root_static_depth = 0;
-
-						while (TRUE)
-						{
-							search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
-							search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
-
-							if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-							{
-								search_main_rotor_blade_root_static.result_sub_object->visible_object = !ejected;
-
-								search_main_rotor_blade_root_static.result_sub_object->relative_pitch = main_rotor_blade_droop_angle;
-
-								//
-								// locate static blade sections and set blade droop angle
-								//
-
-								search_main_rotor_blade_section_static_depth = 0;
-
-								while (TRUE)
-								{
-									search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
-									search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
-
-									if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-									{
-										search_main_rotor_blade_section_static.result_sub_object->relative_pitch = main_rotor_blade_droop_angle;
-									}
-									else
-									{
-										break;
-									}
-
-									search_main_rotor_blade_section_static_depth++;
-								}
-							}
-							else
-							{
-								break;
-							}
-
-							search_main_rotor_blade_root_static_depth++;
-						}
-
-						//
-						// disable moving hub
-						//
-
-						search_main_rotor_hub.search_depth = 0;
-						search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_hub.result_sub_object->visible_object = FALSE;
-						}
-
-						//
-						// enable static hub and set heading
-						//
-
-						search_main_rotor_hub.search_depth = 0;
-						search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_hub.result_sub_object->visible_object = TRUE;
-
-							search_main_rotor_hub.result_sub_object->relative_heading = search_main_rotor_heading_null.result_sub_object->relative_heading;
-						}
-					}
-					else
-					{
-						//
-						// disable static blades
-						//
-
-						search_main_rotor_blade_root_static_depth = 0;
-
-						while (TRUE)
-						{
-							search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
-							search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
-
-							if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-							{
-								search_main_rotor_blade_root_static.result_sub_object->visible_object = FALSE;
-							}
-							else
-							{
-								break;
-							}
-
-							search_main_rotor_blade_root_static_depth++;
-						}
-
-						//
-						// enable moving blades and set coning angle
-						//
-
-						search_main_rotor_blade_moving_depth = 0;
-
-						while (TRUE)
-						{
-							search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
-							search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
-
-							if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-							{
-								search_main_rotor_blade_moving.result_sub_object->visible_object = !ejected;
-
-								search_main_rotor_blade_moving.result_sub_object->relative_pitch = main_rotor_blade_coning_angle;
-							}
-							else
-							{
-								break;
-							}
-
-							search_main_rotor_blade_moving_depth++;
-						}
-
-						//
-						// disable static hub
-						//
-
-						search_main_rotor_hub.search_depth = 0;
-						search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_hub.result_sub_object->visible_object = FALSE;
-						}
-
-						//
-						// enable moving hub and set heading
-						//
-
-						search_main_rotor_hub.search_depth = 0;
-						search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_hub.result_sub_object->visible_object = TRUE;
-
-							search_main_rotor_hub.result_sub_object->relative_heading = search_main_rotor_heading_null.result_sub_object->relative_heading;
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			break;
-		}
-
-		main_rotor_direction = -main_rotor_direction;
-
-		search_main_rotor_shaft_depth++;
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
-{
-	helicopter
-		*raw;
-
-	object_3d_instance
-		*inst3d;
-
-	object_3d_sub_object_search_data
-		search_main_rotor_shaft,
-		search_main_rotor_pitch_bank_null,
-		search_main_rotor_heading_null,
-		search_main_rotor_blade_root_static,
-		search_main_rotor_blade_section_static,
-		search_main_rotor_hub;
-
-	int
-		seed,
-		search_main_rotor_shaft_depth,
-		search_main_rotor_blade_root_static_depth,
-		search_main_rotor_blade_section_static_depth,
-		ejected;
+	unsigned int subtype;
 
 	float
 		main_rotor_direction,
@@ -598,65 +149,138 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		main_rotor_delta_heading,
 		main_rotor_blade_coning_angle,
 		main_rotor_blade_droop_angle,
-		main_rotor_blade_random_droop_angle;
-
+		real_rotor_rpm,
+		blade_heading;
+	
 	ASSERT (en);
-
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-
-   if (get_time_acceleration () == TIME_ACCELERATION_PAUSE)
-	{
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
 		return;
-	}
-
-	if (!ignore_drawn_once)
-	{
-		if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
-		{
-			return;
-		}
-	}
+	if (!ignore_drawn_once && get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+		return;
 
 	raw = (helicopter *) get_local_entity_data (en);
-
 	inst3d = raw->ac.inst3d;
+	if (!inst3d)
+		return;
 
-	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
+	subtype = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+	ASSERT (subtype < NUM_ENTITY_SUB_TYPE_AIRCRAFT);
+	
+	// count rotors
+	
+	if (!quantity_of_roots[subtype])
+		quantity_of_roots[subtype] = count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC);
+	if (!quantity_of_shafts[subtype])
+		quantity_of_shafts[subtype] = count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT);
+	if (!quantity_of_sections[subtype])
+		quantity_of_sections[subtype] = count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC);
 
-	main_rotor_rpm = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
+	// main rotor articulation test
 
-	main_rotor_blade_coning_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_CONING_ANGLE);
-
-	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
-
-	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0f);
-
-	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
-
-	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
-
-	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE);
-
-	main_rotor_delta_heading = rad (180.0) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
-
-	main_rotor_blade_droop_angle *= 1.0 - (main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD));
-
-	seed = get_client_server_entity_random_number_seed(en);
-
-	//
-	// if ejected then disable all main rotor blades
-	//
-
-	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
-
-	if (ejected)
+	if ((in_flight_articulation_test) && (get_external_view_entity () == en))
 	{
-		main_rotor_delta_heading = 0.0;
+		static float
+			test_main_rotor_inc = 2.0,
+			test_main_rotor_rpm = 0.0;
+
+		test_main_rotor_rpm += test_main_rotor_inc;
+
+		// whilst test_main_rotor_rpm < 0.0 the main rotor blades are stationary
+
+		if ((test_main_rotor_rpm <= -10.0) || (test_main_rotor_rpm >= 100.0))
+			test_main_rotor_inc = -test_main_rotor_inc;
+
+		main_rotor_rpm = bound (test_main_rotor_rpm, 0.0, 100.0);
+
+		if (main_rotor_rpm >= MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)
+			main_rotor_blade_coning_angle = main_rotor_rpm / 100.0 * rad (5.0);
+	}
+	else
+	{
+		main_rotor_rpm = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
+		main_rotor_blade_coning_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_CONING_ANGLE);
 	}
 
-	//
+	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
+	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
+	main_rotor_blade_coning_angle = max (0.5 * main_rotor_blade_coning_angle, 0.0f);
+	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
+	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
+	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE);
+	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
+	
+	switch (subtype)
+	{
+		// Seven rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION: // 185, 9.7
+			real_rotor_rpm = 185;
+			break;
+		// Five rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B: // 242, 12.7
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND: // 240, 12.6
+			real_rotor_rpm = 240;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP: // 192, 10
+			real_rotor_rpm = 192;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK: // 120, 6.28
+			real_rotor_rpm = 120;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE: // 354, 18.5
+			real_rotor_rpm = 354;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
+			real_rotor_rpm = 130;
+			break;
+		// four rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK: // 258, 13.5
+			real_rotor_rpm = 258;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR: // 396, 20.7
+			real_rotor_rpm = 396;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW: // 292, 15.3
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE: // 289, 15
+			real_rotor_rpm = 290;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+			real_rotor_rpm = 290;
+			break;
+		// three rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B: // 237, 12.4
+			real_rotor_rpm = 237;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+			real_rotor_rpm = 300;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK: // 225, 11.8
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT: // 264, 13.8
+			real_rotor_rpm = 225;
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY: // 338, 17.7
+			real_rotor_rpm = 338;
+			break;
+		// two rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA: // 324, 17
+			real_rotor_rpm = 324;
+			break;
+		default:
+			real_rotor_rpm = 180;
+	}
+		
+	main_rotor_delta_heading = min(real_rotor_rpm * PI2 * main_rotor_rpm / 6000 * get_delta_time (), PI2 / quantity_of_roots[subtype] * quantity_of_shafts[subtype] / 3.75);
+
+	main_rotor_blade_droop_angle *= max (1.0 - main_rotor_rpm / 60, - 0.1);
+
+	// stop rotors from spinning if paused ( but must still switch the correct objects on and off )
+
+	if (get_time_acceleration () == TIME_ACCELERATION_PAUSE)
+		main_rotor_delta_heading = 0.0;
+
 	// locate rotor shaft
-	//
 
 	search_main_rotor_shaft_depth = 0;
 
@@ -668,60 +292,66 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
-			//
 			// locate pitch and bank null
-			//
 
 			search_main_rotor_pitch_bank_null.search_depth = 0;
 			search_main_rotor_pitch_bank_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL;
 
 			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				//
 				// set pitch and bank
-				//
 
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = main_rotor_pitch;
+				search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = main_rotor_pitch * main_rotor_rpm / 100;
+				search_main_rotor_pitch_bank_null.result_sub_object->relative_roll = main_rotor_roll * main_rotor_rpm / 100;
 
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_roll = main_rotor_roll;
-
-				//
 				// locate heading null
-				//
 
 				search_main_rotor_heading_null.search_depth = 0;
 				search_main_rotor_heading_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
 
 				if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_pitch_bank_null, &search_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
-					//
 					// set heading
-					//
 
 					search_main_rotor_heading_null.result_sub_object->relative_heading = wrap_angle (search_main_rotor_heading_null.result_sub_object->relative_heading + (main_rotor_delta_heading * main_rotor_direction));
 
-					//
-					// set blade droop angle
-					//
+					// adjust moving blades and static blade roots
 
 					search_main_rotor_blade_root_static_depth = 0;
+					search_main_rotor_blade_moving_depth = 0;
 
 					while (TRUE)
 					{
+						search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
+						search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
+
+						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
+							blade_heading = search_main_rotor_blade_moving.result_sub_object->relative_heading;
+							search_main_rotor_blade_moving.result_sub_object->relative_pitch = main_rotor_rpm / 5000 + main_rotor_blade_coning_angle;
+							search_main_rotor_blade_moving.result_sub_object->relative_roll = 2 * main_rotor_direction * bound(- cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch + 
+									sin(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_roll + main_rotor_blade_coning_angle, rad(-10), rad(10));
+							if (get_time_acceleration () == TIME_ACCELERATION_PAUSE || ejected) // hide moving blades
+								search_main_rotor_blade_moving.result_sub_object->visible_object = last_moving_blade_state = 0;
+							else
+								search_main_rotor_blade_moving.result_sub_object->visible_object = (main_rotor_rpm >= 50);
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = max((main_rotor_rpm - 50) / 100, 0);
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.01;
+							if (search_main_rotor_blade_moving.result_sub_object->visible_object < last_moving_blade_state)
+								start_wind_down_sound = TRUE;							
+							last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object;
+						}
+						
 						search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
 						search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
-
-						main_rotor_blade_random_droop_angle = sfrand1x (&seed) * (PI * 0.0625);
 
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
 							search_main_rotor_blade_root_static.result_sub_object->visible_object = !ejected;
-
-							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = main_rotor_blade_droop_angle + main_rotor_blade_random_droop_angle;
-
-							//
+							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch + main_rotor_blade_droop_angle;
+							search_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
+	
 							// locate static blade sections and set blade droop angle
-							//
 
 							search_main_rotor_blade_section_static_depth = 0;
 
@@ -730,58 +360,61 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 								search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
 								search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
 
-								main_rotor_blade_random_droop_angle = sfrand1x (&seed) * (PI * 0.0625);
-
 								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 								{
-									if (!search_main_rotor_blade_section_static.result_sub_object->visible_object)
+									if (search_main_rotor_blade_section_static.result_sub_object->visible_object)
 									{
-										//
-										// stop when we get to a broken section
-										//
-
+										search_main_rotor_blade_section_static.result_sub_object->visible_object = !ejected;
+										search_main_rotor_blade_section_static.result_sub_object->relative_pitch = main_rotor_blade_droop_angle;
+									}
+									else
+									{
+										last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE; // disable moving blade if it's damaged
 										break;
 									}
-
-									search_main_rotor_blade_section_static.result_sub_object->relative_pitch = main_rotor_blade_droop_angle + main_rotor_blade_random_droop_angle;
 								}
 								else
-								{
 									break;
-								}
 
 								search_main_rotor_blade_section_static_depth++;
 							}
 						}
 						else
-						{
 							break;
-						}
 
-						search_main_rotor_blade_root_static_depth++;
+						search_main_rotor_blade_moving_depth++;
+						search_main_rotor_blade_root_static_depth++;;
 					}
 
-					//
-					// find static hub and set heading
-					//
+					// disable moving hub
+
+					search_main_rotor_hub.search_depth = 0;
+					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
+
+					while (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND && search_main_rotor_hub.result_sub_object->visible_object)
+					{
+						search_main_rotor_hub.result_sub_object->visible_object = FALSE;
+						search_main_rotor_hub.search_depth++;
+					}
+
+					// enable static hub and set heading
 
 					search_main_rotor_hub.search_depth = 0;
 					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
 
-					if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					while (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
 						search_main_rotor_hub.result_sub_object->relative_heading = search_main_rotor_heading_null.result_sub_object->relative_heading;
+						search_main_rotor_hub.search_depth++;
 					}
 				}
 			}
 		}
 		else
-		{
 			break;
-		}
 
+		
 		main_rotor_direction = -main_rotor_direction;
-
 		search_main_rotor_shaft_depth++;
 	}
 }
@@ -790,36 +423,166 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_instance *virtual_cockpit_main_rotor_inst3d)
+void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_instance *cockpit_main_rotor_inst3d, object_3d_instance *inst3d)
 {
-	helicopter
-		*raw;
+	object_3d_sub_object_search_data
+		search_main_rotor_shaft,
+		search_main_rotor_pitch_bank_null,
+		search_main_rotor_heading_null,
+		search_main_rotor_blade_root_static,
+		search_main_rotor_blade_section_static,
+		search_main_rotor_blade_moving,
+		search_main_rotor_hub,
+		search_cockpit_main_rotor_shaft,
+		search_cockpit_main_rotor_pitch_bank_null,
+		search_cockpit_main_rotor_heading_null,
+		search_cockpit_main_rotor_blade_root_static,
+		search_cockpit_main_rotor_blade_section_static,
+		search_cockpit_main_rotor_blade_moving,
+		search_cockpit_main_rotor_hub;
 
-	object_3d_instance
-		*tmp;
+	int
+		search_main_rotor_shaft_depth = 0,
+		search_main_rotor_blade_root_static_depth = 0,
+		search_main_rotor_blade_section_static_depth = 0,
+		search_main_rotor_blade_moving_depth = 0;
 
+	float
+		main_rotor_direction;
+	
 	ASSERT (en);
+	ASSERT (en == get_gunship_entity());
 
-	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-
-	ASSERT (virtual_cockpit_main_rotor_inst3d);
-
-	raw = (helicopter *) get_local_entity_data (en);
-
-	tmp = raw->ac.inst3d;
-
-	raw->ac.inst3d = virtual_cockpit_main_rotor_inst3d;
-
-	if (raw->main_rotor_damaged)
+	while (TRUE)
 	{
-		animate_damaged_helicopter_main_rotors (en, TRUE);
-	}
-	else
-	{
-		animate_helicopter_main_rotors (en, TRUE, TRUE);
-	}
+		search_main_rotor_shaft.search_depth = search_cockpit_main_rotor_shaft.search_depth = search_main_rotor_shaft_depth;
+		search_main_rotor_shaft.search_object = inst3d;
+		search_cockpit_main_rotor_shaft.search_object = cockpit_main_rotor_inst3d;
+		search_main_rotor_shaft.sub_object_index = search_cockpit_main_rotor_shaft.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT;
 
-	raw->ac.inst3d = tmp;
+		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND && 
+				find_object_3d_sub_object (&search_cockpit_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			// locate pitch and bank null
+
+			search_main_rotor_pitch_bank_null.search_depth = search_cockpit_main_rotor_pitch_bank_null.search_depth = 0;
+			search_main_rotor_pitch_bank_null.sub_object_index = search_cockpit_main_rotor_pitch_bank_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL;
+
+			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+					find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_shaft, &search_cockpit_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			{
+				// cpoy pitch and bank
+
+				search_cockpit_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch;
+				search_cockpit_main_rotor_pitch_bank_null.result_sub_object->relative_roll = search_main_rotor_pitch_bank_null.result_sub_object->relative_roll;
+
+				// locate heading null
+
+				search_main_rotor_heading_null.search_depth = search_cockpit_main_rotor_heading_null.search_depth = 0;
+				search_main_rotor_heading_null.sub_object_index = search_cockpit_main_rotor_heading_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
+
+				if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_pitch_bank_null, &search_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+						find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_pitch_bank_null, &search_cockpit_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					// copy heading
+
+					search_cockpit_main_rotor_heading_null.result_sub_object->relative_heading = search_main_rotor_heading_null.result_sub_object->relative_heading;
+
+					// find static and moving blades
+
+					search_main_rotor_blade_root_static_depth = 0;
+					search_main_rotor_blade_moving_depth = 0;
+
+					while (TRUE)
+					{
+						search_main_rotor_blade_moving.search_depth = search_cockpit_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
+						search_main_rotor_blade_moving.sub_object_index = search_cockpit_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
+
+						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+								find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_heading_null, &search_cockpit_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
+							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch;
+							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
+							search_cockpit_main_rotor_blade_moving.result_sub_object->visible_object = search_main_rotor_blade_moving.result_sub_object->visible_object;
+							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_scale.x = search_main_rotor_blade_moving.result_sub_object->relative_scale.x;
+							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_scale.y = search_main_rotor_blade_moving.result_sub_object->relative_scale.y;
+						}
+						
+						search_main_rotor_blade_root_static.search_depth = search_cockpit_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
+						search_main_rotor_blade_root_static.sub_object_index = search_cockpit_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
+
+						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+								find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_heading_null, &search_cockpit_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
+							search_cockpit_main_rotor_blade_root_static.result_sub_object->visible_object = search_main_rotor_blade_root_static.result_sub_object->visible_object;
+							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_root_static.result_sub_object->relative_pitch;
+							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_root_static.result_sub_object->relative_roll;
+	
+							// locate static blade sections and copy blade droop angle
+
+							search_main_rotor_blade_section_static_depth = 0;
+
+							while (TRUE)
+							{
+								search_main_rotor_blade_section_static.search_depth = search_cockpit_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
+								search_main_rotor_blade_section_static.sub_object_index = search_cockpit_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
+
+								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+										find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_blade_root_static, &search_cockpit_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+								{
+									search_cockpit_main_rotor_blade_section_static.result_sub_object->relative_pitch = search_main_rotor_blade_section_static.result_sub_object->relative_pitch;
+									search_cockpit_main_rotor_blade_section_static.result_sub_object->visible_object = search_main_rotor_blade_section_static.result_sub_object->visible_object;
+								}
+								else
+									break;
+
+								search_main_rotor_blade_section_static_depth++;
+							}
+						}
+						else
+							break;
+
+						search_main_rotor_blade_moving_depth++;
+						search_main_rotor_blade_root_static_depth++;;
+					}
+
+					// copy moving hub
+
+					search_main_rotor_hub.search_depth = search_cockpit_main_rotor_hub.search_depth = 0;
+					search_main_rotor_hub.sub_object_index = search_cockpit_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
+
+					while (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+							find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_shaft, &search_cockpit_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search_cockpit_main_rotor_hub.result_sub_object->visible_object = search_main_rotor_hub.result_sub_object->visible_object;
+						search_cockpit_main_rotor_hub.result_sub_object->relative_heading = search_main_rotor_hub.result_sub_object->relative_heading;
+						search_main_rotor_hub.search_depth++;
+						search_cockpit_main_rotor_hub.search_depth++;
+					}
+
+					// copy static hub
+
+					search_main_rotor_hub.search_depth = search_cockpit_main_rotor_hub.search_depth = 0;
+					search_main_rotor_hub.sub_object_index = search_cockpit_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
+
+					while (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
+							find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_shaft, &search_cockpit_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search_cockpit_main_rotor_hub.result_sub_object->relative_heading = search_main_rotor_hub.result_sub_object->relative_heading;
+						search_cockpit_main_rotor_hub.result_sub_object->visible_object = search_main_rotor_hub.result_sub_object->visible_object;
+						search_main_rotor_hub.search_depth++;
+						search_cockpit_main_rotor_hub.search_depth++;
+					}
+				}
+			}
+		}
+		else
+			break;
+
+		
+		main_rotor_direction = -main_rotor_direction;
+		search_main_rotor_shaft_depth++;
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -849,12 +612,12 @@ void animate_helicopter_tail_rotor (entity *en)
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+	raw = (helicopter *) get_local_entity_data (en);
+
+	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || raw->tail_rotor_damaged)
 	{
 		return;
 	}
-
-	raw = (helicopter *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -1176,69 +939,19 @@ void animate_helicopter_eo (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void animate_helicopter_suspension (entity *en)
-{
-	helicopter
-		*raw;
-
-	ASSERT (en);
-
-	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
-	{
-		return;
-	}
-
-	if (command_line_dynamics_flight_model != 2)
-		return;
-	
-	//
-	// only animate suspension on player's helicopter
-	//
-
-	if (en == get_gunship_entity ())
-	{
-		raw = (helicopter *) get_local_entity_data (en);
-
-		switch (raw->ac.object_3d_shape)
-		{
-			case OBJECT_3D_AH64D_APACHE_LONGBOW:
-				{
-					animate_apache_suspension(raw->ac.inst3d);
-					break;
-				}
-			case OBJECT_3D_MI24_HIND:
-				{
-					animate_hind_suspension(raw->ac.inst3d);
-					break;
-				}
-			default:
-				{
-					break;
-				}
-		}
-	}
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void animate_helicopter_wheels (entity *en)
 {
 	helicopter
 		*raw;
 
 	ASSERT (en);
+	ASSERT (en == get_gunship_entity());
 
 	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
 	{
 		return;
 	}
 
-	if (command_line_dynamics_flight_model != 2)
-		return;
-	
 	//
 	// only animate wheels rotation on player's helicopter
 	//
@@ -1306,60 +1019,7 @@ void damage_helicopter_3d_object (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int damage_helicopter_main_rotors (entity *en)
-{
-	helicopter
-		*raw;
-
-	object_3d_instance
-		*inst3d;
-
-	int
-		seed,
-		section_fragment_count;
-
-	ASSERT (en);
-
-	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-
-	raw = (helicopter *) get_local_entity_data (en);
-
-	ASSERT (raw->main_rotor_damaged == FALSE);
-
-	inst3d = raw->ac.inst3d;
-
-	seed = get_client_server_entity_random_number_seed(en);
-
-	//
-	// damage main rotor object
-	//
-
-	section_fragment_count = damage_helicopter_main_rotor_inst3d (inst3d, seed);
-
-	if (get_local_entity_int_value (en, INT_TYPE_EJECTED))
-	{
-		section_fragment_count = 0;
-	}
-
-	//
-	// also damage virtual cockpit rotors if entity is the player
-	//
-
-	if (en == get_gunship_entity ())
-	{
-		damage_virtual_cockpit_main_rotors (seed);
-	}
-
-	raw->main_rotor_damaged = TRUE;
-
-	return section_fragment_count;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int damage_helicopter_main_rotor_inst3d (object_3d_instance *inst3d, int seed)
+int damage_helicopter_main_rotors (entity *en, int blade_number)
 {
 	object_3d_sub_object_search_data
 		search_main_rotor_shaft,
@@ -1367,31 +1027,44 @@ int damage_helicopter_main_rotor_inst3d (object_3d_instance *inst3d, int seed)
 		search_main_rotor_heading_null,
 		search_main_rotor_blade_root_static,
 		search_main_rotor_blade_section_static,
-		search_main_rotor_blade_moving,
-		search_main_rotor_hub;
+		search_main_rotor_collision_point;
 
 	int
 		section_cut_off_point,
-		section_fragment_count,
 		search_main_rotor_shaft_depth,
 		search_main_rotor_blade_root_static_depth,
-		search_main_rotor_blade_section_static_depth,
-		search_main_rotor_blade_moving_depth;
+		search_main_rotor_blade_section_static_depth;
 
+	unsigned int subtype;
+	
+	float
+		main_rotor_direction;
+	
+	helicopter
+		*raw;
+	object_3d_instance
+		*inst3d;
+
+	ASSERT (en);
+	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return FALSE;
+
+	raw = (helicopter *) get_local_entity_data (en);
+	inst3d = raw->ac.inst3d;
 	if (!inst3d)
-	{
-		return 0;
-	}
+		return FALSE;
 
-	section_fragment_count = 0;
+	subtype = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+	ASSERT (subtype < NUM_ENTITY_SUB_TYPE_AIRCRAFT);
 
-	//
+	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
+
 	// locate rotor shaft
-	//
 
 	search_main_rotor_shaft_depth = 0;
 
-	while (TRUE)
+	while (search_main_rotor_shaft_depth < quantity_of_shafts[subtype])
 	{
 		search_main_rotor_shaft.search_depth = search_main_rotor_shaft_depth;
 		search_main_rotor_shaft.search_object = inst3d;
@@ -1399,164 +1072,152 @@ int damage_helicopter_main_rotor_inst3d (object_3d_instance *inst3d, int seed)
 
 		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
-			//
 			// locate pitch and bank null
-			//
 
 			search_main_rotor_pitch_bank_null.search_depth = 0;
 			search_main_rotor_pitch_bank_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL;
 
 			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				//
 				// locate heading null
-				//
 
 				search_main_rotor_heading_null.search_depth = 0;
 				search_main_rotor_heading_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
 
 				if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_pitch_bank_null, &search_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
-					//
-					// disable moving blades
-					//
-
-					search_main_rotor_blade_moving_depth = 0;
-
-					while (TRUE)
-					{
-						search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
-						search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE;
-						}
-						else
-						{
-							break;
-						}
-
-						search_main_rotor_blade_moving_depth++;
-					}
-
-					//
-					// enable static blade roots
-					//
-
-					search_main_rotor_blade_root_static_depth = 0;
-
-					while (TRUE)
+						// locate static blade root by it's number, if it presents
+					search_main_rotor_blade_root_static_depth = blade_number >= 0 ? (blade_number - search_main_rotor_shaft_depth * quantity_of_roots[subtype] / quantity_of_shafts[subtype]) : 0;
+					
+					while (search_main_rotor_blade_root_static_depth < quantity_of_roots[subtype] / quantity_of_shafts[subtype] && search_main_rotor_blade_root_static_depth >= 0)
 					{
 						search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
 						search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
 
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
-							search_main_rotor_blade_root_static.result_sub_object->visible_object = TRUE;
-
-							//
-							// locate static blade sections
-							//
+							// count static blade sections
 
 							search_main_rotor_blade_section_static_depth = 0;
 
-							while (TRUE)
+							while (search_main_rotor_blade_section_static_depth < quantity_of_sections[subtype] / quantity_of_roots[subtype])
 							{
 								search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
 								search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
-
-								search_main_rotor_blade_section_static_depth++;
-
-								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static))
 								{
-									break;
+									if (search_main_rotor_blade_section_static.result_sub_object->visible_object)
+									{
+										search_main_rotor_blade_section_static_depth++;
+									}
+									else
+										break;
 								}
+								else
+									break;
 							}
 
-							//
-							// cut off static blade sections
-							//
+							// cut off static blade sections - last one, all of them or random
 
 							if (search_main_rotor_blade_section_static_depth > 0)
 							{
-								section_cut_off_point = rand16x(&seed) % search_main_rotor_blade_section_static_depth;
+								float collision_point = 0;
+								
+								section_cut_off_point = blade_number >= 0 ? (search_main_rotor_blade_section_static_depth - 1) :
+									(blade_number == -1 ? 0 : rand16() % search_main_rotor_blade_section_static_depth);
+								debug_log("blade num %i, cut off %i, depth %i", blade_number, section_cut_off_point, search_main_rotor_blade_section_static_depth);
 
 								search_main_rotor_blade_section_static_depth = 0;
 
-								while (TRUE)
+								while (search_main_rotor_blade_section_static_depth < quantity_of_sections[subtype] / quantity_of_roots[subtype])
 								{
+									viewpoint blade_vp;
+									vec3d blade_direction;
+
 									search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
 									search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
 
 									if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 									{
-										if (search_main_rotor_blade_section_static_depth >= section_cut_off_point)
+										if (search_main_rotor_blade_section_static.result_sub_object->visible_object)
 										{
-											search_main_rotor_blade_section_static.result_sub_object->visible_object = FALSE;
+											if (search_main_rotor_blade_section_static_depth <= section_cut_off_point)
+												collision_point += search_main_rotor_blade_section_static.result_sub_object->relative_position.z;
 
-											section_fragment_count ++;
+											if (search_main_rotor_blade_section_static_depth >= section_cut_off_point)
+											{
+												search_main_rotor_blade_section_static.result_sub_object->visible_object = FALSE;
+
+												memcpy ( blade_vp.attitude, raw->ac.mob.attitude, sizeof ( matrix3x3 ) );
+												blade_vp.position = raw->ac.mob.position;
+												get_3d_sub_object_viewpoint(search_main_rotor_blade_section_static.result_sub_object, &blade_vp, TRUE);
+
+												if (blade_vp.position.x && blade_vp.position.y && blade_vp.position.z)
+												{
+													create_rotor_blade_fragment(en, blade_vp, TRUE);
+
+													if (en == get_gunship_entity())
+													{
+														current_flight_dynamics->main_rotor_rpm.value *= 0.99;
+
+														blade_direction.x = main_rotor_direction;
+														blade_direction.y = blade_direction.z = 0;
+														multiply_matrix3x3_vec3d(&blade_direction, &blade_vp.attitude, &blade_direction);
+														add_dynamic_force ("Rotor blade damage", 0.000005 * current_flight_dynamics->main_rotor_rpm.value, 0, &blade_vp.position, &blade_direction, FALSE);
+														#if DEBUG_MODULE
+															create_vectored_debug_3d_object (&blade_vp.position, &blade_direction, OBJECT_3D_ARROW_FORCES, 10, 5.0);
+														#endif
+													}
+												}
+											}
 										}
+										else
+											break;
 									}
 									else
-									{
 										break;
-									}
 
 									search_main_rotor_blade_section_static_depth++;
+								} 
+
+								// move collision point
+
+								search_main_rotor_collision_point.search_depth = 0;
+								search_main_rotor_collision_point.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_COLLISION_POINT;
+
+								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_collision_point) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+								{
+									debug_log("moving blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+									search_main_rotor_collision_point.result_sub_object->relative_position.z = collision_point;
 								}
 							}
 						}
 						else
-						{
 							break;
-						}
 
-						search_main_rotor_blade_root_static_depth++;
-					}
-
-					//
-					// disable moving hub
-					//
-
-					search_main_rotor_hub.search_depth = 0;
-					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
-
-					if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search_main_rotor_hub.result_sub_object->visible_object = FALSE;
-					}
-
-					//
-					// enable static hub
-					//
-
-					search_main_rotor_hub.search_depth = 0;
-					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
-
-					if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search_main_rotor_hub.result_sub_object->visible_object = TRUE;
+						if (blade_number >= 0)
+							break;
+						else
+							search_main_rotor_blade_root_static_depth++;
 					}
 				}
 			}
 		}
 		else
-		{
 			break;
-		}
 
 		search_main_rotor_shaft_depth++;
+		main_rotor_direction *= - 1;
 	}
 
-	return section_fragment_count;
+	return FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int damage_helicopter_tail_rotors (entity *en)
+void damage_helicopter_tail_rotors (entity *en)
 {
 	helicopter
 		*raw;
@@ -1568,20 +1229,22 @@ int damage_helicopter_tail_rotors (entity *en)
 		search;
 
 	int
-		depth,
-		fragment_count;
+		depth;
+	
+	viewpoint
+		blade_vp;
 
 	ASSERT (en);
-
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return;
 
 	raw = (helicopter *) get_local_entity_data (en);
 
-	ASSERT (raw->tail_rotor_damaged == FALSE);
+	if (raw->tail_rotor_damaged)
+		return;
 
 	inst3d = raw->ac.inst3d;
-
-	fragment_count = 0;
 
 	//
 	// disable moving tail rotor
@@ -1623,7 +1286,11 @@ int damage_helicopter_tail_rotors (entity *en)
 		{
 			search.result_sub_object->visible_object = FALSE;
 
-			fragment_count ++;
+			memcpy ( blade_vp.attitude, raw->ac.mob.attitude, sizeof ( matrix3x3 ) );
+			blade_vp.position = raw->ac.mob.position;
+			get_3d_sub_object_viewpoint(search.result_sub_object, &blade_vp, TRUE);
+
+			create_rotor_blade_fragment(en, blade_vp, FALSE);
 		}
 		else
 		{
@@ -1632,48 +1299,98 @@ int damage_helicopter_tail_rotors (entity *en)
 
 		depth++;
 	}
-
-	return fragment_count;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_main_rotor_fragments (entity *en, int count)
+void create_rotor_blade_fragment (entity *en, viewpoint blade_vp, int main_rotor)
 {
+	object_3d_index_numbers blade_object;
+	
 	ASSERT (en);
+	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return;
 
-	if ((count > 0) && (get_comms_model () == COMMS_MODEL_SERVER))
-	{
+	if (main_rotor)
+		switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+		{
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
+				blade_object = OBJECT_3D_CH53_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
+				blade_object = OBJECT_3D_MI28_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+				blade_object = OBJECT_3D_MI24_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
+				blade_object = OBJECT_3D_MI17_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
+				blade_object = OBJECT_3D_MI6_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+				blade_object = OBJECT_3D_RAH66_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
+				blade_object = OBJECT_3D_CH3_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+				blade_object = OBJECT_3D_UH60_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+				blade_object = OBJECT_3D_OH58_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+				blade_object = OBJECT_3D_AH64D_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+				blade_object = OBJECT_3D_AH64A_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+				blade_object = OBJECT_3D_AH1Z_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+				blade_object = OBJECT_3D_KA29_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+				blade_object = OBJECT_3D_KA52_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+				blade_object = OBJECT_3D_KA50_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+				blade_object = OBJECT_3D_CH47_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+				blade_object = OBJECT_3D_CH46_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+				blade_object = OBJECT_3D_MV22_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+				blade_object = OBJECT_3D_AH1T_ROTOR_BLADE_DAMAGED;
+				break;
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+				blade_object = OBJECT_3D_AH1W_ROTOR_BLADE_DAMAGED;
+				break;
+			default:
+				blade_object = OBJECT_3D_ROTOR_BLADE_DAMAGED;
+		}
+	else
+		blade_object = OBJECT_3D_ROTOR_BLADE_DAMAGED;
+
+	if (get_comms_model () == COMMS_MODEL_SERVER)
 		create_client_server_particle_entity
 		(
-			count,
-			get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION),
-			20,
-			OBJECT_3D_ROTOR_BLADE_DAMAGED
+			1,
+			blade_vp,
+			frand1() * 75,
+			blade_object
 		);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void create_tail_rotor_fragments (entity *en, int count)
-{
-	ASSERT (en);
-
-	if ((count > 0) && (get_comms_model () == COMMS_MODEL_SERVER))
-	{
-		create_client_server_particle_entity
-		(
-			count,
-			get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION),
-			20,
-			OBJECT_3D_TAIL_ROTOR_BLADE_DAMAGED
-		);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1682,6 +1399,24 @@ void create_tail_rotor_fragments (entity *en, int count)
 
 int restore_helicopter_main_rotors (entity *en)
 {
+	object_3d_sub_object_search_data
+		search_main_rotor_shaft,
+		search_main_rotor_pitch_bank_null,
+		search_main_rotor_heading_null,
+		search_main_rotor_blade_root_static,
+		search_main_rotor_blade_section_static,
+		search_main_rotor_collision_point;
+
+	int
+		search_main_rotor_shaft_depth,
+		search_main_rotor_blade_root_static_depth,
+		search_main_rotor_blade_section_static_depth;
+
+	unsigned int subtype;
+
+	float
+		collision_point;
+
 	helicopter
 		*raw;
 
@@ -1689,63 +1424,17 @@ int restore_helicopter_main_rotors (entity *en)
 		*inst3d;
 
 	ASSERT (en);
-
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return FALSE;
 
 	raw = (helicopter *) get_local_entity_data (en);
-
-	if (!raw->main_rotor_damaged)
-	{
-		return FALSE;
-	}
-
 	inst3d = raw->ac.inst3d;
-
-	//
-	// restore main rotor object
-	//
-
-	restore_helicopter_main_rotor_inst3d (inst3d);
-
-	//
-	// also restore virtual cockpit rotors if entity is the player
-	//
-
-	if (en == get_gunship_entity ())
-	{
-		restore_virtual_cockpit_main_rotors ();
-	}
-
-	raw->main_rotor_damaged = FALSE;
-
-	return TRUE;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int restore_helicopter_main_rotor_inst3d (object_3d_instance *inst3d)
-{
-	object_3d_sub_object_search_data
-		search_main_rotor_shaft,
-		search_main_rotor_pitch_bank_null,
-		search_main_rotor_heading_null,
-		search_main_rotor_blade_root_static,
-		search_main_rotor_blade_section_static,
-		search_main_rotor_blade_moving,
-		search_main_rotor_hub;
-
-	int
-		search_main_rotor_shaft_depth,
-		search_main_rotor_blade_root_static_depth,
-		search_main_rotor_blade_section_static_depth,
-		search_main_rotor_blade_moving_depth;
-
 	if (!inst3d)
-	{
-		return 0;
-	}
+		return FALSE;
+
+	subtype = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+	ASSERT (subtype < NUM_ENTITY_SUB_TYPE_AIRCRAFT);
 
 	//
 	// locate rotor shaft
@@ -1753,7 +1442,7 @@ int restore_helicopter_main_rotor_inst3d (object_3d_instance *inst3d)
 
 	search_main_rotor_shaft_depth = 0;
 
-	while (TRUE)
+	while (search_main_rotor_shaft_depth < quantity_of_shafts[subtype])
 	{
 		search_main_rotor_shaft.search_depth = search_main_rotor_shaft_depth;
 		search_main_rotor_shaft.search_object = inst3d;
@@ -1761,137 +1450,64 @@ int restore_helicopter_main_rotor_inst3d (object_3d_instance *inst3d)
 
 		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
-			//
 			// locate pitch and bank null
-			//
 
 			search_main_rotor_pitch_bank_null.search_depth = 0;
 			search_main_rotor_pitch_bank_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL;
 
 			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				//
 				// locate heading null
-				//
 
 				search_main_rotor_heading_null.search_depth = 0;
 				search_main_rotor_heading_null.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
 
 				if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_pitch_bank_null, &search_main_rotor_heading_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
-					//
-					// disable moving blades
-					//
-
-					search_main_rotor_blade_moving_depth = 0;
-
-					while (TRUE)
-					{
-						search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
-						search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-						{
-							search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE;
-						}
-						else
-						{
-							break;
-						}
-
-						search_main_rotor_blade_moving_depth++;
-					}
-
-					//
-					// enable static blade roots
-					//
+					// locate static blade roots
 
 					search_main_rotor_blade_root_static_depth = 0;
 
-					while (TRUE)
+					while (search_main_rotor_blade_root_static_depth < quantity_of_roots[subtype] / quantity_of_shafts[subtype])
 					{
 						search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
 						search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
 
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
-							search_main_rotor_blade_root_static.result_sub_object->visible_object = TRUE;
-
-							//
-							// locate static blade sections
-							//
+							// repair static blade sections
 
 							search_main_rotor_blade_section_static_depth = 0;
 
-							while (TRUE)
+							while (search_main_rotor_blade_section_static_depth < quantity_of_sections[subtype] / quantity_of_roots[subtype])
 							{
 								search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
 								search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
 
-								search_main_rotor_blade_section_static_depth++;
-
-								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-								{
+								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+									search_main_rotor_blade_section_static.result_sub_object->visible_object = TRUE;
+								else
 									break;
-								}
-							}
 
-							//
-							// cut off static blade sections
-							//
-
-							if (search_main_rotor_blade_section_static_depth > 0)
-							{
-								search_main_rotor_blade_section_static_depth = 0;
-
-								while (TRUE)
-								{
-									search_main_rotor_blade_section_static.search_depth = search_main_rotor_blade_section_static_depth;
-									search_main_rotor_blade_section_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_SECTION_STATIC;
-
-									if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_blade_section_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-									{
-										search_main_rotor_blade_section_static.result_sub_object->visible_object = TRUE;
-									}
-									else
-									{
-										break;
-									}
-
-									search_main_rotor_blade_section_static_depth++;
-								}
+								search_main_rotor_blade_section_static_depth++;
 							}
 						}
 						else
-						{
 							break;
+
+						// move collision point
+
+						search_main_rotor_collision_point.search_depth = 0;
+						search_main_rotor_collision_point.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_COLLISION_POINT;
+
+						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_collision_point) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						{
+							collision_point = - aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius + get_3d_vector_magnitude(&search_main_rotor_blade_root_static.result_sub_object->relative_position);
+							debug_log("restoring blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+							search_main_rotor_collision_point.result_sub_object->relative_position.z = collision_point;
 						}
 
 						search_main_rotor_blade_root_static_depth++;
-					}
-
-					//
-					// disable moving hub
-					//
-
-					search_main_rotor_hub.search_depth = 0;
-					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_MOVING;
-
-					if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search_main_rotor_hub.result_sub_object->visible_object = FALSE;
-					}
-
-					//
-					// enable static hub
-					//
-
-					search_main_rotor_hub.search_depth = 0;
-					search_main_rotor_hub.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HUB_STATIC;
-
-					if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_hub) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search_main_rotor_hub.result_sub_object->visible_object = TRUE;
 					}
 				}
 			}
@@ -1903,6 +1519,9 @@ int restore_helicopter_main_rotor_inst3d (object_3d_instance *inst3d)
 
 		search_main_rotor_shaft_depth++;
 	}
+
+
+	raw->main_rotor_damaged = FALSE;
 
 	return TRUE;
 }
@@ -1926,16 +1545,13 @@ int restore_helicopter_tail_rotors (entity *en)
 		depth;
 
 	ASSERT (en);
-
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
+		return FALSE;
 
 	raw = (helicopter *) get_local_entity_data (en);
-
 	if (!raw->tail_rotor_damaged)
-	{
 		return FALSE;
-	}
-
 	inst3d = raw->ac.inst3d;
 
 	//
@@ -1997,6 +1613,8 @@ int get_helicopter_main_rotors_blurred (entity *en)
 {
 	float
 		main_rotor_rpm;
+	int
+		ejected;
 
 	ASSERT (en);
 
@@ -2007,8 +1625,8 @@ int get_helicopter_main_rotors_blurred (entity *en)
 	else
 	{
 		main_rotor_rpm = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
-
-		return (main_rotor_rpm >= MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD);
+		ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
+		return ((main_rotor_rpm >= 50) * !ejected);
 	}
 }
 

@@ -100,6 +100,8 @@ static void draw_local_3d_object (entity *en, float range)
 		internal_view,
 		draw_gunship;
 
+	ASSERT(en);
+	
 	raw = (helicopter *) get_local_entity_data (en);
 
 	//
@@ -129,8 +131,6 @@ static void draw_local_3d_object (entity *en, float range)
 	{
 		int
 			draw_virtual_cockpit_parts,
-			draw_canopy_doors,
-			draw_loading_doors,
 			ejected;
 
 		object_3d_sub_object_search_data
@@ -152,23 +152,8 @@ static void draw_local_3d_object (entity *en, float range)
 
 			draw_virtual_cockpit_parts = FALSE;
 
-			draw_canopy_doors = FALSE;
-
-			draw_loading_doors = FALSE;
-
-			if (en == get_gunship_entity ())
-			{
-				draw_canopy_doors = TRUE;
-
-				if (internal_view)
-				{
-					draw_virtual_cockpit_parts = TRUE;
-				}
-			}
-			else
-			{
-				draw_loading_doors = TRUE;
-			}
+			if (en == get_gunship_entity () && internal_view)
+				draw_virtual_cockpit_parts = TRUE;
 
 			//
 			// fuselage
@@ -183,45 +168,6 @@ static void draw_local_3d_object (entity *en, float range)
 				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
 			}
 
-			//
-			// canopy/loading doors
-			//
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_canopy_doors;
-			}
-
-			search.search_depth = 1;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_canopy_doors;
-			}
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_LOADING_DOOR;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_loading_doors;
-			}
-
-			search.search_depth = 1;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_LOADING_DOOR;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_loading_doors;
-			}
 			break;
 		}
 		case OBJECT_3D_KA_52:
@@ -232,37 +178,12 @@ static void draw_local_3d_object (entity *en, float range)
 			//
 			////////////////////////////////////////
 
-			//
-			// draw 'canopy' doors on player object and 'loading' doors on AI object
-			//
-
 			ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
 
 			draw_virtual_cockpit_parts = FALSE;
 
-			draw_canopy_doors = FALSE;
-
-			draw_loading_doors = FALSE;
-
-			if (en == get_gunship_entity ())
-			{
-				if (!ejected)
-				{
-					draw_canopy_doors = TRUE;
-				}
-
-				if (internal_view)
-				{
-					draw_virtual_cockpit_parts = TRUE;
-				}
-			}
-			else
-			{
-				if (!ejected)
-				{
-					draw_loading_doors = TRUE;
-				}
-			}
+			if (en == get_gunship_entity () && internal_view)
+				draw_virtual_cockpit_parts = TRUE;
 
 			//
 			// stub wings
@@ -290,83 +211,56 @@ static void draw_local_3d_object (entity *en, float range)
 				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
 			}
 
-			//
-			// canopy/loading doors
-			//
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+			if (ejected)
 			{
-				search.result_sub_object->visible_object = draw_canopy_doors;
+				//
+				// canopy/loading doors
+				//
+
+				search.search_depth = 0;
+				search.search_object = raw->ac.inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					search.result_sub_object->visible_object = FALSE;
+				}
+
+				search.search_depth = 1;
+				search.search_object = raw->ac.inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					search.result_sub_object->visible_object = FALSE;
+				}
+
+				//
+				// ejector seats & crew
+				//
+
+				search.search_depth = 0;
+				search.search_object = raw->ac.inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_KA52_EJECTOR_SEAT;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					search.result_sub_object->visible_object = FALSE;
+				}
+
+				search.search_depth = 1;
+				search.search_object = raw->ac.inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_KA52_EJECTOR_SEAT;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					search.result_sub_object->visible_object = FALSE;
+				}
 			}
 
-			search.search_depth = 1;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_CANOPY_DOORS;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_canopy_doors;
-			}
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_LOADING_DOOR;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_loading_doors;
-			}
-
-			search.search_depth = 1;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_LOADING_DOOR;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = draw_loading_doors;
-			}
-
-			//
-			// ejector seats & crew
-			//
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_KA52_EJECTOR_SEAT;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = !ejected;
-			}
-
-			search.search_depth = 1;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_KA52_EJECTOR_SEAT;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = !ejected;
-			}
 			break;
 		}
 		case OBJECT_3D_AH1Z:
-		{
-			draw_virtual_cockpit_parts = internal_view;
-
-			search.search_depth = 0;
-			search.search_object = raw->ac.inst3d;
-			search.sub_object_index = OBJECT_3D_SUB_OBJECT_RAH66_FUSELAGE;
-
-			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
-			}
-			break;
-		}
 		case OBJECT_3D_OH58D:
 		{
 			draw_virtual_cockpit_parts = internal_view;
@@ -391,6 +285,8 @@ static void draw_local_3d_object (entity *en, float range)
 
 	////////////////////////////////////////
 
+	ASSERT(en);
+	
 	if (en == get_gunship_entity ())
 	{
 		//
@@ -405,17 +301,7 @@ static void draw_local_3d_object (entity *en, float range)
 		// animate
 		//
 
-		if (!internal_view)
-		{
-			if (raw->main_rotor_damaged)
-			{
-				animate_damaged_helicopter_main_rotors (en, TRUE);
-			}
-			else
-			{
-				animate_helicopter_main_rotors (en, TRUE, FALSE);
-			}
-		}
+		animate_helicopter_main_rotors (en, FALSE);
 
 		animate_helicopter_tail_rotor (en);
 
@@ -425,8 +311,8 @@ static void draw_local_3d_object (entity *en, float range)
 
 		animate_helicopter_eo (en);
 
-		animate_helicopter_suspension (en);
-
+		animate_aircraft_suspension (en);
+		
 		animate_helicopter_wheels (en);
 
 		animate_aircraft_loading_doors (en);
@@ -438,8 +324,6 @@ static void draw_local_3d_object (entity *en, float range)
 		animate_aircraft_weapon_system_ready (en);
 
 		animate_aircraft_shadow (en);
-
-		animate_aircraft_rudder (en);
 
 		raw->ac.inst3d->object_internal_lighting = object_internal_lighting_valid (en);
 
@@ -499,18 +383,13 @@ static void draw_local_3d_object (entity *en, float range)
 		// animate
 		//
 
-		if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
-		{
-			animate_helicopter_main_rotors (en, FALSE, FALSE);
-		}
-		else
-		{
-			animate_damaged_helicopter_main_rotors (en, FALSE);
-		}
+		animate_helicopter_main_rotors (en, FALSE);
 
 		animate_helicopter_tail_rotor (en);
 
 		animate_helicopter_controls (en);
+
+		animate_aircraft_suspension (en);
 
 		animate_aircraft_loading_doors (en);
 
