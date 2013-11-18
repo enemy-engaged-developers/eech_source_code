@@ -189,8 +189,12 @@ void initialise_mouse ( void )
 		// JB 030311 from Andrew
 		// Sometimes a double mouse is visible (when the resilution in EECH is different from the desktop)
 		// VJ 030430 Double mouse problem, Changed last param to NONEXCLUSIVE
+
+#ifdef DEBUG // exclusive for debug build - more comfortable in windowed mode /thealx/
+		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
+#else
 		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
-		
+#endif
 		if ( ret != DI_OK )
 		{
 	
@@ -706,10 +710,10 @@ void move_mouse ( int dx, int dy )
 	
 
 	// Retro 030317 starts
-	// OK what´s happening here... I need an absolute rather than a relative mouse, so I add/dec the mouse movements
+	// OK whatï¿½s happening here... I need an absolute rather than a relative mouse, so I add/dec the mouse movements
 	// to two variables that have a 'hard ceiling'
 	// There are 2 access methods (below) through which I can get to this data
-	// There´s also a reset function to recenter the view
+	// Thereï¿½s also a reset function to recenter the view
 	// This works regardless of mouse_on or mouse_off... we might change that though..
 	// EVENTS assigned to mouse buttons work ONLY when mouse is ON !
 
