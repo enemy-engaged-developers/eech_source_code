@@ -1987,7 +1987,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 				else
 				{
 
-					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, 0 );
+					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
 				}
 
 				current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
@@ -2472,7 +2472,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 				{
 
 					set_d3d_int_state ( D3DRENDERSTATE_ALPHABLENDENABLE, FALSE );
-					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, 0 );
+					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
 				}
 
 				set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
@@ -3337,7 +3337,7 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 			else
 			{
 	
-				set_d3d_material_colour ( 255, 255, 255, ialpha, 0 );
+				set_d3d_material_colour ( 255, 255, 255, ialpha, current_object_3d_surface->specularity );
 			}
 	
 			if ( current_object_3d_surface->texture_wrapped_u )	{ current_object_3d_texture_u_address = D3DTADDRESS_WRAP; }
@@ -3435,7 +3435,7 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 		if ( ( current_object_3d_surface->polygons ) && ( current_object_3d_surface->reflectivity != 0 ) )
 		{
 	
-			set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->reflectivity, 0 );
+			set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->reflectivity, current_object_3d_surface->specularity );
 	
 			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );

@@ -779,8 +779,8 @@ void set_d3d_material_colour ( int red, int green, int blue, int alpha, int spec
 	d3d_material.dcvDiffuse.r = r;	d3d_material.dcvDiffuse.g = g;	d3d_material.dcvDiffuse.b = b;	d3d_material.dcvDiffuse.a = a;
 	d3d_material.dcvAmbient.r = r;	d3d_material.dcvAmbient.g = g;	d3d_material.dcvAmbient.b = b;	d3d_material.dcvAmbient.a = a;
 	d3d_material.dcvEmissive.r = 0;	d3d_material.dcvEmissive.g = 0;	d3d_material.dcvEmissive.b = 0;	d3d_material.dcvEmissive.a = 0;
-	d3d_material.dcvSpecular.r = s;	d3d_material.dcvSpecular.g = s;	d3d_material.dcvSpecular.b = s;	d3d_material.dcvSpecular.a = a;
-	d3d_material.dvPower = 10.0;
+	d3d_material.dcvSpecular.r = s * r;	d3d_material.dcvSpecular.g = s * g;	d3d_material.dcvSpecular.b = s * b;	d3d_material.dcvSpecular.a = a;
+	d3d_material.dvPower = 50 * s * (a + 1);
 
 	immediate_set_material ( &d3d_material );
 }
