@@ -402,19 +402,11 @@ static void update_suspension(void)
 
 				point->damping = bound(compression_change * inv_delta_time * point->damper_stiffness, -25.0f, 25.0f);
 
-				if (compression_change < 0.0)
-					// rebound produces more damping than bump
-					point->damping *= 1.5;
-
-//				if (spring_compression >= point->max_suspension_compression && compression_change > 0.0)
-//					// increase damper stiffness on the bump to get this descent stopped quickly
-//					point->damping *= 2.0;
-
 				point->suspension_compression = spring_compression;
 				point->water_immersion = 0;
 
 					// let's add some roughness of terrain /thealx/
-				if (fabs(point->velocity.z) > 0.1)
+				if (fabs(point->velocity.z) > 1 && raw->ac.mob.velocity > 1)
 					point->suspension_compression *= 1 + bound(point->velocity.z * sfrand1() / 200, 0, point->max_suspension_compression / 3);
 				
 				if (point->can_turn && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
@@ -502,8 +494,8 @@ static void apply_suspension_forces(void)
 			
 			if (!point->damaged || point->suspension_compression >= point->max_suspension_compression)
 				suspension_stiffness = point->suspension_stiffness;
-			else if (point->suspension_compression / point->max_suspension_compression >= 0.8) // damaged wheel works only when it close to edge
-				suspension_stiffness = point->suspension_stiffness * (point->suspension_compression / point->max_suspension_compression - 0.8) * 5;
+			else if (point->suspension_compression / point->max_suspension_compression >= 0.5) // damaged wheel works only when it close to edge
+				suspension_stiffness = point->suspension_stiffness * (point->suspension_compression / point->max_suspension_compression - 0.5) * 2;
 			else
 				suspension_stiffness = 0;
 			
