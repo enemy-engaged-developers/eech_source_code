@@ -1050,56 +1050,25 @@ void update_collision_dynamics (void)
 	///////////////////////////////////////////////////////////////////
 
 	if (!get_gunship_entity ())
-	{
-
 		return;
-	}
 
 	if (collision_detected)
 	{
-		current_flight_dynamics->world_motion_vector.x = 0.0;
-		current_flight_dynamics->world_motion_vector.y = 0.0;
-		current_flight_dynamics->world_motion_vector.z = 0.0;
-
-		current_flight_dynamics->model_acceleration_vector.x = 0.0;
-		current_flight_dynamics->model_acceleration_vector.y = 0.0;
-		current_flight_dynamics->model_acceleration_vector.z = 0.0;
+		current_flight_dynamics->world_motion_vector.x = current_flight_dynamics->world_motion_vector.y = current_flight_dynamics->world_motion_vector.z = 0.0;
+		current_flight_dynamics->model_acceleration_vector.x = current_flight_dynamics->model_acceleration_vector.y = current_flight_dynamics->model_acceleration_vector.z = 0.0;
 	}
 
 	memcpy (current_flight_dynamics->last_frame_fixed_collision_points, current_flight_dynamics->fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
-
-//	for (loop = 0; loop < current_flight_dynamics->number_of_fixed_collision_points; loop ++)
-//	{
-//
-//		multiply_matrix3x3_vec3d (&current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point,
-//											raw->ac.inst3d->vp.attitude,
-//											&current_flight_dynamics->last_frame_fixed_collision_points [loop].model_point);
-//
-//		current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point.x += current_flight_dynamics->position.x;
-//		current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point.y += current_flight_dynamics->position.y;
-//		current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point.z += current_flight_dynamics->position.z;
-//
-//		bound_position_to_map_area (&current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point);
-//	}
-
 	current_flight_dynamics->valid_last_frame_fixed_collision_points = TRUE;
-
-	//
 
 	memcpy (current_flight_dynamics->last_frame_moving_collision_points, current_flight_dynamics->moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
 
 	for (loop = 0; loop < current_flight_dynamics->number_of_moving_collision_points; loop ++)
 		if(current_flight_dynamics->moving_collision_points [loop].collision_point_type == DYNAMICS_COLLISION_POINT_MAIN_ROTOR)
 		{
-			multiply_matrix3x3_vec3d (&current_flight_dynamics->last_frame_moving_collision_points [loop].world_point,
-												raw->ac.inst3d->vp.attitude,
-												&current_flight_dynamics->last_frame_moving_collision_points [loop].model_point);
-
 			current_flight_dynamics->last_frame_moving_collision_points [loop].world_point.x = current_flight_dynamics->position.x;
 			current_flight_dynamics->last_frame_moving_collision_points [loop].world_point.y = current_flight_dynamics->position.y;
 			current_flight_dynamics->last_frame_moving_collision_points [loop].world_point.z = current_flight_dynamics->position.z;
-
-			bound_position_to_map_area (&current_flight_dynamics->last_frame_moving_collision_points [loop].world_point);
 		}
 
 	current_flight_dynamics->valid_last_frame_moving_collision_points = TRUE;
