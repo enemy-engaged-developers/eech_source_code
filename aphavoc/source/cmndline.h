@@ -228,6 +228,7 @@ extern int
 //VJ 051227 no longer needed, mapinfo structure	global_season,											//VJ 051011 add winter textures
 //VJ 060120 OBSOLETE	global_zbuffer,										//VJ 051011 zbuffer correction
 	command_line_autosave,								//Casm 17JUN05 Autosave option
+	command_line_saves_copies,							// make backup copies of save files /thealx/
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,

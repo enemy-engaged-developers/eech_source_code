@@ -1025,6 +1025,8 @@ static const struct config_option options[] =
 		INT(command_line_session_filter) },
 	{ "autosave", "", "autosave (n = minutes, 0 = off) (def = 0)",
 		SPEC(set_autosave, get_autosave) },
+	{ "saves_copies", "", "how much backup copies of save files to keep (0 = no backup, n = number of copies) (def = 1)",
+		INT(command_line_saves_copies) },
 	{ "dfr", "framerate", "display framerate (0 = off, 1 = on, 2 = log to file \"framerate.txt\") (def = 0)",
 		INT(command_line_framerate) },
 	{ "goto", "planner_goto_button", "\"GOTO\" (teleport) functionality on campaign map (0 = off, 1 = on) (def = 0)",

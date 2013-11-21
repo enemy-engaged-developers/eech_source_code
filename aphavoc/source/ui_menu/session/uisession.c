@@ -756,34 +756,127 @@ int store_session (session_list_data_type *game_session, const char *filename)
 		*force;
 
 	int
-		count;
+		count,
+		del_flag = 0;
 
 	char
 		limited_filename [32],
 		title [128],
 		extension [5],
 		data_filename [256],
-		script_filename [256];
+		script_filename [256],
+		current_savefile [256],
+		new_savefile [256],
+		current_scriptfile [256],
+		new_scriptfile [256],
+		current_count[5];
 
 	FILE
 		*file_ptr;
 
-	count = 0;
+	directory_file_list
+		*saves_listing,
+		*scripts_listing;
+
+	count = -1;
 
 	strncpy (limited_filename, filename, sizeof (limited_filename) - 2);
 	limited_filename [31] = '\0';
 
 	sprintf (data_filename, "%s\\%s\\%s", game_session->data_path, game_session->campaign_directory, limited_filename);
+	sprintf (script_filename, "%s\\%s\\%s", game_session->data_path, game_session->campaign_directory, limited_filename);
+
+	sprintf (extension, ".%s", game_type_extensions [get_game_type ()]);
+	extension [3] = extension [2];
+	extension [2] = extension [1];
+	extension [1] = 'S';
+	strncpy (current_savefile, data_filename, sizeof (data_filename));
+	strncpy (current_scriptfile, script_filename, sizeof (script_filename));
+	strcat (current_savefile, ".sav");
+	strcat (current_scriptfile, extension);
+
+	while (TRUE)
+	{
+		saves_listing = get_first_directory_file (current_savefile);
+		scripts_listing = get_first_directory_file (current_scriptfile);
+
+		if (!saves_listing || !scripts_listing)
+			break;
+
+		count++;
+		
+		sprintf (current_count, "_bak%i", count );
+
+		strncpy (current_savefile, data_filename, sizeof (data_filename));
+		strcat (current_savefile, current_count);
+		strcat (current_savefile, ".sav");
+
+		strncpy (current_scriptfile, script_filename, sizeof (script_filename));
+		strcat (current_scriptfile, current_count);
+		strcat (current_scriptfile, extension);
+	}
+
+	while (count >= 0)
+	{
+		count--;
+
+		strncpy (current_savefile, data_filename, sizeof (data_filename));
+		strncpy (current_scriptfile, script_filename, sizeof (script_filename));
+
+		if (count >= 0)
+		{
+			sprintf (current_count, "_bak%i", count );
+			strcat (current_savefile, current_count);
+			strcat (current_scriptfile, current_count);
+		}
+
+		strcat (current_savefile, ".sav");			
+		strcat (current_scriptfile, extension);
+		
+		saves_listing = get_first_directory_file (current_savefile);
+		scripts_listing = get_first_directory_file (current_scriptfile);
+		
+		if (!del_flag && count >= (command_line_saves_copies - 1))
+		{
+			if (!unlink(current_savefile) && !unlink(current_scriptfile))
+			{
+				debug_log("save file %s and script file %s are deleted", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
+			}
+			else
+			{
+				debug_log("delete error save file %s and script file %s", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
+			}
+				
+			del_flag = TRUE;
+		}
+		else
+		{
+			strncpy (new_savefile, data_filename, sizeof (data_filename));
+			strncpy (new_scriptfile, script_filename, sizeof (script_filename));
+			sprintf (current_count, "_bak%i", count + 1 );
+			strcat (new_savefile, current_count);
+			strcat (new_scriptfile, current_count);
+			strcat (new_savefile, ".sav");			
+			strcat (new_scriptfile, extension);
+			if (!rename(current_savefile, new_savefile) && !rename(current_scriptfile, new_scriptfile))
+			{
+				debug_log("save file %s renamed to %s", get_directory_file_filename ( saves_listing ), new_savefile);
+				debug_log("script file %s renamed to %s", get_directory_file_filename ( scripts_listing ), new_scriptfile);
+			}
+			else
+			{
+				debug_log("error to rename save file %s to %s", get_directory_file_filename ( saves_listing ), new_savefile);
+				debug_log("error to rename script file %s to %s", get_directory_file_filename ( scripts_listing ), new_scriptfile);
+			}
+		}
+	}
+
+	if (saves_listing)
+		destroy_directory_file_list (saves_listing);
+	if (scripts_listing)
+		destroy_directory_file_list (scripts_listing);
 
 	strcat (data_filename, ".sav");
-
-	sprintf (script_filename, "%s\\%s\\%s.", game_session->data_path, game_session->campaign_directory, limited_filename);
-
-	sprintf (extension, "%s", game_type_extensions [get_game_type ()]);
-	extension [2] = extension [1];
-	extension [1] = extension [0];
-	extension [0] = 'S';
-
 	strcat(script_filename, extension);
 
 	//
