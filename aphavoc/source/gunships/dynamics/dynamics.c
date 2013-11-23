@@ -525,10 +525,9 @@ void initialise_flight_dynamics_collision_points (int update_points_position)
 
 		if (!update_points_position)
 		{
-			debug_log("%i blade roots, %i rotor shafts,  %i bank nulls, %i heading nulls found", count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC), 
+			debug_log("%i blade roots, %i rotor shafts, %i tail blades found", count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC), 
 					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT), 
-					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_PITCH_BANK_NULL), 
-					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL));
+					count_sub_object_type_depth (temp_inst3d, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_STATIC));
 		}
 
 		for (collision_type = DYNAMICS_COLLISION_POINT_MAIN_ROTOR; collision_type < NUM_DYNAMICS_COLLISION_POINT_TYPES; collision_type ++)

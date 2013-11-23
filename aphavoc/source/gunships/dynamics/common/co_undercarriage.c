@@ -348,7 +348,9 @@ static void update_suspension(void)
 
 			multiply_transpose_matrix3x3_double_vec3d(&point->velocity, attitude, &point->velocity);
 
-			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
+			if (!bound_double_position_to_map_volume(&point->world_position))
+				terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
+			
 			spring_compression = (terrain_elevation - point->world_position.y);
 
 			if (terrain_class != TERRAIN_CLASS_LAND)
@@ -851,7 +853,8 @@ void animate_aircraft_suspension(entity* en)
 		for (i = 0; i < landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].num_gear_points; i++)
 		{
 			update_ai_gear_world_position(&landing_gears[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].gear_points[i], &point_world_position[i], inv_attitude, en);
-			ter_elevation[i] = get_3d_terrain_elevation(point_world_position[i].x, point_world_position[i].z);
+			if(!bound_position_to_map_volume(&point_world_position[i]))
+				ter_elevation[i] = get_3d_terrain_elevation(point_world_position[i].x, point_world_position[i].z);
 		}
 
 		switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))

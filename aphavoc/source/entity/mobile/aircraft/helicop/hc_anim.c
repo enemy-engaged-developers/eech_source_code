@@ -977,42 +977,14 @@ void damage_helicopter_3d_object (entity *en)
 
 	raw = (helicopter *) get_local_entity_data (en);
 
-	//
-	// store main rotor heading(s)
-	//
+	damage_helicopter_main_rotors(en, -2);
+	damage_helicopter_tail_rotors(en);
 
-	//
-	// store tail rotor pitch(s)
-	//
-
-	//
-	// destruct old object
-	//
-
-	destruct_3d_object (raw->ac.inst3d);
-
-	//
-	// construct new (damaged) object
-	//
-
-	raw->ac.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
-
-	raw->ac.inst3d = construct_3d_object (raw->ac.object_3d_shape);
-
-	//
-	// set id number for new object
-	//
-
-	set_helicopter_id_number (en);
-
-	//
-	// restore main rotor heading(s)
-	//
-
-	//
-	// restore tail rotor pitch(s)
-	//
-
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_PILOT, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AH64D_PILOT, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_MOVING, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1152,7 +1124,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 												blade_vp.position = raw->ac.mob.position;
 												get_3d_sub_object_viewpoint(search_main_rotor_blade_section_static.result_sub_object, &blade_vp, TRUE);
 
-												if (blade_vp.position.x && blade_vp.position.y && blade_vp.position.z)
+												if (!bound_position_to_map_volume(&blade_vp.position))
 												{
 													create_rotor_blade_fragment(en, blade_vp, TRUE);
 
@@ -1236,8 +1208,6 @@ void damage_helicopter_tail_rotors (entity *en)
 
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
-		return;
 
 	raw = (helicopter *) get_local_entity_data (en);
 
@@ -1289,8 +1259,8 @@ void damage_helicopter_tail_rotors (entity *en)
 			memcpy ( blade_vp.attitude, raw->ac.mob.attitude, sizeof ( matrix3x3 ) );
 			blade_vp.position = raw->ac.mob.position;
 			get_3d_sub_object_viewpoint(search.result_sub_object, &blade_vp, TRUE);
-
-			create_rotor_blade_fragment(en, blade_vp, FALSE);
+			if (!bound_position_to_map_volume(&blade_vp.position))
+				create_rotor_blade_fragment(en, blade_vp, FALSE);
 		}
 		else
 		{

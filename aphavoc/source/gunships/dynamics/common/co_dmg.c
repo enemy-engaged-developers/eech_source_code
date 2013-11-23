@@ -1116,6 +1116,8 @@ void update_dynamics_at_keysite (void)
 				
 				if (current_flight_dynamics->dynamics_damage == DYNAMICS_DAMAGE_NONE)
 				{
+					if (!get_keysite_currently_landed_at ()) // check for cheaters
+						current_flight_dynamics->repairing = FALSE;
 					debug_log ("DYNAMICS: model fully repaired");
 					restore_helicopter_entity (get_gunship_entity ());
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL));
@@ -1149,9 +1151,6 @@ void update_dynamics_at_keysite (void)
 				repairing_damage_count ++;
 				this_damage = this_damage << 1;
 			}
-			
-			if (current_flight_dynamics->repairing_damage == DYNAMICS_DAMAGE_NONE && !get_keysite_currently_landed_at ())
-				current_flight_dynamics->repairing = FALSE;
 		}
 	}
 

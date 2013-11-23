@@ -252,6 +252,55 @@ int bound_position_to_map_volume (vec3d *position)
 	return (result);
 }
 
+int bound_double_position_to_map_volume (double_vec3d *position)
+{
+	int
+		result;
+
+	result = FALSE;
+
+	if (position->x < MIN_MAP_X)
+	{
+		position->x = MIN_MAP_X;
+
+		result = TRUE;
+	}
+	else if (position->x > MAX_MAP_X)
+	{
+		position->x = MAX_MAP_X;
+
+		result = TRUE;
+	}
+
+	if (position->y < MIN_MAP_Y)
+	{
+		position->y = MIN_MAP_Y;
+
+		result = TRUE;
+	}
+	else if (position->y > MAX_MAP_Y)
+	{
+		position->y = MAX_MAP_Y;
+
+		result = TRUE;
+	}
+
+	if (position->z < MIN_MAP_Z)
+	{
+		position->z = MIN_MAP_Z;
+
+		result = TRUE;
+	}
+	else if (position->z > MAX_MAP_Z)
+	{
+		position->z = MAX_MAP_Z;
+
+		result = TRUE;
+	}
+
+	return (result);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

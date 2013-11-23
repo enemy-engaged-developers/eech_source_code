@@ -237,7 +237,7 @@ extern int bound_position_to_map_area (vec3d *position);
 extern int bound_position_to_adjusted_map_area (vec3d *position);
 
 extern int bound_position_to_map_volume (vec3d *position);
-
+extern int bound_double_position_to_map_volume (double_vec3d *position);
 extern int bound_position_to_adjusted_map_volume (vec3d *position);
 
 extern int bound_double_position_to_adjusted_map_volume (double_vec3d *position);

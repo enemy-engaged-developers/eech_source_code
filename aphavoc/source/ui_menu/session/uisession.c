@@ -756,8 +756,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 		*force;
 
 	int
-		count,
-		del_flag = 0;
+		count;
 
 	char
 		limited_filename [32],
@@ -836,7 +835,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 		saves_listing = get_first_directory_file (current_savefile);
 		scripts_listing = get_first_directory_file (current_scriptfile);
 		
-		if (!del_flag && count >= (command_line_saves_copies - 1))
+		if (count >= (command_line_saves_copies - 1))
 		{
 			if (!unlink(current_savefile) && !unlink(current_scriptfile))
 			{
@@ -846,8 +845,6 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			{
 				debug_log("delete error save file %s and script file %s", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
 			}
-				
-			del_flag = TRUE;
 		}
 		else
 		{

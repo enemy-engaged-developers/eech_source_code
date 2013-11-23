@@ -491,7 +491,8 @@ int object_internal_lighting_valid (entity *en)
 	{
 		day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
-		return ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
+		return (get_local_entity_int_value (en, INT_TYPE_MOBILE_MOVING) &&
+				((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK) || (day_segment_type == DAY_SEGMENT_TYPE_DAWN)));
 	}
 }
 
