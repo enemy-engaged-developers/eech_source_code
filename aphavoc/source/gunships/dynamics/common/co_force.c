@@ -82,6 +82,8 @@ int
 	fixed_collision_count,
 	moving_collision_count,
 	collision_detected;
+static int
+	water_damage = 0;
 float
 	max_fixed_damage[32];
 
@@ -407,7 +409,7 @@ void resolve_dynamic_forces (void)
       heading,
       pitch;
 
-	if(!get_gunship_entity())
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
 
    get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
@@ -731,10 +733,8 @@ void draw_dynamic_forces (void)
 	int
 		index;
 
-	if (!get_gunship_entity ())
-	{
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	if (get_in_flight_game_mode () != IN_FLIGHT_GAME_MODE_SIMULATOR)
 	{
@@ -883,30 +883,11 @@ void add_dynamic_explosion_force (vec3d *explosion_position, float force)
 
 void add_dynamic_weapon_launch_force (vec3d *launch_position, vec3d *launch_direction, float force, float duration)
 {
-
-	vec3d
-		position,
-		direction;
-
-	position.x = launch_position->x - current_flight_dynamics->position.x;
-	position.y = 0.0;
-	position.z = launch_position->z - current_flight_dynamics->position.z;
-
-	multiply_transpose_matrix3x3_vec3d (&direction, current_flight_dynamics->attitude, launch_direction);
-
-	invert_3d_vector (&direction);
-
-	multiply_transpose_matrix3x3_vec3d (&position, current_flight_dynamics->attitude, &position);
-
-//	force *= duration * get_model_delta_time();
-
-	add_dynamic_force ("Weapon launch force", force, 0, &position, &direction, FALSE);
+	add_dynamic_force ("Weapon launch force", force * get_model_delta_time(), duration, launch_position, launch_direction, FALSE);
 
 #if DEBUG_MODULE
-	create_vectored_debug_3d_object (launch_position, &direction, OBJECT_3D_ARROW_FORCES, duration, 5.0);
-
-	debug_log ("DYNAMICS: launch force %f (range %f), duration %f, position %f, %f, %f, direction %f, %f, %f",
-			force, get_3d_vector_magnitude (&position), duration, position.x, position.y, position.z, direction.x, direction.y, direction.z);
+	debug_log ("DYNAMICS: weapon launch force %f (range %f), duration %f, position %f, %f, %f, direction %f, %f, %f",
+			force, get_3d_vector_magnitude (launch_position), duration, launch_position->x, launch_position->y, launch_position->z, launch_direction->x, launch_direction->y, launch_direction->z);
 #endif
 }
 
@@ -986,12 +967,8 @@ void update_collision_dynamics (void)
 	helicopter
 		*raw;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
-
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	fixed_collision_count = 0;
@@ -1042,15 +1019,43 @@ void update_collision_dynamics (void)
 	dynamics_service_fixed_collision_violations ();
 	dynamics_service_moving_collision_violations ();
 
-	
+	if(!get_gunship_entity() || !current_flight_dynamics)
+		return;
+
+	if ((get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE)) && (get_current_dynamics_fatal_damage ()))
+	{
+
+		entity
+			*force,
+			*enemy_force;
+
+		//
+		// Enter demo mode
+		//
+
+		debug_log("fatal damage");
+
+		force = get_local_force_entity (get_global_gunship_side ());
+
+		enemy_force = get_local_force_entity (get_enemy_side (get_global_gunship_side ()));
+
+		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, force, get_gunship_entity (), NULL);
+
+		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, enemy_force, get_gunship_entity (), NULL);
+
+		if (!water_damage)
+			dynamics_kill_model (DYNAMICS_DESTROY_CRASH_LANDED, NULL);
+		else
+			dynamics_kill_model (DYNAMICS_DESTROY_WATER_CRASH, NULL);
+		
+		return;
+	}	
+
 	///////////////////////////////////////////////////////////////////
 	//
 	// store this frames collision points with new position
 	//
 	///////////////////////////////////////////////////////////////////
-
-	if (!get_gunship_entity ())
-		return;
 
 	if (collision_detected)
 	{
@@ -1105,11 +1110,8 @@ void update_object_collision_dynamics (void)
 	helicopter
 		*raw;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
@@ -1351,11 +1353,8 @@ void update_tree_collision_dynamics (void)
 	helicopter
 		*raw;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
@@ -1498,11 +1497,8 @@ void update_fixed_ground_collision_dynamics (void)
 	int
 		loop;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
@@ -1549,11 +1545,8 @@ void update_moving_ground_collision_dynamics (void)
 	helicopter
 		*raw;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
@@ -1600,8 +1593,7 @@ void dynamics_service_fixed_collision_violations (void)
 		greatest_y_violation_index,
 		greatest_z_violation_index,
 		loop,
-		i,
-		water_damage = 0;
+		i;
 
 	float
 		greatest_x_violation_distance,
@@ -1610,11 +1602,8 @@ void dynamics_service_fixed_collision_violations (void)
 		f,
 		violation_min_level = 3 * get_delta_time();
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	greatest_x_violation_index = -1;
 	greatest_y_violation_index = -1;
@@ -1706,6 +1695,7 @@ void dynamics_service_fixed_collision_violations (void)
 						f -= violation_min_level;
 					}
 					
+					water_damage = FALSE;
 					max_fixed_damage[current_flight_dynamics->fixed_collision_points [loop].collision_point_type] = current_flight_dynamics->fixed_collision_points [loop].violation_distance;
 					debug_log ("DYNAMICS: fixed collision %s violation distance %f, min level %f", dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].name, current_flight_dynamics->fixed_collision_points [loop].violation_distance, violation_min_level);
 				}
@@ -1747,32 +1737,6 @@ void dynamics_service_fixed_collision_violations (void)
 
 		//debug_log ("DYNAMICS: fixed collision movement %f, %f, %f", collision_movement.x, collision_movement.y, collision_movement.z);
 		
-		ASSERT(get_gunship_entity ());
-		
-		if ((get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE)) && (get_current_dynamics_fatal_damage ()))
-		{
-
-			entity
-				*force,
-				*enemy_force;
-
-			//
-			// Enter demo mode
-			//
-
-			force = get_local_force_entity (get_global_gunship_side ());
-
-			enemy_force = get_local_force_entity (get_enemy_side (get_global_gunship_side ()));
-
-			notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, force, get_gunship_entity (), NULL);
-
-			notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, enemy_force, get_gunship_entity (), NULL);
-
-			if (!water_damage)
-				dynamics_kill_model (DYNAMICS_DESTROY_CRASH_LANDED, NULL);
-			else
-				dynamics_kill_model (DYNAMICS_DESTROY_WATER_CRASH, NULL);
-		}
 	}
 }
 
@@ -1785,11 +1749,8 @@ void dynamics_service_moving_collision_violations (void)
 	int
 		loop;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	if (moving_collision_count)
 		for (loop = 0; loop < current_flight_dynamics->number_of_moving_collision_points; loop ++)
@@ -1798,28 +1759,6 @@ void dynamics_service_moving_collision_violations (void)
 				moving_collision_points_counter (loop);	
 				dynamics_damage_model (dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [loop].collision_point_type].damage_type, FALSE);
 			}
-
-	if ((get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE)) && (get_current_dynamics_fatal_damage ()))
-	{
-
-		entity
-			*force,
-			*enemy_force;
-
-		//
-		// Enter demo mode
-		//
-
-		force = get_local_force_entity (get_global_gunship_side ());
-
-		enemy_force = get_local_force_entity (get_enemy_side (get_global_gunship_side ()));
-
-		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, force, get_gunship_entity (), NULL);
-
-		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, enemy_force, get_gunship_entity (), NULL);
-
-		dynamics_kill_model (DYNAMICS_DESTROY_CRASH_LANDED, NULL);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1832,11 +1771,8 @@ void dynamics_setup_fixed_collision_points (void)
 	int
 		loop;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	//
 	// clear collisions
@@ -1869,11 +1805,8 @@ void dynamics_setup_moving_collision_points (void)
 	int
 		loop;
 
-	if (!get_gunship_entity ())
-	{
-
+	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
-	}
 
 	//
 	// setup moving collision points (after fixed have been done so thay are rotated into correct position)

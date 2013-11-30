@@ -312,13 +312,12 @@ float get_triangulated_by_position_range(vec3d *ownship_position, vec3d *target_
 	{
 		float angle;
 		float range_2d = get_2d_range(ownship_position, target_position);
-		float own_altitude = current_flight_dynamics->radar_altitude.value;
 
 		// angle to target
-		angle = range_2d / (ownship_position->y - target_position->y);
+		angle = atan((ownship_position->y - target_position->y) / range_2d);
 
 		// calculate range based on ground being at same altitude at target's position
-		return bound(angle * own_altitude, 0.0, 9900.0);
+		return bound((ownship_position->y - target_position->y) / sin(angle), 0.0, 9900.0);
 	}
 	else
 		return -1.0;

@@ -1803,7 +1803,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		range_error,
 		range_delta,
 		drop_compensation = 0.0,
-		straight_pitch = fixed_pitch ? height_diff_or_pitch : -atan(height_diff_or_pitch / range);
+		straight_pitch;
 
 	int
 		iterations,
@@ -1814,6 +1814,18 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	ASSERT(time_of_flight);
 	ASSERT(aiming_pitch);
 
+		// we need 2d range, not 3d /thealx/
+	if (!fixed_pitch)
+	{
+		straight_pitch = - asin(height_diff_or_pitch / range);
+		range = sqrt(range * range - height_diff_or_pitch * height_diff_or_pitch);
+	}
+	else
+	{
+		straight_pitch = height_diff_or_pitch;
+		range = cos(height_diff_or_pitch) * range;
+	}
+	
 	if (fixed_pitch)
 		iterations = 1;
 	else if (simplified)

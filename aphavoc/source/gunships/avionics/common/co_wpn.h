@@ -123,6 +123,8 @@ extern void initialise_common_weapon_systems (void);
 
 extern void deinitialise_common_weapon_systems (void);
 
+extern void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon);
+
 extern void update_weapon_lock_type (target_acquisition_systems system);
 
 extern void increase_rocket_salvo_size (void);
@@ -142,6 +144,8 @@ extern void update_good_tone (void);
 extern void reset_good_tone (void);
 
 extern float get_weapon_drop(entity_sub_types wpn_type);
+
+extern float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* hud_aim_range);
 
 extern void lase_range_for_ballistics_sight(void);
 

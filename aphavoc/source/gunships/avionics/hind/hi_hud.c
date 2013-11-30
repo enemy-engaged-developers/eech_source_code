@@ -124,7 +124,9 @@ static float
 	hud_screen_x_max,
 	hud_screen_y_max,
 	hud_screen_x_scale,
-	hud_screen_y_scale;
+	hud_screen_y_scale,
+	x_offset,
+	y_offset;
 
 static object_3d*
 	hud_display_model;
@@ -426,33 +428,39 @@ void draw_hind_hud_on_texture (void)
 		{
 			// move texture UV coordinates to move and scale the texture
 			unsigned i;
-			for (i=0; i<num_texture_coordinates; i++)
+			float scale;
+			
+			if (d3d_using_hardware_tnl) // UV handling doesn't work in this case
+				scale = 1;
+			else
 			{
-				float
-					scale,
-					u = hud_texture_uv_coordinates[i].u,
-					v = hud_texture_uv_coordinates[i].v;
-
-				// scale hud to keep same absolute size no matter distance to hud
-				u -= 0.5;
-				v -= 0.5;
-
 				hud_distance = hud_position_z - head_offset_z;
 				scale = hud_position_z / hud_distance;
 
-				u *= scale;
-				v *= scale;
+				for (i=0; i<num_texture_coordinates; i++)
+				{
+					float
+						u = hud_texture_uv_coordinates[i].u,
+						v = hud_texture_uv_coordinates[i].v;
 
-				u += 0.5;
-				v += 0.5;
+					// scale hud to keep same absolute size no matter distance to hud
+					u -= 0.5;
+					v -= 0.5;
 
-				// then displace hud to keep it directly in front of pilot's position
-				u -= (scale) * head_offset_x / hud_width;
-				v += (scale) * (head_offset_y - hud_position_y) / hud_height;
+					u *= scale;
+					v *= scale;
 
-				hud_display_model->surface_texture_points[i].u = u;
-				hud_display_model->surface_texture_points[i].v = v;
+					u += 0.5;
+					v += 0.5;
+
+					hud_display_model->surface_texture_points[i].u = u;
+					hud_display_model->surface_texture_points[i].v = v;
+				}
 			}
+			
+			x_offset = head_offset_x / hud_width * scale * 2.22;
+			y_offset = (head_offset_y - hud_position_y) / hud_height * scale * 2.22;
+			set_2d_view_offset(hud_env, x_offset, y_offset);
 		}
 	}
 
@@ -667,42 +675,6 @@ float get_hud_aiming_range(void)
 	return hud_aim_range;
 }
 
-static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type)
-{
-#define MAX_RANGE 4000.0
-	static float
-		angle_of_drop = 0.0;
-
-	float
-		time_of_flight,
-		triangulated_range,
-		range_diff,
-		height = current_flight_dynamics->radar_altitude.value,
-		pitch = current_flight_dynamics->pitch.value;
-
-	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
-	{
-		if (pitch > (angle_of_drop + rad(0.05)) || height < 2.0)
-			triangulated_range = MAX_RANGE;
-		else
-			triangulated_range = bound(height / tan(-pitch + angle_of_drop), 0.0, MAX_RANGE);
-
-		range_diff = triangulated_range - hud_aim_range;
-		// move the aiming range in gradual steps, so as not to come into a oscilating
-		// state where it continousely overcorrects in alternating directions
-		hud_aim_range += 0.25 * range_diff;
-
-		if (get_ballistic_pitch_deflection(weapon_sub_type, hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
-			angle_of_drop -= pitch;
-		else
-			angle_of_drop = 0.0;
-	}
-
-
-	hud_aim_range;
-	return angle_of_drop;
-}
-
 static void display_weapon_information (void)
 {
 	entity_sub_types
@@ -735,7 +707,7 @@ static void display_weapon_information (void)
 				drop_hud_distance;
 				roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-			angle_of_drop = get_ballistic_weapon_drop(weapon_sub_type);
+			angle_of_drop = get_ballistic_weapon_drop(weapon_sub_type, &hud_aim_range);
 			drop_hud_distance = atan(angle_of_drop) * hud_position_z / (0.5 * hud_height);
 
 			y = cos(roll) * -drop_hud_distance;

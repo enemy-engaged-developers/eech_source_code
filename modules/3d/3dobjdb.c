@@ -3437,7 +3437,7 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 		y_scale = main_object->relative_scale.y;
 		z_scale = main_object->relative_scale.z;
 	}
-	else
+	else if (global)
 	{
 		x = main_object->vp.x;
 		y = main_object->vp.y;
@@ -3448,6 +3448,10 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 		x_scale = main_object->relative_scale.x;
 		y_scale = main_object->relative_scale.y;
 		z_scale = main_object->relative_scale.z;
+	}
+	else
+	{
+		get_3d_transformation_matrix(attitude, 0, 0, 0);
 	}
 
 	for ( ; count >= 0; count-- )
@@ -3487,14 +3491,6 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 	vp->y = y;
 	vp->z = z;
 
-	if (global)
-	{
-		debug_log("world sub obj position x %f y %f z %f", vp->x, vp->y, vp->z);
-	}
-	else
-	{
-		debug_log("local sub obj position x %f y %f z %f", vp->x, vp->y, vp->z);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

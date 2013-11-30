@@ -979,7 +979,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		#endif
 	}
 	else
-		range = get_2d_range (pitch_device_position, intercept_point);
+		range = get_3d_range (pitch_device_position, intercept_point);
 
 	if (range < 0.001)
 		return FALSE;
@@ -2594,7 +2594,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 
 					if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
-						get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, vp);
+						get_3d_sub_object_viewpoint (search_weapon_system_pitch.result_sub_object, vp, FALSE);
 
 						result = TRUE;
 					}

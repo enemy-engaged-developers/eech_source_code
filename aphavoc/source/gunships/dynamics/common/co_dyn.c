@@ -320,7 +320,7 @@ void update_common_attitude_dynamics (void)
 	if (motion_vector_magnitude > 1000 || current_flight_dynamics->angular_pitch_velocity.value > 50 || current_flight_dynamics->angular_roll_velocity.value > 50 || current_flight_dynamics->angular_heading_velocity.value > 50)
 	{
 
-		debug_log ("DYNAMICS: UNSTABLE");
+		debug_log ("DYNAMICS: UNSTABLE motion magnitude %f", motion_vector_magnitude);
 
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
 		{
@@ -1566,7 +1566,7 @@ void update_common_attitude_dynamics (void)
 
 		#if DEBUG_MODULE
 
-		multiply_matrix3x3_vec3d (&direction, raw->ac.mob.attitude, &direction);
+		multiply_matrix3x3_vec3d (&direction, current_flight_dynamics->attitude, &direction);
 
 		position.x += current_flight_dynamics->position.x;
 		position.y += current_flight_dynamics->position.y;

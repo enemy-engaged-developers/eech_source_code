@@ -1763,6 +1763,7 @@ void pack_float_value (entity *en, float_types type, float value)
 				{
 					#ifdef DEBUG_PACK_OVERFLOW
 						debug_log_pack_overflow("unsigned float angle", get_float_type_name(type), width, i, value);
+						debug_log("Overflow %s, min val %i, max val %i", get_local_entity_string (en, STRING_TYPE_FULL_NAME), min_val, max_val);
 					#endif
 					
 					if (i > 0)

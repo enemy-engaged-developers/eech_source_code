@@ -667,7 +667,7 @@ void update_hind_advanced_dynamics (void)
 
 	update_common_attitude_dynamics();
 
-	if (!get_gunship_entity())
+	if (!get_gunship_entity() || !current_flight_dynamics)
 		return;
 	
 	resolve_dynamic_forces ();

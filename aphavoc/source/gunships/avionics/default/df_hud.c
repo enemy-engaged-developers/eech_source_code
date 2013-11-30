@@ -103,7 +103,9 @@ static float
 	bank_scale_viewport_x_min,
 	bank_scale_viewport_y_min,
 	bank_scale_viewport_x_max,
-	bank_scale_viewport_y_max;
+	bank_scale_viewport_y_max,
+	x_scale,
+	y_scale;
 
 //
 // HUD screen co-ords
@@ -1023,16 +1025,12 @@ static void draw_flight_path_marker (void)
 static void draw_pitch_ladder (int draw_horizon_line_only)
 {
 	float
-		//VJ 050204 bug fix scale not correct
-		scalefactor,
 		pitch,
 		mod_pitch,
 		tan_mod_pitch,
 		roll,
 		x,
 		y,
-		x_scale,
-		y_scale,
 		x_horizon,
 		y_horizon,
 		x_10_deg_step,
@@ -1049,9 +1047,6 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	ASSERT (main_3d_env);
 
-	//VJ 050213 bug fix scale not correct
-	scalefactor = global_hud_size2;
-
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
@@ -1066,25 +1061,11 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 	// get x and y scale factors
 	//
 
-	x_scale = (main_3d_env->clip_xmax - main_3d_env->clip_xmin) * 0.5;
-	x_scale /= tan (main_3d_env->width_view_angle * 0.5);
-	x_scale /= (active_2d_environment->vp.x_max - active_2d_environment->vp.x_min) * 0.5;
-	x_scale *= -sin (roll);
-//VJ 050204 bug fix scale not correct
-	x_scale *= hud_screen_x_scale * scalefactor;
+	x_horizon = tan_mod_pitch * x_scale * sin (- roll);
+	y_horizon = tan_mod_pitch * y_scale * cos (roll);
 
-	y_scale = (main_3d_env->clip_ymax - main_3d_env->clip_ymin) * 0.5;
-	y_scale /= tan (main_3d_env->height_view_angle * 0.5);
-	y_scale /= (active_2d_environment->vp.y_max - active_2d_environment->vp.y_min) * 0.5;
-	y_scale *= cos (roll);
-//VJ 050204 bug fix scale not correct
-	y_scale *= hud_screen_y_scale * scalefactor;
-	
-	x_horizon = tan_mod_pitch * x_scale;
-	y_horizon = tan_mod_pitch * y_scale;
-
-	x_10_deg_step = tan (rad (10.0)) * x_scale;
-	y_10_deg_step = tan (rad (10.0)) * y_scale;
+	x_10_deg_step = tan (rad (10.0)) * x_scale * sin (- roll);
+	y_10_deg_step = tan (rad (10.0)) * y_scale * cos (roll);
 
 	////////////////////////////////////////
 	//
@@ -1794,7 +1775,7 @@ static void display_weapon_information (void)
 				print_mono_font_string (s);
 			}
 		}
-		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261))
+		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
 		{
 			if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
 			{
@@ -2317,6 +2298,35 @@ static void draw_target_symbology (void)
 
 				break;
 			}
+			////////////////////////////////////////
+			case ENTITY_SUB_TYPE_WEAPON_S5:
+			case ENTITY_SUB_TYPE_WEAPON_S8:
+			case ENTITY_SUB_TYPE_WEAPON_S13:
+			////////////////////////////////////////
+			{
+				static float hud_aim_range = 0;
+				float angle_of_drop, x, y, x1, x2, y1, y2, angle = 0,
+					roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+				int i = 0, mark;
+
+				angle_of_drop = get_ballistic_weapon_drop(selected_weapon_type, &hud_aim_range);
+
+				x = x_scale * (sin(roll) * angle_of_drop + pilot_head_heading);
+				y = y_scale * (- cos(roll) * angle_of_drop - pilot_head_pitch);
+				draw_2d_circle(x, y, 0.15, hud_colour);
+				while (i < (hud_aim_range + 1) / 100)
+				{
+					mark = !(i % 10);
+					x1 = x + 0.17 * sin(angle);
+					y1 = y + 0.17 * cos(angle);
+					x2 = x + (0.2 + 0.03 * mark) * sin(angle);
+					y2 = y + (0.2 + 0.03 * mark) * cos(angle);
+					draw_2d_half_thick_line(x1, y1, x2, y2, hud_colour);
+					angle += rad(4.5);
+					i ++;
+				}
+				break;
+			}			
 		}
 	}
 }
@@ -3164,6 +3174,23 @@ void draw_default_hud (void)
 		hud_screen_x_scale = scale*640.0 / full_screen_width;
 		hud_screen_y_scale = scale*480.0 / full_screen_height;
 
+	}
+	
+	{
+			//VJ 050204 bug fix scale not correct
+		float scalefactor = global_hud_size2;
+
+		x_scale = (main_3d_env->clip_xmax - main_3d_env->clip_xmin) * 0.5;
+		x_scale /= tan (main_3d_env->width_view_angle * 0.5);
+		x_scale /= (active_2d_environment->vp.x_max - active_2d_environment->vp.x_min) * 0.5;
+			//VJ 050204 bug fix scale not correct
+		x_scale *= hud_screen_x_scale * scalefactor;
+
+		y_scale = (main_3d_env->clip_ymax - main_3d_env->clip_ymin) * 0.5;
+		y_scale /= tan (main_3d_env->height_view_angle * 0.5);
+		y_scale /= (active_2d_environment->vp.y_max - active_2d_environment->vp.y_min) * 0.5;
+			//VJ 050204 bug fix scale not correct
+		y_scale *= hud_screen_y_scale * scalefactor;
 	}
 
 //VJ 050126 hud mod start 

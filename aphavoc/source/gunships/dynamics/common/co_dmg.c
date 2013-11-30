@@ -139,7 +139,7 @@ dynamics_damage_type
 			"Left engine fire",
 			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE,
 			0.6,
-			0.2,
+			0.05,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -148,7 +148,7 @@ dynamics_damage_type
 			"Right engine fire",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE,
 			0.6,
-			0.2,
+			0.05,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -157,7 +157,7 @@ dynamics_damage_type
 			"Low Hydraulics pressure",
 			DYNAMICS_DAMAGE_LOW_HYDRAULICS,
 			0.7,
-			0.3,
+			0.0,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -184,7 +184,7 @@ dynamics_damage_type
 			"Low oil pressure",
 			DYNAMICS_DAMAGE_LOW_OIL_PRESSURE,
 			0.8,
-			0.1,
+			0.0,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -202,7 +202,7 @@ dynamics_damage_type
 			"Avionics",
 			DYNAMICS_DAMAGE_AVIONICS,
 			0.7,
-			0.1,
+			0.0,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -220,7 +220,7 @@ dynamics_damage_type
 			"Undercarriage",
 			DYNAMICS_DAMAGE_UNDERCARRIAGE,
 			0.6,
-			0.1,
+			0.3,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -238,7 +238,7 @@ dynamics_damage_type
 			"Main rotor blade",
 			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE,
 			0.1,
-			0.05,
+			0.0,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -247,7 +247,7 @@ dynamics_damage_type
 			"Secondary hydralics",
 			DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS,
 			0.05,
-			0.05,
+			0.0,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -1056,12 +1056,6 @@ int get_current_dynamics_fatal_damage (void)
 
 	damage_count = 0;
 
-	#if DEBUG_MODULE
-
-	debug_log ("CO_DMG: Assessing damage severity");
-
-	#endif
-
 	while (this_damage < NUM_DYNAMICS_DAMAGE_TYPES)
 	{
 
@@ -1070,7 +1064,7 @@ int get_current_dynamics_fatal_damage (void)
 
 			fatal_damage_counter += dynamics_damage_database [damage_count].damage_severity;
 
-			#if DEBUG_MODULE
+			#if DEBUG_MODULE == 2
 
 			debug_log ("CO_DMG:    %s damaged %f total %f", dynamics_damage_database [damage_count].name, dynamics_damage_database [damage_count].damage_severity, fatal_damage_counter);
 
@@ -1081,6 +1075,13 @@ int get_current_dynamics_fatal_damage (void)
 
 		this_damage = this_damage << 1;
 	}
+
+	#if DEBUG_MODULE
+
+	debug_log ("CO_DMG: total damage severity is %f", fatal_damage_counter);
+
+	#endif
+
 
 	return (fatal_damage_counter >= 1.0) ? TRUE : FALSE;
 }
@@ -1272,6 +1273,7 @@ void update_dynamics_damage (void)
 					position.y = - 1;
 					direction.y = sfrand1();
 					direction.x = sfrand1();
+					direction.z = 0;
 
 					add_dynamic_force ("Damaged stabilizer", bound (current_flight_dynamics->velocity_z.value / 1000, - 0.1, 0.1), 0.0, &position, &direction, FALSE);
 					#if DEBUG_MODULE
@@ -1799,11 +1801,7 @@ void damage_entity_to_flight_model (entity *en)
 
 	ASSERT (en);
 
-	if (!current_flight_dynamics)
-	{
-
-		return;
-	}
+	ASSERT (current_flight_dynamics);
 
 	this_damage = DYNAMICS_DAMAGE_NONE;
 
@@ -1852,7 +1850,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				{
 
-					damage_level += 0.6;
+					damage_level += 0.4;
 
 					#if DYNAMICS_DEBUG
 
@@ -1865,7 +1863,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
 				{
 
-					damage_level += 0.6;
+					damage_level += 0.4;
 
 					#if DYNAMICS_DEBUG
 
@@ -1878,7 +1876,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.05;
 
 					#if DYNAMICS_DEBUG
 
@@ -1891,7 +1889,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.05;
 
 					#if DYNAMICS_DEBUG
 
@@ -1904,7 +1902,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LOW_HYDRAULICS:
 				{
 
-					damage_level += 0.2;
+//					damage_level += 0.2;
 
 					#if DYNAMICS_DEBUG
 
@@ -1917,7 +1915,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
 				{
 
-					damage_level += 0.05;
+//					damage_level += 0.05;
 
 					#if DYNAMICS_DEBUG
 
@@ -1956,7 +1954,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LOW_OIL_PRESSURE:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.0;
 
 					#if DYNAMICS_DEBUG
 
@@ -1982,7 +1980,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_AVIONICS:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.0;
 
 					#if DYNAMICS_DEBUG
 
@@ -2008,7 +2006,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_UNDERCARRIAGE:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.3;
 
 					#if DYNAMICS_DEBUG
 

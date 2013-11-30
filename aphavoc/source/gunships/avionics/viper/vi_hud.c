@@ -507,6 +507,14 @@ static enum OBJECT_3D_VISIBILITY get_coordinate_of_relative_position(vec3d* rela
 	return get_position_3d_screen_coordinates (&position, i, j);
 }
 
+static void draw_hud_centre_datum (void)
+{
+	draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
+	draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
+	draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
+	draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
+}
+
 static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 {
 	object_3d_visibility visibility;
@@ -1932,6 +1940,8 @@ static void draw_target_symbology (void)
 						{
 							draw_dashed_i_beam (heading_offset, pitch_offset);
 						}
+
+						draw_hud_centre_datum();
 					}
 					else
 					{

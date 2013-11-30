@@ -1134,7 +1134,7 @@ void update_flight_dynamics (void)
 
 		update_dynamics_damage ();
 
-		if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE))
+		if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE) || current_flight_dynamics)
 			return;
 
 		current_flight_dynamics->velocity_z.value = bound (current_flight_dynamics->velocity_z.value, knots (-100), knots (200));
@@ -1180,7 +1180,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_apache_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1198,7 +1199,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_havoc_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1216,7 +1218,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_comanche_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1234,7 +1237,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hokum_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1254,7 +1258,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_blackhawk_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1275,10 +1280,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hind_advanced_dynamics ();
-
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
 					break;
-
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1299,7 +1302,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_ah64a_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1317,7 +1321,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_ka50_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1337,7 +1342,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_viper_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1356,7 +1362,8 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_kiowa_advanced_dynamics ();
-
+				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+					break;
 				update_collision_dynamics ();
 				// may get killed, so abort further calculations if so
 				if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -1400,7 +1407,7 @@ void update_dynamics_external_values (void)
 
 //	float rotor_workload; //Werewolf
 
-	if (!get_gunship_entity ())
+	if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
 	{
 		return;
 	}
