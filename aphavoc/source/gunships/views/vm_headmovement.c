@@ -80,6 +80,14 @@ static float
 	command_line_viewpoint_fore_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {0.4, 0.4}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25} },
 	command_line_viewpoint_aft_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {-0.4, -0.4}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25} };
 
+//ataribaby 27/12/2008 for new head g-force movement
+static float
+	x_head_g_movement = 0.0,
+	y_head_g_movement = 0.0,
+	z_head_g_movement = 0.0,
+	random_vibration[3],
+	vibration_force;
+
 static float getMaxLeft()
 {
 	return command_line_viewpoint_left_limit[get_global_gunship_type ()][get_crew_role ()];
@@ -110,6 +118,36 @@ static float getMaxDown()
 	return command_line_viewpoint_down_limit[get_global_gunship_type ()][get_crew_role ()];
 }
 
+void clear_head_movement_data (void)
+{
+	x_head_g_movement = y_head_g_movement = z_head_g_movement = 0.0;	
+}
+
+	//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
+			// some changes /thealx/
+
+void get_head_g_movement (float* x, float* y, float* z, int invert)
+{
+	int i;
+	float z_velocity = 100 * bound(current_flight_dynamics->velocity_z.value * current_flight_dynamics->velocity_z.modifier - 0.9 * current_flight_dynamics->velocity_z.max, 0, 30),
+			y_acceleration = current_flight_dynamics->main_rotor_rpm.value * (current_flight_dynamics->model_acceleration_vector.y > 1.0) * (current_flight_dynamics->model_acceleration_vector.y - 1.0);
+
+	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
+	{
+		vibration_force = move_by_rate(vibration_force, 0.000002 * command_line_g_force_head_movment_modifier * max(z_velocity, y_acceleration), 0.01); // G force > 1.1 or maximum speed
+		for (i = 0; i < 3; i++)
+			random_vibration[i] = (random_vibration[i] >= 0 ? -1 : 1) * frand1() * vibration_force; // should be negative to previous
+	}
+	
+	x_head_g_movement = move_by_rate(x_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.05) * command_line_g_force_head_movment_modifier, 0.005) + random_vibration[0];
+	y_head_g_movement = move_by_rate(y_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.y * ONE_OVER_G, -2.0, 5.0) * 0.025) * command_line_g_force_head_movment_modifier, 0.025) + random_vibration[1];
+	z_head_g_movement = move_by_rate(z_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.z * ONE_OVER_G, -3.0, 3.0) * 0.05) * command_line_g_force_head_movment_modifier, 0.05) + random_vibration[2];
+
+	*x += invert ? - x_head_g_movement : x_head_g_movement;
+	*y += invert ? - y_head_g_movement : y_head_g_movement;
+	*z += invert ? - z_head_g_movement : z_head_g_movement;
+}
+
 float getViewpointOffsetX (float x)
 {
 	if ((command_line_TIR_6DOF == TRUE) && ( query_TIR_active () == TRUE ))
@@ -121,10 +159,8 @@ float getViewpointOffsetX (float x)
 		else
 			x = tmp * -getMaxRight();
 	}
-//VJ 060910 added command_line_g_force_head_movment_modifier
-	if (get_global_wide_cockpit())
-		x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
+	x += x_head_g_movement;
 	x = bound ( x, getMaxRight(), getMaxLeft() );
 	return x;
 }
@@ -140,10 +176,7 @@ float getViewpointOffsetY (float y)
 			y = tmp * getMaxDown();
 	}
 
-//VJ 060910 added command_line_g_force_head_movment_modifier
-	if (get_global_wide_cockpit() && !current_flight_dynamics->auto_hover)
-		y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
-	
+	y += y_head_g_movement;
 	y = bound ( y, getMaxDown(), getMaxUp());
 	return y;
 }
@@ -159,6 +192,7 @@ float getViewpointOffsetZ (float z)
 			z = tmp * -getMaxBackward();
 	}
 
+	z += z_head_g_movement;
 	z = bound ( z, getMaxBackward(), getMaxForeward() );
 
 	return z;

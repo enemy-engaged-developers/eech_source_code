@@ -79,19 +79,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//ataribaby 27/12/2008
-float move_by_rate(float oldval, float newval, float rate);
-
 static object_3d_instance
 	*virtual_cockpit_inst3d_detail_level_normal_inst3d,
 	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
-
-//ataribaby 27/12/2008 for new head g-force movement
-static float
-	x_head_g_movement = 0.0,
-	y_head_g_movement = 0.0,
-	random_vibration_x = 0.0,
-	random_vibration_y = 0.0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +168,7 @@ void deinitialise_viper_virtual_cockpit (void)
 
 	deinitialise_common_virtual_cockpit_cameras ();
 
-
+	clear_head_movement_data();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,10 +457,6 @@ void draw_viper_virtual_cockpit (void)
 				virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].c.y;
 				virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].c.z;
 
-				//ataribaby 27/12/2008
-				//virtual_cockpit_inst3d->vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
-				//virtual_cockpit_inst3d->vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
-
 				if (wide_cockpit_nr == WIDEVIEW_VIPER_PILOT)
 					pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].c.p );
 				if (wide_cockpit_nr == WIDEVIEW_VIPER_COPILOT)
@@ -485,19 +471,7 @@ void draw_viper_virtual_cockpit (void)
 				get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
 				get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
 				get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
-		{
-			if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
-			{
-				random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
-				random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
-			}
-			x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-			y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-
-			virtual_cockpit_inst3d->vp.x -= x_head_g_movement;
-			//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-			virtual_cockpit_inst3d->vp.y -= y_head_g_movement;
-		}
+			get_head_g_movement(&virtual_cockpit_inst3d->vp.x, &virtual_cockpit_inst3d->vp.y, &virtual_cockpit_inst3d->vp.z, FALSE);
 
 		//
 		// COMPASS

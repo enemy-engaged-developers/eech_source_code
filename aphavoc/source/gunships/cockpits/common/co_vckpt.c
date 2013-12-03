@@ -550,3 +550,26 @@ void move_edit_wide_cockpit (void)
 		}
 	}
 }
+
+//ATARIBABY 27/12/2008 move to target value by defined rate
+float move_by_rate(float oldval, float newval, float rate)
+{
+  float changeval;
+	float value = oldval;
+  changeval = get_delta_time() * rate;
+  if (value > newval)
+	{
+    value -= changeval;
+    if (value <= newval) {
+			value = newval;
+		}
+  }
+  else if (value < newval)
+  {
+    value += changeval;
+    if (value >= newval) {
+			value = newval;
+		}
+  }
+	return value;
+}
