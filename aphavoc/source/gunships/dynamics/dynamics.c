@@ -1134,7 +1134,7 @@ void update_flight_dynamics (void)
 
 		update_dynamics_damage ();
 
-		if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE) || current_flight_dynamics)
+		if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE) || !current_flight_dynamics)
 			return;
 
 		current_flight_dynamics->velocity_z.value = bound (current_flight_dynamics->velocity_z.value, knots (-100), knots (200));
@@ -3388,11 +3388,15 @@ void flight_dynamics_start_engine (int engine_number)
 	if (engine_number == 1)
 	{
 		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+		if (engine_rpm->value > 60)
+			return;
 		current_flight_dynamics->left_engine_starter_active = TRUE;
 	}
 	else if (engine_number == 2)
 	{
 		engine_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+		if (engine_rpm->value > 60)
+			return;
 		current_flight_dynamics->right_engine_starter_active = TRUE;
 	}
 	else
