@@ -215,7 +215,7 @@ void deinitialise_dynamic_forces (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_dynamic_force (const char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
+void add_dynamic_force (char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
 {
 
 	int
@@ -270,15 +270,13 @@ void add_dynamic_force (const char *name, float force, float duration, vec3d *po
 
 			current_flight_dynamics->number_of_dynamic_forces ++;
 
-			current_flight_dynamics->dynamic_forces [index].name = NULL;
+			current_flight_dynamics->dynamic_forces [index].name = name;
 
 			#if DEBUG_MODULE
 
 			//if ((get_current_dynamics_options (DYNAMICS_OPTIONS_DRAW_FLIGHT_PATH)) && (debug))
 			if (debug)
 			{
-
-				current_flight_dynamics->dynamic_forces [index].name = (char *) malloc_heap_mem (sizeof (char) * (strlen (name) + 1));
 
 				sprintf (current_flight_dynamics->dynamic_forces [index].name, "%s", name);
 

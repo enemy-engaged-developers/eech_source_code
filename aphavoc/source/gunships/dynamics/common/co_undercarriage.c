@@ -489,6 +489,7 @@ static void apply_suspension_forces(void)
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
 		double wheel_load;
+		char buffer[SUSPENSION_NAME_MAX_LENGTH];
 
 		if (point->suspension_compression > 0 || point->water_immersion > 0)
 		{
@@ -502,7 +503,7 @@ static void apply_suspension_forces(void)
 				suspension_stiffness = 0;
 			
 			position.x = point->position.x;
-			position.y = point->position.y - (point->suspension_compression + point->water_immersion) + 3.0;
+			position.y = -1.0;
 			position.z = point->position.z;
 
 			if (point->suspension_compression >= point->max_suspension_compression && !point->damaged)
@@ -511,58 +512,47 @@ static void apply_suspension_forces(void)
 				wheel_load = G * (point->suspension_compression ? point->suspension_compression * suspension_stiffness : point->water_immersion);
 
 			wheel_load = (wheel_load + point->damping + point->last_wheel_load) / 2;
-			if (!(point->water_immersion > 0 && !strcmp(point->name, "tail bumper")))
-				add_dynamic_force (point->name, wheel_load, 0.0, &position, &up_direction, TRUE);
+
+			sprintf(buffer, "%s load", point->name);
+			if (!(point->water_immersion > 0 && !strcmp(point->name, "name = tail bumper")))
+				add_dynamic_force (buffer, wheel_load, 0.0, &position, &up_direction, TRUE);
 
 			point->last_wheel_load = wheel_load;
 			point->suspension_compression = bound(point->suspension_compression, 0, point->max_suspension_compression);
 
 			// wheel sideways resistance
-			if (!point->can_turn || point->water_immersion > 0 )
 			{
 				float
-					max_force,
-					force,
-					force_diff,
-					max_force_change = get_model_delta_time() * 50.0;
+					wheight_on_wheel = G * max(0, 1 - (point->max_suspension_compression - point->suspension_compression) / point->max_suspension_compression),  // depends on load on wheel
+					force_diff = (wheight_on_wheel * point->velocity.x + point->resistance_force) / 2,
+					max_force_change = get_model_delta_time() * 1000.0;
 
-					max_force = min(wheel_load * 2.5f, 1.0f * G);  // depends on load on wheel
+				if (!point->can_turn || point->water_immersion > 0 )
+				{
+					point->resistance_force = bound(force_diff, -max_force_change, max_force_change);
 
-				force = bound(point->velocity.x * 1.0, -1.0, 1.0);
-				force_diff = (max_force * force) - point->resistance_force;
+					direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
+					direction.y = 0.0;
+					direction.z = 0.0;
 
-				point->resistance_force += bound(force_diff, -max_force_change, max_force_change);
-
-				direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
-				direction.y = 0.0;
-				direction.z = 0.0;
-
-				add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
-			}
+					sprintf(buffer, "%s sideways resistance", point->name);
+					add_dynamic_force (buffer, fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
+				}
 
 			// wheel longitudinal resistance/brakes
-			{
-				float
-					max_force,
-					force,
-					force_diff,
-					max_force_change = get_model_delta_time() * 20.0;
 
-				if (point->has_brakes && current_flight_dynamics->wheel_brake || point->water_immersion > 0)
-					max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
-				else
-					max_force = min(wheel_load * 0.025f, G);  // general rolling resistance
+				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0)
+					wheight_on_wheel *= 0.005;  // general rolling resistance
 
-					force = bound(point->velocity.z * 2.0, -1.0, 1.0);
-				force_diff = (max_force * force) - point->brake_force;
-
-				point->brake_force += bound(force_diff, -max_force_change, max_force_change);
+				force_diff = (wheight_on_wheel * point->velocity.z + point->brake_force) / 2;
+				point->brake_force = bound(force_diff, - max_force_change * 0.1, max_force_change * 0.1);
 
 				direction.x = 0.0;
 				direction.y = 0.0;
 				direction.z = (point->brake_force > 0.0) ? -1.0 : 1.0;
 
-				add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, TRUE);
+				sprintf(buffer, "%s brakes", point->name);
+				add_dynamic_force (buffer, fabs(point->brake_force), 0.0, &position, &direction, TRUE);
 			}
 		}
 	}
@@ -1001,42 +991,43 @@ void rotate_helicopter_wheels(object_3d_instance* inst3d)
 	ASSERT ( current_landing_gear );
 	ASSERT (get_gunship_entity());
 
-	for ( i = 0; i < current_landing_gear->num_gear_points; i++ )
-	{
-		if ( current_landing_gear->gear_points[i].sub_index == OBJECT_3D_INVALID_SUB_OBJECT_INDEX )
-			return;
-
-		if ( current_landing_gear->gear_points[i].suspension_compression == 0.0 )
+	if (get_time_acceleration () != TIME_ACCELERATION_PAUSE)
+		for ( i = 0; i < current_landing_gear->num_gear_points; i++ )
 		{
-			if ( current_landing_gear->gear_points[i].rotation_speed == 0.0 )
-				continue;
+			if ( current_landing_gear->gear_points[i].sub_index == OBJECT_3D_INVALID_SUB_OBJECT_INDEX )
+				return;
 
-			current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].rotation_speed < 0.0) ?
-				min(current_landing_gear->gear_points[i].rotation_speed + 0.1 + (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0) : 
-					max(current_landing_gear->gear_points[i].rotation_speed - 0.1 - (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0);
+			if ( current_landing_gear->gear_points[i].suspension_compression == 0.0 )
+			{
+				if ( current_landing_gear->gear_points[i].rotation_speed == 0.0 )
+					continue;
+
+				current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].rotation_speed < 0.0) ?
+					min(current_landing_gear->gear_points[i].rotation_speed + 0.1 + (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0) : 
+						max(current_landing_gear->gear_points[i].rotation_speed - 0.1 - (current_landing_gear->gear_points[i].has_brakes && current_flight_dynamics->wheel_brake), 0.0);
+			}
+			else
+				current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].can_turn ? sqrt(current_landing_gear->gear_points[i].velocity.x * current_landing_gear->gear_points[i].velocity.x + current_landing_gear->gear_points[i].velocity.z * current_landing_gear->gear_points[i].velocity.z) : current_landing_gear->gear_points[i].velocity.z) / current_landing_gear->gear_points[i].radius;
+
+			current_landing_gear->gear_points[i].rotation_angle += current_landing_gear->gear_points[i].rotation_speed * get_model_delta_time();
+
+			if ( current_landing_gear->gear_points[i].rotation_angle < 0.0 )
+				do
+					current_landing_gear->gear_points[i].rotation_angle += PI2;
+				while ( current_landing_gear->gear_points[i].rotation_angle < 0.0 );
+			else
+				while ( current_landing_gear->gear_points[i].rotation_angle >= PI2 )
+					current_landing_gear->gear_points[i].rotation_angle -= PI2;
+
+			search.search_object = inst3d;
+			search.sub_object_index = current_landing_gear->gear_points[i].sub_index;
+			for ( j = 0; ; j++ )
+			{
+				search.search_depth = j;
+				if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+					break;
+
+				search.result_sub_object->relative_pitch = current_landing_gear->gear_points[i].rotation_angle;
+			}
 		}
-		else
-			current_landing_gear->gear_points[i].rotation_speed = (current_landing_gear->gear_points[i].can_turn ? sqrt(current_landing_gear->gear_points[i].velocity.x * current_landing_gear->gear_points[i].velocity.x + current_landing_gear->gear_points[i].velocity.z * current_landing_gear->gear_points[i].velocity.z) : current_landing_gear->gear_points[i].velocity.z) / current_landing_gear->gear_points[i].radius;
-
-		current_landing_gear->gear_points[i].rotation_angle += current_landing_gear->gear_points[i].rotation_speed * get_model_delta_time();
-
-		if ( current_landing_gear->gear_points[i].rotation_angle < 0.0 )
-			do
-				current_landing_gear->gear_points[i].rotation_angle += PI2;
-			while ( current_landing_gear->gear_points[i].rotation_angle < 0.0 );
-		else
-			while ( current_landing_gear->gear_points[i].rotation_angle >= PI2 )
-				current_landing_gear->gear_points[i].rotation_angle -= PI2;
-
-		search.search_object = inst3d;
-		search.sub_object_index = current_landing_gear->gear_points[i].sub_index;
-		for ( j = 0; ; j++ )
-		{
-			search.search_depth = j;
-			if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
-				break;
-
-			search.result_sub_object->relative_pitch = current_landing_gear->gear_points[i].rotation_angle;
-		}
-	}
 }
