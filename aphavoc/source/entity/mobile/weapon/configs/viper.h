@@ -307,7 +307,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -558,7 +558,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -849,7 +849,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -1140,7 +1140,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -1431,7 +1431,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -1762,7 +1762,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -2093,7 +2093,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -2384,7 +2384,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -2715,7 +2715,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -3046,7 +3046,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -3337,7 +3337,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -3668,7 +3668,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -3999,7 +3999,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -4330,7 +4330,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -4701,7 +4701,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -5072,7 +5072,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -5403,7 +5403,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
@@ -5774,7 +5774,7 @@
         CANNON_BARREL_PITCH_RATE,                 // pitch_rate
         CANNON_BARREL_MIN_PITCH_LIMIT,              // min_pitch_limit
         CANNON_BARREL_MAX_PITCH_LIMIT,              // max_pitch_limit
-        rad (180.0),                          // muzzle_rotate_rate
+        8.3 * PI2,                          // muzzle_rotate_rate
         knots_to_metres_per_second (10000.0),         // rotate_inhibit_velocity
         0,                                  // heading_share_mask
         0,                                  // pitch_share_mask
