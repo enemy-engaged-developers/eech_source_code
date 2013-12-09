@@ -1426,6 +1426,8 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	            old_aspect_x = oa;//aspect;            
 					aspectrow[aspect_index] = oa;//aspect;
 				}	                  
+
+				aspect_index++;
 			}                       
                                  
 			if (doaspect)           
