@@ -207,7 +207,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 	main_rotor_blade_coning_angle = max (0.5 * main_rotor_blade_coning_angle, 0.0f);
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
-	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE);
+	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE) * 0.75;
 	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
 	
 	switch (subtype)
