@@ -816,7 +816,7 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 			head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
 		}
 
-		get_head_g_movement(&head_object->relative_position.x, &head_object->relative_position.y, &head_object->relative_position.z, FALSE);
+		get_head_g_movement(&head_object->relative_position.x, &head_object->relative_position.y, &head_object->relative_position.z, TRUE);
 
 		// keep head inside reasonable limimts
 		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
