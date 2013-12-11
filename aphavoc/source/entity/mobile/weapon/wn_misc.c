@@ -483,20 +483,16 @@ void set_comanche_stub_wing_visibility (entity *en)
 	weapon_config_types
 		config_type;
 
-	object_3d_sub_object_search_data
-		search;
-
 	object_3d_instance
 		*inst3d;
 
 	int
-		depth,
 		package,
 		stub_wings_required;
 
 	ASSERT (en);
 
-	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE)
+	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE && get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR)
 	{
 		return;
 	}
@@ -543,25 +539,7 @@ void set_comanche_stub_wing_visibility (entity *en)
 
 	ASSERT (inst3d);
 
-	depth = 0;
-
-	while (TRUE)
-	{
-		search.search_object = inst3d;
-		search.search_depth = depth;
-		search.sub_object_index = OBJECT_3D_SUB_OBJECT_STUBWINGS;
-
-		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		{
-			search.result_sub_object->visible_object = stub_wings_required;
-		}
-		else
-		{
-			break;
-		}
-
-		depth++;
-	}
+	set_sub_object_type_visible_status(inst3d, OBJECT_3D_SUB_OBJECT_STUBWINGS, stub_wings_required);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
