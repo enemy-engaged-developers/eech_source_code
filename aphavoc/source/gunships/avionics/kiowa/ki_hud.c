@@ -507,12 +507,38 @@ static enum OBJECT_3D_VISIBILITY get_coordinate_of_relative_position(vec3d* rela
 	return get_position_3d_screen_coordinates (&position, i, j);
 }
 
-static void draw_hud_centre_datum (void)
+static void draw_hud_centre_datum (int fixed)
 {
-	draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
-	draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
-	draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
-	draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
+	float	x = 0, y = 0, x_scale, y_scale;
+
+	if (fixed)
+	{
+			//VJ 050204 bug fix scale not correct
+		float scalefactor = global_hud_size2;
+
+		x_scale = (main_3d_env->clip_xmax - main_3d_env->clip_xmin) * 0.5;
+		x_scale /= tan (main_3d_env->width_view_angle * 0.5);
+		x_scale /= (active_2d_environment->vp.x_max - active_2d_environment->vp.x_min) * 0.5;
+			//VJ 050204 bug fix scale not correct
+		x_scale *= hud_screen_x_scale * scalefactor;
+
+		y_scale = (main_3d_env->clip_ymax - main_3d_env->clip_ymin) * 0.5;
+		y_scale /= tan (main_3d_env->height_view_angle * 0.5);
+		y_scale /= (active_2d_environment->vp.y_max - active_2d_environment->vp.y_min) * 0.5;
+			//VJ 050204 bug fix scale not correct
+		y_scale *= hud_screen_y_scale * scalefactor;
+	
+		x = x_scale * pilot_head_heading * fixed,
+		y = - y_scale * pilot_head_pitch * fixed;
+		
+		clip_2d_point_to_hud_extent(&x, &y);
+	}
+	
+
+	draw_2d_line (-0.10 + x, 0.00 + y, -0.05 + x, 0.00 + y, hud_colour);
+	draw_2d_line (0.10 + x, 0.00 + y, 0.05 + x, 0.00 + y, hud_colour);
+	draw_2d_line (0.00 + x, -0.10 + y, 0.00 + x, -0.05 + y, hud_colour);
+	draw_2d_line (0.00 + x, 0.10 + y, 0.00 + x, 0.05 + y, hud_colour);
 }
 
 static void draw_hud_aircraft_datum (int draw_pitch_ladder)
@@ -1490,12 +1516,9 @@ static void display_weapon_information (void)
 
 			print_mono_font_string (s);
 		}
-		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND)
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND)
 		{
-			draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
-			draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
-			draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
-			draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
+			draw_hud_centre_datum(TRUE);
 		}
 	}
 }
@@ -1877,7 +1900,7 @@ static void draw_target_symbology (void)
 		switch (selected_weapon_type)
 		{
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
 				if (target_visible)
@@ -1941,7 +1964,7 @@ static void draw_target_symbology (void)
 							draw_dashed_i_beam (heading_offset, pitch_offset);
 						}
 
-						draw_hud_centre_datum();
+						draw_hud_centre_datum(FALSE);
 					}
 					else
 					{
