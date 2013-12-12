@@ -580,6 +580,9 @@ static void calculate_trail_point_vector( smoke_list *raw, int last_point, int t
 
 		return;
 	}
+
+	if (next_point == num_points) // last point is thin /thealx/
+		radius /= 4;
 	
 	this_pos = &trail_points[ this_point ];
 
