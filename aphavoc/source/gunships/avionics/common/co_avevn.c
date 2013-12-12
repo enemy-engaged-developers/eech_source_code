@@ -75,10 +75,10 @@
 //VJ 051029 toggle high LOD setting
 static void toggle_high_LOD_event (event *ev)
 {
-	if (command_line_high_lod_hack == 1)
-		command_line_high_lod_hack = 0;
+	if (command_line_high_lod_hack < 5)
+		command_line_high_lod_hack++;
 	else
-		command_line_high_lod_hack = 1;		
+		command_line_high_lod_hack = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

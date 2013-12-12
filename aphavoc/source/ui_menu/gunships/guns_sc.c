@@ -1089,6 +1089,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_PILOT, FALSE);
 		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
+		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_MOVING, FALSE);
 	
 		animate_entity_simple_keyframed_sub_objects( apache, OBJECT_3D_SUB_OBJECT_UNDERCARRIAGE, 1);
 		
