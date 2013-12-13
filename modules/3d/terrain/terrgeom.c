@@ -818,7 +818,9 @@ void scan_3d_terrain ( void )
 									dx,
 									dy,
 									dz,
-									range;
+									range,
+									view_range,
+									temp;
 
 								x = sector_centre.x;
 								z = sector_centre.z;
@@ -833,10 +835,13 @@ void scan_3d_terrain ( void )
 
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
+								get_3d_fog_distances (active_3d_environment, &temp, &view_range);
+								view_range = min (view_range * 0.8, 4000);
+
 								if ( trees->type )
 								{
 
-									if ( range < ( 4000 * 4000 ) )
+									if ( range < view_range * view_range )
 									{
 
 										sorting_slot = get_3d_scene_slot ();
@@ -858,7 +863,7 @@ void scan_3d_terrain ( void )
 
 											sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT;
 											sorting_slot->z = *( ( int * ) &range );
-											sorting_slot->terrain_tree.dissolve = 255.0 * max(0, (1 - (3 - max (3000, range) / 1000) * (3 - max (3000, range) / 1000))); // trees dissolve begin to decrease at 3000m thealx 130501 //255.0 - ( ( sq_range / ( 4000.0 * 4000.0 ) ) * 255.0 );
+											sorting_slot->terrain_tree.dissolve = 255.0 * ((range < view_range * 0.75) ? 1 : (1 - (range - view_range * 0.75) / (view_range * 0.25))); //thealx//
 											sorting_slot->terrain_tree.x = x;
 											sorting_slot->terrain_tree.y = y;
 											sorting_slot->terrain_tree.z = z;
