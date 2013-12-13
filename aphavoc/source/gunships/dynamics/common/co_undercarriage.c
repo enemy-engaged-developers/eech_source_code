@@ -489,7 +489,7 @@ static void apply_suspension_forces(void)
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
 		double wheel_load;
-		char buffer[SUSPENSION_NAME_MAX_LENGTH];
+		char buffer[SUSPENSION_NAME_MAX_LENGTH + 16];
 
 		if (point->suspension_compression > 0 || point->water_immersion > 0)
 		{
@@ -535,7 +535,7 @@ static void apply_suspension_forces(void)
 					direction.y = 0.0;
 					direction.z = 0.0;
 
-					sprintf(buffer, "%s sideways resistance", point->name);
+					sprintf(buffer, "%s sideway", point->name);
 					add_dynamic_force (buffer, fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
 				}
 
