@@ -81,6 +81,14 @@ static void toggle_high_LOD_event (event *ev)
 		command_line_high_lod_hack = 0;
 }
 
+static void toggle_eo_quality_event (event *ev)
+{
+	if (command_line_eo_quality < 5)
+		command_line_eo_quality++;
+	else
+		command_line_eo_quality = 0;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1012,6 +1020,7 @@ void set_common_avionics_events (void)
 
 //VJ 051029 toggle high LOD setting
 	set_event (DIK_L, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_high_LOD_event);
+	set_event (DIK_L, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_eo_quality_event);
 
 // arneh 20070103 - electrical system
 	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_electrical_system_event);

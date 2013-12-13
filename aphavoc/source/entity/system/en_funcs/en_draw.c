@@ -201,28 +201,22 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 
 					if (range < env_max_range)
 					{
+						get_3d_fog_distances (env, &fog_start, &fog_end);
+						
 						if (draw_eo_3d_scene)
 						{
-							// start full_eo_range by GCsDriver  08-12-2007
-							// this is for object rendering up to max fog distance
-							if (command_line_eo_full_range)
-							{
-								get_3d_fog_distances (env, &fog_start, &fog_end);
-								object_max_range = fog_end;
-							}
-							else
-							{
-								//original hardcoded value
-								object_max_range = 6000.0;
-							}
-							// end full_eo_range by GCsDriver  08-12-2007
+							object_max_range = fog_end;
 						}
 						else
 						{
-							object_max_range = get_local_entity_float_value (en, FLOAT_TYPE_MAX_3D_OBJECT_VISUAL_RANGE);
+							if (command_line_high_lod_hack < 0 || command_line_high_lod_hack > 5)
+							{
+								debug_fatal ("wrong high_lod_hack value, please check eech.ini");
+							}
+							object_max_range = ((5 - command_line_high_lod_hack) * get_local_entity_float_value (en, FLOAT_TYPE_MAX_3D_OBJECT_VISUAL_RANGE) + command_line_high_lod_hack * fog_end) / 5;
 						}
-
-	            	if (range < object_max_range)
+					
+						if (range < object_max_range)
 						{
 
 							draw_local_entity_3d_object (en, range);

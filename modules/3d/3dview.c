@@ -391,15 +391,16 @@ void realise_3d_clip_extents ( env_3d *env )
 	// if set to FALSE, this will enable higher LODs out to farer distances, and obliterate FPS near cities..
 	//
 	// Casm 19AUG05 Need to compare tans of half of the angles!
-	if (!command_line_high_lod_hack)
+
+	if (command_line_high_lod_hack < 0 || command_line_high_lod_hack > 5 || command_line_eo_quality < 0 || command_line_eo_quality > 5)
 	{
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( 59.99 / 2 ) );
+		debug_fatal ("wrong high_lod_hack or eo_models_quality value, please check eech.ini");
 	}
-	else	// Retro 31Oct2004 (all)
-	{
-		// Casm 08OCT05
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( 110 / 2 ) );
-	}
+	
+	if (!draw_eo_3d_scene)
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( (59.99 + command_line_high_lod_hack * 20) / 2 ) );
+	else
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( (9.99 + command_line_eo_quality * 25) / 2 ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
