@@ -215,7 +215,7 @@ void deinitialise_dynamic_forces (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_dynamic_force (char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
+void add_dynamic_force (const char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
 {
 
 	int
@@ -270,13 +270,15 @@ void add_dynamic_force (char *name, float force, float duration, vec3d *position
 
 			current_flight_dynamics->number_of_dynamic_forces ++;
 
-			current_flight_dynamics->dynamic_forces [index].name = name;
+			current_flight_dynamics->dynamic_forces [index].name = NULL;
 
 			#if DEBUG_MODULE
 
 			//if ((get_current_dynamics_options (DYNAMICS_OPTIONS_DRAW_FLIGHT_PATH)) && (debug))
 			if (debug)
 			{
+
+				current_flight_dynamics->dynamic_forces [index].name = (char *) malloc_heap_mem (sizeof (char) * (strlen (name) + 1));
 
 				sprintf (current_flight_dynamics->dynamic_forces [index].name, "%s", name);
 
@@ -753,21 +755,15 @@ void draw_dynamic_forces (void)
 
 			multiply_matrix3x3_vec3d (&pos, attitude, &current_flight_dynamics->dynamic_forces [index].position);
 
-			direction = current_flight_dynamics->dynamic_forces [index].direction;
-
-			multiply_matrix3x3_vec3d (&direction, attitude, &direction);
+			multiply_matrix3x3_vec3d (&direction, attitude, &current_flight_dynamics->dynamic_forces [index].direction);
 
 			pos.x += current_flight_dynamics->position.x;
-			pos.y += current_flight_dynamics->position.y + 0.25;
+			pos.y += current_flight_dynamics->position.y;
 			pos.z += current_flight_dynamics->position.z;
 
-			current_flight_dynamics->dynamic_forces [index].linear_force *= 10;
+			size = bound ((current_flight_dynamics->dynamic_forces [index].duration ? 1000 : 1) * current_flight_dynamics->dynamic_forces [index].linear_force, -4.0, 4.0);
 
-			size = bound (current_flight_dynamics->dynamic_forces [index].linear_force * 0.25, -4.0, 4.0);
-
-			pos.y += 2.0;
-
-			create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_FORCES, 0, size);
+			create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_FORCES, current_flight_dynamics->dynamic_forces [index].duration, size);
 		}
 	}
 
@@ -881,12 +877,12 @@ void add_dynamic_explosion_force (vec3d *explosion_position, float force)
 
 void add_dynamic_weapon_launch_force (vec3d *launch_position, vec3d *launch_direction, float force, float duration)
 {
-	add_dynamic_force ("Weapon launch force", force * get_model_delta_time(), duration, launch_position, launch_direction, FALSE);
-
 #if DEBUG_MODULE
 	debug_log ("DYNAMICS: weapon launch force %f (range %f), duration %f, position %f, %f, %f, direction %f, %f, %f",
 			force, get_3d_vector_magnitude (launch_position), duration, launch_position->x, launch_position->y, launch_position->z, launch_direction->x, launch_direction->y, launch_direction->z);
 #endif
+
+	add_dynamic_force ("Weapon launch force", force * get_model_delta_time(), duration, launch_position, launch_direction, TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
