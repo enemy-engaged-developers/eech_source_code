@@ -506,10 +506,10 @@ static void apply_suspension_forces(void)
 			position.y = -1.0;
 			position.z = point->position.z;
 
-			if (point->suspension_compression >= point->max_suspension_compression && !point->damaged)
-				wheel_load = G * (point->max_suspension_compression * suspension_stiffness + (point->suspension_compression - point->max_suspension_compression) * point->bump_stiffness);
-			else
-				wheel_load = G * (point->suspension_compression ? point->suspension_compression * suspension_stiffness : point->water_immersion);
+//			if (point->suspension_compression >= point->max_suspension_compression)
+//				wheel_load = G * (point->max_suspension_compression * suspension_stiffness + (point->suspension_compression - point->max_suspension_compression) * point->bump_stiffness);
+//			else
+			wheel_load = G * (point->suspension_compression ? min(point->suspension_compression, point->max_suspension_compression) * suspension_stiffness : point->water_immersion);
 
 			wheel_load = (wheel_load + point->damping + point->last_wheel_load) / 2;
 
@@ -698,13 +698,8 @@ int weight_on_wheels(void)
 	ASSERT (get_gunship_entity());
 	
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
-	{
-		if (current_landing_gear->gear_points[i].suspension_compression > 0.0)
-		{
+		if (current_landing_gear->gear_points[i].suspension_compression > 0 || current_landing_gear->gear_points[i].water_immersion > 0.0)
 			return TRUE;
-			break;
-		}
-	}
 
 	return FALSE;
 }
@@ -920,7 +915,7 @@ void animate_aircraft_suspension(entity* en)
 
 		result_sub_obj.search_object = inst3d;
 
-		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT));
+		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT))
 		{
 			result_sub_obj.search_depth = 0;
 			result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT;
@@ -930,7 +925,7 @@ void animate_aircraft_suspension(entity* en)
 				result_sub_obj.search_depth++;
 			}
 		}
-		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT)); // not "else if"! ch-47 and ka-29 use both
+		if (count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT)) // not "else if"! ch-47 and ka-29 use both
 		{
 			result_sub_obj.search_depth = 0;
 			result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_TAIL_STRUT;
