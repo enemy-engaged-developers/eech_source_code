@@ -1584,6 +1584,6 @@ void update_common_attitude_dynamics (void)
 	{
 		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);
 		if (rpm > 0)
-			create_advanced_rotor_vibration(rpm / 100, FALSE);
+			create_advanced_rotor_vibration(rpm / 500, FALSE);
 	}
 }

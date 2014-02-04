@@ -828,6 +828,8 @@ static const struct config_option options[] =
 		NONE },
 	{ "g-force_head_movement", "", "amount of head movement caused by gravitational force (wideview only) (n = Gs, 1.0 = normal, 0.0 = off) (default = 1.0)",
 		FLOAT(command_line_g_force_head_movment_modifier) },
+	{ "cockpit_vibrations", "", "threshold of visual vibrations caused by rotors and vertical overload (0.0 = off, 1.0 = overload only, above 1.0 = all) (default = 1.1)",
+		FLOAT(command_line_cockpit_vibrations) },
 	{ "comanche_pilot", "", "wideview pilot position",
 		SPEC2(WIDEVIEW_COMANCHE_PILOT, set_position, get_position) },
 	{ "comanche_co-pilot", "", "wideview co-pilot position",

@@ -129,16 +129,20 @@ void clear_head_movement_data (void)
 void get_head_g_movement (float* x, float* y, float* z, int invert)
 {
 	int i;
-	float z_velocity = 100 * bound(current_flight_dynamics->velocity_z.value * current_flight_dynamics->velocity_z.modifier - 0.9 * current_flight_dynamics->velocity_z.max, 0, 30),
-			y_acceleration = current_flight_dynamics->main_rotor_rpm.value * max((current_flight_dynamics->model_acceleration_vector.y > 1.0) * (current_flight_dynamics->model_acceleration_vector.y - 1.0),
-				(current_flight_dynamics->velocity_y.value < - 10.0) * (- current_flight_dynamics->velocity_y.value - 10.0));
 
-	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
+	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE && command_line_cockpit_vibrations > 0)
 	{
-		vibration_force = move_by_rate(vibration_force, 0.000002 * command_line_g_force_head_movment_modifier * max(z_velocity, y_acceleration), 0.01); // G force > 1.1, vortex ring or maximum speed
+		float z_velocity = 100 * bound(current_flight_dynamics->velocity_z.value * current_flight_dynamics->velocity_z.modifier - 0.9 * current_flight_dynamics->velocity_z.max, 0, 30),
+				y_acceleration = current_flight_dynamics->main_rotor_rpm.value * max((current_flight_dynamics->model_acceleration_vector.y > 1.0) * (current_flight_dynamics->model_acceleration_vector.y - 1.0),
+					(current_flight_dynamics->velocity_y.value < - 10.0) * (- current_flight_dynamics->velocity_y.value - 10.0));
+
+		vibration_force = move_by_rate(vibration_force, 0.000002 * (command_line_cockpit_vibrations * max(z_velocity, y_acceleration) + max(0, command_line_cockpit_vibrations - 1) * 5 * current_flight_dynamics->main_rotor_rpm.value), 0.01); // G force > 1.1, vortex ring or maximum speed
 		for (i = 0; i < 3; i++)
 			random_vibration[i] = (random_vibration[i] >= 0 ? -1 : 1) * frand1() * vibration_force; // should be negative to previous
 	}
+	else
+		for (i = 0; i < 3; i++)
+			random_vibration[i] = 0;
 	
 	x_head_g_movement = move_by_rate(x_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.05) * command_line_g_force_head_movment_modifier, 0.005) + random_vibration[0];
 	y_head_g_movement = move_by_rate(y_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.y * ONE_OVER_G, -2.0, 5.0) * 0.025) * command_line_g_force_head_movment_modifier, 0.025) + random_vibration[1];
