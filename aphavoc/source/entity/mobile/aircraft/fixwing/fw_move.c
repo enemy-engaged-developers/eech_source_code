@@ -72,12 +72,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define NEW_FIXED_WING_FLIGHT_MODEL	1
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define DEBUG_NEW_FLIGHT_MODULE 	0
 
 #define DEBUG_MODULE 					0
@@ -1534,8 +1528,6 @@ static void fixed_wing_movement_avoid_enemy_fire (entity *en, vec3d *wp_pos)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if NEW_FIXED_WING_FLIGHT_MODEL
-
 void basic_fixed_wing_movement (entity *en)
 {
 	fixed_wing
@@ -1619,6 +1611,145 @@ void basic_fixed_wing_movement (entity *en)
 	}
 	else
 	{
+		//magitek: if we are facing away from our waypoint, switch to the absolute flight system to turn around to face correct way
+		vec3d wpvector, mvvector;
+		
+		entity
+			*wp;
+			
+		int curr_wp;
+		
+		wpvector.x = wp_pos.x - current_pos->x;
+		wpvector.y = wp_pos.y - current_pos->y;
+		wpvector.z = wp_pos.z - current_pos->z;
+		mvvector.x = raw->ac.mob.motion_vector.x;
+		mvvector.y = raw->ac.mob.motion_vector.y;
+		mvvector.z = raw->ac.mob.motion_vector.z;
+		
+		wp = get_local_entity_current_waypoint (en);
+		curr_wp = get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE);
+
+	//	if (curr_wp == ENTITY_SUB_TYPE_WAYPOINT_TARGET)
+	//	{
+			if(raw->ac.mob.target_link.parent)//target in area
+			{
+				if(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == 27)//if hostile 'Target' waypoint
+				{
+					//magitek - absolute heading if we are aiming cannon
+					if(guide)
+					{
+						entity
+							*task,
+							*target;
+
+						task = get_local_entity_current_task (en);
+
+						if (task)
+						{
+							// ASSERT (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_ENGAGE);
+
+							if(get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_ENGAGE)
+							{
+								 target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+								 
+								 if(target)
+								 {
+									int selected_weapon;
+									selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+									
+									if(selected_weapon)
+									{
+										//only useful for unguided weapon accuracy
+										if(weapon_database[selected_weapon].guidance_type == WEAPON_GUIDANCE_TYPE_NONE)
+										{
+											vec3d
+											//	vec_to_targ,
+												*target_pos;
+
+											target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+											//magitek: bother checking if we are actually using a cannon?
+											if(get_3d_range (current_pos, target_pos) < weapon_database [selected_weapon].effective_range*1.7)
+											{
+											//	vec_to_targ.x = target_pos->x - current_pos->x;
+											//	vec_to_targ.y = target_pos->y - current_pos->y;
+											//	vec_to_targ.z = target_pos->z - current_pos->z;
+												
+											//	if (get_3d_vector_dot_product (&mvvector, &vec_to_targ) > 0.9)//must be strafing target
+											//	{
+													//absolute navigation to aim cannon
+													raw->turn_speed_multi = 1.0;//full speed absolute flight
+													raw->fixed_wing_toggle = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME) + 0.250;			 
+											//	}
+											//	else//facing away - immediately restore normal navigation
+											//	{
+											//		raw->fixed_wing_toggle = 0.0;
+											//	}
+											}
+										}
+									}
+								 }
+							}
+							// aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+
+							// ASSERT (aggressor);
+
+							// target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+
+							// ASSERT (target);
+
+						
+						}
+					}
+				}
+			}
+	//	}
+		
+		if (get_3d_vector_dot_product (&wpvector, &mvvector) < 0.0)//facing opposite way to our required vector
+		{
+			if(!get_local_entity_int_value (en, INT_TYPE_TASK_LEADER))
+			{
+				vec3d 
+					*leader_pos, leader_dist;
+				
+				fixed_wing
+					*leader_raw;
+					
+				entity
+					*leader,
+					*guide;
+				
+				guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
+				ASSERT (guide);
+				leader = (entity *) get_local_entity_ptr_value(guide, PTR_TYPE_TASK_LEADER);
+				ASSERT (leader);
+				leader_raw = (fixed_wing *) get_local_entity_data(leader);
+				
+				leader_pos = get_local_entity_vec3d_ptr (leader, VEC3D_TYPE_POSITION);
+				
+				leader_dist.x = leader_pos->x - current_pos->x;
+				leader_dist.y = leader_pos->y - current_pos->y;
+				leader_dist.z = leader_pos->z - current_pos->z;
+				
+				if(fabs (get_3d_vector_magnitude (&leader_dist)) > 1500.0)//avoid correction when in close formation
+				{
+					raw->fixed_wing_toggle = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME) + 3.0;	
+					raw->turn_speed_multi = 2.0;//halve speed for higher turning radius
+				}
+			}
+			else
+			{
+				//apply heading correction for overshooting of a waypoint
+				raw->fixed_wing_toggle = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME) + 3.0;	
+				raw->turn_speed_multi = 2.0;//halve speed for higher turning radius
+			}
+		}
+		
+		if (raw->fixed_wing_toggle > get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME))
+		{
+			basic_fixed_wing_movement_absolute(en);
+			return;
+		}
+	
 		fixed_wing_flight (en, &new_pos);
 
 		//
@@ -1666,9 +1797,7 @@ void basic_fixed_wing_movement (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#else
-
-void basic_fixed_wing_movement (entity *en)
+void basic_fixed_wing_movement_absolute (entity *en)
 {
 	fixed_wing
 		*raw;
@@ -1864,11 +1993,7 @@ void basic_fixed_wing_movement (entity *en)
 		// in the air
 		//
 
-		raw->ac.mob.velocity += min ((wp_vel - raw->ac.mob.velocity), AIR_ACCELERATION) * get_entity_movement_delta_time ();
-
-		#if USE_VELOCITY_MATCHING
-			fixed_wing_match_velocity(en);
-		#endif
+		raw->ac.mob.velocity += min (((wp_vel/raw->turn_speed_multi) - raw->ac.mob.velocity), AIR_ACCELERATION) * get_entity_movement_delta_time ();
 
 		normalised_wp_vec = wp_vec;
 
@@ -1917,6 +2042,11 @@ void basic_fixed_wing_movement (entity *en)
 
 		max_turn_radius = (raw->ac.mob.velocity * raw->ac.mob.velocity) / aircraft_database [raw->ac.mob.sub_type].g_max;
 
+		// if(get_3d_vector_magnitude (&wp_vec) > 5000.0)
+		// {
+			// max_turn_radius = max_turn_radius / 10;
+		// }
+		
 		memcpy (m, get_local_entity_attitude_matrix_ptr (en), sizeof (matrix3x3));
 
 		get_inverse_matrix (inv, m);
@@ -1993,8 +2123,6 @@ void basic_fixed_wing_movement (entity *en)
 
 	set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &new_pos);
 }
-
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

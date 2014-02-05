@@ -73,7 +73,9 @@ struct FIXED_WING
 		afterburner_state,
 		airbrake_state,
 		flap_state,
-		propellor_rpm;
+		propellor_rpm,
+		fixed_wing_toggle,
+		turn_speed_multi;
 };
 
 typedef struct FIXED_WING fixed_wing;

@@ -1394,6 +1394,16 @@ void update_entity_weapon_systems (entity *source)
 						open_entity_weapon_system_ready (source);
 
 						selected_weapon_system_ready = get_local_entity_int_value (source, INT_TYPE_WEAPON_SYSTEM_READY);
+						
+						//Magitek - animation processing for clients outside of server vision
+						if(get_comms_model () == COMMS_MODEL_SERVER)//server only
+						{
+							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI && get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_LOCAL)//don't animate self
+							{
+								animate_aircraft_weapon_system_ready(source);
+							}
+						}
+
 					}
 					else
 					{

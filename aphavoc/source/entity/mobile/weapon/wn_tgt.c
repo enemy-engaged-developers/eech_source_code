@@ -259,7 +259,8 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 							}
 						}
 					}
-
+					
+				//magitek: revise this!
 #if 0  // disable until we have a way of aborting attacking other targets until air defences are out of the way
 					// TODO: not do for some criteria?
 					if (get_local_entity_int_value(launcher, INT_TYPE_AIRBORNE_AIRCRAFT)
@@ -423,7 +424,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 			damage_capability,
 			total_damage_possible;
 
-		target_damage_level = get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL);
+		target_damage_level = get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL);//magitek, doubled target_health for calculation purposes
 
 		ASSERT (target_damage_level > 0);
 
@@ -448,9 +449,31 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				}
 				else
 				{
-					damage_capability = weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
+					switch (get_local_entity_type (launcher))
+					{
+						case ENTITY_TYPE_FIXED_WING:
+						{
+							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
 											* weapon_database[weapon_type].rate_of_fire
-											* weapon_database[weapon_type].burst_duration;
+											* weapon_database[weapon_type].burst_duration);
+							break;
+						}
+						case ENTITY_TYPE_HELICOPTER:
+						{
+							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
+											* weapon_database[weapon_type].rate_of_fire
+											* weapon_database[weapon_type].burst_duration);
+							break;
+						}
+						
+						default:
+						{
+							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
+											* weapon_database[weapon_type].rate_of_fire
+											* weapon_database[weapon_type].burst_duration);
+							break;
+						}
+					}
 				}
 
 				total_damage_possible = min (damage_capability, target_damage_level);
@@ -525,13 +548,34 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 		weapon_type = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
-		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+		switch (get_local_entity_type (launcher))
 		{
-			if (suitability[package] > highest_suitability)
+			case ENTITY_TYPE_FIXED_WING:
 			{
-				weapon_type = weapon_config_database[config_type][package].sub_type;
+				for (package = NUM_WEAPON_PACKAGES-1; package > 0; package--)
+				{
+					if (suitability[package] > highest_suitability)
+					{
+						weapon_type = weapon_config_database[config_type][package].sub_type;
 
-				highest_suitability = suitability[package];
+						highest_suitability = suitability[package];
+					}
+				}
+				break;
+			}
+			
+			default:
+			{
+				for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+				{
+					if (suitability[package] > highest_suitability)
+					{
+						weapon_type = weapon_config_database[config_type][package].sub_type;
+
+						highest_suitability = suitability[package];
+					}
+				}
+				break;
 			}
 		}
 

@@ -352,6 +352,12 @@ static int suitable_group_task_specific_checks (entity *task, entity *group)
 					// Fast escort group
 					return FALSE;
 				}
+				
+				// magitek: avoid picking slower units than objective group
+				if (group_database [objective_group_type].ai_stats.movement_speed > group_database [group_type].ai_stats.movement_speed)
+				{
+					return FALSE;
+				}
 			}
 
 			break;

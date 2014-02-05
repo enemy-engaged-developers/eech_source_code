@@ -387,7 +387,27 @@
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 14
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{//magitek ejection seat
+				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
+				1,														// number
+				11,													// heading_depth
+				0,											// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
+				FALSE,															// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,																	// heading_share_mask
+				0,																	// pitch_share_mask
+				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 15
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 16
@@ -718,7 +738,27 @@
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 14
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{//magitek
+				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
+				1,														// number
+				11,													// heading_depth
+				0,											// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
+				FALSE,															// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,																	// heading_share_mask
+				0,																	// pitch_share_mask
+				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 15
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 16

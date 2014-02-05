@@ -669,6 +669,16 @@ void initiate_aircraft_crew_ejection (entity *en)
 		}
 		break;
 	}
+	default: 	//magitek 
+	{
+		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+		{
+			set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+			launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
+		}
+		break;
+	}
 	}
 }
 

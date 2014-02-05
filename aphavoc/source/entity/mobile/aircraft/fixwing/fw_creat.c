@@ -172,6 +172,10 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->ac.air_radar_contact_timeout = AIR_RADAR_CONTACT_TIMEOUT_INVALID;
 
+		//magitek navigation
+		raw->fixed_wing_toggle = 0.0;
+		raw->turn_speed_multi = 2.0;
+		
 		//
 		// fixed_wing
 		//

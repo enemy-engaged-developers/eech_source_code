@@ -70,6 +70,8 @@ extern void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos
 
 extern void basic_fixed_wing_movement (entity *en);
 
+extern void basic_fixed_wing_movement_absolute (entity *en);
+
 extern void basic_fixed_wing_death_movement (entity *en);
 
 extern void fixed_wing_impact_movement (entity *en);

@@ -481,6 +481,15 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 						if (current_time < *last_shot)
 							return;
 						elapsed_time = (current_time - *last_shot) * 0.001;
+						
+						if (current_time > *last_shot + 500) //Magitek: ensure elapsed time does not continue to expire on client excessively, note 500ms is a fudge value.
+						{
+							if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)//only fix player helicopters
+							{
+								elapsed_time = get_delta_time();
+								*last_shot = current_time;
+							}
+						}
 					}
 					else
 						elapsed_time = get_delta_time();
