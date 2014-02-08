@@ -1721,11 +1721,13 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 	}
 	else
 	{
-
+		if (get_local_entity_undercarriage_state (en) != 2)
+			lower_client_server_entity_undercarriage (en);
+		
 		// was here to make helicopters avoid buildings when doing troop insertion, but it messed up the carrier landing.
 		//terrain_elevation = get_3d_terrain_point_data (pos->x, pos->z, &raw->ac.terrain_info);
 		//required_height = max (wp_pos->y, terrain_elevation + helicopter_movement_structure_avoidance (en));
-		required_height = wp_pos->y;
+		required_height = wp_pos->y + min(2, raw->ac.mob.velocity);
 	}
 
 	return required_height;

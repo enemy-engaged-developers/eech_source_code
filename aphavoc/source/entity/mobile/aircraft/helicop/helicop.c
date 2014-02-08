@@ -2068,6 +2068,9 @@ void helicopter_release_player_control (entity *en)
 		else
 		{
 			set_client_server_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_SPIN_UP_TIMER, 0.0);
+			close_client_server_entity_loading_doors (en);
+			close_client_server_entity_cargo_doors (en);
+			raise_client_server_entity_undercarriage (en);
 		}
 	}
 }

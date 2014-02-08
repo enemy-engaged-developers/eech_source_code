@@ -2324,10 +2324,10 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 	// Open Leader's Doors
 	//
 	
-	open_client_server_entity_loading_doors (receiver);
+	open_client_server_entity_cargo_doors (receiver);
   
-  //ataribaby 31/12/2008 fix for player heli
-  if (receiver != get_gunship_entity ())
+//  //ataribaby 31/12/2008 fix for player heli
+//  if (receiver != get_gunship_entity ())
 	 lower_client_server_entity_undercarriage (receiver);
 
 	//
@@ -2389,14 +2389,15 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 		
 				while (mb)
 				{
-					sleep += 0.5;
-				
+					sleep += 0.5 + frand1();
 					// delay members to stagger their decend out of the helicopter
 					set_client_server_entity_float_value (mb, FLOAT_TYPE_SLEEP, sleep);
 
 					// get them inside the helicopter
 					set_client_server_entity_vec3d (mb, VEC3D_TYPE_POSITION, &start_pos);
 		
+					if (mb == get_local_entity_first_child (group, LIST_TYPE_MEMBER))
+						sleep = sleep + 3; // there is some formation problems, let's wait until leader reach TROOP_PUTDOWN_POINT
 					mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
 				}
 			}
@@ -2465,6 +2466,7 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 			if (leader)
 			{
 				close_client_server_entity_loading_doors (leader);
+				close_client_server_entity_cargo_doors (leader);
         
         //ataribaby 31/12/2008 fix for player heli
         if (leader != get_gunship_entity ())

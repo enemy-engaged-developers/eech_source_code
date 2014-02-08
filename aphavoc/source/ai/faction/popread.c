@@ -4054,7 +4054,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 		return ( 0 );
 	}
 
-	if ( !object_3d_troop_routes[object_index].landing_route )
+//	if ( !object_3d_troop_routes[object_index].landing_route )
 	{
 	
 		object = construct_3d_object ( object_index );
@@ -4126,7 +4126,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 		return ( 0 );
 	}
 
-	if ( !object_3d_troop_routes[object_index].takeoff_route )
+//	if ( !object_3d_troop_routes[object_index].takeoff_route )
 	{
 	
 		object = construct_3d_object ( object_index );
