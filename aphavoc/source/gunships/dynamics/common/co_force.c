@@ -1172,8 +1172,8 @@ void update_object_collision_dynamics (void)
 						(get_local_entity_int_value (object, INT_TYPE_COLLISION_TEST_MOBILE))))
 					{
 
-						if ((get_local_entity_int_value (object, INT_TYPE_OBJECT_3D_SHAPE) != OBJECT_3D_FARP_MAT) &&
-							(get_local_entity_int_value (object, INT_TYPE_OBJECT_3D_SHAPE) != OBJECT_3D_FARP_MAT_GREY))
+//						if ((get_local_entity_int_value (object, INT_TYPE_OBJECT_3D_SHAPE) != OBJECT_3D_FARP_MAT) &&
+//							(get_local_entity_int_value (object, INT_TYPE_OBJECT_3D_SHAPE) != OBJECT_3D_FARP_MAT_GREY))
 						{
 
 							object_radius = get_object_3d_radius (get_local_entity_int_value (object, INT_TYPE_OBJECT_3D_SHAPE));
