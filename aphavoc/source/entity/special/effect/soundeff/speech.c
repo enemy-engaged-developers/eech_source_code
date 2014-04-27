@@ -326,7 +326,9 @@ static int add_speech_to_list
 
 		if (count > 20)
 		{
+			#if DEBUG_MODULE
 			debug_log ("SPEECH: Warning side %s originator %d queue reached %d items", entity_side_short_names [side], originator, count);
+			#endif
 		}
 
 		queue->next = new_item;

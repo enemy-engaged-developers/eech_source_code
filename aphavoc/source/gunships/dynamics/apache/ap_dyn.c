@@ -139,6 +139,81 @@ void initialise_apache_advanced_dynamics (entity *en)
 	sprintf (current_flight_dynamics->filename, "..\\common\\data\\apache.dyn");
 }
 
+void initialise_advanced_dynamics (entity *en)
+{
+	ASSERT (en);
+
+	current_flight_dynamics = &advanced_flight_dynamics;
+
+	memset (current_flight_dynamics, 0, sizeof (dynamics_type));
+
+	set_dynamics_defaults (en);
+
+	current_flight_dynamics->sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+
+
+	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
+	{
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\apache.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\seaknight.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\helixb.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\greengiant.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\hip.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\chinook.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\hook.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\osprey.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\seacobra.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\supercobra.dyn");
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
+		{
+			sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\superstallion.dyn");
+			break;
+		}
+		default:
+			debug_fatal("WRONG SUB TYPE!");
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -554,7 +629,7 @@ void set_dynamics_defaults (entity *en)
 	// havoc 1
 	// apache -1
 
-	current_flight_dynamics->rotor_rotation_direction = -1.0;
+	current_flight_dynamics->rotor_rotation_direction = aircraft_database[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_direction;
 
 	current_flight_dynamics->rotor_brake = TRUE;
 
@@ -635,8 +710,11 @@ void update_apache_advanced_dynamics (void)
 
 	update_acceleration_dynamics ();
 
-	update_attitude_dynamics();
-
+	if (command_line_dynamics_flight_model == 2)
+		update_common_attitude_dynamics();
+	else
+		update_attitude_dynamics();
+	
 	if (!get_gunship_entity() || !current_flight_dynamics)
 		return;
 
@@ -866,7 +944,8 @@ void update_tail_rotor_dynamics (void)
 
 	float
 		pedal,
-		blade_pitch;
+		blade_pitch,
+		collective = (0.3 + 0.6 * current_flight_dynamics->input_data.collective.value / current_flight_dynamics->input_data.collective.max) * current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_max_rpm;
 
 	// tail rotor angular position
 
@@ -888,11 +967,11 @@ void update_tail_rotor_dynamics (void)
 	if (!current_flight_dynamics->tail_blade_pitch.damaged)
 		pedal = current_flight_dynamics->input_data.pedal.value;
 	else
-		pedal = - current_flight_dynamics->input_data.pedal.max * current_flight_dynamics->rotor_rotation_direction;
+		pedal = - collective * current_flight_dynamics->input_data.pedal.max * current_flight_dynamics->rotor_rotation_direction;
 
 	blade_pitch = rad (pedal / (current_flight_dynamics->input_data.pedal.max / deg (current_flight_dynamics->tail_blade_pitch.max)));
 
-	current_flight_dynamics->tail_blade_pitch.delta = 2.0 * (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
+	current_flight_dynamics->tail_blade_pitch.delta = (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
 
 	current_flight_dynamics->tail_blade_pitch.value += current_flight_dynamics->tail_blade_pitch.delta * get_model_delta_time ();
 
@@ -2672,7 +2751,7 @@ void update_attitude_dynamics (void)
 		// arneh - add vibration if rotor damaged
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
 		create_advanced_rotor_vibration(1, TRUE);
-		// rotor spin up/spin down /thealex/
+		// rotor spin up/spin down /thealx/
 	else if (current_flight_dynamics->main_rotor_rpm.value > 10 && current_flight_dynamics->main_rotor_rpm.value < 90)
 	{
 		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);

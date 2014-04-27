@@ -66,6 +66,8 @@
 
 #include "project.h"
 
+#define OLD_EO
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -502,6 +504,84 @@ static char small_range_marker[] =
 	1,1,1,1,1,0,0,0,
 	1,0,0,0,0,1,1,1,
 	1,1,1,1,1,0,0,0,
+};
+
+static char adv_azimuth_marker[] =
+{
+	7,
+	8,
+	-3,
+	1,
+	0,0,0,1,0,0,0,
+	0,0,1,1,1,0,0,
+	0,1,0,0,0,1,0,
+	1,0,0,0,0,0,1,
+	1,0,0,0,0,0,1,
+	1,0,0,0,0,0,1,
+	1,0,0,0,0,0,1,
+	1,1,1,1,1,1,1,
+};
+
+static char adv_elevation_marker[] =
+{
+	8,
+	7,
+	1,
+	-3,
+	0,0,0,1,1,1,1,1,
+	0,0,1,0,0,0,0,1,
+	0,1,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	0,1,0,0,0,0,0,1,
+	0,0,1,0,0,0,0,1,
+	0,0,0,1,1,1,1,1,
+};
+
+static char adv_altitude_marker[] =
+{
+	8,
+	7,
+	-8,
+	-3,
+	1,1,1,1,1,0,0,0,
+	1,0,0,0,0,1,0,0,
+	1,0,0,0,0,0,1,0,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,1,0,
+	1,0,0,0,0,1,0,0,
+	1,1,1,1,1,0,0,0,
+};
+
+static char tg_symbol[]=
+{
+	19,
+	8,
+	-9,
+	-8,
+	1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+};
+
+static char ta_symbol[]=
+{
+	19,
+	8,
+	-9,
+	-8,
+	1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,
+	0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
+	0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,
+	0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
+	0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+	0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+	0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+	0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1341,37 +1421,37 @@ static display_3d_noise_levels
 		// WEATHERMODE_INVALID
 		{
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_DRY
 		{
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_LIGHT_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_HEAVY_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
 			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_HIGH,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_SNOW
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 	};
 
@@ -1393,7 +1473,11 @@ static int get_undamaged_eo_display_mode (ka50_mfd_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system)
+#else
 static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system)
+#endif
 {
 	float
 		zoom;
@@ -1420,7 +1504,31 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	ASSERT (eo_3d_texture_screen);
 
+#ifdef OLD_EO
+	switch (eo->field_of_view)
+	{
+		case EO_FOV_NARROW:
+		{
+			zoom = 0.015;
+
+			break;
+		}
+		case EO_FOV_MEDIUM:
+		{
+			zoom = 0.06;
+
+			break;
+		}
+		default:
+		{
+			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+
+			break;
+		}
+	}
+#else
 	zoom = convert_linear_view_value (eo);
+#endif
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -1440,10 +1548,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			if (command_line_colour_mfd)
-				tint = DISPLAY_3D_TINT_GREEN;
-			else
-				tint = DISPLAY_3D_TINT_AMBER;
+			tint = DISPLAY_3D_TINT_LLLTV;
 
 			break;
 		}
@@ -1459,7 +1564,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	set_active_screen (eo_3d_texture_screen);
 
-	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (44.99) * zoom);
 
 	//
 	// draw 3D scene (temporarily adjust the virtual cockpit position relative to EO sensor position)
@@ -1511,6 +1616,18 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		virtual_cockpit_inst3d->vp = tmp_vp;
 	}
 
+//	if ( active_3d_environment->render_filter == RENDER_INFRARED )
+//	{
+//		DWORD
+//			dwTFactor;
+//
+//		dwTFactor = ( 0xFF << 24 ) | (80 << 16) | (80 << 8) | 80;
+//		f3d_set_texture_state(0, D3DTSS_COLOROP,D3DTOP_DOTPRODUCT3);
+//		f3d_set_texture_state(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+//		f3d_set_texture_state(0, D3DTSS_COLORARG2, D3DTA_TFACTOR );
+//		f3d_render_state ( D3DRENDERSTATE_TEXTUREFACTOR, dwTFactor );
+//	}
+
 	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
@@ -1522,7 +1639,11 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void draw_full_screen_3d_eo_display (eo_params *eo, target_acquisition_systems system, display_3d_tints tint)
+#else
 static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system, display_3d_tints tint)
+#endif
 {
 	float
 		zoom;
@@ -1544,7 +1665,31 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 
 	ASSERT (eo);
 
+#ifdef OLD_EO
+	switch (eo->field_of_view)
+	{
+		case EO_FOV_NARROW:
+		{
+			zoom = 0.015;
+
+			break;
+		}
+		case EO_FOV_MEDIUM:
+		{
+			zoom = 0.06;
+
+			break;
+		}
+		default:
+		{
+			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+
+			break;
+		}
+	}
+#else
 	zoom = convert_linear_view_value (eo);
+#endif
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -1584,7 +1729,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 		mfd_screen_width,
 		mfd_screen_height,
 		rad (59.99) * zoom,
-		rad (59.99) * zoom
+		rad (44.99) * zoom
 	);
 
 	//
@@ -1639,7 +1784,11 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d)
+#else
 static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system, int damaged, int valid_3d)
+#endif
 {
 	const char
 		*s;
@@ -1812,16 +1961,35 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	//
 
 	{
-		float level = 1.0 / convert_linear_view_value (eo);
+		float level;
+		
+#ifdef OLD_EO
+		switch (eo->field_of_view)
+		{
+			case EO_FOV_NARROW:
+			{
+				level = 21;
 
-		if (level < 10)
-		{
-			sprintf (buffer, "%.1f", level);
+				break;
+			}
+			case EO_FOV_MEDIUM:
+			{
+				level = 7;
+
+				break;
+			}
+			default:
+			{
+				debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+
+				break;
+			}
 		}
-		else
-		{
-			sprintf (buffer, "%d", (int)level);
-		}
+#else
+		level = 1.0 / convert_linear_view_value (eo);
+#endif
+
+		sprintf (buffer, "%d", (int)level);
 
 		s = buffer;
 	}
@@ -2170,6 +2338,203 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	}
 }
 
+
+#ifdef OLD_EO
+static void draw_adv_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d)
+#else
+static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system, int damaged, int valid_3d)
+#endif
+{
+	int
+		has_range,
+		k;
+
+	float
+		width,
+		marker_position,
+		target_range = 0.0,
+		y_adjust;
+
+	entity
+		*source,
+		*target;
+
+	vec3d
+		*source_position;
+
+	ASSERT (eo);
+
+	//
+	// damaged
+	//
+
+	if (damaged)
+	{
+		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR1);
+		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR1);
+
+		return;
+	}
+
+	source = get_gunship_entity ();
+
+	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+
+	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+
+	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (has_range)
+		target_range = get_range_to_target();
+
+	set_mono_font_colour (MFD_COLOUR2);
+	set_mono_font_type (MONO_FONT_TYPE_7X12);
+
+//	// damaged
+//
+//	if (damaged)
+//	{
+//		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR1);
+//		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR1);
+//
+//		return;
+//	}
+
+// Jabberwock 031107 Designated targets
+
+	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+	{
+		if (draw_large_mfd)
+		{
+			y_adjust = -25.0;
+		}
+		else
+		{
+			y_adjust = -12.0;
+		}
+
+		width = get_mono_font_string_width ("MARKED");
+
+		set_2d_mono_font_position (1.0, -1.0);
+
+		set_mono_font_rel_position (-width - 1.0, y_adjust);
+
+		print_mono_font_string ("MARKED");
+	}
+// Jabberwock 031107 ends
+
+	// targeting mode
+	
+	if (eo_is_locked())
+	{
+		draw_2d_mono_sprite (ta_symbol, -0.25, 0.27, MFD_COLOUR2);
+	}
+	else if (eo_ground_stabilised)
+	{
+		draw_2d_mono_sprite (tg_symbol, 0.25, 0.27, MFD_COLOUR2);
+	}
+	
+	// warnings
+	
+	if (current_flight_dynamics->radar_altitude.value < 10)
+	{
+		set_mono_font_type (MONO_FONT_TYPE_10X16);
+		set_2d_mono_font_position (- 0.7, - 0.85);
+		print_mono_font_string ("H");
+	}
+
+	if (current_flight_dynamics->velocity_z.value * current_flight_dynamics->velocity_z.modifier > 0.85 * current_flight_dynamics->velocity_z.max)
+	{
+		set_mono_font_type (MONO_FONT_TYPE_10X16);
+		set_2d_mono_font_position (- 0.5, - 0.85);
+		print_mono_font_string ("V");
+	}
+
+	// static markers
+	
+	draw_2d_line (-0.4, 0.3, -0.3, 0.3, MFD_COLOUR2); // top left
+	draw_2d_line (-0.4, 0.3, -0.4, 0.2, MFD_COLOUR2); // top left
+	draw_2d_line (-0.4, -0.3, -0.3, -0.3, MFD_COLOUR2); // bottom left
+	draw_2d_line (-0.4, -0.3, -0.4, -0.2, MFD_COLOUR2); // bottom left
+	draw_2d_line (0.4, 0.3, 0.3, 0.3, MFD_COLOUR2); // top right
+	draw_2d_line (0.4, 0.3, 0.4, 0.2, MFD_COLOUR2); // top right
+	draw_2d_line (0.4, -0.3, 0.3, -0.3, MFD_COLOUR2); // bottom right
+	draw_2d_line (0.4, -0.3, 0.4, -0.2, MFD_COLOUR2); // bottom right
+	
+	draw_2d_line (-0.8, 0, -0.6, 0, MFD_COLOUR2); // center left
+	draw_2d_line (0.6, 0, 0.8, 0, MFD_COLOUR2); // center right
+	
+	// target gates
+	
+	{
+#ifdef OLD_EO
+		float scale = 4 / ((float) pow(eo->field_of_view, 2) + 1), x, y;
+#else
+		float scale = 4 * (int) (1 / eo->zoom / 64) + 1, x, y;
+#endif
+		
+		if (eo_is_locked())
+		{
+			move_targeting_gates(&x, &y);
+			set_2d_instance_position(mfd_env, x, y);
+		}
+
+		draw_2d_dash_line(- 0.1 * scale, 0.08 * scale, 0.1 * scale, 0.08 * scale, MFD_COLOUR2, MFD_COLOUR6, 0.02, TRUE);
+		draw_2d_dash_line(- 0.1 * scale, - 0.08 * scale, 0.1 * scale, - 0.08 * scale, MFD_COLOUR2, MFD_COLOUR6, 0.02, TRUE);
+		draw_2d_dash_line(- 0.1 * scale, 0.08 * scale, - 0.1 * scale, - 0.08 * scale, MFD_COLOUR2, MFD_COLOUR6, 0.02, TRUE);
+		draw_2d_dash_line(0.1 * scale, 0.08 * scale, 0.1 * scale, - 0.08 * scale, MFD_COLOUR2, MFD_COLOUR6, 0.02, TRUE);
+		draw_2d_dash_line(0.0, 0.0, 0.0, - 0.08 * scale, MFD_COLOUR2, MFD_COLOUR6, 0.02, TRUE);
+
+		reset_2d_instance(mfd_env);
+	}
+	
+	// azimuth
+
+	marker_position = (eo_azimuth / eo_max_azimuth) * 0.48;
+
+	draw_2d_line (-0.48, 0.8, 0.48, 0.8, MFD_COLOUR2);
+	draw_2d_line (-0.48, 0.8 - 0.02, -0.48, 0.8 + 0.02, MFD_COLOUR2);
+	draw_2d_line (0.48, 0.8 - 0.02, 0.48, 0.8 + 0.02, MFD_COLOUR2);
+	draw_2d_line (0.0, 0.8 - 0.01, 0.0, 0.8 + 0.01, MFD_COLOUR2);
+
+	draw_2d_mono_sprite (adv_azimuth_marker, marker_position, 0.8, MFD_COLOUR2);
+
+	// elevation
+
+	marker_position = 2 * 0.75 * (eo_elevation - eo_min_elevation) / (eo_max_elevation - eo_min_elevation);
+
+	draw_2d_line (-0.93, 0.75, -0.93, -0.75, MFD_COLOUR2);
+	draw_2d_line (-0.95, 0.75, -0.91, 0.75, MFD_COLOUR2);
+	draw_2d_line (-0.95, -0.75, -0.91, -0.75, MFD_COLOUR2);
+	draw_2d_line (-0.95, 0.51, -0.91, 0.51, MFD_COLOUR2);
+
+	draw_2d_mono_sprite (adv_elevation_marker, -0.93, marker_position - 0.75, MFD_COLOUR2);
+
+	// altitude
+
+	draw_2d_line (0.92, -0.86, 0.92, -0.16, MFD_COLOUR2);
+	draw_2d_line (0.89, -0.86, 0.95, -0.86, MFD_COLOUR2); // 0
+
+	for (k = 0; k < 5; k++)
+		draw_2d_line (0.92, -0.72 + 0.14 * k, 0.94, -0.72 + 0.14 * k, MFD_COLOUR2);
+
+	marker_position = 0.7 * bound(current_flight_dynamics->radar_altitude.value, 0 , 50) / 50;
+	draw_2d_mono_sprite (adv_altitude_marker, 0.92, -0.86 + marker_position, MFD_COLOUR2);
+	
+	// horizon
+
+	set_2d_instance_rotation (mfd_env, current_flight_dynamics->roll.value);
+
+	draw_2d_line (-0.6, 0, -0.45, 0, MFD_COLOUR2); // left
+	draw_2d_line (-0.45, 0, -0.45, -0.02, MFD_COLOUR2); // left
+	draw_2d_line (0.45, 0, 0.6, 0, MFD_COLOUR2); // right
+	draw_2d_line (0.45, 0, 0.45, -0.02, MFD_COLOUR2); // right
+
+	reset_2d_instance (mfd_env);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2186,7 +2551,7 @@ static void draw_3d_flir_mfd (int full_screen)
 	{
 		if (full_screen)
 		{
-			draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_ORANGE);
+			draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_LLLTV);
 		}
 		else
 		{
@@ -2201,7 +2566,10 @@ static void draw_3d_flir_mfd (int full_screen)
 
 static void draw_2d_flir_mfd (int valid_3d)
 {
-	draw_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
+	if (command_line_advanced_avionics && command_line_colour_mfd && draw_large_mfd)
+		draw_adv_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
+	else
+		draw_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7428,7 +7796,7 @@ static void draw_overlaid_mfd (screen *mfd_screen, ka50_mfd_modes mode, ka50_mfd
 		{
 			if (!ka50_damage.flir)
 			{
-				draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_AMBER);
+				draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_LLLTV);
 			}
 			else
 			{
@@ -8388,3 +8756,5 @@ void select_ka50_eo_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#undef OLD_EO

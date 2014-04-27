@@ -114,8 +114,6 @@ static void draw_local_3d_object (entity *en, float range)
 
 		day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
-		inst3d->object_sprite_lights = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
-
 		if ( get_object_shadow_polygon_object ( raw->fix.object_3d_shape ) )
 		{
 			inst3d->object_has_shadow = TRUE;
@@ -124,6 +122,20 @@ static void draw_local_3d_object (entity *en, float range)
 		{
 			inst3d->object_has_shadow = FALSE;
 		}
+
+		if (active_3d_environment->render_filter == RENDER_INFRARED)
+		{
+			inst3d->object_diffuse_value = 64;
+			inst3d->object_sprite_lights = FALSE;
+		}
+		else if (active_3d_environment->render_filter == RENDER_MONOCHROME)
+		{
+			inst3d->object_diffuse_value = 32;
+			inst3d->object_sprite_lights = FALSE;
+		}
+		else
+			inst3d->object_sprite_lights = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
+
 
 		insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
 	}

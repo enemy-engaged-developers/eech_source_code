@@ -74,7 +74,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN4_GECKO,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M33_OSA,						// sub_type
 				2,																	// number
 				5,																	// heading_depth
 				0,																	// pitch_depth
@@ -96,7 +96,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN3_GOBLET,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_4K60_STORM,						// sub_type
 				2,																	// number
 				0,																	// heading_depth
 				0,																	// pitch_depth
@@ -118,7 +118,7 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN3_GOBLET,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_4K60_STORM,						// sub_type
 				2,																	// number
 				2,																	// heading_depth
 				0,																	// pitch_depth
@@ -140,7 +140,7 @@
 			},
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN3_GOBLET,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_4K60_STORM,						// sub_type
 				2,																	// number
 				3,																	// heading_depth
 				0,																	// pitch_depth
@@ -162,8 +162,8 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_76MM_ROUND,			// sub_type
-				40,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_726_76MM_ROUND,			// sub_type
+				1000,																// number
 				1,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -186,8 +186,8 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_76MM_ROUND,			// sub_type
-				40,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_726_76MM_ROUND,			// sub_type
+				1000,																// number
 				1,																	// heading_depth
 				0,																	// pitch_depth
 				1,			  														// muzzle_depth
@@ -210,8 +210,8 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_76MM_ROUND,			// sub_type
-				40,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_726_76MM_ROUND,			// sub_type
+				1000,																// number
 				4,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -234,8 +234,8 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_76MM_ROUND,			// sub_type
-				40,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_726_76MM_ROUND,			// sub_type
+				1000,																// number
 				4,																	// heading_depth
 				0,																	// pitch_depth
 				1,			  														// muzzle_depth
@@ -258,8 +258,8 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				6,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -280,8 +280,8 @@
 			},
 			// WEAPON PACKAGE 10
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				7,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -302,8 +302,8 @@
 			},
 			// WEAPON PACKAGE 11
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				8,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -324,8 +324,8 @@
 			},
 			// WEAPON PACKAGE 12
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				9,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -346,8 +346,8 @@
 			},
 			// WEAPON PACKAGE 13
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				10,																// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -368,8 +368,8 @@
 			},
 			// WEAPON PACKAGE 14
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				11,																// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -390,8 +390,8 @@
 			},
 			// WEAPON PACKAGE 15
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				12,																// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -412,8 +412,8 @@
 			},
 			// WEAPON PACKAGE 16
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				13, 																// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth

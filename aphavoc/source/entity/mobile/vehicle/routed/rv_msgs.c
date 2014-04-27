@@ -89,6 +89,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		*enemy_force;
 
 	int
+		old_damage_state,
 		total_damage_level;
 
 	float
@@ -126,8 +127,13 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	// assess damage
 	//
 
+	old_damage_state = vehicle_critically_damaged(receiver);
+			
 	damage_client_server_entity (receiver, sender, damage_modifier);
 
+	if (old_damage_state < vehicle_critically_damaged(receiver)) // vehicle critically damaged
+		credit_client_server_mobile_kill (receiver, aggressor);
+	
 	total_damage_level = get_local_entity_int_value (receiver, INT_TYPE_DAMAGE_LEVEL);
 
 	if (total_damage_level <= 0)
@@ -136,7 +142,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		{
 			play_vehicle_destroyed_speech (receiver, aggressor);
 
-			credit_client_server_mobile_kill (receiver, aggressor);
+//			credit_client_server_mobile_kill (receiver, aggressor);
 		}
 
 		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, force, receiver, aggressor);

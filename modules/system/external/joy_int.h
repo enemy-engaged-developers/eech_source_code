@@ -144,7 +144,9 @@ extern void initialise_joysticks ( void );
 
 extern void read_joystick_values ( int joystick_device_index );
 
-extern int set_joystick_force_feedback_forces ( int joystick_device_index, int xforce, int yforce );
+extern int set_joystick_force_feedback_forces ( int xforce, int yforce );
+
+extern struct external_effects* play_ffb_weapon_effect (char* eff_name, float rate);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,6 +154,16 @@ extern int set_joystick_force_feedback_forces ( int joystick_device_index, int x
 
 extern int
 	number_of_joystick_devices;
+	
+extern float 
+	xfreq,
+	yfreq,
+	xampl,
+	yampl,
+	ff_xtrim,
+	ff_ytrim,
+	ff_xcorr,
+	ff_ycorr;
 
 extern joystick_device_info
 	*joystick_devices;

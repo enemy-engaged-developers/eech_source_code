@@ -91,7 +91,7 @@ void update_hind_weapon_systems (void)
 	//
 	////////////////////////////////////////
 
-	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_IGLA_V) && (weapon_lock_type == WEAPON_LOCK_VALID))
+	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V) && (weapon_lock_type == WEAPON_LOCK_VALID))
 	{
 		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE);
 
@@ -116,7 +116,7 @@ void update_hind_weapon_systems (void)
 	switch (weapon_sub_type)
 	{
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+		case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
 		////////////////////////////////////////
 		{
 			if
@@ -139,7 +139,7 @@ void update_hind_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+		case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:
 		////////////////////////////////////////
 		{
 			if
@@ -287,14 +287,14 @@ void update_hind_weapon_systems (void)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 
 			if (fire_single_weapon >= 1)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
@@ -309,14 +309,14 @@ void update_hind_weapon_systems (void)
 			{
 				raw->ac.weapon_salvo_timer = pre_fire_timer;  // should only set once per frame, not once per gun, so revert before each gun */
 				apply_weapon_recoil_effect (en, weapon_sub_type);
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, FALSE);
 			}
 		}
 		else
 		{
 			apply_weapon_recoil_effect (en, weapon_sub_type);
 
-			launch_client_server_weapon (en, weapon_sub_type);
+			launch_client_server_weapon (en, weapon_sub_type, FALSE);
 		}
 	}
 	else
@@ -357,7 +357,7 @@ float get_hind_missile_flight_time (void)
 
 	while (weapon)
 	{
-		if (get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL)
+		if (get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM)
 		{
 			target = get_local_entity_parent (weapon, LIST_TYPE_TARGET);
 

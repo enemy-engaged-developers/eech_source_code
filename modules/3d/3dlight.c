@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "3d.h"
+#include "cmndline.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +229,7 @@ void set_3d_main_light_source ( env_3d *env, light_colour *colour, vec3d *direct
 	env->main_3d_light.light_direction = *direction;
 	env->main_3d_light.type = LIGHT_3D_TYPE_DIRECTIONAL;
 
-	env->shadows_enabled = shadows;
+	env->shadows_enabled = shadows * !!command_line_render_shadows;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -427,45 +428,14 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 	green /= 255.0;
 	blue /= 255.0;
 
-	red *= 1.8666;
-	green *= 1.8666;
-	blue *= 1.8666;
-
-	if (active_3d_environment->render_filter != RENDER_CLEAR )
-	{
-
-		float
-			grey;
-
-		grey = red * 0.3 + green * 0.59 + blue + 0.11;
+	recoloured_light_array[0] = ambient_3d_light;
 	
-		//
-		// Save the current ambient light
-		//
-	
-		recoloured_light_array[0] = ambient_3d_light;
-	
-		ambient_3d_light.colour.red *= grey;
-		ambient_3d_light.colour.green *= grey;
-		ambient_3d_light.colour.blue *= grey;
-	}
-	else
-	{
-	
-		//
-		// Save the current ambient light
-		//
-	
-		recoloured_light_array[0] = ambient_3d_light;
-	
-		ambient_3d_light.colour.red *= red;
-		ambient_3d_light.colour.green *= green;
-		ambient_3d_light.colour.blue *= blue;
-	}
+	ambient_3d_light.colour.red *= red;
+	ambient_3d_light.colour.green *= green;
+	ambient_3d_light.colour.blue *= blue;
 
 	if ( current_3d_lights )
 	{
-/*
 		light_3d_source
 			*lights;
 	
@@ -478,33 +448,15 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 
 		while ( lights )
 		{
-
 			recoloured_light_array[current_recoloured_light_index] = *lights;
 
-			recoloured_light_array[current_recoloured_light_index].colour.red *= red;
-			recoloured_light_array[current_recoloured_light_index].colour.green *= green;
-			recoloured_light_array[current_recoloured_light_index].colour.blue *= blue;
-
-			recoloured_light_array[current_recoloured_light_index].pred = NULL;
-			recoloured_light_array[current_recoloured_light_index].succ = NULL;
-
-			if ( current_recoloured_light_index != 0 )
-			{
-
-				recoloured_light_array[current_recoloured_light_index].pred = &recoloured_light_array[current_recoloured_light_index-1];
-				recoloured_light_array[current_recoloured_light_index-1].succ = &recoloured_light_array[current_recoloured_light_index];
-			}
-
-			lights = lights->succ;
+			lights->colour.red *= red;
+			lights->colour.green *= green;
+			lights->colour.blue *= blue;
 
 			current_recoloured_light_index++;
+			lights = lights->succ;
 		}
-		*/
-
-		saved_current_3d_lights = current_3d_lights;
-
-//		current_3d_lights = &recoloured_light_array[1];
-		current_3d_lights = NULL;
 	}
 }
 
@@ -517,7 +469,26 @@ void restore_uncoloured_current_3d_lights ( void )
 
 	ambient_3d_light = recoloured_light_array[0];
 
-	current_3d_lights = saved_current_3d_lights;
+	if ( current_3d_lights )
+	{
+		light_3d_source
+			*lights;
+	
+		int
+			current_recoloured_light_index;
+
+		current_recoloured_light_index = 1;
+	
+		lights = current_3d_lights;
+
+		while ( lights )
+		{
+			*lights = recoloured_light_array[current_recoloured_light_index];
+
+			current_recoloured_light_index++;
+			lights = lights->succ;
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

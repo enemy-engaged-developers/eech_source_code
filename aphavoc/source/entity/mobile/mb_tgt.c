@@ -196,6 +196,8 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 			check_position.y += increment.y;
 			check_position.z += increment.z;
 	
+			ASSERT(point_inside_map_area(&check_position));
+
 			get_3d_terrain_point_data (check_position.x, check_position.z, &terrain_info);
 	
 			terrain_elevation = get_3d_terrain_point_data_elevation (&terrain_info);
@@ -250,6 +252,8 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 			check_position.y += increment.y;
 			check_position.z += increment.z;
 	
+			ASSERT(point_inside_map_area(&check_position));
+
 			get_3d_terrain_point_data (check_position.x, check_position.z, &terrain_info);
 	
 			terrain_elevation = get_3d_terrain_point_data_elevation (&terrain_info);
@@ -304,6 +308,8 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 			check_position.y -= increment.y;
 			check_position.z -= increment.z;
 	
+			ASSERT(point_inside_map_area(&check_position));
+
 			get_3d_terrain_point_data (check_position.x, check_position.z, &terrain_info);
 	
 			terrain_elevation = get_3d_terrain_point_data_elevation (&terrain_info);

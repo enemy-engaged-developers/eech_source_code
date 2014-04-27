@@ -70,6 +70,12 @@
 
 #include "cmndline.h"	// Retro 18Jul2004
 
+#include <stdio.h> 
+
+#include <stdlib.h>
+
+#include "multi.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,18 +106,59 @@ joystick_device_info
 
 // Retro 10Jul2004
 int AxisCount = 0;
-AxisInfo_t AxisInfo[MAXIMUM_JOYSTICK_DEVICES*8];	// 8 axis per device in DIJOYSTATE, I don´t know why razorworks choose 32 (!!!) (DIJOYSTATE2 I guess, but that´s been never implemented)
+AxisInfo_t AxisInfo[MAXIMUM_JOYSTICK_DEVICES*8];	// 8 axis per device in DIJOYSTATE, I donï¿½t know why razorworks choose 32 (!!!) (DIJOYSTATE2 I guess, but thatï¿½s been never implemented)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
 static BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device, LPVOID user_data);
-#else
-int setup_sdl_joysticks( void );
-#endif
+static BOOL FAR PASCAL DIEnumEffectsProc(LPCDIEFFECTINFO pei, LPVOID pv);
+static BOOL FAR PASCAL EnumEffectsInFileProc(LPCDIFILEEFFECT lpdife, LPVOID pv);
+LPDIRECTINPUTEFFECT
+	g_lpeffect,
+	pEff[999];
+LPDIRECTINPUTDEVICE7
+	feedback_device = NULL;
+char
+	filename[64];
+static int
+	eff_count = 0,
+	ffb = 0;
 
+  // Making list of ffe files
+
+struct external_effects{
+    char* name;
+    struct external_effects *Next;
+}*Head;
+
+void add_eff(char* name)
+ {
+    struct external_effects *temp1, *temp2;
+
+    temp1=(struct external_effects *)safe_malloc(sizeof(struct external_effects));
+    memset (temp1, 0, sizeof (struct external_effects));
+    temp1->name = (char *) safe_malloc ((strlen (name) + 1));
+    sprintf (temp1->name, "%s", name);
+    
+    debug_log("node %s", name);
+
+    if(Head == NULL)
+    {
+       Head = temp1;
+       Head->Next=NULL;
+    }
+    else
+    {
+	temp2 = Head;
+       while(temp2->Next != NULL)
+       temp2=temp2->Next;
+
+       temp1->Next=NULL;
+       temp2->Next=temp1;
+    }
+ }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,11 +195,8 @@ static BOOL axis_has_deadzone ( const int deviceIndex, const int deviceAxis )
 
 void initialise_joysticks (void)
 {
-
-#ifdef WIN32
 	HRESULT
 		di_err;
-#endif
 
 	//
 	// Allocate joystick device array
@@ -174,7 +218,6 @@ void initialise_joysticks (void)
 	AxisCount++;
 	// Retro 10Jul2004 end
 
-#ifdef WIN32
 	if (direct_input)
 	{
 
@@ -186,15 +229,22 @@ void initialise_joysticks (void)
 //			debug_log ("Unable to enumerate any joystick devices");
 		}
 	}
-
-#else
-
-	if( setup_sdl_joysticks() != 0 ) {
-		debug_log ("No joystick devices found");
-	}
-#endif
 }
 
+void deinitialise_joysticks (void)
+{
+    struct external_effects *temp;
+
+	temp = Head;
+
+    while(temp)
+    {
+       temp = Head->Next;
+       safe_free (Head);
+	   Head = temp;
+    }
+	
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,8 +314,7 @@ int setup_sdl_joysticks( void ) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
-BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance, LPVOID user_data)
+ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance, LPVOID user_data)
 {
 
 	HRESULT
@@ -274,7 +323,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	LPDIRECTINPUTDEVICE7
 		device;
 
-   DIPROPRANGE
+	DIPROPRANGE
 		device_range;
 
 	DIPROPDWORD
@@ -285,20 +334,42 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	DIDEVCAPS
 		device_capabilities;
+	
+	DWORD
+		joystick_force_axes[NUMBER_OF_FORCE_FEEDBACK_AXES];
+	
+	LONG
+		joystick_force_directions[NUMBER_OF_FORCE_FEEDBACK_AXES];
+	
+	DIEFFECT
+		effect;        // general parameters
+	
+	GUID
+		guidEffect;
+	
+	DICONSTANTFORCE
+		constant_force;
 
-	LPDIRECTINPUTEFFECT
-		device2_effect;
-
+	directory_file_list
+		*directory_listing;
+	
+	int
+		valid_file;
+	
 	//
 	// Create the device
 	//
+	
+//	di_err = IDirectInput7_CreateDeviceEx (direct_input, GUID_PREFIX device_instance->guidInstance, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
 
-	di_err = IDirectInput7_CreateDeviceEx (direct_input, GUID_PREFIX device_instance->guidInstance, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
+	di_err = IDirectInput7_CreateDeviceEx (direct_input, &device_instance->guidInstance, &IID_IDirectInputDevice7, (void**)&device, NULL);
 
 	if (di_err != DI_OK)
 	{
 
-		return (DIENUM_CONTINUE);
+	    debug_log ("Unable to creat game device");
+	    
+	    return (DIENUM_CONTINUE);
 	}
 
 	//
@@ -320,16 +391,6 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	}
 
 	//
-	// If this force feedback ready ?
-	//
-
-	if (device_capabilities.dwFlags & DIDC_FORCEFEEDBACK)
-	{
-
-		debug_log ("Got a force feedback joystick");
-	}
-
-	//
 	// First, the data format
 	//
 
@@ -348,25 +409,18 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	//
 	// Next the cooperative level
 	//
-
-	device2_effect = NULL;
-
+	
+	
 	if (device_capabilities.dwFlags & DIDC_FORCEFEEDBACK)
 	{
 	
-		DIEFFECT
-			effect;
-
-		DWORD
-			joystick_force_axes[NUMBER_OF_FORCE_FEEDBACK_AXES];
-
-		LONG
-			joystick_force_directions[NUMBER_OF_FORCE_FEEDBACK_AXES];
-
-		DICONSTANTFORCE
-			constant_force;
+		debug_log ("Got a force feedback joystick");
 		
-		di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
+		feedback_device = device;
+		
+		ffb = 1;
+		
+		di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_EXCLUSIVE | DISCL_BACKGROUND);
 	
 		if (di_err != DI_OK)
 		{
@@ -382,11 +436,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Set the auto-centring mechanism off
 		//
 
-		device_property.diph.dwSize = sizeof (DIPROPDWORD);
+		device_property.diph.dwSize = sizeof (device_property);
 		device_property.diph.dwHeaderSize = sizeof (DIPROPHEADER);
 		device_property.diph.dwObj = 0;
 		device_property.diph.dwHow = DIPH_DEVICE;
-		device_property.dwData = TRUE;
+		device_property.dwData = 0;
 
 		di_err = IDirectInputDevice7_SetProperty (device, DIPROP_AUTOCENTER, &device_property.diph);
 
@@ -399,6 +453,27 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 			return (DIENUM_CONTINUE);
 		}
+
+		//
+		// Set the callback in motion to obtain the effect GUID
+		//
+
+		di_err = IDirectInputDevice7_EnumEffects(device, (LPDIENUMEFFECTSCALLBACK) DIEnumEffectsProc, &guidEffect, DIEFT_PERIODIC);
+
+		if (di_err != DI_OK)
+		    {
+
+			    debug_log ("Unable to enumerate a force feedback joystick effect");
+			    
+			IDirectInputDevice7_Release (device);
+	
+		    }
+		else
+		    {
+
+			    debug_log ("Standard force feedback joystick effect enumerated");
+			    
+		    }
 
 		//
 		// Create an effect for this joystick
@@ -425,9 +500,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		effect.lpEnvelope = 0;
 		effect.cbTypeSpecificParams = sizeof (constant_force);
 		effect.lpvTypeSpecificParams = &constant_force;
+		effect.dwStartDelay            = 0;
 
-		di_err = IDirectInputDevice7_CreateEffect (device, GUID_PREFIX GUID_ConstantForce, &effect, &device2_effect, NULL);
-
+		
+		di_err = IDirectInputDevice7_CreateEffect (device, GUID_PREFIX GUID_ConstantForce, &effect, &g_lpeffect, NULL);
+		
 		if (di_err != DI_OK)
 		{
 	
@@ -437,11 +514,62 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 			return (DIENUM_CONTINUE);
 		}
+
+		
+		//
+		// Let's enumerate effects from "forcefeedback" folder
+		//
+		
+		directory_listing = get_first_directory_file ("forcefeedback\\*.ffe");
+		
+		if (directory_listing)
+		{
+		valid_file = TRUE;
+		while (valid_file)
+		{
+			if (get_directory_file_type (directory_listing) == DIRECTORY_FILE_TYPE_FILE)
+			{
+				
+				char
+				    path[64];
+			    
+				sprintf (filename, "%s", get_directory_file_filename (directory_listing));
+				
+				debug_log ("filename %s", filename);
+				
+				sprintf (path, "forcefeedback\\%s", filename);
+				
+				debug_log ("path %s", path);
+				
+				
+					di_err = IDirectInputDevice7_EnumEffectsInFile(device, path, (LPDIENUMEFFECTSINFILECALLBACK) EnumEffectsInFileProc, NULL, DIFEF_INCLUDENONSTANDARD);
+
+					if (di_err != DI_OK)
+					{
+
+					debug_log ("Unable to enumerate effects from %s: %s", filename, get_dinput_error_message (di_err));
+
+					IDirectInputDevice7_Release (device);
+
+					return (DIENUM_STOP);
+					
+					}
+					else
+					    debug_log ("Effects from %s file are enumerated", filename);
+				
+			}
+
+			valid_file = get_next_directory_file (directory_listing);
+		}
+
+		destroy_directory_file_list (directory_listing);
+		}
+	
 	}
+	
 	else
 	{
-	
-		di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	    		di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	
 		if (di_err != DI_OK)
 		{
@@ -475,10 +603,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	// Note: when setting the deadzone, units are specified in the thousandths, so 20% = 2000/10000
 	//
 
-   device_property.diph.dwSize = sizeof (device_property);
-   device_property.diph.dwHeaderSize = sizeof(device_property.diph);
-   device_property.diph.dwHow = DIPH_BYOFFSET;
-   device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+	device_property.diph.dwSize = sizeof (device_property);
+	device_property.diph.dwHeaderSize = sizeof(device_property.diph);
+	device_property.diph.dwHow = DIPH_BYOFFSET;
+	device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 
 	//
 	// Mark all axis to be invalid
@@ -809,7 +937,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Failed to acquire the device - release it.
 		//
 
-//		debug_log ("Unable to acquire the device for a joystick");
+		debug_log ("Unable to acquire the device for a joystick");
 
 		IDirectInputDevice7_Release (device);
 
@@ -821,7 +949,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	//
 
 	joystick_devices[number_of_joystick_devices].input_device = device;
-	joystick_devices[number_of_joystick_devices].input_effect = device2_effect;
+//	joystick_devices[number_of_joystick_devices].input_effect = g_lpeffect;
 	joystick_devices[number_of_joystick_devices].joystick_supports_force_feedback = FALSE;
 	joystick_devices[number_of_joystick_devices].joystick_has_pov = FALSE;
 
@@ -855,9 +983,56 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	return (DIENUM_CONTINUE);
 }
-#endif
+ 
+// Callback for effects
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+BOOL EffectFound = FALSE;
+
+BOOL FAR PASCAL DIEnumEffectsProc(LPCDIEFFECTINFO pei, LPVOID pv)
+    {
+      *((GUID *)pv) = pei->guid;
+      EffectFound = TRUE;
+    debug_log ("effect have GUID now");
+    return (DIENUM_STOP);  // one is enough
+    }
+
+BOOL FAR PASCAL EnumEffectsInFileProc(LPCDIFILEEFFECT lpdife, LPVOID pv)
+     {
+	HRESULT     di_err;
+	char *p;
+	DIEFFECT eff = *lpdife->lpDiEffect;
+
+	    eff.dwTriggerButton = DIEB_NOTRIGGER;
+	
+	    di_err = IDirectInputDevice7_CreateEffect (feedback_device, GUID_PREFIX lpdife->GuidEffect, &eff, &pEff[eff_count], NULL);
+
+	    if (di_err != DI_OK)
+	    {
+		debug_log ("Unable to creat a force feedback effect from file: %s", get_dinput_error_message (di_err));
+	    }
+	    else 
+	    {
+		debug_log ("force feedback effect %i from file is created", eff_count);
+
+		p = strchr (filename, '.');
+
+		if (p)
+		{
+			*p = '\0';
+		}
+
+
+		add_eff((char*)filename);
+		
+	    } 
+
+    ++eff_count;
+    
+   return (DIENUM_CONTINUE);
+    
+    }
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -936,14 +1111,8 @@ extern void change_joystick_properties ( void )
 
 void read_joystick_values (int joystick_device_index)
 {
-
-#ifdef WIN32
 	HRESULT
 		di_err;
-#else
-	int
-		i;
-#endif
 
 	joystick_device_info
 		*joystick;
@@ -961,47 +1130,49 @@ void read_joystick_values (int joystick_device_index)
 	
 		joystick = &joystick_devices[joystick_device_index];
 	
-		//
 		// Read the joystick values
-		//
 	
 		if ((joystick) && (joystick->input_device))
 		{
-		
-			//
 			// Copy the current values to the last values
-			//
 		
 			joystick->joystick_last_state = joystick->joystick_state;
 		
-			//
 			// Now, poll the device
-			//
-		
-#ifdef WIN32
+
 			di_err = IDirectInputDevice7_Poll (joystick->input_device);
-		
+
+			if (di_err == DI_NOTATTACHED)
+			    ffb = 1;
+			else
+			    {
+			     IDirectInputDevice7_SendForceFeedbackCommand( feedback_device, DISFFC_STOPALL );
+			     ffb = 0;
+			    }
+
+
 			if ((di_err == DIERR_INPUTLOST) || (di_err == DIERR_NOTACQUIRED))
 			{
-		
+				debug_log ("poll: %s", get_dinput_error_message (di_err));
 				di_err = IDirectInputDevice7_Acquire (joystick->input_device);
+				debug_log ("acquire joystick device: %s", get_dinput_error_message (di_err));
 		
 				if (di_err != DI_OK)
 				{
-		
-//					debug_log ("Unable to acquire joystick device: %s", get_dinput_error_message (di_err));
+					debug_log ("Unable to acquire joystick device: %s", get_dinput_error_message (di_err));
 				}
-		
-				di_err = IDirectInputDevice7_Poll (joystick->input_device);
+				else
+				{
+					di_err = IDirectInputDevice7_Poll (joystick->input_device);
+					
+				}
 			}
-		
 			if ((di_err != DI_OK) && (di_err != S_FALSE))
 			{
-		
-//				debug_log ("Unable to poll joystick device: %s (%d)", get_dinput_error_message (di_err), di_err);
-		
-//				return;
+				debug_log ("Unable to poll joystick device: %s (%d)", get_dinput_error_message (di_err), di_err);
+				return;
 			}
+		
 		
 			//
 			// Finally, read the state
@@ -1009,108 +1180,59 @@ void read_joystick_values (int joystick_device_index)
 		
 			di_err = IDirectInputDevice7_GetDeviceState (joystick->input_device, sizeof (DIJOYSTATE), &joystick->joystick_state);
 		
-			if ((di_err == DIERR_INPUTLOST) || (di_err == DIERR_NOTACQUIRED))
+			/* if ((di_err == DIERR_INPUTLOST) || (di_err == DIERR_NOTACQUIRED))
 			{
 		
 				IDirectInputDevice7_Acquire (joystick->input_device);
-		
+				
 				di_err = IDirectInputDevice7_GetDeviceState (joystick->input_device, sizeof (DIJOYSTATE), &joystick->joystick_state);
-			}
+			} */
 		
 			if (di_err != DI_OK)
 			{
+
+				debug_log ("Unable to read joystick device state: %s (%d)", get_dinput_error_message (di_err), di_err);
 		
-//				debug_log ("Unable to read joystick device state");
-		
-//				return;
+				return;
 			}
 
 			//
 			// Generate any button events
 			//
 			if (command_line_cyclic_joystick_index != -1)	// Retro 18Jul2004 FIXME
-			if (joystick_device_index == command_line_cyclic_joystick_index)	// Retro 18Jul2004 FIXME
-			for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
-			{
-				if (button_count > 31)	// Retro 8Jan2004 - X52 Kludge..
+			    if (joystick_device_index == command_line_cyclic_joystick_index)	// Retro 18Jul2004 FIXME
+				for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
 				{
-					continue;
-				}
-
-				if (joystick->joystick_last_state.rgbButtons[button_count] != joystick->joystick_state.rgbButtons[button_count])
-				{
-		
-					if (joystick->joystick_state.rgbButtons[button_count] & 0x80)
+					if (button_count > 31)	// Retro 8Jan2004 - X52 Kludge..
 					{
-		
-						//
-						// Generate a button pressed event
-						//
-		
-						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_DOWN);
+						continue;
 					}
-					else
+
+					if (joystick->joystick_last_state.rgbButtons[button_count] != joystick->joystick_state.rgbButtons[button_count])
 					{
-		
-						//
-						// Generate a button released event
-						//
-		
-						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_UP);
-					}
-				}
-			}
 
-#else
-		
-			//
-			// Read the state
-			//
-		
-			for(i = 0; i < joystick->number_of_buttons; i++)
-				joystick->joystick_state.buttons[ i ] = SDL_JoystickGetButton(joystick->input_device, i);
+						if (joystick->joystick_state.rgbButtons[button_count] & 0x80)
+						{
 
-			for(i = 0; i < joystick->number_of_axes; i++)
-				joystick->joystick_state.axes[ i ] = SDL_JoystickGetAxis(joystick->input_device, i);
+							//
+							// Generate a button pressed event
+							//
 
-			for(i = 0; i < joystick->number_of_buttons; i++)
-				joystick->joystick_state.hats[ i ] = SDL_JoystickGetHat(joystick->input_device, i);
+							create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_DOWN);
+						}
+						else
+						{
 
-			//
-			// Generate any button events
-			//
-		
-			for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
-			{
-		
-				if (joystick->joystick_last_state.buttons[button_count] != joystick->joystick_state.buttons[button_count])
-				{
-		
-					if (joystick->joystick_state.buttons[button_count] == 1)
-					{
-		
-						//
-						// Generate a button pressed event
-						//
-		
-						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_DOWN);
-					}
-					else
-					{
-		
-						//
-						// Generate a button released event
-						//
-		
-						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_UP);
+							//
+							// Generate a button released event
+							//
+
+							create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_UP);
+						}
 					}
 				}
-			}
-#endif
-
 		}
 #if 0
-#ifdef WIN32
 		//
 		// Hack for Win2k problems of putting the Z axis data into Slider0 member
 		//
@@ -1120,7 +1242,6 @@ void read_joystick_values (int joystick_device_index)
 
 			joystick->joystick_state.lZ = joystick->joystick_state.rglSlider[0];
 		}
-#endif
 #endif
 		//
 		// Values are in here!
@@ -1162,126 +1283,212 @@ void read_joystick_values (int joystick_device_index)
 	fclose(fp);
 #endif
 }
+ 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+float 
+	xforce = 0,
+	yforce = 0,
+	xtimer = 0,
+	ytimer = 0,
+	xfreq = 0,
+	yfreq = 0,
+	xampl = 0,
+	yampl = 0,
+	ff_xtrim = 0,
+	ff_ytrim = 0,
+	ff_xcorr = 0,
+	ff_ycorr = 0;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, int yforce)
+void play_ffb_weapon_effect (char* eff_name, float rate)
 {
-
-#ifdef WIN32
-	HRESULT
-		di_err;
-	
-	LONG
-		forces_directions[NUMBER_OF_FORCE_FEEDBACK_AXES];
-	
-	DICONSTANTFORCE
-		constant_force;
-
-	DIEFFECT
-		effect;
-
-	DWORD
-		effect_flags;
-
-	ASSERT (joystick_devices[joystick_device_index].input_device);
-	ASSERT (joystick_devices[joystick_device_index].joystick_supports_force_feedback);
-
-	//
-	// Set the effect parameters
-	//
-
-	forces_directions[0] = xforce;
-	forces_directions[1] = yforce;
-
-	constant_force.lMagnitude = (DWORD) sqrt ((double) xforce * (double) xforce + (double) yforce * (double) yforce);
-	
-	effect.dwSize = sizeof (effect);
-	effect.dwFlags = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
-	effect.cAxes = NUMBER_OF_FORCE_FEEDBACK_AXES;
-	effect.rglDirection = forces_directions;
-	effect.lpEnvelope = 0;
-	effect.cbTypeSpecificParams = sizeof (constant_force);
-	effect.lpvTypeSpecificParams = &constant_force;
-
-	//
-	// If the effect isn't playing - play it
-	//
-
-	di_err = DIERR_NOTDOWNLOADED;
-
-	while (di_err == DIERR_NOTDOWNLOADED)
+	if (feedback_device != NULL && ffb == 1 && command_line_forcefeedback == 1 && command_line_ffb_recoil > 0)    
 	{
-	
-		di_err = IDirectInputEffect_GetEffectStatus (joystick_devices[joystick_device_index].input_effect, &effect_flags);
-	
-		if (di_err == DI_OK)
-		{
-	
-			if (!(effect_flags & DIEGES_PLAYING))
+		HRESULT
+			di_err;
+		DWORD
+			effect_flags;
+		int
+			i,
+			found = 0;
+
+		struct external_effects *curr = Head;
+
+		ASSERT (feedback_device);
+
+			for (i = 0; i < (eff_count) ; i++)
 			{
-	
-				//
-				// Start the effect
-				//
-	
-				di_err = IDirectInputEffect_Start (joystick_devices[joystick_device_index].input_effect, 1, 0);
-	
-				if (di_err != DI_OK)
+
+				if (strcmp(curr->name, eff_name) == NULL)
 				{
-	
-					debug_log ("Unable to start a force feedback effect: %s", get_dinput_error_message (di_err));
-	
-					return (FALSE);
+					found = 1;
+
+					debug_log ("effect %s is playing from file", eff_name);
+
+					di_err = IDirectInputEffect_GetEffectStatus (pEff[i], &effect_flags);
+
+					if (di_err == DIERR_NOTDOWNLOADED)
+					{
+					IDirectInputEffect_Download (pEff[i]);
+
+					di_err = IDirectInputEffect_GetEffectStatus (pEff[i], &effect_flags);
+					}
+
+					if (di_err == DI_OK)
+					{
+						if (!effect_flags & DIEGES_PLAYING)
+						{
+
+							//
+							// Start the effect
+							//
+
+						di_err = IDirectInputEffect_Start (pEff[i], 1, DIES_NODOWNLOAD);
+
+
+						if (di_err != DI_OK)
+						{
+							debug_log ("Unable to start a force feedback effect from file: %s", get_dinput_error_message (di_err));
+							return;
+						}
+						else
+							debug_log ("force feedback effect %i is started", i);
+						}
+					}
+					else
+					{
+						debug_log ("Unable to acquire Force feedback effect from file: %s", get_dinput_error_message (di_err));
+						return;
+					} 
 				}
+
+				if(curr->Next != NULL)
+					curr = curr->Next;	    	
+
 			}
-		}
-		else
-		{
-	
+
+			if (!found && rate > 0)
+			{
+				debug_log ("file %s not found. playing standard effect", eff_name);
+				yfreq += rate * PI * get_delta_time() / 30;
+				yampl += command_line_ffb_recoil * 0.5;
+			}
+	}	
+}
+
+void set_joystick_force_feedback_forces ()
+{
+	if (feedback_device != NULL && ffb == 1 && command_line_forcefeedback == 1)    
+	{
+		HRESULT
+			di_err;
+
+		LONG
+			joystick_force_directions[NUMBER_OF_FORCE_FEEDBACK_AXES];
+
+		DIEFFECT
+			effect;        // general parameters
+
+		DICONSTANTFORCE
+			constant_force;
+
+		DWORD
+			effect_flags;
+
+		ASSERT (feedback_device);
+
+			//
+			// Set the effect parameters
+			//
+
+			if (xfreq > (PI / 2))
+				xfreq = (PI / 2);
+
+			xtimer = xtimer + xfreq;
+
+			if (xtimer > PI )
+				xtimer = -PI2 + xtimer;
+
+			if (xtimer < 0)
+				xampl *= -1;
+
+			xforce = (xforce + 10000 * xampl + ff_xcorr) + ff_xtrim;
+
+			if (yfreq > (PI / 2))
+				yfreq = (PI / 2);
+
+			ytimer = ytimer + yfreq;
+
+			if (ytimer > PI )
+				ytimer = -PI2 + ytimer;
+
+			if (ytimer < 0)
+				yampl *= -1;
+
+			yforce = (yforce + 10000 * yampl + ff_ycorr) + ff_ytrim;
+			//debug_log ("xfrce %i, yfrce %i, xfreq %f, yfreq %f, xampl %f, yampl %f, xcorr %f, ycorr %f", xforce, yforce, xfreq, yfreq, xampl, yampl, ff_xcorr, ff_ycorr);
+
+			bound (xforce, -10000, 10000);
+			bound (yforce, -10000, 10000);
+
+			joystick_force_directions[0] = xforce;
+			joystick_force_directions[1] = yforce;
+
+			constant_force.lMagnitude = (DWORD) sqrt ((double) (xforce) * (double) (xforce) + (double) (yforce) * (double) (yforce));
+
+			effect.dwSize = sizeof (effect);
+			effect.dwFlags = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
+			effect.cAxes = NUMBER_OF_FORCE_FEEDBACK_AXES;
+			effect.rglDirection = joystick_force_directions;
+			effect.lpEnvelope = 0;
+			effect.cbTypeSpecificParams = sizeof (constant_force);
+			effect.lpvTypeSpecificParams = &constant_force;
+
+			di_err = IDirectInputEffect_GetEffectStatus (g_lpeffect, &effect_flags);
+
 			if (di_err == DIERR_NOTDOWNLOADED)
 			{
-	
-				IDirectInputEffect_Download (joystick_devices[joystick_device_index].input_effect);
+				IDirectInputEffect_Download (g_lpeffect);
+
+				di_err = IDirectInputEffect_GetEffectStatus (g_lpeffect, &effect_flags);
+			}
+
+			if (di_err == DI_OK)
+			{
+				// If the effect isn't playing - play it
+
+				if (!(effect_flags & DIEGES_PLAYING))
+				{
+					di_err = IDirectInputEffect_Start (g_lpeffect, 1, 0);
+
+					if (di_err != DI_OK)
+					{
+
+						debug_log ("Unable to start a force feedback effect: %s", get_dinput_error_message (di_err));
+
+						return;
+					}
+				}
+				else
+				{
+					di_err = IDirectInputEffect_SetParameters (g_lpeffect, &effect, DIEP_DIRECTION | DIEP_TYPESPECIFICPARAMS );
+
+					if (di_err != DI_OK)
+					{
+						debug_log ("Problems setting effect parameters: %s", get_dinput_error_message (di_err));
+						return;
+					}
+				}
 			}
 			else
 			{
-		
 				debug_log ("Unable to acquire Force feedback effect status: %s", get_dinput_error_message (di_err));
-		
-				return (FALSE);
-			}
-		}
+				return;
+			} 
 	}
 
-	//
-	// now set the new parameters and start the effect immediately.
-	//
-
-	di_err = IDirectInputEffect_SetParameters (joystick_devices[joystick_device_index].input_effect,
-																	&effect, DIEP_DIRECTION | DIEP_TYPESPECIFICPARAMS);
-
-	if (di_err != DI_OK)
-	{
-
-		if (di_err != DI_DOWNLOADSKIPPED)
-		{
-	
-			debug_log ("Problems setting effect parameters: %s", get_dinput_error_message (di_err));
-	
-			return (FALSE);
-		}
-	}
-	else
-	{
-
-		//debug_log ("Set force feedback effect");
-	}
-
-	return (TRUE);
-#endif
+ 	xforce = yforce = xfreq = yfreq = xampl = yampl = ff_xcorr = ff_ycorr = ff_xtrim = ff_ytrim = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1302,7 +1509,6 @@ int get_joystick_axis (int joystick_index, int axis)
 		return 0;
 	// Retro 10Jul2004 end
 
-#ifdef WIN32
 	switch (axis) {
 	case 0:
 		if (joystick_devices[joystick_index].joystick_xaxis_valid)
@@ -1361,16 +1567,6 @@ int get_joystick_axis (int joystick_index, int axis)
 		break;
 	}
 
-#else
-
-	if( joystick_index >= 0 && joystick_index < number_of_joystick_devices
-		  && axis >= 0 && axis < joystick_devices[joystick_index].number_of_axes ) {
-
-		return joystick_devices[joystick_index].joystick_state.axes[ axis ];
-	}
-	
-#endif
-
 	return 0;
 }
 
@@ -1381,8 +1577,6 @@ int get_joystick_axis (int joystick_index, int axis)
 // Added 2003-05-25 (yem) Use this function instead of referencing DIJOYSTATE.rgdwPOV[] directly
 joystick_hat_position get_joystick_hat(joystick_device_info *stick, int index) {
 	// TODO: Add support for diagonal directions
-
-#ifdef WIN32
 
 	DWORD
 		pos;
@@ -1402,30 +1596,6 @@ joystick_hat_position get_joystick_hat(joystick_device_info *stick, int index) {
 			return HAT_LEFT;
 	}
 
-#else
-
-	Uint8
-		pos;
-
-	if( index >= 0 && index < stick->number_of_hats ) {
-		pos = stick->joystick_state.hats[ index ];
-
-		switch( pos ) {
-		case SDL_HAT_UP:
-			return HAT_UP;
-		case SDL_HAT_LEFT:
-			return HAT_LEFT;
-		case SDL_HAT_DOWN:
-			return HAT_DOWN;
-		case SDL_HAT_RIGHT:
-			return HAT_RIGHT;
-		default:
-		case SDL_HAT_CENTERED:
-			return HAT_CENTERED;
-		}			
-	}
-#endif
-
 	return HAT_CENTERED;
 }
 
@@ -1436,18 +1606,8 @@ joystick_hat_position get_joystick_hat(joystick_device_info *stick, int index) {
 // Added 2003-05-25 (yem) Use this function instead of referencing DIJOYSTATE.rgbButtons[] directly
 int get_joystick_button(joystick_device_info *stick, int index) {
 
-#ifdef WIN32
-
 	if( index >= 0 && index < 32 )
 		return stick->joystick_state.rgbButtons[ index ];
-
-#else
-
-	if( index >= 0 && index < stick->number_of_buttons )
-		return stick->joystick_state.buttons[ index ];
-
-#endif
-
 	else
 		return 0;
 }
@@ -1459,7 +1619,6 @@ int get_joystick_button(joystick_device_info *stick, int index) {
 
 void GetGUIDString(const int iDevice, char* theString)
 {
-#ifdef WIN32
 	DIDEVICEINSTANCE devInst;
 	char strTemp[MAX_PATH];
 	char strTemp2[MAX_PATH];
@@ -1492,7 +1651,6 @@ void GetGUIDString(const int iDevice, char* theString)
 	strcat(strTemp,"}");
 
 	strcpy(theString,strTemp);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -209,10 +209,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
-			value = WARHEAD_EFFECTIVE_STONE_BUILDING;
+			value = 10;
 
 			break;
 		}
@@ -247,7 +247,7 @@ void overload_pylon_int_value_functions (void)
 
 	fn_get_local_entity_int_value				[ENTITY_TYPE_PYLON][INT_TYPE_TASK_TARGET_TYPE]								= get_local_int_value;
 
-	fn_get_local_entity_int_value				[ENTITY_TYPE_PYLON][INT_TYPE_WARHEAD_EFFECTIVE_CLASS]						= get_local_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_PYLON][INT_TYPE_ARMOR_LEVEL]						= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

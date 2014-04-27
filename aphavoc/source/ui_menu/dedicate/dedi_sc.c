@@ -401,7 +401,7 @@ void dedicated_screen_update_function (ui_object *obj, void *arg)
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 		{
 
-			if (!get_connection_list_head ())
+//			if (!get_connection_list_head ())
 			{
 
 				debug_log ("DEDI_SC: Exiting game as no clients left");

@@ -100,25 +100,33 @@ const effect_data
       {
          FALSE,															// constructed locally
       },
-      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE
+      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING
       {
-         TRUE,																// constructed locally
+         FALSE,																// constructed locally
       },
-      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE
+      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING
       {
-         TRUE,																// constructed locally
+         FALSE,																// constructed locally
+      },
+      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC
+      {
+         FALSE,																// constructed locally
+      },
+      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC
+      {
+         FALSE,																// constructed locally
       },
       // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL
       {
          FALSE,															// constructed locally
       },
-      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE
-      {
-         TRUE,																// constructed locally
-      },
       // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE
       {
          TRUE,																// constructed locally
+      },
+      // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE
+      {
+         FALSE,																// constructed locally
       },
       // ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_RAIN
       {

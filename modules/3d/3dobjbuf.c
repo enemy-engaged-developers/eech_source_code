@@ -103,8 +103,8 @@ scene_slot_drawing_list
 
 float
 	middle_scene_slot_height;
-int
-	fog;
+static int
+	fog = FALSE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						// Hack in here to pre-load any textures on the object
 						//
 
-//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -410,7 +410,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						// Hack in here to pre-load any textures on the object
 						//
 
-//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -453,7 +453,12 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						buffer->z = *( ( int * ) &distance_bias );
 		
 						buffer->sprite.position = relative_position;
-						buffer->sprite.texture = sprite->texture;
+
+						if (sprite->additive && (active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME))
+							buffer->sprite.texture = system_textures[ texture_animations[TEXTURE_ANIMATION_INDEX_INFRARED_FLAME].texture_indices[0] ];
+						else
+							buffer->sprite.texture = sprite->texture;
+
 						buffer->sprite.radius = sprite->radius;
 						buffer->sprite.colour = sprite->colour;
 						buffer->sprite.additive = sprite->additive;
@@ -667,7 +672,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 						// Hack in here to pre-load any textures on the object
 						//
 
-//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -732,7 +737,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 						// Hack in here to pre-load any textures on the object
 						//
 
-//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -2086,8 +2091,26 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 
 				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
-
+//				set_d3d_int_state ( D3DRENDERSTATE_FOGENABLE, TRUE );
+//				set_d3d_int_state ( D3DRENDERSTATE_FOGTABLEMODE, D3DFOG_LINEAR );
+//				set_3d_fogmode ( active_3d_environment, FOGMODE_ON_MANUAL );
+//				set_3d_fog_distances ( active_3d_environment, 0.0, 10.0 );
+//				{
+//
+//					rgb_colour
+//						single_light_fog_colour;
+//
+//					single_light_fog_colour.r = 255;
+//					single_light_fog_colour.g = 255;
+//					single_light_fog_colour.b = 255;
+//					single_light_fog_colour.a = 255;
+//
+//					set_3d_fog_colour ( active_3d_environment, single_light_fog_colour );
+//				}
+//
+//				set_d3d_alpha_fog_zbuffer ( TRUE, TRUE, TRUE, FALSE );
 				draw_3d_sprite ( &object_order->sprite );
+//				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 
 				break;
 			}
@@ -2391,10 +2414,13 @@ void set_up_tnl_hardware ( void )
 
 			if ( count == 0 )
 			{
-	
+
 				light.dcvAmbient.r = ambient_3d_light.colour.red;
 				light.dcvAmbient.g = ambient_3d_light.colour.green;
 				light.dcvAmbient.b = ambient_3d_light.colour.blue;
+
+				if (active_3d_environment->render_filter == RENDER_INFRARED) // FLIR objects HW
+					light.dcvAmbient.r = light.dcvAmbient.g = light.dcvAmbient.b = 1.0;
 			}
 			else
 			{

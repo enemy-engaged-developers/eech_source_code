@@ -119,7 +119,7 @@ void update_kiowa_weapon_systems (void)
 	//
 	////////////////////////////////////////
 
-	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER) && (weapon_lock_type == WEAPON_LOCK_VALID))
+	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER) && (weapon_lock_type == WEAPON_LOCK_VALID))
 	{
 		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE);
 
@@ -181,7 +181,7 @@ void update_kiowa_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+		case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 		////////////////////////////////////////
 		{
 			if
@@ -354,21 +354,21 @@ void update_kiowa_weapon_systems (void)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 
 			if (fire_single_weapon >= 1)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 		}
 		else
 		{
 			apply_weapon_recoil_effect (en, weapon_sub_type);
 
-			launch_client_server_weapon (en, weapon_sub_type);
+			launch_client_server_weapon (en, weapon_sub_type, FALSE);
 		}
 	}
 	else

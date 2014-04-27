@@ -231,7 +231,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	//////////////////////////
@@ -302,7 +302,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -325,8 +325,8 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_ATAKA;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -383,7 +383,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// MID HARDPOINT
@@ -405,7 +405,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// OUTER HARDPOINT
@@ -427,7 +427,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// WINGTIP HARDPOINT
@@ -451,7 +451,7 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
-	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [5] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	//////////////////////////
@@ -522,7 +522,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -545,8 +545,8 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_VIKHR;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -600,13 +600,14 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->sub_object_depth1 = BLACKHAWK_LHS_OUTER_PYLON;
 	hardpoint_data->sub_object_depth2 = BLACKHAWK_RHS_OUTER_PYLON;
 
-	hardpoint_data->number_of_valid_weapon_types = 3;
+	hardpoint_data->number_of_valid_weapon_types = 4;
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 ////Moje 030519 End
 ////Moje 030613 start
@@ -640,7 +641,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND;
 
 	// INNER HARDPOINT
 
@@ -686,7 +687,7 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S5;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
-	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL;
+	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM;
 	hardpoint_data->valid_weapon_types [5] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// WINGTIP HARDPOINT
@@ -706,7 +707,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 ////moje 030613 end
@@ -805,7 +806,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	//////////////////////////
@@ -876,7 +877,7 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -899,8 +900,8 @@ void initialise_weapon_loading_gunship_database (void)
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
-	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_VIKHR;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S8;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
@@ -1032,9 +1033,9 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
-	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND;
 	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// OUTER HARDPOINT
@@ -1055,7 +1056,7 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 }
@@ -1281,23 +1282,21 @@ static void get_weapons_from_weapon_config (gunship_types gunship_type, weapon_c
 
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 	{
-		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		if (weapon_config_database[weapon_config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
-			break;
-		}
-
-		for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
-		{
-			wlht = &wlgt->hardpoint_list[hardpoint];
-
-			if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+			for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint++)
 			{
-				continue;
-			}
+				wlht = &wlgt->hardpoint_list[hardpoint];
 
-			if (weapon_config_database[weapon_config_type][package].heading_depth == wlht->sub_object_depth1)
-			{
-				current_weapon[hardpoint] = weapon_config_database[weapon_config_type][package].sub_type;
+				if (!wlht->valid || wlht->number_of_valid_weapon_types < 2)
+				{
+					continue;
+				}
+
+				if (weapon_config_database[weapon_config_type][package].heading_depth == wlht->sub_object_depth1)
+				{
+					current_weapon[hardpoint] = weapon_config_database[weapon_config_type][package].sub_type;
+				}
 			}
 		}
 	}
@@ -1478,8 +1477,8 @@ void weapon_loading_select_next_weapon (entity *en, weapon_loading_hardpoint_typ
 
 		// only allow AT6 on outer pylons if they're also loaded on wingtips
 		compare_hardpoint = &gunship_data->hardpoint_list[WEAPON_LOADING_HARDPOINT_WINGTIP];
-		if (compare_hardpoint->valid_weapon_types[compare_hardpoint->current_weapon_index] != ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL)
-			if (hardpoint_data->valid_weapon_types[hardpoint_data->current_weapon_index] == ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL)
+		if (compare_hardpoint->valid_weapon_types[compare_hardpoint->current_weapon_index] != ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM)
+			if (hardpoint_data->valid_weapon_types[hardpoint_data->current_weapon_index] == ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM)
 				hardpoint_data->current_weapon_index++;
 	}
 

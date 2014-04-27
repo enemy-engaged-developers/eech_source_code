@@ -171,6 +171,7 @@ object_3d_instance *construct_temporary_3d_object ( object_3d_index_numbers inde
 		object->object_sprite_lights = FALSE;
 		object->requires_immediate_render = FALSE;
 		object->object_dissolve_value = 255;
+		object->object_diffuse_value = 255;
 
 		if ( objects_3d_scene_database[index].number_of_texture_animations )
 		{

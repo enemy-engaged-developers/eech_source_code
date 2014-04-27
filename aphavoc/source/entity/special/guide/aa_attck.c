@@ -119,6 +119,13 @@ void attack_guide_move_six_reached (entity *en)
 		*aggressor,
 		*target;
 
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+		{
+			debug_log("AA_ATTCK: attack_guide_move_six_reached");
+		}
+	#endif
+
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
 	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
@@ -152,6 +159,13 @@ void attack_guide_move_circle_reached (entity *en)
 		*aggressor,
 		*target;
 
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+		{
+			debug_log("AA_ATTCK: attack_guide_move_circle_reached");
+		}
+	#endif
+
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
 	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
@@ -183,173 +197,76 @@ void attack_guide_fire_intercept_reached (entity *en)
 		*wp,
 		*task,
 		*aggressor,
-		*target;
+		*target,
+		*weapon;
 
-	entity_sub_types
-		selected_weapon;
-
-	vec3d
-		position,
-		*weapon_vector,
-		*weapon_to_target_vector;
-
-	float
-		distance,
-		terrain_elevation,
-		launch_angle_error;
-		
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+
+	ASSERT(target);
+	ASSERT(aggressor);
+
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+		{
+			debug_log("AA_ATTCK: attack_guide_fire_intercept_reached");
+		}
+	#endif
+
+	weapon = get_local_entity_first_child (aggressor, LIST_TYPE_LAUNCHED_WEAPON);
+
+	if (weapon)
+	{
+		weapon = get_local_entity_child_pred_circular(weapon, LIST_TYPE_LAUNCHED_WEAPON);
+
+		while (weapon)
+		{
+			if(weapon_database[get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE)].guidance_type)
+			{
+				#if DEBUG_MODULE
+					if (aggressor == get_external_view_entity ())
+					{
+						debug_log("AG_ATTCK: abort attack_guide_fire_intercept, another missile is still alive");
+
+					}
+				#endif
+
+				if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+					set_attack_guide_move_six_position (en);
+				else
+					set_attack_guide_move_circle_position (en);
+				return;
+			}
+
+			weapon = get_local_entity_child_pred (weapon, LIST_TYPE_LAUNCHED_WEAPON);
+		}
+	}
 
 	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
 	{
-		debug_log ("AA_ATTCK: Aborting attack - weapons hold (fire intercept)");
+		#if DEBUG_MODULE
+			if (en == get_external_view_entity ())
+			{
+				debug_log ("AA_ATTCK: Aborting attack - weapons hold (fire intercept)");
+			}
+		#endif
 
 		delete_group_member_from_engage_guide (aggressor, en, FALSE);
 
 		return;
 	}
 	
-	//
-	// Check if too close
-	//
-
-	if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
-	{
-		if (get_local_entity_float_value (aggressor, FLOAT_TYPE_DISTANCE) < 400.0)
-		{
-			//
-			// set MOVE SIX position
-			//
-
-			set_attack_guide_move_six_position (en);
-
-			return;
-		}
-	}
-	else
-	{
-		if (get_local_entity_float_value (aggressor, FLOAT_TYPE_DISTANCE) < 200.0)
-		{
-			//
-			// set MOVE CIRCLE position
-			//
-
-			set_attack_guide_move_circle_position (en);
-
-			return;
-		}
-	}
-
-	//
-	// check weapon vector
-	//
-
-	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
-
-	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
-
-	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
-	{
-		weapon_vector = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_WEAPON_VECTOR);
-
-		ASSERT (weapon_vector);
-
-		//
-		// Check launch angle error
-		//
-		
-		weapon_to_target_vector = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
-
-		ASSERT (weapon_to_target_vector);
-
-		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
-
-		if (fabs (launch_angle_error) > weapon_database[selected_weapon].max_launch_angle_error)
-		{
-			return;
-		}
-
-		//
-		// Check firing into ground
-		//
-
-		if (get_local_entity_int_value (aggressor, INT_TYPE_IDENTIFY_HELICOPTER))
-		{
-			get_local_entity_vec3d (aggressor, VEC3D_TYPE_POSITION, &position);
-	
-			distance = 120.0;
-	
-			position.x += (distance * weapon_vector->x);
-			position.y += (distance * weapon_vector->y);
-			position.z += (distance * weapon_vector->z);
-	
-			terrain_elevation = get_3d_terrain_elevation (position.x, position.z);
-	
-			if (position.y < terrain_elevation)
-			{
-				return;
-			}
-		}
-	}
-	else
-	{
-		return;
-	}
-
-	//
-	// Check target altitude
-	//
-	{
-		float
-			min_alt,
-			altitude;
-
-		int
-			seed;
-
-		altitude = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE);
-
-		min_alt = 10.0;
-
-		seed = get_client_server_entity_random_number_seed (aggressor);
-
-		min_alt *= (1.0 + (0.5 * frand1x (&seed)));
-
-		if (altitude < min_alt) 
-		{
-			return;
-		}
-	}
-
-	//
 	// Fire Weapon
-	//
 
-	aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL);
+	set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 20);
 
-	//
-	// check weapon
-	//
-
-	if (attack_guide_find_best_weapon (en))
-	{
-		if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+	if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL) == AIRCRAFT_FIRE_OK)
+		if (attack_guide_find_best_weapon (en))
 		{
-			//
-			// set MOVE SIX position
-			//
-
-			set_attack_guide_move_six_position (en);
+			if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+				set_attack_guide_move_six_position (en);
+			else
+				set_attack_guide_move_circle_position (en);
 		}
-		else
-		{
-			//
-			// set MOVE CIRCLE position
-			//
-
-			set_attack_guide_move_circle_position (en);
-		}
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,7 +463,7 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	target_range = get_3d_range (aggressor_pos, target_pos);
 
-	time = target_range / weapon_database [selected_weapon].cruise_velocity;
+	time = target_range / (0.75 * weapon_database[selected_weapon].cruise_velocity);
 
 	lead_distance = time * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY);
 

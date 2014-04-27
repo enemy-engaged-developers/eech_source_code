@@ -73,8 +73,8 @@ enum DISPLAY_3D_TINTS
 	DISPLAY_3D_TINT_GREEN_VISUAL,  // green tint, but visual
 	DISPLAY_3D_TINT_ORANGE,
 	DISPLAY_3D_TINT_ORANGE_VISUAL,
-	DISPLAY_3D_TINT_GREY,          // grey tint IR
-	DISPLAY_3D_TINT_GREY_VISUAL,   // grey tint, but visual
+	DISPLAY_3D_TINT_FLIR,          // grey tint IR
+	DISPLAY_3D_TINT_LLLTV,   // grey tint, but visual
 	DISPLAY_3D_TINT_BLUE,
 	DISPLAY_3D_TINT_BLUE_HAZE, // Jabberwock 031009 Satellite mode
 	DISPLAY_3D_TINT_BLUEGREEN,

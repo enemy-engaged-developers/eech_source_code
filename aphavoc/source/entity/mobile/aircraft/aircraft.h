@@ -102,7 +102,8 @@ struct AIRCRAFT
 		decoy_release_timer,
 		death_timer,
 		air_radar_contact_timeout,
-		rudder_state;
+		rudder_state,
+		weapon_launch_delay;
 
 	weapon_config_types
 		weapon_config_type;
@@ -201,6 +202,8 @@ typedef enum
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD 20.0
+
 //extern int get_local_aircraft_maneuver_complete (entity *en, float min_angle);
 
 extern aircraft_damage_types aircraft_critically_damaged (entity *en);
@@ -215,9 +218,15 @@ extern void play_aircraft_targeted_speech (entity *victim, entity *aggressor);
 
 extern void play_aircraft_flown_into_new_sector_speech (entity *en, entity *old_sector, entity *new_sector);
 
-extern void update_aircraft_damage_timers (void);
+extern void attach_aircraft_meta_smoke_lists (entity *en);
 
-extern int get_aircraft_send_damage_update_flag (void);
+extern void pack_aircraft_meta_smoke_lists (entity *en, pack_modes mode);
+
+extern void unpack_aircraft_meta_smoke_lists (entity *en, pack_modes mode);
+
+extern void assess_fixed_wing_damage_level (entity *en, int old_damage_level, int new_damage_level);
+
+extern void switch_aircraft_damaged_smoke (entity *en);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

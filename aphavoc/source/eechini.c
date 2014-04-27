@@ -753,8 +753,8 @@ static const struct config_option options[] =
 		INT(d3d_allow_paletted_textures) },
 	{ "eofullrange", "", "eo ranges near to max fog distance (and objects are drawn up to it) 1=yes 0=no",
 		INT(command_line_eo_full_range) },
-	{ "render-tree-shadows", "", "1=yes 0=no",
-		INT(command_line_render_tree_shadows) },
+	{ "render-shadows", "", "(0 = off, 1 = all objects except trees, 2 = all objects) (def = 2)",
+		INT(command_line_render_shadows) },
 	{ "trees-fog", "", "fog affects groups of trees (0 = off, 1 = on, 2 = auto off when fps less than 20, auto on when fps more than 30 ) (def = 2)",
 		INT(command_line_trees_fog) },
 	{ NULL, NULL, "",
@@ -791,8 +791,10 @@ static const struct config_option options[] =
 		INT(global_dynamic_water) },
 	{ "night_light", "", "night light darkness level (0.0 - 1.0) (0.0 = fully dark, 1.0 = less dark) (def = 1.0)",
 		FLOAT(global_night_light_level) },
-	{ "persistent_smoke", "", "Burning targets emitting smoke for a long time. [Warning!] CPU intensive. (0 = off, 1 = on) (def = 1)",
-		INT(command_line_persistent_smoke) },
+	{ "max_smoke_time", "", "Smoke and flame maximum time of life, affects only smokes with larger value (1 = 1 minute, 60 = 1 hour) (def = 5)",
+		INT(command_line_max_smoke_time) },
+	{ "smoke_optimisation", "", "Smoke generators quantity optimisation (0 = disabled, 1 = enabled) (def = 1)",
+		INT(command_line_smoke_optimisation) },
 	{ "cloud_puffs", "", "Cloud puffs. (0 = off, 1 = all maps except desert, 2 = all maps) (def = 1)",
 		INT(command_line_cloud_puffs) },
 	{ "cloud_puffs_colours", "", "colours for cloud puffs",
@@ -828,7 +830,7 @@ static const struct config_option options[] =
 		NONE },
 	{ "g-force_head_movement", "", "amount of head movement caused by gravitational force (wideview only) (n = Gs, 1.0 = normal, 0.0 = off) (default = 1.0)",
 		FLOAT(command_line_g_force_head_movment_modifier) },
-	{ "cockpit_vibrations", "", "threshold of visual vibrations caused by rotors and vertical overload (0.0 = off, 1.0 = overload only, above 1.0 = all) (default = 1.1)",
+	{ "cockpit_vibrations", "", "threshold of visual vibrations caused by rotors and vertical overload (0.0 = off, 1.0 = overload only, above 1.0 = both) (default = 1.1)",
 		FLOAT(command_line_cockpit_vibrations) },
 	{ "comanche_pilot", "", "wideview pilot position",
 		SPEC2(WIDEVIEW_COMANCHE_PILOT, set_position, get_position) },
@@ -867,7 +869,7 @@ static const struct config_option options[] =
 
 	{ NULL, "33", "[Dynamics]",
 		NONE },
-	{ "flight_model", "", "0 is default flight model, 1 is werewolf's adjustments of default flight model  (def = 0)",
+	{ "flight_model", "", "0 is default flight model, 1 is werewolf's adjustments of default FM, 2 - alternative pseudoreal FM  (def = 2)",
 		INT(command_line_dynamics_flight_model) },
 	{ "enginerealism", "", "realistic engine workload simulation model (0 = off, 1 = on) (def = 1)",
 		INT(command_line_dynamics_advanced_engine_model) },
@@ -891,12 +893,14 @@ static const struct config_option options[] =
 		FLOAT(command_line_dynamics_yaw_altitude_loss) },
 	{ "debug_show_force_vectors", "", "show force vectors on own helicopter for debuging purposes",
 		SPEC(set_force_vectors, get_force_vectors) },
+	{ "debug_show_damage", "", "show caused by weapons damage",
+		INT(command_line_debug_show_damage) },
 	{ NULL, NULL, "",
 		NONE },
 
 	{ NULL, "28", "[WUT]",
 		NONE },
-	{ NULL, NULL, "for more information see http://www.eechcentral.com/wiki/index.php?title=WUT",
+	{ NULL, NULL, "for more information see http://eechcentral.simhq.com/index.php?title=WUT_files",
 		NONE },
 	{ "wut", "", "Weapons and Unit Tweaking file (n = filename)",
 		SPECSTR(WUT_filename, set_wut, get_string) },
@@ -953,6 +957,8 @@ static const struct config_option options[] =
 		INT(command_line_mouse_tsd_target_select) },
 	{ "co_pilot_reports_targets", "", "Co-pilot will report targets he finds, and add them to TSD",
 		INT(global_co_pilot_scans_for_targets) },
+	{ "advanced_avionics", "", "Advanced avionics (Mi-28, Ka-50, Ka-52)",
+		INT(command_line_advanced_avionics) },
 	{ NULL, NULL, "",
 		NONE },
 
@@ -1010,6 +1016,14 @@ static const struct config_option options[] =
 		INT(command_line_reverse_cyclic_x) },
 	{ "reverse_cyclic_y", "", "reverse cyclic y axis (0 = off, 1 = on) (def = 0)",
 		INT(command_line_reverse_cyclic_y) },
+	{ "forcefeedback", "", "joystick force feedback effects and trim function (0 = off, 1 = on) (def = 1)",
+		INT(command_line_forcefeedback) },
+	{ "ffb_dynamics", "", "power of force feedback effects related to dynamic forces (when forcefeedback=1) (0 = off, 1 = normal gain) (def = 0.5)",
+		FLOAT(command_line_ffb_dynamics) },
+	{ "ffb_vibrations", "", "power of force feedback effects related to parasite vibrations (when forcefeedback=1) (0 = off, 1 = normal gain) (def = 0.5)",
+		FLOAT(command_line_ffb_vibrations) },
+	{ "ffb_recoil", "", "power of force feedback effects related to weapon recoil (when forcefeedback=1) (0 = off, 1 = normal gain) (def = 0.5)",
+		FLOAT(command_line_ffb_recoil) },
 	{ "msl", "mouselook", "activates mouselook (and TrackIR when present) (0 = off, 1 = internal, 2 = external, 3 = both) (def = 0)",
 		INT(command_line_mouse_look) },
 	{ "msls", "mousespeed", "mouselook speed (when msl=1) (n > 0) (def = 15), POV speed (when msl=0) (n > 0, max = 20) (def = 13)",
@@ -1079,6 +1093,8 @@ static const struct config_option options[] =
 		INT(command_line_sound_hdwrbuf) },
 	{ "canopy_sounds_amp", "", "canopy sounds amplifier controller",
 		SPEC(set_canopy_amp, get_canopy_amp) },
+	{ "real_radio_msgs", "", "radio messages volume and pitch control (0 = off, 1 = on) (def = 1)",
+		INT(command_line_real_radio_msgs) },
 	{ "ui_sounds_muted", "", "campaign UI mute (0 = normal UI sounds, 1 = UI sounds muted) (default = 0)",
 		INT(command_line_ui_sounds_muted) },
 	{ NULL, NULL, "",
@@ -1386,7 +1402,7 @@ void initialize_options ( void )
 
 	strcpy ( command_line_themes, "2" );
 
-	set_cloud_puffs_colours ( NULL, "220,230,255;230,230,255;235,235,255;245,245,255;250,250,255;255,255,255" );
+	set_cloud_puffs_colours ( NULL, "160,160,160;180,180,180;200,200,200;220,220,220;240,240,240;255,255,255" );
 }
 
 void process_ini_file (void)

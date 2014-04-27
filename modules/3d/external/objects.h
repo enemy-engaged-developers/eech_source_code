@@ -538,6 +538,7 @@ struct OBJECT_3D_INSTANCE // 92 bytes
 		object_has_shadow:1,
 		object_internal_lighting:1,
 		object_dissolve_value:8,
+		object_diffuse_value:8,
 		object_sprite_lights:1;
 
 	int

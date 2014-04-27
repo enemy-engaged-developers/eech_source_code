@@ -80,7 +80,7 @@ static char
 
 int
 	command_line_dynamics_advanced_engine_model			= TRUE,  //Werewolf 5 Feb 06
-	command_line_dynamics_flight_model					= 0,
+	command_line_dynamics_flight_model					= 2,
 	command_line_dynamics_engine_startup                = FALSE,  // arneh - july 06
 	command_line_report_to_masterserver						= FALSE,  //Werewolf 2 Jan 04 (arneh changed default to off - jan 2007)
 	command_line_debug_input									= FALSE,
@@ -161,7 +161,8 @@ int
 	command_line_no_dx9zbuffer_fix							= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 32, // Casm 03MAR10 32 bits by default
-	command_line_persistent_smoke								= TRUE,
+	command_line_max_smoke_time								= 5,
+	command_line_smoke_optimisation							= 1,
 	command_line_cloud_puffs								= 1, // Casm 20MAY2012
 	command_line_no_mission_complete_music					= FALSE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
@@ -208,7 +209,7 @@ int
 	command_line_pilot_as_periscope_default							= 0,     // GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
 	command_line_eo_full_range						= 0,		// GCsDriver  08-12-2007
-	command_line_render_tree_shadows							= 1,     // GCsDriver  08-12-2007
+	command_line_render_shadows							= 1,     // GCsDriver  08-12-2007
 	command_line_trees_fog										= 2,	// thealx 130430
 	command_line_fly_any_airplane								= TRUE,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
@@ -232,6 +233,7 @@ int
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_reverse_cyclic_x					= 0,	// /thealx/
 	command_line_reverse_cyclic_y					= 0,	// /thealx/
+	command_line_forcefeedback						= 1,	// /thealx/
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005
 	command_line_wobbly_camera				= TRUE,
@@ -241,6 +243,7 @@ int
 	command_line_mouse_tsd_target_select            = TRUE,
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	command_line_shared_mem_export					= 0,	// Retro 14Aug2006
+	command_line_advanced_avionics					= 1,	// /thealx/
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background
 	global_mipmapping									= 1,  //VJ 050530 mipmapping on/off
@@ -254,12 +257,13 @@ int
 	command_line_texture_colour					= 2,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_autosave							= 0,  //Casm 17JUN05 Autosave option
 	command_line_saves_copies							= 1,  // make backup copies of save files /thealx/
+	command_line_debug_show_damage						= 0,
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button					= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model					= FALSE, // camcom bugs removed
 	session_ground_radar_ignores_infantry		= 1,
-	session_camcom										= 0,
+	session_camcom										= 1,
 // Jabberwock 031118 ends
 // mue 070223 export_mfd
 	command_line_export_mfd						=FALSE,
@@ -269,7 +273,8 @@ int
 	command_line_export_mfd_left_pos[4]				={0,0,256,256},
 	command_line_export_mfd_right_pos[4]				={384,0,640,256},
 	command_line_export_mfd_single_pos[4]				={0,0,256,256},
-	command_line_ui_sounds_muted = TRUE; //ataribaby 29/12/2008 for muted UI sounds
+	command_line_ui_sounds_muted = FALSE, //ataribaby 29/12/2008 for muted UI sounds
+	command_line_real_radio_msgs = TRUE;		
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -283,19 +288,22 @@ float
 	command_line_collective_zone_1_limit					= 0.3,		// arneh 2007-01-14
 	command_line_collective_zone_2_limit					= 0.7,		// arneh 2007-01-14
 	command_line_collective_percentage_at_zone1					= 60.0,		// GCsDriver  08-12-2007
+	command_line_ffb_dynamics								= 0.5,	// /thealx/
+	command_line_ffb_vibrations								= 0.5,	// /thealx/
+	command_line_ffb_recoil									= 0.5,	// /thealx/
 	command_line_aitool_grid_pitch 							= 0.0,
 	command_line_comms_resend_timeout						= 2.0,
 	command_line_comms_packet_resend_timer 				= 5.0,
 	command_line_city_block_approximation_range 			= 500.0,
-	command_line_user_invulnerable_time						= 5.0,
+	command_line_user_invulnerable_time						= 1.0,
 	command_line_object_lod_factor							= 1.0,
 	command_line_fog_of_war_maximum_value 					= DEFAULT_FOG_OF_WAR_MAXIMUM_VALUE,
-	command_line_chaff_effectiveness							= 1.0,
-	command_line_flare_effectiveness							= 1.0,
+	command_line_chaff_effectiveness							= 0.5,
+	command_line_flare_effectiveness							= 0.5,
 	command_line_smoke_effectiveness							= 1.0,
 	command_line_g_force_head_movment_modifier					= 1.0,
 	command_line_cockpit_vibrations								= 1.1,
-	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
+	global_night_light_level					= 0.75,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0,	// VJ 050126 hud mod: size
 	global_mfd_size								= 1.0;
 

@@ -96,7 +96,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_M1A2_ABRAMS_1,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_M1A2_ABRAMS_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_M1A2_ABRAMS_1,						// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE,							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -132,7 +132,7 @@ vehicle_data
 			0.5,																// armour_rear
 
 			1500,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -158,7 +158,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_T80U_1,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_T80U_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_T80U_1,									// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND, 				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND, 				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE,							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -194,7 +194,7 @@ vehicle_data
 			0.5,																// armour_rear
 
 			1350,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -256,7 +256,7 @@ vehicle_data
 			0.5,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -318,7 +318,7 @@ vehicle_data
 			0.25,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -380,7 +380,7 @@ vehicle_data
 			0.25,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -406,7 +406,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_M113A2_1,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_M113A2_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_M113A2_1,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,  				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND,  				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE,							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -442,7 +442,7 @@ vehicle_data
 			0.5,																// armour_rear
 
 			800,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -468,7 +468,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_BTR80_1,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_BTR80_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_BTR80_1,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_KPVT_14P5MM_ROUND,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_WHEELED_VEHICLE, 							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -504,7 +504,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			800,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -566,7 +566,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			650,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -592,7 +592,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_BRDM2_1,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_BRDM2_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_BRDM2_1,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_KPVT_14P5MM_ROUND,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_WHEELED_VEHICLE,  							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,	 									// target_priority_type
@@ -628,7 +628,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			650,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -654,7 +654,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_M109A2_1,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_M109A2_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_M109A2_1,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,  				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND,  				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE, 							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -690,7 +690,7 @@ vehicle_data
 			0.25,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -716,7 +716,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_2S19_1,		 							// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_2S19_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_2S19_1,									// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE,  							// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,		 								// target_priority_type
@@ -752,7 +752,7 @@ vehicle_data
 			0.25,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -778,7 +778,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_M270_MLRS_1,							// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_M270_MLRS_1,							// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_M270_MLRS_1,							// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M26A1_227MM_ROCKET,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_TRACKED_VEHICLE,  							// target_symbol_type
 			TARGET_PRIORITY_LOW,	 		 								// target_priority_type
@@ -814,7 +814,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			700,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -876,7 +876,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			700,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -938,7 +938,7 @@ vehicle_data
 			0.25,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1000,7 +1000,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
+			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1062,7 +1062,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1088,7 +1088,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_M48A1_CHAPARRAL_1,	 				// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_M48A1_CHAPARRAL_1,	 				// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_M48A1_CHAPARRAL_1,	 				// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_CHAPARRAL,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_MIM_72G_CHAPARRAL,						// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1124,7 +1124,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1150,7 +1150,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_SA13_GOPHER_1,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_SA13_GOPHER_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_SA13_GOPHER_1,						// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_SA13_GOPHER,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_9M333,						// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1186,7 +1186,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			600,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1248,7 +1248,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			350,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1310,7 +1310,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			350,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1372,7 +1372,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			350,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1434,7 +1434,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			350,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1496,7 +1496,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			300,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1558,7 +1558,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			300,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE, 								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1620,7 +1620,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			300,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1646,7 +1646,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_TARAWA_CLASS_1,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_TARAWA_CLASS_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_TARAWA_CLASS_1,						// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_M242_25MM_ROUND,				// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M61A1_CIWS_20MM_ROUND,				// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_SHIP,											// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1682,7 +1682,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			12000,															// initial_damage_level
-			WARHEAD_EFFECTIVE_CARRIER,									// warhead_effective_class
+			WARHEAD_EFFECTIVE_CARRIER,									// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_HIGH,										// explosive_power
@@ -1708,7 +1708,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_KIEV_CLASS_1,		  					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KIEV_CLASS_1,		  					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KIEV_CLASS_1,		  					// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_SHIP,											// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1744,7 +1744,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			15000,															// initial_damage_level
-			WARHEAD_EFFECTIVE_CARRIER,									// warhead_effective_class
+			WARHEAD_EFFECTIVE_CARRIER,									// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_HIGH,										// explosive_power
@@ -1770,7 +1770,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_OLIVER_HAZARD_PERRY_CLASS_1,		// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_OLIVER_HAZARD_PERRY_CLASS_1,		// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_OLIVER_HAZARD_PERRY_CLASS_1,		// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_SM1MR_STANDARD,					// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_RIM_66B_STANDARD,					// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_SHIP,											// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1806,7 +1806,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			8000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_FRIGATE,									// warhead_effective_class
+			WARHEAD_EFFECTIVE_FRIGATE,									// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_HIGH,										// explosive_power
@@ -1832,7 +1832,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_KRIVAK_II_CLASS_1,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KRIVAK_II_CLASS_1,					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KRIVAK_II_CLASS_1,					// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_SAN4_GECKO,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_9M33_OSA,						// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_SHIP,											// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -1868,7 +1868,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			8000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_FRIGATE,									// warhead_effective_class
+			WARHEAD_EFFECTIVE_FRIGATE,									// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_HIGH,										// explosive_power
@@ -1930,7 +1930,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -1992,7 +1992,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -2018,7 +2018,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_AIST_CLASS_1,							// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AIST_CLASS_1,							// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AIST_CLASS_1,							// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_SHIP,											// target_symbol_type
 			TARGET_PRIORITY_HIGH, 		 								// target_priority_type
@@ -2054,7 +2054,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			1000,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_SHIP,								// armor_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,								// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,										// explosive_power
@@ -2077,10 +2077,10 @@ vehicle_data
 
 			OBJECT_3D_US_MARINE_WALK,									// default_3d_shape
 			ENTITY_FORCE_GROUND,                            	// force
-			WEAPON_CONFIG_TYPE_UNARMED,								// default_weapon_config_type
-			WEAPON_CONFIG_TYPE_UNARMED,								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_UNARMED,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,			 			// default_weapon_type
+			WEAPON_CONFIG_TYPE_US_INFANTRY_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_INFANTRY_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_INFANTRY_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M16A2_5P56MM_ROUND,			 			// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
 			TARGET_PRIORITY_LOW,			 								// target_priority_type
@@ -2116,7 +2116,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power
@@ -2178,7 +2178,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power
@@ -2240,7 +2240,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power
@@ -2263,10 +2263,10 @@ vehicle_data
 
 			OBJECT_3D_CIS_MARINE_WALK,									// default_3d_shape
 			ENTITY_FORCE_GROUND,                            	// force
-			WEAPON_CONFIG_TYPE_UNARMED,								// default_weapon_config_type
-			WEAPON_CONFIG_TYPE_UNARMED,								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_UNARMED,								// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,			 			// default_weapon_type
+			WEAPON_CONFIG_TYPE_CIS_INFANTRY_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_CIS_INFANTRY_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_CIS_INFANTRY_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_AK_47_7P62MM_ROUND,			 			// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
 			TARGET_PRIORITY_LOW,			 								// target_priority_type
@@ -2302,7 +2302,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power
@@ -2328,7 +2328,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_STANDING_1,		// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_STANDING_1,		// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_STANDING_1,		// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_SA7_GRAIL,			 			// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3,			 			// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -2364,7 +2364,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power
@@ -2390,7 +2390,7 @@ vehicle_data
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_KNEELING_1,		// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_KNEELING_1,		// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_CIS_INFANTRY_SAM_KNEELING_1,		// max_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_SA7_GRAIL,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3,						// default_weapon_type
 			TARGET_TYPE_GROUND,											// target_type
 			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
 			TARGET_PRIORITY_HIGH,		 								// target_priority_type
@@ -2426,7 +2426,7 @@ vehicle_data
 			0.0,																// armour_rear
 
 			20,																// initial_damage_level
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// warhead_effective_class
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
 
 			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
 			EXPLOSIVE_POWER_LOW,											// explosive_power

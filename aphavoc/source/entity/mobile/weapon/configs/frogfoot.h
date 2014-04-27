@@ -145,7 +145,7 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_AO17A_30MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_GSH_2_30_30MM_ROUND,				// sub_type
 				NUM_CANNON_ROUNDS,	 										// number
 				CANNON,				 											// heading_depth
 				CANNON_BARREL,			  										// pitch_depth
@@ -167,7 +167,7 @@
 			},
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				LHS_HARDPOINT1,												// heading_depth
 				B8_POD,			  												// pitch_depth
@@ -189,7 +189,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				RHS_HARDPOINT1,												// heading_depth
 				B8_POD,			  												// pitch_depth
@@ -211,7 +211,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				LHS_HARDPOINT2,												// heading_depth
 				B8_POD,			  												// pitch_depth
@@ -233,7 +233,7 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				RHS_HARDPOINT2,												// heading_depth
 				B8_POD,			  												// pitch_depth
@@ -343,7 +343,7 @@
 			},
 			// WEAPON PACKAGE 12
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA8A_APHID,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_60,						// sub_type
 				NUM_APHID_MISSILES,											// number
 				LHS_HARDPOINT5,												// heading_depth
 				APHID_PYLON,													// pitch_depth
@@ -365,7 +365,7 @@
 			},
 			// WEAPON PACKAGE 13
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA8A_APHID,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_60,						// sub_type
 				NUM_APHID_MISSILES,											// number
 				RHS_HARDPOINT5,												// heading_depth
 				APHID_PYLON,													// pitch_depth

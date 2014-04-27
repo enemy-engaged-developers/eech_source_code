@@ -268,7 +268,7 @@ static void kill_local (entity *en)
 
 		pos.y = get_3d_terrain_elevation (pos.x, pos.z);
 
-		create_client_server_crater (CRATER_TYPE_LARGE_EXPLOSION, &pos);
+		create_client_server_crater (CRATER_TYPE_SMALL_EXPLOSION, &pos);
 	}
 
 	//

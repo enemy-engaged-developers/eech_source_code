@@ -83,8 +83,10 @@ static void update_server (entity *en)
 	ship_vehicle
 		*raw;
 
-	int
-		loop;
+	int	
+		loop,
+		damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL),
+		explosive_quality = get_local_entity_int_value (en, INT_TYPE_EXPLOSIVE_QUALITY);
 
 	raw = (ship_vehicle *) get_local_entity_data (en);
 
@@ -94,7 +96,19 @@ static void update_server (entity *en)
 
 	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
-	if (raw->vh.mob.alive)
+	// fire damage
+	
+	if (damage_level && (explosive_quality & EXPLOSIVE_QUALITY_EXPLOSIVE || explosive_quality & EXPLOSIVE_QUALITY_FLAMMABLE) && 
+			vehicle_critically_damaged(en) && frand1() < 2 * get_delta_time())
+	{
+		damage_level -= 1;
+		set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+
+		if (damage_level <= 0)
+			kill_client_server_entity (en);
+	}
+
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 
 		////////////////////////////////////////
@@ -120,14 +134,16 @@ static void update_server (entity *en)
 
 		update_vehicle_weapon_system_ready (en);
 
-		suppress_ineffective_ship_weapons (en);
-
 		update_entity_weapon_systems (en);
 
 		update_entity_weapon_system_weapon_and_target_vectors (en);
 
 		update_vehicle_weapon_fire (en);
 
+		rearm_vehicle_weapons(en);
+		
+		update_vehicle_missile_defence(en);
+				
 		if (tacview_is_logging() && command_line_tacview_logging < 3)
 		{
 			// for modes < 3 we have to check if it's visible now and add or remove it accordingly
@@ -138,7 +154,7 @@ static void update_server (entity *en)
 		//
 		////////////////////////////////////////
 	}
-	else
+	else if (!raw->vh.mob.alive) // do not sink ship until it burn out!
 	{
 		for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 		{
@@ -168,7 +184,7 @@ static void update_client (entity *en)
 
 	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
-	if (raw->vh.mob.alive)
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 
 		////////////////////////////////////////
@@ -192,12 +208,12 @@ static void update_client (entity *en)
 
 		update_vehicle_weapon_system_ready (en);
 
-		suppress_ineffective_ship_weapons (en);
-
 		update_entity_weapon_systems (en);
 
 		update_entity_weapon_system_weapon_and_target_vectors (en);
 
+		rearm_vehicle_weapons(en);
+		
 		//
 		////////////////////////////////////////
 		
@@ -208,7 +224,7 @@ static void update_client (entity *en)
 			write_tacview_unit_update(en, FALSE, FALSE, FALSE);
 		}
 	}
-	else
+	else if (!raw->vh.mob.alive) // do not sink ship until it burn out!
 	{
 		for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 		{

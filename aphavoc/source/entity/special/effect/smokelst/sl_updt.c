@@ -129,7 +129,8 @@ int update_smoke( entity *en )
 		new_pos,
 		interpolated_pos,
 		d,
-		initial_velocity;
+		initial_velocity,
+		motion_vector;
 
 	int
 		create_loop,
@@ -137,7 +138,8 @@ int update_smoke( entity *en )
 		last_index,
 		last_tail,
 		number_of_slots,
-		number_of_frames;
+		number_of_frames,
+		draw_last = FALSE;
 
 	smoke_list_types
 		smoke_type;
@@ -148,7 +150,7 @@ int update_smoke( entity *en )
 
 	#if DEBUG_MODULE
 
-	debug_log ("SL_UPDT: update smoke");
+//	debug_log ("SL_UPDT: update smoke");
 
 	#endif
 
@@ -157,6 +159,8 @@ int update_smoke( entity *en )
 	number_of_slots = raw->smoke_lifetime / raw->frequency;
 
 	smoke_type = raw->smoke_type;
+
+	motion_vector.x = motion_vector.y = motion_vector.z = 0;
 
 	//
 	// Check if the entity should stop producing more smoke
@@ -203,7 +207,13 @@ int update_smoke( entity *en )
 	{
 		if ( !(raw->infinite_generator) )
 		{
-			raw->generator_lifetime -= get_delta_time ();
+			if (get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE && raw->alive_count) // do not create additional smoke puffs for guns /thealx/
+				raw->generator_lifetime = - get_delta_time ();
+			else
+				raw->generator_lifetime -= get_delta_time ();
+			
+			if (raw->generator_lifetime <= 0.0 && smoke_list_draw_mode( smoke_type ) == SMOKE_DRAW_TYPE_TRAILS) // make sure we got last trail point
+				draw_last = TRUE;
 		}
 	}
 
@@ -211,8 +221,20 @@ int update_smoke( entity *en )
 	// Create / Destroy individual smoke points
 	//
 
-	raw->smoke_sleep -= get_delta_time ();
+	if ( raw->alive_count == 1 && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL )
+		raw->smoke_sleep -= 5 * get_delta_time (); // make second point as soon as possible
+	else if (raw->eff.special_effect_link.parent && (smoke_type == SMOKE_LIST_TYPE_FLAME || smoke_type == SMOKE_LIST_TYPE_FIRE || smoke_type == SMOKE_LIST_TYPE_SMALL_FIRE)) // do not create flame for moving object
+	{
+		float parent_velocity = get_local_entity_float_value(raw->eff.special_effect_link.parent, FLOAT_TYPE_VELOCITY);
 
+		if (parent_velocity < 5)
+			raw->smoke_sleep -= get_delta_time ();
+	}
+	else if (draw_last) // make sure we got last trail point
+		raw->smoke_sleep = - get_delta_time();
+	else
+		raw->smoke_sleep -= get_delta_time ();
+	
 	create_count = 0;
 
 	while ( raw->smoke_sleep < 0.0 )
@@ -270,7 +292,7 @@ int update_smoke( entity *en )
 		}	
 	}
 
-	if ( ( create_count > 0 ) && ( raw->generator_lifetime > 0.0 ) )
+	if ( ( create_count > 0 ) && ( raw->generator_lifetime > 0.0 || draw_last ) )
 	{
 
 		//
@@ -286,6 +308,30 @@ int update_smoke( entity *en )
 		debug_log("SMOKE LIST : creating %d new points", create_count);
 
 		#endif
+
+		
+		if (raw->eff.special_effect_link.parent)
+		{
+			matrix3x3
+				attitude;
+
+			get_local_entity_attitude_matrix(raw->eff.special_effect_link.parent, &attitude);
+
+			if (!raw->alive_count && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL && smoke_list_draw_mode( smoke_type ) == SMOKE_DRAW_TYPE_TRAILS) // move 1st trail point backward
+				motion_vector.z = - 20;
+			else if (get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE) // move gun smoke forward
+				motion_vector.z = 20;
+			else if (smoke_type == SMOKE_LIST_TYPE_REAR_SHIP_WAKE || smoke_type == SMOKE_LIST_TYPE_FRONT_SHIP_WAKE) // move ship wake backward
+				motion_vector.z = - 10;
+
+			multiply_matrix3x3_vec3d(&motion_vector, &attitude, &motion_vector);
+
+			motion_vector.y /= 2.5; // can't find what is wrong..
+		}
+
+		motion_vector.x += initial_velocity.x;
+		motion_vector.y += initial_velocity.y;
+		motion_vector.z += initial_velocity.z;
 
 		if ( smoke_list_draw_mode( smoke_type ) == SMOKE_DRAW_TYPE_TRAILS )
 		{
@@ -314,7 +360,7 @@ int update_smoke( entity *en )
 					
 			if ( distance > 0.0 )
 			{
-	
+
 				if ( ( create_count > 1 ) && ( raw->valid[ last_index ] ) )
 				{
 	
@@ -331,8 +377,7 @@ int update_smoke( entity *en )
 						interpolated_pos.y = last_pos->y + ( d.y * t );
 						interpolated_pos.z = last_pos->z + ( d.z * t );
 		
-						create_new_point( en, &interpolated_pos, &initial_velocity, smoke_type, number_of_slots );
-			
+						create_new_point( en, &interpolated_pos, &motion_vector, smoke_type, number_of_slots );
 					}
 				}
 	
@@ -340,7 +385,7 @@ int update_smoke( entity *en )
 				// create new point at current position
 				//
 	
-				create_new_point( en, &new_pos, &initial_velocity, smoke_type, number_of_slots );
+				create_new_point( en, &new_pos, &motion_vector, smoke_type, number_of_slots );
 			}
 		}
 		else
@@ -355,7 +400,7 @@ int update_smoke( entity *en )
 				// create new point at current position
 				//
 
-				create_new_point( en, &new_pos, &initial_velocity, smoke_type, number_of_slots );
+				create_new_point( en, &new_pos, &motion_vector, smoke_type, number_of_slots );
 			}
 		}
 	}
@@ -424,9 +469,14 @@ void create_new_point( entity *en, vec3d *new_pos, vec3d *initial_velocity, smok
 		*raw;
 
 	float
-		iv_noise;
+		iv_noise = 0;
+	
+	smoke_list_data
+		*smoke_info;
 	
 	raw = (smoke_list *) get_local_entity_data( en );
+
+	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 
 	//
 	// set position
@@ -442,7 +492,8 @@ void create_new_point( entity *en, vec3d *new_pos, vec3d *initial_velocity, smok
 	// set intital motion vector
 	//
 
-	iv_noise = smoke_list_initial_velocity_noise( smoke_type );
+	if(!(smoke_list_draw_mode( smoke_type ) == SMOKE_DRAW_TYPE_TRAILS && raw->alive_count < 4)) // do not displace first trail points
+		iv_noise = smoke_list_initial_velocity_noise( smoke_type );
 
 	raw->motion_vector[ raw->head ].x = initial_velocity->x + ( sfrand1() * iv_noise );
 	raw->motion_vector[ raw->head ].z = initial_velocity->z + ( sfrand1() * iv_noise );
@@ -460,11 +511,14 @@ void create_new_point( entity *en, vec3d *new_pos, vec3d *initial_velocity, smok
 	// give random rotation value
 	//
 
-	raw->start_rotation[ raw->head ] = sfrand1() * PI;
+	if (!smoke_info->flat)
+		raw->start_rotation[ raw->head ] = sfrand1() * PI;
+	else
+		raw->start_rotation[ raw->head ] = 0;
 
 	#if DEBUG_MODULE
 
-	debug_log( "SMOKE LIST : Creating Point at %f, %f, %f ", head_pos->x, head_pos->y, head_pos->z );
+	debug_log( "SMOKE LIST : Creating Point %i at %f, %f, %f ", raw->head, head_pos->x, head_pos->y, head_pos->z );
 
 	#endif
 

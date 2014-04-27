@@ -174,6 +174,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_WEAPON_LAUNCH_DELAY:
+		////////////////////////////////////////
+		{
+			raw->weapon_launch_delay = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_WEAPON_SYSTEM_READY_STATE:
 		////////////////////////////////////////
 		{
@@ -651,6 +659,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_WEAPON_LAUNCH_DELAY:
+		////////////////////////////////////////
+		{
+			value = raw->weapon_launch_delay;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_WEAPON_SYSTEM_READY_STATE:
 		////////////////////////////////////////
 		{
@@ -802,6 +818,12 @@ void overload_aircraft_float_value_functions (entity_types type)
 	fn_set_local_entity_raw_float_value			[type][FLOAT_TYPE_WEAPON_BURST_TIMER]										= set_local_float_value;
 	fn_set_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_BURST_TIMER]										= set_local_float_value;
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_BURST_TIMER]										= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value  		[type][FLOAT_TYPE_WEAPON_LAUNCH_DELAY]												= set_local_float_value;
+	fn_set_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_LAUNCH_DELAY]												= set_local_float_value;
+	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_WEAPON_LAUNCH_DELAY][COMMS_MODEL_SERVER]					= set_server_float_value;
+	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_WEAPON_LAUNCH_DELAY][COMMS_MODEL_CLIENT]					= set_client_float_value;
+	fn_get_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_LAUNCH_DELAY]												= get_local_float_value;
 
 	fn_set_local_entity_raw_float_value			[type][FLOAT_TYPE_WEAPON_SYSTEM_READY_STATE]								= set_local_float_value;
 	fn_set_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_SYSTEM_READY_STATE]								= set_local_float_value;

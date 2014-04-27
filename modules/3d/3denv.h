@@ -69,9 +69,7 @@ enum RENDER_FILTERS
 {
 	RENDER_INVALID,
 	RENDER_CLEAR,
-	INFRARED_OFF = RENDER_CLEAR,
 	RENDER_INFRARED,
-	INFRARED_ON = RENDER_INFRARED,
 	RENDER_MONOCHROME,
 };
 
@@ -587,7 +585,6 @@ extern render_filters get_3d_render_filter ( env_3d *env );
 
 extern rgb_colour get_3d_fog_colour ( env_3d *env );
 
-extern int get_monochrome_mode (env_3d* env);
 //
 // Recalculating the environment
 //

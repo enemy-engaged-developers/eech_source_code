@@ -215,10 +215,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_HARD_DAMAGE_CAPABILITY:
+		case INT_TYPE_ARMOR_PENETRATION_CAPABILITY:
 		////////////////////////////////////////
 		{
-			value = weapon_database[raw->mob.sub_type].hard_damage_capability;
+			value = weapon_database[raw->mob.sub_type].armor_penetration_capability;
 
 			break;
 		}
@@ -231,10 +231,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_SOFT_DAMAGE_CAPABILITY:
+		case INT_TYPE_DAMAGE_CAPABILITY:
 		////////////////////////////////////////
 		{
-			value = weapon_database[raw->mob.sub_type].soft_damage_capability;
+			value = weapon_database[raw->mob.sub_type].damage_capability;
 
 			break;
 		}
@@ -319,6 +319,22 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_WEAPON_ROCKET:
+		////////////////////////////////////////
+		{
+			value = (weapon_database[raw->mob.sub_type].boost_time > 0);
+
+			break;
+		}
+		////////////////////////////////////////
+		case INT_TYPE_ARMOR_LEVEL:
+		////////////////////////////////////////
+		{
+			value = 1;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -339,11 +355,11 @@ void overload_weapon_int_value_functions (void)
 {
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_DEFAULT_3D_SHAPE]				= get_local_int_value;
 
-	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_HARD_DAMAGE_CAPABILITY]		= get_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_ARMOR_PENETRATION_CAPABILITY]		= get_local_int_value;
 
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_IDENTIFY_WEAPON]				= get_local_int_value;
 
-	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_SOFT_DAMAGE_CAPABILITY]		= get_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_DAMAGE_CAPABILITY]		= get_local_int_value;
 
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_THREAT_TYPE]					= get_local_int_value;
 
@@ -371,6 +387,8 @@ void overload_weapon_int_value_functions (void)
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE]	= get_local_int_value;
 
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_WARHEAD_TYPE]			= get_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_ROCKET]			= get_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_ARMOR_LEVEL]						= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

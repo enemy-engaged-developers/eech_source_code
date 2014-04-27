@@ -1084,6 +1084,7 @@ void read_population_city_placements ( FILE *fp )
 	
 				keysite_pos.x = x;
 				keysite_pos.z = current_map_max_z - z;
+				ASSERT(point_inside_map_area(&keysite_pos));
 				keysite_pos.y = get_3d_terrain_point_data ( keysite_pos.x, keysite_pos.z, NULL );
 
 				ASSERT (point_inside_adjusted_map_area (&keysite_pos));
@@ -1152,7 +1153,15 @@ void read_population_city_placements ( FILE *fp )
 
 				default:
 				{
-
+					{
+						vec3d pos;
+						pos.x = x;
+						pos.y = 0;
+						pos.z = z;
+						
+						ASSERT(point_inside_map_area(&pos));
+					}
+					
 					y = get_3d_terrain_point_data ( x, z, NULL );
 
 					break;
@@ -1292,6 +1301,14 @@ void read_population_city_placements ( FILE *fp )
 
 					if ( ( temporary_templates[index].type == TEMPLATE_TYPE_FARM ) || ( population_file_version2 ) )
 					{
+						{
+							vec3d pos;
+							pos.x = world_x;
+							pos.y = 0;
+							pos.z = world_z;
+
+							ASSERT(point_inside_map_area(&pos));
+						}
 
 						world_y = get_3d_terrain_point_data ( world_x, world_z, NULL );
 					}
@@ -1496,6 +1513,16 @@ void read_population_airfield_placements ( FILE *fp )
 		fread ( &z, sizeof ( float ), 1, fp );
 
 		z = current_map_max_z - z;
+
+		{
+			vec3d pos;
+			pos.x = x;
+			pos.y = 0;
+			pos.z = z;
+
+			ASSERT(point_inside_map_area(&pos));
+		}
+
 		y = get_3d_terrain_point_data ( x, z, NULL );
 
 		fread ( &string_length, sizeof ( int ), 1, fp );
@@ -1612,6 +1639,15 @@ void read_population_airfield_placements ( FILE *fp )
 				terrain_types
 					type;
 	
+				{
+					vec3d pos;
+					pos.x = x;
+					pos.y = 0;
+					pos.z = z;
+
+					ASSERT(point_inside_map_area(&pos));
+				}
+
 				get_3d_terrain_point_data ( x, z, NULL );
 	
 				type = get_3d_terrain_point_data_type ( NULL );
@@ -2090,6 +2126,8 @@ void read_population_sam_placements ( FILE *fp )
 		fread ( &pos.z, sizeof ( float ), 1, fp );
 
 		pos.z = current_map_max_z - pos.z;
+
+		ASSERT(point_inside_map_area(&pos));
 
 		pos.y = get_3d_terrain_point_data ( pos.x, pos.z, NULL );
 
@@ -2977,10 +3015,21 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 		waypoint_world_pos.y = position->y + route_waypoint_positions[current_route_waypoint_offset].position.y;
 		waypoint_world_pos.z = position->z + route_waypoint_positions[current_route_waypoint_offset].position.z;
 
+		ASSERT(point_inside_map_area(&waypoint_world_pos));
+
 		height_offset = 0;
 
 		for ( offset_index = 0; offset_index < route_waypoint_positions[current_route_waypoint_offset].number_of_positions; offset_index++ )
 		{
+
+			{
+				vec3d pos;
+				pos.x = waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x;
+				pos.y = 0;
+				pos.z = waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z;
+
+				ASSERT(point_inside_map_area(&pos));
+			}
 
 			terrain_height = get_3d_terrain_point_data ( waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x,
 																		waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z, NULL );
@@ -2999,6 +3048,7 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 // ensure the waypoint elevation (y coord) is at the terrain elevation or higher (because ships are 20m above sealevel)
 // and add 10 cm to the elevation to ensure the aircraft touch the ground when landing, 
 // this seems to trigger a change of status
+		ASSERT(point_inside_map_area(&waypoint_world_pos));
 		waypoint_world_pos.y = max(waypoint_world_pos.y,get_3d_terrain_point_data (waypoint_world_pos.x,waypoint_world_pos.z, NULL ));		
 		waypoint_world_pos.y += 0.1;
 //VJ FARP bug, date: 18-mar-03, end
@@ -3027,6 +3077,14 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 			for ( offset_index = 0; offset_index < route_waypoint_positions[current_route_waypoint_offset].number_of_positions; offset_index++ )
 			{
+				{
+					vec3d pos;
+					pos.x = waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x;
+					pos.y = 0;
+					pos.z = waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z;
+
+					ASSERT(point_inside_map_area(&pos));
+				}
 
 				terrain_height = get_3d_terrain_point_data ( waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x,
 																			waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z, NULL );
@@ -3081,6 +3139,14 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 		for ( offset_index = 0; offset_index < route_waypoint_positions[current_route_waypoint_offset].number_of_positions; offset_index++ )
 		{
+			{
+				vec3d pos;
+				pos.x = waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x;
+				pos.y = 0;
+				pos.z = waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z;
+
+				ASSERT(point_inside_map_area(&pos));
+			}
 
 			terrain_height = get_3d_terrain_point_data ( waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x,
 																		waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z, NULL );
@@ -3120,6 +3186,14 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 			for ( offset_index = 0; offset_index < route_waypoint_positions[current_route_waypoint_offset].number_of_positions; offset_index++ )
 			{
+				{
+					vec3d pos;
+					pos.x = waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x;
+					pos.y = 0;
+					pos.z = waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z;
+
+					ASSERT(point_inside_map_area(&pos));
+				}
 
 				terrain_height = get_3d_terrain_point_data ( waypoint_world_pos.x + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].x,
 																			waypoint_world_pos.z + route_waypoint_positions[current_route_waypoint_offset].offsets[offset_index].z, NULL );

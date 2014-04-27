@@ -118,6 +118,11 @@ void draw_local_city_building_object (entity *en, float range)
 	
 			inst3d->object_has_shadow = FALSE;
 	
+			if (active_3d_environment->render_filter == RENDER_INFRARED)
+				inst3d->object_diffuse_value = 64;
+			else if (active_3d_environment->render_filter == RENDER_MONOCHROME)
+				inst3d->object_diffuse_value = 32;
+
 			insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
 		}
 	}

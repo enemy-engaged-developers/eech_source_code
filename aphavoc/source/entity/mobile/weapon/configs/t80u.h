@@ -125,7 +125,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_AT11_SNIPER,	 			 		// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M119M_INVAR,	 			 		// sub_type
 				NUM_SNIPER_MISSILES,		 	  								// number
 				MAIN_GUN_TURRET,			 	 								// heading_depth
 				MAIN_GUN_BARREL,	 	 		 								// pitch_depth
@@ -149,7 +149,7 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND,				// sub_type
 				NUM_MACHINE_GUN_ROUNDS,		 	  							// number
 				MACHINE_GUN_TURRET,			 	 							// heading_depth
 				MACHINE_GUN_BARREL,	 	 		 							// pitch_depth

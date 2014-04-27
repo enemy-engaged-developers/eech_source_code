@@ -82,7 +82,9 @@
 //
 ////////////////////////////////////////
 
-//#define LIST_TYPE_ROOT_FUNCTIONS_REQUIRED
+#define LIST_TYPE_ROOT_FUNCTIONS_REQUIRED
+
+#define LIST_TYPE_TASK_DEPENDENT_ROOT
 
 ////////////////////////////////////////
 //

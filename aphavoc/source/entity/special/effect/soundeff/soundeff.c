@@ -613,6 +613,9 @@ entity *create_local_sound_effect_entity
 			if (get_global_gunship_side () == side)
 			{
 				amp = adjust_radio_message_amplification (amp, &pos);
+
+				if (command_line_real_radio_msgs)
+					pitch -= 0.1 * frand1();
 			}
 			else
 			{	

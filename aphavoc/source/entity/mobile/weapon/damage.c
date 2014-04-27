@@ -89,103 +89,9 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int weapon_damage_capability (entity_sub_types weapon_type, entity *target, int direct_hit);
+extern int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier, entity_sub_types weapon_type, float velocity);
 
 static float get_player_damage_modifier (entity *en);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct WARHEAD_DAMAGE_DATA
-{
-	int
-		effective_targets;
-};
-
-typedef struct WARHEAD_DAMAGE_DATA warhead_damage_data;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-const warhead_damage_data
-	warhead_damage_database [NUM_WEAPON_WARHEAD_TYPES] =
-	{
-		//
-		//	WEAPON_WARHEAD_TYPE_NONE
-		//
-		{
-			WARHEAD_EFFECTIVE_NONE
-		},
-
-		//
-		//	WEAPON_WARHEAD_TYPE_BALL
-		//
-		{
-			WARHEAD_EFFECTIVE_HELICOPTER +
-			WARHEAD_EFFECTIVE_FIXED_WING +
-			WARHEAD_EFFECTIVE_INFANTRY +
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE +
-			WARHEAD_EFFECTIVE_LIGHT_BUILDING
-		},
-
-		//
-		//	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE
-		//
-		{
-			WARHEAD_EFFECTIVE_HELICOPTER +
-			WARHEAD_EFFECTIVE_FIXED_WING +
-			WARHEAD_EFFECTIVE_INFANTRY +
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE +
-			WARHEAD_EFFECTIVE_LIGHT_SHIP +
-			WARHEAD_EFFECTIVE_WOOD_BRIDGE +
-			WARHEAD_EFFECTIVE_STONE_BRIDGE +
-			WARHEAD_EFFECTIVE_LIGHT_BUILDING +
-			WARHEAD_EFFECTIVE_STONE_BUILDING
-		},
-
-		//
-		//	WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING
-		//
-		{
-			WARHEAD_EFFECTIVE_HELICOPTER +
-			WARHEAD_EFFECTIVE_FIXED_WING +
-			WARHEAD_EFFECTIVE_INFANTRY +
-//			WARHEAD_EFFECTIVE_LIGHT_VEHICLE +			// To favour H.E. weapons over A.P.
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE +
-			WARHEAD_EFFECTIVE_LIGHT_SHIP +
-			WARHEAD_EFFECTIVE_WOOD_BRIDGE +
-			WARHEAD_EFFECTIVE_STONE_BRIDGE +
-//			WARHEAD_EFFECTIVE_LIGHT_BUILDING +			// To favour H.E. weapons over A.P.
-			WARHEAD_EFFECTIVE_STONE_BUILDING
-		},
-
-		//
-		//	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK
-		//
-		{
-			WARHEAD_EFFECTIVE_HELICOPTER +
-			WARHEAD_EFFECTIVE_FIXED_WING +
-			WARHEAD_EFFECTIVE_INFANTRY	 +
-			WARHEAD_EFFECTIVE_LIGHT_VEHICLE +
-			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE +
-			WARHEAD_EFFECTIVE_LIGHT_SHIP +
-			WARHEAD_EFFECTIVE_FRIGATE +
-			WARHEAD_EFFECTIVE_CARRIER +
-			WARHEAD_EFFECTIVE_WOOD_BRIDGE +
-			WARHEAD_EFFECTIVE_STONE_BRIDGE +
-			WARHEAD_EFFECTIVE_METAL_BRIDGE +
-			WARHEAD_EFFECTIVE_LIGHT_BUILDING +
-			WARHEAD_EFFECTIVE_STONE_BUILDING +
-			WARHEAD_EFFECTIVE_HARDENED_BUILDING
-		},
-
-		//
-		//	WEAPON_WARHEAD_TYPE_SMOKE_GRENADE
-		//
-		{
-			WARHEAD_EFFECTIVE_NONE
-		},
-	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,10 +105,6 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	weapon_warhead_types
 		warhead_type;
-
-	float
-		temp_damage,
-		armour_thickness;
 
 	ASSERT (en);
 
@@ -234,8 +136,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 		switch (warhead_type)
 		{
-			case WEAPON_WARHEAD_TYPE_BALL:
-			case WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING:
+			case WEAPON_WARHEAD_TYPE_SOLID_SHOT:
 			{
 				if (get_local_entity_index (weapon) & 1)
 				{
@@ -250,8 +151,10 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 				break;
 			}
-			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
 			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT:
 			{
 				if (get_local_entity_index (weapon) & 1)
 				{
@@ -329,44 +232,10 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL);
 
-	damage_capability = weapon_damage_capability (get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE), en, (damage_modifier == 1.0));
+	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, FALSE, FALSE);
 
 	if (damage_capability > 0)
 	{
-		//
-		// weapon is capable of doing damage
-		//
-
-		temp_damage = (float)damage_capability;
-
-		temp_damage *= damage_modifier;
-
-		if (damage_modifier == (float) 1.0)
-		{
-			//
-			// direct hit - compensate for armour thickness
-			//
-
-			armour_thickness = get_local_entity_armour_thickness (en, weapon);
-
-			temp_damage -= temp_damage * armour_thickness * 2.0 / 3.0;
-		}
-
-		//
-		// add +/- 10% random tolerance
-		//
-
-		temp_damage += (temp_damage * 0.1 * sfrand1 ());
-
-		// adjust for burst size
-		temp_damage *= get_local_entity_int_value(weapon, INT_TYPE_WEAPON_BURST_SIZE);
-		
-		//
-		// subtract from entities damage level
-		//
-
-		convert_float_to_int (temp_damage, &damage_capability);
-
 		damage_level -= damage_capability;
 
 		damage_level = max (damage_level, 0);
@@ -375,149 +244,12 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 		#if DEBUG_MODULE
 
-		debug_log ("DAMAGE: %s hit : new damage = %d", get_local_entity_string (en, STRING_TYPE_FULL_NAME), damage_level);
+		debug_log ("DAMAGE: %s hit = %d , new damage level = %d", get_local_entity_string (en, STRING_TYPE_FULL_NAME), damage_capability, damage_level);
 
 		#endif
 	}
 
 	return damage_capability;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//
-// DEBUG FUNCTION
-//
-
-void assess_effectiveness_of_all_weapons_on_entity (entity *en)
-{
-	const char
-		*target_name;
-	char
-		*filename;
-
-	FILE
-		*fp;
-
-	int
-		loop,
-		count,
-		damage_level;
-
-	entity_sub_types
-		weapon_type;
-
-	//
-	// output :
-	// target name,
-	// current damage,
-	//
-	// for each weapon
-	//		weapon name,
-	//		number of rounds needed to destroy using weapon
-
-	ASSERT (en);
-
-	if (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_AIRCRAFT))
-	{
-		target_name = entity_sub_type_aircraft_names [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)];
-	}
-	else if (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_VEHICLE))
-	{
-		target_name = entity_sub_type_vehicle_names [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)];
-	}
-	else
-	{
-		target_name = entity_type_names [en->type];
-	}
-
-	debug_colour_log (DEBUG_COLOUR_RED, "Testing weapon effectiveness on entity : %s", target_name);
-
-	//
-	// open file
-	//
-
-	filename = (char *) malloc_fast_mem (strlen (target_name) + 6);
-
-	sprintf (filename, "%s.dmg", target_name);
-
-	fp = safe_fopen (filename, "w");
-
-    safe_free (filename);
-
-	//
-	// output target name
-	//
-
-	count = fprintf (fp, "OBJECT : %s\n", target_name);
-
-	for (loop = 0; loop < count - 1; loop ++)
-	{
-		fputc ('=', fp);
-	}
-
-	fprintf (fp, "\n\n");
-
-	//
-	// output current damage levels
-	//
-
-	damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL);
-
-	fprintf (fp, "Current Damage :- %4d\n\n", damage_level);
-
-	if (damage_level > 0)
-	{
-		//
-		// cycle through each weapon
-		//
-
-		for (weapon_type = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON + 1; weapon_type < NUM_ENTITY_SUB_TYPE_WEAPONS; weapon_type ++ )
-		{
-			int
-				weapon_power,
-				rounds_needed;
-
-			//
-			// output weapon name
-			//
-
-			count = fprintf (fp, "%s\n", entity_sub_type_weapon_names [weapon_type]);
-
-			for (loop = 0; loop < count - 1; loop ++)
-			{
-				fputc ('-', fp);
-			}
-
-			weapon_power = weapon_damage_capability (weapon_type, en, TRUE);
-
-			rounds_needed = -1;
-
-			if (weapon_power > 0)
-			{
-				rounds_needed = damage_level / weapon_power;
-
-				rounds_needed += 1;
-			}
-
-			//
-			//	output number of rounds needed to destroy / maximum damage possible using weapon
-			//
-
-			if (rounds_needed == -1)
-			{
-				fprintf (fp, "\n    Rounds Needed To Destroy Target : ----\n\n");
-			}
-			else
-			{
-				fprintf (fp, "\n    ROUNDS NEEDED TO DESTROY TARGET : %4d.\n\n", rounds_needed);
-			}
-		}
-	}
-
-	fclose (fp);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -614,108 +346,123 @@ void display_debug_kill_info (entity *victim, entity *aggressor)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int warhead_is_capable_of_damage (weapon_warhead_types type)
+int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier, entity_sub_types weapon_type, float velocity)
 {
-	ASSERT ((type >= WEAPON_WARHEAD_TYPE_NONE) && (type < NUM_WEAPON_WARHEAD_TYPES));
-
-	return (warhead_damage_database [type].effective_targets);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int weapon_is_capable_of_damage (entity_sub_types weapon_type)
-{
-	return (warhead_is_capable_of_damage (weapon_database [weapon_type].warhead_type));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int weapon_is_suitable_for_damaging_target (entity_sub_types weapon_type, entity *target, int direct_hit)
-{
-	weapon_warhead_types
-		warhead_type;
-
 	int
-		warhead_effective_mask,
-		warhead_target_class;
+		result = 0,
+		i,
+		temp,
+		high_explosive = FALSE;
 
-	warhead_type = weapon_database [weapon_type].warhead_type;
-
-	ASSERT ((warhead_type >= WEAPON_WARHEAD_TYPE_NONE) && (warhead_type < NUM_WEAPON_WARHEAD_TYPES));
+	float
+		weapon_armor_penetration_capability,
+		random_modifier = 1,
+		target_armor_thickness,
+		armor_modifier;
+	weapon
+		*raw;
 
 	ASSERT (target);
 
-	if ((warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK) && (!direct_hit))
+	if (wpn) // only for real weapon!
 	{
-		warhead_effective_mask = warhead_damage_database [WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE].effective_targets;
-	}
-	else
-	{
-		warhead_effective_mask = warhead_damage_database [warhead_type].effective_targets;
-	}
+		raw = (weapon *) get_local_entity_data (wpn);
 
-	warhead_target_class = get_local_entity_int_value (target, INT_TYPE_WARHEAD_EFFECTIVE_CLASS);
+		weapon_type = raw->mob.sub_type;
+		target_armor_thickness = get_local_entity_armour_thickness (target, wpn);
+		random_modifier = frand1();
 
-	if (warhead_effective_mask & warhead_target_class)
-	{
-		if (warhead_target_class < WARHEAD_EFFECTIVE_HARD_TARGETS)
+		if (weapon_database[weapon_type].warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
+				weapon_database[weapon_type].warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
 		{
-			return weapon_database [weapon_type].soft_damage_capability;
+			velocity = 1;	
+			high_explosive = TRUE;
+			random_modifier = 0.75 + 2 * random_modifier * random_modifier * random_modifier; // random chance from 75% to 275%, average 100%
 		}
 		else
 		{
-			return weapon_database [weapon_type].hard_damage_capability;
+			velocity = raw->mob.velocity / weapon_database[weapon_type].cruise_velocity;
+			random_modifier = 0.75 + 0.5 * random_modifier; // random chance from 75% to 125%, average 100%
 		}
+
 	}
 	else
 	{
-		return 0;
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int weapon_damage_capability (entity_sub_types weapon_type, entity *target, int direct_hit)
-{
-	int
-		result,
-		warhead_target_class;
-
-	ASSERT (target);
-
-	result = 0;
-
-	warhead_target_class = get_local_entity_int_value (target, INT_TYPE_WARHEAD_EFFECTIVE_CLASS);
-
-	if (warhead_target_class < WARHEAD_EFFECTIVE_HARD_TARGETS)
-	{
-		result = weapon_database [weapon_type].soft_damage_capability;
-	}
-	else
-	{
-		if ((weapon_database [weapon_type].warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK) && (!direct_hit))
+		target_armor_thickness = (float) get_local_entity_int_value (target, INT_TYPE_ARMOR_LEVEL);
+		if (weapon_database[weapon_type].warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
+				weapon_database[weapon_type].warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
 		{
-			//
-			// reduce effectiveness of HEAT missiles if hit is not direct
-			//
-
-			result = (weapon_database [weapon_type].hard_damage_capability >> 3);
-		}
-		else
-		{
-			result = weapon_database [weapon_type].hard_damage_capability;
+			velocity = 1;	
+			high_explosive = TRUE;
 		}
 	}
+	
+	weapon_armor_penetration_capability = weapon_database[weapon_type].armor_penetration_capability * random_modifier * velocity;
+	
+	if (weapon_armor_penetration_capability >= target_armor_thickness && damage_modifier < 0.01) // weapon pierces through the armor
+	{
+		result = (int) (weapon_database[weapon_type].damage_capability * random_modifier * velocity);
 
+		#if DEBUG_MODULE
+			debug_log("DAMAGE: DIRECT HIT - weapon penetration %.1f, target armor %.1f, damage_modifier %.4f, random modifier %.4f, damage %d", 
+					weapon_armor_penetration_capability, target_armor_thickness, damage_modifier, random_modifier, result);
+		#endif
+		
+	}
+	else if (high_explosive)
+	{
+		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - 3) / 3, 1.5));
+		armor_modifier =  min(1, weapon_database[weapon_type].damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5));
+		
+		result = (int) (weapon_database[weapon_type].damage_capability * damage_modifier * armor_modifier * random_modifier);
+
+		#if DEBUG_MODULE
+			debug_log("DAMAGE: SPLASH DAMAGE - weapon penetration %.1f, target armor %.1f, damage_modifier %.4f, armor modifier %.4f, random modifier %.4f, damage %d", 
+					weapon_armor_penetration_capability, target_armor_thickness, damage_modifier, armor_modifier, random_modifier, result);
+		#endif
+
+	}
+	
 	if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
-	{
 		result *= get_player_damage_modifier (target);
+
+	if (wpn && command_line_debug_show_damage) // draw damage value
+	{
+		viewpoint
+			temp_vp;
+		vec3d
+			temp_vec;
+		int
+			digit,
+			zero = TRUE,
+			p = 1000;
+		
+		get_local_entity_vec3d (target, VEC3D_TYPE_POSITION, &temp_vp.position);
+		get_local_entity_attitude_matrix (wpn, &temp_vp.attitude);
+		temp_vec.x = 4;
+		temp_vec.y = temp_vec.z = 0;
+		multiply_matrix3x3_vec3d(&temp_vec, &temp_vp.attitude, &temp_vec);
+		temp_vp.position.x -= 2 * temp_vec.x;
+		temp_vp.position.y -= 2 * temp_vec.y;
+		temp_vp.position.z -= 2 * temp_vec.z;
+
+		temp = result;
+
+		for (i = 3; i >= 0; i-- )
+		{
+			digit = temp / p;
+			if (digit)
+				zero = FALSE;
+
+			if (!zero)
+				create_debug_3d_object (&temp_vp, OBJECT_3D_DIG_0 + digit, 2, 5.0);
+
+			temp %= p;
+			p /= 10;
+			temp_vp.position.x += temp_vec.x;
+			temp_vp.position.y += temp_vec.y;
+			temp_vp.position.z += temp_vec.z;
+		}
 	}
 
 	return result;

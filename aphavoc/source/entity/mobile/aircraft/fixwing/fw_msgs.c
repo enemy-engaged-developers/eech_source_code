@@ -245,20 +245,6 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 			play_aircraft_shot_at_speech (receiver, aggressor);
 		}
 
-		if (total_damage_level < 200)
-		{
-			//
-			// Eject Pilot(s)
-			//
-
-			if (get_local_entity_int_value (receiver, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
-			{
-				if (get_local_entity_int_value (receiver, INT_TYPE_AIRBORNE_AIRCRAFT))
-				{
-					initiate_aircraft_crew_ejection (receiver);
-				}
-			}
-		}
 		/////////////////////////////////////////////////////////////////
 		//
 		//
@@ -345,14 +331,6 @@ static int response_to_waypoint_touch_down_reached (entity_messages message, ent
 	debug_log ("FW_MSGS: switching to taxiing state");
 
 	#endif
-
-	//
-	// clear any smoke trails emitting from the aircraft
-	//
-
-	clear_smoke_list_generator_lifetime (receiver, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE);
-	clear_smoke_list_generator_lifetime (receiver, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE);
-	clear_smoke_list_generator_lifetime (receiver, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE);
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{

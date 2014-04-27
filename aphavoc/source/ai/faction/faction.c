@@ -957,6 +957,8 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 
 				memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
+				ASSERT(point_inside_map_area(start_position));
+				
 				get_3d_terrain_point_data (start_position->x, start_position->z, &terrain_info);
 
 				normal = get_3d_terrain_point_data_normal (&terrain_info);
@@ -1113,6 +1115,8 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 	{
 		memset (&point_data, 0, sizeof (terrain_3d_point_data));
 
+		ASSERT(point_inside_map_area(position));
+				
 		get_3d_terrain_point_data (position->x, position->z, &point_data);
 
 		if (group_database [group_type].registry_list_type == LIST_TYPE_GROUND_REGISTRY)

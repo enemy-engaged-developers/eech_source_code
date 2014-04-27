@@ -857,7 +857,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 	set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 
-	set_3d_infrared_mode ( main_3d_env, INFRARED_OFF );
+	set_3d_infrared_mode ( main_3d_env, RENDER_CLEAR );
 
 	set_3d_weathermode (main_3d_env, WEATHERMODE_DRY );
 

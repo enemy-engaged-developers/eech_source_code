@@ -158,7 +158,8 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","explosive_power");
 	fprintf(fout,"%s,","offensive_capability");
 	fprintf(fout,"%s,","player_controllable");
-	fprintf(fout,"%s\n","points_value");
+	fprintf(fout,"%s,","points_value");
+	fprintf(fout,"%s\n","armor_level");
 	}
   for (i = 0; i < NUM_ENTITY_SUB_TYPE_AIRCRAFT; i++)
   {
@@ -224,7 +225,8 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",aircraft_database[i].explosive_power);
 		fprintf(fout,"%d,",aircraft_database[i].offensive_capability);//y/n  : 1,
 		fprintf(fout,"%d,",aircraft_database[i].player_controllable);//y/n   : 1,
-		fprintf(fout,"%d\n",aircraft_database[i].points_value);//???         : 12;
+		fprintf(fout,"%d,",aircraft_database[i].points_value);//???         : 12;
+		fprintf(fout,"%d\n",aircraft_database[i].armor_level);
 	}
 
 //aphavoc\source\entity\mobile\vehicle\vh_dbase.h
@@ -269,7 +271,7 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","armour_side");
 	fprintf(fout,"%s,","armour_rear");
 	fprintf(fout,"%s,","initial_damage_level");
-	fprintf(fout,"%s,","warhead_effective_class");
+	fprintf(fout,"%s,","armor_level");
 	fprintf(fout,"%s,","explosive_quality");
 	fprintf(fout,"%s,","explosive_power");
 	fprintf(fout,"%s,","offensive_capability");
@@ -332,7 +334,7 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%g,",vehicle_database[i].armour_side);
 		fprintf(fout,"%g,",vehicle_database[i].armour_rear);
 		fprintf(fout,"%d,",vehicle_database[i].initial_damage_level);
-		fprintf(fout,"%d,",IntToBin(vehicle_database[i].warhead_effective_class)); //!! convert to power of 2
+		fprintf(fout,"%d,",vehicle_database[i].armor_level);
 		fprintf(fout,"%d,",vehicle_database[i].explosive_quality);
 		fprintf(fout,"%d,",vehicle_database[i].explosive_power);
 		fprintf(fout,"%d,",vehicle_database[i].offensive_capability);
@@ -351,8 +353,8 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","threat_type");
 	fprintf(fout,"%s,","report_ammo_low_count");
 	fprintf(fout,"%s,","gun_shake");
-	fprintf(fout,"%s,","soft_damage_capability");
-	fprintf(fout,"%s,","hard_damage_capability");
+	fprintf(fout,"%s,","damage_capability");
+	fprintf(fout,"%s,","armor_penetration_capability");
 	fprintf(fout,"%s,","smoke_trail_type");
 	fprintf(fout,"%s,","acquire_parent_forward_velocity");
 	fprintf(fout,"%s,","ignore_gravity");
@@ -360,7 +362,8 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","in_flight_collision_check");
 	fprintf(fout,"%s,","viewable_weapon");
 	fprintf(fout,"%s,","boresight_weapon");
-	fprintf(fout,"%s,","hellfire_flight_profile");
+	fprintf(fout,"%s,","flight_profile_or_self_destr");
+	fprintf(fout,"%s,","flightpath_deviation");
 // fprintf(fout,"%s,","weapon_class");
 	fprintf(fout,"%s,","weapon_class_air_to_air");
 	fprintf(fout,"%s,","weapon_class_air_to_surface");
@@ -370,27 +373,35 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","weapon_class_cargo");
 	fprintf(fout,"%s,","weapon_class_debris");
 	fprintf(fout,"%s,","weight");
+	fprintf(fout,"%s,","diameter");
+	fprintf(fout,"%s,","drag_coefficient");
 	fprintf(fout,"%s,","min_range");
 	fprintf(fout,"%s,","max_range");
 	fprintf(fout,"%s,","effective_range");
 	fprintf(fout,"%s,","min_range_loal");
 	fprintf(fout,"%s,","max_range_loal");
-	fprintf(fout,"%s,","max_range_error_ratio");
+	fprintf(fout,"%s,","circular_error_probable");
 	fprintf(fout,"%s,","muzzle_velocity");
 	fprintf(fout,"%s,","muzzle_velocity_max_error");
 	fprintf(fout,"%s,","cruise_velocity");
 	fprintf(fout,"%s,","g_max");
-	fprintf(fout,"%s,","burn_time");
+	fprintf(fout,"%s,","boost_time");
+	fprintf(fout,"%s,","boost_power");
+	fprintf(fout,"%s,","sustain_time");
+	fprintf(fout,"%s,","sustain_power");
 	fprintf(fout,"%s,","cruise_time");
 	fprintf(fout,"%s,","cruise_time_max_error");
 	fprintf(fout,"%s,","inhibit_time");
 	fprintf(fout,"%s,","burst_duration");
 	fprintf(fout,"%s,","rate_of_fire");
 	fprintf(fout,"%s,","reload_time");
+	fprintf(fout,"%s,","rearming_time");
 	fprintf(fout,"%s,","max_launch_angle_error");
 	fprintf(fout,"%s,","max_seeker_limit");
-	fprintf(fout,"%s,","drag_factor");
-	fprintf(fout,"%s\n","spiral_flightpath");
+	fprintf(fout,"%s,","detonation_radius");
+	fprintf(fout,"%s,","tracer_fire_time");
+	fprintf(fout,"%s,","tracer_color");
+	fprintf(fout,"%s\n","max_altitude");
 	}
 	for (i = 0; i < NUM_ENTITY_SUB_TYPE_WEAPONS; i++)
 	{
@@ -418,8 +429,8 @@ void DumpGWutInfo(const char *filename)
 //    fprintf(fout,"%d,",weapon_database[i].weapon_launched_wingman_speech);
 		fprintf(fout,"%d,",weapon_database[i].report_ammo_low_count);
 		fprintf(fout,"%d,",weapon_database[i].gun_shake);
-		fprintf(fout,"%d,",weapon_database[i].soft_damage_capability);
-		fprintf(fout,"%d,",weapon_database[i].hard_damage_capability);
+		fprintf(fout,"%d,",weapon_database[i].damage_capability);
+		fprintf(fout,"%d,",weapon_database[i].armor_penetration_capability);
 		fprintf(fout,"%d,",weapon_database[i].smoke_trail_type);
 		fprintf(fout,"%d,",weapon_database[i].acquire_parent_forward_velocity);
 		fprintf(fout,"%d,",weapon_database[i].ignore_gravity);
@@ -427,7 +438,8 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",weapon_database[i].in_flight_collision_check);
 		fprintf(fout,"%d,",weapon_database[i].viewable_weapon);
 		fprintf(fout,"%d,",weapon_database[i].boresight_weapon);// meaningful   for featured helicopters only
-		fprintf(fout,"%d,",weapon_database[i].hellfire_flight_profile);// meaningful for Hellfire missiles only
+		fprintf(fout,"%d,",weapon_database[i].flight_profile_or_self_destr);// for Hellfire, Vikhr and self destruction weapons
+		fprintf(fout,"%g,",weapon_database[i].flightpath_deviation); // meters
 //    fprintf(fout,"%d,",weapon_database[i].weapon_class);
 		fprintf(fout,"%d,",weapon_database[i].weapon_class & 1   ? 1:0);//_air_to_air
 		fprintf(fout,"%d,",weapon_database[i].weapon_class & 2   ? 1:0);//_air_to_surface
@@ -436,28 +448,37 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",weapon_database[i].weapon_class & 16 ?   1:0);//_decoy
 		fprintf(fout,"%d,",weapon_database[i].weapon_class & 32 ?   1:0);//_cargo
 		fprintf(fout,"%d,",weapon_database[i].weapon_class & 64 ?   1:0);//_debris
-		fprintf(fout,"%g,",weapon_database[i].weight);// kilogrammes
+		fprintf(fout,"%g,",weapon_database[i].start_weight);// kilogrammes
+		fprintf(fout,"%g,",weapon_database[i].final_weight);// kilogrammes
+		fprintf(fout,"%g,",weapon_database[i].diameter); // meters
+		fprintf(fout,"%g,",weapon_database[i].drag_coefficient);
 		fprintf(fout,"%g,",weapon_database[i].min_range);// metres
 		fprintf(fout,"%g,",weapon_database[i].max_range);// metres
 		fprintf(fout,"%g,",weapon_database[i].effective_range);// metres
 		fprintf(fout,"%g,",weapon_database[i].min_range_loal);// metres
 		fprintf(fout,"%g,",weapon_database[i].max_range_loal);// metres
-		fprintf(fout,"%g,",weapon_database[i].max_range_error_ratio);// max range error/max range
+		fprintf(fout,"%g,",weapon_database[i].circular_error_probable);// max range error/max range
 		fprintf(fout,"%g,",weapon_database[i].muzzle_velocity);// meters/second
 		fprintf(fout,"%g,",weapon_database[i].muzzle_velocity_max_error);// meters/second
 		fprintf(fout,"%g,",weapon_database[i].cruise_velocity);// meters/second
 		fprintf(fout,"%g,",weapon_database[i].g_max);// g
-		fprintf(fout,"%g,",weapon_database[i].burn_time);// seconds
+		fprintf(fout,"%g,",weapon_database[i].boost_time);// seconds
+		fprintf(fout,"%g,",weapon_database[i].boost_power);
+		fprintf(fout,"%g,",weapon_database[i].sustain_time);
+		fprintf(fout,"%g,",weapon_database[i].sustain_power);
 		fprintf(fout,"%g,",weapon_database[i].cruise_time);// seconds
 		fprintf(fout,"%g,",weapon_database[i].cruise_time_max_error);// seconds
 		fprintf(fout,"%g,",weapon_database[i].inhibit_time);// seconds
 		fprintf(fout,"%g,",weapon_database[i].burst_duration);// seconds
 		fprintf(fout,"%g,",weapon_database[i].rate_of_fire);// rounds/minute
 		fprintf(fout,"%g,",weapon_database[i].reload_time);// seconds
+		fprintf(fout,"%g,",weapon_database[i].rearming_time); // seconds
 		fprintf(fout,"%g,",deg(weapon_database[i].max_launch_angle_error));
 		fprintf(fout,"%g,",deg(acos(weapon_database[i].max_seeker_limit)));
-		fprintf(fout,"%g,",weapon_database[i].drag_factor);
-		fprintf(fout,"%d",weapon_database[i].spiral_flightpath);
+		fprintf(fout,"%g,",weapon_database[i].detonation_radius);
+		fprintf(fout,"%g,",weapon_database[i].tracer_fire_time);
+		fprintf(fout,"%g,",weapon_database[i].tracer_color);
+		fprintf(fout,"%g",weapon_database[i].max_altitude);
 		fputs("\n", fout);
 	}
 
@@ -1288,7 +1309,8 @@ void ReadGWutInfo(const char *fname)
 		k = IntValue(p);
 //		aircraft_database[i].player_controllable                           = IntValue(p);
 		aircraft_database[i].points_value                                  = IntValue(p);
-
+		aircraft_database[i].armor_level									= IntValue(p);
+		
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);
 	}
@@ -1347,9 +1369,7 @@ void ReadGWutInfo(const char *fname)
 		vehicle_database[i].armour_side                         = FloatValue(p);
 		vehicle_database[i].armour_rear                         = FloatValue(p);
 		vehicle_database[i].initial_damage_level                = IntValue(p);
-		j = IntValue(p); k = BinToInt(j);
-		if (testdump) fprintf(fout,"%d %d\n",vehicle_database[i].warhead_effective_class, k);
-		vehicle_database[i].warhead_effective_class             = k;
+		vehicle_database[i].armor_level							= IntValue(p);
 		vehicle_database[i].explosive_quality                   = IntValue(p);
 		vehicle_database[i].explosive_power                     = IntValue(p);
 		vehicle_database[i].offensive_capability                = IntValue(p);
@@ -1376,7 +1396,9 @@ void ReadGWutInfo(const char *fname)
 		i = atoi(p);
 		//get entity number
 		p = strtok(NULL,",");
-		//skip full name
+		weapon_database[i].full_name = (char *) safe_malloc(sizeof(char) * strlen(p) + 1);
+		strcpy(weapon_database[i].full_name, p);
+		//update full name
 
 		weapon_database[i].guidance_type                   = ( weapon_guidance_types ) IntValue(p);
 		weapon_database[i].aiming_type                     = ( weapon_aiming_types ) IntValue(p);
@@ -1385,8 +1407,8 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].threat_type                     = ( threat_types ) IntValue(p);
 		weapon_database[i].report_ammo_low_count           = IntValue(p);
 		weapon_database[i].gun_shake                       = IntValue(p);
-		weapon_database[i].soft_damage_capability          = IntValue(p);
-		weapon_database[i].hard_damage_capability          = IntValue(p);
+		weapon_database[i].damage_capability			   = IntValue(p);
+		weapon_database[i].armor_penetration_capability	   = IntValue(p);
 		weapon_database[i].smoke_trail_type                = IntValue(p);
 		weapon_database[i].acquire_parent_forward_velocity = IntValue(p);
 		weapon_database[i].ignore_gravity                  = IntValue(p);
@@ -1394,7 +1416,8 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].in_flight_collision_check       = IntValue(p);
 		weapon_database[i].viewable_weapon                 = IntValue(p);
 		weapon_database[i].boresight_weapon                = IntValue(p);
-		weapon_database[i].hellfire_flight_profile         = IntValue(p);
+		weapon_database[i].flight_profile_or_self_destr    = IntValue(p);
+		weapon_database[i].flightpath_deviation			   = FloatValue(p);
 		k = 0;
 		j = IntValue(p); if (j == 1) k = 1;
 		j = IntValue(p); if (j == 1) k = k | 2;
@@ -1405,18 +1428,27 @@ void ReadGWutInfo(const char *fname)
 		j = IntValue(p); if (j == 1) k = k | 64;
 //    fprintf(fout,"%d %d\n",weapon_database[i].weapon_class, k);
 		weapon_database[i].weapon_class = k;
-		weapon_database[i].weight                    = FloatValue(p);
+		weapon_database[i].start_weight                    = FloatValue(p);
+		weapon_database[i].final_weight                    = FloatValue(p);
+		weapon_database[i].diameter					 = FloatValue(p);
+		weapon_database[i].drag_coefficient			 = FloatValue(p);
 		weapon_database[i].min_range                 = FloatValue(p);
 		weapon_database[i].max_range                 = FloatValue(p);
 		weapon_database[i].effective_range           = FloatValue(p);
 		weapon_database[i].min_range_loal            = FloatValue(p);
 		weapon_database[i].max_range_loal            = FloatValue(p);
-		weapon_database[i].max_range_error_ratio     = FloatValue(p);
+		weapon_database[i].circular_error_probable	 = FloatValue(p);
 		weapon_database[i].muzzle_velocity           = FloatValue(p);
 		weapon_database[i].muzzle_velocity_max_error = FloatValue(p);
-		weapon_database[i].cruise_velocity           = FloatValue(p);
+		{
+			float value = FloatValue(p);
+			weapon_database[i].cruise_velocity = value > 5 ? value : (value * 340);
+		}
 		weapon_database[i].g_max                     = FloatValue(p);
-		weapon_database[i].burn_time                 = FloatValue(p);
+		weapon_database[i].boost_time                = FloatValue(p);
+		weapon_database[i].boost_power				 = FloatValue(p);
+		weapon_database[i].sustain_time				= FloatValue(p);
+		weapon_database[i].sustain_power			 = FloatValue(p);
 		weapon_database[i].cruise_time               = FloatValue(p);
 		weapon_database[i].cruise_time_max_error     = FloatValue(p);
 		weapon_database[i].inhibit_time              = FloatValue(p);
@@ -1424,19 +1456,13 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].rate_of_fire              = FloatValue(p);
 		weapon_database[i].inverse_rate_of_fire		 = (weapon_database[i].rate_of_fire > 0.0) ? (1.0 / weapon_database[i].rate_of_fire) : 0.01;
 		weapon_database[i].reload_time               = FloatValue(p);
+		weapon_database[i].rearming_time	 = FloatValue(p);
 		weapon_database[i].max_launch_angle_error    = rad(FloatValue(p));
-		weapon_database[i].max_seeker_limit			 = cos(weapon_database[i].max_launch_angle_error + 0.25);
-
-		// these values were introduced later, so might not exists in old GWUT files
-		p = strtok(NULL,",");
-		if (p)
-		{
-			float seeker_limit = atof(p);
-			if (seeker_limit > 0.0)
-				weapon_database[i].max_seeker_limit		 = cos(rad(seeker_limit));
-			weapon_database[i].drag_factor			 = FloatValue(p);
-			weapon_database[i].spiral_flightpath	 = IntValue(p);
-		}
+		weapon_database[i].max_seeker_limit		 = cos(rad(FloatValue(p)));
+		weapon_database[i].detonation_radius	 = FloatValue(p);
+		weapon_database[i].tracer_fire_time	 = FloatValue(p);
+		weapon_database[i].tracer_color		 = IntValue(p);
+		weapon_database[i].max_altitude	 = FloatValue(p);
 
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);

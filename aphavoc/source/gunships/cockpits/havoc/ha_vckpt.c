@@ -533,7 +533,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		vp_position.y += current_custom_cockpit_viewpoint.y;
 		vp_position.z += current_custom_cockpit_viewpoint.z;
 
-		get_head_g_movement(&vp_position.x, &vp_position.y, &vp_position.z, FALSE);
+		get_forces_acting_on_pilot(&vp_position.x, &vp_position.y, &vp_position.z, FALSE, TRUE);
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 		get_3d_transformation_matrix(head_rotation, pilot_head_heading, -pilot_head_pitch, 0.0);
@@ -1059,7 +1059,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		vp_position.y += current_custom_cockpit_viewpoint.y;
 		vp_position.z += current_custom_cockpit_viewpoint.z;
 
-		get_head_g_movement(&vp_position.x, &vp_position.y, &vp_position.z, FALSE);
+		get_forces_acting_on_pilot(&vp_position.x, &vp_position.y, &vp_position.z, FALSE, TRUE);
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 		get_3d_transformation_matrix(head_rotation, pilot_head_heading, -pilot_head_pitch, 0.0);

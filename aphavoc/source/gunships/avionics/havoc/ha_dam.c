@@ -102,8 +102,10 @@ void set_havoc_weapon_damage_status (void)
 	set_client_server_entity_weapon_damage (en, HAVOC_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, havoc_damage.rh_outer_pylon);
 	set_client_server_entity_weapon_damage (en, HAVOC_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, havoc_damage.rh_inner_pylon);
 
-	set_client_server_entity_weapon_damage (en, HAVOC_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, havoc_damage.chaff_dispenser);
-	set_client_server_entity_weapon_damage (en, HAVOC_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, havoc_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, HAVOC_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, havoc_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, HAVOC_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, havoc_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, HAVOC_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, havoc_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, HAVOC_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, havoc_damage.flare_dispenser);
 
 	//
 	// check if selected weapon is still available, if not, select next

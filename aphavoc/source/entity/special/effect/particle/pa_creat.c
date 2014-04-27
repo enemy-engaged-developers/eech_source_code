@@ -146,7 +146,13 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->eff.position.x = MID_MAP_X;
 		raw->eff.position.y = MID_MAP_Y;
 		raw->eff.position.z = MID_MAP_Z;
-
+		
+		raw->heading = PI * sfrand1();
+		raw->pitch = PI * sfrand1();
+		raw->roll = PI * sfrand1();
+		
+		raw->motion_vector_pitch = 0.5;
+		
 		////////////////////////////////////////
 		//
 		// OVERWRITE DEFAULT VALUES WITH GIVEN ATTRIBUTES
@@ -201,18 +207,18 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		for ( loop = raw->particle_count - 1 ; loop >= 0 ; loop -- )
 		{
+			float
+				pitch;
+			
 			raw->valid[ loop ] = TRUE;
-
+			
 			if (raw->object_3d_shape != OBJECT_3D_INVALID_OBJECT_INDEX)
 			{
 				raw->inst3d[ loop ] = construct_3d_object (raw->object_3d_shape);
 
-				if (raw->heading || raw->pitch || raw->roll)
-					get_3d_transformation_matrix_fast (rotation_matrix, raw->heading, raw->pitch, raw->roll);
-				else	// okay to use random values as its for visual effect only
-					get_3d_transformation_matrix_fast (rotation_matrix, PI * sfrand1(), PI * sfrand1(), PI * sfrand1());
+				get_3d_transformation_matrix_fast (rotation_matrix, raw->heading, raw->pitch, raw->roll);
 				
-					memcpy (raw->inst3d [loop]->vp.attitude, rotation_matrix, sizeof (matrix3x3));
+				memcpy (raw->inst3d [loop]->vp.attitude, rotation_matrix, sizeof (matrix3x3));
 			}
 			else
 			{
@@ -223,9 +229,17 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			raw->position[ loop ].y = raw->eff.position.y;
 			raw->position[ loop ].z = raw->eff.position.z;
 
-			raw->motion_vector[ loop ].x = ( sfrand1x( &seed ) * raw->initial_speed );
-			raw->motion_vector[ loop ].y = ( (0.25 + 0.75 * frand1x( &seed )) * raw->initial_speed );
-			raw->motion_vector[ loop ].z = ( sfrand1x( &seed ) * raw->initial_speed );
+			if (raw->motion_vector_pitch >= 0.987) // 90 deg - fixed
+				pitch = 1;
+			else if (raw->motion_vector_pitch)
+				pitch = 0.75 * raw->motion_vector_pitch + 0.25 * sfrand1x( &seed );
+			else							// 0 deg - random
+				pitch = sfrand1x( &seed );
+				
+
+			raw->motion_vector[ loop ].x = ( pitch != 1 ? sfrand1x( &seed ) * raw->initial_speed : 0);
+			raw->motion_vector[ loop ].y = ( pitch * raw->initial_speed );
+			raw->motion_vector[ loop ].z = ( pitch != 1 ? sfrand1x( &seed ) * raw->initial_speed : 0);
 
 		}
 
@@ -314,7 +328,7 @@ static entity *create_client (entity_types type, int index, char *pargs)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *create_client_server_particle_entity (int particle_count, viewpoint vp, float initial_speed, object_3d_index_numbers object_3d_shape)
+entity *create_client_server_particle_entity (int particle_count, viewpoint vp, float initial_speed, object_3d_index_numbers object_3d_shape, float motion_vector_pitch)
 {
 
 	entity
@@ -342,6 +356,7 @@ entity *create_client_server_particle_entity (int particle_count, viewpoint vp, 
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_HEADING, get_heading_from_attitude_matrix(vp.attitude)),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_PITCH, get_pitch_from_attitude_matrix(vp.attitude)),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_ROLL, get_roll_from_attitude_matrix(vp.attitude)),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_MOTION_VECTOR_PITCH, motion_vector_pitch),
 		ENTITY_ATTR_END
 	);
 

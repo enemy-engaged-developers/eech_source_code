@@ -399,27 +399,35 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 	
 		entity
 			*sector_en;
+		
+		vec3d
+			*pos;
 
 		entity_sides
 			side;
 
 		float
-			threat_level;			//TEMP
+			enemy_forces,
+			ally_forces;
 	
-		sector_en = get_local_sector_entity (get_local_entity_vec3d_ptr (enemy_entity, VEC3D_TYPE_POSITION));
+		pos = get_local_entity_vec3d_ptr (enemy_entity, VEC3D_TYPE_POSITION);
+		
+		sector_en = get_local_sector_entity (pos);
 
-		side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (sender, INT_TYPE_SIDE);
 
-		threat_level = get_local_sector_entity_enemy_surface_to_surface_defence_level (sector_en, side);
-		threat_level += get_local_sector_entity_enemy_surface_to_air_defence_level (sector_en, side);
+		enemy_forces = get_local_sector_entity_enemy_surface_to_surface_defence_level (sector_en, get_enemy_side (side)) + get_local_sector_entity_enemy_surface_to_air_defence_level (sector_en, get_enemy_side (side));
+		ally_forces =  get_local_sector_entity_enemy_surface_to_surface_defence_level (sector_en, side) + get_local_sector_entity_enemy_surface_to_air_defence_level (sector_en, side);
 
-		if (threat_level > 0.0)	//TEMP - should never really get here if no enemy threat
+		if (enemy_forces > 2 * ally_forces)
 		{
 			// PLAY_SPEECH (GC)
 			//
 			// [GC Introduction],
 			// Requesting support 
-	
+
+			get_speech_sector_coordinates(pos);
+
 			play_client_server_speech
 			(
 				get_session_entity (),
@@ -435,6 +443,12 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 				-1.0,
 				SPEECH_ARRAY_GC_MESSAGES, SPEECH_GC_INTRODUCTION,
 				SPEECH_ARRAY_GC_MESSAGES, SPEECH_GC_REQUEST_SUPPORT_AT,
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [0],
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [1],
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [2],
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [3],
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [4],
+				SPEECH_ARRAY_NUMBERS, speech_sector_coordinates [5],
 				-1
 			);
 		}

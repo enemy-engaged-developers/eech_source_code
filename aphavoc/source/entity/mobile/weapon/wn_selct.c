@@ -123,12 +123,12 @@ static entity_sub_types get_apache_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
@@ -234,7 +234,7 @@ static entity_sub_types get_apache_previous_available_weapon_sub_type (entity *e
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND;
@@ -245,7 +245,7 @@ static entity_sub_types get_apache_previous_available_weapon_sub_type (entity *e
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 
 				break;
 			}
@@ -355,20 +355,20 @@ static entity_sub_types get_havoc_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_ATAKA;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_ATAKA:
+			case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_S8;
@@ -474,7 +474,7 @@ static entity_sub_types get_havoc_previous_available_weapon_sub_type (entity *en
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND;
@@ -482,10 +482,10 @@ static entity_sub_types get_havoc_previous_available_weapon_sub_type (entity *en
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_ATAKA:
+			case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 
 				break;
 			}
@@ -493,7 +493,7 @@ static entity_sub_types get_havoc_previous_available_weapon_sub_type (entity *en
 			case ENTITY_SUB_TYPE_WEAPON_S8:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_ATAKA;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V;
 
 				break;
 			}
@@ -587,12 +587,12 @@ static entity_sub_types get_comanche_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
@@ -698,7 +698,7 @@ static entity_sub_types get_comanche_previous_available_weapon_sub_type (entity 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND;
@@ -709,7 +709,7 @@ static entity_sub_types get_comanche_previous_available_weapon_sub_type (entity 
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER;
 
 				break;
 			}
@@ -819,20 +819,20 @@ static entity_sub_types get_hokum_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_VIKHR;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_VIKHR:
+			case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_S8;
@@ -938,7 +938,7 @@ static entity_sub_types get_hokum_previous_available_weapon_sub_type (entity *en
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND;
@@ -946,10 +946,10 @@ static entity_sub_types get_hokum_previous_available_weapon_sub_type (entity *en
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_VIKHR:
+			case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_IGLA_V;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V;
 
 				break;
 			}
@@ -957,7 +957,7 @@ static entity_sub_types get_hokum_previous_available_weapon_sub_type (entity *en
 			case ENTITY_SUB_TYPE_WEAPON_S8:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_VIKHR;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR;
 
 				break;
 			}

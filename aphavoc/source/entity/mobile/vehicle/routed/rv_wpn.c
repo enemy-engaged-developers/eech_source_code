@@ -198,7 +198,7 @@ void update_routed_vehicle_weapon_fire (entity *en)
 	{
 		if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SUPPRESS_AI_FIRE))
 		{
-			launch_client_server_weapon (en, raw->vh.selected_weapon);
+			launch_client_server_weapon (en, raw->vh.selected_weapon, FALSE);
 		}
 
 		/////////////////////////////////////////////////////////////////

@@ -68,6 +68,8 @@ extern void set_2d_pixel (float x, float y, const rgb_colour col);
 
 extern void draw_2d_line (float x1, float y1, float x2, float y2, const rgb_colour col);
 
+extern void draw_2d_dash_line(float x1, float y1, float x2, float y2, const rgb_colour col1, rgb_colour col2, float length, int thick);
+
 //extern void draw_2d_thick_line (float x1, float y1, float x2, float y2, const rgb_colour col);
 
 extern void draw_2d_half_thick_line (float x1, float y1, float x2, float y2, const rgb_colour col);

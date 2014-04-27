@@ -298,7 +298,8 @@ void draw_debug_3d_objects (viewpoint *vp, float visual_range)
 		// if this function is invoked more than once per frame then lifetime will expire more quickly
 		//
 
-		object->lifetime -= get_delta_time ();
+		if (get_time_acceleration () != TIME_ACCELERATION_PAUSE)
+			object->lifetime -= get_delta_time ();
 
 		if (object->lifetime < 0.0)
 		{

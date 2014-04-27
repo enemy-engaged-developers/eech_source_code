@@ -765,7 +765,7 @@ int load_3d_terrain ( const char *path )
 							//VJ 051030 for Maverick, change to whole tree else only truncs of palms are shown
 							terrain_3d_tree_object = construct_3d_object_by_name ( "FOREST_TREE_OBJECT" );
 							// start render_tree_shadows-mod by GCsDriver 08-12-2007
-							if ( !command_line_render_tree_shadows )
+							if ( command_line_render_shadows != 2 )
 								terrain_3d_tree_object->object_has_shadow = FALSE;
 
 							break;
@@ -776,7 +776,7 @@ int load_3d_terrain ( const char *path )
 
 							terrain_3d_tree_object = construct_3d_object_by_name ( "FOREST_TREE_OBJECT" );
 
-							if ( !command_line_render_tree_shadows )
+							if ( command_line_render_shadows != 2 )
 								terrain_3d_tree_object->object_has_shadow = FALSE;
 
 							// end render_tree_shadows-mod by GCsDriver 08-12-2007
@@ -824,8 +824,8 @@ int load_3d_terrain ( const char *path )
 					center_y,
 					center_z;
 
-				base = rand() % 10;
-				pack = rand() % 5 + 1;
+				base = rand() % 8;
+				pack = rand() % 4 + 1;
 
 				number_of_cloud_puffs = base * pack;
 				cloud_puffs = number_of_cloud_puffs ? ( terrain_3d_cloud_puff_data* ) safe_malloc ( number_of_cloud_puffs * sizeof ( *cloud_puffs ) ) : NULL;
@@ -835,6 +835,9 @@ int load_3d_terrain ( const char *path )
 
 				for ( count = 0; count < number_of_cloud_puffs; count++, cloud_puffs++ )
 				{
+					float brightness,
+						y_center_min = TERRAIN_3D_CLOUD_Y_CENTER_MIN;
+					
 					if ( !( count % pack ) )
 					{
 						do
@@ -847,15 +850,19 @@ int load_3d_terrain ( const char *path )
 							center_z = (z + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
 						}
 						while ( center_z < terrain_3d_min_map_z || center_z > terrain_3d_max_map_z );
-						center_y = (float)rand() / RAND_MAX * TERRAIN_3D_CLOUD_Y_CENTER_MAX + TERRAIN_3D_CLOUD_Y_CENTER_MIN + get_3d_terrain_elevation ( center_x, center_z );
+						
+						y_center_min += get_3d_terrain_elevation ( center_x, center_z );
+						
+						center_y = (float)rand() / RAND_MAX * TERRAIN_3D_CLOUD_Y_CENTER_MAX + y_center_min;
 					}
 
 					cloud_puffs->x = center_x + ((float)rand() / RAND_MAX - 0.5) * 100.0;
-					cloud_puffs->y = center_y + ((float)rand() / RAND_MAX - 0.5) * 100.0;
-					cloud_puffs->z = center_z + ((float)rand() / RAND_MAX - 0.5) * TERRAIN_3D_CLOUD_Y_DIFF;
+					cloud_puffs->y = center_y + ((float)rand() / RAND_MAX - 0.5) * TERRAIN_3D_CLOUD_Y_DIFF;
+					cloud_puffs->z = center_z + ((float)rand() / RAND_MAX - 0.5) * 100;
 					cloud_puffs->heading = (float)rand() / RAND_MAX * PI2;
-					cloud_puffs->scale = (float)rand() / RAND_MAX * 20.0;
-					cloud_puffs->colour = rand() % number_of_cloud_puffs_colours;
+					cloud_puffs->scale = 5 + (float)rand() / RAND_MAX * 5.0;
+					brightness = bound((cloud_puffs->y - y_center_min) / (TERRAIN_3D_CLOUD_Y_CENTER_MAX - TERRAIN_3D_CLOUD_Y_CENTER_MIN + TERRAIN_3D_CLOUD_Y_DIFF), 0, 1);
+					cloud_puffs->colour = brightness * (number_of_cloud_puffs_colours - 1);
 				}
 			}
 		}
@@ -2183,11 +2190,6 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 // Casm 20MAY12 Cloud puffs
 void set_terrain_3d_cloud_puffs_colours ( void )
 {
-	float
-		colour_coef,
-		colour_coef_red,
-		colour_coef_green,
-		colour_coef_blue;
 	int
 		count;
 
@@ -2196,16 +2198,11 @@ void set_terrain_3d_cloud_puffs_colours ( void )
 		return;
 	}
 
-	colour_coef = active_3d_environment->render_filter == RENDER_INFRARED ? 6.0 : 6.0;
-	colour_coef_red = bound ( active_3d_environment->ambient_light.red * colour_coef, 0.1, 1.0 );
-	colour_coef_green = bound ( active_3d_environment->ambient_light.green * colour_coef, 0.1, 1.0 );
-	colour_coef_blue = bound ( active_3d_environment->ambient_light.blue * colour_coef, 0.1, 1.0 );
-
 	for ( count = 0; count < number_of_cloud_puffs_colours; count++ )
 	{
-		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red * colour_coef_red, 255.0f);
-		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green * colour_coef_green, 255.0f);
-		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue * colour_coef_blue, 255.0f);
+		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red , 255.0f);
+		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green, 255.0f);
+		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue, 255.0f);
 		terrain_3d_cloud_puff_colours[count].alpha = 255;
 	}
 }

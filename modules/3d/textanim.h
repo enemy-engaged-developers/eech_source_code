@@ -199,7 +199,10 @@ TEXTURE_ANIMATION_DECLARATION({)
 	// Only add new animations beyond this point (but before LAST)
 
 	//TEXTURE_ANIMATION_INDEX(BURNING_FLAME)
+	TEXTURE_ANIMATION_INDEX(ROCKET_FLAME_SIDE)
+	TEXTURE_ANIMATION_INDEX(ROCKET_FLAME_FRONT)
 
+	TEXTURE_ANIMATION_INDEX(INFRARED_FLAME)
 	// And before this point
 	// Slots for "dynamic" texture animations
 

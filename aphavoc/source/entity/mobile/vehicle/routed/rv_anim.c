@@ -332,25 +332,27 @@ void damage_routed_vehicle_3d_object (entity *en)
 
 	raw = (routed_vehicle *) get_local_entity_data (en);
 
-	//
-	// destruct old object
-	//
-
-	destruct_3d_object (raw->vh.inst3d);
-
-	//
-	// construct new (damaged) object
-	//
-
-	raw->vh.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
-
-	raw->vh.inst3d = construct_3d_object (raw->vh.object_3d_shape);
-
-	//
-	// set id number for new object
-	//
-
-	set_routed_vehicle_id_number (en);
+	set_sub_object_type_visible_status (raw->vh.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_READY, FALSE);
+	
+	//	//
+//	// destruct old object
+//	//
+//
+//	destruct_3d_object (raw->vh.inst3d);
+//
+//	//
+//	// construct new (damaged) object
+//	//
+//
+//	raw->vh.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
+//
+//	raw->vh.inst3d = construct_3d_object (raw->vh.object_3d_shape);
+//
+//	//
+//	// set id number for new object
+//	//
+//
+//	set_routed_vehicle_id_number (en);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -247,10 +247,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
-			value = WARHEAD_EFFECTIVE_FIXED_WING;
+			value = aircraft_database[raw->ac.mob.sub_type].armor_level;
 
 			break;
 		}
@@ -283,7 +283,7 @@ void overload_fixed_wing_int_value_functions (void)
 
 	fn_get_local_entity_int_value				[ENTITY_TYPE_FIXED_WING][INT_TYPE_TASK_TARGET_TYPE]				= get_local_int_value;
 
-	fn_get_local_entity_int_value				[ENTITY_TYPE_FIXED_WING][INT_TYPE_WARHEAD_EFFECTIVE_CLASS]		= get_local_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_FIXED_WING][INT_TYPE_ARMOR_LEVEL]		= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

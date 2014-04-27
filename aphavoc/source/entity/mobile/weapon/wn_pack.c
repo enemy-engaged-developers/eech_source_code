@@ -122,6 +122,23 @@ static void pack_local_data (entity *en, pack_modes mode)
 			pack_int_value (en, INT_TYPE_LOCK_ON_AFTER_LAUNCH, raw->loal_mode);
 			pack_int_value (en, INT_TYPE_WEAPON_MISSILE_PHASE, raw->missile_phase);
 
+			if (mode == PACK_MODE_SERVER_SESSION)
+			{
+
+				if (raw->task_dependent_root.first_child)
+				{
+
+					pack_int_value (en, INT_TYPE_VALID, TRUE);
+
+					pack_list_root (en, LIST_TYPE_TASK_DEPENDENT, &raw->task_dependent_root);
+				}
+				else
+				{
+
+					pack_int_value (en, INT_TYPE_VALID, FALSE);
+				}
+			}
+
 			#if DEBUG_MODULE
 
 			debug_log ("WN_PACK: Packed %s (%d)", weapon_database [raw->mob.sub_type].full_name, get_local_entity_safe_index (en));
@@ -225,6 +242,15 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->loal_mode = unpack_int_value (en, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
 			raw->missile_phase = unpack_int_value (en, INT_TYPE_WEAPON_MISSILE_PHASE);
+
+			if (mode == PACK_MODE_SERVER_SESSION)
+			{
+				if (unpack_int_value (en, INT_TYPE_VALID))
+				{
+
+					unpack_list_root (en, LIST_TYPE_TASK_DEPENDENT, &raw->task_dependent_root);
+				}
+			}
 
 			//
 			// link into system

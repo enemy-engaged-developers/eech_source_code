@@ -1516,7 +1516,7 @@ static void display_weapon_information (void)
 
 			print_mono_font_string (s);
 		}
-		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND)
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND)
 		{
 			draw_hud_centre_datum(TRUE);
 		}
@@ -1900,7 +1900,7 @@ static void draw_target_symbology (void)
 		switch (selected_weapon_type)
 		{
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
 				if (target_visible)
@@ -2019,7 +2019,7 @@ static void draw_target_symbology (void)
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			////////////////////////////////////////
 			{
 				if ((weapon_lock_type == WEAPON_LOCK_VALID) && target_visible)

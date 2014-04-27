@@ -134,7 +134,8 @@ void anti_aircraft_death_movement (entity *en)
 	if (speed == 0.0)
 	{
 
-		delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+//		delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+		set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
 
 		return;
 	}
@@ -146,6 +147,8 @@ void anti_aircraft_death_movement (entity *en)
 	new_pos.x = pos->x + (velocity->x * get_entity_movement_delta_time());
 	new_pos.z = pos->z + (velocity->z * get_entity_movement_delta_time());
 	
+	ASSERT(point_inside_map_area(&new_pos));
+
 	get_3d_terrain_point_data (new_pos.x, new_pos.z, &raw->vh.terrain_info);
 
 	terrain_elevation = get_3d_terrain_point_data_elevation (&raw->vh.terrain_info);
@@ -226,6 +229,8 @@ void anti_aircraft_falling_movement (entity *en)
 	new_pos.y = pos->y + (velocity->y * get_entity_movement_delta_time());
 	new_pos.z = pos->z + (velocity->z * get_entity_movement_delta_time());
 	
+	ASSERT(point_inside_map_area(&new_pos));
+
 	get_3d_terrain_point_data (new_pos.x, new_pos.z, &raw->vh.terrain_info);
 
 	//
@@ -276,7 +281,7 @@ void anti_aircraft_falling_movement (entity *en)
 
 					set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &temp_pos);
 
-					create_client_server_object_hit_ground_explosion_effect (en, get_3d_terrain_point_data_type (&raw->vh.terrain_info));
+					create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_WATER, 1);
 				}
 
 				//
@@ -315,7 +320,9 @@ void anti_aircraft_falling_movement (entity *en)
 
 //					delete_local_entity_from_parents_child_list (en, LIST_TYPE_VIEW);
 	
-					delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+//					delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+					set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+	
 				}
 			}
 		}
@@ -340,7 +347,7 @@ void anti_aircraft_falling_movement (entity *en)
 
 				set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &temp_pos);
 
-				create_client_server_object_hit_ground_explosion_effect (en, get_3d_terrain_point_data_type (&raw->vh.terrain_info));
+				create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_GROUND, 2);
 			}
 
 			velocity->y = 0.0;
@@ -389,7 +396,7 @@ void anti_aircraft_impact_movement (entity *en)
 
 	seed = get_client_server_entity_random_number_seed(en);
 
-	speed = 7.0 + (4.0 * frand1x (&seed));
+	speed = 4.0 * frand1x (&seed);
 
 	velocity = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_MOTION_VECTOR);
 

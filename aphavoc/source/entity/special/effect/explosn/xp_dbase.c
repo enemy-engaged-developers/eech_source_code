@@ -85,13 +85,13 @@ meta_explosion_data
 
 static void initialise_misc_explosion_database(void);
 
-static void initialise_armour_piercing_explosion_database(void);
+static void initialise_object_collision_database(void);
 
 static void initialise_high_explosive_explosion_database(void);
 
-static void initialise_earth_explosion_database(void);
+static void initialise_ground_collision_database(void);
 
-static void initialise_water_explosion_database(void);
+static void initialise_water_collision_database(void);
 
 static void initialise_object_dust_explosion_database(void);
 
@@ -146,7 +146,7 @@ static void export_explosion_database(void)
 			"Delay max;Lifetime min;Lifetime max;Scale min;Scale max;"
 			"Blast radius\n"
 		"#PARTICLES;Trail type;Particle count;"
-			"Initial speed;Frequency;Smoke lifetime\n"
+			"Generator lifetime;Frequency;Smoke lifetime;Initial speed;Motion vector pitch\n"
 		"#SMOKE_TRAILS;Trail type;Trail count;"
 			"Generator lifetime;Frequency;Smoke lifetime;"
 			"Initial velocity (x;y;z)\n"
@@ -197,9 +197,9 @@ static void export_explosion_database(void)
 				{
 					fprintf(file,
 						"PARTICLES;%s;%i;"
-						"%f;%f;%f\n",
+						"%f;%f;%f;%f;%f\n",
 						smoke_list_types_names[co->trail_type], co->particle_count,
-						co->initial_speed, co->frequency, co->smoke_lifetime);
+						co->particle_generator_lifetime, co->frequency, co->smoke_lifetime, co->initial_speed, co->motion_vector_pitch);
 					break;
 				}
 			case EXPLOSION_SMOKE_TRAILS:
@@ -415,12 +415,15 @@ static void import_explosion_database(void)
 						}
 						if (sscanf(ptr,
 							"%i;"
-							"%f;%f;%f",
+							"%f;%f;%f;%f;%f",
 							&co->particle_count,
-							&co->initial_speed, &co->frequency, &co->smoke_lifetime) != 4)
+							&co->particle_generator_lifetime, &co->frequency, &co->smoke_lifetime, &co->initial_speed, &co->motion_vector_pitch) != 6)
 						{
 							continue;
 						}
+
+						co->particle_generator_lifetime = min(command_line_max_smoke_time * 60, co->particle_generator_lifetime);
+
 						break;
 					}
 				case EXPLOSION_SMOKE_TRAILS:
@@ -440,6 +443,9 @@ static void import_explosion_database(void)
 						{
 							continue;
 						}
+
+						co->generator_lifetime = min(command_line_max_smoke_time * 60, co->generator_lifetime);
+						
 						break;
 					}
 				case EXPLOSION_SOUND_EFFECT:
@@ -499,13 +505,13 @@ void initialise_explosion_database(void)
 {
 	initialise_misc_explosion_database();
 
-	initialise_armour_piercing_explosion_database();
+	initialise_object_collision_database();
 
 	initialise_high_explosive_explosion_database();
 
-	initialise_earth_explosion_database();
+	initialise_ground_collision_database();
 
-	initialise_water_explosion_database();
+	initialise_water_collision_database();
 
 	initialise_object_dust_explosion_database();
 
@@ -656,6 +662,10 @@ void initialise_misc_explosion_database(void)
 	explosion_info->frequency 			= 0.1;
 
 	explosion_info->smoke_lifetime 			= 1.5;
+	
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
 
 	////////////////////////////////////////
 	//
@@ -698,7 +708,7 @@ void initialise_misc_explosion_database(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_armour_piercing_explosion_database(void)
+void initialise_object_collision_database(void)
 {
 
 	meta_explosion_component
@@ -713,7 +723,7 @@ void initialise_armour_piercing_explosion_database(void)
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ SMALL_AP_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ SMALL_OBJECT_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	1;
 
@@ -757,14 +767,14 @@ void initialise_armour_piercing_explosion_database(void)
 	explosion_info->animation_frequency		=	2.0;
 
 	explosion_info->rotation_rate		=	0.0;
-
+	
 	////////////////////////////////////////
 	//
 	// MEDIUM A.P. EXPLOSION
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ MEDIUM_AP_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ MEDIUM_OBJECT_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	2;
 
@@ -850,7 +860,7 @@ void initialise_armour_piercing_explosion_database(void)
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ LARGE_AP_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ LARGE_OBJECT_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	2;
 
@@ -946,15 +956,15 @@ void initialise_high_explosive_explosion_database(void)
 
 	////////////////////////////////////////
 	//
-	// SMALL HE EXPLOSION
+	// XSMALL HE EXPLOSION
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ SMALL_HE_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ XSMALL_HE_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	5;
 
-	this_explosion->damage_radius				=	10.0;
+	this_explosion->damage_radius				=	0.0;
 
 	this_explosion->show_on_map				=	FALSE;
 
@@ -965,35 +975,6 @@ void initialise_high_explosive_explosion_database(void)
 	//
 
 	explosion_info = &(this_explosion->component[ 0 ]);
-
-	explosion_info->type 						=	EXPLOSION_OBJECTS;
-
-	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_DEBRI;
-
-	explosion_info->object_count 				=	0;
-
-	explosion_info->red 							=	160;
-	explosion_info->green 						= 	160;
-	explosion_info->blue 						=	160;
-	explosion_info->alpha 						=	180;
-
-	explosion_info->blast_hemisphere_only	=	TRUE;
-
-	explosion_info->delay_max 					=	0.0;
-
-	explosion_info->lifetime_min 				=	1.0;
-	explosion_info->lifetime_max 				=	1.0;
-
-	explosion_info->scale_min 					=	2.0;
-	explosion_info->scale_max 					=	2.0;
-
-	explosion_info->blast_radius		 		=	0.0;
-
-	//
-	// component 1
-	//
-
-	explosion_info = &(this_explosion->component[ 1 ]);
 
 	explosion_info->type 						=	EXPLOSION_SPRITES;
 
@@ -1025,39 +1006,10 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->rotation_rate		=	1.0;
 
 	//
-	// component 2
+	// component 1
 	//
 
-	explosion_info = &(this_explosion->component[ 2 ]);
-
-	explosion_info->type 						=	EXPLOSION_OBJECTS;
-
-	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_FIREBALL;
-
-	explosion_info->object_count 				=	0;
-
-	explosion_info->red 							=	160;
-	explosion_info->green 						= 	160;
-	explosion_info->blue 						=	160;
-	explosion_info->alpha 						=	180;
-
-	explosion_info->blast_hemisphere_only	=	TRUE;
-
-	explosion_info->delay_max 					=	0.0;
-
-	explosion_info->lifetime_min 				=	1.0;
-	explosion_info->lifetime_max 				=	1.0;
-
-	explosion_info->scale_min 					=	5.0;
-	explosion_info->scale_max 					=	5.0;
-
-	explosion_info->blast_radius		 		=	0.0;
-
-	//
-	// component 3
-	//
-
-	explosion_info = &(this_explosion->component[ 3 ]);
+	explosion_info = &(this_explosion->component[ 1 ]);
 
 	explosion_info->type 						=	EXPLOSION_SPRITES;
 
@@ -1089,10 +1041,107 @@ void initialise_high_explosive_explosion_database(void)
 	explosion_info->rotation_rate		=	1.0;
 
 	//
-	// component 4
+	// component 2
 	//
 
-	explosion_info = &(this_explosion->component[ 4 ]);
+	explosion_info = &(this_explosion->component[ 2 ]);
+
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_SMALL_EXPLOSION;
+	explosion_info->sound_volume 				= 0.8;
+
+	////////////////////////////////////////
+	//
+	// SMALL HE EXPLOSION
+	//
+	////////////////////////////////////////
+
+	this_explosion = &(meta_explosion_database[ SMALL_HE_META_EXPLOSION ]);
+
+	this_explosion->number_of_components	=	5;
+
+	this_explosion->damage_radius				=	0.0;
+
+	this_explosion->show_on_map				=	FALSE;
+
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+
+	//
+	// component 0
+	//
+
+	explosion_info = &(this_explosion->component[ 0 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_CANNON_FLARE;
+
+	explosion_info->sprite_count 				=	2;
+
+	explosion_info->red 							=	255;
+	explosion_info->green 						= 	255;
+	explosion_info->blue 						=	255;
+	explosion_info->alpha 						=	255;
+
+	explosion_info->additive 					=	TRUE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.4;
+
+	explosion_info->lifetime_min 				=	0.875;
+	explosion_info->lifetime_max 				=	0.875;
+
+	explosion_info->scale_min 					=	10.0;
+	explosion_info->scale_max 					=	2.5;
+
+	explosion_info->blast_radius		 		=	3.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
+
+	//
+	// component 1
+	//
+
+	explosion_info = &(this_explosion->component[ 1 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_MISSILE_FLARE;
+
+	explosion_info->sprite_count 				=	0;
+
+	explosion_info->red 							=	255;
+	explosion_info->green 						= 	255;
+	explosion_info->blue 						=	255;
+	explosion_info->alpha 						=	255;
+
+	explosion_info->additive 					=	TRUE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.5;
+
+	explosion_info->lifetime_min 				=	0.5;
+	explosion_info->lifetime_max 				=	0.5;
+
+	explosion_info->scale_min 					=	30.0;
+	explosion_info->scale_max 					=	5.0;
+
+	explosion_info->blast_radius		 		=	4.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
+
+	//
+	// component 2
+	//
+
+	explosion_info = &(this_explosion->component[ 2 ]);
 
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 
@@ -1109,7 +1158,7 @@ void initialise_high_explosive_explosion_database(void)
 
 	this_explosion->number_of_components	=	6;
 
-	this_explosion->damage_radius				=	30.0;
+	this_explosion->damage_radius				=	0.0;
 
 	this_explosion->show_on_map				=	TRUE;
 
@@ -1273,7 +1322,7 @@ void initialise_high_explosive_explosion_database(void)
 
 	this_explosion->number_of_components	=	8;
 
-	this_explosion->damage_radius				=	60.0;
+	this_explosion->damage_radius				=	0.0;
 
 	this_explosion->show_on_map				=	TRUE;
 
@@ -1465,6 +1514,225 @@ void initialise_high_explosive_explosion_database(void)
 
 	explosion_info->smoke_lifetime 			= 1.5;
 
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 7 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
+
+	////////////////////////////////////////
+	//
+	// XLARGE HE EXPLOSION
+	//
+	////////////////////////////////////////
+
+	this_explosion = &(meta_explosion_database[ XLARGE_HE_META_EXPLOSION ]);
+
+	this_explosion->number_of_components	=	8;
+
+	this_explosion->damage_radius				=	0.0;
+
+	this_explosion->show_on_map				=	TRUE;
+
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+
+	//
+	// component 0
+	//
+
+	explosion_info = &(this_explosion->component[ 0 ]);
+
+	explosion_info->type 						=	EXPLOSION_OBJECTS;
+
+	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_DEBRI;
+
+	explosion_info->object_count 				=	1;
+
+	explosion_info->red 							=	160;
+	explosion_info->green 						= 	160;
+	explosion_info->blue 						=	160;
+	explosion_info->alpha 						=	180;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.0;
+
+	explosion_info->lifetime_min 				=	1.75;
+	explosion_info->lifetime_max 				=	1.75;
+
+	explosion_info->scale_min 					=	4.0;
+	explosion_info->scale_max 					=	4.0;
+
+	explosion_info->blast_radius		 		=	0.0;
+
+	//
+	// component 1
+	//
+
+	explosion_info = &(this_explosion->component[ 1 ]);
+
+	explosion_info->type 						=	EXPLOSION_OBJECTS;
+
+	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_FIREBALL;
+
+	explosion_info->object_count 				=	1;
+
+	explosion_info->red 							=	160;
+	explosion_info->green 						= 	160;
+	explosion_info->blue 						=	160;
+	explosion_info->alpha 						=	180;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.0;
+
+	explosion_info->lifetime_min 				=	1.75;
+	explosion_info->lifetime_max 				=	1.75;
+
+	explosion_info->scale_min 					=	10.0;
+	explosion_info->scale_max 					=	10.0;
+
+	explosion_info->blast_radius		 		=	0.0;
+
+	//
+	// component 2
+	//
+
+	explosion_info = &(this_explosion->component[ 2 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_CANNON_FLARE;
+
+	explosion_info->sprite_count 				=	3;
+
+	explosion_info->red 							=	255;
+	explosion_info->green 						= 	255;
+	explosion_info->blue 						=	255;
+	explosion_info->alpha 						=	255;
+
+	explosion_info->additive 					=	TRUE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	1.0;
+
+	explosion_info->lifetime_min 				=	1.0;
+	explosion_info->lifetime_max 				=	1.0;
+
+	explosion_info->scale_min 					=	50.0;
+	explosion_info->scale_max 					=	10.0;
+
+	explosion_info->blast_radius		 		=	18.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
+
+	//
+	// component 3
+	//
+
+	explosion_info = &(this_explosion->component[ 3 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_MISSILE_FLARE;
+
+	explosion_info->sprite_count 				=	3;
+
+	explosion_info->red 							=	255;
+	explosion_info->green 						= 	255;
+	explosion_info->blue 						=	255;
+	explosion_info->alpha 						=	255;
+
+	explosion_info->additive 					=	TRUE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.75;
+
+	explosion_info->lifetime_min 				=	1.0;
+	explosion_info->lifetime_max 				=	1.0;
+
+	explosion_info->scale_min 					=	40.0;
+	explosion_info->scale_max 					=	8.0;
+
+	explosion_info->blast_radius		 		=	17.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	1.0;
+
+	//
+	// component 4
+	//
+
+	explosion_info = &(this_explosion->component[ 4 ]);
+
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_LARGE_EXPLOSION;
+	explosion_info->sound_volume 				= 1.0;
+
+	//
+	// component 5
+	//
+
+	explosion_info = &(this_explosion->component[ 5 ]);
+
+	explosion_info->type 						=	EXPLOSION_OBJECTS;
+
+	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_FIREBALL;
+
+	explosion_info->object_count 				=	0;
+
+	explosion_info->red 							=	160;
+	explosion_info->green 						= 	160;
+	explosion_info->blue 						=	160;
+	explosion_info->alpha 						=	180;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.5;
+
+	explosion_info->lifetime_min 				=	1.75;
+	explosion_info->lifetime_max 				=	1.75;
+
+	explosion_info->scale_min 					=	10.0;
+	explosion_info->scale_max 					=	10.0;
+
+	explosion_info->blast_radius		 		=	0.0;
+
+	//
+	// component 6
+	//
+
+	explosion_info = &(this_explosion->component[ 6 ]);
+
+	explosion_info->type 						= EXPLOSION_PARTICLES;
+
+	explosion_info->particle_count 			= 0;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
+
+	explosion_info->initial_speed 			= 30.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 	//
 	// Werewolf: distant explosion sound
 	//
@@ -1479,7 +1747,7 @@ void initialise_high_explosive_explosion_database(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_earth_explosion_database(void)
+void initialise_ground_collision_database(void)
 {
 
 	meta_explosion_component
@@ -1490,11 +1758,11 @@ void initialise_earth_explosion_database(void)
 
 	////////////////////////////////////////
 	//
-	// SMALL EARTH EXPLOSION
+	// XSMALL GROUND EXPLOSION
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ SMALL_EARTH_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ XSMALL_GROUND_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	2;
 
@@ -1552,11 +1820,73 @@ void initialise_earth_explosion_database(void)
 
 	////////////////////////////////////////
 	//
-	// MEDIUM EARTH EXPLOSION
+	// SMALL GROUND EXPLOSION
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ MEDIUM_EARTH_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ SMALL_GROUND_META_EXPLOSION ]);
+
+	this_explosion->number_of_components	=	2;
+
+	this_explosion->damage_radius				=	0.0;
+
+	this_explosion->show_on_map				=	FALSE;
+
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+
+	//
+	// component 0
+	//
+
+	explosion_info = &(this_explosion->component[ 0 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_SMOKE;
+
+	explosion_info->sprite_count 				=	2;
+
+	explosion_info->red 							=	80;
+	explosion_info->green 						= 	60;
+	explosion_info->blue 						=	20;
+	explosion_info->alpha 						=	140;
+
+	explosion_info->additive 					=	FALSE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.25;
+
+	explosion_info->lifetime_min 				=	0.75;
+	explosion_info->lifetime_max 				=	1.5;
+
+	explosion_info->scale_min 					=	4.0;
+	explosion_info->scale_max 					=	6.0;
+
+	explosion_info->blast_radius		 		=	5.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	0.0;
+
+	//
+	// component 1
+	//
+
+	explosion_info = &(this_explosion->component[ 1 ]);
+
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_GROUND_STRAFE;
+	explosion_info->sound_volume 				= 1.0;
+
+	////////////////////////////////////////
+	//
+	// MEDIUM GROUND EXPLOSION
+	//
+	////////////////////////////////////////
+
+	this_explosion = &(meta_explosion_database[ MEDIUM_GROUND_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	2;
 
@@ -1619,13 +1949,17 @@ void initialise_earth_explosion_database(void)
 
 	explosion_info->smoke_lifetime 			= 1.5;
 
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 	////////////////////////////////////////
 	//
-	// LARGE EARTH EXPLOSION
+	// LARGE GROUND EXPLOSION
 	//
 	////////////////////////////////////////
 
-	this_explosion = &(meta_explosion_database[ LARGE_EARTH_META_EXPLOSION ]);
+	this_explosion = &(meta_explosion_database[ LARGE_GROUND_META_EXPLOSION ]);
 
 	this_explosion->number_of_components	=	2;
 
@@ -1687,13 +2021,91 @@ void initialise_earth_explosion_database(void)
 	explosion_info->frequency 			= 0.1;
 
 	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
+	////////////////////////////////////////
+	//
+	// XLARGE GROUND EXPLOSION
+	//
+	////////////////////////////////////////
+
+	this_explosion = &(meta_explosion_database[ XLARGE_GROUND_META_EXPLOSION ]);
+
+	this_explosion->number_of_components	=	2;
+
+	this_explosion->damage_radius				=	0.0;
+
+	this_explosion->show_on_map				=	FALSE;
+
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+
+	//
+	// component 0
+	//
+
+	explosion_info = &(this_explosion->component[ 0 ]);
+
+	explosion_info->type 						=	EXPLOSION_SPRITES;
+
+	explosion_info->animated_texture 		=	TEXTURE_ANIMATION_INDEX_SMOKE;
+
+	explosion_info->sprite_count 				=	5;
+
+	explosion_info->red 							=	80;
+	explosion_info->green 						= 	60;
+	explosion_info->blue 						=	20;
+	explosion_info->alpha 						=	140;
+
+	explosion_info->additive 					=	FALSE;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.25;
+
+	explosion_info->lifetime_min 				=	1.0;
+	explosion_info->lifetime_max 				=	2.5;
+
+	explosion_info->scale_min 					=	6.0;
+	explosion_info->scale_max 					=	8.0;
+
+	explosion_info->blast_radius		 		=	6.0;
+
+	explosion_info->animation_frequency		=	2.0;
+
+	explosion_info->rotation_rate		=	0.0;
+
+	//
+	// component 1
+	//
+
+	explosion_info = &(this_explosion->component[ 1 ]);
+
+	explosion_info->type 						= EXPLOSION_PARTICLES;
+
+	explosion_info->particle_count 			= 6;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_MEDIUM_EARTH_PARTICLE_TRAIL;
+
+	explosion_info->initial_speed 			= 20.0;
+
+	explosion_info->frequency 			= 0.1;
+
+	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_water_explosion_database(void)
+void initialise_water_collision_database(void)
 {
 
 	meta_explosion_component
@@ -1710,7 +2122,7 @@ void initialise_water_explosion_database(void)
 
 	this_explosion = &(meta_explosion_database[ SMALL_WATER_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	2;
+	this_explosion->number_of_components	=	3;
 
 	this_explosion->damage_radius				=	0.0;
 
@@ -1736,11 +2148,44 @@ void initialise_water_explosion_database(void)
 
 	explosion_info->smoke_lifetime 			= 1.5;
 
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 	//
 	// component 1
 	//
 
 	explosion_info = &(this_explosion->component[ 1 ]);
+
+	explosion_info->type 						=	EXPLOSION_OBJECTS;
+
+	explosion_info->object_3d_shape 			=	OBJECT_3D_EFFECT_SMALL_WATER_SPLASH;
+
+	explosion_info->object_count 				=	1;
+
+	explosion_info->red 							=	160;
+	explosion_info->green 						= 	160;
+	explosion_info->blue 						=	160;
+	explosion_info->alpha 						=	180;
+
+	explosion_info->blast_hemisphere_only	=	TRUE;
+
+	explosion_info->delay_max 					=	0.0;
+
+	explosion_info->lifetime_min 				=	1.5;
+	explosion_info->lifetime_max 				=	1.5;
+
+	explosion_info->scale_min 					=	4.0;
+	explosion_info->scale_max 					=	5.0;
+
+	explosion_info->blast_radius		 		=	0.0;
+
+	//
+	// component 2
+	//
+
+	explosion_info = &(this_explosion->component[ 2 ]);
 
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 
@@ -1815,6 +2260,10 @@ void initialise_water_explosion_database(void)
 	explosion_info->frequency 			= 0.1;
 
 	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
 
 	//
 	// component 2
@@ -1895,6 +2344,10 @@ void initialise_water_explosion_database(void)
 	explosion_info->frequency 			= 0.1;
 
 	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
 
 	//
 	// component 2
@@ -2081,7 +2534,7 @@ void initialise_object_dust_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 10.0;
+	explosion_info->particle_generator_lifetime		= 10.0;
 	explosion_info->frequency					= 0.6;
 	explosion_info->smoke_lifetime			= 30.0;
 
@@ -2192,6 +2645,10 @@ void initialise_object_dust_explosion_database(void)
 	explosion_info->frequency 			= 0.1;
 
 	explosion_info->smoke_lifetime 			= 1.5;
+
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
 
 //	explosion_info->trail_scale 				= 15.0;
 
@@ -2467,6 +2924,10 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->smoke_lifetime 			= 1.5;
 
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 	//
 	// component 4
 	//
@@ -2490,10 +2951,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 400.0;
-	else
-		explosion_info->generator_lifetime		= 5.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 400.0);
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 100.0;
 
@@ -2513,10 +2971,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 120.0;
-	else
-		explosion_info->generator_lifetime		= 5.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 120.0);
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -2536,10 +2991,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 200.0;
-	else
-		explosion_info->generator_lifetime		= 5.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 200.0);
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 
@@ -2729,6 +3181,10 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->smoke_lifetime 			= 1.5;
 
+	explosion_info->particle_generator_lifetime 			= 1.5;
+
+	explosion_info->motion_vector_pitch			= 30;
+
 	//
 	// component 6
 	//
@@ -2741,10 +3197,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 1200.0;
-	else
-		explosion_info->generator_lifetime		= 10.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 1200.0);
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 200.0;
 
@@ -2764,10 +3217,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 120.0;
-	else
-		explosion_info->generator_lifetime		= 5.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 120.0);
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -2787,10 +3237,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	if (command_line_persistent_smoke)
-		explosion_info->generator_lifetime		= 200.0;
-	else
-		explosion_info->generator_lifetime		= 10.0;
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 200.0);
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 
@@ -2821,204 +3268,88 @@ void deinitialise_explosion_database(void)
 
 	deinitialise_weapon_explosion_criteria_tables();
 
-	////////////////////////////////////////
-	//
-	// TEST
-	//
-	////////////////////////////////////////
-
 	this_explosion = &(meta_explosion_database[ TEST_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// PURPLE FLARE
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ PURPLE_FLARE_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL AP EXPLOSION
-	//
-	////////////////////////////////////////
+	// OBJECT COLLISION
 
-	this_explosion = &(meta_explosion_database[ SMALL_AP_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ SMALL_OBJECT_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// MEDIUM AP EXPLOSION
-	//
-	////////////////////////////////////////
-
-	this_explosion = &(meta_explosion_database[ MEDIUM_AP_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ MEDIUM_OBJECT_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// LARGE AP EXPLOSION
-	//
-	////////////////////////////////////////
-
-	this_explosion = &(meta_explosion_database[ LARGE_AP_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ LARGE_OBJECT_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL HE EXPLOSION
-	//
-	////////////////////////////////////////
+	// HE EXPLOSION
+	
+	this_explosion = &(meta_explosion_database[ XSMALL_HE_META_EXPLOSION ]);
+	free_mem( this_explosion->component );
 
 	this_explosion = &(meta_explosion_database[ SMALL_HE_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// MEDIUM HE EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_HE_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// LARGE HE EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ LARGE_HE_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL EARTH EXPLOSION
-	//
-	////////////////////////////////////////
-
-	this_explosion = &(meta_explosion_database[ SMALL_EARTH_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ XLARGE_HE_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// MEDIUM EARTH EXPLOSION
-	//
-	////////////////////////////////////////
+	// GROUND COLLISION
 
-	this_explosion = &(meta_explosion_database[ MEDIUM_EARTH_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ XSMALL_GROUND_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// LARGE EARTH EXPLOSION
-	//
-	////////////////////////////////////////
-
-	this_explosion = &(meta_explosion_database[ LARGE_EARTH_META_EXPLOSION ]);
-
+	this_explosion = &(meta_explosion_database[ SMALL_GROUND_META_EXPLOSION ]);
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL WATER EXPLOSION
-	//
-	////////////////////////////////////////
+	this_explosion = &(meta_explosion_database[ MEDIUM_GROUND_META_EXPLOSION ]);
+	free_mem( this_explosion->component );
+
+	this_explosion = &(meta_explosion_database[ LARGE_GROUND_META_EXPLOSION ]);
+	free_mem( this_explosion->component );
+
+	this_explosion = &(meta_explosion_database[ XLARGE_GROUND_META_EXPLOSION ]);
+	free_mem( this_explosion->component );
+
+	// WATER COLLISION
 
 	this_explosion = &(meta_explosion_database[ SMALL_WATER_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// MEDIUM WATER EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_WATER_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// LARGE WATER EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ LARGE_WATER_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL DUST EXPLOSION
-	//
-	////////////////////////////////////////
+	// DUST EXPLOSION
 
 	this_explosion = &(meta_explosion_database[ SMALL_DUST_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// MEDIUM DUST EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_DUST_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// LARGE DUST EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ LARGE_DUST_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// SMALL EXPLOSIVE OBJECT EXPLOSION
-	//
-	////////////////////////////////////////
+	// EXPLOSIVE OBJECT EXPLOSION
 
 	this_explosion = &(meta_explosion_database[ SMALL_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
-
-	////////////////////////////////////////
-	//
-	// MEDIUM EXPLOSIVE OBJECT EXPLOSION
-	//
-	////////////////////////////////////////
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 
-	////////////////////////////////////////
-	//
-	// LARGE EXPLOSIVE OBJECT EXPLOSION
-	//
-	////////////////////////////////////////
-
 	this_explosion = &(meta_explosion_database[ LARGE_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
-
 	free_mem( this_explosion->component );
 }
 

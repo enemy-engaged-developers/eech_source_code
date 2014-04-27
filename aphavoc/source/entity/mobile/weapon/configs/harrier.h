@@ -253,7 +253,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_LAU69A,	  						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_MK_40_FFAR,	  						// sub_type
 				NUM_LAU69A_ROCKETS,	 										// number
 				LHS_HARDPOINT2,												// heading_depth
 				LAU69A_ROCKET_POD,		  	 								// pitch_depth
@@ -275,7 +275,7 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_LAU69A,	  						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_MK_40_FFAR,	  						// sub_type
 				NUM_LAU69A_ROCKETS,	 										// number
 				RHS_HARDPOINT2,												// heading_depth
 				LAU69A_ROCKET_POD,		  	 								// pitch_depth

@@ -545,9 +545,9 @@ static void virtual_cockpit_track_target_event (event *ev)
 
 static void select_cannon_event (event *ev)
 {
-	if (get_local_entity_weapon_available (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND))
+	if (get_local_entity_weapon_available (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND))
 	{
-		set_gunship_weapon (ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND);
+		set_gunship_weapon (ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND);
 	}
 }
 

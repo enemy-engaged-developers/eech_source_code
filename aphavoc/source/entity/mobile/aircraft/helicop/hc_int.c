@@ -610,10 +610,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
-			value = WARHEAD_EFFECTIVE_HELICOPTER;
+			value = aircraft_database[raw->ac.mob.sub_type].armor_level;
 
 			break;
 		}
@@ -736,7 +736,7 @@ void overload_helicopter_int_value_functions (void)
 	fn_set_client_server_entity_int_value	[ENTITY_TYPE_HELICOPTER][INT_TYPE_TIMER][COMMS_MODEL_CLIENT]							= set_client_int_value;
 	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_TIMER]														= get_local_int_value;
 
-	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_WARHEAD_EFFECTIVE_CLASS] 								= get_local_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_ARMOR_LEVEL] 								= get_local_int_value;
 
 	fn_set_local_entity_raw_int_value		[ENTITY_TYPE_HELICOPTER][INT_TYPE_WEAPONS_HOLD]												= set_local_int_value;
 	fn_set_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_WEAPONS_HOLD]												= set_local_int_value;

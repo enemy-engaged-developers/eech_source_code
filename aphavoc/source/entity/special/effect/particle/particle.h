@@ -73,7 +73,8 @@ struct PARTICLE
 		initial_speed,
 		heading,
 		pitch,
-		roll;
+		roll,
+		motion_vector_pitch;
 
 	unsigned char
 		particle_count,

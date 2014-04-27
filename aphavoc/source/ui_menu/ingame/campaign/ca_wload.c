@@ -117,6 +117,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void rebuild_default_payload_list (entity *en);
+static void update_common_gauges (entity *en);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +249,8 @@ void initialise_campaign_screen_weapon_loading_page_objects (void)
 static void update_weapon_loading_page_objects (ui_object *obj, void *arg)
 {
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
+	
+	update_common_gauges(get_local_entity_safe_ptr (get_ui_object_item_number (page_member_list)));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -362,108 +365,28 @@ static void notify_weapon_loading_page_change_weapon (ui_object *obj, void *arg)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
+static void toggle_fuel_weight_modifier (ui_object *obj, void *arg)
 {
-	entity
-		*en;
+	ASSERT (get_gunship_entity());
+	
+	if (current_flight_dynamics->fuel_weight.modifier < 1.0)
+		current_flight_dynamics->fuel_weight.modifier += 0.25;
+	else
+		current_flight_dynamics->fuel_weight.modifier = 0.25;
+	
+	dynamics_takeoff(); // toggle takeoff-land to start refueling
+}
 
-	gunship_types
-		gunship;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void update_common_gauges (entity *en)
+{
 	int
-		hardpoint_;
-
-	int
-		count,
-		fixed,
-		auw,
-		weapon_type;
-
+		auw;
 	float
 		mass;
-
-	ui_object
-		*button_object;
-
-	rgb_colour
-		*col;
-
-	ASSERT (obj);
-
-	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
-
-	ASSERT (en);
-
-	gunship = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
-
-	ASSERT (gunship < NUM_GUNSHIP_TYPES);
-
-	if (get_helicopter_allowed_to_rearm (en))
-	{
-		fixed = FALSE;
-	}
-	else
-	{
-		fixed = TRUE;
-	}
-
-	//
-	// Set button text
-	//	
-
-	for (hardpoint_ = 0; hardpoint_ < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint_++)
-	{
-		weapon_loading_hardpoint_types
-			hardpoint;
-
-		hardpoint = (weapon_loading_hardpoint_types) hardpoint_;
-
-		if (weapon_loading_button_list [gunship][hardpoint].valid)
-		{
-			button_object = weapon_loading_button_list [gunship][hardpoint].button_ptr;
-
-			weapon_type = weapon_loading_get_current_hardpoint_weapon (gunship, hardpoint);
-
-			//
-			// Set Text
-			//
-			
-			if (weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-			{
-				count = get_weapon_loading_hardpoint_weapon_count (en, hardpoint, weapon_type);
-
-				sprintf (buffer, "%dx %s", count, weapon_database [weapon_type].weapon_loading_list_name);
-			}
-			else
-			{
-				sprintf (buffer, "%s", weapon_database [weapon_type].weapon_loading_list_name);
-			}
-
-			set_ui_object_text (button_object, buffer);
-
-			//
-			// Set Button Attributes
-			//
-
-			if ((fixed) || (weapon_loading_get_valid_weapon_count (en, hardpoint) < 2))
-			{
-				set_ui_object_notify_on (button_object, NOTIFY_TYPE_NONE);
-
-				set_ui_object_highlightable (button_object, FALSE);
-
-				col = &ui_ingame_dead_text_colour;
-
-				set_ui_object_font_colour (button_object, col->r, col->g, col->b, col->a);
-			}
-			else
-			{
-				set_ui_object_notify_on (button_object, NOTIFY_TYPE_BUTTON_DOWN);
-
-				set_ingame_ui_object_mouse_over_properties (button_object);
-			}
-		}
-	}
-
 	//
 	// All-Up-Weight (player only)
 	//
@@ -550,6 +473,105 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 		
 			draw_weapon_loading_gauge (page_repairing_gauge, level);
 		}
+	}	
+}
+
+static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
+{
+	entity
+		*en;
+
+	gunship_types
+		gunship;
+
+	int
+		hardpoint_;
+
+	int
+		count,
+		fixed,
+		weapon_type;
+
+	ui_object
+		*button_object;
+
+	rgb_colour
+		*col;
+
+	ASSERT (obj);
+
+	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
+
+	ASSERT (en);
+
+	gunship = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
+
+	ASSERT (gunship < NUM_GUNSHIP_TYPES);
+
+	if (get_helicopter_allowed_to_rearm (en))
+	{
+		fixed = FALSE;
+	}
+	else
+	{
+		fixed = TRUE;
+	}
+
+	//
+	// Set button text
+	//	
+
+	for (hardpoint_ = 0; hardpoint_ < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint_++)
+	{
+		weapon_loading_hardpoint_types
+			hardpoint;
+
+		hardpoint = (weapon_loading_hardpoint_types) hardpoint_;
+
+		if (weapon_loading_button_list [gunship][hardpoint].valid)
+		{
+			button_object = weapon_loading_button_list [gunship][hardpoint].button_ptr;
+
+			weapon_type = weapon_loading_get_current_hardpoint_weapon (gunship, hardpoint);
+
+			//
+			// Set Text
+			//
+			
+			if (weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				count = get_weapon_loading_hardpoint_weapon_count (en, hardpoint, weapon_type);
+
+				sprintf (buffer, "%dx %s", count, weapon_database [weapon_type].weapon_loading_list_name);
+			}
+			else
+			{
+				sprintf (buffer, "%s", weapon_database [weapon_type].weapon_loading_list_name);
+			}
+
+			set_ui_object_text (button_object, buffer);
+
+			//
+			// Set Button Attributes
+			//
+
+			if ((fixed) || (weapon_loading_get_valid_weapon_count (en, hardpoint) < 2))
+			{
+				set_ui_object_notify_on (button_object, NOTIFY_TYPE_NONE);
+
+				set_ui_object_highlightable (button_object, FALSE);
+
+				col = &ui_ingame_dead_text_colour;
+
+				set_ui_object_font_colour (button_object, col->r, col->g, col->b, col->a);
+			}
+			else
+			{
+				set_ui_object_notify_on (button_object, NOTIFY_TYPE_BUTTON_DOWN);
+
+				set_ingame_ui_object_mouse_over_properties (button_object);
+			}
+		}
 	}
 }
 
@@ -569,14 +591,7 @@ void rebuild_default_payload_list (entity *en)
 
 	ui_object_destroy_list_items (page_default_payload_list);
 
-	if (get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES)
-	{	
-		fixed = (!get_helicopter_allowed_to_rearm (en));
-	}
-	else
-	{
-		fixed = TRUE;
-	}
+	fixed = (!get_helicopter_allowed_to_rearm (en));
 
 	//
 
@@ -660,7 +675,8 @@ static void notify_default_payload_list (ui_object *obj, void *arg)
 		
 				set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, get_local_entity_int_value (en, config_type));
 		
-				weapon_loading_update_currently_selected_weapons (en);
+				if (get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES) // no need to do it for default helicopters
+					weapon_loading_update_currently_selected_weapons (en);
 
 				if (en == get_gunship_entity ())
 				{
@@ -1133,9 +1149,12 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
+				UI_ATTR_FUNCTION (toggle_fuel_weight_modifier),
 				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\smallbar.psd")),
 				UI_ATTR_FONT_COLOUR (ui_ingame_dead_text_colour.r, ui_ingame_dead_text_colour.g, ui_ingame_dead_text_colour.b, ui_ingame_dead_text_colour.a),
 				UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_10),
+				UI_ATTR_ITEM_NUMBER (ENTITY_INDEX_DONT_CARE),
+				UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_DOWN),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 				UI_ATTR_END
 			);

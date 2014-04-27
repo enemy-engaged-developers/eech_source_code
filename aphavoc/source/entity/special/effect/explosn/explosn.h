@@ -150,7 +150,7 @@ extern void create_client_server_weapon_killed_explosion_effect (entity *en);
 
 extern void create_client_server_object_killed_explosion_effect (entity *en);
 
-extern void create_client_server_object_hit_ground_explosion_effect (entity *en, terrain_types terrain_type);
+extern void create_client_server_collision_effect (vec3d *pos, dynamics_collision_surface_types surface, unsigned power);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

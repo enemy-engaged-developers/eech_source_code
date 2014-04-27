@@ -66,6 +66,8 @@
 
 extern void initialise_apache_advanced_dynamics (entity *en);
 
+extern void initialise_advanced_dynamics (entity *en);
+
 extern void update_apache_advanced_dynamics (void);
 
 extern void apache_restore_damage_values (void);

@@ -78,6 +78,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+viewpoint
+	*weapon_viewpoint;
+float
+	weapon_velocity = 0.0;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
@@ -87,7 +96,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		*raw;
 
 	int
-		seed;
+		seed,
+		submunition = (weapon_velocity != 0); // if it's submunition, we will use weapon position, attitude and velocity values
 
 	viewpoint
 		vp;
@@ -149,7 +159,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		get_identity_matrix3x3 (raw->mob.attitude);
 
 		raw->mob.alive = TRUE;
-
+		
 		//
 		// weapon
 		//
@@ -175,33 +185,33 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		ASSERT (raw->launched_weapon_link.parent);
 
 		ASSERT (raw->burst_size > 0);
-
+		
 		////////////////////////////////////////
 		//
 		// RESOLVE DEFAULT VALUES
 		//
 		////////////////////////////////////////
 
-		if (weapon_database[raw->mob.sub_type].acquire_parent_forward_velocity)
+		if (!submunition)
 		{
-			raw->mob.velocity = get_local_entity_float_value (raw->launched_weapon_link.parent, FLOAT_TYPE_VELOCITY);
+			if (weapon_database[raw->mob.sub_type].acquire_parent_forward_velocity)
+				raw->mob.velocity = get_local_entity_float_value (raw->launched_weapon_link.parent, FLOAT_TYPE_VELOCITY);
+			else
+				raw->mob.velocity = 0.0;
 		}
 		else
 		{
-			//
-			// overwrite attribute
-			//
-
-			raw->mob.velocity = 0.0;
+			memcpy ( vp.attitude, weapon_viewpoint->attitude, sizeof ( matrix3x3 ));
+			raw->mob.velocity = weapon_velocity;
 		}
-
+		
 		raw->mob.velocity += weapon_database[raw->mob.sub_type].muzzle_velocity;
 
 		seed = get_client_server_entity_random_number_seed (en);
 
 		raw->mob.velocity += weapon_database[raw->mob.sub_type].muzzle_velocity_max_error * frand1x (&seed);
 
-		raw->weapon_lifetime = weapon_database[raw->mob.sub_type].burn_time;
+		raw->weapon_lifetime = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time;
 
 		raw->decoy_timer = get_decoy_timer_start_value (weapon_database[raw->mob.sub_type].decoy_type);
 
@@ -209,21 +219,51 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// detach weapon from launcher (get position and attitude)
 		//
 
-		detach_local_entity_weapon (raw->launched_weapon_link.parent, raw->mob.sub_type, raw->burst_size, &vp);
+		if (!submunition)
+		{
+			detach_local_entity_weapon (raw->launched_weapon_link.parent, raw->mob.sub_type, raw->burst_size, &vp);
+			raw->mob.position = vp.position;
+		}
+		else
+			raw->mob.position = weapon_viewpoint->position;
 
-		raw->mob.position = vp.position;
+		// shells or convertional munitions with remote fuze, decoy_timer is time value
+		
+		if ((weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT || weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS) && 
+				!weapon_database[raw->mob.sub_type].guidance_type)
+		{
+			entity *target;
+			float time_of_flight, dummy;
+			vec3d intercept_point;
+			
+			target = get_local_entity_parent (raw->launched_weapon_link.parent, LIST_TYPE_TARGET);
+			
+			if (target)
+				if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(&raw->mob.position, raw->mob.sub_type, 0, en, target, &intercept_point, &dummy, &time_of_flight))
+				{
+					raw->decoy_timer = - (weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time - time_of_flight + 0.5 * sfrand1() * weapon_database[raw->mob.sub_type].cruise_time_max_error);
+					
+					if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS)
+						raw->decoy_timer -= 1;
+					
+					raw->decoy_timer = max(0, raw->decoy_timer);
+				}
+		}
 
 		// arneh - add dispersion as random rotation in heading and pitch up to max error angle
-		dispersion = weapon_database[raw->mob.sub_type].max_range_error_ratio;
+		// dispersion is ratio of circular error probability value to range (for CEP 0.5m at 1000m ratio value is 0.0005)
+
+		dispersion = weapon_database[raw->mob.sub_type].circular_error_probable;
+
 		if (dispersion > 0.0)
 		{
 			matrix3x3
 				m;
 
 			float
-				heading = dispersion * sfrand1norm(),
-				pitch = dispersion * sfrand1norm();
-
+				heading = 3 * sfrand1norm() * tan(dispersion),
+				pitch = 3 * sfrand1norm() * tan(dispersion);
+			
 			get_3d_transformation_matrix(m, heading, pitch, 0.0);
 			multiply_matrix3x3_matrix3x3(raw->mob.attitude, vp.attitude, m);
 		}
@@ -277,6 +317,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		}
 	}
 
+	weapon_velocity = 0;
+	
 	return (en);
 }
 
@@ -364,7 +406,7 @@ void overload_weapon_create_functions (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_client_server_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int weapon_index, int burst_size, int *smoke_trail_indices)
+void create_client_server_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int weapon_index, int burst_size, int *smoke_trail_indices, int salvo)
 {
 	entity
 		*force,
@@ -393,7 +435,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 	{
 		target = get_local_entity_parent (launcher, LIST_TYPE_TARGET);
 
-/*		if (weapon_database[weapon_sub_type].hellfire_flight_profile)
+/*		if (weapon_database[weapon_sub_type].flight_profile_or_self_destr == 1)
 		{
 			if (get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 			{
@@ -428,12 +470,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 		if (current_weapon_count > 0)
 		{
-			int loal_mode = weapon_database[weapon_sub_type].hellfire_flight_profile && get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
-
-			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
-			{
-				set_force_local_entity_create_stack_attributes (TRUE);
-			}
+			int loal_mode = weapon_database[weapon_sub_type].flight_profile_or_self_destr == 1 && get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
 
 			//
 			// get burst size wrt rate of fire
@@ -525,7 +562,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 			valid_sound_effect = FALSE;
 
-			if (get_local_entity_float_value (launcher, FLOAT_TYPE_WEAPON_BURST_TIMER) == 0.0)
+			if (get_local_entity_float_value (launcher, FLOAT_TYPE_WEAPON_BURST_TIMER) <= 0)
 			{
 				set_local_entity_float_value (launcher, FLOAT_TYPE_WEAPON_BURST_TIMER, weapon_database[weapon_sub_type].burst_duration);
 
@@ -535,6 +572,11 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			//
 			// create weapon
 			//
+
+			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
+			{
+				set_force_local_entity_create_stack_attributes (TRUE);
+			}
 
 			weapon = create_local_entity
 			(
@@ -549,13 +591,17 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 				ENTITY_ATTR_END
 			);
 
+			set_force_local_entity_create_stack_attributes (FALSE);
+
 			if (weapon)
 			{
+				int decoy = weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS);
+				
 				//
 				// send FIRE message to force (unless it's a decoy/cargo/debris being launched)
 				//
 
-				if ((target) && (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS))))
+				if (target && !decoy)
 				{
 					force = get_local_force_entity ((entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE));
 
@@ -580,7 +626,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 				smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
-				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE)
+				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && !(!decoy && command_line_smoke_optimisation && (salvo % 4 != 0))) // smoke optimisation, only for weapons
 				{
 					struct OBJECT_3D_BOUNDS
 						*bounding_box;
@@ -708,8 +754,6 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 					}
 				}
 			}
-
-			set_force_local_entity_create_stack_attributes (FALSE);
 		}
 		else
 		{
@@ -731,6 +775,8 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			ASSERT (burst_size == BURST_SIZE_DONT_CARE);
 
 			ASSERT (!smoke_trail_indices);
+
+			set_force_local_entity_create_stack_attributes (FALSE);
 
 			// NOTE: The clients' weapon counters lag the servers' so it is possible that the
 			//       client may unknowingly attempt to create more weapons than are available.
@@ -824,10 +870,12 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_type)
+void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_type, int salvo_count)
 {
 	int
 		salvo_size;
+	unsigned
+		pods_firing;
 
 	ASSERT (launcher);
 
@@ -842,6 +890,8 @@ void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_
 		return;
 	}
 
+	pods_firing = max(1, get_number_of_pods_firing(launcher, weapon_sub_type));
+	
 	if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
 	{
 		salvo_size = get_local_entity_weapon_salvo_size (launcher, weapon_sub_type);
@@ -859,13 +909,151 @@ void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_
 	}
 
 	ASSERT (salvo_size > 0);
+	ASSERT (salvo_count >= 0);
 
 	while (salvo_size--)
 	{
-		create_client_server_entity_weapon (launcher, weapon_sub_type, ENTITY_INDEX_DONT_CARE, BURST_SIZE_DONT_CARE, NULL);
+		if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+			salvo_count = salvo_size;
+		
+		salvo_count /= pods_firing;
+		
+		create_client_server_entity_weapon (launcher, weapon_sub_type, ENTITY_INDEX_DONT_CARE, BURST_SIZE_DONT_CARE, NULL, salvo_count);
 	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void create_client_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, int weapon_index, viewpoint *vp, float velocity)
+{
+	entity
+		*force,
+		*weapon;
+
+	ASSERT (launcher);
+	ASSERT (entity_sub_type_weapon_valid (weapon_sub_type));
+
+	weapon_viewpoint = vp;
+	weapon_velocity = velocity;
+	
+	if (get_comms_model () == COMMS_MODEL_SERVER)
+	{
+		////////////////////////////////////////
+		//
+		// SERVER/TX and SERVER/RX
+		//
+		////////////////////////////////////////
+
+		ASSERT (weapon_index == ENTITY_INDEX_DONT_CARE);
+
+		if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
+		{
+			set_force_local_entity_create_stack_attributes (TRUE);
+		}
+		//
+		// create weapon
+		//
+
+		weapon = create_local_entity
+		(
+			ENTITY_TYPE_WEAPON,
+			ENTITY_INDEX_DONT_CARE,
+			ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
+			ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, 1),
+			ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_MISSILE_PHASE, MISSILE_PHASE1),
+			ENTITY_ATTR_INT_VALUE (INT_TYPE_LOCK_ON_AFTER_LAUNCH, FALSE),
+			ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
+			ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
+			ENTITY_ATTR_END
+		);
+
+		if (weapon)
+		{
+			//
+			// send FIRE message to force (unless it's a decoy/cargo/debris being launched)
+			//
+
+			if ((target) && (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS))))
+			{
+				force = get_local_force_entity ((entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE));
+
+				if (force)
+				{
+					notify_local_entity (ENTITY_MESSAGE_ENTITY_FIRED_AT, force, launcher, target);
+				}
+			}
+
+			transmit_entity_comms_message
+			(
+				ENTITY_COMMS_CREATE_WEAPON,
+				NULL,
+				launcher,
+				weapon_sub_type,
+				get_local_entity_safe_index (weapon),
+				1,
+				0
+			);
+		}
+
+		set_force_local_entity_create_stack_attributes (FALSE);
+	}
+/*	else
+	{
+		if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
+		{
+			////////////////////////////////////////
+			//
+			// CLIENT/TX
+			//
+			////////////////////////////////////////
+
+			ASSERT (weapon_index == ENTITY_INDEX_DONT_CARE);
+
+			// NOTE: The clients' weapon counters lag the servers' so it is possible that the
+			//       client may unknowingly attempt to create more weapons than are available.
+			//       This is prone to happen during rapid firing.
+
+			transmit_entity_comms_message
+			(
+				ENTITY_COMMS_CREATE_WEAPON,
+				NULL,
+				launcher,
+				weapon_sub_type,
+				ENTITY_INDEX_DONT_CARE,
+				1,
+				NULL
+			);
+		}
+		else
+		{
+			////////////////////////////////////////
+			//
+			// CLIENT/RX
+			//
+			////////////////////////////////////////
+
+			ASSERT (weapon_index != ENTITY_INDEX_DONT_CARE);
+
+			set_force_local_entity_create_stack_attributes (TRUE);
+
+			weapon = create_local_entity
+			(
+				ENTITY_TYPE_WEAPON,
+				weapon_index,
+				ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
+				ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, 1),
+				ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
+				ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
+				ENTITY_ATTR_END
+			);
+
+			ASSERT (weapon);
+
+			set_force_local_entity_create_stack_attributes (FALSE);
+		}
+	}*/
+	
+	weapon_velocity = 0;
+}

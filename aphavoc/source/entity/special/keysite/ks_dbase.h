@@ -88,8 +88,8 @@ struct KEYSITE_DATA
 		unique_name					: 1,
 		hidden_by_fog_of_war		: 1,
 		air_force_capacity		: 2,
-		report_ammo_level,		: 1,
-		report_fuel_level,		: 1,
+		report_ammo_level		: 1,
+		report_fuel_level		: 1,
 
 		assign_task_count			: 2,
 		reserve_task_count		: 2,

@@ -302,10 +302,10 @@ void fixed_wing_attain_waypoint (entity *en, vec3d *wp_vec, vec3d *vel)
 
 		#if DEBUG_MODULE
 
-		if (en == get_external_view_entity ())
-		{
-			debug_filtered_log ("UTAW: %s %d", entity_sub_type_aircraft_names[raw->ac.mob.sub_type], get_local_entity_index(en));
-		}
+			if (en == get_external_view_entity ())
+			{
+				debug_filtered_log ("UTAW: %s %d", entity_sub_type_aircraft_names[raw->ac.mob.sub_type], get_local_entity_index(en));
+			}
 
 		#endif
 
@@ -603,18 +603,18 @@ void fixed_wing_set_velocity (entity *en, vec3d *acc, vec3d *velocity)
 	d = get_3d_vector_magnitude (acc);
 
 	// limit acceleration
-	if (d > aircraft_database[raw->ac.mob.sub_type].g_max)
+	if (d > aircraft_database[raw->ac.mob.sub_type].g_max / 10)
 	{
 
 		//used to get inverse attitude matrix, multiply acc vec by it, normalise, scale by g_max & rotate back
 		//inverse multiply totally unneccesary?
 
-		normalise_3d_vector_given_magnitude (acc, d);
+		normalise_3d_vector_given_magnitude (acc, d / (aircraft_database[raw->ac.mob.sub_type].g_max / 10));
 
 		// perform limiting
-		acc->x *= aircraft_database[raw->ac.mob.sub_type].g_max;
-		acc->y *= aircraft_database[raw->ac.mob.sub_type].g_max;
-		acc->z *= aircraft_database[raw->ac.mob.sub_type].g_max;
+//		acc->x *= aircraft_database[raw->ac.mob.sub_type].g_max / 100;
+//		acc->y *= aircraft_database[raw->ac.mob.sub_type].g_max / 100;
+//		acc->z *= aircraft_database[raw->ac.mob.sub_type].g_max / 100;
 	}
 
 	velocity->x += acc->x * acc_avail * get_entity_movement_delta_time ();
@@ -1061,12 +1061,12 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 
 		new_heading = current_heading + (delta_heading * get_entity_movement_delta_time ());
 
-		#if DEBUG_MODULE
-
-		debug_log ("current heading %f, desired heading %f, delta_heading %f",
-					current_heading, desired_heading, delta_heading);
-
-		#endif
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+		{
+			debug_log ("current heading %f, desired heading %f, delta_heading %f", current_heading, desired_heading, delta_heading);
+		}
+	#endif
 
 	current_pitch = get_pitch_from_attitude_matrix (raw->ac.mob.attitude);
 
@@ -1086,10 +1086,11 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 	dist->z = min (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
 
 	#if DEBUG_MODULE
-
-	debug_log ("current heading %d, desired heading %d, delta_heading %f, dist %f, %f, %f, sqr_range %f, vel %f",
-						current_heading, desired_heading, delta_heading, dist->x, dist->y, dist->z, sqr_range, raw->ac.mob.velocity);
-
+		if (en == get_external_view_entity ())
+		{
+			debug_log ("current heading %d, desired heading %d, delta_heading %f, dist %f, %f, %f, vel %f",
+				current_heading, desired_heading, delta_heading, dist->x, dist->y, dist->z, raw->ac.mob.velocity);
+		}
 	#endif
 
 	new_pos->x = current_pos->x + dist->x;
@@ -1216,15 +1217,17 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 
 					terrain_elevation = get_3d_terrain_point_data_elevation (&raw->ac.terrain_info);
 
-					if (terrain_follow == GUIDE_TERRAIN_FOLLOW_ATTACK_ALTITUDE)
-					{
-						min_height = get_local_entity_float_value (en, FLOAT_TYPE_ATTACK_ALTITUDE);
-					}
-					else
-					{
-						min_height = get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_ALTITUDE);
-					}
+//					if (terrain_follow == GUIDE_TERRAIN_FOLLOW_ATTACK_ALTITUDE)
+//					{
+//						min_height = get_local_entity_float_value (en, FLOAT_TYPE_ATTACK_ALTITUDE);
+//					}
+//					else
+//					{
+//						min_height = get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_ALTITUDE);
+//					}
 
+					min_height = terrain_elevation;
+					
 					min_height = max (min_height, get_local_entity_float_value (sector, FLOAT_TYPE_TALLEST_STRUCTURE_HEIGHT) - terrain_elevation);
 
 					min_height = max (get_local_entity_float_value (wp, FLOAT_TYPE_ALTITUDE), min_height);
@@ -1936,12 +1939,6 @@ void basic_fixed_wing_movement_absolute (entity *en)
 
 			new_heading = current_heading + (delta_heading * get_entity_movement_delta_time ());
 
-			#if DEBUG_MODULE
-
-			debug_log ("current heading %f, desired heading %f, delta_heading %f",
-						current_heading, desired_heading, delta_heading);
-
-			#endif
 		}
 
 		new_pitch = aircraft_database [raw->ac.mob.sub_type].fuselage_angle;
@@ -1953,10 +1950,11 @@ void basic_fixed_wing_movement_absolute (entity *en)
 		dist.z = min (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
 
 		#if DEBUG_MODULE
-
-		debug_log ("current heading %d, desired heading %d, delta_heading %f, dist %f, %f, %f, sqr_range %f, vel %f",
-						current_heading, desired_heading, delta_heading, dist.x, dist.y, dist.z, sqr_range, raw->ac.mob.velocity);
-
+			if (en == get_external_view_entity ())
+			{
+				debug_log ("current heading %f, desired heading %f, delta_heading %f, dist %f, %f, %f, sqr_range %f, vel %f",
+					current_heading, desired_heading, delta_heading, dist.x, dist.y, dist.z, sqr_range, raw->ac.mob.velocity);
+			}
 		#endif
 
 		new_pos.x = current_pos->x + dist.x;
@@ -2057,7 +2055,7 @@ void basic_fixed_wing_movement_absolute (entity *en)
 
 		#if DEBUG_MODULE
 
-		draw_aircraft_turn_radius (en);
+			draw_aircraft_turn_radius (en);
 
 		#endif
 
@@ -2169,6 +2167,8 @@ void basic_fixed_wing_death_movement (entity *en)
 
 	if (raw->ac.terrain_info.terrain_face == NULL)
 	{
+		ASSERT(point_inside_map_area(pos));
+
 		get_3d_terrain_point_data (pos->x, pos->z, &raw->ac.terrain_info);
 	}
 
@@ -2200,17 +2200,6 @@ void basic_fixed_wing_death_movement (entity *en)
 			kill_client_server_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2);
 
 			kill_client_server_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1);
-		}
-
-		//
-		// stop any black smoke TRAILS generating ( marked as type VEHICLE_DAMAGE )
-		//
-
-		if (speed < FIXED_WING_DAMAGE_TRAIL_CUT_OFF_SPEED)
-		{
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE);
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE);
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE);
 		}
 
 		//
@@ -2274,6 +2263,10 @@ void basic_fixed_wing_death_movement (entity *en)
 
 				vec3d
 					temp_pos;
+				int
+					power;
+				float
+					total_velocity = fabs(velocity->x) + fabs(velocity->y) + fabs(velocity->z);
 
 				temp_pos.x = new_pos.x;
 				temp_pos.y = terrain_elevation;
@@ -2281,7 +2274,26 @@ void basic_fixed_wing_death_movement (entity *en)
 
 				set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &temp_pos);
 
-				create_client_server_object_hit_ground_explosion_effect (en, get_3d_terrain_point_data_type (&raw->ac.terrain_info));
+				switch (get_terrain_type_class(get_3d_terrain_point_data_type (&raw->ac.terrain_info)))
+				{
+					case TERRAIN_CLASS_WATER:
+					{
+						power = (int) (bound(total_velocity / 5, 0, 2));
+						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_WATER, power);
+						break;
+					}
+					case TERRAIN_CLASS_LAND:
+					case TERRAIN_CLASS_FOREST:
+					{
+						power = (int) (bound(total_velocity / 5, 0, 4));
+						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_GROUND, power);
+						
+						if (power > 1)
+							create_client_server_crater (CRATER_TYPE_SMALL_EXPLOSION + (power - 2), pos);
+
+						break;
+					}
+				}
 			}
 		}
 
@@ -2292,14 +2304,6 @@ void basic_fixed_wing_death_movement (entity *en)
 			// AIRCRAFT IS BELOW GROUND AND IN WATER
 			//
 			//////////////////////////////////////////
-
-			//
-			// stop any black smoke TRAILS generating ( marked as type VEHICLE_DAMAGE )
-			//
-
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE);
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE);
-			clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE);
 
 			//
 			// also if it lands in water kill any fires that may be burning
@@ -2346,6 +2350,11 @@ void basic_fixed_wing_death_movement (entity *en)
 	//					delete_local_entity_from_parents_child_list (en, LIST_TYPE_VIEW);
 
 						set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 					}
 
 					break;
@@ -2365,6 +2374,11 @@ void basic_fixed_wing_death_movement (entity *en)
 						clear_fixed_wing_velocity (en);
 
 						set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 					}
 				}
 			}
@@ -2397,14 +2411,6 @@ void basic_fixed_wing_death_movement (entity *en)
 				if (altitude < -(get_3d_vector_magnitude (&d) * 0.5))
 				{
 					//
-					// stop any black smoke TRAILS generating ( marked as type VEHICLE_DAMAGE )
-					//
-
-					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE);
-					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE);
-					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE);
-
-					//
 					// aircraft is no longer visible
 					//
 
@@ -2413,6 +2419,11 @@ void basic_fixed_wing_death_movement (entity *en)
 //					delete_local_entity_from_parents_child_list (en, LIST_TYPE_VIEW);
 
 					set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 				}
 			}
 		}
@@ -2491,7 +2502,7 @@ void basic_fixed_wing_death_movement (entity *en)
 			// stop planes rolling on the floor
 			//
 
-			roll += (PI * 0.5 * get_entity_movement_delta_time());
+			roll += (PI * 0.2 * frand1() * get_entity_movement_delta_time());
 
 			dp = bound (required_pitch - pitch, -(PI * 0.25), (PI *0.25));
 
@@ -2597,8 +2608,10 @@ void fixed_wing_crash_movement (entity *en)
 	{
 		normalise_3d_vector_given_magnitude (velocity, speed);
 
-		horizontal_speed -= (horizontal_speed * get_entity_movement_delta_time());
-
+		horizontal_speed -= (max (8 * horizontal_speed, 10.0) * get_entity_movement_delta_time());
+		
+		horizontal_speed = max(horizontal_speed, 0);
+		
 		velocity->x *= horizontal_speed;
 		velocity->y = 0.0;
 		velocity->z *= horizontal_speed;
@@ -2633,7 +2646,7 @@ void fixed_wing_crash_movement (entity *en)
 
 	required_angle = get_pitch_from_attitude_matrix (m) + aircraft_database [raw->ac.mob.sub_type].destroyed_pitch_offset;
 
-	max_angle = PI * get_entity_movement_delta_time ();
+	max_angle = 2 * PI * get_entity_movement_delta_time ();
 
 	delta_pitch = bound (required_angle - pitch, -max_angle, max_angle);
 
@@ -2645,7 +2658,7 @@ void fixed_wing_crash_movement (entity *en)
 
 	required_angle = get_roll_from_attitude_matrix (m) + aircraft_database [raw->ac.mob.sub_type].destroyed_bank_offset;
 
-	max_angle = PI * 0.75 * get_entity_movement_delta_time ();
+	max_angle = 2 * PI * get_entity_movement_delta_time ();
 
 	delta_roll = bound (required_angle - roll, -max_angle, max_angle);
 
@@ -2665,9 +2678,14 @@ void fixed_wing_crash_movement (entity *en)
 	// if aircraft has come to a stop, remove from update list
 	//
 
-	if ((speed == 0.0) && (delta_pitch <= 0.01) && (delta_roll <= 0.01) && (!raw->ac.mob.alive))
+	if ((speed <= 0.01) && (delta_pitch <= 0.01) && (delta_roll <= 0.01) && (!raw->ac.mob.alive))
 	{
 		set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 	}
 }
 
@@ -2694,7 +2712,7 @@ void fixed_wing_impact_movement (entity *en)
 
 	seed = get_client_server_entity_random_number_seed(en);
 
-	speed = 4.0 + (3.0 * frand1x (&seed));
+	speed = 3.0 * frand1x (&seed);
 
 	if (seed & 1)
 	{

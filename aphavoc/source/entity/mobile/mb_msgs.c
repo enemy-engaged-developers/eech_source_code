@@ -277,6 +277,15 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 									break;
 								}
 							}
+
+							#if DEBUG_MODULE
+
+							debug_log ("MB_MSGS: Task %s : Mobile %s task target is %d",
+											get_local_entity_string (sender, STRING_TYPE_FULL_NAME),
+											get_local_entity_string (receiver, STRING_TYPE_FULL_NAME),
+											get_local_entity_int_value (sender, INT_TYPE_TASK_TARGET_CLASS));
+
+							#endif
 						}
 					}
 				}
@@ -580,7 +589,7 @@ static int response_to_waypoint_attack_action (entity_messages message, entity *
 
 		speech_index = waypoint_attack_cpg_comments [val].speech_index;
 	
-		play_client_server_cpg_message (receiver, 1.0, 5.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, speech_index);
+		play_client_server_cpg_message (receiver, 1.0, 5.0, SPEECH_CATEGORY_MISSION_RELATED, 0.0, speech_index);
 	}
 
 	//
@@ -1140,6 +1149,9 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 			set_client_server_entity_int_value (mb, INT_TYPE_POSITION_HOLD, FALSE);
 		}
 
+		if (get_local_entity_int_value (mb, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+			raise_client_server_entity_undercarriage (mb);
+
 		mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
 	}
 
@@ -1388,7 +1400,7 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 		// sleep
 		//
 
-		sleep = get_local_entity_rearming_sleep_time (group);
+		sleep = get_local_entity_rearming_sleep_time (group, FALSE);
 		sleep += get_local_entity_refueling_sleep_time (group);
 
 		//sleep = ONE_MINUTE * ((-0.02 * (ammo + fuel)) + 5.0);
@@ -1569,6 +1581,8 @@ static int response_to_waypoint_loop_reached (entity_messages message, entity *r
 
 static int response_to_waypoint_navigation_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
+	entity *mb, *group;
+	
 	ASSERT (sender);
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_WAYPOINT);
@@ -1580,6 +1594,21 @@ static int response_to_waypoint_navigation_reached (entity_messages message, ent
 	debug_log_entity_message (message, receiver, sender, pargs);
 
 	#endif
+
+	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
+
+	if (group)
+	{
+		mb = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+
+		while (mb)
+		{
+			if (get_local_entity_int_value (mb, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+				raise_client_server_entity_undercarriage (mb);
+
+			mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
+		}
+	}
 
 	set_local_entity_float_value (receiver, FLOAT_TYPE_VIEW_INTEREST_LEVEL, DEFAULT_VIEW_INTEREST_LEVEL);
 
@@ -1890,7 +1919,7 @@ static int response_to_waypoint_recon_action (entity_messages message, entity *r
 		// tell player to transmit recon
 		//
 
-		play_client_server_cpg_message (receiver, 1.0, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, SPEECH_CPG_OBJECTIVE_IN_RANGE_RECON);
+		play_client_server_cpg_message (receiver, 1.0, 30.0, SPEECH_CATEGORY_MISSION_RELATED, 0.0, SPEECH_CPG_OBJECTIVE_IN_RANGE_RECON);
 
 		if (receiver == get_gunship_entity ())
 		{
@@ -1966,7 +1995,7 @@ static int response_to_waypoint_recon_reached (entity_messages message, entity *
 	}
 	else
 	{
-		play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, SPEECH_CPG_TRANSMITTING_RECON);
+		play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, 0.0, SPEECH_CPG_TRANSMITTING_RECON);
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -2327,8 +2356,8 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 	open_client_server_entity_cargo_doors (receiver);
   
 //  //ataribaby 31/12/2008 fix for player heli
-//  if (receiver != get_gunship_entity ())
-	 lower_client_server_entity_undercarriage (receiver);
+//  if (receiver != get_gunship_entity ()) // unfixed /thealx/
+	lower_client_server_entity_undercarriage (receiver);
 
 	//
 	// Create a troop group for leader only

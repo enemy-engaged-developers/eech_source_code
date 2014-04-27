@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_CHAPARRAL,	 	 				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_MIM_72G_CHAPARRAL,	 	 				// sub_type
 				NUM_CHAPARRAL_MISSILES,		 								// number
 				TURRET,			 	 											// heading_depth
 				LAUNCHER,	 	 	 											// pitch_depth

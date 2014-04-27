@@ -533,7 +533,7 @@ static void kill_local (entity *en)
 	//
 	////////////////////////////////////////
 
-	set_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER, calculate_mobile_death_timer_value (en));
+	set_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER, 0);
 
 	routed_vehicle_impact_movement (en);
 

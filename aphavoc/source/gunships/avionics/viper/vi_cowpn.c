@@ -354,21 +354,21 @@ void update_viper_weapon_systems (void)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 
 			if (fire_single_weapon >= 1)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 		}
 		else
 		{
 			apply_weapon_recoil_effect (en, weapon_sub_type);
 
-			launch_client_server_weapon (en, weapon_sub_type);
+			launch_client_server_weapon (en, weapon_sub_type, FALSE);
 		}
 	}
 	else

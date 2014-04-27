@@ -131,6 +131,8 @@ static void update_server (entity *en)
 	
 		memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 	
+		ASSERT(point_inside_map_area(pos));
+
 		terrain_height = get_3d_terrain_point_data (pos->x, pos->z, &terrain_info);
 
 		if (get_terrain_type_class (terrain_info.terrain_type) == TERRAIN_CLASS_WATER)
@@ -145,9 +147,7 @@ static void update_server (entity *en)
 			delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
 	
 			if (get_comms_model () == COMMS_MODEL_SERVER)
-			{
-				create_client_server_object_hit_ground_explosion_effect (en, terrain_info.terrain_type);
-			}
+				create_client_server_collision_effect (pos, DYNAMICS_COLLISION_SURFACE_GROUND, 2);
 		}
 	}
 	else

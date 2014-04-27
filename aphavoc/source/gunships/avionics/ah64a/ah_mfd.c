@@ -2457,37 +2457,37 @@ static display_3d_noise_levels
 		// WEATHERMODE_INVALID
 		{
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_DRY
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_LIGHT_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_HEAVY_RAIN
 		{
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_HIGH,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_SNOW
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 	};
 
@@ -2695,7 +2695,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
-	tint = DISPLAY_3D_TINT_GREEN;
+	tint = DISPLAY_3D_TINT_FLIR;
 
 	if (draw_large_mfd)
 	{
@@ -2822,7 +2822,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN;
+			tint = DISPLAY_3D_TINT_FLIR;
 
 			break;
 		}
@@ -2832,7 +2832,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			tint = DISPLAY_3D_TINT_LLLTV;
 
 			break;
 		}
@@ -2887,6 +2887,9 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 	display_3d_noise_levels
 		noise_level;
+
+	display_3d_tints
+		tint;
 
 	vec3d
 		*position;
@@ -2951,6 +2954,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_FLIR;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_DTV:
@@ -2959,6 +2964,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_LLLTV;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_DVO:
@@ -2966,6 +2973,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 			light_level = dvo_light_levels[weather_mode][day_segment_type];
 
 			noise_level = dvo_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
 		}
@@ -2977,7 +2986,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		}
 	}
 
-	set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -6496,7 +6505,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER)
 	{
 		if (draw_large_mfd)
 		{
@@ -7521,7 +7530,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
 			}
-			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER)
 			{
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
 				int left_tip = pylon == AH64A_LHS_WING_TIP_MOUNT;

@@ -1283,8 +1283,12 @@ void validate_task_entity (entity *en)
 {
 	entity_sub_types
 		task_type;
+	task
+		*raw;
 	
 	ASSERT (en);
+
+	raw = (task *) get_local_entity_data (en);
 
 	task_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -1296,7 +1300,25 @@ void validate_task_entity (entity *en)
 	{
 		case ENTITY_SUB_TYPE_TASK_ENGAGE:
 		{
-			ASSERT (get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT));
+			if(!get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT)) // target destroyed already, terminate task
+				switch (raw->task_state)
+				{
+					case TASK_STATE_COMPLETED:
+					case TASK_STATE_UNASSIGNED:
+					{
+						raw->expire_timer = 0.0001;
+
+						break;
+					}
+
+					case TASK_STATE_ASSIGNED:
+					{
+						raw->stop_timer = 0.0001;
+
+						break;
+					}
+
+				}
 
 			break;
 		}

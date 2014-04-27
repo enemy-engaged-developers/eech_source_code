@@ -318,7 +318,13 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	// adjust volume with entity amplification level
 	//
 	
-	v *= raw->amplification;
+	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE && command_line_real_radio_msgs)
+	{
+		float radio_noize = pow(raw->amplification, 1 - frand1()/2);
+		v *= radio_noize;
+	}
+	else
+		v *= raw->amplification;
 
 	channel = raw->sound_channel != SOUND_CHANNEL_SOUND_EFFECT ? 1 : 0;
 

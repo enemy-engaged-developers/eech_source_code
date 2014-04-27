@@ -2667,7 +2667,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
-	tint = DISPLAY_3D_TINT_GREEN;
+	tint = DISPLAY_3D_TINT_FLIR;
 
 	if (draw_large_mfd)
 	{
@@ -2808,7 +2808,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	set_active_screen (eo_3d_texture_screen);
 
-	tint = DISPLAY_3D_TINT_GREEN;
+	tint = DISPLAY_3D_TINT_FLIR;
 
 	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
 
@@ -2923,7 +2923,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		}
 	}
 
-	set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (DISPLAY_3D_TINT_FLIR, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -6412,7 +6412,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER)
 	{
 		if (draw_large_mfd)
 		{
@@ -7116,7 +7116,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	set_2d_mono_font_position (0.0, -0.3);
 
 	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
-		BLACKHAWK_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF,
+		BLACKHAWK_LHS1_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF,
 		&weapon_sub_type, &number, &damaged))
 	{
 		if (!damaged)
@@ -7141,7 +7141,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	set_2d_mono_font_position (0.0, -0.55);
 	
 	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
-		BLACKHAWK_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
+		BLACKHAWK_LHS1_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
 		&weapon_sub_type, &number, &damaged))
 	{
 		if (!damaged)
@@ -7435,7 +7435,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
 			}
-			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER)
 			{
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
 				int left_tip = pylon == APACHE_LHS_WING_TIP_MOUNT;

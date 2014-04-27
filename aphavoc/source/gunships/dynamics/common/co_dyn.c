@@ -233,7 +233,8 @@ void update_common_attitude_dynamics (void)
 {
 
 	int
-		model_landed;
+		model_landed,
+		coaxial = 0;
 
 	matrix3x3
 		rotor_attitude,
@@ -253,8 +254,9 @@ void update_common_attitude_dynamics (void)
 		left_rotor_force,
 		right_rotor_force,
 		reaction_force,
-		main_angular_force,
-		tail_angular_force;
+		main_angular_force = 0,
+		tail_angular_force = 0,
+		mass_percentage;
 
 	float
 		main_rotor_induced_air_value,
@@ -262,15 +264,19 @@ void update_common_attitude_dynamics (void)
 		main_rotor_rpm_value,
 		main_rotor_roll_angle_value,
 		tail_rotor_induced_air_value,
-		heading_inertia_value,
-		pitch_inertia_value,
-		roll_inertia_value,
+		heading_inertia_modifier,
+		pitch_inertia_modifier,
+		roll_inertia_modifier,
+		heading_moment_modifier,
+		pitch_moment_modifier,
+		roll_moment_modifier,
 		pitch_value,
 		main_blade_x_pitch_value,
 		main_blade_y_pitch_value,
 		velocity_z_value,
 		horizontal_velocity,
-		main_blade_pitch_value;
+		main_blade_pitch_value,
+		sqr_main_rotor_rpm;
 
 	vec3d
 		wind,
@@ -283,6 +289,17 @@ void update_common_attitude_dynamics (void)
 
 	model_landed = !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT);
 
+	switch (current_flight_dynamics->sub_type)
+	{
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+			coaxial = 1;
+	}
+	
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
 	world_motion_vector = current_flight_dynamics->world_motion_vector;
@@ -296,7 +313,7 @@ void update_common_attitude_dynamics (void)
 	position.y = current_flight_dynamics->position.y;
 	position.z = current_flight_dynamics->position.z;
 
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND) && !model_landed)
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND))
 	{
 
 		get_session_wind_velocity_at_point (&position, &wind);
@@ -358,14 +375,18 @@ void update_common_attitude_dynamics (void)
 	// Set up variables
 	//
 
-	main_rotor_induced_air_value = current_flight_dynamics->main_rotor_induced_air.value * current_flight_dynamics->main_rotor_induced_air.modifier;
-	main_rotor_pitch_angle_value = current_flight_dynamics->main_rotor_pitch_angle.value * current_flight_dynamics->main_rotor_pitch_angle.modifier;
 	main_rotor_rpm_value = current_flight_dynamics->main_rotor_rpm.value * current_flight_dynamics->main_rotor_rpm.modifier;
+	sqr_main_rotor_rpm = pow(main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max, 2);
+	main_rotor_induced_air_value = sqr_main_rotor_rpm * current_flight_dynamics->main_rotor_induced_air.value * current_flight_dynamics->main_rotor_induced_air.modifier;
+	main_rotor_pitch_angle_value = current_flight_dynamics->main_rotor_pitch_angle.value * current_flight_dynamics->main_rotor_pitch_angle.modifier;
 	main_rotor_roll_angle_value = current_flight_dynamics->main_rotor_roll_angle.value * current_flight_dynamics->main_rotor_roll_angle.modifier;
-	tail_rotor_induced_air_value = current_flight_dynamics->tail_rotor_induced_air.value * current_flight_dynamics->tail_rotor_induced_air.modifier;
-	heading_inertia_value = current_flight_dynamics->heading_inertia.value * current_flight_dynamics->heading_inertia.modifier;
-	pitch_inertia_value = current_flight_dynamics->pitch_inertia.value * current_flight_dynamics->pitch_inertia.modifier;
-	roll_inertia_value = current_flight_dynamics->roll_inertia.value * current_flight_dynamics->roll_inertia.modifier;
+	tail_rotor_induced_air_value = sqr_main_rotor_rpm * current_flight_dynamics->tail_rotor_induced_air.value * current_flight_dynamics->tail_rotor_induced_air.modifier;
+	heading_inertia_modifier = current_flight_dynamics->heading_inertia.modifier;
+	pitch_inertia_modifier = current_flight_dynamics->pitch_inertia.modifier;
+	roll_inertia_modifier = current_flight_dynamics->roll_inertia.modifier;
+	heading_moment_modifier = current_flight_dynamics->heading_moment.modifier;
+	pitch_moment_modifier = current_flight_dynamics->pitch_moment.modifier;
+	roll_moment_modifier = current_flight_dynamics->roll_moment.modifier;
 	pitch_value = current_flight_dynamics->pitch.value * current_flight_dynamics->pitch.modifier; // + debug_var_y * rad(1.0);
 	main_blade_x_pitch_value = current_flight_dynamics->main_blade_x_pitch.value * current_flight_dynamics->main_blade_x_pitch.modifier;
 	main_blade_y_pitch_value = current_flight_dynamics->main_blade_y_pitch.value * current_flight_dynamics->main_blade_y_pitch.modifier;
@@ -379,159 +400,10 @@ void update_common_attitude_dynamics (void)
 	get_3d_transformation_heading_pitch_matrix(rotor_attitude, main_rotor_roll_angle_value, rad(5.0) - main_rotor_pitch_angle_value);
 	multiply_transpose_matrix3x3_vec3d(&rotor_direction, rotor_attitude, &rotor_direction);
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Rotor Force Analysis
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	angle = 1.0;
-	rotor_split = 0.90;
-
-	edge_rotor_split = 1.0 - rotor_split;
-	edge_rotor_split /= 8.0;
-
-	rotor_edge_value = 0.401681;
-
-	////////////////////////////////////////////
-	// middle of rotor disc
-	////////////////////////////////////////////
-	{
-
-		rotor_force = rotor_split * main_rotor_induced_air_value;
-
-		if ((current_flight_dynamics->rotor_brake) && (current_flight_dynamics->main_rotor_rpm.max != 0.0))
-		{
-
-			rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
-		}
-
-		position.x = 0.0;
-		position.y = 0.0;
-		position.z = 0.0;
-
-		add_dynamic_force ("Middle rotor force", command_line_dynamics_main_rotor_lift * rotor_force, 0.0, &position, &rotor_direction, FALSE);
-	}
-
-	////////////////////////////////////////////
-	// front of rotor disc
-	////////////////////////////////////////////
-	{
-
-		angle = main_rotor_pitch_angle_value;
-
-		front_rotor_force = rotor_edge_value +
-				(0.6 * angle) / (current_flight_dynamics->main_rotor_pitch_angle.max - current_flight_dynamics->main_rotor_pitch_angle.min) +
-				(0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
-
-		front_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
-
-		position.x = 0.0;
-		position.y = 0.0;
-		position.z = rotor_radius;
-
-		add_dynamic_force ("Front rotor force", command_line_dynamics_main_rotor_lift * front_rotor_force, 0.0, &position, &rotor_direction, FALSE);
-	}
-	////////////////////////////////////////////
-	// back of rotor disc
-	////////////////////////////////////////////
-	{
-
-		angle = main_rotor_pitch_angle_value;
-
-		back_rotor_force = rotor_edge_value -
-				(0.6 * angle) / (current_flight_dynamics->main_rotor_pitch_angle.max - current_flight_dynamics->main_rotor_pitch_angle.min) +
-				(0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
-
-		back_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
-
-		position.x = 0.0;
-		position.y = 0.0;
-		position.z = -rotor_radius;
-
-		add_dynamic_force ("Back rotor force", command_line_dynamics_main_rotor_lift * back_rotor_force, 0.0, &position, &rotor_direction, FALSE);
-	}
-	////////////////////////////////////////////
-	// left of rotor disc
-	////////////////////////////////////////////
-	{
-
-		angle = main_rotor_roll_angle_value;
-
-		left_rotor_force = rotor_edge_value -
-				(0.6 * angle) / (current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min) +
-				(0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
-
-		left_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
-
-		position.x = rotor_radius;
-		position.y = 0.0;
-		position.z = 0.0;
-
-		add_dynamic_force ("Left rotor force", command_line_dynamics_main_rotor_lift * left_rotor_force, 0.0, &position, &rotor_direction, FALSE);
-	}
-	////////////////////////////////////////////
-	// right of rotor disc
-	////////////////////////////////////////////
-	{
-
-		angle = main_rotor_roll_angle_value;
-
-		right_rotor_force = rotor_edge_value +
-				(0.6 * angle) / (current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min) +
-				(0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
-
-		right_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
-
-		position.x = -rotor_radius;
-		position.y = 0.0;
-		position.z = 0.0;
-
-		add_dynamic_force ("Right rotor force", command_line_dynamics_main_rotor_lift * right_rotor_force, 0.0, &position, &rotor_direction, FALSE);
-	}
-	////////////////////////////////////////////
-	// tail rotor disc
-	////////////////////////////////////////////
-	{
-
-		tail_angular_force = tail_rotor_induced_air_value * current_flight_dynamics->tail_boom_length.value;
-		tail_angular_force *= heading_inertia_value;
-
-		position.x = 0.0;
-		position.y = 0.0; // -0.08022;
-		position.z = -current_flight_dynamics->tail_boom_length.value;
-
-		direction.x = -current_flight_dynamics->rotor_rotation_direction;
-		direction.y = 0.0;
-		direction.z = 0.0;
-
-		if (model_landed)
-		{
-
-			position.y = 0.0;
-
-			if ((current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_LEFT) &&
-				(current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_RIGHT))
-			{
-
-				tail_angular_force = 0.0;
-			}
-			else
-			{
-
-				tail_angular_force *= min (fabs (velocity_z_value) / 15.0, 1.0);
-			}
-		}
-
-		add_dynamic_force ("Angular tail rotor force", tail_angular_force, 0.0, &position, &direction, FALSE);
-	}
-
 	////////////////////////////////////////////
 	// gravity
 	////////////////////////////////////////////
 	{
-
-		float
-			mass_percentage;
-
 		set_flight_dynamics_mass ();
 
 		mass_percentage = current_flight_dynamics->mass.value;
@@ -553,25 +425,26 @@ void update_common_attitude_dynamics (void)
 
 		add_dynamic_force ("Gravity", force, 0.0, &position, &direction, FALSE);
 	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Rotor Aerodynamic Analysis
+	// Rotor Force Analysis
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	{
-		vec3d
-			temp_model_motion_vector;
+	angle = 1.0;
+	rotor_split = 0.90;
 
-		temp_model_motion_vector = current_flight_dynamics->model_motion_vector;
-		temp_model_motion_vector.y = 0.0;
-		horizontal_velocity = (get_3d_vector_magnitude (&temp_model_motion_vector));
-	}
+	edge_rotor_split = 1.0 - rotor_split;
+	edge_rotor_split /= 8.0;
+
+	rotor_edge_value = 0.401681;
 
 	////////////////////////////////////////////
 	// Transitional Lift generated by 'Wing' effect
 	////////////////////////////////////////////
 
-	if ((get_current_dynamics_options (DYNAMICS_OPTIONS_TRANSITIONAL_LIFT)) &&
-		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
+	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
+		current_flight_dynamics->translational_lift.modifier = 0.5;
+	else if (get_current_dynamics_options (DYNAMICS_OPTIONS_TRANSITIONAL_LIFT))
 	{
 
 		vec3d
@@ -580,7 +453,6 @@ void update_common_attitude_dynamics (void)
 			normalised_model_motion_vector;
 
 		float
-			force,
 			vel;
 
 		normalised_model_motion_vector = model_motion_vector;
@@ -605,80 +477,136 @@ void update_common_attitude_dynamics (void)
 
 		vel = normalise_any_3d_vector (&normalised_model_motion_vector);
 
-		// * 3 because induced air at normal is 9 and max is about 26... needs to scale 0.0 -> 1.0
-		vel *= min (fabs ((3.0 * current_flight_dynamics->main_rotor_induced_air.value) / (current_flight_dynamics->main_rotor_induced_air.max - current_flight_dynamics->main_rotor_induced_air.min)), 1.0);
+		if (vel <= 0.4 * current_flight_dynamics->velocity_z.max)
+			current_flight_dynamics->translational_lift.modifier = 0.6 + 0.4 * pow(vel / (0.4 * current_flight_dynamics->velocity_z.max), 0.8);
+		else
+			current_flight_dynamics->translational_lift.modifier = 0.6 + 0.4 * pow(1 - (vel - 0.4 * current_flight_dynamics->velocity_z.max) / (0.6 * current_flight_dynamics->velocity_z.max), 1.25);
 
-		if (vel >= current_flight_dynamics->translational_lift.min)
-		{
+//		debug_log("TRANSITIONAL %f", current_flight_dynamics->translational_lift.modifier);
+	}
+	else
+		current_flight_dynamics->translational_lift.modifier = 1.0;
 
-			if (vel <= current_flight_dynamics->translational_lift.max)
-			{
 
-				force = (current_flight_dynamics->translational_lift.value * (vel - current_flight_dynamics->translational_lift.min)) / (current_flight_dynamics->translational_lift.max - current_flight_dynamics->translational_lift.min);
-			}
-			else
-			{
+	////////////////////////////////////////////
+	// middle of rotor disc
+	////////////////////////////////////////////
+	{
+		rotor_force = rotor_split * main_rotor_induced_air_value * current_flight_dynamics->translational_lift.modifier;
 
-				force = current_flight_dynamics->translational_lift.value;
-			}
+		position.x = 0.0;
+		position.y = 0.0;
+		position.z = 0.0;
 
-			position.x = (current_flight_dynamics->translational_lift.modifier * current_flight_dynamics->main_rotor_diameter.value / 2.0) * normalised_model_motion_vector.x;
-			position.y = 0.0;
-			position.z = (current_flight_dynamics->translational_lift.modifier * current_flight_dynamics->main_rotor_diameter.value / 2.0) * normalised_model_motion_vector.z;
+		add_dynamic_force ("Middle rotor force", command_line_dynamics_main_rotor_lift * rotor_force, 0.0, &position, &rotor_direction, FALSE);
+	}
 
-			add_dynamic_force ("Transitional lift", force, 0.0, &position, &rotor_direction, FALSE);
-/*
-			// debug
-			{
-				multiply_matrix3x3_vec3d (&position, current_flight_dynamics->attitude, &position);
+	////////////////////////////////////////////
+	// front of rotor disc
+	////////////////////////////////////////////
+	{
 
-				multiply_matrix3x3_vec3d (&direction, current_flight_dynamics->attitude, &direction);
+		angle = main_rotor_pitch_angle_value;
 
-				position.x += current_flight_dynamics->position.x;
-				position.y += current_flight_dynamics->position.y;
-				position.z += current_flight_dynamics->position.z;
+		front_rotor_force = rotor_edge_value +
+				(0.6 * angle) / (current_flight_dynamics->main_rotor_pitch_angle.max - current_flight_dynamics->main_rotor_pitch_angle.min) +
+				 pitch_moment_modifier / mass_percentage * (0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
 
-				create_vectored_debug_3d_object (&position, &direction, OBJECT_3D_ARROW_FORCES, 0, 10.0);
-			}
-			// debug
-*/
-		}
-#ifdef DEBUG
-		if (debug_var_y >0)
-		{
-			float
-				motion_vector_pitch;
+		front_rotor_force *= sqr_main_rotor_rpm;
 
-			vec3d
-				normalised_world_motion_vector;
+		position.x = 0.0;
+		position.y = 0.0;
+		position.z = rotor_radius;
 
-			normalised_world_motion_vector = world_motion_vector;
-			normalise_any_3d_vector (&normalised_world_motion_vector);
-			motion_vector_pitch = asin (normalised_world_motion_vector.y) - aircraft_database [current_flight_dynamics->sub_type].main_rotor_shaft_angle;
+		add_dynamic_force ("Front rotor force", command_line_dynamics_main_rotor_lift * front_rotor_force, 0.0, &position, &rotor_direction, FALSE);
+	}
+	////////////////////////////////////////////
+	// back of rotor disc
+	////////////////////////////////////////////
+	{
 
-			if (current_flight_dynamics->model_motion_vector.z < 0.0)
-			{
+		angle = main_rotor_pitch_angle_value;
 
-				pitch_value *= -1.0;
-			}
+		back_rotor_force = rotor_edge_value -
+				(0.6 * angle) / (current_flight_dynamics->main_rotor_pitch_angle.max - current_flight_dynamics->main_rotor_pitch_angle.min) +
+				pitch_moment_modifier / mass_percentage * (0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
 
-			force = horizontal_velocity *
-						((pitch_value +
-						main_rotor_pitch_angle_value) -
-						motion_vector_pitch);
+		back_rotor_force *= sqr_main_rotor_rpm;
 
-			force = max (force, 0.0f);
+		position.x = 0.0;
+		position.y = 0.0;
+		position.z = -rotor_radius;
 
-			position.x = -0.4 * sin (main_blade_x_pitch_value);
-			position.y = 0.0;
-			position.z = 0.4 * sin (main_blade_y_pitch_value);
+		add_dynamic_force ("Back rotor force", command_line_dynamics_main_rotor_lift * back_rotor_force, 0.0, &position, &rotor_direction, FALSE);
+	}
+	////////////////////////////////////////////
+	// left of rotor disc
+	////////////////////////////////////////////
+	{
 
-			// arneh - this force seems too strong, impossible to decend faster than
-			// about 7-8 m/s by default with forward speed. So reduce it a little
-			force *= 0.9;
-			add_dynamic_force ("Transitional lift", force, 0.0, &position, &rotor_direction, FALSE);
-		}
-#endif
+		angle = main_rotor_roll_angle_value;
+
+		left_rotor_force = rotor_edge_value - 
+				(0.6 * angle) / (current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min) +
+				roll_moment_modifier / mass_percentage * (0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
+
+		left_rotor_force *= sqr_main_rotor_rpm;
+
+		position.x = rotor_radius;
+		position.y = 0.0;
+		position.z = 0.0;
+
+		add_dynamic_force ("Left rotor force", command_line_dynamics_main_rotor_lift * left_rotor_force, 0.0, &position, &rotor_direction, FALSE);
+	}
+	////////////////////////////////////////////
+	// right of rotor disc
+	////////////////////////////////////////////
+	{
+
+		angle = main_rotor_roll_angle_value;
+
+		right_rotor_force = rotor_edge_value + 
+				(0.6 * angle) / (current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min) +
+				roll_moment_modifier / mass_percentage * (0.2 * current_flight_dynamics->input_data.collective.value) / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
+
+		right_rotor_force *= sqr_main_rotor_rpm;
+
+		position.x = -rotor_radius;
+		position.y = 0.0;
+		position.z = 0.0;
+
+		add_dynamic_force ("Right rotor force", command_line_dynamics_main_rotor_lift * right_rotor_force, 0.0, &position, &rotor_direction, FALSE);
+	}
+	////////////////////////////////////////////
+	// tail rotor disc
+	////////////////////////////////////////////
+	{
+
+		tail_angular_force = tail_rotor_induced_air_value * current_flight_dynamics->tail_boom_length.value;
+		tail_angular_force *= heading_moment_modifier;
+		
+		position.x = 0.0;
+		position.y = 0.0; // -0.08022;
+		position.z = -current_flight_dynamics->tail_boom_length.value;
+
+		direction.x = - 1.0;
+		direction.y = 0.0;
+		direction.z = 0.0;
+
+		add_dynamic_force ("Angular tail rotor force", tail_angular_force, 0.0, &position, &direction, FALSE);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Rotor Aerodynamic Analysis
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	{
+		vec3d
+			temp_model_motion_vector;
+
+		temp_model_motion_vector = current_flight_dynamics->model_motion_vector;
+		temp_model_motion_vector.y = 0.0;
+		horizontal_velocity = (get_3d_vector_magnitude (&temp_model_motion_vector));
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -688,7 +616,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// Retreating blade lift loss
 	////////////////////////////////////////////
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_RETREATING_BLADE_STALL))
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_RETREATING_BLADE_STALL) && !coaxial)
 	{
 
 		if (!(get_current_dynamics_options (DYNAMICS_OPTIONS_KEYBOARD_ASSISTANCE) && (get_global_cyclic_input () == KEYBOARD_INPUT)))
@@ -725,7 +653,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// Advancing Blade lift gain
 	////////////////////////////////////////////
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_RETREATING_BLADE_STALL))
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_RETREATING_BLADE_STALL) && !coaxial)
 	{
 
 		if (!(get_current_dynamics_options (DYNAMICS_OPTIONS_KEYBOARD_ASSISTANCE) && (get_global_cyclic_input () == KEYBOARD_INPUT)))
@@ -814,9 +742,8 @@ void update_common_attitude_dynamics (void)
 	{
 		// arneh - main rotor produces no torque when disengaged from
 		// engine or if running with cross coupling enabled
-		if (current_flight_dynamics->rotor_brake ||
-			(!current_flight_dynamics->cross_coupling_effect.damaged) &&
-			(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
+		if (!coaxial && !current_flight_dynamics->cross_coupling_effect.damaged &&
+			get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING) && !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE))
 		{
 			main_angular_force = 0.0;
 		}
@@ -834,7 +761,6 @@ void update_common_attitude_dynamics (void)
 				f = 0.0,
 				p = 0.0025,
 				i = 0.00125,
-				engine_response = 8.0,
 				blade_pitch,
 				a,
 				u,
@@ -844,6 +770,9 @@ void update_common_attitude_dynamics (void)
 				rotor_drag;
 
 			u = main_rotor_rpm_value;
+
+			if (!u)
+				torque = 0.0; // reset value if we jumped in another aircraft
 
 			blade_pitch = bound (main_blade_pitch_value, current_flight_dynamics->main_blade_pitch.min, current_flight_dynamics->main_blade_pitch.max);
 
@@ -858,58 +787,35 @@ void update_common_attitude_dynamics (void)
 			rotor_induced = (u * u) * i * deg (fabs (blade_pitch + relative_air_flow_angle));
 			rotor_drag = rotor_friction + rotor_parasitic + rotor_induced;
 
-			if (current_flight_dynamics->rotor_brake)
-			{
+			a = (torque - rotor_drag) / mass;
 
-				a = rotor_drag / mass;
-			}
-			else
-			{
-
-				a = (torque - rotor_drag) / mass;
-			}
-
-			v = u + (a * get_model_delta_time ());
+			v = (a * get_model_delta_time ());
 
 			// engine management
 
-			torque += engine_response * (100.0 - (v + (a * res))) * get_model_delta_time ();
+			torque -= 2 * (v + (a * res)) * get_model_delta_time ();
 			torque = bound (torque, 0.0, 120.0);
 
-			main_angular_force = heading_inertia_value * (torque * 2.0 * PI * (current_flight_dynamics->main_rotor_diameter.value / 2.0)) / 1649.0;
+			if (!coaxial)
+				main_angular_force = torque * 2.0 * PI * (current_flight_dynamics->main_rotor_diameter.value / 2.0) / 1649.0;
+			else
+				main_angular_force = heading_moment_modifier / mass_percentage * torque * fabs(current_flight_dynamics->tail_blade_pitch.value / current_flight_dynamics->tail_blade_pitch.max) / 100;				
 
 			position.x = 0.0;
 			position.y = 0.0; // -0.08022;
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
-			direction.x = current_flight_dynamics->rotor_rotation_direction;
+			if (!coaxial)
+				direction.x = current_flight_dynamics->rotor_rotation_direction;
+			else
+				direction.x = current_flight_dynamics->rotor_rotation_direction * sign(current_flight_dynamics->tail_blade_pitch.value);
+			
 			direction.y = 0.0;
 			direction.z = 0.0;
 
-			//main_angular_force = (9) + main_angular_force;
-
-			if (model_landed)
-			{
-
-				position.y = 0.0;
-
-/*				if ((current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_LEFT) &&
-					(current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_RIGHT))
-				{
-
-					main_angular_force = 0.0;
-				}
-				else */
-				{
-
-					main_angular_force *= min (fabs (current_flight_dynamics->velocity_z.value) / 15.0, 1.0);
-				}
-			}
+			main_angular_force += pow(current_flight_dynamics->tail_rotor_diameter.value, 2) * sqr_main_rotor_rpm;
 
 			add_dynamic_force ("Main rotor angular torque", main_angular_force, 0.0, &position, &direction, FALSE);
-/*			position.z = current_flight_dynamics->tail_boom_length.value * 0.5;
-			direction.x = -current_flight_dynamics->rotor_rotation_direction;
-			add_dynamic_force ("Main rotor angular torque 2", main_angular_force * 0.5, 0.0, &position, &direction, FALSE); */
 		}
 	}
 	////////////////////////////////////////////
@@ -917,8 +823,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	{
 
-		reaction_force = pitch_inertia_value *
-							(current_flight_dynamics->pitch.delta + current_flight_dynamics->main_rotor_pitch_angle.delta);
+		reaction_force = pitch_inertia_modifier * (current_flight_dynamics->pitch.delta + current_flight_dynamics->main_rotor_pitch_angle.delta);
 
 		position.x = 0.0;
 		position.y = 0.0;
@@ -928,21 +833,20 @@ void update_common_attitude_dynamics (void)
 		direction.y = -1.0;
 		direction.z = 0.0;
 
-		add_dynamic_force ("Pitch resistance", reaction_force * current_flight_dynamics->main_rotor_rpm.value / 100, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Pitch resistance", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Rotor Resistance to movement (Roll)
 	////////////////////////////////////////////
 	{
 
-		reaction_force = roll_inertia_value *
-							(current_flight_dynamics->roll.delta + current_flight_dynamics->main_rotor_roll_angle.delta);
+		reaction_force = roll_inertia_modifier * (current_flight_dynamics->roll.delta + current_flight_dynamics->main_rotor_roll_angle.delta);
 
 		position.x = rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 
-		add_dynamic_force ("Roll resistance", reaction_force * current_flight_dynamics->main_rotor_rpm.value / 100, 0.0, &position, &rotor_direction, FALSE);
+		add_dynamic_force ("Roll resistance", reaction_force, 0.0, &position, &rotor_direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Tail Rotor Resistance to movement. raw delta heading resistance
@@ -953,13 +857,11 @@ void update_common_attitude_dynamics (void)
 		float
 			a,
 			scaling,
-			drag;
+			delta = fabs(current_flight_dynamics->heading.delta) >= 0.005 ? current_flight_dynamics->heading.delta : (sign(current_flight_dynamics->heading.delta) * 200 * pow(current_flight_dynamics->heading.delta, 2));
 
-		drag = -40.0;
+		reaction_force = - heading_inertia_modifier * delta * current_flight_dynamics->tail_boom_length.value;
 
-		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
-
-		a = exp (velocity_z_value / 45.0);
+		a = exp (velocity_z_value / 90.0);
 
 		if (a != 0.0)
 		{
@@ -969,35 +871,23 @@ void update_common_attitude_dynamics (void)
 
 		scaling = min (fabs (scaling), 1.0f);
 
-		reaction_force += (tail_angular_force - main_angular_force) * scaling;
+		if (!coaxial)
+			reaction_force += (tail_angular_force - main_angular_force) * scaling;
 
 		position.x = 0.0;
-		position.y = -0.08022;
+		position.y = 0.0; //-0.08022;
 		position.z = -current_flight_dynamics->tail_boom_length.value;
-
-		if (model_landed)
-		{
-
-			position.y = 0.0;
-		}
 
 		direction.x = 1.0;
 		direction.y = 0.0;
 		direction.z = 0.0;
 
-		if (current_flight_dynamics->tail_rotor_rpm.damaged)
-		{
-
-			reaction_force *= 1 - velocity_z_value / current_flight_dynamics->velocity_z.max; 
-		}
-
-		add_dynamic_force ("Yaw resistance", reaction_force * current_flight_dynamics->tail_rotor_rpm.value / 100, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Yaw resistance", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Fuselage aerodynamics motion_vector -> attitude realignment force in the y axis
 	////////////////////////////////////////////
-	if ((!model_landed) &&
-		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
+	if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR))
 	{
 
 		if (!check_zero_3d_vector (&model_motion_vector))
@@ -1013,7 +903,7 @@ void update_common_attitude_dynamics (void)
 			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.0030 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+			force = heading_inertia_modifier * 0.00001 * (horizontal_velocity * horizontal_velocity) * (0.25 * current_flight_dynamics->tail_boom_length.value + current_flight_dynamics->tail_rotor_diameter.value * current_flight_dynamics->tail_rotor_diameter.value);
 //			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
@@ -1040,8 +930,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// Fuselage aerodynamics motion_vector -> attitude realignment force in the x axis
 	////////////////////////////////////////////
-	if ((!model_landed) &&
-		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
+	if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR))
 	{
 
 		reaction_force = 30.0 * (current_flight_dynamics->pitch.delta + current_flight_dynamics->main_rotor_pitch_angle.delta);
@@ -1065,61 +954,35 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// Resistance to forward movement
 	////////////////////////////////////////////
-	if (!model_landed)
 	{
 
+		vec3d
+			motion_vector = current_flight_dynamics->model_motion_vector;
 		float
-			sign,
-			drag;
+			drag,
+			heading,
+			pitch;
 
-		drag = 0.0005;
-
-		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
-
-		sign = 0.0;
-
-		if (velocity_z_value != 0.0)
+		if (normalise_any_3d_vector(&motion_vector))
 		{
+			get_heading_and_pitch_from_3d_unit_vector(&motion_vector, &heading, &pitch);
+			
+			drag = 0.0003 * (current_flight_dynamics->drag_z.modifier + 
+					current_flight_dynamics->drag_x.modifier * fabs(sin(heading)) + 
+					current_flight_dynamics->drag_y.modifier * fabs(sin(pitch)));
 
-			sign = fabs (velocity_z_value) / velocity_z_value;
+			reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
+
+			position.x = motion_vector.x * rotor_radius;
+			position.y = motion_vector.y * rotor_radius - 0.1 * aircraft_database[current_flight_dynamics->sub_type].centre_of_gravity_to_ground_distance;
+			position.z = motion_vector.z * rotor_radius;
+
+			direction.x = - motion_vector.x;
+			direction.y = - motion_vector.y;
+			direction.z = - motion_vector.z;
+
+			add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, TRUE);
 		}
-
-		position.x = 0.0;
-		position.y = 0.0;
-		position.z = rotor_radius;
-
-		direction.x = 0.0;
-		direction.y = 0.0;
-		direction.z = -1.0 * sign;
-
-		add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
-	}
-	////////////////////////////////////////////
-	// Resistance to lateral movement
-	////////////////////////////////////////////
-	if (!model_landed)
-	{
-
-		float
-			Fmax;
-
-		Fmax = 0.5;
-
-		if (current_flight_dynamics->velocity_x.max != 0.0)
-		{
-
-			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0f);
-		}
-
-		position.x = rotor_radius;
-		position.y = 0.0;
-		position.z = 0.0;
-
-		direction.x = -1.0;
-		direction.y = 0.0;
-		direction.z = 0.0;
-
-		add_dynamic_force ("Lateral motion drag", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// Resistance to vertical movement
@@ -1158,7 +1021,7 @@ void update_common_attitude_dynamics (void)
 		if (current_flight_dynamics->velocity_y.max != 0.0)
 		{
 
-			reaction_force = Fmax * (fabs (model_motion_vector.y) * model_motion_vector.y) / pow (current_flight_dynamics->velocity_y.max, 2.0f);
+			reaction_force = current_flight_dynamics->drag_y.modifier * Fmax * (fabs (model_motion_vector.y) * model_motion_vector.y) / pow (current_flight_dynamics->velocity_y.max, 2.0f);
 		}
 
 		//
@@ -1469,7 +1332,7 @@ void update_common_attitude_dynamics (void)
 		(get_current_dynamics_options (DYNAMICS_OPTIONS_VORTEX_RING)) &&
 		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
 	{
-		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
+		float air_over_rotor = -fabs(main_rotor_induced_air_value) * mass_percentage - model_motion_vector.y;
 		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
 		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
@@ -1579,11 +1442,4 @@ void update_common_attitude_dynamics (void)
 		// arneh - add vibration if rotor damaged
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
 		create_advanced_rotor_vibration(1, TRUE);
-		// rotor spin up/spin down /thealex/
-	else if (current_flight_dynamics->main_rotor_rpm.value > 10 && current_flight_dynamics->main_rotor_rpm.value < 90)
-	{
-		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);
-		if (rpm > 0)
-			create_advanced_rotor_vibration(rpm / 500, FALSE);
-	}
 }

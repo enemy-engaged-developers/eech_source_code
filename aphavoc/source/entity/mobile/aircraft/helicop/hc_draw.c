@@ -325,9 +325,23 @@ static void draw_local_3d_object (entity *en, float range)
 
 		animate_aircraft_shadow (en);
 
-		raw->ac.inst3d->object_internal_lighting = object_internal_lighting_valid (en);
-
-		raw->ac.inst3d->object_sprite_lights = (raw->ac.inst3d->object_internal_lighting && sprite_light_valid (en));
+		if (active_3d_environment->render_filter == RENDER_INFRARED)
+		{
+			raw->ac.inst3d->object_diffuse_value = get_local_entity_int_value (en, INT_TYPE_ALIVE) ? 230 : 255;
+			raw->ac.inst3d->object_internal_lighting = raw->ac.inst3d->object_sprite_lights = FALSE;
+		}
+		else if (active_3d_environment->render_filter == RENDER_MONOCHROME)
+		{
+			raw->ac.inst3d->object_diffuse_value = 0; //32 * (1 - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5 * ONE_MINUTE) / (2 * ONE_MINUTE));
+			raw->ac.inst3d->object_internal_lighting = raw->ac.inst3d->object_sprite_lights = FALSE;
+		}
+		else
+		{
+			raw->ac.inst3d->object_diffuse_value = get_local_entity_int_value (en, INT_TYPE_ALIVE) ? 255 : 127;
+			raw->ac.inst3d->object_diffuse_value *= 1 - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5 * ONE_MINUTE) / (2 * ONE_MINUTE);
+			raw->ac.inst3d->object_internal_lighting = object_internal_lighting_valid (en);
+			raw->ac.inst3d->object_sprite_lights = (raw->ac.inst3d->object_internal_lighting && sprite_light_valid (en));
+		}
 
 		//
 		// draw
@@ -401,11 +415,25 @@ static void draw_local_3d_object (entity *en, float range)
 
 		animate_aircraft_shadow (en);
 
-		animate_and_draw_entity_muzzle_flash_effect (en);
+		if (active_3d_environment->render_filter == RENDER_INFRARED)
+		{
+			raw->ac.inst3d->object_diffuse_value = get_local_entity_int_value (en, INT_TYPE_ALIVE) ? 230 : 255;
+			raw->ac.inst3d->object_internal_lighting = raw->ac.inst3d->object_sprite_lights = FALSE;
+		}
+		else if (active_3d_environment->render_filter == RENDER_MONOCHROME)
+		{
+			raw->ac.inst3d->object_diffuse_value = 0; //32 * (1 - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5 * ONE_MINUTE) / (2 * ONE_MINUTE));
+			raw->ac.inst3d->object_internal_lighting = raw->ac.inst3d->object_sprite_lights = FALSE;
+		}
+		else
+		{
+			animate_and_draw_entity_muzzle_flash_effect (en);
 
-		raw->ac.inst3d->object_internal_lighting = object_internal_lighting_valid (en);
-
-		raw->ac.inst3d->object_sprite_lights = (raw->ac.inst3d->object_internal_lighting && sprite_light_valid (en));
+			raw->ac.inst3d->object_diffuse_value = get_local_entity_int_value (en, INT_TYPE_ALIVE) ? 255 : 127;
+			raw->ac.inst3d->object_diffuse_value *= 1 - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5 * ONE_MINUTE) / (2 * ONE_MINUTE);
+			raw->ac.inst3d->object_internal_lighting = object_internal_lighting_valid (en);
+			raw->ac.inst3d->object_sprite_lights = (raw->ac.inst3d->object_internal_lighting && sprite_light_valid (en));
+		}
 
 		//
 		// draw

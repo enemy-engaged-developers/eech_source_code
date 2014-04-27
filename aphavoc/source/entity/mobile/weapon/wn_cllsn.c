@@ -302,7 +302,8 @@ int collision_test_weapon_with_trees (vec3d *weapon_old_position, vec3d *weapon_
 float get_local_entity_armour_thickness (entity *target, entity *weapon)
 {
 	float
-		armour_thickness;
+		armor_thickness,
+		result = 0;
 
 	entity_sub_types
 		sub_type;
@@ -315,48 +316,8 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	armour_thickness = 0.0;
-
-	////////////////////////////////////////
-	//
-	// only vehicles are armoured
-	//
-	////////////////////////////////////////
-
-	if (!get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE))
-	{
-		return (armour_thickness);
-	}
-
-	sub_type = get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE);
-
-	////////////////////////////////////////
-	//
-	// only some vehicles are armoured
-	//
-	////////////////////////////////////////
-	{
-		int
-			armoured;
-
-		armoured =
-		(
-			(vehicle_database[sub_type].armour_front > 0.0) ||
-			(vehicle_database[sub_type].armour_side > 0.0) ||
-			(vehicle_database[sub_type].armour_rear > 0.0)
-		);
-
-		if (!armoured)
-		{
-			return (armour_thickness);
-		}
-	}
-
-	////////////////////////////////////////
-	//
 	// get game difficulty level (use player's own level)
-	//
-	////////////////////////////////////////
+
 	{
 		game_difficulty_settings
 			difficulty;
@@ -384,57 +345,132 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 
 		if (difficulty == GAME_DIFFICULTY_EASY)
 		{
-			return (armour_thickness);
+			return (1);
 		}
 	}
 
-	////////////////////////////////////////
-	//
 	// get armour thickness
-	//
-	////////////////////////////////////////
+
+	armor_thickness = (float) get_local_entity_int_value (target, INT_TYPE_ARMOR_LEVEL);
+
+	ASSERT(armor_thickness);
+	
+	if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE) ||
+			get_local_entity_int_value (target, INT_TYPE_IDENTIFY_AIRCRAFT))
 	{
 		float
-			target_zvx,
-			target_zvz,
-			weapon_zvx,
-			weapon_zvz,
-			cos_theta,
-			theta;
-
+			front_armor,
+			rear_armor,
+			side_armor,
+			top_armor,
+			norm;
+		vec3d
+			impact_vector,
+			*target_position,
+			*weapon_position;
 		matrix3x3
-			*target_attitude,
-			*weapon_attitude;
+			*target_attitude;
 
-		target_attitude = get_local_entity_attitude_matrix_ptr (target);
-		weapon_attitude = get_local_entity_attitude_matrix_ptr (weapon);
-
-		target_zvx = (*target_attitude)[2][0];
-		target_zvz = (*target_attitude)[2][2];
-		weapon_zvx = -(*weapon_attitude)[2][0];
-		weapon_zvz = -(*weapon_attitude)[2][2];
-
-		cos_theta = (target_zvx * weapon_zvx) + (target_zvz * weapon_zvz);
-
-		cos_theta = bound (cos_theta, -1.0, 1.0);
-
-		theta = acos (cos_theta);
-
-		if (theta <= rad (45.0))
+		
+		if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE))
 		{
-			armour_thickness = vehicle_database[sub_type].armour_front;
-		}
-		else if (theta <= rad (135.0))
-		{
-			armour_thickness = vehicle_database[sub_type].armour_side;
+			sub_type = get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE);
+
+			front_armor = vehicle_database[sub_type].armour_front;
+			rear_armor = vehicle_database[sub_type].armour_rear;
+			side_armor = vehicle_database[sub_type].armour_side;
+			top_armor = (rear_armor + side_armor) / 3;
 		}
 		else
 		{
-			armour_thickness = vehicle_database[sub_type].armour_rear;
+			front_armor = 1;
+			rear_armor = 0.25;
+			side_armor = 0.75;
+			top_armor = 0.5;
 		}
-	}
+		
+		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+		weapon_position = get_local_entity_vec3d_ptr (weapon, VEC3D_TYPE_POSITION);
+		target_attitude = get_local_entity_attitude_matrix_ptr (target);
+		
+		impact_vector.x = weapon_position->x - target_position->x;
+		impact_vector.y = weapon_position->y - target_position->y;
+		impact_vector.z = weapon_position->z - target_position->z;
+		
+		multiply_matrix3x3_vec3d(&impact_vector, target_attitude, &impact_vector);
+		
+		norm = fabs(impact_vector.x) + fabs(impact_vector.y) + fabs(impact_vector.z);
+		
+		impact_vector.x /= norm;
+		impact_vector.y /= norm;
+		impact_vector.z /= norm;
 
-	return (armour_thickness);
+		if (impact_vector.x >= 0)
+			result += side_armor * impact_vector.x;
+		else
+			result -= side_armor * impact_vector.x;
+		
+		if (impact_vector.y >= 0)
+			result += top_armor * impact_vector.y;
+		else
+			result -= top_armor * impact_vector.y;
+		
+		if (impact_vector.z >= 0)
+			result += front_armor * impact_vector.z;
+		else
+			result -= rear_armor * impact_vector.z;
+		
+		ASSERT(result);
+		
+		armor_thickness *= result;
+		
+		#if DEBUG_MODULE
+		debug_log("WN_COLLSN: armor: side %f, top %f, front %f, result %f, armour_thickness %f", impact_vector.x, impact_vector.y, impact_vector.z, result, armor_thickness);
+		#endif
+	}
+	
+//	{
+//		float
+//			target_zvx,
+//			target_zvz,
+//			weapon_zvx,
+//			weapon_zvz,
+//			cos_theta,
+//			theta;
+//
+//		matrix3x3
+//			*target_attitude,
+//			*weapon_attitude;
+//
+//		target_attitude = get_local_entity_attitude_matrix_ptr (target);
+//		weapon_attitude = get_local_entity_attitude_matrix_ptr (weapon);
+//
+//		target_zvx = (*target_attitude)[2][0];
+//		target_zvz = (*target_attitude)[2][2];
+//		weapon_zvx = -(*weapon_attitude)[2][0];
+//		weapon_zvz = -(*weapon_attitude)[2][2];
+//
+//		cos_theta = (target_zvx * weapon_zvx) + (target_zvz * weapon_zvz);
+//
+//		cos_theta = bound (cos_theta, -1.0, 1.0);
+//
+//		theta = acos (cos_theta);
+//
+//		if (theta <= rad (45.0))
+//		{
+//			armour_thickness *= vehicle_database[sub_type].armour_front;
+//		}
+//		else if (theta <= rad (135.0))
+//		{
+//			armour_thickness *= vehicle_database[sub_type].armour_side;
+//		}
+//		else
+//		{
+//			armour_thickness *= vehicle_database[sub_type].armour_rear;
+//		}
+//	}
+
+	return (armor_thickness);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

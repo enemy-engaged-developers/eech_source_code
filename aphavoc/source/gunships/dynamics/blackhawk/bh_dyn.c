@@ -136,7 +136,10 @@ void initialise_blackhawk_advanced_dynamics (entity *en)
 
 	current_flight_dynamics->sub_type = ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK;
 
-	sprintf (current_flight_dynamics->filename, "..\\common\\data\\blckhwk.dyn");
+	if (command_line_dynamics_flight_model != 2)
+		sprintf (current_flight_dynamics->filename, "..\\common\\data\\blckhwk.dyn");
+	else
+		sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\blckhwk.dyn");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -634,8 +637,11 @@ void update_blackhawk_advanced_dynamics (void)
 
 	update_acceleration_dynamics ();
 
-	update_attitude_dynamics ();
-
+	if (command_line_dynamics_flight_model == 2)
+		update_common_attitude_dynamics();
+	else
+		update_attitude_dynamics();
+	
 	if (!get_gunship_entity() || !current_flight_dynamics)
 		return;
 
@@ -866,7 +872,8 @@ void update_tail_rotor_dynamics (void)
 
 	float
 		pedal,
-		blade_pitch;
+		blade_pitch,
+		collective = (0.3 + 0.6 * current_flight_dynamics->input_data.collective.value / current_flight_dynamics->input_data.collective.max) * current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_max_rpm;
 
 	// tail rotor angular position
 
@@ -888,11 +895,11 @@ void update_tail_rotor_dynamics (void)
 	if (!current_flight_dynamics->tail_blade_pitch.damaged)
 		pedal = current_flight_dynamics->input_data.pedal.value;
 	else
-		pedal = - current_flight_dynamics->input_data.pedal.max * current_flight_dynamics->rotor_rotation_direction;
+		pedal = - collective * current_flight_dynamics->input_data.pedal.max * current_flight_dynamics->rotor_rotation_direction;
 
 	blade_pitch = rad (pedal / (current_flight_dynamics->input_data.pedal.max / deg (current_flight_dynamics->tail_blade_pitch.max)));
 
-	current_flight_dynamics->tail_blade_pitch.delta = 2.0 * (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
+	current_flight_dynamics->tail_blade_pitch.delta = (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
 
 	current_flight_dynamics->tail_blade_pitch.value += current_flight_dynamics->tail_blade_pitch.delta * get_model_delta_time ();
 
@@ -2667,7 +2674,7 @@ void update_attitude_dynamics (void)
 		// arneh - add vibration if rotor damaged
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
 		create_advanced_rotor_vibration(1, TRUE);
-		// rotor spin up/spin down /thealex/
+		// rotor spin up/spin down /thealx/
 	else if (current_flight_dynamics->main_rotor_rpm.value > 10 && current_flight_dynamics->main_rotor_rpm.value < 90)
 	{
 		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);

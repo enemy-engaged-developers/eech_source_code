@@ -99,8 +99,12 @@ void set_blackhawk_weapon_damage_status (void)
 	set_client_server_entity_weapon_damage (en, BLACKHAWK_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, blackhawk_damage.rh_outer_pylon);
 	set_client_server_entity_weapon_damage (en, BLACKHAWK_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, blackhawk_damage.rh_inner_pylon);
 
-	set_client_server_entity_weapon_damage (en, BLACKHAWK_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, blackhawk_damage.chaff_dispenser);
-	set_client_server_entity_weapon_damage (en, BLACKHAWK_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, blackhawk_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_LHS1_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, blackhawk_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_LHS1_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, blackhawk_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_LHS2_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, blackhawk_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_LHS2_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, blackhawk_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, blackhawk_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, BLACKHAWK_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, blackhawk_damage.flare_dispenser);
 
 	//
 	// check if selected weapon is still available, if not, select next

@@ -65,13 +65,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+#define OLD_EO
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+eo_params
+	ka50_flir;
+#else
 eo_params_dynamic_move
 	ka50_flir;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,17 +88,23 @@ void initialise_ka50_eo (void)
 	eo_sensor									= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth									= rad (0.0);
-	eo_min_azimuth								= rad (-70.0);
-	eo_max_azimuth								= rad (70.0);
+	eo_min_azimuth								= rad (-35.0);
+	eo_max_azimuth								= rad (35.0);
 	eo_elevation								= rad (0.0);
-	eo_min_elevation							= rad (-15.0);
-	eo_max_elevation							= rad (25.0);
+	eo_min_elevation							= rad (-80.0);
+	eo_max_elevation							= rad (15.0);
 	eo_max_visual_range						= 5000.0,
 	eo_ground_stabilised					= 0;
 
-	ka50_flir.zoom							= 1.0;
-	ka50_flir.min_zoom						= 1.0;
-	ka50_flir.max_zoom						= 1.0 / 128.0;
+#ifdef OLD_EO
+	ka50_flir.field_of_view				= EO_FOV_MEDIUM;
+	ka50_flir.min_field_of_view			= EO_FOV_NARROW;
+	ka50_flir.max_field_of_view			= EO_FOV_MEDIUM;
+#else
+	ka50_flir.zoom							= 1/7.0;
+	ka50_flir.min_zoom						= 1/7.0;
+	ka50_flir.max_zoom						= 1/23.0;
+#endif
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,6 +225,17 @@ void get_ka50_eo_relative_centred_viewpoint (viewpoint *vp)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void inc_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	if (eo->field_of_view < eo->max_field_of_view)
+	{
+		eo->field_of_view++;
+	}
+}
+#else
 static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
@@ -224,22 +247,43 @@ static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
 		eo->zoom = 1.0;
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void fast_inc_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	eo->field_of_view = eo->max_field_of_view;
+}
+#else
 static void fast_inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
 	eo->zoom = 1.0;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void dec_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	if (eo->field_of_view > eo->min_field_of_view)
+	{
+		eo->field_of_view--;
+	}
+}
+#else
 static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
@@ -251,23 +295,37 @@ static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
 		eo->zoom = 0.0;
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void fast_dec_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	eo->field_of_view = eo->min_field_of_view;
+}
+#else
 static void fast_dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
 	eo->zoom = 0.0;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+void update_ka50_eo (eo_params *eo)
+#else
 void update_ka50_eo (eo_params_dynamic_move *eo)
+#endif
 {
 	float
 		fine_slew_rate,
@@ -324,12 +382,14 @@ void update_ka50_eo (eo_params_dynamic_move *eo)
 
 	////////////////////////////////////////
 
+#ifndef OLD_EO
 	if (command_line_eo_zoom_joystick_index != -1)
 	{
 		long pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
 
 		eo->zoom = (pos + 10000) / 20000.0;
 	}
+#endif
 
 	////////////////////////////////////////
 	//
@@ -337,6 +397,61 @@ void update_ka50_eo (eo_params_dynamic_move *eo)
 	//
 	////////////////////////////////////////
 
+#ifdef OLD_EO
+	switch (eo->field_of_view)
+	{
+		////////////////////////////////////////
+		case EO_FOV_NARROW:
+		////////////////////////////////////////
+		{
+			fine_slew_rate = rad (0.05) * get_delta_time ();
+
+			medium_slew_rate = rad (0.25) * get_delta_time ();
+
+			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+
+			coarse_slew_rate = rad (1.0) * get_delta_time ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case EO_FOV_MEDIUM:
+		////////////////////////////////////////
+		{
+			fine_slew_rate = rad (0.5) * get_delta_time ();
+
+			medium_slew_rate = rad (2.5) * get_delta_time ();
+
+			mouse_slew_rate = rad (6) * get_delta_time ();	// Jabberwock 030930
+
+			coarse_slew_rate = rad (10.0) * get_delta_time ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case EO_FOV_WIDE:
+		////////////////////////////////////////
+		{
+			fine_slew_rate = rad (4.0) * get_delta_time ();
+
+			medium_slew_rate = rad (20.0) * get_delta_time ();
+
+			mouse_slew_rate = rad (48) * get_delta_time ();	// Jabberwock 030930
+
+			coarse_slew_rate = rad (80.0) * get_delta_time ();
+
+			break;
+		}
+		////////////////////////////////////////
+		default:
+		////////////////////////////////////////
+		{
+			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+
+			break;
+		}
+	}
+#else
 	{
 		float exp_zoom_value = convert_linear_view_value (eo);
 
@@ -348,6 +463,7 @@ void update_ka50_eo (eo_params_dynamic_move *eo)
 
 		coarse_slew_rate = rad (80.0) * exp_zoom_value * get_delta_time ();
 	}
+#endif
 
 	////////////////////////////////////////
 
@@ -360,8 +476,13 @@ void update_ka50_eo (eo_params_dynamic_move *eo)
 		eo_azimuth = get_eo_azimuth (ROTATE_RATE, coarse_slew_rate, eo_azimuth, eo_min_azimuth, eo_max_azimuth, mouse_slew_rate);
 		eo_elevation = get_eo_elevation (ROTATE_RATE, coarse_slew_rate, eo_elevation, eo_min_elevation, eo_max_elevation, mouse_slew_rate);
 	}
+
+#ifdef OLD_EO
+	eo->field_of_view = get_old_eo_zoom(eo->field_of_view, eo->max_field_of_view, eo->min_field_of_view);
+#else
 	if (command_line_eo_zoom_joystick_index == -1 && (command_line_mouse_look != MOUSELOOK_ON || command_line_field_of_view_joystick_index != -1))
 		eo->zoom = get_new_eo_zoom(eo->zoom);
+#endif
 
 	////////////////////////////////////////
 	// loke 030315
@@ -487,7 +608,11 @@ void slave_ka50_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
+#ifdef OLD_EO
+				ka50_flir.field_of_view = ka50_flir.min_field_of_view;
+#else
 				ka50_flir.zoom = 0.0;
+#endif
 				break;
 			}
 		}
@@ -498,7 +623,11 @@ void slave_ka50_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
-				ka50_flir.zoom = 1.0;
+#ifdef OLD_EO
+				ka50_flir.field_of_view = ka50_flir.min_field_of_view;
+#else
+				ka50_flir.zoom = 0.0;
+#endif
 				break;
 			}
 		}
@@ -508,3 +637,5 @@ void slave_ka50_eo_to_current_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#undef OLD_EO

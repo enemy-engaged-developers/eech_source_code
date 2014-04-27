@@ -267,7 +267,7 @@ static void launch_weapon_event (event *ev)
 
 static void launch_chaff_event (event *ev)
 {
-	launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_CHAFF);
+	launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_CHAFF, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ static void launch_chaff_event (event *ev)
 
 static void launch_flare_event (event *ev)
 {
-	launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_FLARE);
+	launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_FLARE, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,7 +516,7 @@ static void rearm_refuel_repair_event (event *ev)
 		{
 			// refuel
 
-			current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max;
+			current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier;
 	
 			// repair
 	

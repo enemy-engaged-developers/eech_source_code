@@ -79,25 +79,22 @@
 static weapon_explosion_criteria
 	ball_explosion_criteria_table,
 	high_explosive_explosion_criteria_table,
-	armour_piercing_explosion_criteria_table,
-	heat_explosion_criteria_table,
-	smoke_grenade_explosion_criteria_table;
+	smoke_grenade_explosion_criteria_table,
+	ground_collision_criteria_table,
+	water_collision_criteria_table,
+	object_collision_criteria_table;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void initialise_ball_explosion_criteria_table ();
-
 static void initialise_high_explosive_explosion_criteria_table ();
-
-static void initialise_armour_piercing_explosion_criteria_table ();
-
-static void initialise_heat_explosion_criteria_table ();
-
 static void initialise_smoke_grenade_explosion_criteria_table ();
-
-static void add_explosion_criteria (int index, weapon_kill_codes kill_code, int min_damage, int max_damage, meta_explosion_types type, weapon_explosion_criteria *table);
+static void initialise_ground_collision_criteria_table ();
+static void initialise_water_collision_criteria_table ();
+static void initialise_object_collision_criteria_table ();
+static void add_explosion_criteria (int index, int min_damage, int max_damage, meta_explosion_types type, weapon_explosion_criteria *table);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,14 +103,12 @@ static void add_explosion_criteria (int index, weapon_kill_codes kill_code, int 
 void initialise_weapon_explosion_criteria_tables ()
 {
 	initialise_ball_explosion_criteria_table ();
-
 	initialise_high_explosive_explosion_criteria_table ();
-
-	initialise_armour_piercing_explosion_criteria_table ();
-
-	initialise_heat_explosion_criteria_table ();
-
 	initialise_smoke_grenade_explosion_criteria_table ();
+
+	initialise_ground_collision_criteria_table ();
+	initialise_water_collision_criteria_table ();
+	initialise_object_collision_criteria_table ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,105 +120,16 @@ void initialise_ball_explosion_criteria_table ()
 	weapon_explosion_criteria
 		*table;
 
-	weapon_kill_codes
-		kill_code;
-
-	int
-		count;
-
 	table = &ball_explosion_criteria_table;
 
-	////////////////////////////////////////
+	table->kill_code_criteria_count = 1;
 
-	kill_code =  WEAPON_KILL_CODE_OK;
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
 
-	table->kill_code_criteria_count [kill_code] = 0;
+	add_explosion_criteria (0, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_EXHAUSTED;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OUT_OF_BOUNDS;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_LAND;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_EARTH_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_WATER;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_WATER_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_AP_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,368 +141,19 @@ void initialise_high_explosive_explosion_criteria_table ()
 	weapon_explosion_criteria
 		*table;
 
-	weapon_kill_codes
-		kill_code;
-
-	int
-		count;
-
 	table = &high_explosive_explosion_criteria_table;
 
-	////////////////////////////////////////
-
-	kill_code =  WEAPON_KILL_CODE_OK;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_EXHAUSTED;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OUT_OF_BOUNDS;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_LAND;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_WATER;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_WATER_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_AP_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void initialise_armour_piercing_explosion_criteria_table ()
-{
-	weapon_explosion_criteria
-		*table;
-
-	weapon_kill_codes
-		kill_code;
-
-	int
-		count;
-
-	table = &armour_piercing_explosion_criteria_table;
-
-	////////////////////////////////////////
-
-	kill_code =  WEAPON_KILL_CODE_OK;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_EXHAUSTED;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OUT_OF_BOUNDS;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_LAND;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_EARTH_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_EARTH_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_EARTH_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_WATER;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_WATER_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_AP_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_AP_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_AP_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void initialise_heat_explosion_criteria_table ()
-{
-	weapon_explosion_criteria
-		*table;
-
-	weapon_kill_codes
-		kill_code;
-
-	int
-		count;
-
-	table = &heat_explosion_criteria_table;
-
-	////////////////////////////////////////
-
-	kill_code =  WEAPON_KILL_CODE_OK;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_EXHAUSTED;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OUT_OF_BOUNDS;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_LAND;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_WATER;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_WATER_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
-
-/*	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table); */
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
-
-/*
-	count = 3;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
-	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);*/
+	table->kill_code_criteria_count = 5;
+
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
+
+	add_explosion_criteria (0, 0, 49, XSMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (1, 50, 249, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (2, 249, 999, MEDIUM_HE_META_EXPLOSION, table);
+	add_explosion_criteria (3, 1000, 1999, LARGE_HE_META_EXPLOSION, table);
+	add_explosion_criteria (4, 2000, INT_MAX, XLARGE_HE_META_EXPLOSION, table);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -608,93 +165,83 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 	weapon_explosion_criteria
 		*table;
 
-	weapon_kill_codes
-		kill_code;
-
-	int
-		count;
 
 	table = &smoke_grenade_explosion_criteria_table;
 
-	////////////////////////////////////////
+	table->kill_code_criteria_count = 1;
 
-	kill_code =  WEAPON_KILL_CODE_OK;
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
 
-	table->kill_code_criteria_count [kill_code] = 0;
+	add_explosion_criteria (0, 0, INT_MAX, PURPLE_FLARE_META_EXPLOSION, table);
+}
 
-	table->kill_code_criteria [kill_code] = NULL;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////
+void initialise_ground_collision_criteria_table ()
+{
+	weapon_explosion_criteria
+		*table;
 
-	kill_code = WEAPON_KILL_CODE_EXHAUSTED;
+	table = &ground_collision_criteria_table;
 
-	count = 1;
+	table->kill_code_criteria_count = 5;
 
-	table->kill_code_criteria_count [kill_code] = count;
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
 
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	add_explosion_criteria (0, 0, 49, XSMALL_GROUND_META_EXPLOSION, table);
+	add_explosion_criteria (1, 50, 249, SMALL_GROUND_META_EXPLOSION, table);
+	add_explosion_criteria (2, 250, 999, MEDIUM_GROUND_META_EXPLOSION, table);
+	add_explosion_criteria (3, 1000, 1999, LARGE_GROUND_META_EXPLOSION, table);
+	add_explosion_criteria (4, 2000, INT_MAX, XLARGE_GROUND_META_EXPLOSION, table);
+}
 
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////
+void initialise_water_collision_criteria_table ()
+{
+	weapon_explosion_criteria
+		*table;
 
-	kill_code = WEAPON_KILL_CODE_OUT_OF_BOUNDS;
+	table = &water_collision_criteria_table;
 
-	count = 1;
+	table->kill_code_criteria_count = 2;
 
-	table->kill_code_criteria_count [kill_code] = count;
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
 
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	add_explosion_criteria (0, 0, 249, SMALL_WATER_META_EXPLOSION, table);
+	add_explosion_criteria (1, 250, INT_MAX, MEDIUM_WATER_META_EXPLOSION, table);
+}
 
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////
+void initialise_object_collision_criteria_table ()
+{
+	weapon_explosion_criteria
+		*table;
 
-	kill_code = WEAPON_KILL_CODE_HIT_LAND;
+	table = &object_collision_criteria_table;
 
-	count = 1;
+	table->kill_code_criteria_count = 3;
 
-	table->kill_code_criteria_count [kill_code] = count;
+	table->min_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->max_damage = (int *) malloc (sizeof (int) * table->kill_code_criteria_count);
+	table->type = (meta_explosion_types *) malloc (sizeof (meta_explosion_types) * table->kill_code_criteria_count);
 
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, PURPLE_FLARE_META_EXPLOSION, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_WATER;
-
-	count = 1;
-
-	table->kill_code_criteria_count [kill_code] = count;
-
-	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
-
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
-
-	////////////////////////////////////////
-
-	kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-	table->kill_code_criteria_count [kill_code] = 0;
-
-	table->kill_code_criteria [kill_code] = NULL;
+	add_explosion_criteria (0, 0, 49, SMALL_OBJECT_META_EXPLOSION, table);
+	add_explosion_criteria (1, 50, 999, MEDIUM_OBJECT_META_EXPLOSION, table);
+	add_explosion_criteria (2, 1000, INT_MAX, LARGE_OBJECT_META_EXPLOSION, table);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -706,85 +253,34 @@ void deinitialise_weapon_explosion_criteria_tables ()
 	weapon_explosion_criteria
 		*table;
 
-	int
-		kill_code;
-
-	///////////////////////////////////////////////////////////////////////
-
 	table = &ball_explosion_criteria_table;
-
-	for (kill_code = 0; kill_code < NUM_WEAPON_KILL_CODES; kill_code ++)
-	{
-		if (table->kill_code_criteria [kill_code])
-		{
-			free_mem (table->kill_code_criteria [kill_code]);
-		}
-	}
-
-	///////////////////////////////////////////////////////////////////////
+	free (table->max_damage);
+	free (table->min_damage);
+	free (table->type);
 
 	table = &high_explosive_explosion_criteria_table;
-
-	for (kill_code = 0; kill_code < NUM_WEAPON_KILL_CODES; kill_code ++)
-	{
-		if (table->kill_code_criteria [kill_code])
-		{
-			free_mem (table->kill_code_criteria [kill_code]);
-		}
-	}
-
-	///////////////////////////////////////////////////////////////////////
-
-	table = &armour_piercing_explosion_criteria_table;
-
-	for (kill_code = 0; kill_code < NUM_WEAPON_KILL_CODES; kill_code ++)
-	{
-		if (table->kill_code_criteria [kill_code])
-		{
-			free_mem (table->kill_code_criteria [kill_code]);
-		}
-	}
-
-	///////////////////////////////////////////////////////////////////////
-
-	table = &heat_explosion_criteria_table;
-
-	for (kill_code = 0; kill_code < NUM_WEAPON_KILL_CODES; kill_code ++)
-	{
-		if (table->kill_code_criteria [kill_code])
-		{
-			free_mem (table->kill_code_criteria [kill_code]);
-		}
-	}
-
-	///////////////////////////////////////////////////////////////////////
+	free (table->max_damage);
+	free (table->min_damage);
+	free (table->type);
 
 	table = &smoke_grenade_explosion_criteria_table;
-
-	for (kill_code = 0; kill_code < NUM_WEAPON_KILL_CODES; kill_code ++)
-	{
-		if (table->kill_code_criteria [kill_code])
-		{
-			free_mem (table->kill_code_criteria [kill_code]);
-		}
-	}
+	free (table->max_damage);
+	free (table->min_damage);
+	free (table->type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_explosion_criteria (int index, weapon_kill_codes kill_code, int min_damage, int max_damage, meta_explosion_types type, weapon_explosion_criteria *table)
+void add_explosion_criteria (int index, int min_damage, int max_damage, meta_explosion_types type, weapon_explosion_criteria *table)
 {
-
 	ASSERT (index >= 0);
+	ASSERT (index < table->kill_code_criteria_count); 
 
-	ASSERT (index < table->kill_code_criteria_count [kill_code]);
-
-	table->kill_code_criteria [kill_code][index].min_damage = min_damage;
-	table->kill_code_criteria [kill_code][index].max_damage = max_damage;
-
-	table->kill_code_criteria [kill_code][index].type = type;
+	table->min_damage[index] = min_damage;
+	table->max_damage[index] = max_damage;
+	table->type[index] = type;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -804,87 +300,75 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 		*criteria_table;
 
 	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	damage_capability = get_local_entity_int_value (en, INT_TYPE_DAMAGE_CAPABILITY);
 
-	//
-	// get relevant criteria table, based on warhead type
-	//
-
-	switch (warhead_type)
-	{
-		case WEAPON_WARHEAD_TYPE_NONE:
+	if (!kill_code) // weapon explosion
+		switch (warhead_type)
 		{
-			return META_EXPLOSION_TYPE_NONE;
+			case WEAPON_WARHEAD_TYPE_NONE:
+			{
+				return META_EXPLOSION_TYPE_NONE;
+			}
+			case WEAPON_WARHEAD_TYPE_SOLID_SHOT:
+			case WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS:
+			case WEAPON_WARHEAD_TYPE_ILLUMINATION_FLARE:
+			{
+				criteria_table = &ball_explosion_criteria_table;
+
+				break;
+			}
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
+			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT:
+			{
+				criteria_table = &high_explosive_explosion_criteria_table;
+
+				break;
+			}
+			case WEAPON_WARHEAD_TYPE_SMOKE_GRENADE:
+			{
+				criteria_table = &smoke_grenade_explosion_criteria_table;
+
+				break;
+			}
+			default:
+			{
+				debug_fatal ("XP_WPN : Invalid warhead type %d", warhead_type);
+
+				return META_EXPLOSION_TYPE_NONE;
+			}
 		}
-		case WEAPON_WARHEAD_TYPE_BALL:
+	else // weapon collision
+		switch (kill_code)
 		{
-			damage_capability = get_local_entity_int_value (en, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
+			case WEAPON_KILL_CODE_HIT_WATER:
+			{
+				criteria_table = &water_collision_criteria_table;
 
-			criteria_table = &ball_explosion_criteria_table;
+				break;
+			}
+			case WEAPON_KILL_CODE_HIT_LAND:
+			{
+				criteria_table = &ground_collision_criteria_table;
 
-			break;
+				break;
+			}
+			case WEAPON_KILL_CODE_HIT_TARGET:
+			{
+				criteria_table = &object_collision_criteria_table;
+
+				break;
+			}
 		}
-		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
-		{
-			damage_capability = get_local_entity_int_value (en, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
 
-			criteria_table = &high_explosive_explosion_criteria_table;
 
-			break;
-		}
-		case WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING:
-		{
-			damage_capability = get_local_entity_int_value (en, INT_TYPE_HARD_DAMAGE_CAPABILITY);
-
-			criteria_table = &armour_piercing_explosion_criteria_table;
-
-			break;
-		}
-		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK:
-		{
-			damage_capability = get_local_entity_int_value (en, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
-
-			criteria_table = &heat_explosion_criteria_table;
-
-			break;
-		}
-		case WEAPON_WARHEAD_TYPE_SMOKE_GRENADE:
-		{
-			damage_capability = 0;
-
-			criteria_table = &smoke_grenade_explosion_criteria_table;
-
-			break;
-		}
-		default:
-		{
-			debug_fatal ("XP_WPN : Invalid warhead type %d", warhead_type);
-
-			return META_EXPLOSION_TYPE_NONE;
-		}
-	}
-
-	//
 	// search through the table, checking all other criteria
-	//
 
-	if (criteria_table->kill_code_criteria [kill_code] == NULL)
-	{
-		debug_fatal ("XP_WPN : No criteria table found for warhead type %d, kill code %d", warhead_type, kill_code);
-	}
+	for (loop = 0; loop < criteria_table->kill_code_criteria_count; loop ++)
+		if ( criteria_table->min_damage[loop] <= damage_capability && criteria_table->max_damage[loop] >= damage_capability )
+			return criteria_table->type[loop];
 
-	for (loop = 0; loop < criteria_table->kill_code_criteria_count [kill_code]; loop ++)
-	{
-		//
-		// check damage capability
-		//
-
-		if ( ( criteria_table->kill_code_criteria [kill_code][loop].min_damage <= damage_capability ) &&
-				( criteria_table->kill_code_criteria [kill_code][loop].max_damage >= damage_capability ) )
-		{
-
-			return criteria_table->kill_code_criteria [kill_code][loop].type;
-		}
-	}
 
 	return META_EXPLOSION_TYPE_NONE;
 }

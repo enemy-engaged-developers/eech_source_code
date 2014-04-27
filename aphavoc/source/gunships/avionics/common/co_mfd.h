@@ -140,6 +140,7 @@ extern float
 	clicked_position_y;
 	
 extern void update_pointer_position (void);
+extern void move_targeting_gates(float *x, float *y);
 extern void store_point_left_event (event* ev);
 extern void store_point_right_event (event* ev);
 extern int is_holding_left_button (void);

@@ -171,7 +171,14 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 	vec3d
 		*target_pos,
-		en_pos;
+		en_pos,
+		*weapon_vector,
+		*weapon_to_target_vector;
+	float
+		launch_angle_error,
+		range;
+	int
+		debug_flag = FALSE;
 
 	int loal_mode = FALSE;
 
@@ -179,9 +186,36 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 	raw = (aircraft *) get_local_entity_data (en);
 
-	//
+	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &en_pos);
+
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+			debug_flag = TRUE;
+		if (get_gunship_entity())
+			if (en == (get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET)))
+				debug_flag = TRUE;
+	#endif
+
+	// find target
+
+	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
+
+	if (!target)
+	{
+		if (debug_flag)
+		{
+			debug_log ("AC_WPN: Fire Weapon Error - NO TARGET");
+		}
+
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0);
+
+		return AIRCRAFT_FIRE_NO_TARGET;
+	}
+
+	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	range = get_3d_range (&en_pos, target_pos);
+
 	// Fire suppressed
-	//
 
 	if (check_flags & AIRCRAFT_FIRE_SUPPRESSED)
 	{
@@ -191,55 +225,97 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 		}
 	}
 
-	//
 	// check weapon
-	//
+
+	if (!aircraft_select_best_weapon(en, target))
+	{
+		if (debug_flag)
+		{
+			debug_log ("AC_WPN: Can't find suitable weapon, skip");
+		}
+
+		return AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY;
+	}
 
 	if (check_flags & AIRCRAFT_FIRE_NO_WEAPON)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
-			debug_log ("AC_WPN: Fire Weapon Error - NO WEAPON");
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - NO WEAPON");
+			}
+			
+			set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0);
 
 			return AIRCRAFT_FIRE_NO_WEAPON;
 		}
 	}
 
-	//
 	// weapon system_ready
-	//
 
 	if (check_flags & AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY)
 	{
 		if (!get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY))
 		{
-			debug_log ("AC_WPN: Fire Weapon Error - WEAPON SYSTEM NOT READY");
-
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - WEAPON SYSTEM NOT READY");
+			}
+			
 			return AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY;
 		}
-	}
 
-//	debug_log("%s: %d", get_sub_type_name(en), get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON));
-
-	//
-	// find target
-	//
-
-	if (check_flags & AIRCRAFT_FIRE_NO_TARGET)
-	{
-		target = get_local_entity_parent (en, LIST_TYPE_TARGET);
-
-		if (!target)
+		if (!get_local_entity_int_value (en, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 		{
-			debug_log ("AC_WPN: Fire Weapon Error - NO TARGET");
-
-			return AIRCRAFT_FIRE_NO_TARGET;
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - outside launch angle (1)");
+			}
+			
+			return AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY;
 		}
+
+		weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
+
+		ASSERT (weapon_vector);
+
+		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+
+		if (!weapon_database [raw->selected_weapon].guidance_type && weapon_database [raw->selected_weapon].aiming_type)
+		{
+				float
+					angle,
+					time,
+					pitch = - asin((en_pos.y - target_pos->y) / range);
+				
+				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
+				{
+					weapon_to_target_vector->x = target_pos->x - en_pos.x;
+					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
+					weapon_to_target_vector->z = target_pos->z - en_pos.z;
+
+					normalise_3d_vector(weapon_to_target_vector);
+				}
+		}
+
+		ASSERT (weapon_to_target_vector);
+
+		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+
+		if (fabs (launch_angle_error) > weapon_database[raw->selected_weapon].max_launch_angle_error)
+		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
+			}
+			
+			return AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY;
+		}
+
 	}
 
-	//
 	// line of sight checks
-	//
 
 	if (check_flags & AIRCRAFT_FIRE_NO_LOS)
 	{
@@ -255,10 +331,6 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 			criteria = MOBILE_LOS_CHECK_COURSE_TERRAIN;
 		}
 
-		get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &en_pos);
-
-		target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
 		en_pos.y -= (get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE) + 2.0);
 
 		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, (mobile_los_check_criteria) criteria))
@@ -266,37 +338,46 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
 				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
 			{
-				debug_log("AC_WPN: Switching to LOAL mode to fire at target without LOS ((Aircraft %s (%d), Target %s (%d))",
-									get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
-									get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
-
+				if (debug_flag)
+				{
+					debug_log("AC_WPN: Switching to LOAL mode to fire at target without LOS ((Aircraft %s (%d), Target %s (%d))",
+										get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+										get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+				}
+				
 				loal_mode = TRUE;
 			}
 			else
 			{
-				debug_log ("AC_WPN: Fire Weapon Error - NO LOS (Aircraft %s (%d), Target %s (%d))",
-									get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
-									get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
-
+				if (debug_flag)
+				{
+					debug_log ("AC_WPN: Fire Weapon Error - NO LOS (Aircraft %s (%d), Target %s (%d))",
+										get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+										get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+				}
+				
 				return AIRCRAFT_FIRE_NO_LOS;
 			}
 		}
 	}
 
-	//
 	// Play Speech
-	//
 
 	play_aircraft_weapon_launched_speech (en, raw->selected_weapon);
 
-	//
 	// Fire weapon
-	//
 
 	set_local_entity_int_value(en, INT_TYPE_LOCK_ON_AFTER_LAUNCH, loal_mode);
 
-	launch_client_server_weapon (en, raw->selected_weapon);
+	if (debug_flag)
+	{
+		debug_log ("AC_WPN: Launch Weapon!");
+	}
 
+	set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0);
+	
+	launch_client_server_weapon (en, raw->selected_weapon, FALSE);
+	
 	return AIRCRAFT_FIRE_OK;
 }
 
@@ -304,86 +385,297 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// aircraft waiting to engage, or using cannons
+
 void update_aircraft_weapon_fire (entity *en)
 {
-   aircraft
-      *raw;
+	aircraft
+		*raw;
+	entity
+		*target;
+	int
+		debug_flag = FALSE;
+	float
+		range;
+	vec3d
+		en_pos,
+		*target_pos,
+		*weapon_vector,
+		*weapon_to_target_vector;
+	float
+		launch_angle_error;
 
 	ASSERT (en);
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-   raw = (aircraft *) get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
-	if (raw->weapon_burst_timer > 0.0)
+	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &en_pos);
+
+	#if DEBUG_MODULE
+		if (en == get_external_view_entity ())
+			debug_flag = TRUE;
+		if (get_gunship_entity())
+			if (en == (get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET)))
+				debug_flag = TRUE;
+	#endif
+
+	if (raw->weapon_burst_timer <= 0)
 	{
-		//
-		// check valid selected weapon
-		//
+		float old_value = raw->weapon_launch_delay;
+		
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0, old_value - get_delta_time ()));
 
-		if (raw->selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		if ((int)old_value == (int)raw->weapon_launch_delay) // update once per second
+			return;
+		
+		if (raw->weapon_launch_delay <= 0)
 		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: weapon launch delay expired");
+			}
+		}
+	}
+	else
+	{
+		raw->weapon_burst_timer = max(0, raw->weapon_burst_timer - get_delta_time ());
+
+		if (raw->weapon_burst_timer > 0.0)
+		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Continuing Burst");
+			}
+		}
+		else
+		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Stop Burst");
+			}
+
 			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-
-			raw->weapon_burst_timer = 0.0;
-
+			raw->weapon_salvo_timer = 0.0;
+			
 			return;
 		}
+	}
 
-		//
-		// check selected weapon is ready
-		//
+	target = raw->mob.target_link.parent;
 
-		if (!raw->selected_weapon_system_ready)
+	if (!target)
+	{
+		if (debug_flag)
 		{
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-
-			raw->weapon_burst_timer = 0.0;
-
-			return;
+			debug_log ("AC_WPN: Not Firing - No Target");
 		}
 
-		//
-		// check valid target
-		//
+		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_salvo_timer = 0;
+		
+		return;
+	}
 
-		if (!raw->mob.target_link.parent)
+	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	range = get_3d_range (&en_pos, target_pos);
+
+	// Check Suppress AI fire
+
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SUPPRESS_AI_FIRE))
+	{
+		if (debug_flag)
 		{
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-
-			raw->weapon_burst_timer = 0.0;
-
-			return;
+			debug_log ("AC_WPN: Not Firing - AI fire suppressed");
 		}
 
-		//
-		// fire weapon
-		//
+		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_salvo_timer = 0.0;
 
-		launch_client_server_weapon (en, raw->selected_weapon);
+		return;
+	}
 
-		//
-		// update burst timer
-		//
+	// check selected weapon is ready
 
-		raw->weapon_burst_timer -= get_delta_time ();
-
-		if (raw->weapon_burst_timer <= 0.0)
+	if (!raw->selected_weapon_system_ready)
+	{
+		if (debug_flag)
 		{
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+			debug_log ("AC_WPN: Not Firing - Weapon system not ready");
+		}
 
-			raw->weapon_burst_timer = 0.0;
+		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_salvo_timer = 0.0;
+
+		return;
+	}
+
+	// Check range
+
+	{
+		if ((range < weapon_database [raw->selected_weapon].min_range) || (range > weapon_database [raw->selected_weapon].max_range))
+		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Not Firing - out of range");
+			}
+
+			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+			raw->weapon_salvo_timer = 0.0;
+
+			if (!aircraft_select_best_weapon(en, target))
+			{
+				if (debug_flag)
+				{
+					debug_log ("AC_WPN: Can't find suitable weapon, skip");
+				}
+				
+				return;
+			}
+		}
+	}
+
+	// check within max launch angle error
+
+	if (!get_local_entity_int_value (en, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
+	{
+		if (debug_flag)
+		{
+			debug_log ("AC_WPN: Not Firing - outside launch angle");
+		}
+
+		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_salvo_timer = 0.0;
+
+		return;
+	}
+
+	{
+		weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
+
+		ASSERT (weapon_vector);
+
+		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+
+		if (!weapon_database [raw->selected_weapon].guidance_type && weapon_database [raw->selected_weapon].aiming_type)
+		{
+				float
+					angle,
+					time,
+					pitch = - asin((en_pos.y - target_pos->y) / range);
+				
+				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
+				{
+					weapon_to_target_vector->x = target_pos->x - en_pos.x;
+					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
+					weapon_to_target_vector->z = target_pos->z - en_pos.z;
+
+					normalise_3d_vector(weapon_to_target_vector);
+				}
+		}
+
+		ASSERT (weapon_to_target_vector);
+
+		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+
+		if (fabs (launch_angle_error) > weapon_database[raw->selected_weapon].max_launch_angle_error)
+		{
+			if (debug_flag)
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
+			}
+			
+			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+			raw->weapon_salvo_timer = 0.0;
 
 			return;
 		}
 	}
-	else
-		raw->weapon_salvo_timer = 0.0;
+	// fire weapon
+
+	if (debug_flag)
+	{
+		debug_log ("AC_WPN: Fire Weapon!");
+	}
+
+	set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0.0);
+	
+	launch_client_server_weapon (en, raw->selected_weapon, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int aircraft_select_best_weapon (entity *en, entity *target)
+{
+	entity
+		*guide,
+		*task;
+
+	int
+		weapon_type;
+
+	ASSERT(target);
+	ASSERT(en);
+	
+	//
+	// Find best weapon
+	//
+
+	weapon_type = get_best_weapon_for_target (en, target, BEST_WEAPON_CRITERIA_ALL);
+
+	//
+	// abort engage task and re-arm if no suitable weapon
+	//
+
+	if (weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+	{
+		weapon_type = get_best_weapon_for_target (en, target, BEST_WEAPON_CRITERIA_MINIMAL);
+
+		if (weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			#if DEBUG_MODULE
+
+			debug_log ("VH_WPN: %s (%d) Aborting engage task - no suitable weapon for %s (%d)",
+										get_local_entity_string (en, STRING_TYPE_FULL_NAME),
+										get_local_entity_index (en),
+										get_local_entity_string (target, STRING_TYPE_FULL_NAME),
+										get_local_entity_index (target));
+
+			#endif
+
+			guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
+
+			if (guide)
+			{
+				task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
+
+				ASSERT (task);
+
+				notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, en, TASK_TERMINATED_ABORTED);
+			}
+		}
+
+		if (weapon_type != get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON))
+		{
+			set_client_server_entity_int_value (en, INT_TYPE_SELECTED_WEAPON, weapon_type);
+		}
+
+		return FALSE;
+	}
+	else
+	{
+		if (weapon_type != get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON))
+		{
+			set_client_server_entity_int_value (en, INT_TYPE_SELECTED_WEAPON, weapon_type);
+		}
+
+		return TRUE;
+	}
+}
+
 
 void update_aircraft_decoy_release (entity *en)
 {
@@ -511,9 +803,9 @@ void update_aircraft_decoy_release (entity *en)
 
 							time_to_impact = range / max (velocity, 1.0f);
 
-							if (time_to_impact < 10.0)
+							if (time_to_impact < 5.0)
 							{
-								launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CHAFF);
+								launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CHAFF, FALSE);
 
 								chaff_released = TRUE;
 
@@ -539,9 +831,9 @@ void update_aircraft_decoy_release (entity *en)
 
 							time_to_impact = range / max (velocity, 1.0f);
 
-							if (time_to_impact < 10.0)
+							if (time_to_impact < 5.0)
 							{
-								launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_FLARE);
+								launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_FLARE, FALSE);
 
 								flare_released = TRUE;
 

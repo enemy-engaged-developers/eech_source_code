@@ -148,24 +148,24 @@ void rebuild_weapon_log_list (player_log_type *log, int side)
 		{
 			weapon = log->side_log[side].weapon_usage[count][WEAPON_LOG_FIRED];
 
-			if ( (count == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER) ||
+			if ( (count == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND) ||
-					(count == ENTITY_SUB_TYPE_WEAPON_IGLA_V) ||
+					(count == ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_S5) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_S8) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_S13) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND) ||
-					(count == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND) ||
-					(count == ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL) ||
-					(count == ENTITY_SUB_TYPE_WEAPON_ATAKA) ||
-					(count == ENTITY_SUB_TYPE_WEAPON_VIKHR)
+					(count == ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND) ||
+					(count == ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM) ||
+					(count == ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V) ||
+					(count == ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR)
 				)
 			{
 

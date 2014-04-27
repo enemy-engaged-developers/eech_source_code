@@ -203,7 +203,7 @@ static void launch_weapon_event (event *ev)
 
 	if (en)
 	{
-		launch_client_server_weapon (en, get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON));
+		launch_client_server_weapon (en, get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON), FALSE);
 	}
 }
 
@@ -227,7 +227,7 @@ static void launch_chaff_event (event *ev)
 
 	if (en)
 	{
-		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CHAFF);
+		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CHAFF, FALSE);
 	}
 }
 
@@ -251,7 +251,7 @@ static void launch_flare_event (event *ev)
 
 	if (en)
 	{
-		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_FLARE);
+		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_FLARE, FALSE);
 	}
 }
 
@@ -275,7 +275,7 @@ static void launch_smoke_grenade_event (event *ev)
 
 	if (en)
 	{
-		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_SMOKE_GRENADE);
+		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_SMOKE_GRENADE, FALSE);
 	}
 }
 
@@ -299,7 +299,7 @@ static void launch_crate_event (event *ev)
 
 	if (en)
 	{
-		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CRATE);
+		launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_CRATE, FALSE);
 	}
 }
 
@@ -342,7 +342,7 @@ static void launch_persuer_weapon_event (event *ev)
 
 				if (weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
-					launch_client_server_weapon (persuer, weapon_type);
+					launch_client_server_weapon (persuer, weapon_type, FALSE);
 				}
 			}
 
@@ -1481,7 +1481,7 @@ static void kill_external_view_entity_event (event *ev)
 
 			set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, 0);
 
-			notify_local_entity (ENTITY_MESSAGE_COLLISION, en, NULL, 1.0);
+			notify_local_entity (ENTITY_MESSAGE_COLLISION, en, NULL, 0.0);
 		}
 	}
 }
@@ -1512,7 +1512,7 @@ static void damage_external_view_entity_event (event *ev)
 
 			set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
 
-			notify_local_entity (ENTITY_MESSAGE_COLLISION, en, NULL, 1.0);
+			notify_local_entity (ENTITY_MESSAGE_COLLISION, en, NULL, 0.0);
 		}
 	}
 }
@@ -1562,23 +1562,6 @@ static void restore_external_view_entity_main_rotors_event (event *ev)
 
 			transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, en, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
 		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void assess_external_view_entity_weapon_effectiveness_event (event *ev)
-{
-	entity
-		*en;
-
-	en = get_external_view_entity ();
-
-	if (en)
-	{
-		assess_effectiveness_of_all_weapons_on_entity (en);
 	}
 }
 
@@ -2414,7 +2397,7 @@ void set_flight_debug_events (void)
 
 	////////////////////////////////////////
 
-	set_event (DIK_K, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, assess_external_view_entity_weapon_effectiveness_event);
+//	set_event (DIK_K, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, assess_external_view_entity_weapon_effectiveness_event);
 
 	set_event (DIK_K, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, toggle_in_flight_debug_keysite_info_event);
 

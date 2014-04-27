@@ -123,7 +123,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_M220_TOW2B,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_BGM_71D_TOW_2,						// sub_type
 				NUM_TOW_MISSILES,	 	  	 									// number
 				TOW_LAUNCHER_TURRET,			 								// heading_depth
 				TOW_LAUNCHER_BARREL,	 	 									// pitch_depth

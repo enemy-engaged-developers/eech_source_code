@@ -241,10 +241,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
-			value = segment_database[raw->bridge_segment_type].warhead_effective_class;
+			value = segment_database[raw->bridge_segment_type].armor_level;
 
 			break;
 		}
@@ -289,7 +289,7 @@ void overload_segment_int_value_functions (void)
 
 	fn_get_local_entity_int_value				[ENTITY_TYPE_SEGMENT][INT_TYPE_TASK_TARGET_TYPE]								= get_local_int_value;
 
-	fn_get_local_entity_int_value				[ENTITY_TYPE_SEGMENT][INT_TYPE_WARHEAD_EFFECTIVE_CLASS]						= get_local_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_SEGMENT][INT_TYPE_ARMOR_LEVEL]						= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

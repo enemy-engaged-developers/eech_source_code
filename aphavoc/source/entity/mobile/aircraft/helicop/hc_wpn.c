@@ -132,7 +132,7 @@ void update_helicopter_weapon_fire (entity *en)
 		// fire weapon
 		//
 
-		launch_client_server_weapon (en, raw->ac.selected_weapon);
+		launch_client_server_weapon (en, raw->ac.selected_weapon, FALSE);
 
 		//
 		// update burst timer

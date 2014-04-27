@@ -130,15 +130,15 @@ struct SMOKE_LIST_DATA
 		texture_size;
 
 	float
-		animation_rate;
+		animation_rate,
+		wind_affected;
 
 	unsigned short int
 		additive			:	1,
 		draw_type		:	1,
 		flat				:	1,
 		ground_based	:	1,
-		lock_to_parent	:	1,
-		wind_affected	:	1;
+		lock_to_parent	:	1;
 };
 
 typedef struct SMOKE_LIST_DATA smoke_list_data;

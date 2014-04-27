@@ -580,11 +580,12 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 	}
 
 	// arneh - let rockets generate smoke only as long as the rocket engine burns
-	if (parent && parent->type == ENTITY_TYPE_WEAPON)
-	{
-		weapon* raw = (weapon *) get_local_entity_data (parent);
-		lifetime = weapon_database[raw->mob.sub_type].burn_time;
-	}
+	if (parent)
+		if(parent->type == ENTITY_TYPE_WEAPON)
+		{
+			weapon* raw = (weapon *) get_local_entity_data (parent);
+			lifetime = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time;
+		}
 
 	if (lifetime == 0.0)
 		lifetime = smoke_list_component->generator_lifetime;
@@ -986,6 +987,26 @@ void initialise_meta_smoke_list_database(void)
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GREY_TRAIL;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	10.0;
+	smoke_list_info->frequency 				=	0.05;
+	smoke_list_info->smoke_lifetime 			=	4.0;
+
+	//
+	// component 2
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL ].component[ 2 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
 	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_ADDITIVE_TRAIL;
 
 	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
@@ -998,40 +1019,13 @@ void initialise_meta_smoke_list_database(void)
 	smoke_list_info->frequency 				=	0.05;
 	smoke_list_info->smoke_lifetime 			=	0.6;
 
-	//
-	// component 2
-	//
-
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL ].component[ 2 ]);
-
-	smoke_list_info->type 						=	SMOKE_LIST_SPRITES;
-
-	smoke_list_info->animated_texture		=	TEXTURE_ANIMATION_INDEX_MISSILE_FLARE;
-
-	smoke_list_info->sprite_count	 			=	1;
-
-	smoke_list_info->red 						=	255;
-	smoke_list_info->green 						=	255;
-	smoke_list_info->blue 						=	255;
-	smoke_list_info->alpha 						=	255;
-
-	smoke_list_info->animation_frequency 	=	0.1;
-
-	smoke_list_info->lifetime 					=	1.5;
-
-	smoke_list_info->scale 						=	3.0;
-
-	smoke_list_info->rotation_rate 	=	1.0;
-
-	smoke_list_info->additive 					=	TRUE;
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// SMALL ROCKET TRAIL
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].number_of_components = 1;
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].number_of_components = 3;
 
 	//
 	// component 0
@@ -1052,6 +1046,53 @@ void initialise_meta_smoke_list_database(void)
 	smoke_list_info->generator_lifetime 	=	3.0;
 	smoke_list_info->frequency 				=	0.08;
 	smoke_list_info->smoke_lifetime 			=	3.0;
+
+	//
+	// component 1
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].component[ 1 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GREY_TRAIL;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	3.0;
+	smoke_list_info->frequency 				=	0.08;
+	smoke_list_info->smoke_lifetime 			=	3.0;
+
+	//
+	// component 2
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].component[ 2 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->animated_texture		=	TEXTURE_ANIMATION_INDEX_MISSILE_FLARE;
+
+	smoke_list_info->sprite_count	 			=	1;
+
+	smoke_list_info->red 						=	255;
+	smoke_list_info->green 						=	255;
+	smoke_list_info->blue 						=	255;
+	smoke_list_info->alpha 						=	255;
+
+	smoke_list_info->animation_frequency 	=	0.1;
+
+	smoke_list_info->lifetime 					=	1.5;
+
+	smoke_list_info->scale 						=	3.0;
+
+	smoke_list_info->rotation_rate 	=	1.0;
+
+	smoke_list_info->additive 					=	TRUE;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1298,23 +1339,23 @@ void initialise_meta_smoke_list_database(void)
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// AIRCRAFT LIGHT DAMAGE
+	// AIRCRAFT LIGHT DAMAGE MOVING
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE ].number_of_components = 1;
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING ].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING ].component[ 0 ]);
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_TRAIL;
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE;
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING;
 
 	smoke_list_info->trail_count	 			=	1;
 
@@ -1326,51 +1367,23 @@ void initialise_meta_smoke_list_database(void)
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// AIRCRAFT MEDIUM DAMAGE
+	// AIRCRAFT HEAVY DAMAGE MOVING
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE ].number_of_components = 1;
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].number_of_components = 2;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].component[ 0 ]);
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE_TRAIL;
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MEDIUM_DAMAGE;
-
-	smoke_list_info->trail_count	 			=	1;
-
-	smoke_list_info->infinite 					=	TRUE;
-
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.06;
-	smoke_list_info->smoke_lifetime 			=	2.0;
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// AIRCRAFT HEAVY DAMAGE
-	//
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE ].number_of_components = 2;
-
-	//
-	// component 0
-	//
-
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE ].component[ 0 ]);
-
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
-
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_TRAIL;
-
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE;
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
 
 	smoke_list_info->trail_count	 			=	1;
 
@@ -1384,69 +1397,253 @@ void initialise_meta_smoke_list_database(void)
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].component[ 1 ]);
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_ADDITIVE_DAMAGE_TRAIL;
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE;
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
 
 	smoke_list_info->trail_count	 			=	1;
 
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.05;
-	smoke_list_info->smoke_lifetime 			=	0.55;
+	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->smoke_lifetime 			=	2.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// AIRCRAFT_SMALL_TOUCHDOWN_TRAIL
+	// AIRCRAFT LIGHT DAMAGE STATIC
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL ].number_of_components = 1;
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC ].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC ].component[ 0 ]);
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL;
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	TRUE;
+
+	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->smoke_lifetime 			=	2.0;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// AIRCRAFT HEAVY DAMAGE STATIC
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].number_of_components = 2;
+
+	//
+	// component 0
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].component[ 0 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	TRUE;
+
+	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->smoke_lifetime 			=	2.5;
+
+	//
+	// component 1
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].component[ 1 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	TRUE;
+
+	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->smoke_lifetime 			=	2.5;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// SMALL GUN_SMOKE
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE ].number_of_components = 1;
+
+	//
+	// component 0
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE ].component[ 0 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
 	smoke_list_info->trail_count	 			=	1;
 
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.02;
-	smoke_list_info->smoke_lifetime 			=	2.5;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// AIRCRAFT_LARGE_TOUCHDOWN_TRAIL
+	// LARGE GUN_SMOKE
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL ].number_of_components = 1;
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].number_of_components = 3;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 0 ]);
 
 	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL;
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	1.0;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
+
+	//
+	// component 1
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 1 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	1.0;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
+
+	//
+	// component 2
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 2 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	1.0;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// LARGE GUN_SMOKE
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].number_of_components = 3;
+
+	//
+	// component 0
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 0 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	1.0;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
+
+	//
+	// component 1
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 1 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+
+	smoke_list_info->trail_count	 			=	1;
+
+	smoke_list_info->infinite 					=	FALSE;
+
+	smoke_list_info->generator_lifetime 	=	1.0;
+	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->smoke_lifetime 			=	4.5;
+
+	//
+	// component 2
+	//
+
+	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 2 ]);
+
+	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+
+	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+
+	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
 	smoke_list_info->trail_count	 			=	1;
 

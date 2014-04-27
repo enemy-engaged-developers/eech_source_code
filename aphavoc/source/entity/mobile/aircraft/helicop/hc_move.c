@@ -118,15 +118,15 @@ static float helicopter_movement_structure_avoidance (entity *en);
 
 static float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_pos);
 
-static void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3d *wp_pos, int emerg);
+static void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3d *wp_pos);
 
 static int helicopter_crash_movement (entity *en);
 
 static void clear_helicopter_velocity (entity *en);
 
-static int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos);
+static void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos);
 
-/*static*/ void debug_visuals (entity *en, vec3d *wp_pos);
+/*static*/ void debug_visuals (entity *en, vec3d *tg_pos, float lifetime);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,8 +164,6 @@ void helicopter_movement (entity *en)
 		desired_roll,
 		desired_pitch;
 
-	int emergency;
-	
 	vec3d
 		wp_vec,
 		wp_pos,
@@ -215,8 +213,7 @@ void helicopter_movement (entity *en)
 
 	wp_pos.y = max (wp_pos.y, get_3d_terrain_point_data_elevation (&raw->ac.terrain_info));
 
-	
-	emergency = helicopter_adjust_waypoint_position_with_los (en, &wp_pos);//magitek: emergency manoeuvring
+	helicopter_adjust_waypoint_position_with_los (en, &wp_pos);
 
 	range = get_local_entity_float_value (en, FLOAT_TYPE_DISTANCE);
 
@@ -254,15 +251,6 @@ void helicopter_movement (entity *en)
 	max_y_vel = 0.1 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 	max_z_vel = 1.0 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 
-	if(emergency == 1 && raw->ac.mob.motion_vector.y > 0.0)
-	{
-		max_y_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
-	}
-	else if(emergency == -1 && raw->ac.mob.motion_vector.y < 0.0)
-	{
-		max_y_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
-	}
-	
 	normalise_any_3d_vector (&wp_vec);
 
 	// rotate into model space for speed bounding
@@ -289,43 +277,28 @@ void helicopter_movement (entity *en)
 	multiply_matrix3x3_vec3d (&wp_vec, raw->ac.mob.attitude, &wp_vec);
 
 	// add on required height for terrain avoidance
-	if(emergency == 0)
-	{
 		wp_vec.y = (height - hc_pos->y);
 		wp_vec.y = bound (wp_vec.y, -max_y_vel, max_y_vel);
-	}
+
 	// add on the velocity of the wp (i.e. the speed it is moving)
 	// don't add in Y-component as it causes the wingmen to crash into the floor if the player decends quickly
 	wp_vec.x += wp_vel.x;
 	wp_vec.z += wp_vel.z;
 
-	//#if DEBUG_MODULE
+	#if DEBUG_MODULE
 
-	//wp_pos.y = height;
+	wp_pos.y = height;
 
-	// debug_visuals (en, &wp_pos);
+	 debug_visuals (en, &wp_pos, 0);
 
-	//#endif
+	#endif
 
 	//
 	//
 	//
-
 
 	world_acceleration_vector.x = (wp_vec.x - raw->ac.mob.motion_vector.x) * 0.3;
-
-	if(emergency == 1 && raw->ac.mob.motion_vector.y > 0.0)
-	{
-		world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.4;
-	}
-	else if(emergency == -1 && raw->ac.mob.motion_vector.y < 0.0)
-	{
-		world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.4;
-	}
-	else
-	{
 		world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.3;
-	}
 	world_acceleration_vector.z = (wp_vec.z - raw->ac.mob.motion_vector.z) * 0.3;
 
 	//
@@ -337,7 +310,7 @@ void helicopter_movement (entity *en)
 
 	helicopter_movement_calculate_rotor_rpm (en, lift);
 
-	if ((raw->main_rotor_spin_up_timer > 0.0) &&
+	if ((raw->main_rotor_spin_up_timer > 0.0 || raw->main_rotor_rpm < 50) &&
 		((get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI) ||
 		 (get_local_entity_int_value (en, INT_TYPE_AUTO_PILOT))))
 	{
@@ -393,14 +366,7 @@ void helicopter_movement (entity *en)
 	//
 
 	raw->ac.mob.motion_vector.x += world_acceleration_vector.x * get_entity_movement_delta_time ();
-	if(emergency != 0)
-	{
-		raw->ac.mob.motion_vector.y = wp_vec.y*1.5;
-	}
-	else
-	{
 		raw->ac.mob.motion_vector.y = wp_vec.y;
-	}
 	raw->ac.mob.motion_vector.z += world_acceleration_vector.z * get_entity_movement_delta_time ();
 
 	// set velocity
@@ -449,7 +415,7 @@ void helicopter_movement (entity *en)
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, new_roll);
 
-	helicopter_movement_calculate_new_position (en, guide, &wp_pos, emergency);
+	helicopter_movement_calculate_new_position (en, guide, &wp_pos);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -540,6 +506,11 @@ void helicopter_death_movement (entity *en)
 					if (!raw->ac.mob.alive)
 					{
 						set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 					}
 				}
 			}
@@ -597,14 +568,36 @@ void helicopter_death_movement (entity *en)
 
 				vec3d
 					temp_pos;
+				int
+					power;
+				float
+					total_velocity = fabs(velocity->x) + fabs(velocity->y) + fabs(velocity->z);
 
 				temp_pos.x = new_pos.x;
 				temp_pos.y = terrain_elevation;
 				temp_pos.z = new_pos.z;
 
 				set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &temp_pos);
-
-				create_client_server_object_hit_ground_explosion_effect (en, get_3d_terrain_point_data_type (&raw->ac.terrain_info));
+				
+				switch (get_terrain_type_class(get_3d_terrain_point_data_type (&raw->ac.terrain_info)))
+				{
+					case TERRAIN_CLASS_WATER:
+					{
+						power = (int) (bound(total_velocity / 5, 0, 1));
+						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_WATER, power);
+						break;
+					}
+					case TERRAIN_CLASS_LAND:
+					case TERRAIN_CLASS_FOREST:
+					{
+						power = (int) (bound(total_velocity / 5, 0, 4));
+						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_GROUND, power);
+						if (power > 1)
+							create_client_server_crater (CRATER_TYPE_SMALL_EXPLOSION + (power - 2), pos);
+						
+						break;
+					}
+				}
 
 				//
 				// stop any engine noise
@@ -672,6 +665,11 @@ void helicopter_death_movement (entity *en)
 						clear_helicopter_velocity (en);
 
 						set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 					}
 
 					break;
@@ -695,6 +693,11 @@ void helicopter_death_movement (entity *en)
 						clear_helicopter_velocity (en);
 
 						set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+						clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 					}
 				}
 			}
@@ -737,6 +740,11 @@ void helicopter_death_movement (entity *en)
 					clear_helicopter_velocity (en);
 
 					set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
+
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+					clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
 				}
 			}
 		}
@@ -790,11 +798,11 @@ void helicopter_death_movement (entity *en)
 
 	roll = get_roll_from_attitude_matrix (raw->ac.mob.attitude);
 
-	heading += (PI * 0.4 * get_entity_movement_delta_time());
+	heading += (PI * 0.2 * frand1() * get_entity_movement_delta_time());
 
 	pitch -= (pitch * 0.25 * get_entity_movement_delta_time());
 
-	roll -= (roll * 0.25 * get_entity_movement_delta_time());
+	roll -= (PI * 0.2 * frand1() * get_entity_movement_delta_time());
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, heading, pitch, roll);
 
@@ -860,7 +868,7 @@ int helicopter_crash_movement (entity *en)
 
 	required_angle = get_pitch_from_attitude_matrix (m) + aircraft_database [raw->ac.mob.sub_type].destroyed_pitch_offset;
 
-	max_angle = PI * get_entity_movement_delta_time ();
+	max_angle = 2 * PI * get_entity_movement_delta_time ();
 
 	delta_angle = bound (required_angle - pitch, -max_angle, max_angle);
 
@@ -872,7 +880,7 @@ int helicopter_crash_movement (entity *en)
 
 	required_angle = get_roll_from_attitude_matrix (m) + aircraft_database [raw->ac.mob.sub_type].destroyed_bank_offset;
 
-	max_angle = PI * 0.25 * get_entity_movement_delta_time ();
+	max_angle = 2 * PI * 0.25 * get_entity_movement_delta_time ();
 
 	delta_angle = bound (required_angle - roll, -max_angle, max_angle);
 
@@ -918,7 +926,7 @@ int helicopter_crash_movement (entity *en)
 
 	speed = normalise_any_3d_vector (velocity);
 
-	acc = max (speed * 0.65, 4.0);
+	acc = max (8 * speed, 10.0);
 
 	speed -= (acc * get_entity_movement_delta_time ());
 
@@ -999,7 +1007,7 @@ void helicopter_impact_movement (entity *en)
 
 	seed = get_client_server_entity_random_number_seed(en);
 
-	speed = 10.0 + (2.0 * frand1x (&seed));
+	speed = 2.0 * frand1x (&seed);
 
 	if (seed & 1)
 	{
@@ -1737,7 +1745,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3d *wp_pos, int emerg)
+void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3d *wp_pos)
 {
 	vec3d
 		*position,
@@ -1760,12 +1768,7 @@ void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3
 	mv = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_MOTION_VECTOR);
 
 	position->x += (mv->x * get_entity_movement_delta_time ());
-	
-	// if(emerg)
-	// {
-		position->y += (mv->y * get_entity_movement_delta_time ());
-	// }
-	
+	position->y += (mv->y * get_entity_movement_delta_time ());
 	position->z += (mv->z * get_entity_movement_delta_time ());
 
 	bound_position_to_map_volume (position);
@@ -1859,11 +1862,10 @@ void update_player_helicopter_waypoint_distance (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
+void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 {
 
 	float
-		speed_differential,
 		closest_range,
 		range,
 		distance;
@@ -1884,7 +1886,7 @@ int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 
 		// leader doesn't avoid wingmen
 
-		return 0;
+		return;
 	}
 
 	// check los to wp_pos
@@ -1922,57 +1924,6 @@ int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 
 			hc_pos = get_local_entity_vec3d_ptr (hc, VEC3D_TYPE_POSITION);
 
-			//magitek: EXPERIMENTAL speed differential designed to prevent wing AI from ramming you 
-			speed_differential = fabs(get_3d_vector_magnitude(get_local_entity_vec3d_ptr (en, VEC3D_TYPE_MOTION_VECTOR)) - get_3d_vector_magnitude(get_local_entity_vec3d_ptr (hc, VEC3D_TYPE_MOTION_VECTOR)) / 5);
-			
-			if(speed_differential < 1.0)
-			{
-				// {
-					// rgb_colour
-						// los_colour;
-
-					// los_colour.r = 0.0;
-					// los_colour.g = 255.0;
-					// los_colour.b = 0.0;
-					// los_colour.a = 255.0;
-
-					// create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
-				// }
-
-				speed_differential = 1.0;
-			}
-			else if(speed_differential > 3.0)
-			{
-				// {
-					// rgb_colour
-						// los_colour;
-
-					// los_colour.r = 255.0;
-					// los_colour.g = 0.0;
-					// los_colour.b = 0.0;
-					// los_colour.a = 255.0;
-
-					// create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
-				// }
-
-				speed_differential = 3.0;
-			}
-			// else
-			// {
-				// {
-					// rgb_colour
-						// los_colour;
-
-					// los_colour.r = 0.0;
-					// los_colour.g = 0.0;
-					// los_colour.b = 255.0;
-					// los_colour.a = 255.0;
-
-					// vertical line to wp
-					// create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
-				// }
-			// }
-			
 			range = get_sqr_3d_range (hc_pos, en_pos);
 
 			if (range < closest_range)
@@ -1980,7 +1931,7 @@ int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 
 				distance = get_3d_perp_dist_of_point_from_line (en_pos, wp_pos, hc_pos, &collision_point);
 
-				if (distance <= HELICOPTER_AVOIDANCE_DISTANCE * speed_differential)
+				if (distance <= HELICOPTER_AVOIDANCE_DISTANCE)
 				{
 
 					closest_range = range;
@@ -1999,150 +1950,25 @@ int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 	{
 
 		vec3d
-			*en_vec,
-			*hc_vec,
 			new_pos;
 
-		float dive,hullsize;
-		
-		dive=0.0;
-		
 		hc_pos = get_local_entity_vec3d_ptr (closest_hc, VEC3D_TYPE_POSITION);
-		
-		if(get_local_entity_int_value (closest_hc, INT_TYPE_GROUP_LEADER))
-		//if(closest_range < (HELICOPTER_AVOIDANCE_DISTANCE*speed_differential) * 0.8)//this may be a problem, check our immediate vector for collisions
-		{
-
-			hc_vec = get_local_entity_vec3d_ptr (closest_hc, VEC3D_TYPE_MOTION_VECTOR);
-			en_vec = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_MOTION_VECTOR);
-		
-			hullsize = get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
-		
-				// magitek: check altitude?
-				
-				// terrain_elevation = get_3d_terrain_point_data_elevation (&raw->ac.terrain_info);
-				// altitude = en_pos.y - (terrain_elevation + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE));
-				
-				// emergency dive
-				
-			if(fabs(en_pos->y - hc_pos->y) > hullsize * 1.5)//dont evade if we are already far on the y-axis
-				if(hc_pos->y > (en_pos->y+ hullsize*0.25)) //target is above us
-				{
-				//	if(hc_vec->y > 5.0)//target is heading up as well
-					//{
-						//dive = -hullsize * 20;///evade down //we assume helicopter above us is measured from the center and that we are the same class of heli
-						
-					//}
-					//else
-					//{
-						dive = -hullsize * 2.0;//evade down
-					//}
-				}
-				else if(hc_pos->y < (en_pos->y+hullsize*0.5))// - hullsize))//target is below
-				{
-					// if(hc_vec->y > 5.0)//target is heading up as well
-					// {
-						// dive = -hullsize * 20;//evade down //we assume helicopter above us is measured from the center and that we are the same class of heli
-					// }
-					// else
-					// {
-						dive = hullsize * 1.5;//evade up
-					// }
-				}
-				else //target is equal, dodge based on motion vector, or dodge up
-				{
-					if(hc_pos->y > en_pos->y)
-					{
-						dive = -hullsize * 2.0;//evade down
-					}
-					else if(hc_pos->y < en_pos->y)
-					{
-						dive = hullsize * 2.0;//evade up
-					}
-					else
-					{
-						dive = -hullsize * 20;//evade down
-					}
-					// if(en_vec->y < hc_vec->y)//merge vectors, someone is going up, someone is going down
-					// {
-						// dive = -hullsize * 20;//evade down
-					// }
-					// else
-					// {
-						
-						// dive = hullsize * 20;//evade up as a final resort
-					// }//beyond this: there is no hope of evasion.
-					
-				}
-
-		}
 		
 		new_pos.x = closest_collision_point.x - hc_pos->x;
 		new_pos.y = closest_collision_point.y - hc_pos->y;
 		new_pos.z = closest_collision_point.z - hc_pos->z;
-		//doesn't care if it selects a vector that heads straight through your helicopter
+
 		normalise_any_3d_vector (&new_pos);
 
 		new_pos.x = hc_pos->x + (2.0 * HELICOPTER_AVOIDANCE_DISTANCE * new_pos.x);
+		new_pos.y = hc_pos->y + (2.0 * HELICOPTER_AVOIDANCE_DISTANCE * new_pos.y);
 		new_pos.z = hc_pos->z + (2.0 * HELICOPTER_AVOIDANCE_DISTANCE * new_pos.z);
 	
-		if(dive == 0.0)
-		{
-			// vec3d debugvec;
-			// rgb_colour
-				// los_colour;
-				
-			//regular evasion
-			new_pos.y = hc_pos->y + (2.0 * HELICOPTER_AVOIDANCE_DISTANCE * new_pos.y);
-			
-			// los_colour.r = 255.0;
-			// los_colour.g =255.0;
-			// los_colour.b = 0.0;
-			// los_colour.a = 255.0;
-			// debugvec.x = en_pos->x;
-			// debugvec.y = en_pos->y - hullsize*20;
-			// debugvec.z = en_pos->z;
-			// create_debug_3d_line (en_pos, &debugvec, los_colour, 0.001);
-		}
-		else
-		{
-			hc_pos = get_local_entity_vec3d_ptr (closest_hc, VEC3D_TYPE_POSITION);
-
-			// if(dive > 0.0)
-			// {
-				// if(get_local_entity_int_value (closest_hc, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
-				// {
-						// rgb_colour
-							// los_colour;
-						// los_colour.r = 255.0;
-						// los_colour.g = 0.0;
-						// los_colour.b = 0.0;
-						// los_colour.a = 255.0;
-						// create_debug_3d_line (en_pos, hc_pos, los_colour, 0.001);
-				// }
-			// }
-			// else
-			// {
-						// rgb_colour
-							// los_colour;
-						// los_colour.r = 0.0;
-						// los_colour.g = 0.0;
-						// los_colour.b = 255.0;
-						// los_colour.a = 255.0;
-						// create_debug_3d_line (en_pos, hc_pos, los_colour, 0.001);
-			// }
-			//close-range evade
-			//new_pos.x = hc_pos->x
-			new_pos.y = hc_pos->y + dive;
-			//new_pos.y = hc_pos->y + (2.0 * HELICOPTER_AVOIDANCE_DISTANCE * new_pos.y);
-		}
-
 		wp_pos->x = new_pos.x;
 		wp_pos->y = new_pos.y;
 		wp_pos->z = new_pos.z;
 
 		#if 0
-		if(closest_hc)
 		{
 			rgb_colour
 				los_colour;
@@ -2153,47 +1979,34 @@ int helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 			los_colour.a = 255.0;
 
 			// vertical line to wp
-			//create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
-			create_debug_3d_line (en_pos, hc_pos, los_colour, 0.001);
+			create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
 		}
 		#endif
-		
-		if(dive < 0.0)
-		{
-			return -1;//emergency manoeuvring
-		}
-		else if(dive > 0.0)
-		{
-			return 1;
-		}
 	}
-	
-	return 0;
-		
 }
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_visuals (entity *en, vec3d *wp_pos)
+void debug_visuals (entity *en, vec3d *tg_pos, float lifetime)
 {
 
-	helicopter
+	aircraft
 		*raw;
 
 	vec3d
 		flat_wp_pos,
-		*hc_pos;
+		*ac_pos;
 
 	rgb_colour
 		los_colour;
 
 	ASSERT (en);
 
-	raw = (helicopter *) get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
-	hc_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+	ac_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 	// create first line from helicopter to waypoint position
 
@@ -2202,12 +2015,12 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 	los_colour.b = 0.0;
 	los_colour.a = 255.0;
 
-	flat_wp_pos = *wp_pos;
+	flat_wp_pos = *tg_pos;
 
-	flat_wp_pos.y = hc_pos->y;
+	flat_wp_pos.y = ac_pos->y;
 
 	// line to flat wp_pos
-	create_debug_3d_line (hc_pos, &flat_wp_pos, los_colour, 0.001);
+	create_debug_3d_line (ac_pos, &flat_wp_pos, los_colour, lifetime);
 
 	los_colour.r = 0.0;
 	los_colour.g = 0.0;
@@ -2215,7 +2028,7 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 	los_colour.a = 255.0;
 
 	// vertical line to wp
-	create_debug_3d_line (&flat_wp_pos, wp_pos, los_colour, 0.001);
+	create_debug_3d_line (&flat_wp_pos, tg_pos, los_colour, lifetime);
 
 	// create arrow at wp_pos
 	{
@@ -2227,17 +2040,17 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 			viewpoint
 				vp;
 
-		temp_position = *wp_pos;
+		temp_position = *tg_pos;
 
 		temp_direction.x = 0.0;
 		temp_direction.y = 1.0;
 		temp_direction.z = 0.0;
 
-		memcpy (&vp.position, wp_pos, sizeof (vec3d));
+		memcpy (&vp.position, tg_pos, sizeof (vec3d));
 
 		get_matrix3x3_from_unit_vec3d_and_roll (vp.attitude, &temp_direction, 0.0);
 
-		create_debug_3d_object (&vp, OBJECT_3D_SPHERICAL_TEST, 0.001, 1.0);
+		create_debug_3d_object (&vp, OBJECT_3D_SPHERICAL_TEST, lifetime, 1.0);
 	}
 }
 

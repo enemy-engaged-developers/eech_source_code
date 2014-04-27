@@ -117,6 +117,8 @@ static void pack_local_data (entity *en, pack_modes mode)
 	
 			pack_float_value (en, FLOAT_TYPE_ROLL, raw->roll);
 	
+			pack_float_value (en, FLOAT_TYPE_MOTION_VECTOR_PITCH, raw->motion_vector_pitch);
+	
 			pack_int_value (en, INT_TYPE_PARTICLE_COUNT, raw->particle_count);
 
 			pack_int_value (en, INT_TYPE_OBJECT_3D_SHAPE, raw->object_3d_shape);
@@ -209,6 +211,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			raw->pitch = unpack_float_value (en, FLOAT_TYPE_PITCH);
 
 			raw->roll = unpack_float_value (en, FLOAT_TYPE_ROLL);
+
+			raw->motion_vector_pitch = unpack_float_value (en, FLOAT_TYPE_MOTION_VECTOR_PITCH);
 
 			raw->particle_count = unpack_int_value (en, INT_TYPE_PARTICLE_COUNT);
 

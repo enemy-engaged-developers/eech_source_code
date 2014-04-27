@@ -121,7 +121,17 @@ static void set_local_float_value (entity *en, float_types type, float value)
 		case FLOAT_TYPE_VERY_HIGH_VELOCITY:
 		////////////////////////////////////////
 		{
+			int update_smoke = FALSE;
+			
+			if(get_local_entity_int_value (en, INT_TYPE_IDENTIFY_AIRCRAFT))
+				if (raw->velocity > AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD && value <= AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD ||
+						raw->velocity <= AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD && value > AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD)
+					update_smoke = TRUE;
+			
 			raw->velocity = value;
+
+			if (update_smoke)
+				switch_aircraft_damaged_smoke(en);
 
 			break;
 		}

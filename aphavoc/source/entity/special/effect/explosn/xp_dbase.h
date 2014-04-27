@@ -167,7 +167,9 @@ struct META_EXPLOSION_COMPONENT
 					float
 						initial_speed,
 						frequency,
-						smoke_lifetime;
+						smoke_lifetime,
+						particle_generator_lifetime,
+						motion_vector_pitch;
 //						trail_scale;
 				};
 

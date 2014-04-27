@@ -2283,7 +2283,7 @@ static void draw_target_symbology (void)
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			////////////////////////////////////////
 			{
@@ -2302,6 +2302,7 @@ static void draw_target_symbology (void)
 			case ENTITY_SUB_TYPE_WEAPON_S5:
 			case ENTITY_SUB_TYPE_WEAPON_S8:
 			case ENTITY_SUB_TYPE_WEAPON_S13:
+			case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
 			////////////////////////////////////////
 			{
 				static float hud_aim_range = 0;

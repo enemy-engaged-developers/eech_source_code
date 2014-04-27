@@ -280,11 +280,11 @@ static vec3d head_limits[2][2];
 
 static int
 	cockpit_fan_enabled = FALSE,
-	open_door;
+	open_door = TRUE;
 
 static float
 	door_handle_timer = 0.0,
-	door_state;
+	door_state = 0.0;
 
 static float
   over_stress_light_value = 0.0;
@@ -563,8 +563,9 @@ void initialise_hind_3d_cockpit (void)
 	head_limits[1][1].z =  0.3;
 #endif
 
-	open_door = get_local_entity_loading_door_state (get_gunship_entity ()) == 2;
-	door_state = get_local_entity_loading_door_state (get_gunship_entity ()) == 3 || get_local_entity_loading_door_state (get_gunship_entity ()) == 0;
+	open_door = get_local_entity_loading_door_state (get_gunship_entity ()) == 1 || get_local_entity_loading_door_state (get_gunship_entity ()) == 2;
+	door_state = get_local_entity_loading_door_state (get_gunship_entity ()) == 0 || get_local_entity_loading_door_state (get_gunship_entity ()) == 3;
+
 	canopy_door_state = 1.0 - door_state;
 	animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 	animate_keyframed_sub_object_type(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
@@ -738,7 +739,7 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 
 	switch (selected_weapon)
 	{
-	case ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND:
+	case ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND:
 		angle = rad(-82.0);
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_S5:
@@ -749,8 +750,8 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 	case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
 		angle = rad(-170.0);
 		break;
-	case ENTITY_SUB_TYPE_WEAPON_ATAKA:
-	case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+	case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
+	case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:
 	default:
 		angle = rad(58.0);
 		break;
@@ -1128,7 +1129,7 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 			head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
 		}
 
-		get_head_g_movement(&head_object->relative_position.x, &head_object->relative_position.y, &head_object->relative_position.z, TRUE);
+		get_forces_acting_on_pilot(&head_object->relative_position.x, &head_object->relative_position.y, &head_object->relative_position.z, TRUE, TRUE);
 
 		// keep head inside reasonable limimts
 		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);

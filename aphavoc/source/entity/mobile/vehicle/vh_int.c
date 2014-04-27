@@ -158,7 +158,11 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_DAMAGE_LEVEL:
 		////////////////////////////////////////
 		{
+			float old_damage = raw->damage_level;
+
 			raw->damage_level = value;
+
+			assess_vehicle_damage_level (en, old_damage);
 
 			break;
 		}
@@ -946,10 +950,10 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
-			value = vehicle_database[raw->mob.sub_type].warhead_effective_class;
+			value = vehicle_database[raw->mob.sub_type].armor_level;
 
 			break;
 		}
@@ -1142,7 +1146,7 @@ void overload_vehicle_int_value_functions (entity_types type)
 
 	fn_get_local_entity_int_value				[type][INT_TYPE_VIEWABLE]											= get_local_int_value;
 
-	fn_get_local_entity_int_value				[type][INT_TYPE_WARHEAD_EFFECTIVE_CLASS]						= get_local_int_value;
+	fn_get_local_entity_int_value				[type][INT_TYPE_ARMOR_LEVEL]						= get_local_int_value;
 
 	fn_set_local_entity_raw_int_value		[type][INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID]  			= set_local_int_value;
 	fn_set_local_entity_int_value				[type][INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID]			= set_local_int_value;

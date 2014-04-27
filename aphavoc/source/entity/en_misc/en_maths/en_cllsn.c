@@ -120,7 +120,10 @@ terrain_classes get_ground_impact_point (vec3d *above_ground, vec3d *below_groun
 
 	ASSERT (ground_impact_point);
 
-	ASSERT (point_above_ground (above_ground));
+	if(!point_above_ground (above_ground))
+	{
+		above_ground->y = get_3d_terrain_elevation (above_ground->x, above_ground->z) + 0.001;
+	}
 
 	ASSERT (point_inside_map_area (above_ground));
 
@@ -152,6 +155,7 @@ terrain_classes get_ground_impact_point (vec3d *above_ground, vec3d *below_groun
 		length = get_sqr_3d_range (&point_a, &point_b);
 	}
 
+	ASSERT(point_inside_map_area(&point_b));
 	point_b.y = get_3d_terrain_point_data (point_b.x, point_b.z, NULL);
 
 	*ground_impact_point = point_b;

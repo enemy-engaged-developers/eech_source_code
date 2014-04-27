@@ -93,7 +93,7 @@ void set_hind_weapon_damage_status (void)
 
 	en = get_gunship_entity ();
 
-	set_client_server_entity_weapon_damage (en, HIND_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND, hind_damage.gun_jammed);
+	set_client_server_entity_weapon_damage (en, HIND_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND, hind_damage.gun_jammed);
 
 	set_client_server_entity_weapon_damage (en, HIND_LHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, hind_damage.lh_wing_tip_mount);
 	set_client_server_entity_weapon_damage (en, HIND_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, hind_damage.lh_outer_pylon);

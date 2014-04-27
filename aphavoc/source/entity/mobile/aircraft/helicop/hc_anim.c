@@ -107,6 +107,8 @@ void animate_helicopter_controls ( entity *en )
 	animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TILT_ROTOR, bound( raw->ac.mob.velocity / 80, 0, 1));
 	if (en == get_gunship_entity())
 		animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, (100 + current_flight_dynamics->input_data.pedal.value) / 200 );
+	else
+		animate_entity_simple_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, 0.5 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -447,9 +449,6 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 		search_main_rotor_blade_section_static_depth = 0,
 		search_main_rotor_blade_moving_depth = 0;
 
-	float
-		main_rotor_direction;
-	
 	ASSERT (en);
 	ASSERT (en == get_gunship_entity());
 
@@ -579,8 +578,6 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 		else
 			break;
 
-		
-		main_rotor_direction = -main_rotor_direction;
 		search_main_rotor_shaft_depth++;
 	}	
 }
@@ -980,7 +977,7 @@ void damage_helicopter_3d_object (entity *en)
 	damage_helicopter_main_rotors(en, -2);
 	damage_helicopter_tail_rotors(en);
 
-	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_WEAPON, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_PILOT, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AH64D_PILOT, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING, FALSE);
@@ -1097,7 +1094,10 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 								
 								section_cut_off_point = blade_number >= 0 ? (search_main_rotor_blade_section_static_depth - 1) :
 									(blade_number == -1 ? 0 : rand16() % search_main_rotor_blade_section_static_depth);
-								debug_log("blade num %i, cut off %i, depth %i", blade_number, section_cut_off_point, search_main_rotor_blade_section_static_depth);
+
+								#if DEBUG_MODULE
+									debug_log("blade num %i, cut off %i, depth %i", blade_number, section_cut_off_point, search_main_rotor_blade_section_static_depth);
+								#endif
 
 								search_main_rotor_blade_section_static_depth = 0;
 
@@ -1159,7 +1159,10 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 
 								if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_collision_point) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 								{
-									debug_log("moving blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+									#if DEBUG_MODULE
+										debug_log("moving blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+									#endif
+
 									search_main_rotor_collision_point.result_sub_object->relative_position.z = collision_point;
 								}
 							}
@@ -1358,8 +1361,9 @@ void create_rotor_blade_fragment (entity *en, viewpoint blade_vp, int main_rotor
 		(
 			1,
 			blade_vp,
-			frand1() * 75,
-			blade_object
+			frand1() * 75.0,
+			blade_object,
+			sin(PI / 6)
 		);
 }
 
@@ -1473,7 +1477,11 @@ int restore_helicopter_main_rotors (entity *en)
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_collision_point) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
 							collision_point = - aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius + get_3d_vector_magnitude(&search_main_rotor_blade_root_static.result_sub_object->relative_position);
-							debug_log("restoring blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+
+							#if DEBUG_MODULE
+								debug_log("restoring blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
+							#endif
+
 							search_main_rotor_collision_point.result_sub_object->relative_position.z = collision_point;
 						}
 

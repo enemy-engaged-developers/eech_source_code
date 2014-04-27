@@ -3604,7 +3604,7 @@ void process_received_entity_comms_messages (void)
 
 				////////////////////////////////////////
 
-				create_client_server_entity_weapon (launcher, weapon_sub_type, weapon_index, burst_size, smoke_trail_indices);
+				create_client_server_entity_weapon (launcher, weapon_sub_type, weapon_index, burst_size, smoke_trail_indices, 0);
 
 				////////////////////////////////////////
 

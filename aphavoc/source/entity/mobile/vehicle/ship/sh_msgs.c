@@ -86,6 +86,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 
 	int
 		damage_caused,
+		old_damage_state,
 		total_damage_level;
 
 	float
@@ -99,6 +100,8 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 
 	damage_modifier = va_arg (pargs, double);
 
+	old_damage_state = vehicle_critically_damaged(receiver);
+			
 	damage_caused = damage_client_server_entity (receiver, sender, damage_modifier);
 
 	total_damage_level = get_local_entity_int_value (receiver, INT_TYPE_DAMAGE_LEVEL);
@@ -128,8 +131,8 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	
 					warhead_type = (weapon_warhead_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_WARHEAD_TYPE);
 	
-					if ((warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE) ||
-							(warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK))
+					if ((warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK) &&
+							(warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT))
 					{
 						vec3d
 							rel_pos,
@@ -177,13 +180,16 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	// assess damage
 	//
 
+	if (old_damage_state < vehicle_critically_damaged(receiver)) // vehicle critically damaged
+		credit_client_server_mobile_kill (receiver, aggressor);
+	
 	if (total_damage_level <= 0)
 	{
 		if (aggressor)
 		{
 			play_vehicle_destroyed_speech (receiver, aggressor);
 
-			credit_client_server_mobile_kill (receiver, aggressor);
+//			credit_client_server_mobile_kill (receiver, aggressor);
 		}
 
 		notify_local_entity (ENTITY_MESSAGE_FORCE_DESTROYED, force, receiver, aggressor);

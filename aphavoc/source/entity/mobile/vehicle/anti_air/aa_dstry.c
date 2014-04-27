@@ -441,7 +441,7 @@ static void kill_local (entity *en)
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_TARGET);
 
-	delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+//	delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
 
 	set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
 
@@ -488,6 +488,8 @@ static void kill_local (entity *en)
 	// SPECIAL EFFECTS
 	//
 	////////////////////////////////////////
+
+	set_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER, 0);
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -636,7 +638,7 @@ void kill_local_restored_anti_aircraft_entity (entity *en)
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_TARGET);
 
-	delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
+//	delete_local_entity_from_parents_child_list (en, LIST_TYPE_UPDATE);
 
 	//
 	// kill weapon sound effects

@@ -396,20 +396,20 @@ void write_tacview_new_unit(entity* en)
 			{
 				switch (sub_type)
 				{
-				case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
-				case ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND:
-				case ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND:
-				case ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_KPVT_14P5MM_ROUND:
 					type = 0x49;  // bullets
 					break;
-				case ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_OTO_MELARA_76MM_ROUND:
 				case ENTITY_SUB_TYPE_WEAPON_M284_155MM_ROUND:
-				case ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_100MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_A_190_100MM_ROUND:
 				case ENTITY_SUB_TYPE_WEAPON_2A65_152MM_ROUND:
 					type = 0x4a;  // artillery
 					break;
 				case ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET:
-				case ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET:
+				case ENTITY_SUB_TYPE_WEAPON_M26A1_227MM_ROCKET:
 					// these are actually rockets, despite being in the projectile section
 					name = weapon_database[sub_type].full_name;
 					type = 0x44;
@@ -426,7 +426,7 @@ void write_tacview_new_unit(entity* en)
 				name = weapon_database[sub_type].full_name;
 			}
 			// missiles
-			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_AT11_SNIPER)
+			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_9M119M_INVAR)
 			{
 				type = 0x40;
 				name = weapon_database[sub_type].full_name;

@@ -89,8 +89,6 @@
 // It is:
 //
 
-#ifdef WIN32
-
 typedef struct DIJOYSTATE {
     int		lX;                     /* x-axis position              */
     int		lY;                     /* y-axis position              */
@@ -102,19 +100,6 @@ typedef struct DIJOYSTATE {
     unsigned int    rgdwPOV[4];             /* POV directions               */
     unsigned char   rgbButtons[32];         /* 32 buttons                   */
 } DIJOYSTATE, *LPDIJOYSTATE;
-
-#else
-
-typedef char Uint8;
-typedef int Sint16;
-
-typedef struct {
-	Uint8 buttons[ MAXIMUM_JOYSTICK_BUTTONS ];
-	Sint16 axes[ MAXIMUM_JOYSTICK_AXES ];
-	Uint8 hats [MAXIMUM_JOYSTICK_HATS ];
-} SDLJOYSTATE;
-
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,9 +131,6 @@ typedef struct _SDL_Joystick SDL_Joystick;
 
 struct JOYSTICK_DEVICE_INFO
 {
-
-#ifdef WIN32
-
 	void
 		*input_device;
 
@@ -174,22 +156,6 @@ struct JOYSTICK_DEVICE_INFO
 		joystick_last_state,
 		joystick_state;
 
-#else
-
-	SDL_Joystick
-		*input_device;
-
-	int
-		number_of_buttons,
-		number_of_axes,
-		number_of_hats;
-
-	SDLJOYSTATE
-		joystick_last_state,
-		joystick_state;
-
-#endif
-
 	char
 		device_name[1024];
 
@@ -204,10 +170,13 @@ typedef struct JOYSTICK_DEVICE_INFO joystick_device_info;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern void initialise_joysticks ( void );
+extern void deinitialise_joysticks (void);
 
 extern void read_joystick_values ( int joystick_device_index );
 
-extern int set_joystick_force_feedback_forces ( int joystick_device_index, int xforce, int yforce );
+extern void set_joystick_force_feedback_forces ();
+
+extern void play_ffb_weapon_effect (char* eff_name, float rate);
 
 extern int get_joystick_axis (int joystick_index, int axis);
 
@@ -222,6 +191,18 @@ extern void change_joystick_properties ( void );	// Retro 12Dez2004
 
 extern int
 	number_of_joystick_devices;
+
+extern float 
+	xforce,
+	yforce,
+	xfreq,
+	yfreq,
+	xampl,
+	yampl,
+	ff_xtrim,
+	ff_ytrim,
+	ff_xcorr,
+	ff_ycorr;
 
 extern joystick_device_info
 	*joystick_devices;

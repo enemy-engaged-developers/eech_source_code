@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET,	 			// sub_type
+				ENTITY_SUB_TYPE_WEAPON_M26A1_227MM_ROCKET,	 			// sub_type
 				NUM_ROCKETS,		 											// number
 				TURRET,			 	 											// heading_depth
 				LAUNCHER,	 	 	 											// pitch_depth

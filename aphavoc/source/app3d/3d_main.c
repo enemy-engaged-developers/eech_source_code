@@ -146,7 +146,7 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 
 	if (night_vision_system_active)
 	{
-		tint = gunship_sides[get_global_gunship_type ()] != ENTITY_SIDE_RED_FORCE ? DISPLAY_3D_TINT_GREEN : DISPLAY_3D_TINT_BLUE;
+		tint = (gunship_sides[get_global_gunship_type ()] != ENTITY_SIDE_RED_FORCE || !command_line_russian_nvg_no_ir) ? DISPLAY_3D_TINT_GREEN : DISPLAY_3D_TINT_GREEN_VISUAL;
 //VJ 050818 PNVS brighness levels
 // switched 0 and 2 so high level is default by GCsDriver 08-12-2007
 		switch (global_PNVS_level)

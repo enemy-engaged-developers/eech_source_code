@@ -74,8 +74,8 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				0,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth
@@ -96,8 +96,8 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND,			// sub_type
-				300,																// number
+				ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND,			// sub_type
+				2000,																// number
 				1,																	// heading_depth
 				0,																	// pitch_depth
 				0,			  														// muzzle_depth

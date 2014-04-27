@@ -146,6 +146,42 @@ void draw_2d_line (float x1, float y1, float x2, float y2, const rgb_colour col)
 	}
 }
 
+void draw_2d_dash_line(float x1, float y1, float x2, float y2, const rgb_colour col1, rgb_colour col2, float length, int thick)
+{
+	int i;
+	vec2d magn;
+	float angle_cos, angle_sin, x0 = x2, y0 = y2;
+	
+	magn.x = x2 - x1;
+	magn.y = y2 - y1;
+	
+	i = (int) (get_2d_vector_magnitude(&magn) / length);
+	angle_cos = magn.x / (sqrt(magn.x * magn.x + magn.y * magn.y));
+	angle_sin = magn.y / (sqrt(magn.x * magn.x + magn.y * magn.y));
+	
+	for (; i >= 0; i--)
+	{
+		if (!i)
+		{
+			x2 = x0;
+			y2 = y0;
+		}
+		else
+		{
+			x2 = x1 + length * angle_cos;
+			y2 = y1 + length * angle_sin;
+		}
+		
+		if (thick)
+			draw_2d_half_thick_line (x1, y1, x2, y2, (i % 2) ? col1 : col2);
+		else
+			draw_2d_line (x1, y1, x2, y2, (i % 2) ? col1 : col2);
+
+		x1 = x2;
+		y1 = y2;
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

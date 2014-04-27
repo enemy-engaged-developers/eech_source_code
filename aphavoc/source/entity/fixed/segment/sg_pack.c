@@ -275,6 +275,8 @@ void unpack_local_segment_data (pack_modes mode)
 
 				memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
+				ASSERT(point_inside_map_area(pos));
+
 				pos->y = get_3d_terrain_point_data (pos->x, pos->z, &terrain_info);
 
 				if (get_terrain_type_class (terrain_info.terrain_type) == TERRAIN_CLASS_WATER)

@@ -130,7 +130,7 @@ struct BRIDGE_SEGMENT_DATA
 	int
 		initial_damage_level,
 		target_type,
-		warhead_effective_class;
+		armor_level;
 };
 
 typedef struct BRIDGE_SEGMENT_DATA bridge_segment_data;

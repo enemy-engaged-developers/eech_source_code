@@ -1559,7 +1559,7 @@ entity *create_sead_task (entity_sides side, entity *target, entity *originator,
 
 	#if DEBUG_MODULE >= 2
 
-	debug_log ("TASKGEN: creating side %d SEAD task to sector %d, %d", side, raw->x_sector, raw->z_sector);
+	debug_log ("TASKGEN: creating side %d SEAD task", side);
 
 	#endif
 

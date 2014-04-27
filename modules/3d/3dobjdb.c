@@ -2827,6 +2827,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	//
 
 	object->object_dissolve_value = 255;
+	object->object_diffuse_value = 255;
 
 	return ( object );
 }
@@ -2846,9 +2847,9 @@ void dump_object(object_3d_instance* obj, FILE* output)
 	fprintf(output, "index: %04X\n", index);
 	fprintf(output, "view position: %.3f %.3f %.3f\n", obj->view_position.x, obj->view_position.y, obj->view_position.z);
 	fprintf(output, "relative scale: %.3f %.3f %.3f\n", obj->relative_scale.x, obj->relative_scale.y, obj->relative_scale.z);
-	fprintf(output, "visible %d, immediate render: %d, shadow: %d, lighting: %d, dissolve: %d, sprite light: %d\n",
+	fprintf(output, "visible %d, immediate render: %d, shadow: %d, lighting: %d, dissolve: %d, sprite light: %d, diffuse: %d\n",
 		obj->visible_object, obj->requires_immediate_render, obj->object_has_shadow,
-		obj->object_internal_lighting, obj->object_dissolve_value, obj->object_sprite_lights);
+		obj->object_internal_lighting, obj->object_dissolve_value, obj->object_sprite_lights, obj->object_diffuse_value);
 
 	fprintf(output, "scene index: %04X\n", scene->index);
 	fprintf(output, "self shadows: %d, shadow index: %X\n", scene->self_shadows, scene->shadow_polygon_object_index);

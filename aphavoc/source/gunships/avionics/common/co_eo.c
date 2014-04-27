@@ -2902,9 +2902,9 @@ void cpg_report_identified_target(entity* target)
 			int allied = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SIDE) == get_local_entity_int_value (target, INT_TYPE_SIDE);
 
 			if (allied)
-				play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_FRIENDLY);
+				play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, 0.0, SPEECH_CPG_FRIENDLY);
 			else
-				play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0,	SPEECH_CPG_ENEMY);
+				play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, 0.0,	SPEECH_CPG_ENEMY);
 		}
 	}
 }
@@ -2918,17 +2918,17 @@ void cpg_report_next_prev_target(entity* target)
 
 		if (!get_local_entity_int_value(target, INT_TYPE_CPG_IDENTIFIED))
 		{
-			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0,
+			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, 0.0,
 					SPEECH_CPG_SPOT_ON);
 		}
 		else if (allied)
 		{
-			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0,
+			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, 0.0,
 					SPEECH_CPG_FRIENDLY);
 		}
 		else if (!allied)
 		{
-			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0,
+			play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, 0.0,
 					SPEECH_CPG_ENEMY);
 		}
 	}

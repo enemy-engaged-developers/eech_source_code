@@ -110,77 +110,47 @@ static void draw_local_3d_object (entity *en, float range)
 		}
 		////////////////////////////////////////
 		case OBJECT_3D_CANNON_SHELL:
-		case OBJECT_3D_CANNON_SHELL_BLUE:
-		case OBJECT_3D_CANNON_SHELL_GREEN:
-		case OBJECT_3D_CANNON_SHELL_ORANGE:
-		case OBJECT_3D_CANNON_SHELL_PURPLE:
-		case OBJECT_3D_CANNON_SHELL_RED:
-		case OBJECT_3D_CANNON_SHELL_WHITE:
+		case OBJECT_3D_CANNON_SABOT:
 		////////////////////////////////////////
 		{
 			float
-				heading,
-				pitch,
-				roll;
+				scale = weapon_database[raw->mob.sub_type].diameter;
 
-			inst3d = construct_temporary_3d_object (weapon_database[raw->mob.sub_type].default_3d_shape, FALSE);
-
-			if (inst3d)
 			{
-				inst3d->vp.position = raw->mob.position;
+				inst3d = construct_temporary_3d_object (weapon_database[raw->mob.sub_type].default_3d_shape, FALSE);
 
-				//
-				// scale tracer wrt velocity and frame rate
-				//
+				if (inst3d)
+				{
+					inst3d->vp.position = raw->mob.position;
+					memcpy (inst3d->vp.attitude, raw->mob.attitude, sizeof (matrix3x3));
+					inst3d->relative_scale.x = inst3d->relative_scale.y = inst3d->relative_scale.z = scale;
+					inst3d->object_has_shadow = FALSE;
 
-				inst3d->relative_scale.x = 100.0;
-				inst3d->relative_scale.y = 100.0;
-				inst3d->relative_scale.z = raw->mob.velocity * get_delta_time () * 0.75;
-
-				//
-				// roll for visual effect
-				//
-
-				heading = get_heading_from_attitude_matrix (raw->mob.attitude);
-
-				pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
-
-				roll = sfrand1 () * PI;
-
-				get_3d_transformation_matrix (inst3d->vp.attitude, heading, pitch, roll);
-
-				//
-				// draw
-				//
-
-				inst3d->object_has_shadow = FALSE;
-
-				insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
+					insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
+				}
 			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case OBJECT_3D_ARTILLERY_SHELL:
-		////////////////////////////////////////
-		{
-			inst3d = construct_temporary_3d_object (weapon_database[raw->mob.sub_type].default_3d_shape, FALSE);
-
-			if (inst3d)
+				
+			if (weapon_database[raw->mob.sub_type].tracer_fire_time > - raw->weapon_lifetime)
 			{
-				inst3d->vp.position = raw->mob.position;
+				if (active_3d_environment->render_filter == RENDER_MONOCHROME || active_3d_environment->render_filter == RENDER_INFRARED)
+					inst3d = construct_temporary_3d_object (OBJECT_3D_TRACER_FIRE_WHITE, FALSE);
+				else
+					inst3d = construct_temporary_3d_object (OBJECT_3D_TRACER_FIRE_ORANGE + weapon_database[raw->mob.sub_type].tracer_color, FALSE);
 
-				memcpy (inst3d->vp.attitude, raw->mob.attitude, sizeof (matrix3x3));
+				if (inst3d)
+				{
+					float
+						time_modifier = bound(- raw->weapon_lifetime / 0.25, 0, 1) - bound(- 2 * (weapon_database[raw->mob.sub_type].tracer_fire_time + raw->weapon_lifetime - 0.5), 0, 1); // fade in and fade out
 
-				inst3d->relative_scale.x = 10.0;
-				inst3d->relative_scale.y = 10.0;
-				inst3d->relative_scale.z = 10.0;
+					inst3d->vp.position = raw->mob.position;
+					memcpy (inst3d->vp.attitude, raw->mob.attitude, sizeof (matrix3x3));
+					inst3d->relative_scale.x = inst3d->relative_scale.y = inst3d->relative_scale.z = 4 * scale * time_modifier;
+					inst3d->object_has_shadow = FALSE;
 
-				inst3d->object_has_shadow = FALSE;
-
-				insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
+					insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
+				}
 			}
-
+			
 			break;
 		}
 		////////////////////////////////////////
@@ -204,9 +174,9 @@ static void draw_local_3d_object (entity *en, float range)
 
 			seed = get_client_server_entity_random_number_seed (en);
 
-			cruise_time_error = frand1x (&seed) * weapon_database[raw->mob.sub_type].cruise_time_max_error;
+			cruise_time_error = sfrand1x (&seed) * weapon_database[raw->mob.sub_type].cruise_time_max_error;
 
-			total_cruise_time = weapon_database[raw->mob.sub_type].cruise_time + cruise_time_error;
+			total_cruise_time = weapon_database[raw->mob.sub_type].cruise_time + 0.5 * cruise_time_error;
 
 			lifetime_ratio = -raw->weapon_lifetime / total_cruise_time;
 
@@ -825,7 +795,7 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 
 	ASSERT (raw);
 
-	lifetime = -raw->weapon_lifetime;
+	lifetime = raw->weapon_lifetime;
 
 	switch (raw->parachute_status)
 	{
@@ -833,12 +803,8 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 		case PARACHUTE_STATUS_CLOSED:
 		////////////////////////////////////////
 		{
-			if ((lifetime > 3.0) && (raw->mob.motion_vector.y < 0.0))
-			{
+			if ((lifetime <- 1.0) && (raw->mob.motion_vector.y < 0.0))
 				raw->parachute_status = PARACHUTE_STATUS_OPEN1;
-
-				raw->weapon_lifetime = 0.0;
-			}
 
 			break;
 		}
@@ -846,11 +812,9 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN1:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime < -1.1)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN2;
-
-				raw->weapon_lifetime = 0.0;
 			}
 
 			break;
@@ -859,11 +823,9 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN2:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime < 1.2)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN3;
-
-				raw->weapon_lifetime = 0.0;
 			}
 
 			break;
@@ -896,7 +858,7 @@ void update_weapon_crate_animation (weapon *raw)
 
 	ASSERT (raw);
 
-	lifetime = -raw->weapon_lifetime;
+	lifetime = raw->weapon_lifetime;
 
 	if (raw->weapon_on_ground)
 	{
@@ -909,7 +871,7 @@ void update_weapon_crate_animation (weapon *raw)
 		case PARACHUTE_STATUS_CLOSED:
 		////////////////////////////////////////
 		{
-			if ((lifetime > 0.5) && (raw->mob.motion_vector.y < 0.0))
+			if ((lifetime < - 0.5) && (raw->mob.motion_vector.y < 0.0))
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN1;
 
@@ -922,7 +884,7 @@ void update_weapon_crate_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN1:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime < - 0.6)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN2;
 
@@ -935,7 +897,7 @@ void update_weapon_crate_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN2:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime < - 0.7)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN3;
 

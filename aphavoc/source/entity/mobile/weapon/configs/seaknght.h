@@ -66,14 +66,16 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		#define CHAFF_DISPENSER	(0)
-		#define FLARE_DISPENSER	(0)
+		#define LHS_CHAFF_DISPENSER	(0)
+		#define LHS_FLARE_DISPENSER	(0)
+		#define RHS_CHAFF_DISPENSER	(1)
+		#define RHS_FLARE_DISPENSER	(1)
 
 		#define CHAFF_VECTOR	  	(0)
 		#define FLARE_VECTOR	  	(0)
 
-		#define NUM_CHAFFS		(30)
-		#define NUM_FLARES		(30)
+		#define NUM_CHAFFS		(10)
+		#define NUM_FLARES		(20)
 
 		////////////////////////////////////////
 		//
@@ -85,12 +87,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
 				NUM_CHAFFS,	 	  												// number
-				CHAFF_DISPENSER,												// heading_depth
+				LHS_CHAFF_DISPENSER,												// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,	  				  	  				 							// muzzle_depth
 				FALSE, 			  	  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -107,12 +109,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
 				NUM_FLARES,	 													// number
-				FLARE_DISPENSER,												// heading_depth
+				LHS_FLARE_DISPENSER,												// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,	  				  	  				 							// muzzle_depth
 				FALSE, 			  	  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -126,9 +128,49 @@
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 3
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				NUM_CHAFFS,	 	  												// number
+				RHS_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,	  				  	  				 							// muzzle_depth
+				FALSE, 			  	  				 							// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),		  			// rotate_inhibit_velocity
+				0,		 											 				// heading_share_mask
+				0,		 		 									  				// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 4
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				NUM_FLARES,	 													// number
+				RHS_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,	  				  	  				 							// muzzle_depth
+				FALSE, 			  	  				 							// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),		  			// rotate_inhibit_velocity
+				0,		 											 				// heading_share_mask
+				0,		 		 									  				// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 5
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 6
@@ -187,8 +229,10 @@
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 		},
 
-		#undef CHAFF_DISPENSER
-		#undef FLARE_DISPENSER
+		#undef LHS_CHAFF_DISPENSER
+		#undef LHS_FLARE_DISPENSER
+		#undef RHS_CHAFF_DISPENSER
+		#undef RHS_FLARE_DISPENSER
 
 		#undef CHAFF_VECTOR
 		#undef FLARE_VECTOR

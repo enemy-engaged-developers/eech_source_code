@@ -112,7 +112,8 @@ int
 	current_object_3d_outcode;
 
 float
-	current_object_3d_dissolve_factor;
+	current_object_3d_dissolve_factor,
+	current_object_3d_diffuse_factor;
 
 unsigned char
 	current_object_3d_dissolve_value;
@@ -806,7 +807,7 @@ void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour co
 void calculate_luminous_colour ( real_colour *colour )
 {
 
-	if (active_3d_environment->render_filter == RENDER_INFRARED )
+	if (active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME )
 	{
 	
 

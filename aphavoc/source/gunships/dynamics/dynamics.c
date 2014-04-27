@@ -215,13 +215,16 @@ void initialise_flight_dynamics (entity *en)
 
          switch (get_global_gunship_type ())
          {
-						// JB 030313 Fly any aircraft
-						default:
-						case GUNSHIP_TYPE_APACHE:
+			// JB 030313 Fly any aircraft
+			default:
+			case GUNSHIP_TYPE_APACHE:
             {
-               initialise_apache_advanced_dynamics (en);
+				if (command_line_dynamics_flight_model != 2)
+					initialise_apache_advanced_dynamics (en);
+				else
+					initialise_advanced_dynamics (en);
 
-               break;
+				break;
             }
 
             case GUNSHIP_TYPE_COMANCHE:
@@ -858,7 +861,6 @@ void set_dynamics_entity_values (entity *en)
 	}
 
 	if ((!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT)) ||
-		(get_local_entity_float_value (en, FLOAT_TYPE_RADAR_ALTITUDE) < 1.0) || // altitude (not carrier)
 		(get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) == 0.0)) // engine off
 	{
 
@@ -1079,16 +1081,42 @@ void update_flight_dynamics (void)
 
 	//////////////////////////////////////////////////////////////////
 
-	//debug_log ("CO_FORCE: adding force to joystick");
-	//set_joystick_force_feedback_forces (current_flight_dynamics->input_data.cyclic_joystick_device_index, 10000.0, 0.0);
-/*
-	set_joystick_force_feedback_forces (current_flight_dynamics->input_data.cyclic_joystick_device_index,
-													(sin (current_flight_dynamics->main_rotor_angular_position.value) * 3000.0),
-													(cos (current_flight_dynamics->main_rotor_angular_position.value) * 3000.0));
+	/// ForceFeedback by thealx 130224 ///////////////////////////////
+	
+	if (command_line_forcefeedback == 1)
+	{
+	    int state = get_local_entity_undercarriage_state (get_gunship_entity ());
+		vec3d pilot_forces;
+		
+		pilot_forces.x = pilot_forces.y = pilot_forces.z = 0;
+		
+		if (command_line_ffb_dynamics > 0 || command_line_ffb_vibrations > 0)
+		{
+			get_forces_acting_on_pilot(&pilot_forces.x, &pilot_forces.y, &pilot_forces.z, TRUE, FALSE);
+			xforce += pilot_forces.x * 1000000;
+			yforce += pilot_forces.z * 1000000;
+		}
+		
+		if (command_line_ffb_dynamics > 0)
+		{
+			xforce += command_line_ffb_dynamics * sin (current_flight_dynamics->angular_roll_velocity.value) * 10000;
+			yforce += command_line_ffb_dynamics * sin (current_flight_dynamics->angular_pitch_velocity.value) * 10000;
+		}
+		
+	    // Gears events
+	    
+	    if (command_line_ffb_vibrations > 0 && (state == AIRCRAFT_UNDERCARRIAGE_LOWERING || state == AIRCRAFT_UNDERCARRIAGE_RAISING))
+	    {
+		    xfreq += command_line_ffb_vibrations * sfrand1();
+		    xampl += command_line_ffb_vibrations * sfrand1() / 4;
+		    yfreq += command_line_ffb_vibrations * sfrand1();
+		    yampl += command_line_ffb_vibrations * sfrand1() / 4;
+	    }
 
-	debug_log ("%f, %f", (sin (current_flight_dynamics->main_rotor_angular_position.value) * 3000.0),
-													(cos (current_flight_dynamics->main_rotor_angular_position.value) * 3000.0));
-*/
+	    // main function
+	    
+	    set_joystick_force_feedback_forces();
+	}
 	//////////////////////////////////////////////////////////////////
 
 	if ((get_comms_model () == COMMS_MODEL_CLIENT) && (!current_flight_dynamics))
@@ -1742,8 +1770,8 @@ void save_dynamics_model (event *ev)
 		fprintf (file_ptr, "g_force value = %f, min = %f, max = %f, modifier = %f\n", current_flight_dynamics->g_force.value, current_flight_dynamics->g_force.min, current_flight_dynamics->g_force.max, current_flight_dynamics->g_force.modifier);
 		fprintf (file_ptr, "combined_engine_rpm value = %f, min = %f, max = %f, modifier = %f\n", current_flight_dynamics->combined_engine_rpm.value, current_flight_dynamics->combined_engine_rpm.min, current_flight_dynamics->combined_engine_rpm.max, current_flight_dynamics->combined_engine_rpm.modifier);
 		fprintf (file_ptr, "combined_engine_torque value = %f, min = %f, max = %f, modifier = %f\n", current_flight_dynamics->combined_engine_torque.value, current_flight_dynamics->combined_engine_torque.min, current_flight_dynamics->combined_engine_torque.max, current_flight_dynamics->combined_engine_torque.modifier);
-		fprintf (file_ptr, "fuel_weight value = %f, min = %f, max = %f, modifier = %f\n", current_flight_dynamics->fuel_weight.value, current_flight_dynamics->fuel_weight.min, current_flight_dynamics->fuel_weight.max, current_flight_dynamics->fuel_weight.modifier);
-
+		fprintf (file_ptr, "fuel_weight value = %f, min = %f, max = %f, modifier = %f, delta = %f\n", current_flight_dynamics->fuel_weight.value, current_flight_dynamics->fuel_weight.min, current_flight_dynamics->fuel_weight.max, current_flight_dynamics->fuel_weight.modifier, &current_flight_dynamics->fuel_weight.delta);
+		fprintf (file_ptr, "centre_of_gravity_x = %f, centre_of_gravity_y = %f, centre_of_gravity_z = %f\n", current_flight_dynamics->centre_of_gravity.x, current_flight_dynamics->centre_of_gravity.y, current_flight_dynamics->centre_of_gravity.z);
 		fclose (file_ptr);
 	}
 }
@@ -1830,6 +1858,7 @@ void load_dynamics_model (event *ev)
 		fscanf (file_ptr, "velocity_x value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->velocity_x.value, &current_flight_dynamics->velocity_x.min, &current_flight_dynamics->velocity_x.max, &current_flight_dynamics->velocity_x.modifier);
 		fscanf (file_ptr, "velocity_y value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->velocity_y.value, &current_flight_dynamics->velocity_y.min, &current_flight_dynamics->velocity_y.max, &current_flight_dynamics->velocity_y.modifier);
 		fscanf (file_ptr, "velocity_z value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->velocity_z.value, &current_flight_dynamics->velocity_z.min, &current_flight_dynamics->velocity_z.max, &current_flight_dynamics->velocity_z.modifier);
+		current_flight_dynamics->velocity_z.max = 1.2 * aircraft_database[current_flight_dynamics->sub_type].cruise_velocity;
 		fscanf (file_ptr, "acceleration_x value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->acceleration_x.value, &current_flight_dynamics->acceleration_x.min, &current_flight_dynamics->acceleration_x.max, &current_flight_dynamics->acceleration_x.modifier);
 		fscanf (file_ptr, "acceleration_y value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->acceleration_y.value, &current_flight_dynamics->acceleration_y.min, &current_flight_dynamics->acceleration_y.max, &current_flight_dynamics->acceleration_y.modifier);
 		fscanf (file_ptr, "acceleration_z value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->acceleration_z.value, &current_flight_dynamics->acceleration_z.min, &current_flight_dynamics->acceleration_z.max, &current_flight_dynamics->acceleration_z.modifier);
@@ -1872,8 +1901,9 @@ void load_dynamics_model (event *ev)
 		fscanf (file_ptr, "g_force value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->g_force.value, &current_flight_dynamics->g_force.min, &current_flight_dynamics->g_force.max, &current_flight_dynamics->g_force.modifier);
 		fscanf (file_ptr, "combined_engine_rpm value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->combined_engine_rpm.value, &current_flight_dynamics->combined_engine_rpm.min, &current_flight_dynamics->combined_engine_rpm.max, &current_flight_dynamics->combined_engine_rpm.modifier);
 		fscanf (file_ptr, "combined_engine_torque value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->combined_engine_torque.value, &current_flight_dynamics->combined_engine_torque.min, &current_flight_dynamics->combined_engine_torque.max, &current_flight_dynamics->combined_engine_torque.modifier);
-		fscanf (file_ptr, "fuel_weight value = %f, min = %f, max = %f, modifier = %f\n", &current_flight_dynamics->fuel_weight.value, &current_flight_dynamics->fuel_weight.min, &current_flight_dynamics->fuel_weight.max, &current_flight_dynamics->fuel_weight.modifier);
-
+		fscanf (file_ptr, "fuel_weight value = %f, min = %f, max = %f, modifier = %f, delta = %f\n", &current_flight_dynamics->fuel_weight.value, &current_flight_dynamics->fuel_weight.min, &current_flight_dynamics->fuel_weight.max, &current_flight_dynamics->fuel_weight.modifier, &current_flight_dynamics->fuel_weight.delta);
+		current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max = aircraft_database[current_flight_dynamics->sub_type].fuel_default_weight;
+		fscanf (file_ptr, "centre_of_gravity_x = %f, centre_of_gravity_y = %f, centre_of_gravity_z = %f\n", &current_flight_dynamics->centre_of_gravity.x, &current_flight_dynamics->centre_of_gravity.y, &current_flight_dynamics->centre_of_gravity.z);
 		fclose (file_ptr);
 	}
 	else
@@ -2594,7 +2624,7 @@ void dynamics_land (void)
 	current_flight_dynamics_landed_at_keysite = NULL;
 
 	/////////////////////////////////////////////////////////////////
-	dynamics_restore_damage_values ();
+//	dynamics_restore_damage_values ();
 	/////////////////////////////////////////////////////////////////
 
 	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
@@ -2923,7 +2953,7 @@ float set_flight_dynamics_mass (void)
 {
 
 	current_flight_dynamics->mass.value = current_flight_dynamics->mass.min +
-														(current_flight_dynamics->fuel_weight.value * current_flight_dynamics->fuel_weight.modifier) +
+														(current_flight_dynamics->fuel_weight.value /* * current_flight_dynamics->fuel_weight.modifier */) +
 														(current_flight_dynamics->weapon_mass.modifier * get_local_entity_weapon_load_weight (get_gunship_entity ()));
 
 	return current_flight_dynamics->mass.value;
@@ -3901,7 +3931,7 @@ void create_advanced_rotor_vibration(float force, int damaged)
 	position.y = 0.0;
 
 	direction.x = position.x;
-	direction.y = - damaged * rotor_radius / (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) ? 2 : 10);
+	direction.y = 0;
 	direction.z = position.z;
 
 	add_dynamic_force ("Main rotor vibration", force, 0.0, &position, &direction, FALSE);

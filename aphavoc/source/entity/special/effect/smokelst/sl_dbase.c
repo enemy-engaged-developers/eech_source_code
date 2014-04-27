@@ -208,7 +208,7 @@ static void export_smoke_list_database (void)
 			"%f;%i;%i;%i;%i;%f;"
 			"%i;%i;%i;%i;%f;"
 			"%f;%f;%f;"
-			"%f;%f;%i;%i;%i;%i;%i;%i\n",
+			"%f;%f;%i;%i;%i;%i;%i;%f\n",
 			count, smoke_list_types_names[count], texture_animation_names[smoke->texture],
 
 			smoke->red_start,
@@ -286,8 +286,7 @@ static void import_smoke_list_database (void)
 		draw_type,
 		flat,
 		ground_based,
-		lock_to_parent,
-		wind_affected;
+		lock_to_parent;
 
 	file = safe_fopen (SMOKE_LIST_DATABASE_FILENAME, "r");
 	fgets (buf, sizeof (buf), file);
@@ -339,7 +338,7 @@ static void import_smoke_list_database (void)
 				"%f;%i;%i;%i;%i;%f;"
 				"%i;%i;%i;%i;%f;"
 				"%f;%f;%f;"
-				"%f;%f;%i;%i;%i;%i;%i;%i",
+				"%f;%f;%i;%i;%i;%i;%i;%f",
 				&red_start,
 				&green_start,
 				&blue_start,
@@ -377,7 +376,7 @@ static void import_smoke_list_database (void)
 				&flat,
 				&ground_based,
 				&lock_to_parent,
-				&wind_affected) != 33)
+				&smoke->wind_affected) != 33)
 			{
 				continue;
 			}
@@ -403,7 +402,6 @@ static void import_smoke_list_database (void)
 			smoke->flat = flat != 0;
 			smoke->ground_based = ground_based != 0;
 			smoke->lock_to_parent = lock_to_parent != 0;
-			smoke->wind_affected = wind_affected != 0;
 
 			if (count == total_number_of_smoke_list_types)
 			{
@@ -1318,11 +1316,11 @@ void initialise_smoke_list_database (void)
 
 	////////////////////////////////////////
 	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_TRAIL
+	//	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL
 	//
 	////////////////////////////////////////
 	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_TRAIL]);
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL]);
 
 		// START COLOUR
 		item->red_start			=	130;		// red
@@ -1370,69 +1368,13 @@ void initialise_smoke_list_database (void)
 		item->lock_to_parent				=	TRUE;
 		item->wind_affected				=	TRUE;
 	}
-
 	////////////////////////////////////////
 	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE_TRAIL
-	//
-	////////////////////////////////////////
-	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_MEDIUM_DAMAGE_TRAIL]);
-
-		// START COLOUR
-		item->red_start			=	40;		// red
-		item->green_start			=	40;		// green
-		item->blue_start 			=	40;		// blue
-		item->alpha_start 		=	160;		// alpha
-		item->radius_start		=	0.2;		// radius
-
-		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.5;		// colour change 1 lifescale
-		item->red_1					=	40;		// red
-		item->green_1 				=	40;		// green
-		item->blue_1 				=	40;		// blue
-		item->alpha_1 				=	90;		// alpha
-		item->radius_1 			=	6.5;		// radius
-
-		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	80;		// red
-		item->green_2				=	80;		// green
-		item->blue_2				=	80;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	20.0;		// radius
-
-		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
-		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	1.0;		// radius
-
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
-
-		item->initial_velocity_noise	=	1.0;
-
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
-
-		item->additive						=	FALSE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
-		item->flat							=	FALSE;
-		item->ground_based				=	FALSE;
-		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
-	}
-
-	////////////////////////////////////////
-	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_TRAIL
+	//	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL
 	//
 	////////////////////////////////////////
 	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_TRAIL]);
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL]);
 
 		// START COLOUR
 		item->red_start			=	30;		// red
@@ -1483,34 +1425,88 @@ void initialise_smoke_list_database (void)
 
 	////////////////////////////////////////
 	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_ADDITIVE_DAMAGE_TRAIL
+	//	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL
 	//
 	////////////////////////////////////////
 	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_ADDITIVE_DAMAGE_TRAIL]);
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	90;		// red
-		item->green_start			=	60;		// green
-		item->blue_start 			=	20;		// blue
-		item->alpha_start 		=	0;			// alpha
+		item->red_start			=	130;		// red
+		item->green_start			=	130;		// green
+		item->blue_start 			=	130;		// blue
+		item->alpha_start 		=	100;		// alpha
+		item->radius_start		=	0.25;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.12;		// colour change 1 lifescale
+		item->red_1					=	130;		// red
+		item->green_1 				=	130;		// green
+		item->blue_1 				=	130;		// blue
+		item->alpha_1 				=	100;		// alpha
+		item->radius_1 			=	1.5;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	120;		// red
+		item->green_2				=	120;		// green
+		item->blue_2				=	120;		// blue
+		item->alpha_2				=	80;		// alpha
+		item->radius_2				=	3.5;		// radius
+
+		// END COLOUR
+		item->red_end				=	80;		// red
+		item->green_end			=	80;		// green
+		item->blue_end				=	80;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	5.0;		// radius
+
+		item->final_vertical_velocity	=	2.5;
+		item->vertical_acceleration	=	0.8;
+
+		item->initial_velocity_noise	=	1.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
+		item->texture_size				=	16.0;
+		item->animation_rate				=	1.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	TRUE;
+	}
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL]);
+
+		// START COLOUR
+		item->red_start			=	30;		// red
+		item->green_start			=	30;		// green
+		item->blue_start 			=	30;		// blue
+		item->alpha_start 		=	180;		// alpha
 		item->radius_start		=	0.2;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.5;		// colour change 1 lifescale
-		item->red_1					=	140;		// red
-		item->green_1 				=	90;		// green
-		item->blue_1 				=	40;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	3.0;		// radius
+		item->red_1					=	30;		// red
+		item->green_1 				=	30;		// green
+		item->blue_1 				=	30;		// blue
+		item->alpha_1 				=	110;		// alpha
+		item->radius_1 			=	6.5;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	0;			// red
-		item->green_2				=	0;			// green
-		item->blue_2				=	0;			// blue
+		item->red_2					=	50;		// red
+		item->green_2				=	50;		// green
+		item->blue_2				=	50;		// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	1.0;		// radius
+		item->radius_2				=	20.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	0;			// red
@@ -1524,11 +1520,11 @@ void initialise_smoke_list_database (void)
 
 		item->initial_velocity_noise	=	1.0;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_ADDITIVE_SMOKE_TRAIL;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
 		item->texture_size				=	16.0;
 		item->animation_rate				=	1.0;
 
-		item->additive						=	TRUE;
+		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
@@ -1538,66 +1534,11 @@ void initialise_smoke_list_database (void)
 
 	////////////////////////////////////////
 	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL
+	//	SMOKE_LIST_TYPE_GUN_SMOKE
 	//
 	////////////////////////////////////////
 	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL]);
-
-		// START COLOUR
-		item->red_start			=	255;		// red
-		item->green_start			=	255;		// green
-		item->blue_start 			=	255;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.1;		// radius
-
-		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	255;		// red
-		item->green_1 				=	255;		// green
-		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	4.0;		// radius
-
-		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	255;		// red
-		item->green_2				=	255;		// green
-		item->blue_2				=	255;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	4.0;		// radius
-
-		// END COLOUR
-		item->red_end				=	255;		// red
-		item->green_end			=	255;		// green
-		item->blue_end				=	255;		// blue
-		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	4.0;		// radius
-
-		item->final_vertical_velocity	=	0.2;
-		item->vertical_acceleration	=	0.1;
-
-		item->initial_velocity_noise	=	0.05;
-
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
-		item->texture_size				=	1.0;
-		item->animation_rate				=	0.0;
-
-		item->additive						=	FALSE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
-		item->flat							=	FALSE;
-		item->ground_based				=	TRUE;
-		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
-	}
-
-	////////////////////////////////////////
-	//
-	//	SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL
-	//
-	////////////////////////////////////////
-	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL]);
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_GUN_SMOKE]);
 
 		// START COLOUR
 		item->red_start			=	255;		// red
@@ -1646,6 +1587,60 @@ void initialise_smoke_list_database (void)
 		item->wind_affected				=	TRUE;
 	}
 
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_GUN_SMOKE_2
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_GUN_SMOKE_2]);
+
+		// START COLOUR
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;		// blue
+		item->alpha_start 		=	180;		// alpha
+		item->radius_start		=	0.25;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	1.0;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
+		item->blue_1 				=	255;		// blue
+		item->alpha_1 				=	0;			// alpha
+		item->radius_1 			=	10.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	1.0;		// colour change 2 lifescale
+		item->red_2					=	255;		// red
+		item->green_2				=	255;		// green
+		item->blue_2				=	255;		// blue
+		item->alpha_2				=	0;			// alpha
+		item->radius_2				=	10.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	255;		// red
+		item->green_end			=	255;		// green
+		item->blue_end				=	255;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	10.0;		// radius
+
+		item->final_vertical_velocity	=	0.25;
+		item->vertical_acceleration	=	0.1;
+
+		item->initial_velocity_noise	=	0.1;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	TRUE;
+	}
 
 	// Xhit: The following smoke trails type downwash is for the downwash effect (030328)
 	// These are mapped from surface_types

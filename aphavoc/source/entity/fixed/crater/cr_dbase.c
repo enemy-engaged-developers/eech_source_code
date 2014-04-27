@@ -127,10 +127,10 @@ const crater_data
 		//
 		////////////////////////////////////////
 		{
-			OBJECT_3D_EFFECT_CRATER,					// object 3d shape
+			OBJECT_3D_CRATER_ROUND,					// object 3d shape
 
-			7.0,												// min scale
-			10.0,												// max scale
+			1.0,												// min scale
+			6.0,												// max scale
 	
 			200.0,											// lifetime
 		},
@@ -143,8 +143,8 @@ const crater_data
 		{
 			OBJECT_3D_CRATER_ROUND,						// object 3d shape
 
-			10.0,												// min scale
-			16.0,												// max scale
+			4.0,												// min scale
+			10.0,												// max scale
 	
 			400.0,											// lifetime
 		},
@@ -157,8 +157,8 @@ const crater_data
 		{
 			OBJECT_3D_CRATER_ROUND,						// object 3d shape
 
-			16.0,												// min scale
-			24.0,												// max scale
+			8.0,												// min scale
+			16.0,												// max scale
 	
 			600.0,											// lifetime
 		},

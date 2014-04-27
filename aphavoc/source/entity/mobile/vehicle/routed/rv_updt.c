@@ -85,7 +85,9 @@ static void update_server (entity *en)
 		*raw;
 
 	int
-		loop;
+		loop,
+		damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL),
+		explosive_quality = get_local_entity_int_value (en, INT_TYPE_EXPLOSIVE_QUALITY);
 
 	raw = (routed_vehicle *) get_local_entity_data (en);
 
@@ -94,6 +96,18 @@ static void update_server (entity *en)
 	raw->vh.sleep -= get_delta_time ();
 
 	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
+
+	// fire damage
+	
+	if (damage_level && (explosive_quality & EXPLOSIVE_QUALITY_EXPLOSIVE || explosive_quality & EXPLOSIVE_QUALITY_FLAMMABLE) && 
+			vehicle_critically_damaged(en) && frand1() < 2 * get_delta_time())
+	{
+		damage_level--;
+		set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+
+		if (damage_level <= 0)
+			kill_client_server_entity (en);
+	}
 
 	#if DEBUG_MODULE
 	// debug
@@ -145,7 +159,7 @@ static void update_server (entity *en)
 	#endif
 	// debug
 
-	if (raw->vh.mob.alive)
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 
 		//
@@ -181,6 +195,8 @@ static void update_server (entity *en)
 
 		update_vehicle_decoy_release (en);
 
+		rearm_vehicle_weapons(en);
+		
 		//
 		////////////////////////////////////////
 
@@ -198,17 +214,20 @@ static void update_server (entity *en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
-			raw->vh.death_timer -= get_delta_time ();
+			raw->vh.death_timer += get_delta_time ();
 
-			if (raw->vh.death_timer <= 0.0)
-			{
-				destroy_client_server_entity_family (en);
-			}
+			if (!((int)(raw->vh.death_timer + 1) % 300))
+				if (raw->vh.death_timer >= calculate_mobile_death_timer_value (en))
+				{
+					destroy_client_server_entity_family (en);
+				}
 		}
 		else
 		{
 			for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 			{
+				ASSERT(point_inside_map_area(&raw->vh.mob.position));
+
 				get_3d_terrain_point_data (raw->vh.mob.position.x, raw->vh.mob.position.z, &raw->vh.terrain_info);
 
 				routed_vehicle_death_movement (en);
@@ -237,7 +256,7 @@ static void update_client (entity *en)
 
 	update_local_entity_view_interest_level (en);
 
-	if (raw->vh.mob.alive)
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 
 		////////////////////////////////////////
@@ -265,6 +284,8 @@ static void update_client (entity *en)
 
 		update_entity_weapon_system_weapon_and_target_vectors (en);
 
+		rearm_vehicle_weapons(en);
+		
 		//
 		////////////////////////////////////////
 		
@@ -282,11 +303,14 @@ static void update_client (entity *en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
+			raw->vh.death_timer += get_delta_time ();
 		}
 		else
 		{
 			for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 			{
+				ASSERT(point_inside_map_area(&raw->vh.mob.position));
+
 				get_3d_terrain_point_data (raw->vh.mob.position.x, raw->vh.mob.position.z, &raw->vh.terrain_info);
 
 				routed_vehicle_death_movement (en);

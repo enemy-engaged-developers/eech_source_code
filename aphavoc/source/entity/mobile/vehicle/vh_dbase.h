@@ -140,7 +140,7 @@ struct VEHICLE_DATA
 
 	int
 		initial_damage_level,
-		warhead_effective_class;
+		armor_level;
 
 	unsigned int
 		explosive_quality 	: NUM_EXPLOSIVE_QUALITY_BITS,

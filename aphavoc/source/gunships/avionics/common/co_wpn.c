@@ -70,6 +70,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define DEBUG_MODULE 0
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 weapon_lock_types
 	weapon_lock_type;
 
@@ -151,12 +157,12 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 		switch (selected_weapon)
 		{
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
-			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
-			case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
-			case ENTITY_SUB_TYPE_WEAPON_ATAKA:
-			case ENTITY_SUB_TYPE_WEAPON_VIKHR:
+			case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:
+			case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
+			case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
 			////////////////////////////////////////
@@ -192,8 +198,8 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
-			case ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
 				duration = 0.2;
@@ -234,6 +240,8 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 		direction.z = - 1;
 		multiply_matrix3x3_vec3d(&direction, &vp.attitude, &direction);
 		add_dynamic_weapon_launch_force (&vp.position, &direction, strength, duration);
+		
+		play_ffb_weapon_effect((char*)weapon_database[selected_weapon].full_name, weapon_database[selected_weapon].rate_of_fire);
 	}
 }
 
@@ -387,7 +395,9 @@ void update_weapon_lock_type (target_acquisition_systems system)
 			// this should never happen
 			//
 
+			#if DEBUG_MODULE
 			debug_colour_log (DEBUG_COLOUR_RED, "WARNING! Target and weapon vectors are not valid");
+			#endif
 		}
 	}
 
@@ -448,7 +458,9 @@ void update_weapon_lock_type (target_acquisition_systems system)
 			// this should never happen
 			//
 
+			#if DEBUG_MODULE
 			debug_colour_log (DEBUG_COLOUR_RED, "WARNING! Target and weapon vectors are not valid");
+			#endif
 		}
 	}
 
@@ -467,7 +479,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 	weapon_min_range = weapon_database[selected_weapon_type].min_range;
 
-	if (weapon_database[selected_weapon_type].hellfire_flight_profile)
+	if (weapon_database[selected_weapon_type].flight_profile_or_self_destr == 1)
 	{
 		if (get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 		{
@@ -484,7 +496,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 	weapon_max_range = weapon_database[selected_weapon_type].max_range;
 
-	if (weapon_database[selected_weapon_type].hellfire_flight_profile)
+	if (weapon_database[selected_weapon_type].flight_profile_or_self_destr == 1)
 	{
 		if (get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 		{
@@ -862,12 +874,12 @@ void lase_range_for_ballistics_sight(void)
 	angle_of_drop = 0.0;
 
 	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-		get_ballistic_pitch_deflection(wpn_type, range, current_flight_dynamics->pitch.value, &angle_of_drop, &time_of_flight, FALSE, TRUE);
+		get_ballistic_pitch_deflection(wpn_type, range, current_flight_dynamics->pitch.value, &angle_of_drop, &time_of_flight, FALSE, TRUE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
 
-	ballistics_sight_calibrated_drop = angle_of_drop - current_flight_dynamics->pitch.value;
+	ballistics_sight_calibrated_drop = angle_of_drop;
 }
 
-float get_weapon_drop(entity_sub_types wpn_type)
+float get_weapon_drop(entity_sub_types wpn_type) // boresight weapon
 {
 	entity* target = get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET);
 
@@ -889,10 +901,10 @@ float get_weapon_drop(entity_sub_types wpn_type)
 		else
 			range = get_3d_range (source_position, &target_position);
 
-		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC || weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 		{
 			angle_of_projection = 0.0;
-			get_ballistic_pitch_deflection(wpn_type, range, source_position->y - target_position.y, &angle_of_projection, &time_of_flight, FALSE, FALSE);
+			get_ballistic_pitch_deflection(wpn_type, range, source_position->y - target_position.y, &angle_of_projection, &time_of_flight, FALSE, FALSE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
 			angle_of_projection += asin((source_position->y - target_position.y) / range);
 		}
 		else
@@ -952,11 +964,11 @@ float get_missile_flight_time (void)
 		{
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
-		case ENTITY_SUB_TYPE_WEAPON_ATAKA:
-		case ENTITY_SUB_TYPE_WEAPON_VIKHR:
-		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
-		case ENTITY_SUB_TYPE_WEAPON_AS10_KAREN:
-		case ENTITY_SUB_TYPE_WEAPON_AS14_KEDGE:
+		case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
+		case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
+		case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:
+		case ENTITY_SUB_TYPE_WEAPON_KH_25MT:
+		case ENTITY_SUB_TYPE_WEAPON_KH_29L:
 			show_flight_time = TRUE;
 			break;
 		default:
@@ -1029,9 +1041,7 @@ float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* hud_aim
 		// state where it continousely overcorrects in alternating directions
 		*hud_aim_range += 0.25 * range_diff;
 
-		if (get_ballistic_pitch_deflection(weapon_sub_type, *hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
-			angle_of_drop -= pitch;
-		else
+		if (!get_ballistic_pitch_deflection(weapon_sub_type, *hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY)))
 			angle_of_drop = 0.0;
 	}
 

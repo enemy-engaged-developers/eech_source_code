@@ -514,7 +514,7 @@ void scan_3d_terrain ( void )
 	// Set the rendering routines dependant on infrared mode
 	//
 
-	if ( active_3d_environment->render_filter == RENDER_INFRARED )
+	if ( active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME)
 	{
 
 		if ( get_3d_terrain_dual_pass_rendering () )
@@ -786,7 +786,7 @@ void scan_3d_terrain ( void )
 
 						if (	( terrain_3d_tree_rendering_enabled ) &&
 						//VJ 040206 for Craigmire: trun on trees in infrared!
-								//( active_3d_environment->infrared_mode != INFRARED_ON ) &&
+								//( active_3d_environment->infrared_mode != RENDER_INFRARED ) &&
 								( terrain_tree_sectors ) &&
 								( terrain_tree_sectors[current_sector_z][current_sector_x].number_of_trees ) )
 						{
@@ -966,7 +966,7 @@ void scan_3d_terrain ( void )
 
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
-								test_range = 4000.0 + 400.0 * min ( cloud_puffs->scale, 10.0f );
+								test_range = 6000.0 - 40.0 * min ( cloud_puffs->scale, 10.0f );
 
 								if ( range < test_range * test_range )
 								{
@@ -978,7 +978,7 @@ void scan_3d_terrain ( void )
 
 										sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT;
 										sorting_slot->z = *( ( int * ) &range );
-										sorting_slot->terrain_cloud_puff.dissolve = ( 1.0 - range / test_range ) * 255.0;
+										sorting_slot->terrain_cloud_puff.dissolve = 255.0 * ((range < test_range * 0.75) ? 1 : (1 - (range - test_range * 0.75) / (test_range * 0.25))); //thealx//
 										sorting_slot->terrain_cloud_puff.x = x;
 										sorting_slot->terrain_cloud_puff.y = y;
 										sorting_slot->terrain_cloud_puff.z = z;
@@ -1094,7 +1094,7 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 
 // start render_tree_shadows-mod by GCsDriver 08-12-2007
 //		if ( shadows_enabled )
-		if ( shadows_enabled && command_line_render_tree_shadows )
+		if ( shadows_enabled && command_line_render_shadows == 2 )
 		{
 // end render_tree_shadows-mod by GCsDriver 08-12-2007
 

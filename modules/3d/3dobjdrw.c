@@ -89,8 +89,9 @@ static void add_transparent_surface ( int clipped );
 
 int OLD_CURRENT_3D_OBJECT_FACE_FACING ( void );
 
-extern int
-	fog;
+static int scene_index;
+
+static int fog = FALSE;
 
 void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *surface );
 
@@ -147,6 +148,8 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 	//
 
 	scene = &objects_3d_scene_database[obj->object_number];
+	
+	scene_index = obj->object_number;
 
 	//
 	// Set up the texture animations for this object.
@@ -202,6 +205,8 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 	current_object_3d_dissolve_value = obj->object_dissolve_value;
 	current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 	current_object_3d_dissolve_factor /= 255.0;
+
+	current_object_3d_diffuse_factor = obj->object_diffuse_value / 255.0;
 
 	//
 	// Calculate the object's rotation matrix, to transform its 3d points relative to the view.
@@ -520,18 +525,18 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 			{
 
 				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-
+				
 				draw_3d_translucent_object ( current_object_3d_translucent_surfaces );
 
 				if ( active_3d_environment->fogmode == FOGMODE_OFF )
 				{
 
-					set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
+				set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
 				}
 				else
 				{
 
-					set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
+				set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 				}
 			}
 
@@ -609,6 +614,10 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 			insert_zbiased_object_into_3d_scene ( OBJECT_3D_DRAW_TYPE_SPRITE, &sprite, 0 );
 		}
 	}
+	
+	scene_index = FALSE;
+	current_object_3d_diffuse_factor = 1;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -933,7 +942,7 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 			{
 
 				illuminate_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
-
+				
 				if ( object_outcode )
 				{
 
@@ -2277,6 +2286,14 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 		if ( surface->surface->polygons )
 		{
 
+			matrix3x3
+				temp;
+			vec3d
+				temp_vec;
+			float
+					heading,
+					pitch;
+
 			//
 			// Set up the object drawing global variables
 			//
@@ -2307,6 +2324,21 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 			current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 			current_object_3d_dissolve_factor /= 255.0;
 
+			// particle clouds hack - make billboard from subobject
+			
+			if (scene_index == OBJECT_3D_CLOUD)
+			{
+				memcpy ( &temp, surface->vp.attitude, sizeof ( matrix3x3 ) );
+
+				temp_vec.x = visual_3d_vp->position.x - surface->vp.position.x;
+				temp_vec.y = visual_3d_vp->position.y - surface->vp.position.y;
+				temp_vec.z = visual_3d_vp->position.z - surface->vp.position.z;
+
+				normalise_any_3d_vector(&temp_vec);
+				get_heading_and_pitch_from_3d_unit_vector(&temp_vec, &heading, &pitch);
+				get_3d_transformation_matrix(&surface->vp.attitude, heading, pitch - PI/2, 0);
+			}
+
 			//
 			// Calculate the object's rotation matrix, to transform its 3d points relative to the view.
 			//
@@ -2323,8 +2355,11 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 			rotation_3d[2][1] = ( surface->vp.zv.x * visual_3d_vp->yv.x + surface->vp.zv.y * visual_3d_vp->yv.y + surface->vp.zv.z * visual_3d_vp->yv.z );
 			rotation_3d[2][2] = ( surface->vp.zv.x * visual_3d_vp->zv.x + surface->vp.zv.y * visual_3d_vp->zv.y + surface->vp.zv.z * visual_3d_vp->zv.z );
 
-			memcpy ( object_to_eye_attitude, rotation_3d, sizeof ( matrix3x3 ) );
+			if (scene_index == OBJECT_3D_CLOUD)
+				memcpy ( surface->vp.attitude, &temp, sizeof ( matrix3x3 ) );
 
+			memcpy ( object_to_eye_attitude, rotation_3d, sizeof ( matrix3x3 ) );
+			
 			rotation_3d[0][0] *= surface->object_3d_scale.x;
 			rotation_3d[1][0] *= surface->object_3d_scale.y;
 			rotation_3d[2][0] *= surface->object_3d_scale.z;
@@ -2348,12 +2383,18 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 			//
 
 			light = generate_relative_lights ( &surface->vp, &surface->object_unit_position, current_3d_lights );
+			
+			if (scene_index == OBJECT_3D_CLOUD) // light up clouds
+			{
+				light->x = 0;
+				light->z = light->y = - sin(PI/4);
+			}
 
 			{
 
 				vec3d
 					rel_pos;
-
+				
 				//
 				// Calculate the relative camera position in the object viewspace
 				//
@@ -2483,8 +2524,13 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 	zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
 	current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
 
-	if ( !command_line_trees_fog || command_line_trees_fog == 2 && (1 / get_delta_time_average() < (20 + 10 * !fog)) ) // clipped trees fog
+	if ( command_line_trees_fog == 1 || command_line_trees_fog == 2 && (1 / get_delta_time_average() >= (20 + 10 * !fog)) ) // clipped trees fog
+		fog = TRUE;
+	else
+	{
 		set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
+		fog = FALSE;
+	}
 
 	if ( current_object_3d_surface->additive )
 	{

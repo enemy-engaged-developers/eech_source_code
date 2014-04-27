@@ -74,7 +74,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_OTO_MELARA_76MM_ROUND,					// sub_type
 				40,																// number
 				1,		  															// heading_depth
 				0,																	// pitch_depth
@@ -96,7 +96,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_SM1MR_STANDARD,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_RIM_66B_STANDARD,					// sub_type
 				1,		  															// number
 				0,		  															// heading_depth
 				0,																	// pitch_depth

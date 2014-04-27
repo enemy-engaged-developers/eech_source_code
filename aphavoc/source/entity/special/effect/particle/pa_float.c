@@ -124,6 +124,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_MOTION_VECTOR_PITCH:
+		////////////////////////////////////////
+		{
+			raw->motion_vector_pitch = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -231,7 +239,16 @@ static float get_local_float_value (entity *en, float_types type)
 			value = raw->roll;
 
 			break;
-		}		////////////////////////////////////////
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_MOTION_VECTOR_PITCH:
+		////////////////////////////////////////
+		{
+			value = raw->motion_vector_pitch;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -313,6 +330,22 @@ void overload_particle_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL][COMMS_MODEL_CLIENT]		= set_client_float_value;
 
 	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_ROLL]								= get_local_float_value;
+
+	////////////////////////////////////////
+	//
+	// FLOAT_TYPE_MOTION_VECTOR_PITCH
+	//
+	////////////////////////////////////////
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_MOTION_VECTOR_PITCH]								= set_local_float_value;
+
+	fn_set_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_MOTION_VECTOR_PITCH]								= set_local_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_MOTION_VECTOR_PITCH][COMMS_MODEL_SERVER]		= set_server_float_value;
+
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_MOTION_VECTOR_PITCH][COMMS_MODEL_CLIENT]		= set_client_float_value;
+
+	fn_get_local_entity_float_value				[ENTITY_TYPE_PARTICLE][FLOAT_TYPE_MOTION_VECTOR_PITCH]								= get_local_float_value;
 
 }
 

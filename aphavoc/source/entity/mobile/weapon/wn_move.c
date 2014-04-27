@@ -114,10 +114,12 @@ int
 #define RANGE_STEP 20.0
 #define WRITE_STEP 250.0
 #define PITCH_STEP 5
-#define NUM_SINGLE_DEGREE_VALUES 21
-#define NUM_NEGATIVE_PITCH_VALUES (((90 - 10) / PITCH_STEP))
+#define VELOCITY_TESTS 1 + 4
+#define VELOCITY_TEST_STEP 50
+#define NUM_SINGLE_DEGREE_VALUES 61
+#define NUM_NEGATIVE_PITCH_VALUES (((90 - (NUM_SINGLE_DEGREE_VALUES - 1) / 2) / PITCH_STEP))
 #define TOTAL_PITCH_INDICES (2*NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES)
-#define LAST_WEAPON ENTITY_SUB_TYPE_WEAPON_S13
+#define LAST_WEAPON (NUM_ENTITY_SUB_TYPE_WEAPONS - 1)
 
 typedef struct
 {
@@ -126,8 +128,9 @@ typedef struct
 } ballistics_data;
 
 static ballistics_data*
-	ballistics_table[LAST_WEAPON+1][TOTAL_PITCH_INDICES + 2];
+	ballistics_table[VELOCITY_TESTS][LAST_WEAPON+1][TOTAL_PITCH_INDICES + 2];
 
+static void update_guided_weapon (	weapon* raw, vec3d* new_position, float delta_time, float turn_rate, float range, int wind);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,11 +311,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 		turn_demand,
 		max_turn_rate,
 		turn_rate,
-		max_frame_turn_rate,
-		frame_turn_rate,
-		inhibit_damp_factor,
-		acceleration;
-
+		inhibit_damp_factor = 1,
+		time_elapsed,
+		current_life_time;
+	int
+		engine_mode = 0;
 	vec3d
 		uvec_intercept_point;
 
@@ -328,6 +331,13 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	raw = (weapon *) get_local_entity_data (en);
 
+	if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].sustain_time > 0)
+		engine_mode = 2; // boost
+	else if (raw->weapon_lifetime > 0)
+		engine_mode = 1; // sustain
+	
+	current_life_time = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time - raw->weapon_lifetime;
+
 	////////////////////////////////////////
 	//
 	// move guided powered/guided unpowered weapon (ignore gravity)
@@ -341,7 +351,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	#endif
 
 	// adjust for high trajectory
-	if (weapon_database[raw->mob.sub_type].hellfire_flight_profile && raw->missile_phase != MISSILE_FINAL_PHASE)
+
+	if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1 && raw->missile_phase != MISSILE_FINAL_PHASE)
 	{
 		float range, dive_ratio;
 		vec3d
@@ -473,11 +484,16 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	length = get_3d_vector_magnitude (&uvec_intercept_point);
 
+	// make higher trajectory /thealx/
+	
+	time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 4 sec elapsed
+	uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath rised 10m
+
 	//
 	// guard against divide by zero (weapon must be very close to the intercept point)
 	//
 
-	if (length < 1.0)
+	if (length < max(weapon_database[raw->mob.sub_type].detonation_radius, 1))
 	{
 		raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
 
@@ -499,17 +515,18 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
+		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time)  // weapon armed after 1 second
 		{
-			debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)),
-				deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
+
+			#if DEBUG_MODULE
+				debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)),
+					deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
+			#endif
 
 			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
 
 			return;
 		}
-//		else
-//			set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
 	}
 
 	//
@@ -530,17 +547,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	turn_demand = acos (cos_turn_demand);
 
-	max_turn_rate = weapon_database[raw->mob.sub_type].g_max / max (raw->mob.velocity, 1.0f);
-
-	turn_rate = bound (turn_demand, -max_turn_rate, max_turn_rate);
-
-	max_frame_turn_rate = max_turn_rate * get_delta_time ();
-
 	//
 	// damp turn rate during inhibit period
 	//
 
-	if (raw->weapon_lifetime > (weapon_database[raw->mob.sub_type].burn_time - weapon_database[raw->mob.sub_type].inhibit_time))
+	if (current_life_time < weapon_database[raw->mob.sub_type].inhibit_time)
 	{
 		//
 		// damp using y = x * x curve
@@ -548,41 +559,22 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 		ASSERT (weapon_database[raw->mob.sub_type].inhibit_time > 0.0);
 
-		inhibit_damp_factor = (weapon_database[raw->mob.sub_type].burn_time - raw->weapon_lifetime) / weapon_database[raw->mob.sub_type].inhibit_time;
+		inhibit_damp_factor = current_life_time / weapon_database[raw->mob.sub_type].inhibit_time;
 
 		inhibit_damp_factor *= inhibit_damp_factor;
 
-		turn_rate *= inhibit_damp_factor;
-
-		frame_turn_rate = inhibit_damp_factor * bound (turn_demand, -max_frame_turn_rate, max_frame_turn_rate);
 	}
-	else
+	else if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1 && raw->missile_phase != MISSILE_FINAL_PHASE)
 	{
 		// arneh - limit turn rate in first phases of hellfire trajectory to get a smoother arc
-		if (weapon_database[raw->mob.sub_type].hellfire_flight_profile && raw->missile_phase != MISSILE_FINAL_PHASE)
-			max_frame_turn_rate = max_frame_turn_rate * 0.5;
-
-		frame_turn_rate = bound (turn_demand, -max_frame_turn_rate, max_frame_turn_rate);
+		
+		inhibit_damp_factor = 0.5;
 	}
 
-	get_3d_transformation_matrix (m1, frame_turn_rate, 0.0, 0.0);
-
-	// arneh - make vikhrs spiral
-	if (weapon_database[raw->mob.sub_type].spiral_flightpath && raw->weapon_lifetime > 0.0
-		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2)
-	{
-		matrix3x3 spiral_matrix, tmp;
-
-		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
-		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
-
-		get_3d_transformation_matrix (spiral_matrix, heading, pitch, 0.0);
-
-		multiply_matrix3x3_matrix3x3 (tmp, m1, raw->mob.attitude);
-		multiply_matrix3x3_matrix3x3 (m2, tmp, spiral_matrix);
-	}
-	else
-		multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
+	max_turn_rate = G * weapon_database[raw->mob.sub_type].g_max / raw->mob.velocity * inhibit_damp_factor;
+	turn_rate = bound (turn_demand, - max_turn_rate, max_turn_rate);
+	get_3d_transformation_matrix (m1, turn_rate * get_delta_time (), 0.0, 0.0);
+	multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
 
 	//
 	// set roll to zero to remove jitter on weapon view
@@ -590,165 +582,193 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	get_3d_transformation_matrix (raw->mob.attitude, get_heading_from_attitude_matrix (m2), get_pitch_from_attitude_matrix (m2), 0.0);
 
+	update_guided_weapon (raw, new_position, get_delta_time (), turn_rate, length, TRUE);
+	
+//	debug_log("weapon velocity %f, turn rate %f, limit %f, range %f, time passed %f", raw->mob.velocity, deg(turn_demand), deg(max_turn_rate), length, weapon_database[raw->mob.sub_type].boost_time - raw->weapon_lifetime);
+
+}
+
+static void update_guided_weapon (weapon* raw, vec3d* new_position, float delta_time, float turn_rate, float range, int wind)
+{
+	float
+		acceleration = 0,
+		displacement_modifier,
+		current_life_time,
+		weapon_weight = get_weapon_current_weight(raw->weapon_lifetime, raw->mob.sub_type);
+	int 
+		engine_mode = 0;
+	vec3d
+		wind_velocity;
+
+	if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].sustain_time > 0)
+		engine_mode = 2; // boost
+	else if (raw->weapon_lifetime > 0)
+		engine_mode = 1; // sustain
+	
+	current_life_time = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time - raw->weapon_lifetime;
+	displacement_modifier = 25 * delta_time * bound ((range - 500) / 1000, 0, 1) * bound(min(current_life_time, raw->weapon_lifetime) / weapon_database[raw->mob.sub_type].inhibit_time, 0, 1);
+
 	//
 	// acceleration
 	//
 
-	if (raw->weapon_lifetime > 0.0)
+	if (engine_mode == 2)
+		acceleration = weapon_database[raw->mob.sub_type].boost_power / weapon_weight;
+	else if (engine_mode == 1)
+		acceleration = weapon_database[raw->mob.sub_type].sustain_power / weapon_weight;
+	acceleration -= get_weapon_drag(raw->mob.velocity, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter, weapon_database[raw->mob.sub_type].drag_coefficient) / weapon_weight;
+	acceleration -= fabs(turn_rate) * get_delta_time () * raw->mob.velocity;
+	if (!weapon_database[raw->mob.sub_type].ignore_gravity)
+		acceleration -= sin(get_pitch_from_attitude_matrix(raw->mob.attitude)) * G;
+
+	if (acceleration > 9999 || acceleration < -9999)
+		acceleration = 0;
+
+	// udate velocity
+
+	raw->mob.velocity = bound (raw->mob.velocity + acceleration * delta_time, 0, 1.5 * weapon_database[raw->mob.sub_type].cruise_velocity);
+
+	// wind
+
+	if (wind)
 	{
-		acceleration = weapon_database[raw->mob.sub_type].g_max - (fabs (turn_rate) * raw->mob.velocity);
+		get_session_wind_velocity_at_point (&raw->mob.position, &wind_velocity);
+
+		wind_velocity.x = delta_time * get_weapon_drag(wind_velocity.x, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
+		wind_velocity.y = delta_time * get_weapon_drag(wind_velocity.y, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
+		wind_velocity.z = delta_time * get_weapon_drag(wind_velocity.z, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
 	}
 	else
-	{
-		acceleration = -(fabs (turn_rate) * raw->mob.velocity);
-	}
-
-	//
-	// velocity
-	//
-
-	raw->mob.velocity += acceleration * get_delta_time ();
-
-	raw->mob.velocity = max (raw->mob.velocity, 0.0f);
-
-	if (raw->weapon_lifetime < 0.0 && raw->mob.velocity < 20.0)  // self destruct if speed drops too low (after motor has burned out)
-	{
-		debug_log("%s self destructed due to speed dropping too low (%0.1f m/s)", weapon_database[raw->mob.sub_type].full_name, raw->mob.velocity);
-
-		raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-
-		return;
-	}
-
-	//
+		wind_velocity.x = wind_velocity.y = wind_velocity.z = 0;
+		
 	// motion vector
-	//
 
-	raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-	raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-	raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
+	raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity + wind_velocity.x;
+	raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity + wind_velocity.y;
+	raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity + wind_velocity.z;
 
-	//
 	// position
-	//
 
-	new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-	new_position->y += raw->mob.motion_vector.y * get_delta_time ();
-	new_position->z += raw->mob.motion_vector.z * get_delta_time ();
+	new_position->x += raw->mob.motion_vector.x * delta_time;
+	new_position->y += raw->mob.motion_vector.y * delta_time;
+	new_position->z += raw->mob.motion_vector.z * delta_time;
+	
+	// flightpath adjustments
+
+	if (raw->weapon_lifetime > 0.0 && displacement_modifier)
+	{
+		vec3d displacement;
+		float spiral = (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 2),
+				deviation = weapon_database[raw->mob.sub_type].flightpath_deviation;
+
+		displacement.x = displacement.y = displacement.z = 0;
+
+		if (spiral)
+		{
+			float timer = wrap_angle(0.75 * PI2 * raw->weapon_lifetime);
+
+			displacement.x -= displacement_modifier * (sin(timer) > 0 ? 1 : - 1) * sqrt(sin(timer));
+			displacement.y += displacement_modifier * (cos(timer) > 0 ? 1 : - 1) * cos(timer) * cos(timer);
+		}
+
+		if (deviation)
+		{
+			float
+				angle_x = sin((wrap_angle(get_3d_vector_magnitude(new_position) / 222) + wrap_angle(get_system_time() / 1000)) / 2),
+				angle_y = sin((wrap_angle(get_3d_vector_magnitude(new_position) / 111) + wrap_angle(get_system_time() / 2000)) / 2);
+
+			displacement.x += deviation * displacement_modifier * sign(angle_x) * sin(angle_x) * sin(angle_x);
+			displacement.y += deviation * displacement_modifier * sign(angle_y) * sin(angle_y) * sin(angle_y);
+//			debug_log("angle x %f y %f", angle_x, angle_y);
+		}
+	
+		multiply_matrix3x3_vec3d(&displacement, raw->mob.attitude, &displacement);
+
+		new_position->x += bound(displacement.x, - delta_time * (10 * spiral + deviation), delta_time * (10 * spiral + deviation));
+		new_position->y += bound(displacement.y, - delta_time * (10 * spiral + deviation), delta_time * (10 * spiral + deviation));
+		new_position->z += bound(displacement.z, - delta_time * (10 * spiral + deviation), delta_time * (10 * spiral + deviation));
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_time, int disperse)
+static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_time, int wind)
 {
 	float
-		acceleration,
+		acceleration = 0,
 		heading,
 		pitch,
 		h_vel,
-		v_vel;
-
+		v_vel,
+		parachute_modifier = 1,
+		weapon_weight;
+	vec3d
+		wind_velocity;
+	
 	ASSERT (raw);
 	ASSERT (new_position);
+	
+	weapon_weight = get_weapon_current_weight(raw->weapon_lifetime, raw->mob.sub_type);
 
-	if (raw->weapon_lifetime > 0.0)
+	// acceleration
+
+	if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].sustain_time > 0) // boost
+		acceleration += weapon_database[raw->mob.sub_type].boost_power / weapon_weight;
+	else if (raw->weapon_lifetime > 0) // sustain
+		acceleration += weapon_database[raw->mob.sub_type].sustain_power / weapon_weight;
+
+	switch(raw->mob.sub_type) // speed up eject seat if parachute is closed
+		case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
+		case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
+		case ENTITY_SUB_TYPE_WEAPON_CRATE:
+		{
+			if (raw->parachute_status != PARACHUTE_STATUS_OPEN3)
+				parachute_modifier = 0.05;
+			break;
+		}
+			
+	acceleration -= get_weapon_drag(raw->mob.velocity, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter * parachute_modifier, weapon_database[raw->mob.sub_type].drag_coefficient) / weapon_weight;
+
+	if (acceleration > 9999 || acceleration < -9999)
+		acceleration = 0;
+
+	// update velocity
+
+	raw->mob.velocity = bound (raw->mob.velocity + acceleration * delta_time, 0.0, 1.5 * weapon_database[raw->mob.sub_type].cruise_velocity);
+
+	// wind
+
+	if (wind)
 	{
-		////////////////////////////////////////
-		//
-		// move unguided powered weapon (ignore gravity)
-		//
-		////////////////////////////////////////
-
-		//
-		// acceleration
-		//
-
-		acceleration = weapon_database[raw->mob.sub_type].g_max;
-
-		//
-		// velocity
-		//
-
-		raw->mob.velocity += acceleration * delta_time;
-		raw->mob.velocity = bound (raw->mob.velocity, 0.0, weapon_database[raw->mob.sub_type].cruise_velocity);
-	}
-	else if (weapon_database[raw->mob.sub_type].drag_factor > 0.0 &&
-		weapon_database[raw->mob.sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-	{
-		// arneh - simulate drag as decelleration
-		float
-			 // adjust velocity in steps to avoid difference because of different delta times (i.e. different behaviour drag depending on frame rate)
-			adjusted_velocity = (int)(raw->mob.velocity * 0.1) * 10;
-
-		acceleration = -0.001 * weapon_database[raw->mob.sub_type].drag_factor * adjusted_velocity * adjusted_velocity;
-
-		// velocity
-
-		raw->mob.velocity += acceleration * delta_time;
-		raw->mob.velocity = max (raw->mob.velocity, 0.0f);
-	}
-
-
-	if (weapon_database[raw->mob.sub_type].ignore_gravity)
-	{
-		////////////////////////////////////////
-		//
-		// move unguided unpowered weapon (ignore gravity)
-		//
-		////////////////////////////////////////
-
-		//
-		// motion vector
-		//
-
-		raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-		raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-		raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
-
-		//
-		// position
-		//
-
-		new_position->x += raw->mob.motion_vector.x * delta_time;
-		new_position->y += raw->mob.motion_vector.y * delta_time;
-		new_position->z += raw->mob.motion_vector.z * delta_time;
+		get_session_wind_velocity_at_point (&raw->mob.position, &wind_velocity);
+	
+		wind_velocity.x = delta_time * get_weapon_drag(wind_velocity.x, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter * parachute_modifier, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
+		wind_velocity.y = delta_time * get_weapon_drag(wind_velocity.y, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter * parachute_modifier, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
+		wind_velocity.z = delta_time * get_weapon_drag(wind_velocity.z, raw->mob.position.y, weapon_database[raw->mob.sub_type].diameter * parachute_modifier, weapon_database[raw->mob.sub_type].drag_coefficient * 1.5) / weapon_weight;	
 	}
 	else
+		wind_velocity.x = wind_velocity.y = wind_velocity.z = 0;
+	
+	// motion vector
+
+	raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity + wind_velocity.x;
+	raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity + wind_velocity.y;
+	raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity + wind_velocity.z;
+
+	// position
+
+	new_position->x += raw->mob.motion_vector.x * delta_time;
+	new_position->y += raw->mob.motion_vector.y * delta_time;
+	new_position->z += raw->mob.motion_vector.z * delta_time;
+
+	ASSERT(new_position->y >= -1000000000000.0);  // mostly just tests for -nan and -inf which happens with buggy floating point calculations
+
+	// apply gravity (after moving weapon)
+
+	if (!weapon_database[raw->mob.sub_type].ignore_gravity)
 	{
-		////////////////////////////////////////
-		//
-		// move unguided unpowered weapon (with gravity)
-		//
-		////////////////////////////////////////
-
-		// Workaround for buggy floating point calculations in open watcom 1.7
-		// Assign to variable instead of using expression directly in calculation
-		float gravity_fall = (0.5 * G * delta_time * delta_time);
-
-		//
-		// motion vector
-		//
-
-		raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-		raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-		raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
-
-		//
-		// position
-		//
-
-		new_position->x += raw->mob.motion_vector.x * delta_time;
-		new_position->y += raw->mob.motion_vector.y * delta_time - gravity_fall;
-		new_position->z += raw->mob.motion_vector.z * delta_time;
-
-		ASSERT(new_position->y >= -1000000000000.0);  // mostly just tests for -nan and -inf which happens with buggy floating point calculations
-
-		//
-		// apply gravity (after moving weapon)
-		//
-
 		heading = get_heading_from_attitude_matrix (raw->mob.attitude);
 
 		pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
@@ -757,51 +777,7 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 
 		v_vel = (sin (pitch) * raw->mob.velocity) - (G * delta_time);
 
-		////////////////////////////////////////
-		//
-		// fudge for ejector seat and crates
-		//
-
-		switch (raw->mob.sub_type)
-		{
-			case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
-			case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
-			{
-				if (raw->parachute_status == PARACHUTE_STATUS_OPEN1)
-				{
-					h_vel = bound (h_vel, -7.5, 7.5);
-
-					v_vel = max (v_vel, -15.0f);
-				}
-				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
-				{
-					h_vel = bound (h_vel, -5.0, 5.0);
-
-					v_vel = max (v_vel, -10.0f);
-				}
-				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
-				{
-					h_vel = bound (h_vel, -2.5, 2.5);
-
-					v_vel = max (v_vel, -5.0f);
-				}
-
-				break;
-			}
-			case ENTITY_SUB_TYPE_WEAPON_CRATE:
-			{
-				h_vel = bound (h_vel, -10.0, 10.0);
-
-				v_vel = max (v_vel, -20.0f);
-
-				break;
-			}
-		}
-
-		//
-		////////////////////////////////////////
-
-		raw->mob.velocity = sqrt ((h_vel * h_vel) + (v_vel * v_vel));
+		raw->mob.velocity = bound (sqrt ((h_vel * h_vel) + (v_vel * v_vel)), 0.0, 1.5 * weapon_database[raw->mob.sub_type].cruise_velocity);
 
 		pitch = atan2 (v_vel, h_vel);
 
@@ -846,7 +822,7 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
-				#ifdef DEBUG_MODULE
+				#if DEBUG_MODULE
 				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
 				#endif
 
@@ -929,7 +905,6 @@ void weapon_movement (entity *en)
 		dy,
 		dz,
 		cruise_time_error,
-		total_cruise_time,
 		heading;
 
 	vec3d
@@ -960,7 +935,7 @@ void weapon_movement (entity *en)
 	//
 	////////////////////////////////////////
 
-	raw->mob.velocity = max (raw->mob.velocity, 0.0f);
+	raw->mob.velocity = bound (raw->mob.velocity, 0.0, 1.5 * weapon_database[raw->mob.sub_type].cruise_velocity);
 
 	////////////////////////////////////////
 	//
@@ -982,13 +957,47 @@ void weapon_movement (entity *en)
 
 	seed = get_client_server_entity_random_number_seed (en);
 
-	cruise_time_error = frand1x (&seed) * weapon_database[raw->mob.sub_type].cruise_time_max_error;
+	cruise_time_error = 0.5 * frand1x (&seed) * weapon_database[raw->mob.sub_type].cruise_time_max_error;
 
-	total_cruise_time = weapon_database[raw->mob.sub_type].cruise_time + cruise_time_error;
-
-	if (raw->weapon_lifetime < -total_cruise_time)
+	if (raw->weapon_lifetime <= - weapon_database[raw->mob.sub_type].cruise_time - cruise_time_error) // this is the end of the journey..
 	{
-		raw->kill_code = WEAPON_KILL_CODE_EXHAUSTED;
+		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
+			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
+		else
+			raw->kill_code = WEAPON_KILL_CODE_EXHAUSTED;
+		
+		#if DEBUG_MODULE
+			debug_log("Weapon destroyed due to time exceeded");
+		#endif
+
+		return;
+	}
+
+	if (raw->decoy_timer && !weapon_database[raw->mob.sub_type].decoy_type && raw->weapon_lifetime <= - raw->decoy_timer) // time for fireworks!
+	{
+		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
+			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
+		
+		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS && get_comms_model () == COMMS_MODEL_SERVER) // create submunitions if it's needed, TODO: make it work for client
+		{
+			viewpoint vp;
+			int count = (int) weapon_database[raw->mob.sub_type + 1].burst_duration;
+		
+			memcpy ( vp.attitude, raw->mob.attitude, sizeof ( matrix3x3 ) );
+			vp.position = raw->mob.position;
+
+			while (count)
+			{
+				create_client_server_entity_submunition_weapon(raw->launched_weapon_link.parent, raw->mob.target_link.parent, raw->mob.sub_type + 1, ENTITY_INDEX_DONT_CARE, &vp, raw->mob.velocity);
+				count--;
+			}
+		}
+
+		raw->decoy_timer = 0;
+	
+		#if DEBUG_MODULE > 1
+			debug_log("Weapon timer is reached");
+		#endif
 
 		return;
 	}
@@ -1062,7 +1071,7 @@ void weapon_movement (entity *en)
 			{
 				if (!raw->mob.target_link.parent)  // has no target
 				{
-					if (!weapon_database[raw->mob.sub_type].hellfire_flight_profile)
+					if (!weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1)
 					{
 						check_guidance_source (raw, en, FALSE);
 					}
@@ -1103,7 +1112,7 @@ void weapon_movement (entity *en)
 			{
 				if (!raw->mob.target_link.parent)
 				{
-					if (weapon_database[raw->mob.sub_type].hellfire_flight_profile)
+					if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1)
 					{
 						if (raw->launched_weapon_link.parent)
 						{
@@ -1133,7 +1142,7 @@ void weapon_movement (entity *en)
 			}
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
-				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET)))
 			{
 				intercept_point_valid = FALSE;
 			}
@@ -1149,7 +1158,7 @@ void weapon_movement (entity *en)
 			check_guidance_source (raw, en, TRUE);
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
-				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET)))
 			{
 				intercept_point_valid = FALSE;
 			}
@@ -1168,21 +1177,18 @@ void weapon_movement (entity *en)
 		}
 		////////////////////////////////////////
 		case WEAPON_GUIDANCE_TYPE_RADIO_COMMAND:
-		////////////////////////////////////////
-		{
-			check_guidance_source (raw, en, FALSE);
-
-			intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
-
-			break;
-		}
-		////////////////////////////////////////
 		case WEAPON_GUIDANCE_TYPE_WIRE_GUIDED:
 		////////////////////////////////////////
 		{
 			check_guidance_source (raw, en, FALSE);
 
-			intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
+			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
+				&& !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))
+			{
+				intercept_point_valid = FALSE;
+			}
+			else
+				intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
 
 			break;
 		}
@@ -1194,14 +1200,14 @@ void weapon_movement (entity *en)
 	//
 	////////////////////////////////////////
 
-	if (intercept_point_valid)
+	if (intercept_point_valid && (raw->weapon_lifetime > 0 || raw->mob.velocity > 200))
 	{
 		move_guided_weapon (en, &new_position, &intercept_point);
 	}
 	else
 	{
 		// unless missile is a LOAL hellfire in phase 1 or 2, move as an unguided weapon when no target
-		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2)
+		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2 || (raw->weapon_lifetime <= 0 && raw->mob.velocity <= 200))
 		{
 			weapon* weapon = (struct WEAPON *) get_local_entity_data (en);
 			move_unguided_weapon (weapon, &new_position, get_delta_time(), TRUE);
@@ -1540,25 +1546,29 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 	float deg_pitch = deg(pitch);
 
 	int
-		int_pitch;
+		int_pitch,
+		i_elevation = (NUM_SINGLE_DEGREE_VALUES - 1) / 2;
+	float
+		f_elevation = (NUM_SINGLE_DEGREE_VALUES - 1) / 2;
+	
 
 	ASSERT(closeness);
 
-	if (deg_pitch < -10.0)
+	if (deg_pitch < - f_elevation)
 	{
 		int_pitch = (int)(floor(deg_pitch / PITCH_STEP));
 
 		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
 
-		return int_pitch + (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES;
+		return int_pitch + (i_elevation / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES;
 	}
-	else if (deg_pitch < (10.0 + PITCH_STEP))
+	else if (deg_pitch < (f_elevation + PITCH_STEP))
 	{
 		int_pitch = (int)(floor(deg_pitch));
 
 		*closeness = 1.0 - (deg_pitch - int_pitch);
 
-		return int_pitch + NUM_NEGATIVE_PITCH_VALUES + 10;
+		return int_pitch + NUM_NEGATIVE_PITCH_VALUES + i_elevation;
 	}
 	else
 	{
@@ -1566,7 +1576,7 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 
 		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
 
-		return int_pitch - (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES - 1;
+		return int_pitch - (i_elevation / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES - 1;
 	}
 }
 
@@ -1575,24 +1585,28 @@ static int get_floor_pitch_index(float pitch, float* closeness)
  *  if output is non-NULL part of the table will also be written
  *  to that file
  */
-void calculate_projectory(weapon* wpn, FILE* output)
+void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 {
-	float
-		dummy;
-
 	int
 		i,
 		pitch_index = 0,
-		zero_pitch = get_floor_pitch_index(0, &dummy),
-		num_range_values;
+		num_range_values,
+		last_write_range = 0;
 
 	float
-		pitch;
-
-	ballistics_data** data = ballistics_table[wpn->mob.sub_type];
+		pitch,
+		test_velocity[256],
+		test_time[256],
+		test_drop[256],
+		test_range[256],
+		test_drop_angle[256],
+		test_drag[256],
+		max_speed = 0;
+	
+	ballistics_data** data = ballistics_table[velocity_test][wpn->mob.sub_type];
 
 	num_range_values = (int)(weapon_database[wpn->mob.sub_type].max_range / RANGE_STEP) + 2;
-
+	
 	// initialize -90 and +90
 	data[0] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
 	data[TOTAL_PITCH_INDICES - 1] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
@@ -1604,10 +1618,12 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		data[TOTAL_PITCH_INDICES-1][i].drop_angle = 0.0;
 		data[TOTAL_PITCH_INDICES-1][i].flight_time = 0.0;
 	}
-
-	// write header for ballistics data:
-	if (output)
-		fputs("range     velocity    time   drop\n", output);
+	
+	for (i=0; i < 256; i++)
+	{
+		test_velocity[i] = test_time[i] = test_drop[i] = test_drop_angle[i] = test_drag[i] = 0.0;
+		test_range[i] = weapon_database[wpn->mob.sub_type].max_range;
+	}	
 
 	// initialize all the other pitches
 	pitch_index = 1;
@@ -1615,26 +1631,35 @@ void calculate_projectory(weapon* wpn, FILE* output)
 	while (pitch_index < (TOTAL_PITCH_INDICES - 1))
 	{
 		float
-			#ifdef DEBUG
 			dummy,
-			#endif
 			time = 0.0,
 			pitch_ratio,
 			max_range,
 			delta_time = 0.02;
 
 		int
-			last_write_range = 0,
-			range_mark = 0;
-
-
-		ASSERT(get_floor_pitch_index(pitch + rad(0.1), &dummy) == pitch_index);
-
+			range_mark = 0,
+			write_step = 0,
+			write_range = WRITE_STEP;
+		
 		data[pitch_index] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
 
+		if (velocity_test && (weapon_database[wpn->mob.sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_AIR || weapon_database[wpn->mob.sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_SURFACE))
+		{
+			ballistics_data
+					*source_ptr = ballistics_table[velocity_test - 1][wpn->mob.sub_type][pitch_index],
+					*dest_ptr = ballistics_table[velocity_test][wpn->mob.sub_type][pitch_index];
+
+			memcpy(dest_ptr, source_ptr, sizeof(ballistics_data) * num_range_values);
+			pitch_index++;
+			continue;
+		}
+		
+		ASSERT(get_floor_pitch_index(pitch + rad(0.1), &dummy) == pitch_index);
+
 		// initialize weapon for new firing
-		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].burn_time;
-		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity;
+		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].boost_time + weapon_database[wpn->mob.sub_type].sustain_time;
+		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity + velocity_test * (float) VELOCITY_TEST_STEP;
 
 		wpn->mob.position.x = 0.0;
 		wpn->mob.position.y = 0.0;
@@ -1654,37 +1679,80 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		max_range = min(weapon_database[wpn->mob.sub_type].max_range,
 			weapon_database[wpn->mob.sub_type].max_range * cos(pitch) * 1.25f);
 
-		while (wpn->mob.position.z < max_range)
+		while (TRUE)
 		{
-			float drop;
+			float
+				fake_y,
+				fake_z,
+				expected_height;
+			vec2d magnitude[2];
 
 			time += delta_time;
 			wpn->weapon_lifetime -= delta_time;
 			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
 
+			if (wpn->weapon_lifetime < - weapon_database[wpn->mob.sub_type].cruise_time ||
+					wpn->mob.position.y < max(- weapon_database[wpn->mob.sub_type].max_range, - 4000) ||
+					wpn->mob.velocity < 20.0 && wpn->weapon_lifetime < 0)
+				break;
+			
 			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
 			if (wpn->mob.velocity < 150.0)
 			{
 				delta_time = 0.04;
 				if (wpn->mob.velocity < 75.0)
 					delta_time = 0.1;
+			}
+			else
+				delta_time = 0.02;
 
-				if (wpn->mob.velocity < 20.0)
-					break;
+			if (pitch >= 0 && pitch <= PI / 4 && !velocity_test) // collect data for statistics, only for first velocity test
+			{
+				if (wpn->mob.velocity > max_speed)
+					max_speed = wpn->mob.velocity;
+
+				if (wpn->mob.position.z >= write_range - 1)
+				{
+					magnitude[0].x = test_range[write_step] - range_mark * RANGE_STEP;
+					magnitude[0].y = test_drop[write_step];
+					magnitude[1].x = wpn->mob.position.z - range_mark * RANGE_STEP;
+					magnitude[1].y = wpn->mob.position.y;
+
+					if(get_2d_vector_magnitude(&magnitude[1]) < get_2d_vector_magnitude(&magnitude[0]))
+					{
+						test_velocity[write_step] = wpn->mob.velocity;
+						test_time[write_step] = time;
+						test_drop[write_step] = wpn->mob.position.y;
+						test_range[write_step] = wpn->mob.position.z;
+						test_drop_angle[write_step] = pitch - atan(test_drop[write_step]/test_range[write_step]);
+						test_drag[write_step] = get_weapon_drag(wpn->mob.velocity, wpn->mob.position.y, weapon_database[wpn->mob.sub_type].diameter, weapon_database[wpn->mob.sub_type].drag_coefficient) / get_weapon_current_weight(wpn->weapon_lifetime, wpn->mob.sub_type);
+					}
+					
+					if (wpn->mob.position.z >= 10000)
+						write_range += WRITE_STEP * 4;
+					else if (wpn->mob.position.z >= 5000)
+						write_range +=  WRITE_STEP * 2;
+					else
+						write_range += WRITE_STEP;
+					
+					write_step++;
+				}
 			}
 
-			if (wpn->mob.position.z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
+			expected_height = pitch_ratio * wpn->mob.position.z;
+			fake_y = wpn->mob.position.y + cos(pitch) * (expected_height - wpn->mob.position.y);
+			fake_z = wpn->mob.position.z - sin(pitch) * (expected_height - wpn->mob.position.y);
+			
+			if (fake_z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
 			{
 				int
-					stop_index = (int)((wpn->mob.position.z + 1) / RANGE_STEP);
+					stop_index = (int)((fake_z + 1) / RANGE_STEP);
 				float
-					drop_angle,
-					expected_height;
+					drop_angle;
 
 				// adjust for expected height if there was no drop, so as to calculate real drop
-				expected_height = pitch_ratio * wpn->mob.position.z;
-				drop = (expected_height - wpn->mob.position.y) / wpn->mob.position.z;
-				drop_angle = atan(drop);
+
+				drop_angle = pitch - atan(wpn->mob.position.y / wpn->mob.position.z);
 
 				ASSERT(stop_index >= range_mark);
 
@@ -1693,14 +1761,6 @@ void calculate_projectory(weapon* wpn, FILE* output)
 				{
 					data[pitch_index][range_mark].drop_angle = drop_angle;
 					data[pitch_index][range_mark].flight_time = time;
-				}
-
-				// output to file every WRITE_STEP steps
-				if (output && wpn->mob.position.z > (last_write_range + WRITE_STEP - 1) && pitch_index == zero_pitch)
-				{
-					last_write_range += WRITE_STEP;
-					fprintf(output, "%5d m  %6.1f m/s %5.1f s %6.1f m (%.1f degrees)\n",
-						last_write_range, wpn->mob.velocity, time, -wpn->mob.position.y, deg(drop_angle));
 				}
 
 				if (range_mark == num_range_values)
@@ -1723,6 +1783,119 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		else
 			pitch += rad(PITCH_STEP);
 	}
+	
+	// write collected ballistics data
+	if (output && !velocity_test)
+	{
+		fputs("range     velocity    time     drop  drop angle   drag force\n", output);
+
+		i = 0;
+		
+		if (output)
+			while (test_time[i])
+			{
+				fprintf(output, "%5.2f m  %6.2f m/s %5.2f s %6.1f m %2.2f degrees %4.1f\n",
+					test_range[i], test_velocity[i], test_time[i], - test_drop[i], deg(test_drop_angle[i]), test_drag[i]);
+				i++;
+			}
+		fprintf(output, "top velocity %6.1f m/s \n", max_speed);
+	}
+}
+
+void calculate_range(weapon* wpn, FILE* output, int zero_pitch)
+{
+	float
+		pitch = 0,
+		range_step = 100,
+		write_step = 100;
+
+	if (output)
+	{
+
+		float
+			time = 0.0,
+			delta_time = 0.1;
+
+		int
+			last_write_range = 0;
+
+		fputs(" range    altitude    velocity    time     drag   weight\n", output);
+	
+		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].boost_time + weapon_database[wpn->mob.sub_type].sustain_time;
+		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity;
+		wpn->mob.position.x = wpn->mob.position.y = wpn->mob.position.z = 0.0;
+
+		if (!zero_pitch)
+		{
+			if (weapon_database[wpn->mob.sub_type].weapon_class & WEAPON_CLASS_AIR_TO_AIR || weapon_database[wpn->mob.sub_type].weapon_class & WEAPON_CLASS_AIR_TO_SURFACE)
+			{
+				wpn->mob.position.y = weapon_database[wpn->mob.sub_type].max_altitude;
+				pitch = - atan(weapon_database[wpn->mob.sub_type].max_altitude / weapon_database[wpn->mob.sub_type].max_range);
+			}
+			else if (weapon_database[wpn->mob.sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_AIR)
+				pitch = atan(weapon_database[wpn->mob.sub_type].max_altitude / weapon_database[wpn->mob.sub_type].max_range);
+			else
+				return;
+		}
+
+		get_identity_matrix3x3(wpn->mob.attitude);
+		get_3d_transformation_matrix(wpn->mob.attitude, 0.0, pitch, 0.0);
+
+		while (wpn->mob.position.z < weapon_database[wpn->mob.sub_type].max_range)
+		{
+			time += delta_time;
+			wpn->weapon_lifetime -= delta_time;
+
+			update_guided_weapon(wpn, &wpn->mob.position, delta_time, FALSE, FALSE, FALSE);
+			
+			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
+
+			if (wpn->mob.velocity < 150.0)
+			{
+				delta_time = 0.04;
+				if (wpn->mob.velocity < 75.0)
+					delta_time = 0.1;
+
+				if (wpn->mob.velocity < 20.0 && wpn->weapon_lifetime < 0)
+					break;
+			}
+			
+			if (wpn->mob.position.z > 300000 || wpn->mob.position.y > 1.1 * weapon_database[wpn->mob.sub_type].max_altitude || wpn->mob.position.y < - weapon_database[wpn->mob.sub_type].max_altitude)
+				break;
+
+			if (output && wpn->mob.position.z > (last_write_range + write_step - 1))
+			{
+				last_write_range += write_step;
+				fprintf(output, "%5d m %f m  %6.1f m/s %5.1f s, %.2f, %.2f \n",
+					last_write_range, wpn->mob.position.y, wpn->mob.velocity, time, get_weapon_drag(wpn->mob.velocity, wpn->mob.position.y, weapon_database[wpn->mob.sub_type].diameter, weapon_database[wpn->mob.sub_type].drag_coefficient), get_weapon_current_weight(wpn->weapon_lifetime, wpn->mob.sub_type));
+			}
+
+			if (last_write_range >= 20000)
+			{
+				write_step = 5000;
+				range_step = 2500;
+			}
+			else if (last_write_range >= 10000)
+			{
+				write_step = 2000;
+				range_step = 1000;
+			}
+			else if (last_write_range >= 5000)
+			{
+				write_step = 1000;
+				range_step = 500;
+			}
+			else if (last_write_range >= 500)
+			{
+				write_step = 500;
+				range_step = 250;
+			}
+		}
+
+		fprintf(output, "%5.0f m %f m  %6.1f m/s %5.1f s, %.2f, pitch %.2f \n",
+			wpn->mob.position.z, wpn->mob.position.y, wpn->mob.velocity, time, get_weapon_drag(wpn->mob.velocity, wpn->mob.position.y, weapon_database[wpn->mob.sub_type].diameter, weapon_database[wpn->mob.sub_type].drag_coefficient), deg(pitch));
+	}
+		
 }
 
 /** precalculates ballistics tables for all weapons with ballistic aiming.
@@ -1750,19 +1923,82 @@ void generate_ballistics_tables(void)
 
 	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
 	{
-		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		if (weapon_database[wpn_type].aiming_type && !weapon_database[wpn_type].guidance_type)
 		{
+			unsigned i;
+			
 			if (write_file)
 			{
-				fprintf(write_file, "\n%s   max_range: %.0f m, muzzle velocity: %.0f m/s, drag: %.2f\n",
+				fprintf(write_file, "\n%s   max_range: %.0f m, muzzle velocity: %.0f m/s, cruise velocity: %.0f m/s, drag: %.2f\n",
 					weapon_database[wpn_type].full_name,
 					weapon_database[wpn_type].max_range,
 					weapon_database[wpn_type].muzzle_velocity,
-					weapon_database[wpn_type].drag_factor);
+					weapon_database[wpn_type].cruise_velocity,
+					weapon_database[wpn_type].drag_coefficient);
 			}
 
 			wpn.mob.sub_type = wpn_type;
-			calculate_projectory(&wpn, write_file);
+
+			for(i = 0; i < VELOCITY_TESTS; i++)
+				calculate_projectory(&wpn, write_file, i);
+		}
+
+		if (write_file)
+			fflush(write_file);
+	}
+
+	if (write_file)
+		fclose(write_file);
+}
+
+void generate_guided_missiles_tables(void)
+{
+	weapon
+		wpn;
+
+	entity_sub_types
+		wpn_type;
+
+	FILE*
+		write_file = NULL;
+
+	write_file = fopen("guided-missiles-data.txt", "w");
+
+	fputs("Note: this file only lists ballistics data generated from the currently used GWUT File\n"
+		  "Changing the values will have no effect, change the GWUT file to see change\n"
+		  "This file can be used to help getting good values for the GWUT file\n\n", write_file);
+
+	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
+	{
+		if (weapon_database[wpn_type].guidance_type)
+		{
+			int i;
+			
+			if (write_file)
+			{
+				fprintf(write_file, "\n%s \n"
+						"max_range: %.0f m, max_altitude %.0f m, muzzle velocity: %.0f m/s, cruise velocity: %.0f m/s, cruise_time %.1f s\n"
+						"sustain_time %.1f s, sustain_power %.1f, g_max %.1f, drag: %.2f \n"
+						"boost_time %.1f s, boost_power %.1f, start_weight %.1f, final_weight %.1f \n",
+					weapon_database[wpn_type].full_name,
+					weapon_database[wpn_type].max_range,
+					weapon_database[wpn_type].max_altitude,
+					weapon_database[wpn_type].muzzle_velocity,
+					weapon_database[wpn_type].cruise_velocity,
+					weapon_database[wpn_type].cruise_time,
+					weapon_database[wpn_type].sustain_time,
+					weapon_database[wpn_type].sustain_power,
+					weapon_database[wpn_type].g_max,
+					weapon_database[wpn_type].drag_coefficient,
+					weapon_database[wpn_type].boost_time,
+					weapon_database[wpn_type].boost_power,
+					weapon_database[wpn_type].start_weight,
+					weapon_database[wpn_type].final_weight);
+			}
+
+			wpn.mob.sub_type = wpn_type;
+			for(i = 0; i < 2; i++)
+				calculate_range(&wpn, write_file, i);
 		}
 
 		if (write_file)
@@ -1776,18 +2012,19 @@ void generate_ballistics_tables(void)
 void delete_ballistics_tables(void)
 {
 	entity_sub_types wpn_type;
-	unsigned pitch_index;
+	unsigned pitch_index, i;
 
-	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
-		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-		{
-			for(pitch_index = 0; pitch_index < TOTAL_PITCH_INDICES; pitch_index++)
+	for(i = 0; i < VELOCITY_TESTS; i++)
+		for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
+			if (weapon_database[wpn_type].aiming_type && !weapon_database[wpn_type].guidance_type)
 			{
-				if (ballistics_table[wpn_type][pitch_index])
-					safe_free(ballistics_table[wpn_type][pitch_index]);
-				ballistics_table[wpn_type][pitch_index] = NULL;
+				for(pitch_index = 0; pitch_index < TOTAL_PITCH_INDICES; pitch_index++)
+				{
+					if (ballistics_table[i][wpn_type][pitch_index])
+						safe_free(ballistics_table[i][wpn_type][pitch_index]);
+					ballistics_table[i][wpn_type][pitch_index] = NULL;
+				}
 			}
-		}
 }
 
 /**
@@ -1796,25 +2033,40 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_diff_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int fixed_pitch)
+int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_diff_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int fixed_pitch, float velocity)
 {
 	float
 		pitch_delta,
 		range_error,
 		range_delta,
-		drop_compensation = 0.0,
-		straight_pitch;
+		drop_compensation[2] = {0, 0},
+		time[2] = {0, 0},
+		straight_pitch,
+		velocity_multiplier = 1;
 
 	int
 		iterations,
 		i,
+		k,
+		l = 0,
 		pitch_index,
-		range_index;
+		range_index,
+		velocity_test = 0;
 
 	ASSERT(time_of_flight);
 	ASSERT(aiming_pitch);
 
-		// we need 2d range, not 3d /thealx/
+	if (wpn_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON || wpn_type >= NUM_ENTITY_SUB_TYPE_WEAPONS) // some bug should be fixed..
+	{
+		debug_log("weapon type %i is illegal!", wpn_type);
+		return FALSE;
+	}
+	
+	if (!ballistics_table[0][wpn_type][0])
+		return FALSE;
+
+		// we need 2d range
+
 	if (!fixed_pitch)
 	{
 		straight_pitch = - asin(height_diff_or_pitch / range);
@@ -1823,27 +2075,32 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	else
 	{
 		straight_pitch = height_diff_or_pitch;
-		range = cos(height_diff_or_pitch) * range;
+		range = range * cos(height_diff_or_pitch);
 	}
 	
 	if (fixed_pitch)
-		iterations = 1;
-	else if (simplified)
-		iterations = 3;
+		iterations = 2;
 	else
-		iterations = 5;
+		iterations = 3;
 
-	if (!ballistics_table[wpn_type][0])
+	// prepare velocity test
+	
+	velocity = bound(velocity, 0, (VELOCITY_TESTS - 1) * VELOCITY_TEST_STEP - 1);
+
+	if (velocity > 1 && weapon_database[wpn_type].acquire_parent_forward_velocity)
 	{
-		ASSERT(FALSE);
-		return FALSE;
+		velocity_test = (int) (velocity / VELOCITY_TEST_STEP);
+		velocity_multiplier = 1 - (velocity / (float) VELOCITY_TEST_STEP - velocity_test);
 	}
-
+	
 	ASSERT(range >= 0.0);
 
 	if (range <= 0.1)
 	{
-		*aiming_pitch = straight_pitch;
+		if (!fixed_pitch)
+			*aiming_pitch = straight_pitch;
+		else
+			*aiming_pitch = 0;
 		*time_of_flight = 0.0;
 		return TRUE;
 	}
@@ -1853,70 +2110,77 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	range_error = range - (range_index * RANGE_STEP);
 	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_diff_or_pitch);
 	#endif
 
 	// refine drop_compensation - do it several times because as we adjust
 	// cannon pitch we have to use a different ballistics table.  Do it a few
 	// times so that it stabalizes somewhat
-	for (i = 0; i < iterations; i++)
+
+	for (k = velocity_test; k <= velocity_test + 1 * (velocity > 1 && weapon_database[wpn_type].acquire_parent_forward_velocity); k++)
 	{
-		float use_pitch = min(straight_pitch + drop_compensation, rad(90.0f));
+		for (i = 0; i < iterations; i++)
+		{
+			float use_pitch = min(straight_pitch + drop_compensation[l], rad(90.0f));
 
-		pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
-		ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);
-		drop_compensation = ballistics_table[wpn_type][pitch_index][range_index].drop_angle;
+			pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
+			ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);
+			drop_compensation[l] = ballistics_table[k][wpn_type][pitch_index][range_index].drop_angle;
 
-		if (drop_compensation > rad(45.0))
-			return FALSE;
+			if (drop_compensation[l] > rad(45.0))
+				return FALSE;
 
-		*time_of_flight = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
+			time[l] = ballistics_table[k][wpn_type][pitch_index][range_index].flight_time;
+		}
+
+		// average between next pitch and range:
+		if (!simplified)
+		{
+			ballistics_data
+				pitch_compensation[2],
+				compensation_grid[2][2];
+
+			int next_pitch_index = min(pitch_index + 1, TOTAL_PITCH_INDICES-1);
+
+			// first average the next ranges
+			compensation_grid[0][0].drop_angle = drop_compensation[l];
+			compensation_grid[0][0].flight_time = *time_of_flight;
+
+			compensation_grid[0][1].drop_angle = ballistics_table[k][wpn_type][pitch_index][range_index+1].drop_angle;
+			compensation_grid[0][1].flight_time = ballistics_table[k][wpn_type][pitch_index][range_index+1].flight_time;
+
+			compensation_grid[1][0].drop_angle = ballistics_table[k][wpn_type][next_pitch_index][range_index].drop_angle;
+			compensation_grid[1][0].flight_time = ballistics_table[k][wpn_type][next_pitch_index][range_index].flight_time;
+
+			compensation_grid[1][1].drop_angle = ballistics_table[k][wpn_type][next_pitch_index][range_index+1].drop_angle;
+			compensation_grid[1][1].flight_time = ballistics_table[k][wpn_type][next_pitch_index][range_index+1].flight_time;
+
+			// then average oover next pitch
+			pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
+			pitch_compensation[0].flight_time = (pitch_delta * compensation_grid[0][0].flight_time) + ((1 - pitch_delta) * compensation_grid[1][0].flight_time);
+
+			pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);
+			pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);
+
+			// and finally get a total
+			drop_compensation[l] = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
+			time[l] = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
+
+			#if DEBUG_MODULE > 1
+				debug_log("range: %.0f, pitch %.3f, average over drop: %.3f", range, deg(straight_pitch), deg(drop_compensation[l]));
+			#endif
+		}
+		
+		l++;
 	}
 
-	// average between next pitch and range:
-	if (!simplified)
-	{
-		ballistics_data
-			pitch_compensation[2],
-			compensation_grid[2][2];
+	*aiming_pitch = drop_compensation[0] * velocity_multiplier + drop_compensation[1] * (1 - velocity_multiplier);
+	*time_of_flight = time[0] * velocity_multiplier + time[1] * (1 - velocity_multiplier);
 
-		int next_pitch_index = min(pitch_index + 1, TOTAL_PITCH_INDICES-1);
-
-		// first average the next ranges
-		compensation_grid[0][0].drop_angle = drop_compensation;
-		compensation_grid[0][0].flight_time = *time_of_flight;
-
-		compensation_grid[0][1].drop_angle = ballistics_table[wpn_type][pitch_index][range_index+1].drop_angle;
-		compensation_grid[0][1].flight_time = ballistics_table[wpn_type][pitch_index][range_index+1].flight_time;
-
-		compensation_grid[1][0].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index].drop_angle;
-		compensation_grid[1][0].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index].flight_time;
-
-		compensation_grid[1][1].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index+1].drop_angle;
-		compensation_grid[1][1].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index+1].flight_time;
-
-		// then average oover next pitch
-		pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
-		pitch_compensation[0].flight_time = (pitch_delta * compensation_grid[0][0].flight_time) + ((1 - pitch_delta) * compensation_grid[1][0].flight_time);
-
-		pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);
-		pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);
-
-		// and finally get a total
-		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
-		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
-
-		#if DEBUG_MODULE
-		debug_log("average over drop: (%.3f, %.3f, %.3f, %.3f) result: %.3f",
-			deg(compensation_grid[0][0].drop_angle), deg(compensation_grid[0][1].drop_angle),
-			deg(compensation_grid[1][0].drop_angle), deg(compensation_grid[1][1].drop_angle),
-			deg(drop_compensation));
-		#endif
-	}
-
-	*aiming_pitch = straight_pitch + drop_compensation;
-
+	if (!fixed_pitch)
+		*aiming_pitch += straight_pitch; // get absolute angle only if straight_pitch wasn't given
+	
 	return TRUE;
 }
 

@@ -147,6 +147,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->ac.mob.side = ENTITY_SIDE_UNINITIALISED;
 
+		raw->ac.weapon_launch_delay = 0;
+
 		raw->ac.operational_state = OPERATIONAL_STATE_UNKNOWN;
 
 		//
@@ -444,7 +446,7 @@ entity *create_client_server_entity_fixed_wing (int index, entity_sub_types sub_
 		// damage smoke
 		//
 
-		attach_fixed_wing_meta_smoke_lists (new_entity);
+		attach_aircraft_meta_smoke_lists (new_entity);
 
 		//
 		// sound effects
@@ -492,6 +494,8 @@ entity *create_client_server_entity_fixed_wing (int index, entity_sub_types sub_
 	//
 
 	raw = (fixed_wing *) get_local_entity_data (new_entity);
+
+	ASSERT(point_inside_map_area(position));
 
 	get_3d_terrain_point_data (position->x, position->z, &raw->ac.terrain_info);
 

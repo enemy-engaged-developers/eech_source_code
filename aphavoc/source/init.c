@@ -731,7 +731,7 @@ void full_initialise_game (void)
 	// INITIALISE TRACKIR
 	//	Retro 030317
 	//	THIS IS NOT LOCALIZED YET !!
-	//	(well.. doesn¥t have to be)
+	//	(well.. doesn“ët have to be)
 	////////////////////////////////////////
 
 	debug_log ( "Initialising trackIR" );
@@ -1004,11 +1004,16 @@ void full_initialise_game (void)
 	ui_force_update ();
 
 	generate_ballistics_tables();
-
+	generate_guided_missiles_tables();
+	
 	debug_log ( "Finished Full initialise" );
 	set_ui_object_text ( initialising_text, get_trans ("Finished Initialisation") );
 
 	ui_force_update ();
+
+#ifndef DEBUG
+	ASSERT("INITIALISATION COMPLETED");
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

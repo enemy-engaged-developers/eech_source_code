@@ -475,7 +475,7 @@ static void kill_local (entity *en)
 	// death timer (set time after which entity is totally destroyed)
 	//
 
-	set_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER, calculate_mobile_death_timer_value (en));
+	set_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER, 0);
 
 	////////////////////////////////////////
 	//

@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND,				// sub_type
 				NUM_MACHINE_GUN_ROUNDS,		 	  							// number
 				MACHINE_GUN_TURRET,			 	 							// heading_depth
 				MACHINE_GUN_BARREL,	 	 		 							// pitch_depth

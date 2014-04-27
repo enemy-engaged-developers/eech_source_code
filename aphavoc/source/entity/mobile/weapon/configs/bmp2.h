@@ -123,7 +123,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_AT5_SPANDREL,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M113_KONKURS,					// sub_type
 				NUM_SPANDREL_MISSILES,	 	  	 							// number
 				SPANDREL_LAUNCHER_TURRET,			 						// heading_depth
 				SPANDREL_LAUNCHER_BARREL,	 	 							// pitch_depth

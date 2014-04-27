@@ -94,6 +94,8 @@ static void update_server (entity *en)
 		for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 		{
 
+			ASSERT(point_inside_map_area(&raw->mob.position));
+
 			get_3d_terrain_point_data (raw->mob.position.x, raw->mob.position.z, &raw->terrain_info);
 
 			basic_cargo_movement (en);
@@ -136,6 +138,8 @@ static void update_client (entity *en)
 		for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 		{
 			
+			ASSERT(point_inside_map_area(&raw->mob.position));
+
 			get_3d_terrain_point_data (raw->mob.position.x, raw->mob.position.z, &raw->terrain_info);
 
 			basic_cargo_movement (en);

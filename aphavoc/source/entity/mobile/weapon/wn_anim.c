@@ -180,53 +180,51 @@ void reset_entity_weapon_config_animation (entity *en)
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				break;
-			}
+				ASSERT (package_status[package].number <= weapon_config_database[config_type][package].number);
 
-			ASSERT (package_status[package].number <= weapon_config_database[config_type][package].number);
+				search_weapon_system_heading.search_depth = weapon_config_database[config_type][package].heading_depth;
+				search_weapon_system_heading.search_object = inst3d;
+				search_weapon_system_heading.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
 
-			search_weapon_system_heading.search_depth = weapon_config_database[config_type][package].heading_depth;
-			search_weapon_system_heading.search_object = inst3d;
-			search_weapon_system_heading.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
-
-			if (find_object_3d_sub_object (&search_weapon_system_heading) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-			{
-				if (weapon_config_database[config_type][package].rotate)
-				{
-					search_weapon_system_heading.result_sub_object->relative_heading = package_status[package].weapon_system_heading;
-				}
-
-				search_weapon_system_pitch.search_depth = weapon_config_database[config_type][package].pitch_depth;
-				search_weapon_system_pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
-
-				if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				if (find_object_3d_sub_object (&search_weapon_system_heading) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
 					if (weapon_config_database[config_type][package].rotate)
 					{
-						search_weapon_system_pitch.result_sub_object->relative_pitch = -package_status[package].weapon_system_pitch;
+						search_weapon_system_heading.result_sub_object->relative_heading = package_status[package].weapon_system_heading;
 					}
 
-					search_weapon_system_pitch.result_sub_object->visible_object = TRUE;
+					search_weapon_system_pitch.search_depth = weapon_config_database[config_type][package].pitch_depth;
+					search_weapon_system_pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
 
-					search_weapon_system_weapon_depth = weapon_config_database[config_type][package].number - package_status[package].number;
-
-					while (TRUE)
+					if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
-						search_weapon_system_weapon.search_depth = search_weapon_system_weapon_depth;
-						search_weapon_system_weapon.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_WEAPON;
-
-						if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_pitch, &search_weapon_system_weapon) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						if (weapon_config_database[config_type][package].rotate)
 						{
-							search_weapon_system_weapon.result_sub_object->visible_object = TRUE;
-						}
-						else
-						{
-							break;
+							search_weapon_system_pitch.result_sub_object->relative_pitch = -package_status[package].weapon_system_pitch;
 						}
 
-						search_weapon_system_weapon_depth++;
+						search_weapon_system_pitch.result_sub_object->visible_object = TRUE;
+
+						search_weapon_system_weapon_depth = weapon_config_database[config_type][package].number - package_status[package].number;
+
+						while (TRUE)
+						{
+							search_weapon_system_weapon.search_depth = search_weapon_system_weapon_depth;
+							search_weapon_system_weapon.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_WEAPON;
+
+							if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_pitch, &search_weapon_system_weapon) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+							{
+								search_weapon_system_weapon.result_sub_object->visible_object = TRUE;
+							}
+							else
+							{
+								break;
+							}
+
+							search_weapon_system_weapon_depth++;
+						}
 					}
 				}
 			}

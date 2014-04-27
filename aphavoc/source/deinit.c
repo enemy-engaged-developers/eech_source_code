@@ -240,6 +240,10 @@ void deinitialise_game (void)
 	// arneh - delete the ballistics tables
 	delete_ballistics_tables();
 
+	// free ffb data
+	
+	deinitialise_joysticks();
+	
 	////////////////////////////////////////
 	//
 	// DEINITIALISE MEMORY BLOCK SYSTEM

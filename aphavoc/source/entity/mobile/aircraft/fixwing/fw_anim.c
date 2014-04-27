@@ -746,25 +746,29 @@ void damage_fixed_wing_3d_object (entity *en)
 
 	raw = (fixed_wing *) get_local_entity_data (en);
 
-	//
-	// destruct old object
-	//
-
-	destruct_3d_object (raw->ac.inst3d);
-
-	//
-	// construct new (damaged) object
-	//
-
-	raw->ac.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
-
-	raw->ac.inst3d = construct_3d_object (raw->ac.object_3d_shape);
-
-	//
-	// set id number for new object
-	//
-
-	set_fixed_wing_id_number (en);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_PILOT, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_WEAPON, FALSE);
+	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_PROPELLER_MOVING, FALSE);
+	raw->propellor_rpm = 0;	
+//	//
+//	// destruct old object
+//	//
+//
+//	destruct_3d_object (raw->ac.inst3d);
+//
+//	//
+//	// construct new (damaged) object
+//	//
+//
+//	raw->ac.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
+//
+//	raw->ac.inst3d = construct_3d_object (raw->ac.object_3d_shape);
+//
+//	//
+//	// set id number for new object
+//	//
+//
+//	set_fixed_wing_id_number (en);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

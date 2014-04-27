@@ -110,7 +110,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 0;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_WOOD_BRIDGE;
+	segment_info->armor_level		= 1;
 
 	////////////////////////////////////////
 	//
@@ -134,7 +134,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_WOOD_BRIDGE;
+	segment_info->armor_level		= 1;
 
 	////////////////////////////////////////
 	//
@@ -158,7 +158,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_WOOD_BRIDGE;
+	segment_info->armor_level		= 1;
 
 	////////////////////////////////////////
 	//
@@ -182,7 +182,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_WOOD_BRIDGE;
+	segment_info->armor_level		= 1;
 
 	////////////////////////////////////////
 	//
@@ -206,7 +206,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 400;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_WOOD_BRIDGE;
+	segment_info->armor_level		= 1;
 
 	////////////////////////////////////////
 	//
@@ -230,7 +230,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 0;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -254,7 +254,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 0;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -278,7 +278,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 0;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -302,7 +302,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -326,7 +326,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -350,7 +350,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -374,7 +374,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 800;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -398,7 +398,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 800;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -422,7 +422,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 800;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -446,7 +446,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -470,7 +470,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -494,7 +494,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -518,7 +518,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_METAL_BRIDGE;
+	segment_info->armor_level		= 10;
 
 	////////////////////////////////////////
 	//
@@ -542,7 +542,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_METAL_BRIDGE;
+	segment_info->armor_level		= 10;
 
 	////////////////////////////////////////
 	//
@@ -566,7 +566,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_METAL_BRIDGE;
+	segment_info->armor_level		= 10;
 
 	////////////////////////////////////////
 	//
@@ -590,7 +590,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 500;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_METAL_BRIDGE;
+	segment_info->armor_level		= 10;
 
 	////////////////////////////////////////
 	//
@@ -614,7 +614,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -638,7 +638,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -662,7 +662,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 200;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -686,7 +686,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 750;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -710,7 +710,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 750;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -734,7 +734,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 800;
 	segment_info->target_type						= TARGET_TYPE_GROUND;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 
 	////////////////////////////////////////
 	//
@@ -758,7 +758,7 @@ void initialise_segment_database()
 
 	segment_info->initial_damage_level			= 100;
 	segment_info->target_type						= TARGET_TYPE_INVALID;
-	segment_info->warhead_effective_class		= WARHEAD_EFFECTIVE_STONE_BRIDGE;
+	segment_info->armor_level		= 5;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

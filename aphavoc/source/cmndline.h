@@ -137,7 +137,8 @@ extern int
 	command_line_no_dx9zbuffer_fix,
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
-	command_line_persistent_smoke,								// arneh 2007-07-10
+	command_line_max_smoke_time,								// arneh 2007-07-10 // updated /thealx/
+	command_line_smoke_optimisation,
 	command_line_cloud_puffs,								// Casm 20MAY2012
 	command_line_no_mission_complete_music,
 	command_line_mouse_look,									// Retro 030317
@@ -184,7 +185,7 @@ extern int
 	command_line_pilot_as_periscope_default,									// GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope,									// GCsDriver  08-12-2007
 	command_line_eo_full_range,						// GCsDriver  08-12-2007
-	command_line_render_tree_shadows,						// GCsDriver  08-12-2007
+	command_line_render_shadows,						// GCsDriver  08-12-2007
 	command_line_trees_fog,									// thealx 130430
 	command_line_fly_any_airplane,							// VJ 030424
 	command_line_tsd_enemy_colours,							// VJ 030511
@@ -208,6 +209,7 @@ extern int
 	command_line_reverse_pedal,									// Retro 17Jul2004
 	command_line_reverse_cyclic_x,								// /thealx/
 	command_line_reverse_cyclic_y,								// /thealx/
+	command_line_forcefeedback,									// /thealx/
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_external_trackir_direction,					// Retro 31Jan2005 (spooky, eh ?)
 	command_line_wobbly_camera,									// arneh - makes external cameras wobbly in movement
@@ -217,6 +219,7 @@ extern int
 	command_line_mouse_tsd_target_select,                       // arneh, feb 2008
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
 	command_line_shared_mem_export,								// Retro 14Aug2006
+	command_line_advanced_avionics,								// /thealx/
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha, 									// VJ 050126 hud mod: background
 	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
@@ -230,6 +233,7 @@ extern int
 //VJ 060120 OBSOLETE	global_zbuffer,										//VJ 051011 zbuffer correction
 	command_line_autosave,								//Casm 17JUN05 Autosave option
 	command_line_saves_copies,							// make backup copies of save files /thealx/
+	command_line_debug_show_damage,
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
@@ -244,7 +248,8 @@ extern int
 	command_line_export_mfd_right_pos[4],
 	command_line_export_mfd_left_pos[4],
 	command_line_export_mfd_single_pos[4],
-  command_line_ui_sounds_muted; //ataribaby 29/12/2008 for muted UI sounds
+	command_line_ui_sounds_muted, //ataribaby 29/12/2008 for muted UI sounds
+	command_line_real_radio_msgs;
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
@@ -258,6 +263,9 @@ extern float
 	command_line_dynamics_tail_rotor_drag,
 	command_line_dynamics_cyclic_dead_zone,
 	command_line_dynamics_yaw_altitude_loss,
+	command_line_ffb_dynamics,								// /thealx/
+	command_line_ffb_vibrations,							// /thealx/
+	command_line_ffb_recoil,								// /thealx/
 	command_line_aitool_grid_pitch,
 	command_line_comms_packet_resend_timer,
 	command_line_comms_resend_timeout,

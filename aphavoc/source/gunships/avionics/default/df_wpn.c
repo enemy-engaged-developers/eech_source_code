@@ -121,8 +121,8 @@ void update_default_weapon_systems (void)
 
 	switch (weapon_sub_type)
 	{
-	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
-	case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+	case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
+	case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
 	case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 	 if (weapon_lock_type == WEAPON_LOCK_VALID)
 	{
@@ -171,7 +171,7 @@ void update_default_weapon_systems (void)
 		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
 		case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND:
 		case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND:
-		case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+		case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
 		case ENTITY_SUB_TYPE_WEAPON_S5:
 		case ENTITY_SUB_TYPE_WEAPON_S8:
 		case ENTITY_SUB_TYPE_WEAPON_S13:
@@ -198,9 +198,9 @@ void update_default_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
-		case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
-		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+		case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
+		case ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V:
+		case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:
 		case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 		////////////////////////////////////////
 		{
@@ -224,8 +224,8 @@ void update_default_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_ATAKA:
-		case ENTITY_SUB_TYPE_WEAPON_VIKHR:
+		case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
+		case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 		////////////////////////////////////////
 		{
 			if
@@ -378,14 +378,14 @@ void update_default_weapon_systems (void)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 
 			if (fire_single_weapon >= 1)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, rocket_salvo_count);
 			}
 			
 			// when firing radar hellfires in PFZ mode automaticly select next target
@@ -404,17 +404,17 @@ void update_default_weapon_systems (void)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, FALSE);
 
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, FALSE);
 			}
 			else
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-				launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type, FALSE);
 			}
 		}
 	}
@@ -462,7 +462,7 @@ float get_default_missile_flight_time (void)
 		weapon_sub_type = get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II) ||
-			(weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_ATAKA) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR)
+			(weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR)
 		)
 		{
 			target = get_local_entity_parent (weapon, LIST_TYPE_TARGET);

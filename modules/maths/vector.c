@@ -140,30 +140,32 @@ float accurately_normalise_3d_vector ( vec3d *vector )
 float normalise_3d_vector ( vec3d *vector )
 {
 
-	float
-		x,
-		y,
-		z,
-		length,
-		one_over_length;
+//	float
+//		x,
+//		y,
+//		z,
+//		length,
+//		one_over_length;
+//
+//	ASSERT ( vector );
+//
+//	x = ( ( vector->x ) * ( vector->x ) );
+//	y = ( ( vector->y ) * ( vector->y ) );
+//	z = ( ( vector->z ) * ( vector->z ) );
+//
+//	length = sqrt ( x + y + z );
+//
+//	ASSERT ( length > 0.0 );
+//
+//	one_over_length = 1.0 / length;
+//
+//	vector->x = ( vector->x * one_over_length );
+//	vector->y = ( vector->y * one_over_length );
+//	vector->z = ( vector->z * one_over_length );
+//
+//	return ( length );
 
-	ASSERT ( vector );
-
-	x = ( ( vector->x ) * ( vector->x ) );
-	y = ( ( vector->y ) * ( vector->y ) );
-	z = ( ( vector->z ) * ( vector->z ) );
-
-	length = sqrt ( x + y + z );
-
-	ASSERT ( length > 0.0 );
-
-	one_over_length = 1.0 / length;
-
-	vector->x = ( vector->x * one_over_length );
-	vector->y = ( vector->y * one_over_length );
-	vector->z = ( vector->z * one_over_length );
-
-	return ( length );
+	return normalise_any_3d_vector(vector);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,27 +175,30 @@ float normalise_3d_vector ( vec3d *vector )
 float normalise_2d_vector ( vec2d *vector )
 {
 
-	float
-		x,
-		y,
-		length,
-		one_over_length;
+//	float
+//		x,
+//		y,
+//		length,
+//		one_over_length;
+//
+//	ASSERT ( vector );
+//
+//	x = ( ( vector->x ) * ( vector->x ) );
+//	y = ( ( vector->y ) * ( vector->y ) );
+//
+//	length = sqrt ( x + y );
+//
+//	ASSERT ( length > 0.0 );
+//
+//	one_over_length = 1.0 / length;
+//
+//	vector->x = ( vector->x * one_over_length );
+//	vector->y = ( vector->y * one_over_length );
+//
+//	return ( length );
+	
+	return normalise_any_2d_vector(vector);
 
-	ASSERT ( vector );
-
-	x = ( ( vector->x ) * ( vector->x ) );
-	y = ( ( vector->y ) * ( vector->y ) );
-
-	length = sqrt ( x + y );
-
-	ASSERT ( length > 0.0 );
-
-	one_over_length = 1.0 / length;
-
-	vector->x = ( vector->x * one_over_length );
-	vector->y = ( vector->y * one_over_length );
-
-	return ( length );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

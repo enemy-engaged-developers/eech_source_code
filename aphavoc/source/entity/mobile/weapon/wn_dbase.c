@@ -169,11 +169,12 @@ weapon_data
 			0,																		// in_flight_collision_check
 			0,																		// viewable_weapon
 			0,																		// boresight_weapon
-			0,																		// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			0,																		// flight_profile
+			0,																	// tracer_color
 			0,																		// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -193,8 +194,17 @@ weapon_data
 			0.0,																	// reload_time
 			0.0,																	// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0,                                                                   // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0,																	// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -205,21 +215,171 @@ weapon_data
 
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_M16A2_5P56MM_ROUND
 		//
 		////////////////////////////////////////
 		{
-			"12.7mm Round",		 											// full_name
-			"12.7mm",																	// hud_name
-			"12.7mm",																	// mfd_name
-			"M2 12.7mm",																	// weapon_loading_list_name
-			"Browning M2 12.7mm",																	// weapon_loading_name_text
+			"M16A2 5.56mm Round",		 											// full_name
+			"?",																	// hud_name
+			"?",																	// mfd_name
+			"?",																	// weapon_loading_list_name
+			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
+			-1,																	// weapon_selected_cpg_speech
+			-1,																	// weapon_low_cpg_speech
+			-1,																	// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			TRUE,																	// gun_shake
+			4,																		// soft_damage_capability
+			0,																		// hard_damage_capability
+			META_SMOKE_LIST_TYPE_NONE,										// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,		  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			FALSE,																// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
+			WEAPON_CLASS_SURFACE_TO_SURFACE,
+			0.0,																	// start_weight
+			1.0,																	// final_weight
+			0.0,		  															// min_range
+			1800.0,																// max_range
+			600.0,																// effective_range
+			0.0,																	// min_range_loal
+			1800.0,		 														// max_range_loal
+			0.0,																	// max_range_error_ratio
+			600.0,																// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			600.0,																// cruise_velocity
+			0.0,																	// g_max
+			0.0,																	// burn_time
+			1800.0 / 600.0,													// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			3.0,																	// burst_duration
+			1000.0,																// rate_of_fire
+			10.0,																	// reload_time
+			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_M60E4_7P62MM_ROUND
+		//
+		////////////////////////////////////////
+		{
+			"M60E4 7.62mm Round",		 											// full_name
+			"?",																	// hud_name
+			"?",																	// mfd_name
+			"?",																	// weapon_loading_list_name
+			"?",																	// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
+			-1,																	// weapon_selected_cpg_speech
+			-1,																	// weapon_low_cpg_speech
+			-1,																	// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			TRUE,																	// gun_shake
+			4,																		// soft_damage_capability
+			0,																		// hard_damage_capability
+			META_SMOKE_LIST_TYPE_NONE,										// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,		  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			FALSE,																// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
+			WEAPON_CLASS_SURFACE_TO_SURFACE,
+			0.0,																	// start_weight
+			1.0,																	// final_weight
+			0.0,		  															// min_range
+			1800.0,																// max_range
+			600.0,																// effective_range
+			0.0,																	// min_range_loal
+			1800.0,		 														// max_range_loal
+			0.0,																	// max_range_error_ratio
+			600.0,																// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			600.0,																// cruise_velocity
+			0.0,																	// g_max
+			0.0,																	// burn_time
+			1800.0 / 600.0,													// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			3.0,																	// burst_duration
+			1000.0,																// rate_of_fire
+			10.0,																	// reload_time
+			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND
+		//
+		////////////////////////////////////////
+		{
+			"M2HB 12.7mm Round",		 											// full_name
+			"M2HB 12.7mm",																	// hud_name
+			"M2HB 12.7mm",																	// mfd_name
+			"M2HB 12.7mm",																	// weapon_loading_list_name
+			"M2HB 12.7mm",																	// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -241,12 +401,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
-
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
@@ -266,8 +426,17 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 1000.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -281,13 +450,13 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
-			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
@@ -307,14 +476,15 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE +
 			WEAPON_CLASS_SURFACE_TO_AIR +
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
@@ -334,8 +504,95 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 1000.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_M61A1_CIWS_20MM_ROUND
+		//
+		////////////////////////////////////////
+		{
+			"M61A1 CIWS 20mm Round",												// full_name
+			"?",																	// hud_name
+			"?",																	// mfd_name
+			"?",																	// weapon_loading_list_name
+			"?",																	// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
+			-1,																	// weapon_selected_cpg_speech
+			-1,																	// weapon_low_cpg_speech
+			-1,																	// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			TRUE,																	// gun_shake
+			12,																	// soft_damage_capability
+			0,																		// hard_damage_capability
+			META_SMOKE_LIST_TYPE_NONE,										// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			TRUE,		  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			FALSE,																// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
+			WEAPON_CLASS_AIR_TO_SURFACE +
+			WEAPON_CLASS_SURFACE_TO_AIR +
+			WEAPON_CLASS_SURFACE_TO_SURFACE,
+
+			0.0,																	// start_weight
+			1.0,																	// final_weight
+			0.0,																	// min_range
+			1600.0,																// max_range
+			600.0,																// effective_range
+			0.0,																	// min_range_loal
+			1600.0,			 													// max_range_loal
+			0.0,																	// max_range_error_ratio
+			884.0,																// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			884.0,																// cruise_velocity
+			0.0,																	// g_max
+			0.0,																	// burn_time
+			1600.0 / 884.0,													// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			3.0,																	// burst_duration
+			1000.0,																// rate_of_fire
+			10.0,																	// reload_time
+			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -349,11 +606,11 @@ weapon_data
 			"M197",																// weapon_loading_list_name
 			"M197 20mm Cannon",												// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -375,12 +632,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.257, 		 														// weight
+			0.257, 		 														// start_weight
+			1.0,																	// final_weight
 			0.0,			 														// min_range
 			1600.0,																// max_range
 			500.0,																// effective_range
@@ -400,8 +658,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 750.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 750.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -415,13 +682,13 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
-			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
@@ -441,12 +708,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.0,	  																// weight
+			0.0,	  																// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
@@ -466,8 +734,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 1650.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 1650.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -481,11 +758,11 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_WHITE,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -507,12 +784,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			3500.0,																// max_range
 			2000.0,																// effective_range
@@ -532,8 +810,17 @@ weapon_data
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 1000.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -547,13 +834,13 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING,						// warhead_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE,						// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
-			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
@@ -573,12 +860,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.0, 		 															// weight
+			0.0, 		 															// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			1200.0,																// max_range
 			600.0,																// effective_range
@@ -598,8 +886,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.25,                                                                   // drag_factor
-            1.0 / 2100.0,                                                          // inverse_rate_of_fire
+			0.25,																	// drag_factor
+			1.0 / 2100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -613,7 +910,7 @@ weapon_data
 			"M230",																// weapon_loading_list_name
 			"M230 30mm Chain Gun",											// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -639,12 +936,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.495,																// weight
+			0.495,																// start_weight
+			1.0,																	// final_weight
 			0.0,	 																// min_range
 			1200.0,																// max_range
 			800.0,																// effective_range
@@ -664,12 +962,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 625.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 625.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_OTO_MELARA_76MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -683,7 +990,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -709,11 +1016,12 @@ weapon_data
 			FALSE,																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			2571.4,																// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
@@ -733,8 +1041,17 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -752,7 +1069,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -778,11 +1095,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
@@ -802,8 +1120,17 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.5,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.5,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -817,7 +1144,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -843,11 +1170,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
@@ -867,12 +1195,21 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET
+		// ENTITY_SUB_TYPE_WEAPON_M26A1_227MM_ROCKET
 		//
 		////////////////////////////////////////
 		{
@@ -912,11 +1249,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			15801.5,																// min_range
 			31600.0,																// max_range
 			15000.0,																// effective_range
@@ -936,12 +1274,173 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_AK_47_7P62MM_ROUND
+		//
+		////////////////////////////////////////
+		{
+			"AK-47 7.62mm Round",		 											// full_name
+			"?",																	// hud_name
+			"?",																	// mfd_name
+			"?",																	// weapon_loading_list_name
+			"?",																	// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
+			-1,																	// weapon_selected_cpg_speech
+			-1,																	// weapon_low_cpg_speech
+			-1,																	// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			TRUE,																	// gun_shake
+			4,																		// soft_damage_capability
+			0,																		// hard_damage_capability
+			META_SMOKE_LIST_TYPE_NONE,										// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,		  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			FALSE,																// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
+			WEAPON_CLASS_SURFACE_TO_SURFACE,
+
+			0.0,																	// start_weight
+			1.0,																	// final_weight
+			0.0,		  															// min_range
+			1800.0,																// max_range
+			600.0,																// effective_range
+			0.0,																	// min_range_loal
+			1800.0,		 														// max_range_loal
+			0.0,																	// max_range_error_ratio
+			600.0,																// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			600.0,																// cruise_velocity
+			0.0,																	// g_max
+			0.0,																	// burn_time
+			1800.0 / 600.0,													// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			3.0,																	// burst_duration
+			1000.0,																// rate_of_fire
+			10.0,																	// reload_time
+			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_PKM_7P62MM_ROUND
+		//
+		////////////////////////////////////////
+		{
+			"PKM 7.62mm Round",		 											// full_name
+			"?",																	// hud_name
+			"?",																	// mfd_name
+			"?",																	// weapon_loading_list_name
+			"?",																	// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
+			-1,																	// weapon_selected_cpg_speech
+			-1,																	// weapon_low_cpg_speech
+			-1,																	// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			TRUE,																	// gun_shake
+			4,																		// soft_damage_capability
+			0,																		// hard_damage_capability
+			META_SMOKE_LIST_TYPE_NONE,										// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,		  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			FALSE,																// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
+			WEAPON_CLASS_SURFACE_TO_SURFACE,
+
+			0.0,																	// start_weight
+			1.0,																	// final_weight
+			0.0,		  															// min_range
+			1800.0,																// max_range
+			600.0,																// effective_range
+			0.0,																	// min_range_loal
+			1800.0,		 														// max_range_loal
+			0.0,																	// max_range_error_ratio
+			600.0,																// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			600.0,																// cruise_velocity
+			0.0,																	// g_max
+			0.0,																	// burn_time
+			1800.0 / 600.0,													// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			3.0,																	// burst_duration
+			1000.0,																// rate_of_fire
+			10.0,																	// reload_time
+			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -951,11 +1450,11 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_WHITE,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -977,12 +1476,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
@@ -1002,12 +1502,21 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 1000.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1017,11 +1526,11 @@ weapon_data
 			"Yak-B",																	// weapon_loading_list_name
 			"Yak-B 12.7mm Gatling Gun",													// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -1043,12 +1552,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.133,																	// weight
+			0.133,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			1500.0,																// max_range
 			800.0,																// effective_range
@@ -1068,12 +1578,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 4000.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 4000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_KPVT_14P5MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1083,11 +1602,11 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_WHITE,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
@@ -1109,12 +1628,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
@@ -1134,8 +1654,17 @@ weapon_data
 			12.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 1000.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 1000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1149,11 +1678,11 @@ weapon_data
 			"UPK-23", 															// weapon_loading_list_name
 			"UPK-23-250 23mm Cannon Pod",										// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_GUN_PODS,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// interior_launch_sound_effect
@@ -1175,12 +1704,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			TRUE,																	// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.9,																	// weight.  actually each round is .325 kg, but empty pod weighs 145 kg by itself
+			0.9,																	// start_weight
+			1.0,																	// final_weight.  actually each round is .325 kg, but empty pod weighs 145 kg by itself
 			0.0,		  															// min_range
 			2000.0,																// max_range
 			500.0,																// effective_range
@@ -1200,12 +1730,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 3200.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 3200.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1215,7 +1754,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1241,12 +1780,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,	  																// min_range
 			1600.0,																// max_range
 			800.0,																// effective_range
@@ -1266,8 +1806,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 1500.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 1500.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1281,7 +1830,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1307,11 +1856,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			2500.0,																// max_range
 			1500.0,																// effective_range
@@ -1331,8 +1881,17 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 2000.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 2000.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1346,7 +1905,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1372,12 +1931,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,			 														// min_range
 			4000.0,																// max_range
 			800.0,																// effective_range
@@ -1397,8 +1957,17 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 600.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 600.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1412,7 +1981,7 @@ weapon_data
 			"2A42 (HE)",	  													// weapon_loading_list_name
 			"2A42 30mm Cannon",												// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1438,12 +2007,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			1.0,																	// weight
+			1.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,			 														// min_range
 			2000.0,																// max_range
 			600.0,																// effective_range
@@ -1463,8 +2033,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 600.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 600.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1478,11 +2057,11 @@ weapon_data
 			"2A42 (AP)",	  													// weapon_loading_list_name
 			"2A42 30mm Cannon",												// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING,						// warhead_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE,						// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_INTERIOR_CHAINGUN,						// interior_launch_sound_effect
@@ -1504,12 +2083,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			1.0,																	// weight
+			1.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,			 														// min_range
 			2000.0,																// max_range
 			600.0,																// effective_range
@@ -1529,8 +2109,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.6,                                                                   // drag_factor
-            1.0 / 350.0,                                                          // inverse_rate_of_fire
+			0.6,																	// drag_factor
+			1.0 / 350.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1544,7 +2133,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1570,12 +2159,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,	 																// min_range
 			2000.0,																// max_range
 			1000.0,																// effective_range
@@ -1595,12 +2185,21 @@ weapon_data
 			16.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AO17A_30MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_GSH_2_30_30MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1610,11 +2209,11 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_RED,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING,						// warhead_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE,						// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// interior_launch_sound_effect
@@ -1636,12 +2235,13 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.0, 	  																// weight
+			0.0, 	  																// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			1500.0,																// max_range
 			800.0,																// effective_range
@@ -1661,12 +2261,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_AK_630_30MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1676,7 +2285,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_CANNON_SHELL_WHITE,									// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1702,11 +2311,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			1500.0,																// max_range
 			1000.0,																// effective_range
@@ -1726,12 +2336,21 @@ weapon_data
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_76MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_AK_726_76MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1741,7 +2360,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1767,11 +2386,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		  															// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
@@ -1791,12 +2411,21 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_100MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_A_190_100MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1806,7 +2435,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1832,11 +2461,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
@@ -1856,12 +2486,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_2K23_100MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_2A70_100MM_ROUND
 		//
 		////////////////////////////////////////
 		{
@@ -1871,7 +2510,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -1897,11 +2536,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
@@ -1921,8 +2561,17 @@ weapon_data
 			22.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -1966,11 +2615,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			5209.4,	  															// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
@@ -1990,8 +2640,17 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2009,7 +2668,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -2035,11 +2694,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,																	// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
@@ -2059,8 +2719,17 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.5,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.5,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2074,7 +2743,7 @@ weapon_data
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
-			OBJECT_3D_ARTILLERY_SHELL,			  							// default_3d_shape
+			OBJECT_3D_CANNON_SHELL,			  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION,				// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
@@ -2100,11 +2769,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,	 																// min_range
 			24000.0,																// max_range
 			12000.0,																// effective_range
@@ -2124,8 +2794,17 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.7,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.7,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2172,11 +2851,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			TRUE,			  														// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			6.0,																	// weight
+			6.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			5000.0,																// max_range
 			800.0,																// effective_range
@@ -2196,8 +2876,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2237,11 +2926,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			TRUE,				 													// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			6.0,																	// weight
+			6.0,																	// start_weight
+			6.0,																	// final_weight
 			100.0,																// min_range
 			5000.0,																// max_range
 			800.0,																// effective_range
@@ -2261,12 +2951,96 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_LAU69A
+		// ENTITY_SUB_TYPE_WEAPON_M73_HE
+		//
+		////////////////////////////////////////
+		{
+			"M73 HE submunition",			 		  								// full_name
+			"?",															// hud_name
+			"?",															// mfd_name
+			"?",	 		 													// weapon_loading_list_name
+			"?",		 											// weapon_loading_name_text
+
+			OBJECT_3D_CANNON_SHELL,	  							// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
+			THREAT_TYPE_INVALID,												// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_INTERIOR_FLARE,				// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_EXTERIOR_FLARE,				// exterior_launch_sound_effect
+			-1,					// continuous_sound_effect
+			-1,									// weapon_selected_cpg_speech
+			-1,											// weapon_low_cpg_speech
+			-1,											// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			-1,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			FALSE,																// gun_shake
+			600,																	// soft_damage_capability
+			400,																	// hard_damage_capability
+			0,				// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,	  	 															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			TRUE,																	// viewable_weapon
+			TRUE,				 													// boresight_weapon
+			FALSE,																// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
+
+			6.0,																	// start_weight
+			1.0,																	// final_weight
+			100.0,																// min_range
+			5000.0,																// max_range
+			800.0,																// effective_range
+			100.0,	  															// min_range_loal
+			5000.0,																// max_range_loal
+			0.0,																	// max_range_error_ratio
+			50.0,																	// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			850.0,																// cruise_velocity
+			30.0 * G,															// g_max
+			2.718,																// burn_time
+			4.443,																// cruise_time
+			0.0,																	// cruise_time_max_error
+			0.0,																	// inhibit_time
+			0.0,																	// burst_duration
+			FIRE_SINGLE_WEAPON,												// rate_of_fire
+			0.0,																	// reload_time
+			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_MK_40_FFAR
 		//
 		////////////////////////////////////////
 		{
@@ -2302,11 +3076,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			5000.0,																// max_range
 			750.0,																// effective_range
@@ -2326,8 +3101,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2367,11 +3151,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				  													// viewable_weapon
 			FALSE,					// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			8.25,																	// weight
+			8.25,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			3000.0,																// max_range
 			600.0,																// effective_range
@@ -2391,8 +3176,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2432,11 +3226,12 @@ weapon_data
 			TRUE,	 						// in_flight_collision_check
 			TRUE,			  				// viewable_weapon
 			TRUE,							// boresight_weapon
-			FALSE,							// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,							// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,				// weapon_class
 
-			16.6,																	// weight
+			16.6,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			4000.0,																// max_range
 			600.0,																// effective_range
@@ -2456,8 +3251,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2497,11 +3301,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			TRUE,	  																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			68.0,																	// weight
+			68.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			6000.0,																// max_range
 			600.0,																// effective_range
@@ -2521,8 +3326,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.3,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.3,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2533,7 +3347,7 @@ weapon_data
 
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER
+		// ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER
 		//
 		////////////////////////////////////////
 		{
@@ -2569,11 +3383,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			13.6,																	// weight
+			13.6,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			5000.0,																// max_range
 			2500.0,																// effective_range
@@ -2593,8 +3408,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -2634,11 +3458,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			85.3,																	// weight
+			85.3,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			18000.0,																// max_range
 			5000.0,																// effective_range
@@ -2658,12 +3483,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM
+		// ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM
 		//
 		////////////////////////////////////////
 		{
@@ -2699,11 +3533,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			65000.0,																// max_range
 			5000.0,																// effective_range
@@ -2723,12 +3558,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_IGLA_V
+		// ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V
 		//
 		////////////////////////////////////////
 		{
@@ -2764,11 +3608,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			18.2,																	// weight
+			18.2,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			5200.0,																// max_range
 			3000.0,																// effective_range
@@ -2788,12 +3633,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AA8A_APHID
+		// ENTITY_SUB_TYPE_WEAPON_R_60
 		//
 		////////////////////////////////////////
 		{
@@ -2829,11 +3683,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			43.5,																	// weight
+			43.5,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			8000.0,																// max_range
 			5000.0,																// effective_range
@@ -2853,12 +3708,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AA8B_APHID
+		// ENTITY_SUB_TYPE_WEAPON_R_60M
 		//
 		////////////////////////////////////////
 		{
@@ -2894,11 +3758,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			43.5,																	// weight
+			43.5,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			15000.0,																// max_range
 			5000.0,																// effective_range
@@ -2918,12 +3783,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AA10A_ALAMO
+		// ENTITY_SUB_TYPE_WEAPON_R_27R
 		//
 		////////////////////////////////////////
 		{
@@ -2959,11 +3833,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			40000.0,																// max_range
 			5000.0,																// effective_range
@@ -2983,12 +3858,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AA10B_ALAMO
+		// ENTITY_SUB_TYPE_WEAPON_R_27T
 		//
 		////////////////////////////////////////
 		{
@@ -3024,11 +3908,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			1.0,																	// weight
+			1.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			20000.0,																// max_range
 			5000.0,																// effective_range
@@ -3048,12 +3933,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AA11_ARCHER
+		// ENTITY_SUB_TYPE_WEAPON_R_73
 		//
 		////////////////////////////////////////
 		{
@@ -3089,11 +3983,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			1.0,																	// weight
+			1.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			30000.0,																// max_range
 			5000.0,																// effective_range
@@ -3113,8 +4008,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3161,11 +4065,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			TRUE,																	// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			TRUE,																	// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			45.0,																	// weight
+			45.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			8000.0,																// max_range
 			3000.0,																// effective_range
@@ -3185,8 +4090,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -3226,11 +4140,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			TRUE,																	// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			TRUE,																	// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			45.0,																	// weight
+			45.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			8000.0,																// max_range
 			3000.0,																// effective_range
@@ -3250,8 +4165,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -3291,11 +4215,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			24000.0,																// max_range
 			6000.0,																// effective_range
@@ -3315,8 +4240,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -3356,11 +4290,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			24000.0,																// max_range
 			6000.0,																// effective_range
@@ -3380,12 +4315,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_ATAKA
+		// ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V
 		//
 		////////////////////////////////////////
 		{
@@ -3402,8 +4346,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
 			THREAT_TYPE_RF_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_ATAKA1,				                    // interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_ATAKA2,				                    // exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA1,									 // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA2,									 // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
 			SPEECH_CPG_SELECTING_ATAKA,									// weapon_selected_cpg_speech
 			SPEECH_CPG_ATAKAS_LOW,											// weapon_low_cpg_speech
@@ -3421,11 +4365,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			42.5,																	// weight
+			42.5,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			6000.0,																// max_range
 			3000.0,																// effective_range
@@ -3445,12 +4390,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_VIKHR
+		// ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR
 		//
 		////////////////////////////////////////
 		{
@@ -3467,8 +4421,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
 			THREAT_TYPE_LASER_MISSILE,										// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-		    SOUND_SAMPLE_INDEX_ATAKA1,				                    // interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_ATAKA2,				                    // exterior_launch_sound_effect
+			 SOUND_SAMPLE_INDEX_ATAKA1,									 // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA2,									 // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
 			SPEECH_CPG_SWITCHING_TO_VIKHR,								// weapon_selected_cpg_speech
 			SPEECH_CPG_VIKHRS_LOW,											// weapon_low_cpg_speech
@@ -3486,11 +4440,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            TRUE,                                                                   // spiral_flight_path
+			2,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			45.0,																	// weight
+			45.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			10000.0,																// max_range
 			3000.0,																// effective_range
@@ -3510,12 +4465,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL
+		// ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM
 		//
 		////////////////////////////////////////
 		{
@@ -3551,11 +4515,12 @@ weapon_data
 			TRUE,	 							// in_flight_collision_check
 			TRUE,			  					// viewable_weapon
 			FALSE,								// boresight_weapon
-			FALSE,								// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,								// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,					// weapon_class
 
-			31.4,								// weight
+			31.4,								// start_weight
+			1.0,																	// final_weight
 			400.0,								// min_range
 			5000.0,								// max_range
 			3000.0,								// effective_range
@@ -3575,12 +4540,21 @@ weapon_data
 			0.0,							// reload_time
 			rad (20.0),						// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AS10_KAREN
+		// ENTITY_SUB_TYPE_WEAPON_KH_25MT
 		//
 		////////////////////////////////////////
 		{
@@ -3616,11 +4590,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			10000.0,																// max_range
 			4000.0,																// effective_range
@@ -3640,12 +4615,21 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AS14_KEDGE
+		// ENTITY_SUB_TYPE_WEAPON_KH_29L
 		//
 		////////////////////////////////////////
 		{
@@ -3681,11 +4665,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			40000.0,																// max_range
 			6000.0,																// effective_range
@@ -3705,8 +4690,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3717,7 +4711,7 @@ weapon_data
 
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_CHAPARRAL
+		// ENTITY_SUB_TYPE_WEAPON_MIM_72G_CHAPARRAL
 		//
 		////////////////////////////////////////
 		{
@@ -3753,11 +4747,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
@@ -3777,8 +4772,17 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -3818,11 +4822,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
@@ -3842,12 +4847,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SM1MR_STANDARD
+		// ENTITY_SUB_TYPE_WEAPON_RIM_66B_STANDARD
 		//
 		////////////////////////////////////////
 		{
@@ -3883,11 +4897,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
@@ -3907,12 +4922,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SEA_SPARROW
+		// ENTITY_SUB_TYPE_WEAPON_RIM_7M_SEA_SPARROW
 		//
 		////////////////////////////////////////
 		{
@@ -3948,11 +4972,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			55000.0,																// max_range
 			15000.0,																// effective_range
@@ -3972,12 +4997,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SA7_GRAIL
+		// ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3
 		//
 		////////////////////////////////////////
 		{
@@ -4013,11 +5047,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			3200.0,																// max_range
 			2000.0,																// effective_range
@@ -4037,12 +5072,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SA13_GOPHER
+		// ENTITY_SUB_TYPE_WEAPON_9M333
 		//
 		////////////////////////////////////////
 		{
@@ -4059,8 +5103,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
 			THREAT_TYPE_IR_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_CHAPARRAL,				                // interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_CHAPARRAL,				                // exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,								 // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,								 // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -4078,11 +5122,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
@@ -4102,12 +5147,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SA19_GRISON
+		// ENTITY_SUB_TYPE_WEAPON_9M311
 		//
 		////////////////////////////////////////
 		{
@@ -4143,11 +5197,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			8000.0,																// max_range
 			5000.0,																// effective_range
@@ -4167,12 +5222,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SAN3_GOBLET
+		// ENTITY_SUB_TYPE_WEAPON_4K60_STORM
 		//
 		////////////////////////////////////////
 		{
@@ -4208,11 +5272,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,						 											// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			24000.0,																// max_range
 			12000.0,																// effective_range
@@ -4232,12 +5297,21 @@ weapon_data
 			25.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_SAN4_GECKO
+		// ENTITY_SUB_TYPE_WEAPON_9M33_OSA
 		//
 		////////////////////////////////////////
 		{
@@ -4273,11 +5347,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			500.0,																// min_range
 			12000.0,																// max_range
 			8000.0,																// effective_range
@@ -4297,8 +5372,17 @@ weapon_data
 			24.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4309,7 +5393,7 @@ weapon_data
 
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_M220_TOW2B
+		// ENTITY_SUB_TYPE_WEAPON_BGM_71D_TOW_2
 		//
 		////////////////////////////////////////
 		{
@@ -4345,11 +5429,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			3750.0,																// max_range
 			3000.0,																// effective_range
@@ -4369,12 +5454,21 @@ weapon_data
 			30.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AT5_SPANDREL
+		// ENTITY_SUB_TYPE_WEAPON_9M113_KONKURS
 		//
 		////////////////////////////////////////
 		{
@@ -4410,11 +5504,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
@@ -4434,12 +5529,21 @@ weapon_data
 			30.0,																	// reload_time
 			rad (15.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AT10_STABBER
+		// ENTITY_SUB_TYPE_WEAPON_9M117_BASTION
 		//
 		////////////////////////////////////////
 		{
@@ -4475,11 +5579,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			5000.0,																// max_range
 			3000.0,																// effective_range
@@ -4499,12 +5604,21 @@ weapon_data
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_AT11_SNIPER
+		// ENTITY_SUB_TYPE_WEAPON_9M119M_INVAR
 		//
 		////////////////////////////////////////
 		{
@@ -4540,11 +5654,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			TRUE,		  															// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			100.0,																// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
@@ -4564,8 +5679,17 @@ weapon_data
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4612,11 +5736,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DECOY,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4636,8 +5761,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -4677,11 +5811,12 @@ weapon_data
 			FALSE, 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DECOY,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4701,8 +5836,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -4742,11 +5886,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DECOY,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4766,8 +5911,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4814,11 +5968,12 @@ weapon_data
 			FALSE,	 															// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_CARGO,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4838,8 +5993,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4864,7 +6028,7 @@ weapon_data
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_NONE,										// aiming_type
 			WEAPON_DECOY_TYPE_NONE,			 								// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_NONE,										// interior_launch_sound_effect
@@ -4886,11 +6050,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4910,8 +6075,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -4929,11 +6103,11 @@ weapon_data
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_NONE,										// aiming_type
 			WEAPON_DECOY_TYPE_NONE,			 								// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,										 // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,										 // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -4951,11 +6125,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -4975,8 +6150,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -4994,11 +6178,11 @@ weapon_data
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_NONE,										// aiming_type
 			WEAPON_DECOY_TYPE_NONE,			 								// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,										 // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,										 // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -5016,11 +6200,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -5040,8 +6225,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -5059,7 +6253,7 @@ weapon_data
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_NONE,										// aiming_type
 			WEAPON_DECOY_TYPE_NONE,			 								// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_ARTILLERY,							// interior_launch_sound_effect
@@ -5081,11 +6275,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -5105,8 +6300,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 		////////////////////////////////////////
 		//
@@ -5124,7 +6328,7 @@ weapon_data
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
 			WEAPON_AIMING_TYPE_NONE,										// aiming_type
 			WEAPON_DECOY_TYPE_NONE,			 								// decoy_type
-			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
+			WEAPON_WARHEAD_TYPE_SOLID_SHOT,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_ARTILLERY,							// interior_launch_sound_effect
@@ -5146,11 +6350,12 @@ weapon_data
 			TRUE,	 																// in_flight_collision_check
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
+			FALSE,																// flight_profile
+			0,																	// tracer_color
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
-			0.0,																	// weight
+			0.0,																	// start_weight
+			1.0,																	// final_weight
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
@@ -5170,8 +6375,17 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
 		},
 	};
 
@@ -5228,9 +6442,9 @@ void validate_weapon_database (void)
 
 		debug_assert ((weapon_database[sub_type].gun_shake == FALSE) || (weapon_database[sub_type].gun_shake == TRUE));
 
-		debug_assert (weapon_database[sub_type].soft_damage_capability >= 0);
+		debug_assert (weapon_database[sub_type].damage_capability >= 0);
 
-		debug_assert (weapon_database[sub_type].hard_damage_capability >= 0);
+		debug_assert (weapon_database[sub_type].armor_penetration_capability >= 0);
 
 		debug_assert (weapon_database[sub_type].smoke_trail_type < NUM_META_SMOKE_LIST_TYPES);
 
@@ -5246,11 +6460,13 @@ void validate_weapon_database (void)
 
 		debug_assert ((weapon_database[sub_type].boresight_weapon == FALSE) || (weapon_database[sub_type].boresight_weapon == TRUE));
 
-		debug_assert ((weapon_database[sub_type].hellfire_flight_profile == FALSE) || (weapon_database[sub_type].hellfire_flight_profile == TRUE));
-
+		debug_assert (weapon_database[sub_type].flight_profile_or_self_destr >= 0);
+		
 		debug_assert (weapon_database[sub_type].weapon_class != 0);
 
-		debug_assert (weapon_database[sub_type].weight >= 0.0);
+		debug_assert (weapon_database[sub_type].start_weight >= 0.0);
+
+		debug_assert (weapon_database[sub_type].final_weight >= 0.0);
 
 		debug_assert (weapon_database[sub_type].min_range >= 0.0);
 
@@ -5260,7 +6476,7 @@ void validate_weapon_database (void)
 
 		debug_assert (weapon_database[sub_type].max_range_loal >= weapon_database[sub_type].min_range_loal);
 
-		debug_assert (weapon_database[sub_type].max_range_error_ratio >= 0.0);
+		debug_assert (weapon_database[sub_type].circular_error_probable >= 0.0);
 
 		debug_assert (weapon_database[sub_type].muzzle_velocity >= 0.0);
 
@@ -5268,11 +6484,9 @@ void validate_weapon_database (void)
 
 		debug_assert (weapon_database[sub_type].cruise_velocity >= 0.0);
 
-		debug_assert ((weapon_database[sub_type].muzzle_velocity + weapon_database[sub_type].muzzle_velocity_max_error) <= weapon_database[sub_type].cruise_velocity);
+		debug_assert (weapon_database[sub_type].muzzle_velocity <= weapon_database[sub_type].cruise_velocity);
 
 		debug_assert (weapon_database[sub_type].g_max >= 0.0);
-
-		debug_assert (weapon_database[sub_type].burn_time >= 0.0);
 
 		debug_assert (weapon_database[sub_type].cruise_time >= 0.0);
 
@@ -5280,23 +6494,42 @@ void validate_weapon_database (void)
 
 		debug_assert (weapon_database[sub_type].cruise_time_max_error >= 0.0);
 
-		debug_assert (weapon_database[sub_type].inhibit_time <= weapon_database[sub_type].burn_time);
+		debug_assert (weapon_database[sub_type].inhibit_time <= weapon_database[sub_type].boost_time + weapon_database[sub_type].sustain_time);
+
+		debug_assert (weapon_database[sub_type].diameter >= 0.0);
+		
+		debug_assert (weapon_database[sub_type].tracer_color <= 5);
 
 		if (weapon_database[sub_type].rate_of_fire != FIRE_SINGLE_WEAPON)
 		{
 			debug_assert (weapon_database[sub_type].burst_duration > 0.0);
 
 			debug_assert (weapon_database[sub_type].rate_of_fire > 0.0);
+
+			debug_assert (weapon_database[sub_type].boost_time == 0.0);
+
+			debug_assert (weapon_database[sub_type].sustain_time == 0.0);
 		}
 		else
 		{
-			debug_assert (weapon_database[sub_type].burst_duration == 0.0);
+//			debug_assert (weapon_database[sub_type].burst_duration == 0.0); // used for submunition quantity
 
 			debug_assert (weapon_database[sub_type].launch_sound_effect_sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_MISC);
+
+			debug_assert (weapon_database[sub_type].boost_time >= 0.0);
+
+			debug_assert (weapon_database[sub_type].sustain_time >= 0.0);
+		}
+
+		if (weapon_database[sub_type].sustain_time > 0.0)
+		{
+			debug_assert (weapon_database[sub_type].boost_time > 0.0);
+
+			debug_assert (weapon_database[sub_type].sustain_power > 0.0);
 		}
 
 		if ((weapon_database[sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_AIR) ||
-		    (weapon_database[sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_SURFACE))
+			 (weapon_database[sub_type].weapon_class & WEAPON_CLASS_SURFACE_TO_SURFACE))
 		{
 			debug_assert (weapon_database[sub_type].reload_time > 0.0);
 		}
@@ -5413,8 +6646,10 @@ weapon_package
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_LCU
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_LCAC
 		#include "configs/aist.h"				// ENTITY_SUB_TYPE_VEHICLE_AIST_CLASS
+		#include "configs/us_inf_a.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY
 		#include "configs/us_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_STANDING
 		#include "configs/us_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_KNEELING
+		#include "configs/rs_inf_a.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY
 		#include "configs/rs_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_STANDING
 		#include "configs/rs_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_KNEELING
 	};
@@ -5474,6 +6709,27 @@ muzzle_flash_animation
 			TEXTURE_ANIMATION_INDEX_GUN_SMOKE,					// texture_animation_index1
 			TEXTURE_ANIMATION_INDEX_GUN_SMOKE_FRONT,			// texture_animation_index2
 			0.25,															// muzzle_flash_duration
+		},
+		// MUZZLE_FLASH_SMALL_ROCKET
+		{
+			OBJECT_3D_EFFECT_ROCKET_FLAME,						// object_3d_index_number
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_SIDE,					// texture_animation_index1
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_FRONT,			// texture_animation_index2
+			0.2,															// muzzle_flash_duration
+		},
+		// MUZZLE_FLASH_MEDIUM_ROCKET
+		{
+			OBJECT_3D_EFFECT_ROCKET_FLAME,						// object_3d_index_number
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_SIDE,					// texture_animation_index1
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_FRONT,			// texture_animation_index2
+			0.3,															// muzzle_flash_duration
+		},
+		// MUZZLE_FLASH_LARGE_ROCKET
+		{
+			OBJECT_3D_EFFECT_ROCKET_FLAME,						// object_3d_index_number
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_SIDE,					// texture_animation_index1
+			TEXTURE_ANIMATION_INDEX_ROCKET_FLAME_FRONT,			// texture_animation_index2
+			0.4,															// muzzle_flash_duration
 		},
 	};
 

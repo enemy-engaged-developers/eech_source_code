@@ -245,22 +245,17 @@ void draw_application_3d_scene (void)
 
 		scan_3d_terrain ();
 
-		if ( get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
-		{
-
-			scan_3d_clouds ();
-		}
+		scan_3d_clouds ();
 
 		scan_local_entity_3d_objects (&main_vp);
 
 		draw_3d_horizon ();
 
-		if (get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
+		draw_3d_sun ();
+
+		if (get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED )
 		{
-
 			draw_3d_stars ();
-
-			draw_3d_sun ();
 
 			draw_3d_moon ();
 		}
@@ -269,11 +264,10 @@ void draw_application_3d_scene (void)
 
 		if ( ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED ) && ( application_3d_rain_active ) )
 		{
-
 			draw_3d_rain ();
-
-			draw_3d_lightning_strikes ();
 		}
+
+		draw_3d_lightning_strikes ();
 
 		end_3d_scene ();
 	}
@@ -562,7 +556,7 @@ void draw_application_ui_3d_scene (void)
 
 	scan_3d_terrain ();
 
-	if ( get_3d_render_filter ( main_3d_env ) == INFRARED_OFF )
+	if ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED )
 	{
 
 		scan_3d_clouds ();
@@ -572,7 +566,7 @@ void draw_application_ui_3d_scene (void)
 
 	draw_3d_horizon ();
 
-	if ( get_3d_render_filter ( main_3d_env ) == INFRARED_OFF )
+	if ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED )
 	{
 
 		draw_3d_stars ();
@@ -584,7 +578,7 @@ void draw_application_ui_3d_scene (void)
 
 	draw_3d_scene ();
 /*
-	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF )
+	if ( get_3d_infrared_mode ( main_3d_env ) != RENDER_INFRARED )
 	{
 
 		draw_3d_rain ();
@@ -592,7 +586,7 @@ void draw_application_ui_3d_scene (void)
 		draw_3d_lightning_strikes ();
 	}
 */
-/*	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_ON )
+/*	if ( get_3d_infrared_mode ( main_3d_env ) == RENDER_INFRARED )
 	{
 
 		switch ( current_3d_noise_level )
@@ -688,7 +682,8 @@ void render_infrared_interference ( int alpha )
 
 	float
 		noise;
-
+	int
+		fog_intensity;
 	rgb_colour
 		fog_colour;
 
@@ -704,9 +699,20 @@ void render_infrared_interference ( int alpha )
 
 	get_3d_viewport ( main_3d_env, &x1, &y1, &x2, &y2 );
 
-	fog_colour = get_3d_fog_colour ( main_3d_env );
+	if (get_3d_render_filter ( main_3d_env ) != RENDER_MONOCHROME)
+	{
+		fog_colour = get_3d_fog_colour ( main_3d_env );
 
-	noise = sfrand1 ();
+		noise = sfrand1 ();
+	}
+	else
+	{
+		fog_colour = get_3d_fog_colour ( main_3d_env );
+		fog_intensity = (fog_colour.red + fog_colour.green + fog_colour.blue) / 3;
+		fog_colour.red = fog_colour.green = fog_colour.blue = fog_intensity;
+
+		noise = 0.1 * sfrand1 ();
+	}
 
 	if ( begin_3d_scene () )
 	{

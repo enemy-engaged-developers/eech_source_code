@@ -709,7 +709,7 @@ void draw_hokum_virtual_cockpit (void)
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
-			get_head_g_movement(&virtual_cockpit_inst3d->vp.x, &virtual_cockpit_inst3d->vp.y, &virtual_cockpit_inst3d->vp.z, FALSE);
+			get_forces_acting_on_pilot(&virtual_cockpit_inst3d->vp.x, &virtual_cockpit_inst3d->vp.y, &virtual_cockpit_inst3d->vp.z, FALSE, TRUE);
 
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 		{
@@ -733,7 +733,7 @@ void draw_hokum_virtual_cockpit (void)
 				direction.y = m2[2][1];
 				direction.z = m2[2][2];
 
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.5000, 0.4000, 0.0000);
+				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.0666, 0.1098, 0.6431);
 
 				insert_light_3d_source_into_3d_scene (cockpit_light);
 
@@ -793,7 +793,7 @@ void draw_hokum_virtual_cockpit (void)
 				direction.y = m2[2][1];
 				direction.z = m2[2][2];
 
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.5000, 0.4000, 0.0000);
+				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.0666, 0.1098, 0.6431);
 			}
 			else
 			{
@@ -805,7 +805,7 @@ void draw_hokum_virtual_cockpit (void)
 				direction.y = virtual_cockpit_inst3d->vp.yv.y;
 				direction.z = virtual_cockpit_inst3d->vp.yv.z;
 
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.0666, 0.1098, 0.6431);
+				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.5000, 0.4000, 0.0000);
 			}
 
 			insert_light_3d_source_into_3d_scene (display_backlight);

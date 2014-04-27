@@ -70,5 +70,6 @@ extern float getViewpointOffsetY (float y);
 
 extern float getViewpointOffsetZ (float z);
 
-extern void get_head_g_movement (float* x, float* y, float* z, int invert);
+extern void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int view);
+
 extern void clear_head_movement_data (void);

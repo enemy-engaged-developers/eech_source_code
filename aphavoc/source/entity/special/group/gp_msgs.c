@@ -1131,7 +1131,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 								speech_index = SPEECH_CPG_MISSION_COMPLETED2;
 							}
 		
-							play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, speech_index);
+							play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, 0.0, speech_index);
 						}
 					}
 				}

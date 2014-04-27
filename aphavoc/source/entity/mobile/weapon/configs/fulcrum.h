@@ -188,7 +188,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,				// sub_type
 				NUM_CANNON_ROUNDS,	 										// number
 				CANNON,	  														// heading_depth
 				CANNON_BARREL,			  	 									// pitch_depth
@@ -210,7 +210,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA10A_ALAMO,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_27R,	  					// sub_type
 				NUM_ALAMO_MISSILES,	 				 						// number
 				LHS_HARDPOINT1,												// heading_depth
 				ALAMO_PYLON,	  		 		  	 							// pitch_depth
@@ -232,7 +232,7 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA10A_ALAMO,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_27R,	  					// sub_type
 				NUM_ALAMO_MISSILES,	 				 						// number
 				RHS_HARDPOINT1,												// heading_depth
 				ALAMO_PYLON,	  		 		  	 							// pitch_depth
@@ -254,7 +254,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA10B_ALAMO,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_27T,	  					// sub_type
 				NUM_ALAMO_MISSILES,	 				 						// number
 				LHS_HARDPOINT2,												// heading_depth
 				ALAMO_PYLON,	  		 		  	 							// pitch_depth
@@ -276,7 +276,7 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA10B_ALAMO,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_27T,	  					// sub_type
 				NUM_ALAMO_MISSILES,	 				 						// number
 				RHS_HARDPOINT2,												// heading_depth
 				ALAMO_PYLON,	  		 		  	 							// pitch_depth
@@ -298,7 +298,7 @@
 			},
 			// WEAPON PACKAGE 10
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA11_ARCHER,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_73,	  					// sub_type
 				NUM_ARCHER_MISSILES,	 				 						// number
 				LHS_HARDPOINT3,												// heading_depth
 				ARCHER_PYLON,	  		 		  	 							// pitch_depth
@@ -320,7 +320,7 @@
 			},
 			// WEAPON PACKAGE 11
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA11_ARCHER,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_73,	  					// sub_type
 				NUM_ARCHER_MISSILES,	 				 						// number
 				RHS_HARDPOINT3,												// heading_depth
 				ARCHER_PYLON,	  		 		  	 							// pitch_depth
@@ -479,7 +479,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,				// sub_type
 				NUM_CANNON_ROUNDS,	 										// number
 				CANNON,	  														// heading_depth
 				CANNON_BARREL,			  	 									// pitch_depth
@@ -501,7 +501,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				LHS_HARDPOINT2,												// heading_depth
 				KAREN_PYLON,	  		 		  	 							// pitch_depth
@@ -523,7 +523,7 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				RHS_HARDPOINT2,												// heading_depth
 				KAREN_PYLON,	  		 		  	 							// pitch_depth
@@ -545,7 +545,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				LHS_HARDPOINT1,												// heading_depth
 				KAREN_PYLON,	  		 		  	 							// pitch_depth
@@ -567,7 +567,7 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_AS10_KAREN,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KH_25MT,	  					// sub_type
 				NUM_KAREN_MISSILES,	 				 						// number
 				RHS_HARDPOINT1,												// heading_depth
 				KAREN_PYLON,	  		 		  	 							// pitch_depth
@@ -589,7 +589,7 @@
 			},
 			// WEAPON PACKAGE 10
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA11_ARCHER,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_73,	  					// sub_type
 				NUM_ARCHER_MISSILES,	 				 						// number
 				LHS_HARDPOINT3,												// heading_depth
 				ARCHER_PYLON,	  		 		  	 							// pitch_depth
@@ -611,7 +611,7 @@
 			},
 			// WEAPON PACKAGE 11
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA11_ARCHER,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_73,	  					// sub_type
 				NUM_ARCHER_MISSILES,	 				 						// number
 				RHS_HARDPOINT3,												// heading_depth
 				ARCHER_PYLON,	  		 		  	 							// pitch_depth

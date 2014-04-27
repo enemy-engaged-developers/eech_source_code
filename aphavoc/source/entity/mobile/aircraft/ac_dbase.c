@@ -106,7 +106,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50,					// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_42,					// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_6,					// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -115,6 +115,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_AH64D_APACHE_LONGBOW,									// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.8313,																	// centre_of_gravity_to_ground_distance
          2.96,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -151,7 +152,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.315,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -183,7 +183,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,							// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_12,							// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_8,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_8,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_6,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -192,6 +192,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_MI28N_HAVOC_B,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.70,																		// centre_of_gravity_to_ground_distance
          2.71,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -228,7 +229,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			8.6,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -259,8 +259,8 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1,							// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384,							// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_86,							// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_155,							// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_27,							// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_347,							// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_42,							// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -269,6 +269,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_RAH66_COMANCHE,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.0,																		// centre_of_gravity_to_ground_distance
          3.0,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -305,7 +306,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			5.95,																	// main_rotor_radius
-
 			500,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -336,8 +336,8 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_12,								// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_7,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_7,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_8,								// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_6,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -346,6 +346,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_KA52_HOKUM_B,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          4.065,																	// centre_of_gravity_to_ground_distance
          3.25,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -382,7 +383,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.25,																	// main_rotor_radius
-
 			650,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -413,11 +413,11 @@ aircraft_data
 			ENTITY_FORCE_AIR,							// force
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,					// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,					// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_12,					// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_10,					// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_5,					// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,			// default_weapon_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_7,					// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,			// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,						// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,							// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,					// force_info_catagory
@@ -425,6 +425,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,					// view_category
 			VIEW_TYPE_UH60_BLACK_HAWK,						// view_type
 			MAP_ICON_HELICOPTER,							// map icon
+			5,																		// armor_level
 
          3.5154,										// centre_of_gravity_to_ground_distance
          3.35,											// centre_of_gravity_to_ground_distance_destroyed
@@ -461,7 +462,6 @@ aircraft_data
 			10.0,									// Fuel_economy
 			1.0,									// number_of_main_rotors
 			8.18,									// main_rotor_radius
-
 			650,								// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,					// explosive_quality
@@ -493,10 +493,10 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_60,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND,					// default_weapon_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_45,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_48,									// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_31,									// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -504,6 +504,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_MI24V_HIND,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.94,		  																// centre_of_gravity_to_ground_distance
          3.25,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -540,7 +541,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			8.65,																	// main_rotor_radius
-
 			650,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -581,6 +581,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_CH46E_SEA_KNIGHT,										// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          4.5958,																	// centre_of_gravity_to_ground_distance
          3.76,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -617,7 +618,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			9.145,																	// main_rotor_radius
-
 			750,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -646,10 +646,10 @@ aircraft_data
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1, 								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1, 								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1, 								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA29_HELIX_B_3, 								// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA29_HELIX_B_2,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA29_HELIX_B_3,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_S5,											// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,	 											// target_priority_type
@@ -658,6 +658,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_KA29_HELIX_B,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.405,																	// centre_of_gravity_to_ground_distance
          3.02,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -694,7 +695,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.95,																	// main_rotor_radius
-
 			750,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -735,6 +735,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_CH3_JOLLY_GREEN_GIANT,									// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          4.54,																		// centre_of_gravity_to_ground_distance
          3.90,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -771,7 +772,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			9.5,																	// main_rotor_radius
-
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -800,11 +800,11 @@ aircraft_data
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_MI17_HIP_1,	  								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI17_HIP_1,	  								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI17_HIP_1,	  								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI17_HIP_1,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI17_HIP_3,	  								// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI17_HIP_2,									// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI17_HIP_1,									// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI17_HIP_1,									// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_S5,											// default_weapon_type
+			WEAPON_CONFIG_TYPE_MI17_HIP_3,									// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_S8,											// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -812,6 +812,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_MI17_HIP,													// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          4.30,																		// centre_of_gravity_to_ground_distance
          4.00,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -848,7 +849,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			10.645,																	// main_rotor_radius
-
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -889,6 +889,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_CH47D_CHINOOK,											// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          5.0,																		// centre_of_gravity_to_ground_distance
          4.22,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -925,7 +926,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			2.0,																	// number_of_main_rotors
 			9.145,																	// main_rotor_radius
-
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -966,6 +966,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_MI6_HOOK,													// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
 			6.81,																		// centre_of_gravity_to_ground_distance
          6.00,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1002,7 +1003,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			17.5,																	// main_rotor_radius
-
 			1000,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1043,6 +1043,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_A10A_THUNDERBOLT,										// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			2.05,																		// centre_of_gravity_to_ground_distance
          0.45,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1079,7 +1080,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1112,7 +1112,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_SU25_FROGFOOT_1,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU25_FROGFOOT_1,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU25_FROGFOOT_1,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_AO17A_30MM_ROUND,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_GSH_2_30_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_AIRCRAFT,												// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_FIXED_WING,							// force_info_catagory
@@ -1120,6 +1120,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_SU25_FROGFOOT,											// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			1.55,																		// centre_of_gravity_to_ground_distance
          0.62,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1156,7 +1157,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1183,7 +1183,7 @@ aircraft_data
 			OBJECT_3D_F16_FIGHTING_FALCON,									// default_3d_shape
 			NUM_GUNSHIP_TYPES,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_F16_FIGHTING_FALCON_1,						// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_F16_FIGHTING_FALCON_2,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_F16_FIGHTING_FALCON_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_F16_FIGHTING_FALCON_2,						// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_F16_FIGHTING_FALCON_1,						// air_to_air_weapon_config_type
@@ -1197,6 +1197,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_F16_FIGHTING_FALCON,									// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			1.675,																	// centre_of_gravity_to_ground_distance
          0.80,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1233,7 +1234,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1260,13 +1260,13 @@ aircraft_data
 			OBJECT_3D_MIG29_FULCRUM,											// default_3d_shape
 			NUM_GUNSHIP_TYPES,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_2,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_2,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_1,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_2,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MIG29_FULCRUM_2,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_AIRCRAFT,						 						// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_FIXED_WING,							// force_info_catagory
@@ -1274,6 +1274,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_MIG29_FULCRUM,											// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			1.5882,																	// centre_of_gravity_to_ground_distance
          0.42,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1310,7 +1311,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1351,6 +1351,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_AV8B_HARRIER,												// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			1.925,																	// centre_of_gravity_to_ground_distance
          1.07,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1387,7 +1388,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1420,7 +1420,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_YAK141_FREESTYLE_1,							// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_YAK141_FREESTYLE_1,							// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_YAK141_FREESTYLE_1,							// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_AIRCRAFT,						 						// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_FIXED_WING,							// force_info_catagory
@@ -1428,6 +1428,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_YAK41_FREESTYLE,											// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			2.45,																		// centre_of_gravity_to_ground_distance
          1.25,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1464,7 +1465,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1491,7 +1491,7 @@ aircraft_data
 			OBJECT_3D_FA_18,														// default_3d_shape
 			NUM_GUNSHIP_TYPES,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_FA18_HORNET_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_FA18_HORNET_2,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_FA18_HORNET_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_FA18_HORNET_2,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_FA18_HORNET_1,								// air_to_air_weapon_config_type
@@ -1505,6 +1505,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_FA18_HORNET,												// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			1.975,																	// centre_of_gravity_to_ground_distance
          0.82,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1541,7 +1542,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1568,13 +1568,13 @@ aircraft_data
 			OBJECT_3D_SU33,														// default_3d_shape
 			NUM_GUNSHIP_TYPES,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_SU33_FLANKER_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU33_FLANKER_2,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU33_FLANKER_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU33_FLANKER_2,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU33_FLANKER_1,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU33_FLANKER_2,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_SU33_FLANKER_2,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_AIRCRAFT,												// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_FIXED_WING,							// force_info_catagory
@@ -1582,6 +1582,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
 			VIEW_TYPE_SU33_FLANKER,												// view_type
 			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
 
 			2.8,																		// centre_of_gravity_to_ground_distance
          1.00,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1618,7 +1619,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			700,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1654,12 +1654,12 @@ aircraft_data
          OBJECT_3D_AH_64A,														// default_3d_shape
 			GUNSHIP_TYPE_AH64A,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_24,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_22,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_24,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_23,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -1668,6 +1668,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_AH64A_APACHE,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.8313,																	// centre_of_gravity_to_ground_distance
          3.1,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1704,7 +1705,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.315,																	// main_rotor_radius
-
 			600,																		//DL initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1736,8 +1736,8 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_30,									// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_12,									// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_8,									// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_6,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -1746,6 +1746,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_KA50_HOKUM,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          4.065,																	// centre_of_gravity_to_ground_distance
          3.5,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1782,7 +1783,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.25,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1813,8 +1813,8 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20,						// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_13,						// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_7,						// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_10,						// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_9,						// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_2,						// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -1823,6 +1823,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_OH58D_KIOWA_WARRIOR,									// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          2.9,																		// centre_of_gravity_to_ground_distance
          2.7,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1859,7 +1860,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			5.08,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1900,6 +1900,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_MV22_OSPREY,												// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          3.373,																	// centre_of_gravity_to_ground_distance
          2.5,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -1936,7 +1937,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			2.0,																	// number_of_main_rotors
 			12.885,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -1965,11 +1965,11 @@ aircraft_data
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_3,								// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_2,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
+			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_3,								// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_BGM_71D_TOW_2,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -1977,6 +1977,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_AH1T_SEACOBRA,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.75,																		// centre_of_gravity_to_ground_distance
          3.4,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2013,7 +2014,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			6.7,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2042,10 +2042,10 @@ aircraft_data
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_3,				 			// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_2,				 			// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_3,				 			// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -2054,6 +2054,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_AH1W_SUPERCOBRA,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.75,																		// centre_of_gravity_to_ground_distance
          3.4,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2090,7 +2091,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.315,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2130,6 +2130,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_HELICOPTERS,							// view_category
 			VIEW_TYPE_CH53E_SUPER_STALLION,									// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
+			5,																		// armor_level
 
          5.228,																	// centre_of_gravity_to_ground_distance
          4.25,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2166,7 +2167,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			12.08,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2207,6 +2207,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_AIRCRAFT,								// view_category
 			VIEW_TYPE_C17_GLOBEMASTER_III,									// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
+			5,																		// armor_level
 
 			6.075,																	// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2243,7 +2244,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2284,6 +2284,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_AIRCRAFT,								// view_category
 			VIEW_TYPE_IL76MD_CANDID_B,											// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
+			5,																		// armor_level
 
 			6.55,																		// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2320,7 +2321,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2361,6 +2361,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_AIRCRAFT,								// view_category
 			VIEW_TYPE_C130J_HERCULES_II,										// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
+			5,																		// armor_level
 
 			3.9,			  															// centre_of_gravity_to_ground_distance
          2.8,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2397,7 +2398,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2438,6 +2438,7 @@ aircraft_data
 			VIEW_CATEGORY_TRANSPORT_AIRCRAFT,								// view_category
 			VIEW_TYPE_AN12B_CUB,													// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
+			5,																		// armor_level
 
 			6.5,			  															// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2474,7 +2475,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			0.0,																	// number_of_main_rotors
 			0.0,																	// main_rotor_radius
-
 			850,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
@@ -2506,8 +2506,8 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_18,				 			// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_10,				 			// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_17,				 			// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1Z_VIPER_9,				 			// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_2,				 			// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -2515,6 +2515,7 @@ aircraft_data
 			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
 			VIEW_TYPE_AH1Z_VIPER,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
+			5,																		// armor_level
 
          3.75,																		// centre_of_gravity_to_ground_distance
          3.4,																		// centre_of_gravity_to_ground_distance_destroyed
@@ -2551,7 +2552,6 @@ aircraft_data
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
 			7.315,																	// main_rotor_radius
-
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality

@@ -95,6 +95,11 @@ void initialise_attack_guide (entity *en)
 
 	ASSERT (aggressor);
 
+	if (get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) > 0.0)
+	{
+		return;
+	}
+
 	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
 	ASSERT (target);
@@ -118,18 +123,20 @@ void initialise_attack_guide (entity *en)
 
 		return;
 	}
-
-	//
-	// Air-Air & Air-Surface
-	//
-
-	if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
-		initialise_air_to_air_attack_guide (en, aggressor, target);
-	}
 	else
 	{
-		initialise_air_to_ground_attack_guide (en, aggressor, target);
+		//
+		// Air-Air & Air-Surface
+		//
+
+		if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+		{
+			initialise_air_to_air_attack_guide (en, aggressor, target);
+		}
+		else
+		{
+			initialise_air_to_ground_attack_guide (en, aggressor, target);
+		}
 	}
 }
 
@@ -202,7 +209,7 @@ void calculate_attack_guide_intercept_point (entity *aggressor, entity *target, 
 			pitch = -atan(height_diff / get_2d_range(aggressor_pos, get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION))),
 			tof;
 
-		if (get_ballistic_pitch_deflection(selected_weapon, mid_salvo_distance, pitch, &aiming_pitch, &tof, FALSE, TRUE))
+		if (get_ballistic_pitch_deflection(selected_weapon, mid_salvo_distance, pitch, &aiming_pitch, &tof, FALSE, TRUE, get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY)))
 		{
 			float
 				projectile_drop_angle = aiming_pitch - pitch,  // aiming pitch is absolute, but we need to figure out how much higher we need to aim
@@ -254,6 +261,11 @@ int attack_guide_find_best_weapon (entity *en)
 	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
+
+	if (get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) > 0.0)
+	{
+		return FALSE;
+	}
 
 	target = get_local_entity_parent (aggressor, LIST_TYPE_TARGET);
 

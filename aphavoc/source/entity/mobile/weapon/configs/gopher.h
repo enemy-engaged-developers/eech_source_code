@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_SA13_GOPHER,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M333,						// sub_type
 				NUM_GOPHER_MISSILES,		 									// number
 				TURRET,			 	 											// heading_depth
 				LAUNCHER,	 	 	 											// pitch_depth

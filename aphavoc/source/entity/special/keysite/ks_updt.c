@@ -166,6 +166,9 @@ static void update_server (entity *en)
 	// Check if keysite is being repaired.
 	//
 
+	if (raw->repair_timer > (60.0 * ONE_MINUTE))
+		raw->repair_timer = (60.0 * ONE_MINUTE);
+	
 	if (raw->keysite_usable_state == KEYSITE_STATE_REPAIRING)
 	{
 		raw->repair_timer -= get_delta_time ();

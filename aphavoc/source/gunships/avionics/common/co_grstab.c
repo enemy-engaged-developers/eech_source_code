@@ -118,14 +118,10 @@ void handle_ground_stabilisation (void)
 
 	if (eo_ground_stabilised)
 	{
-		vec3d
-			*velocity;
-
 		matrix3x3
 			attitude;
 				
 		float
-			accel,
 			delta_pitch,
 			delta_roll,
 			heading,
@@ -137,10 +133,6 @@ void handle_ground_stabilisation (void)
 			horizontal_pan_offset,
 			vertical_pan_offset;
 						
-		velocity = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
-		accel = velocity->y * get_entity_movement_delta_time();
-
-
 		get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
 		heading = atan2 (attitude [2][0], attitude [2][2]);
@@ -199,7 +191,7 @@ void handle_ground_stabilisation (void)
 					
 		horizontal_pan_offset = (eo_ground_stabilisation_value_heading - heading) * cos(angley) + delta_roll * sin(angley) * correctionx + sin(anglex) * sin(delta_pitch) * eo_elevation;
 		
-		vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex) - 0.00028 * accel;
+		vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex);
 
 		eo_azimuth +=  horizontal_pan_offset;
 

@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_KPVT_14P5MM_ROUND,				// sub_type
 				NUM_MACHINE_GUN_ROUNDS,		 	  							// number
 				MACHINE_GUN_TURRET,			 	 							// heading_depth
 				MACHINE_GUN_BARREL,	 	 		 							// pitch_depth

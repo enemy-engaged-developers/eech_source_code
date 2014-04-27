@@ -223,7 +223,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_SA19_GRISON,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M311,						// sub_type
 				NUM_GRISON_MISSILES,											// number
 				GRISON_LAUNCHER_TURRET,										// heading_depth
 				GRISON_LAUNCHER_INNER_TUBES,								// pitch_depth
@@ -250,7 +250,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_SA19_GRISON,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M311,						// sub_type
 				NUM_GRISON_MISSILES,											// number
 				GRISON_LAUNCHER_TURRET,										// heading_depth
 				GRISON_LAUNCHER_OUTER_TUBES,								// pitch_depth

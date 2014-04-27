@@ -558,7 +558,7 @@ extern terrain_3d_file_validation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Casm 20MAY12 Cloud puffs
-#define TERRAIN_3D_CLOUD_Y_CENTER_MIN 500.0
+#define TERRAIN_3D_CLOUD_Y_CENTER_MIN 1000.0
 #define TERRAIN_3D_CLOUD_Y_CENTER_MAX 2000.0
 #define TERRAIN_3D_CLOUD_Y_DIFF       100.0
 

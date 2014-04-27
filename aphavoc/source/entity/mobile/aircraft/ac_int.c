@@ -149,9 +149,11 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_DAMAGE_LEVEL:
 		////////////////////////////////////////
 		{
-			assess_aircraft_damage_level (en, raw->damage_level, value);
+			float old_damage = raw->damage_level;
 
 			raw->damage_level = value;
+
+			assess_aircraft_damage_level (en, old_damage, value);
 
 			break;
 		}
@@ -257,6 +259,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			raw->selected_weapon = value;
 
 			raw->weapon_burst_timer = 0.0;
+			raw->weapon_salvo_timer = 0.0;
 
 			//
 			// special case for player's gunship
@@ -309,7 +312,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 			load_local_entity_weapon_config (en);
 
-			if ((get_comms_model () == COMMS_MODEL_CLIENT) && (en == get_gunship_entity ()))
+			if ((get_comms_model () == COMMS_MODEL_CLIENT) && (en == get_gunship_entity ()) && get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES)
 			{
 				//
 				// needed because of the clients lag between selecting a new config, and it actually being changed

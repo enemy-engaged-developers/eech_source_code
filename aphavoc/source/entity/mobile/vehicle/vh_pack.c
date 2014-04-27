@@ -226,23 +226,23 @@ void pack_vehicle_data (entity *en, vehicle *raw, pack_modes mode)
 
 			for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 			{
-				if (weapon_config_database[raw->weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				if (weapon_config_database[raw->weapon_config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
-					break;
+					pack_int_value (en, INT_TYPE_WEAPON_PACKAGE_NUMBER, raw->weapon_package_status_array[package].number);
+
+					pack_int_value (en, INT_TYPE_WEAPON_PACKAGE_DAMAGED, raw->weapon_package_status_array[package].damaged);
+
+					if (weapon_config_database[raw->weapon_config_type][package].rotate)
+					{
+						pack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_HEADING, raw->weapon_package_status_array[package].weapon_system_heading);
+
+						pack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_PITCH, raw->weapon_package_status_array[package].weapon_system_pitch);
+					}
+
+					// muzzle_flash_timer
+
+					pack_float_value (en, FLOAT_TYPE_WEAPON_REARMING_TIMER, raw->weapon_package_status_array[package].rearming_timer);
 				}
-
-				pack_int_value (en, INT_TYPE_WEAPON_PACKAGE_NUMBER, raw->weapon_package_status_array[package].number);
-
-				pack_int_value (en, INT_TYPE_WEAPON_PACKAGE_DAMAGED, raw->weapon_package_status_array[package].damaged);
-
-				if (weapon_config_database[raw->weapon_config_type][package].rotate)
-				{
-					pack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_HEADING, raw->weapon_package_status_array[package].weapon_system_heading);
-
-					pack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_PITCH, raw->weapon_package_status_array[package].weapon_system_pitch);
-				}
-
-				// muzzle_flash_timer
 			}
 
 			pack_int_value (en, INT_TYPE_SELECTED_WEAPON, raw->selected_weapon);
@@ -430,23 +430,23 @@ void unpack_vehicle_data (entity *en, vehicle *raw, pack_modes mode)
 
 			for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 			{
-				if (weapon_config_database[raw->weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				if (weapon_config_database[raw->weapon_config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
-					break;
+					raw->weapon_package_status_array[package].number = unpack_int_value (en, INT_TYPE_WEAPON_PACKAGE_NUMBER);
+
+					raw->weapon_package_status_array[package].damaged = unpack_int_value (en, INT_TYPE_WEAPON_PACKAGE_DAMAGED);
+
+					if (weapon_config_database[raw->weapon_config_type][package].rotate)
+					{
+						raw->weapon_package_status_array[package].weapon_system_heading = unpack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_HEADING);
+
+						raw->weapon_package_status_array[package].weapon_system_pitch = unpack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_PITCH);
+					}
+
+					// muzzle_flash_timer
+
+					raw->weapon_package_status_array[package].rearming_timer = unpack_float_value (en, FLOAT_TYPE_WEAPON_REARMING_TIMER);
 				}
-
-				raw->weapon_package_status_array[package].number = unpack_int_value (en, INT_TYPE_WEAPON_PACKAGE_NUMBER);
-
-				raw->weapon_package_status_array[package].damaged = unpack_int_value (en, INT_TYPE_WEAPON_PACKAGE_DAMAGED);
-
-				if (weapon_config_database[raw->weapon_config_type][package].rotate)
-				{
-					raw->weapon_package_status_array[package].weapon_system_heading = unpack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_HEADING);
-
-					raw->weapon_package_status_array[package].weapon_system_pitch = unpack_float_value (en, FLOAT_TYPE_WEAPON_SYSTEM_PITCH);
-				}
-
-				// muzzle_flash_timer
 			}
 
 			reset_entity_weapon_config_animation (en);

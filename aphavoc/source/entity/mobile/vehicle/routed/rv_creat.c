@@ -288,6 +288,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// align with terrain
 		//
 
+		ASSERT(point_inside_map_area(&raw->vh.mob.position));
+
 		get_3d_terrain_point_data (raw->vh.mob.position.x, raw->vh.mob.position.z, &raw->vh.terrain_info);
 
 		heading = get_heading_from_attitude_matrix (raw->vh.mob.attitude);

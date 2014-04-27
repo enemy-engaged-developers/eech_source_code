@@ -72,8 +72,9 @@
 
 #define DEBUG_MODULE					0
 
-#define MAX_SMOKE_TRAIL_POINTS	200
+#define MAX_SMOKE_TRAIL_POINTS	256
 
+#define TRAIL_RIBBONS 3
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,17 +85,17 @@ static void draw_smoke_trails( entity *en );
 
 static void draw_smoke_trail( entity *en, int start, int end, int number_of_slots );
 
-static void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info );
+static void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos );
 
-static void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_index, smoke_list_data *smoke_info, float alpha_modifier );
+static void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_index, smoke_list_data *smoke_info, float alpha_modifier, vec3d *smoke_pos  );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void calculate_smoke_trail_points( smoke_list *raw, int start, int end, int number_of_slots );
+static void calculate_smoke_trail_points( entity *en, int start, int end, int number_of_slots );
 
-static void calculate_trail_point_vector( smoke_list *raw, int last_point, int this_point, int next_point, int num_points );
+static void calculate_trail_point_vector( entity *en, int last_point, int this_point, int next_point, int num_points );
 
 static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_index );
 
@@ -107,7 +108,7 @@ static int
 
 // each trail consists of 2 "ribbons"
 static smoke_trail_data
-	*trail_data[ 2 ];
+	*trail_data[ TRAIL_RIBBONS ];
 
 static vec3d
 	*trail_points;
@@ -229,9 +230,13 @@ static void draw_smoke_sprites( entity *en )
 		// set the sprite dependant on the lifetime
 		//
 
-		get_smoke_sprite_display_values( raw, current, lifetime, &spr, smoke_info );
-
 		smoke_pos = &(raw->position[ current ]);
+
+		get_smoke_sprite_display_values( raw, current, lifetime, &spr, smoke_info, smoke_pos );
+
+		// fade in the trail
+		if (!current && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL)
+			spr.alpha = 0;
 
 		memcpy (&(spr.position), smoke_pos, sizeof (vec3d));
 
@@ -353,7 +358,8 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 		ds,
 		frame,
 		num_points,
-		loop;
+		loop,
+		trail = 0;
 
 	vec3d
 		*smoke_pos;
@@ -422,25 +428,13 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 			lifetime = bound( lifetime, 0.0, raw->smoke_lifetime );
 		}
 
-		// fade out the ends of the trail
-		if ( loop == 0 )
-		{
-			alpha_modifier = 0.0 + ( 0.33 * ( raw->smoke_sleep / raw->frequency ) );
-		}
-		else if ( loop == 1 )
-		{
-			alpha_modifier = 0.33 + ( 0.33 * ( raw->smoke_sleep / raw->frequency ) );
-		}
-		else if ( loop == 2 )
-		{
-			alpha_modifier = 0.66 + ( 0.33 * ( raw->smoke_sleep / raw->frequency ) );
-		}
+		// fade in and fade out the trail
+		if ( loop == num_points || loop == 0)
+			alpha_modifier = 0;
 		else
-		{
-			alpha_modifier = 1.0;
-		}
-	
-		get_smoke_trail_display_values( raw, lifetime, loop, smoke_info, alpha_modifier );
+			alpha_modifier = 1;
+		
+		get_smoke_trail_display_values( raw, lifetime, loop, smoke_info, alpha_modifier, &(trail_points[ loop ]));
 
 		trail_lifetimes[ loop ] = lifetime;
 
@@ -458,7 +452,7 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 
 	number_of_trail_points = 0;
 
-	calculate_smoke_trail_points( raw, start, end, number_of_slots );
+	calculate_smoke_trail_points( en, start, end, number_of_slots );
 
 	if ( number_of_trail_points < 2 )
 	{
@@ -469,22 +463,22 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 
 	trail_texture = get_texture_animation_texture_pointer ( smoke_info->texture, frame );
 
-	if ( smoke_info->additive )
-	{
-		zb = -50.0;
-	}
-	else
-	{
+//	if ( smoke_info->additive )
+//	{
+//		zb = -50.0;
+//	}
+//	else
+//	{
 		zb = 0.0;
+//	}
+
+	do
+	{		
+		insert_zbiased_smoke_trail_into_3d_scene ( number_of_trail_points, zb, smoke_info->additive, trail_texture, texture_distance, smoke_info->texture_size, trail_data[ trail ] );
+		trail++;
 	}
-
-	insert_zbiased_smoke_trail_into_3d_scene ( number_of_trail_points, zb, smoke_info->additive, trail_texture, texture_distance, smoke_info->texture_size, trail_data[ 0 ] );
-
-	if ( !smoke_info->flat )
-	{
-		insert_zbiased_smoke_trail_into_3d_scene ( number_of_trail_points, zb, smoke_info->additive, trail_texture, texture_distance, smoke_info->texture_size, trail_data[ 1 ] );
-	}
-
+	while (	trail < TRAIL_RIBBONS * !smoke_info->flat);
+	
 	#if DEBUG_MODULE
 
 	debug_log( "**************************************" );
@@ -505,13 +499,18 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void calculate_smoke_trail_points( smoke_list *raw, int start, int end, int number_of_slots )
+static void calculate_smoke_trail_points( entity *en, int start, int end, int number_of_slots )
 {
 	int
 		loop,
 		num_points;
+	
+	smoke_list
+		*raw;
 
 	ASSERT( start != end );
+
+	raw = (smoke_list *) get_local_entity_data( en );
 
 	num_points = end - start;
 
@@ -524,7 +523,7 @@ static void calculate_smoke_trail_points( smoke_list *raw, int start, int end, i
 
 	for ( loop = 0 ; loop < num_points ; loop ++ )
 	{
-		calculate_trail_point_vector( raw, loop - 1, loop, loop + 1, num_points );
+		calculate_trail_point_vector( en, loop - 1, loop, loop + 1, num_points );
 	}
 }
 
@@ -532,7 +531,7 @@ static void calculate_smoke_trail_points( smoke_list *raw, int start, int end, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void calculate_trail_point_vector( smoke_list *raw, int last_point, int this_point, int next_point, int num_points )
+static void calculate_trail_point_vector( entity *en, int last_point, int this_point, int next_point, int num_points )
 {
 	vec3d
 		*last_pos,
@@ -552,12 +551,18 @@ static void calculate_trail_point_vector( smoke_list *raw, int last_point, int t
 		mag_dl,
 		mag_dn,
 		mag_v,
-		radius,
-		rotation_angle;
+		radius;
 
 	smoke_list_data
 		*smoke_info;
 
+	smoke_list
+			*raw;
+	
+	int trail = 0;
+
+	raw = (smoke_list *) get_local_entity_data( en );
+	
 	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 
 	//
@@ -581,8 +586,13 @@ static void calculate_trail_point_vector( smoke_list *raw, int last_point, int t
 		return;
 	}
 
-	if (next_point == num_points) // last point is thin /thealx/
-		radius /= 4;
+	if (get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL)
+	{
+		if (next_point == num_points) // last point is thin
+			radius /= 2;
+		else if (this_point < 3) // first points are opposite
+			radius *= pow(4 - this_point, 0.5);
+	}
 	
 	this_pos = &trail_points[ this_point ];
 
@@ -679,51 +689,31 @@ static void calculate_trail_point_vector( smoke_list *raw, int last_point, int t
 
 	get_matrix3x3_from_unit_vec3d( direction_matrix, &v );
 
-	if ( smoke_info->flat )
+	//
+	// Rotate matrix to get angles for trail ribbons
+	//
+	
+	do
 	{
-		memcpy( m, direction_matrix, sizeof( matrix3x3 ) );
-	}
-	else
-	{
-		rotation_angle = calculate_trail_point_rotation_angle( raw, this_point );
-
-		get_3d_transformation_matrix( rotation_matrix, 0.0, 0.0, rotation_angle );
-
+		get_3d_transformation_matrix( rotation_matrix, 0.0, 0.0, PI * trail / TRAIL_RIBBONS + calculate_trail_point_rotation_angle( raw, this_point ) );
 		multiply_matrix3x3_matrix3x3( m, rotation_matrix, direction_matrix );
+		
+		perpendicular.x = m[ 0 ][ 0 ] * radius;
+		perpendicular.y = m[ 0 ][ 1 ] * radius;
+		perpendicular.z = m[ 0 ][ 2 ] * radius;
+
+		trail_data[ trail ][ number_of_trail_points ].point1.x = this_pos->x + perpendicular.x;
+		trail_data[ trail ][ number_of_trail_points ].point1.y = this_pos->y + perpendicular.y;
+		trail_data[ trail ][ number_of_trail_points ].point1.z = this_pos->z + perpendicular.z;
+
+		trail_data[ trail ][ number_of_trail_points ].point2.x = this_pos->x - perpendicular.x;
+		trail_data[ trail ][ number_of_trail_points ].point2.y = this_pos->y - perpendicular.y;
+		trail_data[ trail ][ number_of_trail_points ].point2.z = this_pos->z - perpendicular.z;
+		
+		trail++;
 	}
-
-	//
-	// use xv an zv vectors as perpendicular ( multiply by the radius to get a distance out from the centre of the trail )
-	//
-
-	// ribbon #1 ( use xv vector )
-
-	perpendicular.x = m[ 0 ][ 0 ] * radius;
-	perpendicular.y = m[ 0 ][ 1 ] * radius;
-	perpendicular.z = m[ 0 ][ 2 ] * radius;
-
-	trail_data[ 0 ][ number_of_trail_points ].point1.x = this_pos->x + perpendicular.x;
-	trail_data[ 0 ][ number_of_trail_points ].point1.y = this_pos->y + perpendicular.y;
-	trail_data[ 0 ][ number_of_trail_points ].point1.z = this_pos->z + perpendicular.z;
-
-	trail_data[ 0 ][ number_of_trail_points ].point2.x = this_pos->x - perpendicular.x;
-	trail_data[ 0 ][ number_of_trail_points ].point2.y = this_pos->y - perpendicular.y;
-	trail_data[ 0 ][ number_of_trail_points ].point2.z = this_pos->z - perpendicular.z;
-
-	// ribbon #2 ( use yv vector )
-
-	perpendicular.x = m[ 1 ][ 0 ] * radius;
-	perpendicular.y = m[ 1 ][ 1 ] * radius;
-	perpendicular.z = m[ 1 ][ 2 ] * radius;
-
-	trail_data[ 1 ][ number_of_trail_points ].point1.x = this_pos->x + perpendicular.x;
-	trail_data[ 1 ][ number_of_trail_points ].point1.y = this_pos->y + perpendicular.y;
-	trail_data[ 1 ][ number_of_trail_points ].point1.z = this_pos->z + perpendicular.z;
-
-	trail_data[ 1 ][ number_of_trail_points ].point2.x = this_pos->x - perpendicular.x;
-	trail_data[ 1 ][ number_of_trail_points ].point2.y = this_pos->y - perpendicular.y;
-	trail_data[ 1 ][ number_of_trail_points ].point2.z = this_pos->z - perpendicular.z;
-
+	while (	trail < TRAIL_RIBBONS * !smoke_info->flat);
+	
 	#if DEBUG_MODULE
 
 	debug_log ("Point %d = %f, %f, %f", number_of_trail_points, this_pos->x, this_pos->y, this_pos->z);
@@ -744,11 +734,19 @@ static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_in
 	float
 		angle;
 
+	smoke_list_data
+		*smoke_info;
+	
+	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
+
 	//
-	// the trail rotates through 45 degrees per second
+	// the trail rotates through 5 degrees per second
 	//
 
-	angle = trail_lifetimes[ point_index ] * PI_OVER_FOUR;
+	if (!smoke_info->flat)
+		angle = trail_lifetimes[ point_index ] * rad(5);
+	else
+		angle = 0;
 
 	return wrap_angle( angle );
 }
@@ -757,7 +755,7 @@ static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info )
+void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos )
 {
 	float
 		d,
@@ -772,11 +770,17 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		blue_end,
 		alpha_end,
 		radius_end,
-		red_lightlevel,
-		green_lightlevel,
-		blue_lightlevel,
 		// Xhit: added scale and alpha for downwash effect (030328)
-		scale;
+		scale,
+		fog_start,
+		fog_end,
+		fog_modifier,
+		max_multiplier;
+
+	light_colour
+		ambient;
+	rgb_colour
+		fog_color;
 	
 	unsigned char
 		alpha_percentage;
@@ -792,22 +796,34 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	scale = raw->scale;
 	alpha_percentage = raw->alpha_percentage;
 
-	// adjust downwash for ambient light, so that it won't "glow" in the dark
-	get_3d_ambient_light_level(&red_lightlevel, &green_lightlevel, &blue_lightlevel);
-	red_lightlevel = bound(red_lightlevel * 2.5, 0.1, 1.0);
-	green_lightlevel = bound(green_lightlevel * 2.5, 0.1, 1.0);
-	blue_lightlevel = bound(blue_lightlevel * 2.5, 0.1, 1.0);
+	if (active_3d_environment->render_filter != RENDER_CLEAR || smoke_info->additive)
+		ambient.red = ambient.green = ambient.blue = 1;
+	else
+	{
+		ambient.red = ambient_3d_light.colour.red + 0.75 * current_3d_sun->colour.red;
+		ambient.green = ambient_3d_light.colour.green + 0.75 * current_3d_sun->colour.green;
+		ambient.blue = ambient_3d_light.colour.blue + 0.75 * current_3d_sun->colour.blue;
 
+		max_multiplier = max(ambient.red, max(ambient.green,ambient.blue));
+
+		if (max_multiplier > 1)
+		{
+			ambient.red /= max_multiplier;
+			ambient.green /= max_multiplier;
+			ambient.blue /= max_multiplier;
+		}
+	}
+	
 	if ( lifescale < smoke_info->colour_change_1 )
 	{
-		red_start = (float)smoke_info->red_start * red_lightlevel;
-		red_end = (float)smoke_info->red_1 * red_lightlevel;
+		red_start = (float)smoke_info->red_start * ambient.red;
+		red_end = (float)smoke_info->red_1 * ambient.red;
 
-		green_start = (float)smoke_info->green_start * green_lightlevel;
-		green_end = (float)smoke_info->green_1 * green_lightlevel;
+		green_start = (float)smoke_info->green_start * ambient.green;
+		green_end = (float)smoke_info->green_1 * ambient.green;
 
-		blue_start = (float)smoke_info->blue_start * blue_lightlevel;
-		blue_end = (float)smoke_info->blue_1 * blue_lightlevel;
+		blue_start = (float)smoke_info->blue_start * ambient.blue;
+		blue_end = (float)smoke_info->blue_1 * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_start;
 		alpha_end = (float)smoke_info->alpha_1;
@@ -819,14 +835,14 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	}
 	else if ( lifescale < smoke_info->colour_change_2 )
 	{
-		red_start = (float)smoke_info->red_1 * red_lightlevel;
-		red_end = (float)smoke_info->red_2 * red_lightlevel;
+		red_start = (float)smoke_info->red_1 * ambient.red;
+		red_end = (float)smoke_info->red_2 * ambient.red;
 
-		green_start = (float)smoke_info->green_1 * green_lightlevel;
-		green_end = (float)smoke_info->green_2 * green_lightlevel;
+		green_start = (float)smoke_info->green_1 * ambient.green;
+		green_end = (float)smoke_info->green_2 * ambient.green;
 
-		blue_start = (float)smoke_info->blue_1 * blue_lightlevel;
-		blue_end = (float)smoke_info->blue_2 * blue_lightlevel;
+		blue_start = (float)smoke_info->blue_1 * ambient.blue;
+		blue_end = (float)smoke_info->blue_2 * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_1;
 		alpha_end = (float)smoke_info->alpha_2;
@@ -838,14 +854,14 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	}
 	else
 	{
-		red_start = (float)smoke_info->red_2 * red_lightlevel;
-		red_end = (float)smoke_info->red_end * red_lightlevel;
+		red_start = (float)smoke_info->red_2 * ambient.red;
+		red_end = (float)smoke_info->red_end * ambient.red;
 
-		green_start = (float)smoke_info->green_2 * green_lightlevel;
-		green_end = (float)smoke_info->green_end * green_lightlevel;
+		green_start = (float)smoke_info->green_2 * ambient.green;
+		green_end = (float)smoke_info->green_end * ambient.green;
 
-		blue_start = (float)smoke_info->blue_2 * blue_lightlevel;
-		blue_end = (float)smoke_info->blue_end * blue_lightlevel;
+		blue_start = (float)smoke_info->blue_2 * ambient.blue;
+		blue_end = (float)smoke_info->blue_end * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_2;
 		alpha_end = (float)smoke_info->alpha_end;
@@ -858,22 +874,35 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 
 	d = bound( d, 0.0, 1.0 );
 
+	//  apply fog
+	
+	fog_color = get_3d_fog_colour ( active_3d_environment );
+	fog_modifier = get_3d_range(&visual_3d_vp->position, smoke_pos);
+	get_3d_fog_distances (active_3d_environment, &fog_start, &fog_end);
+	
+	if (fog_modifier < fog_start)
+		fog_modifier = 0;
+	else if (fog_modifier >= fog_end)
+		fog_modifier = 1;
+	else
+		fog_modifier = pow((fog_modifier - fog_start) / (fog_end - fog_start), 2);
+	
 	//
 	// set sprites colour
 	// 
 	
 	convert_float_to_int (red_start + (d * (red_end - red_start)), &result);
-	spr->red = result;
+	spr->red = result * (1 - fog_modifier) + fog_color.red * fog_modifier;
 
 	convert_float_to_int (green_start + (d * (green_end - green_start)), &result);
-	spr->green = result;
+	spr->green = result * (1 - fog_modifier) + fog_color.green * fog_modifier;
 
 	convert_float_to_int (blue_start + (d * (blue_end - blue_start)), &result);
-	spr->blue = result;
+	spr->blue = result * (1 - fog_modifier) + fog_color.blue * fog_modifier;
 
 	// Xhit: added "* (alpha_percentage/100)" for downwash effect (030328)
 	convert_float_to_int (((alpha_start + ( d * (alpha_end - alpha_start))) * (alpha_percentage/100.0)), &result);
-	spr->alpha = result;
+	spr->alpha = result / (active_3d_environment->render_filter == RENDER_INFRARED ? 4 : 1);
 
 	//
 	// set sprites size
@@ -914,32 +943,57 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_index, smoke_list_data *smoke_info, float alpha_modifier )
+void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_index, smoke_list_data *smoke_info, float alpha_modifier, vec3d *smoke_pos  )
 {
 	float
 		d,
 		lifescale,
 		red_start, green_start, blue_start, alpha_start, radius_start,
 		red_end, green_end, blue_end, alpha_end, radius_end,
-		red_result, green_result, blue_result, alpha_result;
+		red_result, green_result, blue_result, alpha_result,
+		fog_start,
+		fog_end,
+		fog_modifier,
+		max_multiplier;
 
+	light_colour
+		ambient;
+	rgb_colour
+		fog_color;
 	int
 		temp,
 		trail;
 
+	if (active_3d_environment->render_filter == RENDER_CLEAR && smoke_info->additive)
+		ambient.red = ambient.green = ambient.blue = 1;
+	else
+	{
+		ambient.red = ambient_3d_light.colour.red + 0.75 * current_3d_sun->colour.red;
+		ambient.green = ambient_3d_light.colour.green + 0.75 * current_3d_sun->colour.green;
+		ambient.blue = ambient_3d_light.colour.blue + 0.75 * current_3d_sun->colour.blue;
 
+		max_multiplier = max(ambient.red, max(ambient.green,ambient.blue));
+
+		if (max_multiplier > 1 || smoke_info->additive && max_multiplier < 1)
+		{
+			ambient.red /= max_multiplier;
+			ambient.green /= max_multiplier;
+			ambient.blue /= max_multiplier;
+		}
+	}
+	
 	lifescale = lifetime / raw->smoke_lifetime;
 
 	if ( lifescale < smoke_info->colour_change_1 )
 	{
-		red_start = (float)smoke_info->red_start;
-		red_end = (float)smoke_info->red_1;
+		red_start = (float)smoke_info->red_start * ambient.red;
+		red_end = (float)smoke_info->red_1 * ambient.red;
 
-		green_start = (float)smoke_info->green_start;
-		green_end = (float)smoke_info->green_1;
+		green_start = (float)smoke_info->green_start * ambient.green;
+		green_end = (float)smoke_info->green_1 * ambient.green;
 
-		blue_start = (float)smoke_info->blue_start;
-		blue_end = (float)smoke_info->blue_1;
+		blue_start = (float)smoke_info->blue_start * ambient.blue;
+		blue_end = (float)smoke_info->blue_1 * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_start;
 		alpha_end = (float)smoke_info->alpha_1;
@@ -951,14 +1005,14 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 	}
 	else if ( lifescale < smoke_info->colour_change_2 )
 	{
-		red_start = (float)smoke_info->red_1;
-		red_end = (float)smoke_info->red_2;
+		red_start = (float)smoke_info->red_1 * ambient.red;
+		red_end = (float)smoke_info->red_2 * ambient.red;
 
-		green_start = (float)smoke_info->green_1;
-		green_end = (float)smoke_info->green_2;
+		green_start = (float)smoke_info->green_1 * ambient.green;
+		green_end = (float)smoke_info->green_2 * ambient.green;
 
-		blue_start = (float)smoke_info->blue_1;
-		blue_end = (float)smoke_info->blue_2;
+		blue_start = (float)smoke_info->blue_1 * ambient.blue;
+		blue_end = (float)smoke_info->blue_2 * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_1;
 		alpha_end = (float)smoke_info->alpha_2;
@@ -970,14 +1024,14 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 	}
 	else
 	{
-		red_start = (float)smoke_info->red_2;
-		red_end = (float)smoke_info->red_end;
+		red_start = (float)smoke_info->red_2 * ambient.red;
+		red_end = (float)smoke_info->red_end * ambient.red;
 
-		green_start = (float)smoke_info->green_2;
-		green_end = (float)smoke_info->green_end;
+		green_start = (float)smoke_info->green_2 * ambient.green;
+		green_end = (float)smoke_info->green_end * ambient.green;
 
-		blue_start = (float)smoke_info->blue_2;
-		blue_end = (float)smoke_info->blue_end;
+		blue_start = (float)smoke_info->blue_2 * ambient.blue;
+		blue_end = (float)smoke_info->blue_end * ambient.blue;
 
 		alpha_start = (float)smoke_info->alpha_2;
 		alpha_end = (float)smoke_info->alpha_end;
@@ -1000,26 +1054,39 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 
 	blue_result = blue_start + ( d * ( blue_end - blue_start ) );
 
+	//  apply fog
+	
+	fog_color = get_3d_fog_colour ( active_3d_environment );
+	fog_modifier = get_3d_range(&visual_3d_vp->position, smoke_pos);
+	get_3d_fog_distances (active_3d_environment, &fog_start, &fog_end);
+	
+	if (fog_modifier < fog_start)
+		fog_modifier = 0;
+	else if (fog_modifier >= fog_end)
+		fog_modifier = 1;
+	else
+		fog_modifier = pow((fog_modifier - fog_start) / (fog_end - fog_start), 2);
+	
 	//
 	// special case for alpha value if trail point is last in the list ( i.e. index == alive_count - 1 )
 	//
 
 	alpha_result = alpha_start + ( d * ( alpha_end - alpha_start ) );
 
-	alpha_result *= alpha_modifier;
+	alpha_result *= alpha_modifier / (active_3d_environment->render_filter == RENDER_INFRARED ? 4 : 1);
 
 	trail_radius[ trail_index ] = ( radius_start + ( d * ( radius_end - radius_start ) ) ) + raw->width_adjustment;
 
-	for ( trail = 0 ; trail < 2 ; trail ++ )
+	for ( trail = 0 ; trail < TRAIL_RIBBONS ; trail ++ )
 	{
 		convert_float_to_int (red_result, &temp);
-		trail_data[ trail ][ trail_index ].colour.red = temp;
+		trail_data[ trail ][ trail_index ].colour.red = temp * (1 - fog_modifier) + fog_color.red * fog_modifier;;
 
 		convert_float_to_int (green_result, &temp);
-		trail_data[ trail ][ trail_index ].colour.green = temp;
+		trail_data[ trail ][ trail_index ].colour.green = temp * (1 - fog_modifier) + fog_color.green * fog_modifier;;
 
 		convert_float_to_int (blue_result, &temp);
-		trail_data[ trail ][ trail_index ].colour.blue = temp;
+		trail_data[ trail ][ trail_index ].colour.blue = temp * (1 - fog_modifier) + fog_color.blue * fog_modifier;;
 
 		convert_float_to_int (alpha_result, &temp);
 		trail_data[ trail ][ trail_index ].colour.alpha = temp;
@@ -1032,9 +1099,10 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 
 void initialise_smoke_list_draw_arrays (void)
 {
-
-	trail_data[ 0 ] = (smoke_trail_data *) safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
-	trail_data[ 1 ] = (smoke_trail_data *) safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
+	int trail;
+	
+	for ( trail = 0 ; trail < TRAIL_RIBBONS ; trail ++ )
+		trail_data[ trail ] = (smoke_trail_data *) safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
 
 	trail_points = (vec3d *) safe_malloc (sizeof (vec3d) * MAX_SMOKE_TRAIL_POINTS);
 
@@ -1049,9 +1117,10 @@ void initialise_smoke_list_draw_arrays (void)
 
 void deinitialise_smoke_list_draw_arrays (void)
 {
-
-	safe_free (trail_data[ 0 ]);
-	safe_free (trail_data[ 1 ]);
+	int trail;
+	
+	for ( trail = 0 ; trail < TRAIL_RIBBONS ; trail ++ )
+		safe_free (trail_data[ trail ]);
 
 	safe_free (trail_points);
 

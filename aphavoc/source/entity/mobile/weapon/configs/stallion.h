@@ -66,18 +66,16 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		// this is fake to avoid compile error "macro ...dispenser different than previous definition"
-		// 0 and 1 values are hardcoded in weapon packages
-		#define LHS_CHAFF_DISPENSER					(COBRA_LHS_CHAFF_DISPENSER)
-		#define RHS_CHAFF_DISPENSER					(COBRA_RHS_CHAFF_DISPENSER)
-		#define LHS_FLARE_DISPENSER					(COBRA_LHS_FLARE_DISPENSER)
-		#define RHS_FLARE_DISPENSER					(COBRA_RHS_FLARE_DISPENSER)
+		#define LHS_CHAFF_DISPENSER					(0)
+		#define RHS_CHAFF_DISPENSER					(1)
+		#define LHS_FLARE_DISPENSER					(0)
+		#define RHS_FLARE_DISPENSER					(1)
 
 		#define CHAFF_VECTOR	 		 	(0)
 		#define FLARE_VECTOR	 		 	(0)
 
-		#define NUM_CHAFFS				(30)
-		#define NUM_FLARES				(30)
+		#define NUM_CHAFFS				(10)
+		#define NUM_FLARES				(20)
 
 		////////////////////////////////////////
 		//
@@ -89,12 +87,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
 				NUM_CHAFFS,	 	  												// number
-				0,											// heading_depth
+				LHS_CHAFF_DISPENSER,											// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -111,12 +109,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
 				NUM_CHAFFS,	 	  												// number
-				1,											// heading_depth
+				RHS_CHAFF_DISPENSER,											// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -133,12 +131,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
 				NUM_FLARES,	 													// number
-				0,											// heading_depth
+				LHS_FLARE_DISPENSER,											// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -155,12 +153,12 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
 				NUM_FLARES,	 													// number
-				1,											// heading_depth
+				RHS_FLARE_DISPENSER,											// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit

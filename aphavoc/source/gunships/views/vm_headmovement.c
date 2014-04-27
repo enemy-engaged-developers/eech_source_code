@@ -82,11 +82,13 @@ static float
 
 //ataribaby 27/12/2008 for new head g-force movement
 static float
-	x_head_g_movement = 0.0,
-	y_head_g_movement = 0.0,
-	z_head_g_movement = 0.0,
-	random_vibration[3],
-	vibration_force;
+	head_vibration[3] = {0, 0, 0},
+	head_vibration_force = 0,
+	ffb_vibration[3] = {0, 0, 0},
+	ffb_vibration_force = 0;
+static vec3d
+	head_movement,
+	ffb_movement;
 
 static float getMaxLeft()
 {
@@ -120,37 +122,67 @@ static float getMaxDown()
 
 void clear_head_movement_data (void)
 {
-	x_head_g_movement = y_head_g_movement = z_head_g_movement = 0.0;	
+	head_movement.x = head_movement.y = head_movement.z = 0.0;	
+	ffb_movement.x = ffb_movement.y = ffb_movement.z = 0.0;	
 }
 
 	//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
 			// some changes /thealx/
 
-void get_head_g_movement (float* x, float* y, float* z, int invert)
+void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int view)
 {
 	int i;
+	float
+		vibrations_power,
+		inertia_power,
+		*vibration,
+		*vibration_force,
+		*rotor_rpm = &current_flight_dynamics->main_rotor_rpm.value;
+	dynamics_float_variable
+		*velocity = &current_flight_dynamics->velocity_z;
+	vec3d
+		*movement,
+		*accel = &current_flight_dynamics->model_acceleration_vector;
+			
 
-	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE && command_line_cockpit_vibrations > 0)
+	if (view)
 	{
-		float z_velocity = 100 * bound(current_flight_dynamics->velocity_z.value * current_flight_dynamics->velocity_z.modifier - 0.9 * current_flight_dynamics->velocity_z.max, 0, 30),
-				y_acceleration = current_flight_dynamics->main_rotor_rpm.value * max((current_flight_dynamics->model_acceleration_vector.y > 1.0) * (current_flight_dynamics->model_acceleration_vector.y - 1.0),
+		vibrations_power = command_line_cockpit_vibrations;
+		inertia_power = command_line_g_force_head_movment_modifier;
+		movement = &head_movement;
+		vibration = &head_vibration;
+		vibration_force = &head_vibration_force;
+	}
+	else
+	{
+		vibrations_power = command_line_ffb_vibrations;
+		inertia_power = command_line_ffb_dynamics / 10;
+		movement = &ffb_movement;
+		vibration = &ffb_vibration;
+		vibration_force = &ffb_vibration_force;
+	}
+	
+	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE && vibrations_power > 0)
+	{
+		float z_velocity = 100 * bound(velocity->value * velocity->modifier - 0.9 * velocity->max, 0, 30),
+				y_acceleration = *rotor_rpm * max((accel->y > 1.0) * (accel->y - 1.0),
 					(current_flight_dynamics->velocity_y.value < - 10.0) * (- current_flight_dynamics->velocity_y.value - 10.0));
 
-		vibration_force = move_by_rate(vibration_force, 0.000002 * (command_line_cockpit_vibrations * max(z_velocity, y_acceleration) + max(0, command_line_cockpit_vibrations - 1) * 5 * current_flight_dynamics->main_rotor_rpm.value), 0.01); // G force > 1.1, vortex ring or maximum speed
+		*vibration_force = move_by_rate(*vibration_force, 0.000002 * (vibrations_power * max(z_velocity, y_acceleration) + max(0, vibrations_power - 1) * 5 * *rotor_rpm + 20 * max(0, 40 - fabs(*rotor_rpm - 50))), 0.01); // G force > 1.1, rotor spin-up, vortex ring or maximum speed
 		for (i = 0; i < 3; i++)
-			random_vibration[i] = (random_vibration[i] >= 0 ? -1 : 1) * frand1() * vibration_force; // should be negative to previous
+			vibration[i] = (vibration[i] >= 0 ? -1 : 1) * frand1() * *vibration_force; // should be negative to previous
 	}
 	else
 		for (i = 0; i < 3; i++)
-			random_vibration[i] = 0;
-	
-	x_head_g_movement = move_by_rate(x_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.05) * command_line_g_force_head_movment_modifier, 0.005) + random_vibration[0];
-	y_head_g_movement = move_by_rate(y_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.y * ONE_OVER_G, -2.0, 5.0) * 0.025) * command_line_g_force_head_movment_modifier, 0.025) + random_vibration[1];
-	z_head_g_movement = move_by_rate(z_head_g_movement, (bound(current_flight_dynamics->model_acceleration_vector.z * ONE_OVER_G, -3.0, 3.0) * 0.05) * command_line_g_force_head_movment_modifier, 0.05) + random_vibration[2];
+			vibration[i] = 0;
 
-	*x += invert ? - x_head_g_movement : x_head_g_movement;
-	*y += invert ? - y_head_g_movement : y_head_g_movement;
-	*z += invert ? - z_head_g_movement : z_head_g_movement;
+	movement->x = move_by_rate(movement->x, (bound(accel->x * ONE_OVER_G, -3.0, 3.0) * 0.05) * inertia_power, 0.005) + vibration[0];
+	movement->y = move_by_rate(movement->y, (bound(accel->y * ONE_OVER_G, -2.0, 5.0) * 0.025) * inertia_power, 0.025) + vibration[1];
+	movement->z = move_by_rate(movement->z, (bound(accel->z * ONE_OVER_G, -3.0, 3.0) * 0.05) * inertia_power, 0.05) + vibration[2];
+
+	*x += invert ? - movement->x : movement->x;
+	*y += invert ? - movement->y : movement->y;
+	*z += invert ? - movement->z : movement->z;
 }
 
 float getViewpointOffsetX (float x)
@@ -165,7 +197,7 @@ float getViewpointOffsetX (float x)
 			x = tmp * -getMaxRight();
 	}
 
-	x += x_head_g_movement;
+	x += head_movement.x;
 	x = bound ( x, getMaxRight(), getMaxLeft() );
 	return x;
 }
@@ -181,7 +213,7 @@ float getViewpointOffsetY (float y)
 			y = tmp * getMaxDown();
 	}
 
-	y += y_head_g_movement;
+	y += head_movement.y;
 	y = bound ( y, getMaxDown(), getMaxUp());
 	return y;
 }
@@ -197,7 +229,7 @@ float getViewpointOffsetZ (float z)
 			z = tmp * -getMaxBackward();
 	}
 
-	z += z_head_g_movement;
+	z += head_movement.z;
 	z = bound ( z, getMaxBackward(), getMaxForeward() );
 
 	return z;

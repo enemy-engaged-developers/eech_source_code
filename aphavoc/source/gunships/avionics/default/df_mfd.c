@@ -2777,37 +2777,37 @@ static display_3d_noise_levels
 		// WEATHERMODE_INVALID
 		{
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_DRY
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_LIGHT_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_HEAVY_RAIN
 		{
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_HIGH,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_SNOW
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 	};
 
@@ -2989,7 +2989,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN;
+			tint = DISPLAY_3D_TINT_FLIR;
 
 			break;
 		}
@@ -2999,7 +2999,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			tint = DISPLAY_3D_TINT_LLLTV;
 
 			break;
 		}
@@ -3145,7 +3145,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN;
+			tint = DISPLAY_3D_TINT_FLIR;
 
 			break;
 		}
@@ -3155,7 +3155,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 			
-			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			tint = DISPLAY_3D_TINT_LLLTV;
 
 			break;
 		}
@@ -3220,6 +3220,9 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+
 	ASSERT (eo);
 
 	switch (eo->field_of_view)
@@ -3274,6 +3277,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_FLIR;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_DTV:
@@ -3281,6 +3286,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 			light_level = dtv_light_levels[weather_mode][day_segment_type];
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
+			
+			tint = DISPLAY_3D_TINT_LLLTV;
 
 			break;
 		}
@@ -3289,6 +3296,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 			light_level = dvo_light_levels[weather_mode][day_segment_type];
 
 			noise_level = dvo_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
 		}
@@ -3300,7 +3309,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		}
 	}
 
-	set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -3474,7 +3483,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
 			s = "RKT";
 			break;
-		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+		case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 		case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			s = "ATA";
 			break;
@@ -6851,7 +6860,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER)
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER)
 	{
 		if (draw_large_mfd)
 		{
@@ -7616,7 +7625,7 @@ int pylon_start, pylon_end;
 				case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
 				{
 					get_local_entity_weapon_hardpoint_info (get_gunship_entity (), 
-						HELIX_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, 
+						HELIX_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, 
 						&weapon_sub_type, &number, &damaged);
 					//sprintf (s, "KI:%2d", number);
 					break;
@@ -7699,7 +7708,7 @@ int pylon_start, pylon_end;
 				case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
 				{
 					get_local_entity_weapon_hardpoint_info (get_gunship_entity (), 
-						HELIX_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, 
+						HELIX_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, 
 						&weapon_sub_type, &number, &damaged);
 					//sprintf (s, "KI:%2d", number);
 					break;
@@ -8097,7 +8106,7 @@ int pylon_start, pylon_end;
 
 				break;
 			}
-			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+			case ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER:
 			case ENTITY_SUB_TYPE_WEAPON_AIM9M_SIDEWINDER:
 			{
 

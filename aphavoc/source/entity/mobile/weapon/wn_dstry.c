@@ -82,6 +82,9 @@ static void destroy_local (entity *en)
 {
 	weapon
 		*raw;
+	entity
+		*task,
+		*destroy_task;
 
 	////////////////////////////////////////
 	//
@@ -114,6 +117,31 @@ static void destroy_local (entity *en)
 	// UNLINK FROM SYSTEM
 	//
 	////////////////////////////////////////
+
+	if (get_comms_model () == COMMS_MODEL_SERVER)
+	{
+		task = get_local_entity_first_child (en, LIST_TYPE_TASK_DEPENDENT);
+
+		while (task)
+		{
+
+			destroy_task = task;
+
+			task = get_local_entity_child_succ (task, LIST_TYPE_TASK_DEPENDENT);
+
+			if (destroy_task->type == ENTITY_TYPE_TASK)
+			{
+
+				#if DEBUG_MODULE
+
+				debug_log ("WN_DSTRY: killing weapon, notifying task %s complete", entity_sub_type_task_names [get_local_entity_int_value (destroy_task, INT_TYPE_ENTITY_SUB_TYPE)]);
+
+				#endif
+
+				notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, destroy_task, en, TASK_TERMINATED_OBJECTIVE_MESSAGE);
+			}
+		}
+	}
 
 	//
 	// if the weapon is a decoy then any locked on weapons should re-acquire lock on the target (decoy launcher) if any
@@ -153,6 +181,8 @@ static void destroy_local (entity *en)
 	//
 	// weapon
 	//
+
+	unlink_local_entity_children (en, LIST_TYPE_TASK_DEPENDENT);
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_LAUNCHED_WEAPON);
 

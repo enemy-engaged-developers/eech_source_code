@@ -131,7 +131,6 @@ static int response_to_decoy_active (entity_messages message, entity *receiver, 
 			////////////////////////////////////////
 			case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR:
 			case WEAPON_GUIDANCE_TYPE_ACTIVE_RADAR:
-			case WEAPON_GUIDANCE_TYPE_RADIO_COMMAND:
 			////////////////////////////////////////
 			{
 				if (decoy_type == WEAPON_DECOY_TYPE_CHAFF)
@@ -157,6 +156,7 @@ static int response_to_decoy_active (entity_messages message, entity *receiver, 
 			case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER_BEAM_RIDING:
 			case WEAPON_GUIDANCE_TYPE_ACTIVE_LASER:
 			case WEAPON_GUIDANCE_TYPE_WIRE_GUIDED:
+			case WEAPON_GUIDANCE_TYPE_RADIO_COMMAND:
 			////////////////////////////////////////
 			{
 				if (decoy_type == WEAPON_DECOY_TYPE_SMOKE_GRENADE)

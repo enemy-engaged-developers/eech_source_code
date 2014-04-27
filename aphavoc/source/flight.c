@@ -703,8 +703,6 @@ void update_in_flight_timers (void)
 
 	update_mobile_sprite_light_timers ();
 
-	update_aircraft_damage_timers ();
-
 	update_message_log ();
 }
 

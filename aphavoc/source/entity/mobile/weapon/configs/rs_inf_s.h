@@ -87,7 +87,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_SA7_GRAIL,	  					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3,	  					// sub_type
 				NUM_GRAIL_MISSILES,		 	  								// number
 				TURRET,			 	 											// heading_depth
 				LAUNCHER,	 	 	 											// pitch_depth

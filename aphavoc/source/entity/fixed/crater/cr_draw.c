@@ -107,6 +107,9 @@ static void draw_local_3d_object (entity *en, float range)
 
 		get_3d_transformation_matrix_from_face_normal_and_heading (inst3d->vp.attitude, &face_normal, raw->fix.heading);
 
+		if (active_3d_environment->render_filter == RENDER_INFRARED)
+			inst3d->object_diffuse_value = 10;
+
 		insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
 	}
 }

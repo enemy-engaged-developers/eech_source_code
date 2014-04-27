@@ -88,10 +88,18 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		package,
 		los_to_target,
 		suitability[NUM_WEAPON_PACKAGES],
-		suitable_weapon_count;
+		suitable_weapon_count,
+		debug_flag = 0,
+		damage_by_type[NUM_ENTITY_SUB_TYPE_WEAPONS];
 
 	entity_sub_types
 		weapon_type;
+
+	vec3d
+		*launcher_pos,
+		*target_pos;
+	float
+		target_range;
 
 	ASSERT (launcher);
 
@@ -99,33 +107,45 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 	ASSERT (criteria <= BEST_WEAPON_CRITERIA_ALL);
 
-	//
+#if DEBUG_MODULE
+
+	if (launcher == get_external_view_entity ())
+		debug_flag = DEBUG_MODULE;
+	if (get_gunship_entity())
+		if (launcher == (get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET)))
+			debug_flag = DEBUG_MODULE;
+
+#endif
+
 	// get list of weapons available on the launcher
-	//
 
 	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (!package_status)
-	{
 		return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
-	}
 
 	config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 	ASSERT (weapon_config_type_valid (config_type));
 
+	for (package = 1; package < NUM_ENTITY_SUB_TYPE_WEAPONS; package++)
+		damage_by_type[package] = 0;
+	
 	suitable_weapon_count = 0;
 
-	#if DEBUG_MODULE
+	if (get_local_entity_type (launcher) == ENTITY_TYPE_SHIP_VEHICLE) // disable out of angle weapons
+		suppress_ineffective_ship_weapons (launcher, target);
 
-	if (launcher == get_external_view_entity ())
+	launcher_pos = get_local_entity_vec3d_ptr (launcher, VEC3D_TYPE_POSITION);
+	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	target_range = get_3d_range (launcher_pos, target_pos);
+
+	if (debug_flag)
 	{
 		debug_log ("WN_TGT : Get Suitable Weapon ( Launcher %s , Target %s )", get_local_entity_string (launcher, STRING_TYPE_FULL_NAME), get_local_entity_string (target, STRING_TYPE_FULL_NAME));
 
 		debug_log ("WN_TGT : Available Weapon List :");
 	}
-
-	#endif
 
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 	{
@@ -133,46 +153,38 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 		weapon_type = weapon_config_database[config_type][package].sub_type;
 
-		//
 		// check package is valid
-		//
 
 		if (weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
 			ASSERT (package_status[package].number <= weapon_config_database[config_type][package].number);
 
-			//
 			// check warhead is capable of damage
-			//
 
-			if (weapon_is_capable_of_damage (weapon_type))
+			if (!weapon_database[weapon_type].rate_of_fire ?
+				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size) :
+				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
+										* weapon_database[weapon_type].rate_of_fire
+										* weapon_database[weapon_type].burst_duration / 60))
 			{
-				//
 				// check package is not damaged
-				//
 
 				if (!package_status[package].damaged)
 				{
-					//
 					// check package has rounds left
-					//
 
 					if (package_status[package].number > 0)
 					{
 						suitability[package] = TRUE;
 
 						suitable_weapon_count ++;
-
-						#if DEBUG_MODULE
-
-						if (launcher == get_external_view_entity ())
-						{
-							debug_log ("WN_TGT : (%d) %s :", package, weapon_database[weapon_type].full_name);
-						}
-
-						#endif
 					}
 				}
+			}
+
+			if (debug_flag)
+			{
+				debug_log ("WN_TGT : (%d) %s : damaged %i, ammo left %i, capable of damage %i", package, weapon_database[weapon_type].full_name, package_status[package].damaged, package_status[package].number, suitability[package]);
 			}
 		}
 	}
@@ -182,52 +194,46 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 	}
 
-	//
 	// filter out unsuitables with respect to weapon class
-	//
 
 	{
 		int
 			weapon_class,
 			suitable_weapon_classes;
 
-		#if DEBUG_MODULE
-
-		if (launcher == get_external_view_entity ())
+		if (debug_flag)
 		{
-			debug_log ("WN_TGT : Suitable Weapon List After Class Filter:");
-		}
-
-		#endif
-
-		if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
-		{
-			//
-			// target is an aircraft in the air
-			//
-
-			suitable_weapon_classes = WEAPON_CLASS_AIR_TO_AIR + WEAPON_CLASS_SURFACE_TO_AIR;
-		}
-		else
-		{
-			//
-			// target is an aircraft or a vehicle on the ground
-			//
-
-			suitable_weapon_classes = WEAPON_CLASS_AIR_TO_SURFACE + WEAPON_CLASS_SURFACE_TO_SURFACE;
+			debug_log ("WN_TGT : Class Filter:");
 		}
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
+			weapon_type = weapon_config_database[config_type][package].sub_type;
+			
+			if (get_local_entity_type (target) == ENTITY_TYPE_FIXED_WING)
+			{
+				// fixed wing
+
+				suitable_weapon_classes = !(weapon_database[weapon_type].guidance_type && WEAPON_CLASS_AIR_TO_SURFACE) * WEAPON_CLASS_AIR_TO_AIR + WEAPON_CLASS_SURFACE_TO_AIR; // do not use shturm, vikhr etc. against jets!
+			}
+			else if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+			{
+				// heli, missile
+
+				suitable_weapon_classes = WEAPON_CLASS_AIR_TO_AIR + WEAPON_CLASS_SURFACE_TO_AIR + WEAPON_CLASS_SURFACE_TO_SURFACE * (target_range < 200 && !weapon_database[weapon_type].guidance_type && weapon_database[weapon_type].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION); // small exception for close slow targets
+			}
+			else
+			{
+				// target is an aircraft or a vehicle on the ground
+
+				suitable_weapon_classes = WEAPON_CLASS_AIR_TO_SURFACE + WEAPON_CLASS_SURFACE_TO_SURFACE;
+			}
+
 			if (suitability[package])
 			{
-				weapon_type = weapon_config_database[config_type][package].sub_type;
-
 				weapon_class = weapon_database[weapon_type].weapon_class;
 
-				//
 				// bitwise AND to test weapon class compatibility
-				//
 
 				if ((suitable_weapon_classes & weapon_class) == 0)
 				{
@@ -235,23 +241,23 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 					suitable_weapon_count --;
 				}
-				else
+
+				if (criteria & BEST_WEAPON_ALTITUDE_CHECK && get_local_entity_int_value (launcher, INT_TYPE_AIRBORNE_AIRCRAFT))
 				{
-					if (criteria & BEST_WEAPON_ALTITUDE_CHECK)
+					// if target is airborne, and launcher is a vehicle - check launchers floor and ceiling scanning ability
+
+					if ((get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT)) && (get_local_entity_int_value (launcher, INT_TYPE_IDENTIFY_VEHICLE)) &&
+							(weapon_database [weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR || weapon_database [weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_ACTIVE_RADAR))
 					{
-						//
-						// if target is airborne, and launcher is a vehicle - check launchers floor and ceiling scanning ability
-						//
+						float
+							target_altitude;
 
-						if ((get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT)) && (get_local_entity_int_value (launcher, INT_TYPE_IDENTIFY_VEHICLE)))
+						target_altitude = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE);
+
+						if ((target_altitude > get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_CEILING)) ||
+								(target_altitude < get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_FLOOR)))
 						{
-							float
-								target_altitude;
-
-							target_altitude = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE);
-
-							if ((target_altitude > get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_CEILING)) ||
-									(target_altitude < get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_FLOOR)))
+							if(suitability[package])
 							{
 								suitability[package] = FALSE;
 
@@ -259,33 +265,12 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 							}
 						}
 					}
-					
-				//magitek: revise this!
-#if 0  // disable until we have a way of aborting attacking other targets until air defences are out of the way
-					// TODO: not do for some criteria?
-					if (get_local_entity_int_value(launcher, INT_TYPE_AIRBORNE_AIRCRAFT)
-							 && get_local_entity_int_value(target, INT_TYPE_VIEW_CATEGORY) == VIEW_CATEGORY_AIR_DEFENCE_UNITS)
-					{
-						// don't try to take out anti-aircaft systems with unguided weapons, it's suicide
-						if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE)
-						{
-							suitability[package] = FALSE;
-							suitable_weapon_count --;
-						}
-					}
-#endif
 				}
-				#if DEBUG_MODULE
 
-				if (launcher == get_external_view_entity ())
+				if (debug_flag && !suitability[package])
 				{
-					if (suitability [package])
-					{
-						debug_log ("WN_TGT : (%d) %s :", package, weapon_database[weapon_type].full_name);
-					}
+					debug_log ("WN_TGT : (%d) %s : EXCLUDED", package, weapon_database[weapon_type].full_name);
 				}
-
-				#endif
 			}
 		}
 	}
@@ -295,9 +280,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 	}
 
-	//
 	// special case for vehicles - only fire projectiles if no line of sight
-	//
 
 	if (criteria & BEST_WEAPON_LOS_CHECK)
 	{
@@ -309,14 +292,10 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 			if (!los_to_target)
 			{
-				#if DEBUG_MODULE
-
-				if (launcher == get_external_view_entity ())
+				if (debug_flag)
 				{
-					debug_log ("WN_TGT : Suitable Weapon List After LOS Filter :");
+					debug_log ("WN_TGT : LOS Filter :");
 				}
-
-				#endif
 
 				for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 				{
@@ -324,21 +303,17 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					{
 						weapon_type = weapon_config_database[config_type][package].sub_type;
 
-						if (weapon_database[weapon_type].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
+						if (weapon_database[weapon_type].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION || target_range < 8000 )
 						{
 							suitability[package] = FALSE;
 
 							suitable_weapon_count --;
-						}
-						#if DEBUG_MODULE
-						else
-						{
-							if (launcher == get_external_view_entity ())
+							
+							if (debug_flag)
 							{
-								debug_log ("WN_TGT : (%d) %s :", package, weapon_database[weapon_type].full_name);
+								debug_log ("WN_TGT : (%d) %s : EXCLUDED", package, weapon_database[weapon_type].full_name);
 							}
 						}
-						#endif
 					}
 				}
 			}
@@ -350,35 +325,18 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		}
 	}
 
-	//
 	// filter out unsuitables with respect to range
-	//
 
 	if (criteria & BEST_WEAPON_RANGE_CHECK)
 	{
 		float
-			target_range,
 			min_weapon_range,
 			max_weapon_range;
 
-		vec3d
-			*launcher_pos,
-			*target_pos;
-
-		launcher_pos = get_local_entity_vec3d_ptr (launcher, VEC3D_TYPE_POSITION);
-
-		target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_approx_3d_range (launcher_pos, target_pos);
-
-		#if DEBUG_MODULE
-
-		if (launcher == get_external_view_entity ())
+		if (debug_flag)
 		{
-			debug_log ("WN_TGT : Suitable Weapon List After Range Filter ( Range = %f ) :", target_range);
+			debug_log ("WN_TGT : Range Filter ( Range = %f ) :", target_range);
 		}
-
-		#endif
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
@@ -387,24 +345,38 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				weapon_type = weapon_config_database[config_type][package].sub_type;
 
 				min_weapon_range = weapon_database[weapon_type].min_range;
-//				max_weapon_range = weapon_database[weapon_type].max_range;
 				max_weapon_range = weapon_database[weapon_type].effective_range;
+				
+				switch(get_local_entity_int_value(target, INT_TYPE_VIEW_CATEGORY))
+				{
+					case VIEW_CATEGORY_COMBAT_HELICOPTERS:
+					{
+						if (weapon_database[weapon_type].guidance_type)
+							max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9 * weapon_database[weapon_type].max_range);
+						break;
+					}
+					case VIEW_CATEGORY_WARSHIPS:
+					case VIEW_CATEGORY_AIR_DEFENCE_UNITS:
+					{
+						max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9 * weapon_database[weapon_type].max_range);
+						break;
+					}
+				}
+				
+				if (!weapon_database[weapon_type].guidance_type && (get_local_entity_type (target) == ENTITY_TYPE_WEAPON || get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT)))
+					max_weapon_range = weapon_database[weapon_type].max_range;
 
 				if ((target_range < min_weapon_range) || (target_range > max_weapon_range))
 				{
 					suitability[package] = FALSE;
 
 					suitable_weapon_count --;
-				}
-				#if DEBUG_MODULE
-				else
-				{
-					if (launcher == get_external_view_entity ())
+
+					if (debug_flag)
 					{
-						debug_log ("WN_TGT : (%d) %s :", package, weapon_database[weapon_type].full_name);
+						debug_log ("WN_TGT : (%d) %s : EXCLUDED (min_range %.1f, max_range %.1f", package, weapon_database[weapon_type].full_name, min_weapon_range, max_weapon_range);
 					}
 				}
-				#endif
 			}
 		}
 
@@ -414,85 +386,128 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		}
 	}
 
-	//
 	// find how much damage each weapon could possibly cause
-	//
 
+	if (get_local_entity_type (target) != ENTITY_TYPE_WEAPON)
 	{
 		int
 			target_damage_level,
 			damage_capability,
 			total_damage_possible;
 
-		target_damage_level = get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL);//magitek, doubled target_health for calculation purposes
-
+		target_damage_level = 2 * get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL);
+		
 		ASSERT (target_damage_level > 0);
 
-		#if DEBUG_MODULE
-
-		if (launcher == get_external_view_entity ())
+		if (debug_flag)
 		{
-			debug_log ("WN_TGT : Suitable Weapon List After Damage Filter ( current damage level = %d ) :", target_damage_level);
+			debug_log ("WN_TGT : Damage Filter ( target damage level = %d ) :", target_damage_level / 2);
 		}
-
-		#endif
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
+			float accuracy_multiplier = 1;
+			
 			if (suitability[package])
 			{
 				weapon_type = weapon_config_database[config_type][package].sub_type;
 
 				if (weapon_database[weapon_type].rate_of_fire == FIRE_SINGLE_WEAPON)
 				{
-					damage_capability = weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE);
+					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size;
 				}
 				else
 				{
-					switch (get_local_entity_type (launcher))
-					{
-						case ENTITY_TYPE_FIXED_WING:
-						{
-							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
-											* weapon_database[weapon_type].rate_of_fire
-											* weapon_database[weapon_type].burst_duration);
-							break;
-						}
-						case ENTITY_TYPE_HELICOPTER:
-						{
-							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
-											* weapon_database[weapon_type].rate_of_fire
-											* weapon_database[weapon_type].burst_duration);
-							break;
-						}
-						
-						default:
-						{
-							damage_capability = (weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
-											* weapon_database[weapon_type].rate_of_fire
-											* weapon_database[weapon_type].burst_duration);
-							break;
-						}
-					}
+					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
+									* weapon_database[weapon_type].rate_of_fire
+									* weapon_database[weapon_type].burst_duration / 60;
 				}
 
 				total_damage_possible = min (damage_capability, target_damage_level);
 
-				suitability[package] = total_damage_possible;
+				//	 guided weapons are generally more suitable for air target except close range
+
+				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && target_range > 1000)
+				{
+					total_damage_possible *= (int)max(target_range / 1000, 1);
+				}
+				else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
+				{
+					accuracy_multiplier = min (1, 10 / (weapon_database[weapon_type].circular_error_probable * target_range)); // what chance to get 50% hits in 10m radius circle from this distance
+					total_damage_possible *= accuracy_multiplier;
+				}
+
+				damage_by_type[weapon_type] += total_damage_possible;
 
 				if (total_damage_possible == 0)
 				{
 					suitable_weapon_count --;
-				}
-				#if DEBUG_MODULE
-				else
-				{
-					if (launcher == get_external_view_entity ())
+					
+					if (debug_flag)
 					{
-						debug_log ("WN_TGT : (%d) %s - damage %d", package, weapon_database[weapon_type].full_name, total_damage_possible);
+						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
 					}
 				}
-				#endif
+				else if (debug_flag)
+				{
+					debug_log ("WN_TGT : (%d) %s (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+				}
+			}
+		}
+	}
+	else // ANTI MISSILE WEAPON SYSTEMS
+	{
+		int
+			total_damage_possible;
+
+		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+		{
+			float accuracy_multiplier = 1;
+			
+			if (suitability[package])
+			{
+				weapon_type = weapon_config_database[config_type][package].sub_type;
+
+				if (weapon_database[weapon_type].warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
+				{
+					if (weapon_database[weapon_type].rate_of_fire == FIRE_SINGLE_WEAPON)
+					{
+						total_damage_possible = weapon_database[weapon_type].damage_capability * weapon_config_database[config_type][package].salvo_size;
+					}
+					else
+					{
+						total_damage_possible = weapon_database[weapon_type].damage_capability
+										* weapon_database[weapon_type].rate_of_fire
+										* weapon_database[weapon_type].burst_duration / 60;
+					}
+
+					//	 guided weapons are generally more suitable for air target except close range
+
+					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && target_range > 1000)
+					{
+						total_damage_possible *= (int)max(target_range/1000, 1);
+					}
+					else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
+					{
+						accuracy_multiplier = min (1, 10 / (weapon_database[weapon_type].circular_error_probable * target_range));
+						total_damage_possible *= accuracy_multiplier;
+					}
+
+					damage_by_type[weapon_type] += total_damage_possible;
+
+					if (debug_flag)
+					{
+						debug_log ("WN_TGT : (%d) %s (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+					}
+				}
+				else
+				{
+					suitable_weapon_count --;
+					if (debug_flag)
+					{
+						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+					}
+				}
 			}
 		}
 	}
@@ -502,91 +517,27 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 	}
 
-	//
-	// guided weapons are generally more suitable...
-	//
-
-	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-	{
-		weapon_type = weapon_config_database[config_type][package].sub_type;
-
-		if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
-		{
-			suitability[package] *= 4;
-		}
-	}
-
-	//
-	// Special case :- Aircraft should only use guided missiles against other aircraft
-	//
-
-	if (get_local_entity_int_value (launcher, INT_TYPE_IDENTIFY_AIRCRAFT))
-	{
-		if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
-		{
-			for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-			{
-				weapon_type = weapon_config_database[config_type][package].sub_type;
-
-				if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE)
-				{
-					suitability[package] = 0;
-				}
-			}
-		}
-	}
-
-	//
 	// find the most suitable weapon
-	//
 
 	{
 		int
-			highest_suitability;
-
-		highest_suitability = 0;
+			highest_suitability = 0;
 
 		weapon_type = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
-		switch (get_local_entity_type (launcher))
+		for (package = 1; package < NUM_ENTITY_SUB_TYPE_WEAPONS; package++)
 		{
-			case ENTITY_TYPE_FIXED_WING:
+			if (damage_by_type[package] > highest_suitability)
 			{
-				for (package = NUM_WEAPON_PACKAGES-1; package > 0; package--)
-				{
-					if (suitability[package] > highest_suitability)
-					{
-						weapon_type = weapon_config_database[config_type][package].sub_type;
-
-						highest_suitability = suitability[package];
-					}
-				}
-				break;
-			}
-			
-			default:
-			{
-				for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-				{
-					if (suitability[package] > highest_suitability)
-					{
-						weapon_type = weapon_config_database[config_type][package].sub_type;
-
-						highest_suitability = suitability[package];
-					}
-				}
-				break;
+				weapon_type = package;
+				highest_suitability = damage_by_type[package];
 			}
 		}
 
-		#if DEBUG_MODULE
-
-		if (launcher == get_external_view_entity ())
+		if (debug_flag)
 		{
-			debug_log ("WN_TGT : BEST WEAPON %s - damage %d", weapon_database[weapon_type].full_name, highest_suitability);
+			debug_log ("WN_TGT : PRIMARY WEAPON %s - damage %d", weapon_database[weapon_type].full_name, highest_suitability);
 		}
-
-		#endif
 	}
 
 	return weapon_type;
@@ -649,7 +600,7 @@ float get_local_entity_max_weapon_range (entity *launcher)
 				// check warhead is capable of damage
 				//
 
-				if (weapon_is_capable_of_damage (weapon_type))
+				if (weapon_type >= WEAPON_WARHEAD_TYPE_SOLID_SHOT)
 				{
 					//
 					// check package is not damaged

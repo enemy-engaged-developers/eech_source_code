@@ -75,7 +75,7 @@ extern void weapon_movement (entity *en);
 
 extern void generate_ballistics_tables(void);
 extern void delete_ballistics_tables(void);
-
+extern void generate_guided_missiles_tables(void);
 extern float get_projectile_flight_time_fast(entity_sub_types wpn_type, float range, float height_difference);
 
 /** 
@@ -96,7 +96,7 @@ extern float get_projectile_flight_time_fast(entity_sub_types wpn_type, float ra
  * @use_fixed_pitch  Use fixed pitch, not fixed target.
  * @return           TRUE if able to calculate ballistics.  FALSE otherwise (usually because target is outside maximum range)
  */
-extern int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int use_fixed_pitch);
+extern int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int use_fixed_pitch, float velocity);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -671,7 +671,7 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
-			"INT_TYPE_HARD_DAMAGE_CAPABILITY",          			// name
+			"INT_TYPE_ARMOR_PENETRATION_CAPABILITY",          			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			32,   								             			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
@@ -1420,7 +1420,7 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
-			"INT_TYPE_SOFT_DAMAGE_CAPABILITY",          			// name
+			"INT_TYPE_DAMAGE_CAPABILITY",          			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			32,   								             			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
@@ -1854,7 +1854,7 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
-			"INT_TYPE_WARHEAD_EFFECTIVE_CLASS",		 				// name
+			"INT_TYPE_ARMOR_LEVEL",		 				// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			32,																// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
@@ -1995,6 +1995,13 @@ int_type_data
 		},
 		{
 			"INT_TYPE_WEAPON_WARHEAD_TYPE",           			// name
+			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
+			32,                                       			// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"INT_TYPE_WEAPON_ROCKET",           			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			32,                                       			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack

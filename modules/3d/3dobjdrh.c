@@ -192,6 +192,8 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 	current_object_3d_dissolve_value = obj->object_dissolve_value;
 	current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 	current_object_3d_dissolve_factor /= 255.0;
+	
+	current_object_3d_diffuse_factor = obj->object_diffuse_value / 255.0;
 
 	//
 	// Calculate the object's rotation matrix, to transform its 3d points relative to the view.
@@ -1098,6 +1100,8 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 	current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 	current_object_3d_dissolve_factor /= 255.0;
 
+	current_object_3d_diffuse_factor = obj->object_diffuse_value / 255.0;
+
 	//
 	// Calculate the object's rotation matrix, to transform its 3d points relative to the view.
 	//
@@ -1982,12 +1986,12 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 				if ( current_object_3d_surface->luminous )
 				{
 
-					set_d3d_material_emissive_colour ( current_object_3d_surface->red, current_object_3d_surface->green, current_object_3d_surface->blue, current_object_3d_surface->alpha );
+					set_d3d_material_emissive_colour ( current_object_3d_surface->red * current_object_3d_diffuse_factor, current_object_3d_surface->green * current_object_3d_diffuse_factor, current_object_3d_surface->blue * current_object_3d_diffuse_factor, current_object_3d_surface->alpha );
 				}
 				else
 				{
 
-					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
+					set_d3d_material_colour ( 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
 				}
 
 				current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
@@ -2049,7 +2053,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 						current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT;
 #endif
 	
-						set_d3d_material_emissive_colour ( current_object_3d_surface->red, current_object_3d_surface->green, current_object_3d_surface->blue, current_object_3d_surface->alpha );
+						set_d3d_material_emissive_colour ( current_object_3d_surface->red * current_object_3d_diffuse_factor, current_object_3d_surface->green * current_object_3d_diffuse_factor, current_object_3d_surface->blue * current_object_3d_diffuse_factor, current_object_3d_surface->alpha );
 	
 						set_d3d_texture ( 0, current_object_3d_luminosity_texture );
 						set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
@@ -2179,9 +2183,9 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 				else
 				{
 
-					set_d3d_material_colour ( current_object_3d_surface->red,
-														current_object_3d_surface->green,
-														current_object_3d_surface->blue,
+					set_d3d_material_colour ( current_object_3d_surface->red *	current_object_3d_diffuse_factor,
+														current_object_3d_surface->green *	current_object_3d_diffuse_factor,
+														current_object_3d_surface->blue *	current_object_3d_diffuse_factor,
 														current_object_3d_surface->alpha,
 														current_object_3d_surface->specularity );
 				}
@@ -2438,7 +2442,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 					convert_float_to_int ( ( intensity * ambient_3d_light.colour.green ), &ig );
 					convert_float_to_int ( ( intensity * ambient_3d_light.colour.blue ), &ib );
 	
-					set_d3d_material_emissive_colour ( ir, ig, ib, current_object_3d_surface->alpha );
+					set_d3d_material_emissive_colour ( ir * current_object_3d_diffuse_factor, ig * current_object_3d_diffuse_factor, ib * current_object_3d_diffuse_factor, current_object_3d_surface->alpha );
 
 					if ( current_object_3d_surface->additive )
 					{
@@ -2472,7 +2476,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 				{
 
 					set_d3d_int_state ( D3DRENDERSTATE_ALPHABLENDENABLE, FALSE );
-					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
+					set_d3d_material_colour ( 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
 				}
 
 				set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
@@ -2617,12 +2621,12 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 				if ( current_object_3d_surface->luminous )
 				{
 
-					set_d3d_material_emissive_colour ( iint, iint, iint, current_object_3d_surface->alpha );
+					set_d3d_material_emissive_colour ( iint * current_object_3d_diffuse_factor, iint * current_object_3d_diffuse_factor, iint * current_object_3d_diffuse_factor, current_object_3d_surface->alpha );
 				}
 				else
 				{
 
-					set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
+					set_d3d_material_colour ( 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, current_object_3d_surface->alpha, current_object_3d_surface->specularity );
 				}
 
 				if ( current_object_3d_surface->detail )
@@ -3326,18 +3330,18 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 					asm_convert_float_to_int ( ( ( ( float ) current_object_3d_surface->green ) * current_object_3d_dissolve_factor ), &igreen );
 					asm_convert_float_to_int ( ( ( ( float ) current_object_3d_surface->blue ) * current_object_3d_dissolve_factor ), &iblue );
 			
-					set_d3d_material_emissive_colour ( ired, igreen, iblue, ialpha );
+					set_d3d_material_emissive_colour ( ired *	current_object_3d_diffuse_factor, igreen *	current_object_3d_diffuse_factor, iblue *	current_object_3d_diffuse_factor, ialpha );
 				}
 				else
 				{
 	
-					set_d3d_material_emissive_colour ( current_object_3d_surface->red, current_object_3d_surface->green, current_object_3d_surface->blue, ialpha );
+					set_d3d_material_emissive_colour ( current_object_3d_surface->red *	current_object_3d_diffuse_factor, current_object_3d_surface->green *	current_object_3d_diffuse_factor, current_object_3d_surface->blue *	current_object_3d_diffuse_factor, ialpha );
 				}
 			}
 			else
 			{
 	
-				set_d3d_material_colour ( 255, 255, 255, ialpha, current_object_3d_surface->specularity );
+				set_d3d_material_colour ( 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, ialpha, current_object_3d_surface->specularity );
 			}
 	
 			if ( current_object_3d_surface->texture_wrapped_u )	{ current_object_3d_texture_u_address = D3DTADDRESS_WRAP; }
@@ -3398,20 +3402,20 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 					asm_convert_float_to_int ( ( ( ( float ) current_object_3d_surface->green ) * current_object_3d_dissolve_factor ), &igreen );
 					asm_convert_float_to_int ( ( ( ( float ) current_object_3d_surface->blue ) * current_object_3d_dissolve_factor ), &iblue );
 			
-					set_d3d_material_emissive_colour ( ired, igreen, iblue, ialpha );
+					set_d3d_material_emissive_colour ( ired *	current_object_3d_diffuse_factor, igreen *	current_object_3d_diffuse_factor, iblue *	current_object_3d_diffuse_factor, ialpha );
 				}
 				else
 				{
 	
-					set_d3d_material_emissive_colour ( current_object_3d_surface->red, current_object_3d_surface->green, current_object_3d_surface->blue, ialpha );
+					set_d3d_material_emissive_colour ( current_object_3d_surface->red *	current_object_3d_diffuse_factor, current_object_3d_surface->green *	current_object_3d_diffuse_factor, current_object_3d_surface->blue *	current_object_3d_diffuse_factor, ialpha );
 				}
 			}
 			else
 			{
 	
-				set_d3d_material_colour ( current_object_3d_surface->red,
-													current_object_3d_surface->green,
-													current_object_3d_surface->blue,
+				set_d3d_material_colour ( current_object_3d_surface->red *	current_object_3d_diffuse_factor,
+													current_object_3d_surface->green *	current_object_3d_diffuse_factor,
+													current_object_3d_surface->blue *	current_object_3d_diffuse_factor,
 													ialpha,
 													current_object_3d_surface->specularity );
 			}
@@ -3435,7 +3439,7 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 		if ( ( current_object_3d_surface->polygons ) && ( current_object_3d_surface->reflectivity != 0 ) )
 		{
 	
-			set_d3d_material_colour ( 255, 255, 255, current_object_3d_surface->reflectivity, current_object_3d_surface->specularity );
+			set_d3d_material_colour ( 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, 255 *	current_object_3d_diffuse_factor, current_object_3d_surface->reflectivity, current_object_3d_surface->specularity );
 	
 			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );

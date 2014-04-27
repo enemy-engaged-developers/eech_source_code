@@ -138,6 +138,8 @@ void draw_z_sorted_3d_object ( object_3d_instance *obj )
 	current_object_3d_dissolve_factor = 1.0;
 	current_object_3d_dissolve_value = 255;
 
+	current_object_3d_diffuse_factor = 1.0;
+
 	//
 	// Turn lightmaps off
 	//

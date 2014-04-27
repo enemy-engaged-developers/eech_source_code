@@ -153,6 +153,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->ac.mob.side = ENTITY_SIDE_UNINITIALISED;
 
+		raw->ac.weapon_launch_delay = 0;
+
 		raw->ac.operational_state = OPERATIONAL_STATE_UNKNOWN;
 
 		//
@@ -472,6 +474,12 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 	// create and attach special effects
 	//
 
+	//
+	// damage smoke
+	//
+
+	attach_aircraft_meta_smoke_lists (new_entity);
+
 	create_helicopter_rotor_sound_effects (new_entity);
 
 	{
@@ -616,6 +624,8 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 	//
 
 	raw = (helicopter *) get_local_entity_data (new_entity);
+
+	ASSERT(point_inside_map_area(position));
 
 	get_3d_terrain_point_data (position->x, position->z, &raw->ac.terrain_info);
 

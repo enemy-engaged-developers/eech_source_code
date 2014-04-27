@@ -70,9 +70,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_3D_SMOKE_TRAILS 152
+#define MAX_3D_SMOKE_TRAILS 8192
 
-#define MAX_3D_SMOKE_TRAIL_POINTS 1024
+#define MAX_3D_SMOKE_TRAIL_POINTS 32768
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static real_colour light_smoke_colour ( real_colour colour, int additive );
+//static real_colour light_smoke_colour ( real_colour colour, int additive );
 
 static void render_smoke_trail_polygon ( vertex *poly, screen *texture, int additive );
 
@@ -131,7 +131,7 @@ smoke_trail_information *get_smoke_trail_header ( void )
 	}
 	else
 	{
-
+		debug_log("not enough place for smoke trails!");
 		return ( NULL );
 	}
 }
@@ -157,6 +157,7 @@ smoke_trail_data *get_smoke_trail_point_data ( int number_of_points )
 	}
 	else
 	{
+		debug_log("not enough place for smoke trail points!");
 
 		return ( NULL );
 	}
@@ -259,7 +260,7 @@ void insert_zbiased_smoke_trail_into_3d_scene ( int number_of_points, float zbia
 		
 				rotated_points[0].texture_u = texture_u;
 
-				rotated_points[0].colour = light_smoke_colour ( points[0].colour, additive );
+				rotated_points[0].colour = points[0].colour;
 		
 				for ( count = 0; count < ( number_of_points - 1 ); count++ )
 				{
@@ -293,7 +294,7 @@ void insert_zbiased_smoke_trail_into_3d_scene ( int number_of_points, float zbia
 					texture_u += texture_temp_distance;
 		
 					rotated_points[count+1].texture_u = texture_u;
-					rotated_points[count+1].colour = light_smoke_colour ( points[count+1].colour, additive );
+					rotated_points[count+1].colour = points[count+1].colour;
 				}
 		
 				//
@@ -376,85 +377,85 @@ void insert_zbiased_smoke_trail_into_3d_scene ( int number_of_points, float zbia
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-real_colour light_smoke_colour ( real_colour colour, int additive )
-{
-
-	real_colour
-		result;
-
-	float
-		r,
-		g,
-		b,
-		intensity;
-
-	int
-		ir,
-		ig,
-		ib;
-
-	result.colour = colour.colour;
-
-	if ( additive )
-	{
-
-		if (active_3d_environment->render_filter != RENDER_CLEAR )
-		{
-
-			//
-			// Colour the additive to the light colour
-			//
-
-			r = colour.red;
-			g = colour.green;
-			b = colour.blue;
-
-			intensity = ( 0.3 * r ) + ( 0.59 * g ) + ( 0.11 * b );
-
-			r = intensity * ambient_3d_light.colour.red;
-			g = intensity * ambient_3d_light.colour.green;
-			b = intensity * ambient_3d_light.colour.blue;
-
-			asm_convert_float_to_int ( r, &ir );
-			asm_convert_float_to_int ( g, &ig );
-			asm_convert_float_to_int ( b, &ib );
-
-			result.red = ir;
-			result.green = ig;
-			result.blue = ib;
-		}
-		else
-		{
-
-			result = colour;
-		}
-	}
-	else
-	{
-
-		r = colour.red;
-		g = colour.green;
-		b = colour.blue;
-
-		r *= ambient_3d_light.colour.red * 1.866666;		//2.8;
-		g *= ambient_3d_light.colour.green * 1.866666;	//2.8;
-		b *= ambient_3d_light.colour.blue * 1.866666;	//2.8;
-
-		asm_convert_float_to_int ( r, &ir );
-		asm_convert_float_to_int ( g, &ig );
-		asm_convert_float_to_int ( b, &ib );
-
-		ir = bound ( ir, 0, 255 );
-		ig = bound ( ig, 0, 255 );
-		ib = bound ( ib, 0, 255 );
-
-		result.red = ir;
-		result.green = ig;
-		result.blue = ib;
-	}
-
-	return ( result );
-}
+//real_colour light_smoke_colour ( real_colour colour, int additive )
+//{
+//
+//	real_colour
+//		result;
+//
+//	float
+//		r,
+//		g,
+//		b,
+//		intensity;
+//
+//	int
+//		ir,
+//		ig,
+//		ib;
+//
+//	result.colour = colour.colour;
+//
+//	if ( additive )
+//	{
+//
+//		if (active_3d_environment->render_filter != RENDER_CLEAR )
+//		{
+//
+//			//
+//			// Colour the additive to the light colour
+//			//
+//
+//			r = colour.red;
+//			g = colour.green;
+//			b = colour.blue;
+//
+//			intensity = ( 0.3 * r ) + ( 0.59 * g ) + ( 0.11 * b );
+//
+//			r = intensity * ambient_3d_light.colour.red;
+//			g = intensity * ambient_3d_light.colour.green;
+//			b = intensity * ambient_3d_light.colour.blue;
+//
+//			asm_convert_float_to_int ( r, &ir );
+//			asm_convert_float_to_int ( g, &ig );
+//			asm_convert_float_to_int ( b, &ib );
+//
+//			result.red = ir;
+//			result.green = ig;
+//			result.blue = ib;
+//		}
+//		else
+//		{
+//
+//			result = colour;
+//		}
+//	}
+//	else
+//	{
+//		
+//		r = colour.red;
+//		g = colour.green;
+//		b = colour.blue;
+//
+//		r *= ambient_3d_light.colour.red * 1.866666;		//2.8;
+//		g *= ambient_3d_light.colour.green * 1.866666;	//2.8;
+//		b *= ambient_3d_light.colour.blue * 1.866666;	//2.8;
+//
+//		asm_convert_float_to_int ( r, &ir );
+//		asm_convert_float_to_int ( g, &ig );
+//		asm_convert_float_to_int ( b, &ib );
+//
+//		ir = bound ( ir, 0, 255 );
+//		ig = bound ( ig, 0, 255 );
+//		ib = bound ( ib, 0, 255 );
+//
+//		result.red = ir;
+//		result.green = ig;
+//		result.blue = ib;
+//	}
+//
+//	return ( result );
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

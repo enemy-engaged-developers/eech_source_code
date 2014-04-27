@@ -70,20 +70,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define AIRCRAFT_DAMAGE_TIMER_MAX_VALUE	10.0
-
-static float
-	aircraft_damage_timer = 0.0;
-
-static int
-	send_damage_update_flag = FALSE;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define MORTAL_DAMAGE_LEVEL 25
-#define CRITICAL_DAMAGE_LEVEL 15
+#define DEBUG_MODULE 0
+#define AIRCRAFT_MORTAL_DAMAGE_LEVEL 30
+#define AIRCRAFT_CRITICAL_DAMAGE_LEVEL 5
+#define MAX_META_SMOKE_LIST_ATTACHMENT_POINTS 	2
 
 aircraft_damage_types aircraft_critically_damaged (entity *en)
 {
@@ -98,11 +88,11 @@ aircraft_damage_types aircraft_critically_damaged (entity *en)
 
 	percent_damaged = (100 * raw->damage_level) / aircraft_database[raw->mob.sub_type].initial_damage_level;
 
-	if (percent_damaged < CRITICAL_DAMAGE_LEVEL)
+	if (percent_damaged < AIRCRAFT_CRITICAL_DAMAGE_LEVEL)
 	{
 		return AIRCRAFT_DAMAGE_CRITICAL;
 	}
-	else if (percent_damaged < MORTAL_DAMAGE_LEVEL)
+	else if (percent_damaged < AIRCRAFT_MORTAL_DAMAGE_LEVEL)
 	{
 		return AIRCRAFT_DAMAGE_MORTAL;
 	}
@@ -116,22 +106,236 @@ aircraft_damage_types aircraft_critically_damaged (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static struct ATTACHED_META_SMOKE_LIST_TABLE
+{
+
+	meta_smoke_list_types							type;
+	object_3d_sub_object_index_numbers			attachment_point[MAX_META_SMOKE_LIST_ATTACHMENT_POINTS];
+
+} attached_meta_smoke_list_table[] =
+	{
+		////////////////////////////////////////////////
+		//
+		// LIGHT DAMAGE MOVING
+		//
+		////////////////////////////////////////////////
+		{
+			META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING,
+			{
+				OBJECT_3D_SUB_OBJECT_DAMAGED_SMOKE,
+				-1
+			}
+		},
+		////////////////////////////////////////////////
+		//
+		// HEAVY DAMAGE MOVING
+		//
+		////////////////////////////////////////////////
+		{
+			META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING,
+			{
+				OBJECT_3D_SUB_OBJECT_DAMAGED_SMOKE,
+				-1
+			}
+		},
+		////////////////////////////////////////////////
+		//
+		// LIGHT DAMAGE STATIC
+		//
+		////////////////////////////////////////////////
+		{
+			META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC,
+			{
+				OBJECT_3D_SUB_OBJECT_DAMAGED_SMOKE,
+				-1
+			}
+		},
+		////////////////////////////////////////////////
+		//
+		// HEAVY DAMAGE STATIC
+		//
+		////////////////////////////////////////////////
+		{
+			META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC,
+			{
+				OBJECT_3D_SUB_OBJECT_DAMAGED_SMOKE,
+				-1
+			}
+		},
+		////////////////////////////////////////////////
+		//
+		// TERMINATOR
+		//
+		////////////////////////////////////////////////
+		{
+			(meta_smoke_list_types) -1,
+			{
+				-1,
+				-1
+			}
+		}
+	};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void attach_aircraft_meta_smoke_lists (entity *en)
+{
+	int
+		item,
+		point;
+
+	object_3d_sub_object_index_numbers
+		attachment_point;
+
+	meta_smoke_list_types
+		type;
+
+	item = 0;
+
+	while (TRUE)
+	{
+		type = attached_meta_smoke_list_table [item].type;
+
+		if (type == -1)
+		{
+			break;
+		}
+		else
+		{
+			point = 0;
+
+			while (TRUE)
+			{
+				attachment_point = attached_meta_smoke_list_table [item].attachment_point [point];
+
+				if (attachment_point == -1)
+				{
+					break;
+				}
+
+				if (point >= MAX_META_SMOKE_LIST_ATTACHMENT_POINTS)
+				{
+					debug_fatal ("AIRCRAFT: Attach meta smoke lists - too many attachment points");
+				}
+
+				attach_local_meta_smoke_lists_to_object (en, type, attachment_point, NULL);
+
+				point ++;
+			}
+		}
+
+		item ++;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void switch_aircraft_damaged_smoke (entity *en)
+{
+	int
+		high_speed;
+	aircraft_damage_types
+		damage_level;
+
+	high_speed = get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY) >= AIRCRAFT_DAMAGED_SMOKE_SPEED_THRESHOLD;
+
+	damage_level = aircraft_critically_damaged(en);
+	
+	#if DEBUG_MODULE
+		debug_log("AIRCRAFT: switching damaged smoke for %s, damage_level %i, high_speed %i", aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].full_name, damage_level, high_speed);
+	#endif
+		
+	if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) != OPERATIONAL_STATE_DEAD)
+	{
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING, high_speed && (damage_level == AIRCRAFT_DAMAGE_MORTAL));
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING, high_speed && (damage_level == AIRCRAFT_DAMAGE_CRITICAL));
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC, !high_speed && (damage_level == AIRCRAFT_DAMAGE_MORTAL));
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC, !high_speed && (damage_level == AIRCRAFT_DAMAGE_CRITICAL));
+	}
+	else
+	{
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING, FALSE);
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING, FALSE);
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC, FALSE);
+		set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC, FALSE);
+
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC);
+		clear_smoke_list_generator_lifetime (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void assess_aircraft_damage_level (entity *en, int old_damage_level, int new_damage_level)
 {
 
-	switch (get_local_entity_type (en))
-	{
-		case ENTITY_TYPE_FIXED_WING:
-		{
-			assess_fixed_wing_damage_level (en, old_damage_level, new_damage_level);
+	float
+		initial_damage,
+		old_percent_damaged,
+		new_percent_damaged;
 
-			break;
-		}
-		case ENTITY_TYPE_HELICOPTER:
+	if (old_damage_level == new_damage_level)
+	{
+		return;
+	}
+	
+	initial_damage = (float)(aircraft_database[get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].initial_damage_level);
+	
+	old_percent_damaged = (100.0 * (float)old_damage_level) / initial_damage;
+	new_percent_damaged = (100.0 * (float)new_damage_level) / initial_damage;
+
+	#if DEBUG_MODULE
+		debug_log("AIRCRAFT: %s old damage %f, new damage %f", aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].full_name, old_percent_damaged, new_percent_damaged);
+	#endif
+		
+	// Eject Pilot(s)
+
+	if (get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT) && get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI && new_percent_damaged < 0.75 * AIRCRAFT_CRITICAL_DAMAGE_LEVEL && new_damage_level > 10)
+		initiate_aircraft_crew_ejection (en);
+
+	// update smoke
+	
+	if ((new_percent_damaged < AIRCRAFT_CRITICAL_DAMAGE_LEVEL && old_percent_damaged >= AIRCRAFT_CRITICAL_DAMAGE_LEVEL) || 
+			(new_percent_damaged < AIRCRAFT_MORTAL_DAMAGE_LEVEL && old_percent_damaged >= AIRCRAFT_MORTAL_DAMAGE_LEVEL)) // damage threshold reached
+	{
+		switch_aircraft_damaged_smoke(en);
+		
+		if (get_comms_model() == COMMS_MODEL_SERVER && new_damage_level > 10) // return group home
 		{
-			break;
+			entity
+				*group,
+				*guide,
+				*task;
+			
+			group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+
+			if (group)
+			{
+				guide = get_local_group_primary_guide (group);
+						
+				if (guide)
+				{
+					task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
+
+					debug_log("TASK PRIORITY %f", task->task_data->task_priority);
+					if (task->task_data->task_priority <= 5.0)
+						group_return_to_base (group);
+				}
+			}
 		}
 	}
+		
+	if (new_percent_damaged >= AIRCRAFT_MORTAL_DAMAGE_LEVEL && old_percent_damaged < AIRCRAFT_MORTAL_DAMAGE_LEVEL) // recovery happened
+		switch_aircraft_damaged_smoke(en);
+		
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -574,36 +778,3 @@ void play_aircraft_flown_into_new_sector_speech (entity *en, entity *old_sector,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void update_aircraft_damage_timers (void)
-{
-
-	if (send_damage_update_flag)
-	{
-		send_damage_update_flag = FALSE;
-	}
-
-	aircraft_damage_timer -= get_delta_time ();
-
-	if (aircraft_damage_timer < 0.0)
-	{
-		aircraft_damage_timer = AIRCRAFT_DAMAGE_TIMER_MAX_VALUE;
-
-		send_damage_update_flag = TRUE;
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int get_aircraft_send_damage_update_flag (void)
-{
-	return send_damage_update_flag;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-

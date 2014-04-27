@@ -195,48 +195,46 @@ void draw_3d_sprite ( object_3d_sprite *sprite )
 		set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
 		set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
 
-		if (active_3d_environment->render_filter != RENDER_CLEAR )
+		if (sprite->additive && (active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME))
+		{
+			real_colour
+				colour;
+
+			colour.colour = sprite->colour;
+			colour.red = colour.green = colour.blue = 255;
+			sprite->colour = colour.colour;			
+		}
+		else if (active_3d_environment->render_filter != RENDER_CLEAR )
 		{
 
 			float
-				r,
-				g,
-				b,
-				intensity;
-
-			int
-				ir,
-				ig,
-				ib;
-
+				max_multiplier;
 			real_colour
 				colour;
+			light_colour
+				ambient;
 
 			//
 			// Colour the additive to the light colour
 			//
 
-			colour.colour = sprite->colour;
+			ambient.red = ambient_3d_light.colour.red + 0.75 * current_3d_sun->colour.red;
+			ambient.green = ambient_3d_light.colour.green + 0.75 * current_3d_sun->colour.green;
+			ambient.blue = ambient_3d_light.colour.blue + 0.75 * current_3d_sun->colour.blue;
 
-			r = colour.red;
-			g = colour.green;
-			b = colour.blue;
+			max_multiplier = max(ambient.red, max(ambient.green,ambient.blue));
 
-			intensity = ( 0.3 * r ) + ( 0.59 * g ) + ( 0.11 * b );
-
-			r = intensity * ambient_3d_light.colour.red;
-			g = intensity * ambient_3d_light.colour.green;
-			b = intensity * ambient_3d_light.colour.blue;
-
-			convert_float_to_int ( r, &ir );
-			convert_float_to_int ( g, &ig );
-			convert_float_to_int ( b, &ib );
+			if (max_multiplier > 1 || sprite->additive && max_multiplier < 1)
+			{
+				ambient.red /= max_multiplier;
+				ambient.green /= max_multiplier;
+				ambient.blue /= max_multiplier;
+			}
 
 			colour.colour = sprite->colour;
-			colour.red = ir;
-			colour.green = ig;
-			colour.blue = ib;
-
+			colour.red *= ambient.red;
+			colour.green *= ambient.green;
+			colour.blue *= ambient.blue;
 			sprite->colour = colour.colour;
 		}
 

@@ -106,13 +106,9 @@
 
 extern int damage_client_server_entity (entity *en, entity *weapon, float damage_modifier);
 
-extern void assess_effectiveness_of_all_weapons_on_entity (entity *en);
-
 extern void display_debug_kill_info (entity *victim, entity *aggressor);
 
-extern int weapon_is_capable_of_damage (entity_sub_types weapon_type);
-
-extern int weapon_is_suitable_for_damaging_target (entity_sub_types weapon_type, entity *target, int direct_hit);
+extern int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier, entity_sub_types weapon_type, float velocity);
 
 extern void initialise_destroyed_object_database (void);
 

@@ -82,7 +82,8 @@ static void update_server (entity *en)
 		*raw;
 
 	int
-		loop;
+		loop,
+		damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL);
 
 	raw = (person *) get_local_entity_data (en);
 
@@ -92,7 +93,18 @@ static void update_server (entity *en)
 
 	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
-	if (raw->vh.mob.alive)
+	// bleeding damage
+	
+	if (damage_level &&  vehicle_critically_damaged(en) && frand1() < 2 * get_delta_time())
+	{
+		damage_level--;
+		set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+
+		if (damage_level <= 0)
+			kill_client_server_entity (en);
+	}
+
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 		//
 		// Update
@@ -125,6 +137,8 @@ static void update_server (entity *en)
 
 		update_vehicle_decoy_release (en);
 
+		rearm_vehicle_weapons(en);
+		
 		//
 		////////////////////////////////////////
 	}
@@ -132,11 +146,15 @@ static void update_server (entity *en)
 	{
 		update_person_animation (en);
 
-		raw->vh.death_timer -= get_delta_time ();
-
-		if (raw->vh.death_timer <= 0.0)
+		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
-			destroy_client_server_entity_family (en);
+			raw->vh.death_timer += get_delta_time ();
+
+			if (!((int)(raw->vh.death_timer + 1) % 300))
+				if (raw->vh.death_timer >= calculate_mobile_death_timer_value (en))
+				{
+					destroy_client_server_entity_family (en);
+				}
 		}
 	}
 }
@@ -161,7 +179,7 @@ static void update_client (entity *en)
 
 	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
-	if (raw->vh.mob.alive)
+	if (raw->vh.mob.alive && !vehicle_critically_damaged(en))
 	{
 
 		//
@@ -191,6 +209,8 @@ static void update_client (entity *en)
 
 		update_entity_weapon_system_weapon_and_target_vectors (en);
 
+		rearm_vehicle_weapons(en);
+		
 		//
 		////////////////////////////////////////
 	}
@@ -198,11 +218,9 @@ static void update_client (entity *en)
 	{
 		update_person_animation (en);
 
-		raw->vh.death_timer -= get_delta_time ();
-
-		if (raw->vh.death_timer <= 0.0)
+		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
-			destroy_client_server_entity_family (en);
+			raw->vh.death_timer += get_delta_time ();
 		}
 	}
 }

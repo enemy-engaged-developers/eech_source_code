@@ -99,30 +99,30 @@ void get_local_entity_weapon_load(entity* en, weapon_count weapon_load[], unsign
 			entity_sub_types weapon_type;
 			int number;
 
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-				break;
-
-			if (!package_status[package].damaged)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				unsigned i;
-
-				weapon_type = weapon_config_database[config_type][package].sub_type;
-				number = package_status[package].number;
-
-				for (i=0; i < next_free; i++)
+				if (!package_status[package].damaged)
 				{
-					if (weapon_load[i].weapon_type == weapon_type)
+					unsigned i;
+
+					weapon_type = weapon_config_database[config_type][package].sub_type;
+					number = package_status[package].number;
+
+					for (i=0; i < next_free; i++)
 					{
-						weapon_load[i].count += number;
-						break;
+						if (weapon_load[i].weapon_type == weapon_type)
+						{
+							weapon_load[i].count += number;
+							break;
+						}
 					}
-				}
 
-				if (i == next_free && next_free <= max_num_weapons-1 && weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)  // weapon not in array already
-				{
-					next_free++;
-					weapon_load[i].weapon_type = weapon_type;
-					weapon_load[i].count = number;
+					if (i == next_free && next_free <= max_num_weapons-1 && weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)  // weapon not in array already
+					{
+						next_free++;
+						weapon_load[i].weapon_type = weapon_type;
+						weapon_load[i].count = number;
+					}
 				}
 			}
 		}
@@ -159,16 +159,43 @@ float get_local_entity_weapon_load_weight (entity *en)
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				break;
+				weapon_weight = weapon_database[weapon_config_database[config_type][package].sub_type].start_weight;
+
+				package_weight = weapon_weight * package_status[package].number;
+
+				weapon_load_weight += package_weight;
 			}
+		}
+	}
+	
+	// cargo weight
+	
+	{
+		entity
+			*group,
+			*guide,
+			*task;
 
-			weapon_weight = weapon_database[weapon_config_database[config_type][package].sub_type].weight;
+		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
-			package_weight = weapon_weight * package_status[package].number;
+		if (group->group_data->sub_type == ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER || group->group_data->sub_type == ENTITY_SUB_TYPE_GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER)
+		{
+			guide = get_local_group_primary_guide (group);
 
-			weapon_load_weight += package_weight;
+			if (guide)
+			{
+				task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
+
+				if (task->task_data->sub_type == ENTITY_SUB_TYPE_TASK_SUPPLY)
+				{
+					if (group->group_data->sub_type == ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER)
+						weapon_load_weight += 6000;
+					else
+						weapon_load_weight += 2000;
+				}
+			}
 		}
 	}
 
@@ -207,16 +234,14 @@ int get_local_entity_weapon_count (entity *en, entity_sub_types weapon_sub_type)
 
 			for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 			{
-				if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
-					break;
-				}
-
-				if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
-				{
-					if (!package_status[package].damaged)
+					if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
 					{
-						weapon_count += package_status[package].number;
+						if (!package_status[package].damaged)
+						{
+							weapon_count += package_status[package].number;
+						}
 					}
 				}
 			}
@@ -237,16 +262,14 @@ int check_weapon_on_hardpoint (weapon_config_types config_type, entity_sub_types
 
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 	{
-		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
-			return (FALSE);
-		}
-
-		if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
-		{
-			if (weapon_config_database[config_type][package].heading_depth == heading_depth)
+			if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
 			{
-				return (TRUE);
+				if (weapon_config_database[config_type][package].heading_depth == heading_depth)
+				{
+					return (TRUE);
+				}
 			}
 		}
 	}
@@ -264,17 +287,9 @@ int check_hardpoint_clean (weapon_config_types config_type, int heading_depth)
 		package;
 
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-	{
-		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-		{
-			return (TRUE);
-		}
-
-		if (weapon_config_database[config_type][package].heading_depth == heading_depth)
-		{
-			return (FALSE);
-		}
-	}
+		if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].heading_depth == heading_depth)
+				return (FALSE);
 
 	return (TRUE);
 }
@@ -304,29 +319,27 @@ void set_local_entity_weapon_damage (entity *en, int heading_depth, entity_sub_t
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				break;
-			}
-
-			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-			{
-				if (weapon_config_database[config_type][package].heading_depth == heading_depth)
-				{
-					package_status[package].damaged = damage;
-
-					break;
-				}
-			}
-			else
-			{
-				if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
+				if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
 					if (weapon_config_database[config_type][package].heading_depth == heading_depth)
 					{
 						package_status[package].damaged = damage;
 
 						break;
+					}
+				}
+				else
+				{
+					if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
+					{
+						if (weapon_config_database[config_type][package].heading_depth == heading_depth)
+						{
+							package_status[package].damaged = damage;
+
+							break;
+						}
 					}
 				}
 			}
@@ -427,29 +440,9 @@ int get_local_entity_weapon_hardpoint_info
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				break;
-			}
-
-			if (given_weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-			{
-				if (weapon_config_database[config_type][package].heading_depth == heading_depth)
-				{
-					*weapon_sub_type = weapon_config_database[config_type][package].sub_type;
-
-					*number = package_status[package].number;
-
-					*damaged = package_status[package].damaged;
-
-					result = TRUE;
-
-					break;
-				}
-			}
-			else
-			{
-				if (weapon_config_database[config_type][package].sub_type == given_weapon_sub_type)
+				if (given_weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
 					if (weapon_config_database[config_type][package].heading_depth == heading_depth)
 					{
@@ -462,6 +455,24 @@ int get_local_entity_weapon_hardpoint_info
 						result = TRUE;
 
 						break;
+					}
+				}
+				else
+				{
+					if (weapon_config_database[config_type][package].sub_type == given_weapon_sub_type)
+					{
+						if (weapon_config_database[config_type][package].heading_depth == heading_depth)
+						{
+							*weapon_sub_type = weapon_config_database[config_type][package].sub_type;
+
+							*number = package_status[package].number;
+
+							*damaged = package_status[package].damaged;
+
+							result = TRUE;
+
+							break;
+						}
 					}
 				}
 			}
@@ -513,20 +524,18 @@ void set_comanche_stub_wing_visibility (entity *en)
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
-				break;
-			}
+				if
+				(
+					(weapon_config_database[config_type][package].heading_depth == COMANCHE_LHS_STUB_WING) ||
+					(weapon_config_database[config_type][package].heading_depth == COMANCHE_RHS_STUB_WING)
+				)
+				{
+					stub_wings_required = TRUE;
 
-			if
-			(
-				(weapon_config_database[config_type][package].heading_depth == COMANCHE_LHS_STUB_WING) ||
-				(weapon_config_database[config_type][package].heading_depth == COMANCHE_RHS_STUB_WING)
-			)
-			{
-				stub_wings_required = TRUE;
-
-				break;
+					break;
+				}
 			}
 		}
 	}
@@ -578,19 +587,13 @@ int get_comanche_stub_wings_attached (entity *en)
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-			{
-				break;
-			}
-
-			if
-			(
-				(weapon_config_database[config_type][package].heading_depth == COMANCHE_LHS_STUB_WING) ||
-				(weapon_config_database[config_type][package].heading_depth == COMANCHE_RHS_STUB_WING)
-			)
-			{
-				return (TRUE);
-			}
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				if
+				(
+					(weapon_config_database[config_type][package].heading_depth == COMANCHE_LHS_STUB_WING) ||
+					(weapon_config_database[config_type][package].heading_depth == COMANCHE_RHS_STUB_WING)
+				)
+					return (TRUE);
 		}
 	}
 

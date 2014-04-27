@@ -105,7 +105,8 @@ extern int
 	current_object_3d_outcode;
 
 extern float
-	current_object_3d_dissolve_factor;
+	current_object_3d_dissolve_factor,
+	current_object_3d_diffuse_factor;
 
 extern unsigned char
 	current_object_3d_dissolve_value;

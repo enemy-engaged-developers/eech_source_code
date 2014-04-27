@@ -328,7 +328,8 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 		total_number_of_sub_object_indices;
 
 	float
-		object_dissolve;
+		object_dissolve,
+		object_diffuse;
 
 	float
 		object_approximation_scale;

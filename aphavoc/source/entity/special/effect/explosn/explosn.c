@@ -86,7 +86,7 @@ static int create_meta_explosion_smoke_trails( meta_explosion_component *explosi
 
 static int create_meta_explosion_sound_effect( meta_explosion_component *explosion_component, vec3d *position, int *entity_index_list );
 
-static void damage_objects_within_explosion_damage_radius (entity *en, entity *target, meta_explosion_types type);
+static void damage_objects_within_explosion_damage_radius (entity *en, entity *target);
 
 static void create_client_server_dust_object_explosion_effect (entity *en, vec3d *pos, int explosive_power);
 
@@ -277,12 +277,6 @@ int create_meta_explosion_sprites( meta_explosion_component *explosion_component
 		// create each individual element
 		//
 
-		#if DEBUG_MODULE >= 2
-
-		debug_log( "index : %d", entity_index_list[ loop ] );
-
-		#endif
-
 		delay = -( explosion_component->delay_max * frand1() );
 //		delay = - explosion_component->delay_max;
 
@@ -343,6 +337,12 @@ int create_meta_explosion_sprites( meta_explosion_component *explosion_component
 		);
 
 		entity_index_list[ loop ] = get_local_entity_index( new_entity );
+
+		#if DEBUG_MODULE >= 2
+
+		debug_log( "index : %d", entity_index_list[ loop ] );
+
+		#endif
 	}
 
 	return count;
@@ -408,12 +408,6 @@ int create_meta_explosion_objects( meta_explosion_component *explosion_component
 		// create each individual element
 		//
 
-		#if DEBUG_MODULE >= 2
-
-		debug_log( "index : %d", entity_index_list[ loop ] );
-
-		#endif
-
 		if ( explosion_component->blast_radius > 0.0 )
 		{
 			heading = ( PI * sfrand1() );
@@ -474,6 +468,12 @@ int create_meta_explosion_objects( meta_explosion_component *explosion_component
 		);
 
 		entity_index_list[ loop ] = get_local_entity_index( new_entity );
+
+		#if DEBUG_MODULE >= 2
+
+		debug_log( "index : %d", entity_index_list[ loop ] );
+
+		#endif
 	}
 
 	return count;
@@ -508,6 +508,12 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 	// create particle entity
 	//
 
+	#if DEBUG_MODULE >= 2
+
+	debug_log("EXPLOSION : creating %d particles", count );
+
+	#endif
+
 	particle_entity = create_local_entity
 	(
 		ENTITY_TYPE_PARTICLE,
@@ -516,10 +522,17 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_PARTICLE_COUNT, count),
 		ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, position->x, position->y, position->z),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_INITIAL_SPEED, explosion_component->initial_speed),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_MOTION_VECTOR_PITCH, sin(rad(explosion_component->motion_vector_pitch))),
 		ENTITY_ATTR_END
 	);
 
 	entity_index_list[ 0 ] = get_local_entity_index( particle_entity );
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log( "index : %d", entity_index_list[ 0 ] );
+
+	#endif
 
 	//
 	// create and link smoke trails to the particle
@@ -527,7 +540,7 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 
 	#if DEBUG_MODULE >= 2
 
-	debug_log("EXPLOSION : creating %d particles", count );
+	debug_log("EXPLOSION : creating %d smoke trails", count );
 
 	#endif
 
@@ -535,12 +548,6 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{
-		#if DEBUG_MODULE >= 2
-
-		debug_log( "index : %d", entity_index_list[ loop + 1 ] );
-
-		#endif
-
 		new_entity = create_local_entity
 		(
 			ENTITY_TYPE_SMOKE_LIST,
@@ -548,8 +555,8 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 			ENTITY_ATTR_PARENT (LIST_TYPE_SPECIAL_EFFECT, particle_entity),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_EXPLOSION_PARTICLE),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_SMOKE_TYPE, trail_type),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_INFINITE_GENERATOR, TRUE),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, INFINITE_SMOKE_ON),
+			ENTITY_ATTR_INT_VALUE (INT_TYPE_INFINITE_GENERATOR, FALSE),
+			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, explosion_component->particle_generator_lifetime),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, explosion_component->frequency),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, explosion_component->smoke_lifetime),
 //			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SCALE, explosion_component->trail_scale),
@@ -558,6 +565,12 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 		);
 
 		entity_index_list[ loop + 1 ] = get_local_entity_index( new_entity );
+
+		#if DEBUG_MODULE >= 2
+
+		debug_log( "index : %d", entity_index_list[ loop + 1 ] );
+
+		#endif
 
 	}
 
@@ -619,11 +632,6 @@ int create_meta_explosion_smoke_trails( meta_explosion_component *explosion_comp
 
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{
-		#if DEBUG_MODULE >= 2
-
-		debug_log( "index : %d", entity_index_list[ loop ] );
-
-		#endif
 
 		new_entity = create_local_entity
 		(
@@ -636,12 +644,18 @@ int create_meta_explosion_smoke_trails( meta_explosion_component *explosion_comp
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, explosion_component->frequency),
 			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, explosion_component->smoke_lifetime),
 //			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SCALE, explosion_component->scale),
-			ENTITY_ATTR_VEC3D (VEC3D_TYPE_INITIAL_VELOCITY, iv->x, iv->y, iv->z),
+			ENTITY_ATTR_VEC3D (VEC3D_TYPE_INITIAL_VELOCITY, sfrand1() * iv->x, frand1() * iv->y, sfrand1() * iv->z),
 			ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, position->x, position->y, position->z),
 			ENTITY_ATTR_END
 		);
 
 		entity_index_list[ loop ] = get_local_entity_index( new_entity );
+
+		#if DEBUG_MODULE >= 2
+
+		debug_log( "index : %d", entity_index_list[ loop ] );
+
+		#endif
 	}
 
 	return count;
@@ -660,8 +674,6 @@ int create_meta_explosion_sound_effect( meta_explosion_component *explosion_comp
 	#if DEBUG_MODULE >= 2
 
 	debug_log("EXPLOSION : creating sound effect" );
-
-	debug_log( "index : %d", entity_index_list[ 0 ] );
 
 	#endif
 
@@ -715,6 +727,12 @@ int create_meta_explosion_sound_effect( meta_explosion_component *explosion_comp
 	);
 
 	entity_index_list[ 0 ] = get_local_entity_index( new_entity );
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log( "index : %d", entity_index_list[ 0 ] );
+
+	#endif
 
 	return 1;
 }
@@ -800,7 +818,8 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 		*pos;
 
 	meta_explosion_types
-		type;
+		explosion_type,
+		collision_type;
 
 	weapon_kill_codes
 		kill_code;
@@ -821,15 +840,35 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 
 	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
 
-	//
 	// calculate type of resulting explosion
-	//
 
-	type = get_suitable_weapon_explosion_type (en, kill_code);
-
-	if (type == META_EXPLOSION_TYPE_NONE)
+	switch (kill_code)
 	{
-		return;
+		case WEAPON_KILL_CODE_HIT_LAND:
+		case WEAPON_KILL_CODE_HIT_TARGET:
+		case WEAPON_KILL_CODE_OVERSHOT_TARGET:
+		case WEAPON_KILL_CODE_SELF_DESTRUCT:
+		{
+			explosion_type = get_suitable_weapon_explosion_type (en, FALSE);
+			break;
+		}
+		default:
+			explosion_type = META_EXPLOSION_TYPE_NONE;
+	}
+
+	// calculate type of collision effects
+
+	switch (kill_code)
+	{
+		case WEAPON_KILL_CODE_HIT_WATER:
+		case WEAPON_KILL_CODE_HIT_LAND:
+		case WEAPON_KILL_CODE_HIT_TARGET:
+		{
+			collision_type = get_suitable_weapon_explosion_type (en, kill_code);
+			break;
+		}
+		default:
+			collision_type = META_EXPLOSION_TYPE_NONE;
 	}
 
 	//
@@ -856,12 +895,15 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 
 			memset (&point_data, 0, sizeof (terrain_3d_point_data));
 
+			ASSERT(point_inside_map_area(pos));
 			get_3d_terrain_point_data (pos->x, pos->z, &point_data);
 
 			if (get_terrain_type_draw_crater (point_data.terrain_type))
 			{
 				create_client_server_weapon_hit_ground_crater (en, pos);
 			}
+
+			damage_objects_within_explosion_damage_radius (en, NULL);
 
 			//
 			// deliberate fall-through
@@ -874,7 +916,7 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 			// notify all objects within blast radius
 			//
 
-			damage_objects_within_explosion_damage_radius (en, NULL, type);
+			damage_objects_within_explosion_damage_radius (en, NULL);
 
 			break;
 		}
@@ -893,33 +935,7 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 			{
 				if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
 				{
-					notify_local_entity (ENTITY_MESSAGE_COLLISION, target, en, 1.0);
-				}
-
-				if ((warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE) ||
-						(warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK))
-				{
-					if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE))
-					{
-						//
-						// create a crater
-						//
-	
-						vec3d
-							crater_pos;
-	
-						memset (&point_data, 0, sizeof (terrain_3d_point_data));
-	
-						crater_pos.x = pos->x;
-						crater_pos.z = pos->z;
-	
-						crater_pos.y = get_3d_terrain_point_data (pos->x, pos->z, &point_data);
-	
-						if (get_terrain_type_draw_crater (point_data.terrain_type))
-						{
-							create_client_server_weapon_hit_ground_crater (en, &crater_pos);
-						}
-					}
+					notify_local_entity (ENTITY_MESSAGE_COLLISION, target, en, 0.0);
 				}
 			}
 
@@ -927,7 +943,7 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 			// notify all objects within blast radius ( except the target )
 			//
 
-			damage_objects_within_explosion_damage_radius (en, target, type);
+			damage_objects_within_explosion_damage_radius (en, target);
 
 			break;
 		}
@@ -937,23 +953,26 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 		}
 	}
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
-	debug_log ("EXPLOSN : Creating Weapon Killed effect, type %d, at %f, %f", type, pos->x, pos->z);
+	debug_log ("EXPLOSN : Creating Weapon Killed effect, type %d, at %f, %f", explosion_type, pos->x, pos->z);
 
 	#endif
 
-	create_client_server_explosion_effect (type, pos, NULL);
+	if (explosion_type != META_EXPLOSION_TYPE_NONE)
+		create_client_server_explosion_effect (explosion_type, pos, NULL);
+	
+	if (collision_type != META_EXPLOSION_TYPE_NONE)
+		create_client_server_explosion_effect (collision_type, pos, NULL);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void damage_objects_within_explosion_damage_radius (entity *en, entity *target, meta_explosion_types type)
+void damage_objects_within_explosion_damage_radius (entity *en, entity *target)
 {
 	float
-		R,
 		range,
 		temp_x,
 		temp_z,
@@ -966,7 +985,8 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 		min_sector_x,
 		max_sector_x,
 		min_sector_z,
-		max_sector_z;
+		max_sector_z,
+		damage_capability;
 
 	vec3d
 		*explosion_position,
@@ -975,15 +995,18 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 	entity
 		*sect,
 		*object;
+	weapon_warhead_types
+		warhead_type;
 
-	damage_radius = meta_explosion_database[ type ].damage_radius;
+	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	damage_capability = get_local_entity_int_value (en, INT_TYPE_DAMAGE_CAPABILITY);
+
+	damage_radius = sqrt(damage_capability);
 
 	if (damage_radius == 0.0)
 	{
 		return;
 	}
-
-	R = damage_radius * damage_radius;
 
 	explosion_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -1044,6 +1067,7 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 					case ENTITY_TYPE_SHIP_VEHICLE:
 					case ENTITY_TYPE_SITE:
 					case ENTITY_TYPE_SITE_UPDATABLE:
+					case ENTITY_TYPE_WEAPON:
 					{
 						if (get_local_entity_int_value (object, INT_TYPE_ALIVE))
 						{
@@ -1051,32 +1075,26 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 
 							if (object_position)
 							{
-								range = get_sqr_3d_range (explosion_position, object_position);
+								range = get_3d_range (explosion_position, object_position);
 
-								if (range < R)
+								if (range && (range < damage_radius))
 								{
-									float
-										x;
-
-									x = (range / R);
-									
-									damage_modifier = 1.0 - x;
-
-									// arneh - for armour piercing warheads (i.e. shaped charge), damage is much less severe for targets not hit directly
-									if (get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE) == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK
-										|| get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE) == WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING)
-									{
-										debug_log("Damage level reduced from %.2f to %.2f for armour piercing charge", damage_modifier, damage_modifier*damage_modifier);
-										damage_modifier *= damage_modifier;
-									}
+									damage_modifier = range / damage_radius; // less value - more damage!
 
 									#if DEBUG_MODULE
-									
-									debug_filtered_log ("EXPLOSN : range %.2f, damage radius %.2f --> damage modifier = %f", range, R, damage_modifier);
-
+									debug_log ("EXPLOSN : damage radius %.2f, range %.2f, damage modifier = %f", damage_radius, range, damage_modifier);
 									#endif
 
-									notify_local_entity (ENTITY_MESSAGE_COLLISION, object, en, damage_modifier);
+									if (object->type != ENTITY_TYPE_WEAPON)
+										notify_local_entity (ENTITY_MESSAGE_COLLISION, object, en, damage_modifier);
+									else if (1 - pow(damage_modifier, pow((float)(warhead_type - 3) / 3, 1.5)) > 0.75 && get_local_entity_int_value (object, INT_TYPE_WEAPON_ROCKET))
+									{
+										#if DEBUG_MODULE
+										debug_log ("EXPLOSN : MISSILE DESTROYED!");
+										#endif
+
+										set_local_entity_int_value (object, INT_TYPE_WEAPON_KILL_CODE, WEAPON_KILL_CODE_OVERSHOT_TARGET);
+									}
 								}
 							}
 						}
@@ -1095,36 +1113,87 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_client_server_object_hit_ground_explosion_effect (entity *en, terrain_types terrain_type)
+void create_client_server_collision_effect (vec3d *pos, dynamics_collision_surface_types surface, unsigned power)
 {
-	vec3d
-		pos;
-
-	meta_explosion_types
-		type;
-
-	ASSERT (en);
-
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
-
-	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &pos);
-
-	if (get_terrain_type_class (terrain_type) == TERRAIN_CLASS_WATER)
-	{
-		type = MEDIUM_WATER_META_EXPLOSION;
-	}
-	else
-	{
-		type = MEDIUM_EARTH_META_EXPLOSION;
-	}
+	ASSERT (power < 5);
+	ASSERT (surface >= 0 && surface < NUM_DYNAMICS_COLLISION_SURFACE_TYPES);
 
 	#if DEBUG_MODULE
 
-	debug_log ("EXPLOSN : Creating Object Hit Ground effect, type %d, at %f, %f", type, pos.x, pos.z);
+	debug_log ("EXPLOSN : Creating Object Hit Ground effect, type %d, at %f, %f", type, pos->x, pos->z);
 
 	#endif
 
-	create_client_server_explosion_effect (type, &pos, NULL);
+	switch (surface)
+	{
+		case DYNAMICS_COLLISION_SURFACE_WATER:
+		{
+			switch (power)
+			{
+				case 1:
+				{
+					create_client_server_explosion_effect (MEDIUM_WATER_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 2:
+				{
+					create_client_server_explosion_effect (LARGE_WATER_META_EXPLOSION, pos, NULL);
+					break;
+				}
+			}
+			break;
+		}
+		case DYNAMICS_COLLISION_SURFACE_GROUND:
+		{
+			switch (power)
+			{
+				case 1:
+				{
+					create_client_server_explosion_effect (SMALL_GROUND_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 2:
+				{
+					create_client_server_explosion_effect (MEDIUM_GROUND_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 3:
+				{
+					create_client_server_explosion_effect (LARGE_GROUND_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 4:
+				{
+					create_client_server_explosion_effect (XLARGE_GROUND_META_EXPLOSION, pos, NULL);
+					break;
+				}
+			}
+			break;
+		}
+		case DYNAMICS_COLLISION_SURFACE_OBJECT:
+		{
+			switch (power)
+			{
+				case 1:
+				{
+					create_client_server_explosion_effect (SMALL_OBJECT_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 2:
+				{
+					create_client_server_explosion_effect (MEDIUM_OBJECT_META_EXPLOSION, pos, NULL);
+					break;
+				}
+				case 3:
+				{
+					create_client_server_explosion_effect (LARGE_OBJECT_META_EXPLOSION, pos, NULL);
+					break;
+				}
+			}
+			break;
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

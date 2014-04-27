@@ -126,7 +126,7 @@ static void update_server (entity *en)
 	update_local_helicopter_rotor_sounds (en);
 
 	damage_type = aircraft_critically_damaged (en);
-
+	
 	if (raw->ac.mob.alive)
 	{
 		switch (raw->player)
@@ -141,7 +141,7 @@ static void update_server (entity *en)
 				for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 				{
 
-					if ((damage_type == AIRCRAFT_DAMAGE_CRITICAL) || (get_local_entity_int_value (en, INT_TYPE_EJECTED)))
+					if (get_local_entity_int_value (en, INT_TYPE_EJECTED) || raw->main_rotor_rpm < 50 && get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 					{
 
 						helicopter_death_movement (en);
@@ -151,6 +151,8 @@ static void update_server (entity *en)
 
 						if (!get_local_entity_int_value (en, INT_TYPE_LANDED))
 						{
+
+							ASSERT(point_inside_map_area(&raw->ac.mob.position));
 
 							get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 						}
@@ -202,6 +204,19 @@ static void update_server (entity *en)
 					update_aircraft_weapon_fire (en);
 
 					update_aircraft_decoy_release (en);
+
+					if (damage_type > AIRCRAFT_DAMAGE_NONE)
+						if (frand1() < pow(damage_type, 4) * get_delta_time())
+						{
+							int damage_level = max(0, get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) - 1);
+
+							if (damage_level <= 0)
+								kill_client_server_entity (en);
+							else
+								set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+
+							return;
+						}
 				}
 
 				//
@@ -261,13 +276,15 @@ static void update_server (entity *en)
 					for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 					{
 
-						if (get_local_entity_int_value (en, INT_TYPE_EJECTED))
+						if (get_local_entity_int_value (en, INT_TYPE_EJECTED) || raw->main_rotor_rpm < 50 && get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 						{
 
 							helicopter_death_movement (en);
 						}
 						else
 						{
+
+							ASSERT(point_inside_map_area(&raw->ac.mob.position));
 
 							get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 
@@ -351,7 +368,7 @@ static void update_server (entity *en)
 					for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 					{
 
-						if ((damage_type == AIRCRAFT_DAMAGE_CRITICAL) || (get_local_entity_int_value (en, INT_TYPE_EJECTED)))
+						if (get_local_entity_int_value (en, INT_TYPE_EJECTED) || raw->main_rotor_rpm < 50 && get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 						{
 
 							helicopter_death_movement (en);
@@ -361,6 +378,8 @@ static void update_server (entity *en)
 
 							if (!get_local_entity_int_value (en, INT_TYPE_LANDED))
 							{
+
+								ASSERT(point_inside_map_area(&raw->ac.mob.position));
 
 								get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 							}
@@ -427,23 +446,24 @@ static void update_server (entity *en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
-			raw->ac.death_timer -= get_delta_time ();
+			raw->ac.death_timer += get_delta_time ();
 
-			if (raw->ac.death_timer <= 0.0)
-			{
-				if (get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+			if (!((int)(raw->ac.death_timer + 1) % 300))
+				if (raw->ac.death_timer >= calculate_mobile_death_timer_value (en))
 				{
-					//
-					// don't destroy helicopters while they are still occupied by players (otherwise avionics / pilot-entity etc. don't get deinitialised)
-					//
+					if (get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+					{
+						//
+						// don't destroy helicopters while they are still occupied by players (otherwise avionics / pilot-entity etc. don't get deinitialised)
+						//
 
-					destroy_client_server_entity_family (en);
+						destroy_client_server_entity_family (en);
+					}
+					else
+					{
+						raw->ac.death_timer = 0.0;
+					}
 				}
-				else
-				{
-					raw->ac.death_timer = 0.0;
-				}
-			}
 		}
 		else
 		{
@@ -492,7 +512,7 @@ static void update_client (entity *en)
 				for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 				{
 
-					if ((damage_type == AIRCRAFT_DAMAGE_CRITICAL) || (get_local_entity_int_value (en, INT_TYPE_EJECTED)))
+					if (get_local_entity_int_value (en, INT_TYPE_EJECTED) || raw->main_rotor_rpm < 50 && get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 					{
 
 						helicopter_death_movement (en);
@@ -502,6 +522,8 @@ static void update_client (entity *en)
 
 						if (!get_local_entity_int_value (en, INT_TYPE_LANDED))
 						{
+
+							ASSERT(point_inside_map_area(&raw->ac.mob.position));
 
 							get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 						}
@@ -602,7 +624,7 @@ static void update_client (entity *en)
 					for (loop = 0; loop < get_entity_movement_iterations (); loop ++)
 					{
 
-						if ((damage_type == AIRCRAFT_DAMAGE_CRITICAL) || (get_local_entity_int_value (en, INT_TYPE_EJECTED)))
+						if (get_local_entity_int_value (en, INT_TYPE_EJECTED) || raw->main_rotor_rpm < 50 && get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 						{
 
 							helicopter_death_movement (en);
@@ -612,6 +634,8 @@ static void update_client (entity *en)
 
 							if (!get_local_entity_int_value (en, INT_TYPE_LANDED))
 							{
+
+								ASSERT(point_inside_map_area(&raw->ac.mob.position));
 
 								get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 							}
@@ -715,6 +739,8 @@ static void update_client (entity *en)
 							if (!get_local_entity_int_value (en, INT_TYPE_LANDED))
 							{
 
+								ASSERT(point_inside_map_area(&raw->ac.mob.position));
+
 								get_3d_terrain_point_data (raw->ac.mob.position.x, raw->ac.mob.position.z, &raw->ac.terrain_info);
 							}
 
@@ -753,6 +779,7 @@ static void update_client (entity *en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_DEAD)
 		{
+			raw->ac.death_timer += get_delta_time ();
 		}
 		else
 		{

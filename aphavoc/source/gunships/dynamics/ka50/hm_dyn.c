@@ -136,7 +136,10 @@ void initialise_ka50_advanced_dynamics (entity *en)
 
 	current_flight_dynamics->sub_type = ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM;
 
-	sprintf (current_flight_dynamics->filename, "..\\common\\data\\ka50.dyn");
+	if (command_line_dynamics_flight_model != 2)
+		sprintf (current_flight_dynamics->filename, "..\\common\\data\\ka50.dyn");
+	else
+		sprintf (current_flight_dynamics->filename, "..\\common\\data\\dynamics\\ka50.dyn");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -553,7 +556,7 @@ void set_dynamics_defaults (entity *en)
 	// havoc 1
 	// apache -1
 
-	current_flight_dynamics->rotor_rotation_direction = 1.0;
+	current_flight_dynamics->rotor_rotation_direction = - 1.0;
 
 	current_flight_dynamics->rotor_brake = TRUE;
 
@@ -621,13 +624,15 @@ void update_ka50_advanced_dynamics (void)
 
 	update_main_rotor_rpm_dynamics ();
 
-	update_tail_rotor_rpm_dynamics ();
+	if (command_line_dynamics_flight_model != 2)
+		update_tail_rotor_rpm_dynamics ();
 
 	update_main_rotor_coning_angle ();
 
 	update_main_rotor_thrust_dynamics ();
 
-	update_tail_rotor_thrust_dynamics ();
+	if (command_line_dynamics_flight_model != 2)
+		update_tail_rotor_thrust_dynamics ();
 
 	update_power_dynamics ();
 
@@ -635,8 +640,11 @@ void update_ka50_advanced_dynamics (void)
 
 	update_acceleration_dynamics ();
 
-	update_attitude_dynamics ();
-
+	if (command_line_dynamics_flight_model == 2)
+		update_common_attitude_dynamics();
+	else
+		update_attitude_dynamics();
+	
 	if (!get_gunship_entity() || !current_flight_dynamics)
 		return;
 
@@ -890,7 +898,7 @@ void update_tail_rotor_dynamics (void)
 
 	blade_pitch = rad (pedal / (current_flight_dynamics->input_data.pedal.max / deg (current_flight_dynamics->tail_blade_pitch.max)));
 
-	current_flight_dynamics->tail_blade_pitch.delta = 2.0 * (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
+	current_flight_dynamics->tail_blade_pitch.delta = 4.0 * (blade_pitch - current_flight_dynamics->tail_blade_pitch.value);
 
 	current_flight_dynamics->tail_blade_pitch.value += current_flight_dynamics->tail_blade_pitch.delta * get_model_delta_time ();
 
@@ -2419,7 +2427,7 @@ void update_attitude_dynamics (void)
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
-		if (vibration_limit > 0.0 &&  velocity_factor > 0.0)
+		if (vibration_limit > 0.0 && !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE) && velocity_factor > 0.0)
 			create_rotor_vibration(bound(vibration_limit * 0.3 * velocity_factor, 0.0, 1.0));
 
 		if (air_over_rotor > 0.0)     //model_motion_vector.y < -fabs (main_rotor_induced_air_value))
@@ -2524,7 +2532,7 @@ void update_attitude_dynamics (void)
 		// arneh - add vibration if rotor damaged
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
 		create_advanced_rotor_vibration(1, TRUE);
-		// rotor spin up/spin down /thealex/
+		// rotor spin up/spin down /thealx/
 	else if (current_flight_dynamics->main_rotor_rpm.value > 10 && current_flight_dynamics->main_rotor_rpm.value < 90)
 	{
 		float rpm = 40 - fabs(current_flight_dynamics->main_rotor_rpm.value - 50);

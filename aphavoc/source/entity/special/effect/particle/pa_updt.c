@@ -230,6 +230,27 @@ int update_particle( entity *en )
 			}
 
 			pos->y = 0.0;		// bound height above ground, otherwise an error will occur when trying to pack the position
+			
+			if (get_comms_model () == COMMS_MODEL_SERVER && 
+					raw->object_3d_shape >= OBJECT_3D_AH1T_ROTOR_BLADE_DAMAGED && 
+					raw->object_3d_shape <= OBJECT_3D_UH60_ROTOR_BLADE_DAMAGED &&
+					point_inside_map_area(pos) && point_below_ceiling(pos))
+			{
+				terrain_3d_point_data
+					terrain_point_data;
+				terrain_classes
+					ter_class;
+				
+				memset (&terrain_point_data, 0, sizeof (terrain_3d_point_data));
+				ASSERT(point_inside_map_area(pos));
+				pos->y = get_3d_terrain_point_data (pos->x, pos->z, &terrain_point_data);
+				ter_class = get_terrain_type_class (get_3d_terrain_point_data_type (&terrain_point_data));
+				
+				if (ter_class == TERRAIN_CLASS_LAND)
+					create_client_server_collision_effect (pos, DYNAMICS_COLLISION_SURFACE_GROUND, 1);
+				else if (ter_class == TERRAIN_CLASS_WATER)
+					create_client_server_collision_effect (pos, DYNAMICS_COLLISION_SURFACE_WATER, 1);
+			}
 
 			#if DEBUG_MODULE
 	

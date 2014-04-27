@@ -1795,7 +1795,7 @@ static void display_weapon_information (void)
 			else
 				weapon_type = "AP";
 		}
-		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR)
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR)
 		{
 			float flight_time = get_missile_flight_time ();
 //			debug_log("ft: %.1f", flight_time);
@@ -1810,7 +1810,7 @@ static void display_weapon_information (void)
 			}
 			weapon_type = "MSL";
 		}
-		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_IGLA_V)
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V)
 			weapon_type = "ATA";
 		else
 		{

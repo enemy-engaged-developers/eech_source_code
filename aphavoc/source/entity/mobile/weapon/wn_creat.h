@@ -66,9 +66,11 @@
 
 extern void overload_weapon_create_functions (void);
 
-extern void create_client_server_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int weapon_index, int burst_size, int *smoke_trail_indices);
+extern void create_client_server_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int weapon_index, int burst_size, int *smoke_trail_indices, int salvo);
 
-extern void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_type);
+extern void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_type, int salvo_count);
+
+extern void create_client_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, int weapon_index, viewpoint *vp, float velocity);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

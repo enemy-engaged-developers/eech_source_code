@@ -260,6 +260,39 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		}
 
 		insert_local_entity_into_parents_child_list (en, LIST_TYPE_SECTOR, get_local_sector_entity (&raw->eff.position), NULL);
+		
+		if (command_line_smoke_optimisation && raw->eff.special_effect_link.parent && (raw->smoke_type == SMOKE_LIST_TYPE_FIRE || raw->smoke_type == SMOKE_LIST_TYPE_SMALL_FIRE)) // kill neighbor fire smoke source 
+		{
+			entity 
+				*smoke,
+				*parent;
+			vec3d
+				*parent_pos1,
+				*parent_pos2;
+					
+			parent_pos1 = get_local_entity_vec3d_ptr(raw->eff.special_effect_link.parent, VEC3D_TYPE_POSITION);
+			smoke = get_local_entity_first_child (get_update_entity (), LIST_TYPE_UPDATE);
+			
+			while(smoke)
+			{
+				if (get_local_entity_type ((smoke)) == ENTITY_TYPE_SMOKE_LIST)
+				{
+					parent = get_local_entity_parent(smoke, LIST_TYPE_SPECIAL_EFFECT);
+				
+					if (parent && parent != raw->eff.special_effect_link.parent && get_local_entity_int_value(smoke, INT_TYPE_SMOKE_TYPE) == raw->smoke_type)
+					{
+						parent_pos2 = get_local_entity_vec3d_ptr(parent, VEC3D_TYPE_POSITION);
+
+						if (get_3d_range(parent_pos1, parent_pos2) < 20)
+						{
+							set_local_entity_float_value(smoke, FLOAT_TYPE_GENERATOR_LIFETIME, 0);
+							debug_log("FIRE SMOKE KILLED!!!");
+						}
+					}
+				}
+				smoke = (get_local_entity_child_succ (smoke, LIST_TYPE_UPDATE));
+			}
+		}
 	}
 
 	return (en);

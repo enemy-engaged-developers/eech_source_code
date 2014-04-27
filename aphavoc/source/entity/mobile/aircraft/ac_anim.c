@@ -603,82 +603,83 @@ void initiate_aircraft_crew_ejection (entity *en)
 
 	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
 	{
-	case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-	{
-		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 		{
-			if (en == get_gunship_entity ())
+			if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
 			{
-				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-				exit_game (NULL);
-
-				if (select_view_menu_view_players_gunship ())
+				if (en == get_gunship_entity ())
 				{
-					set_view_menu_display_visible_status (FALSE);
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
 
-					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+					exit_game (NULL);
+
+					if (select_view_menu_view_players_gunship ())
+					{
+						set_view_menu_display_visible_status (FALSE);
+
+						set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+					}
+					else
+					{
+						debug_fatal ("Cannot view player's gunship");
+					}
 				}
 				else
 				{
-					debug_fatal ("Cannot view player's gunship");
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR, FALSE);
 				}
 			}
-			else
-			{
-				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR);
-			}
+			break;
 		}
-		break;
-	}
-	case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-	{
-		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 		{
-			if (en == get_gunship_entity ())
+			if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
 			{
-				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-				exit_game (NULL);
-
-				if (select_view_menu_view_players_gunship ())
+				if (en == get_gunship_entity ())
 				{
-					set_view_menu_display_visible_status (FALSE);
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
 
-					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+					exit_game (NULL);
+
+					if (select_view_menu_view_players_gunship ())
+					{
+						set_view_menu_display_visible_status (FALSE);
+
+						set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+					}
+					else
+					{
+						debug_fatal ("Cannot view player's gunship");
+					}
 				}
 				else
 				{
-					debug_fatal ("Cannot view player's gunship");
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT, FALSE);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR, FALSE);
 				}
 			}
-			else
-			{
-				set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
-				launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR);
-			}
+			break;
 		}
-		break;
-	}
-	default: 	//magitek 
-	{
-		if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+		default: 	//magitek 
 		{
-			set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+			if (get_local_entity_type (en) == ENTITY_TYPE_FIXED_WING)
+				if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
+				{
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
 
-			launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
+					launch_client_server_weapon (en, ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT, FALSE);
+				}
+			break;
 		}
-		break;
-	}
 	}
 }
 

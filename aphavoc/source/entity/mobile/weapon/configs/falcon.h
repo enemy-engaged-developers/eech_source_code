@@ -254,7 +254,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				LHS_HARDPOINT2,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth
@@ -276,7 +276,7 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				RHS_HARDPOINT2,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth
@@ -298,7 +298,7 @@
 			},
 			// WEAPON PACKAGE 10
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				LHS_HARDPOINT1,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth
@@ -320,7 +320,7 @@
 			},
 			// WEAPON PACKAGE 11
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				RHS_HARDPOINT1,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth
@@ -545,7 +545,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				LHS_HARDPOINT1,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth
@@ -567,7 +567,7 @@
 			},
 			// WEAPON PACKAGE 9
 			{
-				ENTITY_SUB_TYPE_WEAPON_AIM120_AMRAAM,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AIM120C_AMRAAM,					// sub_type
 				NUM_AMRAAM_MISSILES,	 										// number
 				RHS_HARDPOINT1,												// heading_depth
 				AMRAAM_PYLON,		  	  										// pitch_depth

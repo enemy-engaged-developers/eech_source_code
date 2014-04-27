@@ -108,7 +108,8 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 
 	ASSERT (group);
 
-	ASSERT (get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY));
+	if (!get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
+		return NULL;
 
 	ASSERT (objective);
 
@@ -122,7 +123,8 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 
 	ASSERT ((get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_AIRCRAFT)) ||
 				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_VEHICLE)) ||
-				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_FIXED)));
+				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_FIXED)) ||
+				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_WEAPON)));
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SUPPRESS_AI_FIRE))
 	{
@@ -900,7 +902,7 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 			{
 				target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
-				ASSERT (target);
+//				ASSERT (target);
 
 				if (!target)
 				{
@@ -926,6 +928,8 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 					priority [loop] = get_local_entity_float_value (target, FLOAT_TYPE_TARGET_PRIORITY_GROUND_ATTACK);
 				}
 
+				priority [loop] += max(0, 0.1 - 0.1 * get_sqr_2d_range(get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION), get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION)) / MAX_ENGAGE_RANGE); // close targets a more important
+				
 				#if DEBUG_MODULE
 
 				debug_log ("ENGAGE: (%d) Target : %s, Priority %f", loop, get_local_entity_string (target, STRING_TYPE_FULL_NAME), priority [loop]);
@@ -1033,6 +1037,8 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 							task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 			
 							target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+
+							ASSERT(target);
 
 							if (target == member)
 							{

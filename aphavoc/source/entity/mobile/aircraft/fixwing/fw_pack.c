@@ -129,7 +129,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			// spin through special effects link and pack up local only smoke trails
 			//
 
-			pack_fixed_wing_meta_smoke_lists (en, mode);
+//			pack_aircraft_meta_smoke_lists (en, mode);
 
 			pack_mobile_local_sound_effects (en, mode);
 
@@ -245,7 +245,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// attached smoke lists must be unpacked after the entity is linked into the world
 			//
 
-			unpack_fixed_wing_meta_smoke_lists (en, mode);
+//			unpack_aircraft_meta_smoke_lists (en, mode);
+//			switch_aircraft_damaged_smoke(en);
 
 			unpack_mobile_local_sound_effects (en, mode);
 

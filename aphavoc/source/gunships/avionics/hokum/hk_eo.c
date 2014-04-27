@@ -65,15 +65,23 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+#define OLD_EO
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+eo_params
+	hokum_flir,
+	hokum_llltv,
+	hokum_periscope;
+#else
 eo_params_dynamic_move
 	hokum_flir,
 	hokum_llltv,
 	hokum_periscope;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,11 +92,11 @@ void initialise_hokum_eo (void)
 	eo_sensor									= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth									= rad (0.0);
-	eo_min_azimuth								= rad (-70.0);
-	eo_max_azimuth								= rad (70.0);
+	eo_min_azimuth								= rad (-135.0);
+	eo_max_azimuth								= rad (135.0);
 	eo_elevation								= rad (0.0);
-	eo_min_elevation							= rad (-15.0);
-	eo_max_elevation							= rad (25.0);
+	eo_min_elevation							= rad (-80.0);
+	eo_max_elevation							= rad (20.0);
 	eo_max_visual_range						= 5000.0,
 	eo_ground_stabilised					= 0;
 
@@ -97,9 +105,9 @@ void initialise_hokum_eo (void)
 	hokum_flir.min_field_of_view			= EO_FOV_NARROW;
 	hokum_flir.max_field_of_view			= EO_FOV_WIDE;
 
-	hokum_llltv.field_of_view				= EO_FOV_NARROW;
+	hokum_llltv.field_of_view				= EO_FOV_WIDE;
 	hokum_llltv.min_field_of_view			= EO_FOV_NARROW;
-	hokum_llltv.max_field_of_view			= EO_FOV_NARROW;
+	hokum_llltv.max_field_of_view			= EO_FOV_WIDE;
 
    hokum_periscope.field_of_view       = EO_FOV_WIDE;
 	hokum_periscope.min_field_of_view	= EO_FOV_NARROW;
@@ -285,83 +293,107 @@ void get_hokum_eo_relative_centred_viewpoint (viewpoint *vp)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
+#ifdef OLD_EO
+static void inc_eo_field_of_view (eo_params *eo)
 {
 	ASSERT (eo);
 
-#ifdef OLD_EO
 	if (eo->field_of_view < eo->max_field_of_view)
 	{
 		eo->field_of_view++;
 	}
+}
 #else
+static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
+{
+	ASSERT (eo);
+
 	eo->zoom += 0.2;
 
 	if (eo->zoom > 1.0)
 	{
 		eo->zoom = 1.0;
 	}
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void fast_inc_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	eo->field_of_view = eo->max_field_of_view;
+}
+#else
 static void fast_inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
-#ifdef OLD_EO
-	eo->field_of_view = eo->max_field_of_view;
-#else
 	eo->zoom = 1.0;
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
+#ifdef OLD_EO
+static void dec_eo_field_of_view (eo_params *eo)
 {
 	ASSERT (eo);
 
-#ifdef OLD_EO
 	if (eo->field_of_view > eo->min_field_of_view)
 	{
 		eo->field_of_view--;
 	}
+}
 #else
+static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
+{
+	ASSERT (eo);
+
 	eo->zoom -= 0.2;
 
 	if (eo->zoom < 0.0)
 	{
 		eo->zoom = 0.0;
 	}
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+static void fast_dec_eo_field_of_view (eo_params *eo)
+{
+	ASSERT (eo);
+
+	eo->field_of_view = eo->min_field_of_view;
+}
+#else
 static void fast_dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
-#ifdef OLD_EO
-	eo->field_of_view = eo->min_field_of_view;
-#else
 	eo->zoom = 0.0;
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OLD_EO
+void update_hokum_eo (eo_params *eo)
+#else
 void update_hokum_eo (eo_params_dynamic_move *eo)
+#endif
 {
 	float
 		fine_slew_rate,
@@ -418,12 +450,14 @@ void update_hokum_eo (eo_params_dynamic_move *eo)
 
 	////////////////////////////////////////
 
+#ifndef OLD_EO
 	if (command_line_eo_zoom_joystick_index != -1)
 	{
 		long pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
 
 		eo->zoom = (pos + 10000) / 20000.0;
 	}
+#endif
 
 	////////////////////////////////////////
 	//
@@ -510,8 +544,13 @@ void update_hokum_eo (eo_params_dynamic_move *eo)
 		eo_azimuth = get_eo_azimuth (ROTATE_RATE, coarse_slew_rate, eo_azimuth, eo_min_azimuth, eo_max_azimuth, mouse_slew_rate);
 		eo_elevation = get_eo_elevation (ROTATE_RATE, coarse_slew_rate, eo_elevation, eo_min_elevation, eo_max_elevation, mouse_slew_rate);
 	}
+
+#ifdef OLD_EO
+	eo->field_of_view = get_old_eo_zoom(eo->field_of_view, eo->max_field_of_view, eo->min_field_of_view);
+#else
 	if (command_line_eo_zoom_joystick_index == -1 && (command_line_mouse_look != MOUSELOOK_ON || command_line_field_of_view_joystick_index != -1))
 		eo->zoom = get_new_eo_zoom(eo->zoom);
+#endif
 
 	////////////////////////////////////////
 	// loke 030315
@@ -723,8 +762,9 @@ void toggle_hokum_eo_system(void)
 	case TARGET_ACQUISITION_SYSTEM_FLIR:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_LLLTV;
 
+#ifndef OLD_EO
 		copy_eo_zoom(&hokum_flir, &hokum_llltv);
-
+#endif
 		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
 			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_LLLTV;
 
@@ -733,8 +773,9 @@ void toggle_hokum_eo_system(void)
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
 
+#ifndef OLD_EO
 		copy_eo_zoom(&hokum_llltv, &hokum_flir);
-
+#endif
 		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV ||
 			target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
 		{
@@ -831,3 +872,5 @@ void slave_hokum_eo_to_current_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#undef OLD_EO

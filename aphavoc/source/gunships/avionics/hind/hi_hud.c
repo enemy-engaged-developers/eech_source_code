@@ -699,7 +699,7 @@ static void display_weapon_information (void)
 			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8)
 			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13)
 			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
-			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND && target_acquisition_system != TARGET_ACQUISITION_SYSTEM_HMS))
+			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND && target_acquisition_system != TARGET_ACQUISITION_SYSTEM_HMS))
 		{
 			float
 				x,y;

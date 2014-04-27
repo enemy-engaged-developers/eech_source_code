@@ -92,22 +92,26 @@ unsigned char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-float get_local_entity_rearming_sleep_time (entity *group)
+float get_local_entity_rearming_sleep_time (entity *group, int weapon_type)
 {
 
 	float
+		base_time,	
 		sleep_time;
 
-	sleep_time = get_local_entity_float_value (group, FLOAT_TYPE_REARMING_TIME);
+	if(!weapon_type)
+		base_time = get_local_entity_float_value (group, FLOAT_TYPE_REARMING_TIME);
+	else
+		base_time = weapon_database[weapon_type].rearming_time;
 
-	sleep_time *= -(((MAX_REARMING_TIME_SCALING_FACTOR - 1.0) / 100.0) * get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL)) + MAX_REARMING_TIME_SCALING_FACTOR;
+	sleep_time = base_time * ( -(MAX_REARMING_TIME_SCALING_FACTOR - 1.0) / 100.0 * get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL) + MAX_REARMING_TIME_SCALING_FACTOR);
 
 	#if DEBUG_MODULE || DEBUG_SUPPLY
 
 	debug_log ("EN_SUPLY: SUPPLY_INFO: group %s rearming sleep time = %f (normal_time = %f, supply level = %f)",
 					get_local_entity_string (group, STRING_TYPE_FULL_NAME),
 					sleep_time,
-					get_local_entity_float_value (group, FLOAT_TYPE_REARMING_TIME),
+					base_time,
 					get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL));
 
 	#endif

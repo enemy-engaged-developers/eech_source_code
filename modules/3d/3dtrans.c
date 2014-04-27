@@ -206,9 +206,12 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 		real_colour
 			normal_colour;
 
-		asm_convert_float_to_int (  ( ambient_3d_light.colour.red * 255 ), &ir );
-		asm_convert_float_to_int (  ( ambient_3d_light.colour.green * 255 ), &ig );
-		asm_convert_float_to_int (  ( ambient_3d_light.colour.blue * 255 ), &ib );
+		asm_convert_float_to_int (  ( ambient_3d_light.colour.red * 255 * current_object_3d_diffuse_factor ), &ir );
+		asm_convert_float_to_int (  ( ambient_3d_light.colour.green * 255 * current_object_3d_diffuse_factor ), &ig );
+		asm_convert_float_to_int (  ( ambient_3d_light.colour.blue * 255 * current_object_3d_diffuse_factor ), &ib );
+
+		if (active_3d_environment->render_filter == RENDER_INFRARED) // FLIR objects SW
+			ir = ig = ib = 255;
 
 		normal_colour.red = ir;
 		normal_colour.green = ig;
@@ -259,9 +262,12 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			// Set the light levels
 			//
 
-			r = ambient_3d_light.colour.red;
-			g = ambient_3d_light.colour.green;
-			b = ambient_3d_light.colour.blue;
+			r = ambient_3d_light.colour.red * current_object_3d_diffuse_factor;
+			g = ambient_3d_light.colour.green * current_object_3d_diffuse_factor;
+			b = ambient_3d_light.colour.blue * current_object_3d_diffuse_factor;
+
+			if (active_3d_environment->render_filter == RENDER_INFRARED) // FLIR objects SW
+				r = g = b = 1;
 
 			s = 0;
 
@@ -276,6 +282,8 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			//
 
 			d_intensity = normal.x * lights->lx + normal.y * lights->ly + normal.z * lights->lz;
+			d_intensity *= current_object_3d_diffuse_factor;
+			
 			s_intensity = normal.x * lights->highlight_vector.x + normal.y * lights->highlight_vector.y + normal.z * lights->highlight_vector.z;
 
 //			d_intensity *= 1.0 / 32767.0;
@@ -365,9 +373,12 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			// Set the light levels
 			//
 
-			r = ambient_3d_light.colour.red;
-			g = ambient_3d_light.colour.green;
-			b = ambient_3d_light.colour.blue;
+			r = ambient_3d_light.colour.red * current_object_3d_diffuse_factor;
+			g = ambient_3d_light.colour.green * current_object_3d_diffuse_factor;
+			b = ambient_3d_light.colour.blue * current_object_3d_diffuse_factor;
+
+			if (active_3d_environment->render_filter == RENDER_INFRARED) // FLIR objects SW
+				r = g = b = 1;
 
 			specular = 0;
 
@@ -390,6 +401,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 				//
 
 				temp_intensity = normal.x * this_light->lx + normal.y * this_light->ly + normal.z * this_light->lz;
+				temp_intensity *= current_object_3d_diffuse_factor;
 //				temp_intensity *= 1.0 / 32767.0;
 
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )

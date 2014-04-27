@@ -74,7 +74,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_100MM_ROUND,		// sub_type
+				ENTITY_SUB_TYPE_WEAPON_A_190_100MM_ROUND,		// sub_type
 				40,																// number
 				2,		  															// heading_depth
 				0,																	// pitch_depth
@@ -96,7 +96,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_100MM_ROUND,		// sub_type
+				ENTITY_SUB_TYPE_WEAPON_A_190_100MM_ROUND,		// sub_type
 				40,																// number
 				3,		  															// heading_depth
 				0,																	// pitch_depth
@@ -118,7 +118,7 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN4_GECKO,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M33_OSA,						// sub_type
 				2,		  															// number
 				0,		  															// heading_depth
 				0,																	// pitch_depth
@@ -140,7 +140,7 @@
 			},
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_SAN4_GECKO,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M33_OSA,						// sub_type
 				2,		  															// number
 				1,		  															// heading_depth
 				0,																	// pitch_depth

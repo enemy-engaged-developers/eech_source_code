@@ -787,6 +787,8 @@ void toggle_comanche_lock_target (void)
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_DVO:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		////////////////////////////////////////
 		{
 			toggle_eo_lock();
@@ -794,7 +796,9 @@ void toggle_comanche_lock_target (void)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_IHADSS:
 		case TARGET_ACQUISITION_SYSTEM_HIDSS:
+		case TARGET_ACQUISITION_SYSTEM_HMS:
 		////////////////////////////////////////
 		{
 			hms_target_locked ^= 1;

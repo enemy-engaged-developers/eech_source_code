@@ -276,6 +276,7 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 		pos.z = position->z + offset.z;
 
 		//Xhit: This is necessary if it's going to work on tilting terrain. (030328)
+		ASSERT(point_inside_map_area(&pos));
 		get_3d_terrain_point_data (pos.x, pos.z, &terrain_info);
 		pos.y = get_3d_terrain_point_data_elevation (&terrain_info);
 
@@ -436,6 +437,7 @@ void draw_downwash_effect(entity *en)
 	pos.y = position->y - aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].centre_of_gravity_to_ground_distance;
 	pos.z = position->z;
 
+	ASSERT(point_inside_map_area(&pos));
 	get_3d_terrain_point_data (pos.x, pos.z, &terrain_info);
 	min_altitude = get_3d_terrain_point_data_elevation (&terrain_info);
 

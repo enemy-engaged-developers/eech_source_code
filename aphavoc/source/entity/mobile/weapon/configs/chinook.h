@@ -66,14 +66,24 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		#define CHAFF_DISPENSER	(0)
-		#define FLARE_DISPENSER	(0)
+		#define LHS1_CHAFF_DISPENSER	(0)
+		#define LHS1_FLARE_DISPENSER	(0)
+		#define LHS2_CHAFF_DISPENSER	(1)
+		#define LHS2_FLARE_DISPENSER	(1)
+		#define LHS3_CHAFF_DISPENSER	(2)
+		#define LHS3_FLARE_DISPENSER	(2)
+		#define RHS1_CHAFF_DISPENSER	(3)
+		#define RHS1_FLARE_DISPENSER	(3)
+		#define RHS2_CHAFF_DISPENSER	(4)
+		#define RHS2_FLARE_DISPENSER	(4)
+		#define RHS3_CHAFF_DISPENSER	(5)
+		#define RHS3_FLARE_DISPENSER	(5)
 
 		#define CHAFF_VECTOR	  	(0)
 		#define FLARE_VECTOR	  	(0)
 
-		#define NUM_CHAFFS		(30)
-		#define NUM_FLARES		(30)
+		#define NUM_CHAFFS		(10)
+		#define NUM_FLARES		(20)
 
 		////////////////////////////////////////
 		//
@@ -84,13 +94,13 @@
 			// WEAPON PACKAGE 1
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,	 	  												// number
-				CHAFF_DISPENSER,												// heading_depth
+				2 * NUM_CHAFFS,	 	  												// number
+				LHS1_CHAFF_DISPENSER,												// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -106,13 +116,13 @@
 			// WEAPON PACKAGE 2
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,	 													// number
-				FLARE_DISPENSER,												// heading_depth
+				2 * NUM_FLARES,	 													// number
+				LHS1_FLARE_DISPENSER,												// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				4,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -126,25 +136,225 @@
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 3
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				NUM_CHAFFS,	 	  												// number
+				LHS2_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 4
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				NUM_FLARES,	 													// number
+				LHS2_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 5
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				NUM_CHAFFS,	 	  												// number
+				LHS3_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 6
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				NUM_FLARES,	 													// number
+				LHS3_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 7
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				2 * NUM_CHAFFS,	 	  												// number
+				RHS1_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 8
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				2 * NUM_FLARES,	 													// number
+				RHS1_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 9
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				NUM_CHAFFS,	 	  												// number
+				RHS2_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 10
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				NUM_FLARES,	 													// number
+				RHS2_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 11
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
+				NUM_CHAFFS,	 	  												// number
+				RHS3_CHAFF_DISPENSER,												// heading_depth
+				CHAFF_VECTOR,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 12
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
+				NUM_FLARES,	 													// number
+				RHS3_FLARE_DISPENSER,												// heading_depth
+				FLARE_VECTOR,			  										// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				4,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),												 		// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 		 													// pitch_share_mask
+				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 13
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 14
@@ -187,9 +397,18 @@
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 		},
 
-		#undef CHAFF_DISPENSER
-		#undef FLARE_DISPENSER
-
+		#undef LHS1_CHAFF_DISPENSER	
+		#undef LHS1_FLARE_DISPENSER	
+		#undef LHS2_CHAFF_DISPENSER	
+		#undef LHS2_FLARE_DISPENSER	
+		#undef LHS3_CHAFF_DISPENSER	
+		#undef LHS3_FLARE_DISPENSER	
+		#undef RHS1_CHAFF_DISPENSER	
+		#undef RHS1_FLARE_DISPENSER	
+		#undef RHS2_CHAFF_DISPENSER	
+		#undef RHS2_FLARE_DISPENSER	
+		#undef RHS3_CHAFF_DISPENSER	
+		#undef RHS3_FLARE_DISPENSER	
 		#undef CHAFF_VECTOR
 		#undef FLARE_VECTOR
 

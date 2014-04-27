@@ -296,21 +296,6 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 			}
 */
 		}
-		
-		if (total_damage_level > 0)
-		{
-			//
-			// Eject Pilot(s)
-			//
-
-			if (get_local_entity_int_value (receiver, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
-			{
-				if (get_local_entity_int_value (receiver, INT_TYPE_AIRBORNE_AIRCRAFT))
-				{
-					initiate_aircraft_crew_ejection (receiver);
-				}
-			}
-		}
 	}
 
 	/////////////////////////////////////////////////////////////////

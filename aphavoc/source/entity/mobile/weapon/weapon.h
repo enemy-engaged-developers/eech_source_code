@@ -101,11 +101,14 @@ typedef int weapon_guidance_types;
 enum WEAPON_WARHEAD_TYPES
 {
 	WEAPON_WARHEAD_TYPE_NONE,
-	WEAPON_WARHEAD_TYPE_BALL,
-	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,
-	WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING,
-	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,
 	WEAPON_WARHEAD_TYPE_SMOKE_GRENADE,
+	WEAPON_WARHEAD_TYPE_ILLUMINATION_FLARE,
+	WEAPON_WARHEAD_TYPE_SOLID_SHOT,
+	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,
+	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE,
+	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,
+	WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT,
+	WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS,
 	NUM_WEAPON_WARHEAD_TYPES
 };
 
@@ -245,6 +248,8 @@ struct WEAPON
 	list_link
 		launched_weapon_link,
 		view_weapon_link;
+	list_root
+		task_dependent_root;
 };
 
 typedef struct WEAPON weapon;
@@ -262,6 +267,9 @@ enum MUZZLE_FLASH_TYPES
 	MUZZLE_FLASH_MEDIUM_CALIBRE_FLARED,
 	MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,
 	MUZZLE_FLASH_LARGE_CALIBRE_FLARED,
+	MUZZLE_FLASH_SMALL_ROCKET,
+	MUZZLE_FLASH_MEDIUM_ROCKET,
+	MUZZLE_FLASH_LARGE_ROCKET,
 	NUM_MUZZLE_FLASH_TYPES
 };
 
@@ -846,6 +854,9 @@ enum WEAPON_CONFIG_TYPES
 	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_7,
 	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_8,
 	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,
+	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_10,
+	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_11,
+	WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_12,
 ////Moje 030525 End
 	////////////////////////////////////////
 	//
@@ -930,6 +941,8 @@ enum WEAPON_CONFIG_TYPES
 	////////////////////////////////////////
 
 	WEAPON_CONFIG_TYPE_KA29_HELIX_B_1,
+	WEAPON_CONFIG_TYPE_KA29_HELIX_B_2,
+	WEAPON_CONFIG_TYPE_KA29_HELIX_B_3,
 
 	////////////////////////////////////////
 	//
@@ -946,6 +959,8 @@ enum WEAPON_CONFIG_TYPES
 	////////////////////////////////////////
 
 	WEAPON_CONFIG_TYPE_MI17_HIP_1,
+	WEAPON_CONFIG_TYPE_MI17_HIP_2,
+	WEAPON_CONFIG_TYPE_MI17_HIP_3,
 
 	////////////////////////////////////////
 	//
@@ -1148,6 +1163,8 @@ enum WEAPON_CONFIG_TYPES
 	////////////////////////////////////////
 
 	WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,
+	WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_2,
+	WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_3,
 
 	////////////////////////////////////////
 	//
@@ -1156,6 +1173,8 @@ enum WEAPON_CONFIG_TYPES
 	////////////////////////////////////////
 
 	WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,
+	WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_2,
+	WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_3,
 
 	////////////////////////////////////////
 	//
@@ -1486,6 +1505,14 @@ enum WEAPON_CONFIG_TYPES
 
 	////////////////////////////////////////
 	//
+	// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY
+	//
+	////////////////////////////////////////
+
+	WEAPON_CONFIG_TYPE_US_INFANTRY_1,
+
+	////////////////////////////////////////
+	//
 	// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_STANDING
 	//
 	////////////////////////////////////////
@@ -1499,6 +1526,14 @@ enum WEAPON_CONFIG_TYPES
 	////////////////////////////////////////
 
 	WEAPON_CONFIG_TYPE_US_INFANTRY_SAM_KNEELING_1,
+
+	////////////////////////////////////////
+	//
+	// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY
+	//
+	////////////////////////////////////////
+
+	WEAPON_CONFIG_TYPE_CIS_INFANTRY_1,
 
 	////////////////////////////////////////
 	//
@@ -1557,8 +1592,10 @@ typedef int weapon_config_types;
 #define HAVOC_LHS_OUTER_PYLON		  		(2)
 #define HAVOC_RHS_OUTER_PYLON		  		(3)
 #define HAVOC_CANNON_TURRET		  		(4)
-#define HAVOC_CHAFF_DISPENSER		  		(5)
-#define HAVOC_FLARE_DISPENSER		  		(5)
+#define HAVOC_LHS_CHAFF_DISPENSER		  		(5)
+#define HAVOC_LHS_FLARE_DISPENSER		  		(5)
+#define HAVOC_RHS_CHAFF_DISPENSER		  		(6)
+#define HAVOC_RHS_FLARE_DISPENSER		  		(6)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1604,8 +1641,12 @@ typedef int weapon_config_types;
 #define BLACKHAWK_RHS_INNER_PYLON	  		(1)
 #define BLACKHAWK_LHS_OUTER_PYLON	  		(2)
 #define BLACKHAWK_RHS_OUTER_PYLON	  		(3)
-#define BLACKHAWK_CHAFF_DISPENSER	  		(4)
-#define BLACKHAWK_FLARE_DISPENSER	  		(4)
+#define BLACKHAWK_LHS1_CHAFF_DISPENSER	  		(4)
+#define BLACKHAWK_LHS1_FLARE_DISPENSER	  		(4)
+#define BLACKHAWK_LHS2_CHAFF_DISPENSER	  		(5)
+#define BLACKHAWK_LHS2_FLARE_DISPENSER	  		(5)
+#define BLACKHAWK_RHS_CHAFF_DISPENSER	  		(6)
+#define BLACKHAWK_RHS_FLARE_DISPENSER	  		(6)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1679,8 +1720,10 @@ typedef int weapon_config_types;
 #define KIOWA_CHAFF_DISPENSER	  		(2)
 #define KIOWA_FLARE_DISPENSER	  		(2)
   		
-#define HELIX_CHAFF_DISPENSER	  		(4)
-#define HELIX_FLARE_DISPENSER	  		(4)
+#define HELIX_LHS_CHAFF_DISPENSER	  		(4)
+#define HELIX_RHS_CHAFF_DISPENSER	  		(5)
+#define HELIX_LHS_FLARE_DISPENSER	  		(4)
+#define HELIX_RHS_FLARE_DISPENSER	  		(5)
 
 #define DEFAULT_CHAFF_DISPENSER	  		(0)
 #define DEFAULT_FLARE_DISPENSER	  		(1)
@@ -1793,7 +1836,8 @@ struct WEAPON_PACKAGE_STATUS
 	float
 		weapon_system_heading,
 		weapon_system_pitch,
-		muzzle_flash_timer;
+		muzzle_flash_timer,
+		rearming_timer;
 };
 
 typedef struct WEAPON_PACKAGE_STATUS weapon_package_status;
@@ -1913,7 +1957,7 @@ extern int get_local_entity_weapon_ammunition_available (entity *launcher);
 
 extern int get_local_entity_weapon_salvo_size (entity *launcher, entity_sub_types weapon_sub_type);
 
-extern void suppress_ineffective_ship_weapons (entity *source);
+extern void suppress_ineffective_ship_weapons (entity *source, entity *target);
 
 extern void create_weapon_launched_sound_effects (entity *launcher, entity_sub_types weapon_sub_type);
 
@@ -1921,6 +1965,8 @@ extern int guidance_type_can_use_point_lock(weapon_guidance_types type);
 
 extern unsigned get_number_of_pods_firing(entity* launcher, entity_sub_types weapon_type);
 
+extern int get_lead_and_ballistic_intercept_point_and_angle_of_projection (vec3d *pitch_device_position,entity_sub_types wpn_type,float weapon_velocity,
+		entity *source,entity *target,vec3d *intercept_point,float *angle_of_projection,float *time_of_flight);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

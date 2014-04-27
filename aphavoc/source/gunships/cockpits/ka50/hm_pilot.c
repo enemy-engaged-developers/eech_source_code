@@ -2165,9 +2165,9 @@ static void update_pilot_rest_animation (int head_anim_only)
 
 					if (eject_timer > 1.0)
 					{
-						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE);
-						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR);
-						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR);
+						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE, FALSE);
+						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR, FALSE);
+						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR, FALSE);
 
 						eject_stage = 1;
 					}
@@ -2201,7 +2201,7 @@ static void update_pilot_rest_animation (int head_anim_only)
 
 					if (eject_timer > 2.0)
 					{
-						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT);
+						launch_client_server_weapon (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT, FALSE);
 
 						pilot_rest_anim_mode = PILOT_REST_ANIM_MODE_NONE;
 

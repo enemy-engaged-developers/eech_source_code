@@ -111,7 +111,8 @@ struct AIRCRAFT_DATA
 		view_type;
 
 	int
-		map_icon;
+		map_icon,
+		armor_level;
 
 	float
 		centre_of_gravity_to_ground_distance,
@@ -153,7 +154,6 @@ struct AIRCRAFT_DATA
 		number_of_main_rotors,
 		// Xhit: added "main_rotor_radius" for downwash effect. (030328) 
 		main_rotor_radius;
-
 	int
 		initial_damage_level;
 

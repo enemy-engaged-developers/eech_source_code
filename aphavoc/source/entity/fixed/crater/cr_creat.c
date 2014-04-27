@@ -298,49 +298,29 @@ void create_client_server_weapon_hit_ground_crater (entity *weapon, vec3d *posit
 		type;
 
 	warhead_type = (weapon_warhead_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	damage_capability = get_local_entity_int_value (weapon, INT_TYPE_DAMAGE_CAPABILITY);
 
 	switch (warhead_type)
 	{
-		case WEAPON_WARHEAD_TYPE_BALL:
-		{
-			damage_capability = get_local_entity_int_value (weapon, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
-
-			type = CRATER_TYPE_SMALL_AP_SHELL;
-
-			break;
-		}
-		case WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING:
-		{
-			damage_capability = get_local_entity_int_value (weapon, INT_TYPE_HARD_DAMAGE_CAPABILITY);
-
-			if (damage_capability < 100)
-			{
-				type = CRATER_TYPE_SMALL_AP_SHELL;
-			}
-			else
-			{
-				type = CRATER_TYPE_LARGE_AP_SHELL;
-			}
-
-			break;
-		}
-		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
 		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK:
+		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE:
+		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
+		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT:
 		{
-			damage_capability = get_local_entity_int_value (weapon, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
-
-			if (damage_capability < 100)
-			{
-				type = CRATER_TYPE_SMALL_EXPLOSION;
-			}
-			else if (damage_capability < 1000)
-			{
-				type = CRATER_TYPE_MEDIUM_EXPLOSION;
-			}
-			else
+			if (damage_capability > 2000)
 			{
 				type = CRATER_TYPE_LARGE_EXPLOSION;
 			}
+			else if (damage_capability > 1000)
+			{
+				type = CRATER_TYPE_MEDIUM_EXPLOSION;
+			}
+			else if (damage_capability > 100)
+			{
+				type = CRATER_TYPE_SMALL_EXPLOSION;
+			}
+			else
+				return;
 
 			break;
 		}
@@ -350,10 +330,7 @@ void create_client_server_weapon_hit_ground_crater (entity *weapon, vec3d *posit
 		}
 	}
 
-	if (damage_capability > 0)
-	{
-		create_client_server_crater (type, position);
-	}
+	create_client_server_crater (type, position);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

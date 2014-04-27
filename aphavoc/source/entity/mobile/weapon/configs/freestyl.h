@@ -138,7 +138,7 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_GSH301_30MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,				// sub_type
 				NUM_CANNON_ROUNDS,	 										// number
 				CANNON,				 											// heading_depth
 				CANNON_BARREL,			  										// pitch_depth
@@ -204,7 +204,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA8A_APHID,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_60,						// sub_type
 				NUM_APHID_MISSILES,											// number
 				LHS_HARDPOINT2,												// heading_depth
 				APHID_PYLON,													// pitch_depth
@@ -226,7 +226,7 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_AA8A_APHID,						// sub_type
+				ENTITY_SUB_TYPE_WEAPON_R_60,						// sub_type
 				NUM_APHID_MISSILES,											// number
 				RHS_HARDPOINT2,												// heading_depth
 				APHID_PYLON,													// pitch_depth

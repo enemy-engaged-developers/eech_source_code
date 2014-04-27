@@ -133,6 +133,9 @@ struct DYNAMICS_COLLISION_TYPE
 
 	unsigned short int
 		violated;
+	
+	dynamics_collision_surface_types
+		surface_type;
 };
 
 typedef struct DYNAMICS_COLLISION_TYPE dynamics_collision_type;

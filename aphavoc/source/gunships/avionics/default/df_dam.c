@@ -126,8 +126,10 @@ void set_default_weapon_damage_status (void)
 	set_client_server_entity_weapon_damage (en, 3, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_outer_pylon);
 	set_client_server_entity_weapon_damage (en, 1, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, default_damage.rh_inner_pylon);
 
-	set_client_server_entity_weapon_damage (en, HELIX_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
-	set_client_server_entity_weapon_damage (en, HELIX_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, HELIX_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, HELIX_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, default_damage.chaff_dispenser);
+	set_client_server_entity_weapon_damage (en, HELIX_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
+	set_client_server_entity_weapon_damage (en, HELIX_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, default_damage.flare_dispenser);
 		}
 	}
 

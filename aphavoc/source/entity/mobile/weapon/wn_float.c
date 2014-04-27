@@ -193,7 +193,7 @@ static float get_local_float_value (entity *en, float_types type)
 		case FLOAT_TYPE_WEIGHT:
 		////////////////////////////////////////
 		{
-			value = weapon_database[raw->mob.sub_type].weight;
+			value = get_weapon_current_weight(raw->weapon_lifetime, raw->mob.sub_type);
 
 			break;
 		}
@@ -202,6 +202,22 @@ static float get_local_float_value (entity *en, float_types type)
 		////////////////////////////////////////
 		{
 			value = raw->weapon_lifetime;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_TARGET_PRIORITY_AIR_ATTACK:
+		////////////////////////////////////////
+		{
+			value = 2;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_TARGET_PRIORITY_GROUND_ATTACK:
+		////////////////////////////////////////
+		{
+			value = 2;
 
 			break;
 		}
@@ -228,6 +244,8 @@ void overload_weapon_float_value_functions (void)
 
 	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_WEIGHT]							= get_local_float_value;
 	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_WEAPON_LIFETIME]				= get_local_float_value;
+	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_TARGET_PRIORITY_AIR_ATTACK]	  	= get_local_float_value;
+	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_TARGET_PRIORITY_GROUND_ATTACK]	= get_local_float_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -104,7 +104,7 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_2K23_100MM_ROUND,				// sub_type
+				ENTITY_SUB_TYPE_WEAPON_2A70_100MM_ROUND,				// sub_type
 				NUM_MAIN_GUN_ROUNDS,		 	  								// number
 				MAIN_GUN_TURRET,			 									// heading_depth
 				MAIN_GUN_BARREL,	 	 										// pitch_depth
@@ -130,7 +130,7 @@
 			},
 			// WEAPON PACKAGE 2
 			{
-				ENTITY_SUB_TYPE_WEAPON_AT10_STABBER,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_9M117_BASTION,					// sub_type
 				NUM_STABBER_MISSILES,	 	  	 							// number
 				MAIN_GUN_TURRET,			 		 							// heading_depth
 				MAIN_GUN_BARREL,	 	 				 						// pitch_depth

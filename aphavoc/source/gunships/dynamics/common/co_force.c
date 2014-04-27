@@ -138,8 +138,8 @@ dynamics_collision_point_type
 			"DYNAMICS_COLLISION_POINT_FUSELAGE",
 			OBJECT_3D_SUB_OBJECT_FUSELAGE_COLLISION_POINT,
 			FALSE,
-			(dynamics_damage_types) (DYNAMICS_DAMAGE_FUEL_LEAK | DYNAMICS_DAMAGE_LOW_HYDRAULICS | DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE | DYNAMICS_DAMAGE_APU |
-					DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS | DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE | DYNAMICS_DAMAGE_LOW_OIL_PRESSURE | DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE |
+			(dynamics_damage_types) (DYNAMICS_DAMAGE_FUEL_LEAK | DYNAMICS_DAMAGE_LOW_HYDRAULICS | DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE | DYNAMICS_DAMAGE_LEFT_ENGINE | DYNAMICS_DAMAGE_APU |
+					DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS | DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE | DYNAMICS_DAMAGE_RIGHT_ENGINE | DYNAMICS_DAMAGE_LOW_OIL_PRESSURE | DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE |
 						DYNAMICS_DAMAGE_AVIONICS | DYNAMICS_DAMAGE_UNDERCARRIAGE),
 		},
 		{
@@ -338,7 +338,7 @@ void update_dynamic_forces (void)
 
 				current_flight_dynamics->number_of_dynamic_forces --;
 
-				#if DEBUG_MODULE
+				#if DEBUG_MODULE > 1
 
 				if (current_flight_dynamics->dynamic_forces [index].name)
 				{
@@ -586,28 +586,28 @@ void resolve_dynamic_forces (void)
   				{
   				  //ataribaby 4/1/2009 limit torque around 100%
   				  if (current_flight_dynamics->world_acceleration_vector.y < 2.0 && current_flight_dynamics->combined_engine_torque.value <= 100.0)
-              current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;
+              current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0;
             else              
-              current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
+              current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0;
   				}
   				else if (current_flight_dynamics->velocity_y.value > 0.0)
   				{
   				  //ataribaby 4/1/2009 limit torque around 100%
   				  if (current_flight_dynamics->world_acceleration_vector.y > -2.0 || current_flight_dynamics->combined_engine_torque.value > 100.0)
-              current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
+              current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0;
             else
-              current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;              
+              current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0;              
   				}
         }
         else
         {
   				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0) && current_flight_dynamics->combined_engine_torque.value <= 100.0)
   				{
-  					current_flight_dynamics->input_data.collective.value += i * get_delta_time();
+  					current_flight_dynamics->input_data.collective.value += i * get_model_delta_time();
   				}
   				else if ((current_flight_dynamics->velocity_y.value > 0.0) && (resultant_vertically > -1.0))
   				{
-  					current_flight_dynamics->input_data.collective.value -= i * get_delta_time();
+  					current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time();
   				}
         }
 				//
@@ -669,14 +669,14 @@ void resolve_dynamic_forces (void)
 
 					i = min (i, -delta_altitude);
 
-					current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
+					current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
 				}
 				else if (delta_altitude > 0.0)
 				{
 
 					i = min (i, delta_altitude);
 
-					current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
+					current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
 				}
 
 	  			// intentional follow through...
@@ -741,9 +741,9 @@ void draw_dynamic_forces (void)
 		return;
 	}
 
-	old_position.x = current_flight_dynamics->position.x - (current_flight_dynamics->world_motion_vector.x * get_delta_time ());
-	old_position.y = current_flight_dynamics->position.y - (current_flight_dynamics->world_motion_vector.y * get_delta_time ());
-	old_position.z = current_flight_dynamics->position.z - (current_flight_dynamics->world_motion_vector.z * get_delta_time ());
+	old_position.x = current_flight_dynamics->position.x - (current_flight_dynamics->world_motion_vector.x * get_model_delta_time ());
+	old_position.y = current_flight_dynamics->position.y - (current_flight_dynamics->world_motion_vector.y * get_model_delta_time ());
+	old_position.z = current_flight_dynamics->position.z - (current_flight_dynamics->world_motion_vector.z * get_model_delta_time ());
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
@@ -956,7 +956,8 @@ void update_collision_dynamics (void)
 {
 
 	int
-		loop;
+		loop,
+		emerengency_landing = FALSE;
 
 	helicopter
 		*raw;
@@ -1078,10 +1079,16 @@ void update_collision_dynamics (void)
 	//
 	///////////////////////////////////////////////////////////////////
 
-	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && !weight_on_wheels())
+	if (current_flight_dynamics->main_rotor_rpm.value <= 50)
+		for (loop = 0; loop < current_flight_dynamics->number_of_fixed_collision_points; loop ++)
+			if(current_flight_dynamics->fixed_collision_points [loop].terrain_elevation < 0.1)
+				emerengency_landing = TRUE;
+
+	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && !(weight_on_wheels() || emerengency_landing))
 		dynamics_takeoff ();
-	else if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && weight_on_wheels()) // TO DO - make fixed_collision_count works stable
+	else if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && (weight_on_wheels() || emerengency_landing)) // TO DO - make fixed_collision_count works stable
 		dynamics_land ();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1243,6 +1250,7 @@ void update_object_collision_dynamics (void)
 						vec.z = current_flight_dynamics->fixed_collision_points [loop].world_point.z - current_flight_dynamics->fixed_collision_points [loop].collision_point.z;
 
 						current_flight_dynamics->fixed_collision_points [loop].violation_distance = get_3d_vector_magnitude (&vec) + 0.02;
+						current_flight_dynamics->fixed_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_OBJECT;
 
 						#if 0
 
@@ -1300,6 +1308,7 @@ void update_object_collision_dynamics (void)
 					vec.z = current_flight_dynamics->moving_collision_points [loop].world_point.z - current_flight_dynamics->moving_collision_points [loop].collision_point.z;
 
 					current_flight_dynamics->moving_collision_points [loop].violation_distance = get_3d_vector_magnitude (&vec) + 0.02;
+					current_flight_dynamics->moving_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_OBJECT;
 
 					#if 0
 
@@ -1395,6 +1404,7 @@ void update_tree_collision_dynamics (void)
 					current_flight_dynamics->fixed_collision_points [loop].collision_point.z = current_flight_dynamics->fixed_collision_points [loop].world_point.z;
 
 					current_flight_dynamics->fixed_collision_points [loop].violation_distance = get_3d_vector_magnitude (&collision_vector);
+					current_flight_dynamics->fixed_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_TREE;
 
 					#if 0
 
@@ -1450,6 +1460,7 @@ void update_tree_collision_dynamics (void)
 					current_flight_dynamics->moving_collision_points [loop].collision_point.z = current_flight_dynamics->moving_collision_points [loop].world_point.z;
 
 					current_flight_dynamics->moving_collision_points [loop].violation_distance = get_3d_vector_magnitude (&collision_vector);
+					current_flight_dynamics->moving_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_TREE;
 
 					#if 0
 
@@ -1509,10 +1520,20 @@ void update_fixed_ground_collision_dynamics (void)
 
 			if (current_flight_dynamics->fixed_collision_points [loop].terrain_elevation > current_flight_dynamics->fixed_collision_points [loop].world_point.y)
 			{
-
+				int soil = get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_LAND || get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_FOREST;
+				
 				fixed_collision_count ++;
 
-				current_flight_dynamics->fixed_collision_points [loop].violation_distance = get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_LAND ? fabs (current_flight_dynamics->fixed_collision_points [loop].terrain_elevation - current_flight_dynamics->fixed_collision_points [loop].world_point.y): 0;
+				if (soil)
+				{
+					current_flight_dynamics->fixed_collision_points [loop].violation_distance = fabs (current_flight_dynamics->fixed_collision_points [loop].terrain_elevation - current_flight_dynamics->fixed_collision_points [loop].world_point.y);
+					current_flight_dynamics->fixed_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_GROUND;
+				}
+				else
+				{
+					current_flight_dynamics->fixed_collision_points [loop].violation_distance = 0;
+					current_flight_dynamics->fixed_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_WATER;
+				}
 
 				current_flight_dynamics->fixed_collision_points [loop].violated = TRUE;
 
@@ -1557,10 +1578,16 @@ void update_moving_ground_collision_dynamics (void)
 
 		if ((current_flight_dynamics->moving_collision_points [loop].terrain_elevation) > current_flight_dynamics->moving_collision_points [loop].world_point.y)
 		{
+			int soil = get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_LAND || get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_FOREST;
 
 			moving_collision_count ++;
 
 			current_flight_dynamics->moving_collision_points [loop].violation_distance = fabs (current_flight_dynamics->moving_collision_points [loop].terrain_elevation - current_flight_dynamics->moving_collision_points [loop].world_point.y);
+
+			if (soil)
+				current_flight_dynamics->moving_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_GROUND;
+			else
+				current_flight_dynamics->moving_collision_points [loop].surface_type = DYNAMICS_COLLISION_SURFACE_WATER;
 
 			current_flight_dynamics->moving_collision_points [loop].violated = TRUE;
 
@@ -1594,7 +1621,7 @@ void dynamics_service_fixed_collision_violations (void)
 		greatest_y_violation_distance,
 		greatest_z_violation_distance,
 		f,
-		violation_min_level = 3 * get_delta_time();
+		violation_min_level = (float) get_local_entity_int_value (get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_AIRCREW), INT_TYPE_DIFFICULTY_LEVEL) * 2 * get_model_delta_time();
 
 	if(!get_gunship_entity() || !current_flight_dynamics)
 		return;
@@ -1608,7 +1635,7 @@ void dynamics_service_fixed_collision_violations (void)
 	greatest_z_violation_distance = 0.0;
 
 	for (i = 0; i < NUM_DYNAMICS_COLLISION_POINT_TYPES; i++)
-		max_fixed_damage[i] = max (violation_min_level, max_fixed_damage[i] - get_delta_time() / 30);
+		max_fixed_damage[i] = max (violation_min_level, max_fixed_damage[i] - get_model_delta_time() / 30);
 
 	if (fixed_collision_count)
 	{
@@ -1655,17 +1682,18 @@ void dynamics_service_fixed_collision_violations (void)
 				//
 				// Fixed collisions damage
 				//
+				
 				current_flight_dynamics->fixed_collision_points [loop].violation_distance *= get_3d_vector_magnitude (&current_flight_dynamics->world_motion_vector) / 10;
 				
-				if (current_flight_dynamics->fixed_collision_points [loop].collision_point_type == DYNAMICS_COLLISION_POINT_ENGINE && !current_flight_dynamics->fixed_collision_points [loop].violation_distance)
+				if (current_flight_dynamics->fixed_collision_points [loop].collision_point_type == DYNAMICS_COLLISION_POINT_ENGINE && !current_flight_dynamics->fixed_collision_points [loop].violation_distance) // water damage
 				{
 					dynamics_damage_model (dynamics_collision_point_info [DYNAMICS_COLLISION_POINT_ENGINE].damage_type, TRUE);
 					water_damage = TRUE;
 					debug_log ("DYNAMICS: water damage %s", dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].name);
 				}
-				else if (!current_flight_dynamics->fixed_collision_points [loop].violation_distance)
+				else if (!current_flight_dynamics->fixed_collision_points [loop].violation_distance) // water damage
 				{
-					if (frand1() < (get_delta_time() / ((get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK || 
+					if (frand1() < (get_model_delta_time() / ((get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK || 
 							get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION) ? 1000 : 10)))
 					{
 						dynamics_damage_model (dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].damage_type, TRUE);
@@ -1675,6 +1703,8 @@ void dynamics_service_fixed_collision_violations (void)
 				}
 				else if (current_flight_dynamics->fixed_collision_points [loop].violation_distance >= max_fixed_damage[current_flight_dynamics->fixed_collision_points [loop].collision_point_type])
 				{
+					int power;
+					
 					if (current_flight_dynamics->fixed_collision_points [loop].collision_point_type == DYNAMICS_COLLISION_POINT_STABILISER ||
 							current_flight_dynamics->fixed_collision_points [loop].collision_point_type == DYNAMICS_COLLISION_POINT_AVIONICS)
 						dynamics_damage_model (dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].damage_type, FALSE);
@@ -1691,7 +1721,16 @@ void dynamics_service_fixed_collision_violations (void)
 					
 					water_damage = FALSE;
 					max_fixed_damage[current_flight_dynamics->fixed_collision_points [loop].collision_point_type] = current_flight_dynamics->fixed_collision_points [loop].violation_distance;
-					debug_log ("DYNAMICS: fixed collision %s violation distance %f, min level %f", dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].name, current_flight_dynamics->fixed_collision_points [loop].violation_distance, violation_min_level);
+					
+					// effects 
+					
+					if (get_comms_model () == COMMS_MODEL_SERVER)
+					{
+						power = (int) (bound(current_flight_dynamics->fixed_collision_points [loop].violation_distance / 0.1, 0, 2));
+						create_client_server_collision_effect (&current_flight_dynamics->fixed_collision_points [loop].world_point, current_flight_dynamics->fixed_collision_points [loop].surface_type, power);
+					}
+					
+					debug_log ("DYNAMICS: fixed collision %s violation distance %f, min level %f", dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [loop].collision_point_type].name, current_flight_dynamics->fixed_collision_points [loop].violation_distance, violation_min_level + max_fixed_damage[current_flight_dynamics->fixed_collision_points [loop].collision_point_type]);
 				}
 				
 			}
@@ -1752,6 +1791,11 @@ void dynamics_service_moving_collision_violations (void)
 			{
 				moving_collision_points_counter (loop);	
 				dynamics_damage_model (dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [loop].collision_point_type].damage_type, FALSE);
+			
+				// effects 
+
+				if (get_comms_model () == COMMS_MODEL_SERVER && !current_flight_dynamics->last_frame_moving_collision_points [loop].violated)
+					create_client_server_collision_effect (&current_flight_dynamics->moving_collision_points [loop].world_point, current_flight_dynamics->moving_collision_points [loop].surface_type, 1);
 			}
 }
 

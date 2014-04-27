@@ -782,6 +782,9 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 					set_current_flight_dynamics_auto_pilot (FALSE);
+					
+					if (frand1() < 0.2)
+						dynamics_damage_model (DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
 
 					break;	
 				}
@@ -1164,21 +1167,28 @@ void update_dynamics_at_keysite (void)
 
 		keysite = get_keysite_currently_landed_at ();
 		available_fuel = current_flight_dynamics->fuel_weight.max;
-		
+
 		if (keysite)
 			if (get_local_entity_float_value (keysite, FLOAT_TYPE_FUEL_SUPPLY_LEVEL) <= 0.0)
 				if (!get_connection_list_head ())
 					available_fuel = current_flight_dynamics->fuel_weight.max * 0.25;
 
-		if (current_flight_dynamics->fuel_weight.value >= available_fuel * 0.99)
-			current_flight_dynamics->refueling = current_fuel_level = available_fuel = FALSE;
-		else
+		if (current_flight_dynamics->fuel_weight.value > 1.01 * current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier)
+		{
+			if (!current_fuel_level)
+				current_fuel_level = current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier;
+			current_flight_dynamics->fuel_weight.value -= 10 * REFUELING_RATE * get_delta_time ();
+		}
+		else if (current_flight_dynamics->fuel_weight.value <= 0.99 * current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier && 
+				current_flight_dynamics->fuel_weight.value <= 0.99 * available_fuel)
 		{
 			if (!current_fuel_level)
 				current_fuel_level = current_flight_dynamics->fuel_weight.value;
 			current_flight_dynamics->fuel_weight.value += REFUELING_RATE * get_delta_time ();
 			debug_log ("DYNAMICS: refueling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, available_fuel);
 		}
+		else
+			current_flight_dynamics->refueling = current_fuel_level = available_fuel = FALSE;
 
 		current_flight_dynamics->fuel_weight.value = bound (current_flight_dynamics->fuel_weight.value,
 																			current_flight_dynamics->fuel_weight.min,
@@ -1307,85 +1317,85 @@ void update_dynamics_damage (void)
 
 void dynamics_restore_damage_values (void)
 {
-	switch (get_global_gunship_type ())
-	{
-		// JB 030313 Fly any aircraft
-		default:
-		case GUNSHIP_TYPE_APACHE:
-		{
-
-			apache_restore_damage_values ();
-
-			break;
-		}
-
-		case GUNSHIP_TYPE_COMANCHE:
-		{
-
-			comanche_restore_damage_values ();
-
-			break;
-		}
-
-		case GUNSHIP_TYPE_HAVOC:
-		{
-
-			havoc_restore_damage_values ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_HOKUM:
-		{
-
-			hokum_restore_damage_values ();
-
-			break;
-		}
-		////Moje 030518 Start
-		case GUNSHIP_TYPE_BLACKHAWK:
-		{
-
-			blackhawk_restore_damage_values ();
-
-			break;
-		}
-		////Moje 030518 End
-		////Moje 030612 start
-		case GUNSHIP_TYPE_HIND:
-		{
-
-			hind_restore_damage_values ();
-
-			break;
-		}
-		////Moje 030612 end
-		////Moje 030816 Start
-		case GUNSHIP_TYPE_AH64A:
-		{
-
-			ah64a_restore_damage_values ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_KA50:
-		{
-			ka50_restore_damage_values ();
-			break;
-		}
-		////Moje 030816 end
-		case GUNSHIP_TYPE_VIPER:
-		{
-			viper_restore_damage_values ();
-
-			break;
-		}
-		case GUNSHIP_TYPE_KIOWA:
-		{
-			kiowa_restore_damage_values ();
-
-			break;
-		}
-	}
+//	switch (get_global_gunship_type ())
+//	{
+//		// JB 030313 Fly any aircraft
+//		default:
+//		case GUNSHIP_TYPE_APACHE:
+//		{
+//
+//			apache_restore_damage_values ();
+//
+//			break;
+//		}
+//
+//		case GUNSHIP_TYPE_COMANCHE:
+//		{
+//
+//			comanche_restore_damage_values ();
+//
+//			break;
+//		}
+//
+//		case GUNSHIP_TYPE_HAVOC:
+//		{
+//
+//			havoc_restore_damage_values ();
+//
+//			break;
+//		}
+//		case GUNSHIP_TYPE_HOKUM:
+//		{
+//
+//			hokum_restore_damage_values ();
+//
+//			break;
+//		}
+//		////Moje 030518 Start
+//		case GUNSHIP_TYPE_BLACKHAWK:
+//		{
+//
+//			blackhawk_restore_damage_values ();
+//
+//			break;
+//		}
+//		////Moje 030518 End
+//		////Moje 030612 start
+//		case GUNSHIP_TYPE_HIND:
+//		{
+//
+//			hind_restore_damage_values ();
+//
+//			break;
+//		}
+//		////Moje 030612 end
+//		////Moje 030816 Start
+//		case GUNSHIP_TYPE_AH64A:
+//		{
+//
+//			ah64a_restore_damage_values ();
+//
+//			break;
+//		}
+//		case GUNSHIP_TYPE_KA50:
+//		{
+//			ka50_restore_damage_values ();
+//			break;
+//		}
+//		////Moje 030816 end
+//		case GUNSHIP_TYPE_VIPER:
+//		{
+//			viper_restore_damage_values ();
+//
+//			break;
+//		}
+//		case GUNSHIP_TYPE_KIOWA:
+//		{
+//			kiowa_restore_damage_values ();
+//
+//			break;
+//		}
+//	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1572,85 +1582,85 @@ void repair_damage_model (unsigned int damage)
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
 
-					switch (current_flight_dynamics->sub_type)
-					{
-
-						case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
-						{
-
-							apache_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
-						{
-
-							havoc_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
-						{
-
-							comanche_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-						{
-
-							hokum_restore_damage_values ();
-
-							break;
-						}
-					////Moje 030527 Start
-
-						case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
-						{
-
-							blackhawk_restore_damage_values ();
-
-							break;
-						}
-					////Moje 030527 End
-					////moje 030612 start
-						case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
-						{
-
-							hind_restore_damage_values ();
-
-							break;
-						}
-					////Moje 030612 end
-					////Moje 030816 Start
-
-						case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
-						{
-
-							ah64a_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-						{
-							ka50_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
-						{
-							viper_restore_damage_values ();
-
-							break;
-						}
-						case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
-						{
-							kiowa_restore_damage_values ();
-
-							break;
-						}
-					////Moje 030816 end
-					}
+//					switch (current_flight_dynamics->sub_type)
+//					{
+//
+//						case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+//						{
+//
+//							apache_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
+//						{
+//
+//							havoc_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+//						{
+//
+//							comanche_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+//						{
+//
+//							hokum_restore_damage_values ();
+//
+//							break;
+//						}
+//					////Moje 030527 Start
+//
+//						case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+//						{
+//
+//							blackhawk_restore_damage_values ();
+//
+//							break;
+//						}
+//					////Moje 030527 End
+//					////moje 030612 start
+//						case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+//						{
+//
+//							hind_restore_damage_values ();
+//
+//							break;
+//						}
+//					////Moje 030612 end
+//					////Moje 030816 Start
+//
+//						case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+//						{
+//
+//							ah64a_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+//						{
+//							ka50_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+//						{
+//							viper_restore_damage_values ();
+//
+//							break;
+//						}
+//						case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+//						{
+//							kiowa_restore_damage_values ();
+//
+//							break;
+//						}
+//					////Moje 030816 end
+//					}
 
 					#if DYNAMICS_DEBUG
 

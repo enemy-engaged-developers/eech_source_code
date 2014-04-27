@@ -526,8 +526,8 @@ float_type_data
 		{
 			"FLOAT_TYPE_INITIAL_SPEED",								// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
-			7,																	// pack_num_whole_bits (excluding sign bit)
-			6,																	// pack_num_fractional_bits
+			11,																	// pack_num_whole_bits (excluding sign bit)
+			2,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -745,6 +745,14 @@ float_type_data
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,	 						// pack_type
 			1,																	// pack_num_whole_bits (excluding sign bit)
 			7,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_MOTION_VECTOR_PITCH", 		            // name
+			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
+			7,																	// pack_num_whole_bits (excluding sign bit)
+			6,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -1304,10 +1312,26 @@ float_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"FLOAT_TYPE_WEAPON_LAUNCH_DELAY",								// name
+			FLOAT_PACK_TYPE_UNSIGNED_VALUE,								// pack_type
+			8,																	// pack_num_whole_bits (excluding sign bit)
+			4,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
 			"FLOAT_TYPE_WEAPON_LIFETIME",								// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
 			9,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_WEAPON_REARMING_TIMER",							// name
+			FLOAT_PACK_TYPE_UNPACKED,									// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -1661,7 +1685,7 @@ void pack_float_value (entity *en, float_types type, float value)
 
 			width = 1 + float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			#ifdef DEBUG_PACK_OVERFLOW
+			#if DEBUG_PACK_OVERFLOW
 			{
 				int max_val = (1 << (width - 1)) - 1;
 				int min_val = -max_val - 1;
@@ -1754,14 +1778,14 @@ void pack_float_value (entity *en, float_types type, float value)
 
 			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			#ifdef DEBUG_PACK_OVERFLOW
+			#if DEBUG_PACK_OVERFLOW
 			{
 				int max_val = (1 << (width)) - 1;
 				int min_val = 0;
 
 				if (width < 32 && (i > max_val || i < min_val))
 				{
-					#ifdef DEBUG_PACK_OVERFLOW
+					#if DEBUG_PACK_OVERFLOW
 						debug_log_pack_overflow("unsigned float angle", get_float_type_name(type), width, i, value);
 						debug_log("Overflow %s, min val %i, max val %i", get_local_entity_string (en, STRING_TYPE_FULL_NAME), min_val, max_val);
 					#endif
@@ -1845,14 +1869,14 @@ void pack_float_value (entity *en, float_types type, float value)
 
 			width = 1 + float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			#ifdef DEBUG_PACK_OVERFLOW
+			#if DEBUG_PACK_OVERFLOW
 			{
 				int max_val = (1 << (width - 1)) - 1;
 				int min_val = -max_val - 1;
 
 				if (width < 32 && (i > max_val || i < min_val))
 				{
-					#ifdef DEBUG_PACK_OVERFLOW
+					#if DEBUG_PACK_OVERFLOW
 						debug_log_pack_overflow("signed float value", get_float_type_name(type), width, i, value);
 					#endif
 					
@@ -1910,6 +1934,8 @@ void pack_float_value (entity *en, float_types type, float value)
 				i,
 				width;
 
+			if (value < 0)
+				debug_log("signed float restricted, type %s", get_float_type_name(type));
 			ASSERT (value >= 0.0);
 
 			ASSERT
@@ -1936,14 +1962,14 @@ void pack_float_value (entity *en, float_types type, float value)
 
 			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			#ifdef DEBUG_PACK_OVERFLOW
+			#if DEBUG_PACK_OVERFLOW
 			{
 				int max_val = (1 << (width)) - 1;
 				int min_val = 0;
 
 				if (width < 32 && (i > max_val || i < min_val))
 				{
-					#ifdef DEBUG_PACK_OVERFLOW
+					#if DEBUG_PACK_OVERFLOW
 						debug_log_pack_overflow("unsigned float value", get_float_type_name(type), width, i, value);
 					#endif
 					

@@ -66,8 +66,9 @@
 
 struct WEAPON_DATA
 {
+	char
+		*full_name;
 	const char
-		*full_name,
 		*hud_name,
 		*mfd_name,
 		*weapon_loading_list_name,
@@ -109,8 +110,8 @@ struct WEAPON_DATA
 
 	int
 		gun_shake,
-		soft_damage_capability,
-		hard_damage_capability,
+		damage_capability,
+		armor_penetration_capability,
 		smoke_trail_type,
 		acquire_parent_forward_velocity,
 		ignore_gravity,
@@ -118,25 +119,26 @@ struct WEAPON_DATA
 		in_flight_collision_check,
 		viewable_weapon,
 		boresight_weapon,					// meaningful for featured helicopters only
-		hellfire_flight_profile,		// meaningful for Hellfire missiles only
-		spiral_flightpath;              // has a spiral flight path (vikhrs)
+		flight_profile_or_self_destr,		// for Hellfire, Vikhr and self destruction weapons
+		tracer_color;
 
 	unsigned int
 		weapon_class;
 
 	float
-		weight,								// kilogrammes
+		start_weight,								// kilogrammes
+		final_weight,								// kilogrammes
 		min_range,							// metres
 		max_range,							// metres
 		effective_range,					// metres
 		min_range_loal,					// metres
 		max_range_loal,					// metres
-		max_range_error_ratio,			// max range error/max range
+		circular_error_probable,			// max range error/max range
 		muzzle_velocity,              // meters/second
 		muzzle_velocity_max_error,		// meters/second
 		cruise_velocity,					// meters/second
 		g_max,                        // g
-		burn_time,                    // seconds
+		boost_time,                    // seconds
 		cruise_time,                  // seconds
 		cruise_time_max_error,        // seconds
 		inhibit_time,						// seconds
@@ -144,9 +146,18 @@ struct WEAPON_DATA
 		rate_of_fire,						// rounds/minute
 		reload_time,						// seconds
 		max_launch_angle_error,			// radians
-		max_seeker_limit,				// cos of angle (usually cos(max_launch_angle_error))
-		drag_factor,                    // projectile drag, used for calculating deceleration
-		inverse_rate_of_fire;           // 1.0 / rate_of_fire
+		max_seeker_limit,				// cos of angle
+		drag_coefficient,                    // projectile drag, used for calculating deceleration
+		inverse_rate_of_fire,           // 1.0 / rate_of_fire
+		flightpath_deviation,			// meters
+		boost_power,					// newton * s (kilogrammes * m / s^2)
+		sustain_power,					// newton * s (kilogrammes * m / s^2)
+		sustain_time,					// seconds
+		diameter,						// meters
+		detonation_radius,				// meters
+		rearming_time,					// seconds
+		tracer_fire_time,					// seconds
+		max_altitude;					// meters
 };
 
 typedef struct WEAPON_DATA weapon_data;

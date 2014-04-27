@@ -1002,7 +1002,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, INFRARED_OFF );
+			set_3d_infrared_mode ( main_3d_env, RENDER_CLEAR );
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_AUTOMATIC );
 
@@ -1023,7 +1023,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			{
 				set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
 			}else{
-				set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+				set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 			}
 			// end russian NVG WITHOUT FLIR by GCsDriver  08-12-2007
 
@@ -1111,7 +1111,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+			set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 
 			//
 			// Set the light in the scene
@@ -1388,7 +1388,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+			set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 
 			//
 			// Set the light in the scene
@@ -1464,7 +1464,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			break;
 		}
 
-		case DISPLAY_3D_TINT_GREY:
+		case DISPLAY_3D_TINT_FLIR:
 		{
 
 			//
@@ -1483,93 +1483,22 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			{
 
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
-				{
-
-					ambient_light.red = 0.48;
-					ambient_light.green = 0.48;
-					ambient_light.blue = 0.48;
-
-					main_light.red = 0.12;
-					main_light.green = 0.12;
-					main_light.blue = 0.12;
-
-					break;
-				}
-
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
-				{
-
-					ambient_light.red = 0.64;
-					ambient_light.green = 0.64;
-					ambient_light.blue = 0.64;
-
-					main_light.red = 0.16;
-					main_light.green = 0.16;
-					main_light.blue = 0.16;
-
-					break;
-				}
-
-				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
-				{
-
-					ambient_light.red = 0.8;
-					ambient_light.green = 0.8;
-					ambient_light.blue = 0.8;
-
-					main_light.red = 0.2;
-					main_light.green = 0.2;
-					main_light.blue = 0.2;
-
-					break;
-				}
-			}
-/*			switch ( current_3d_light_level )
-			{
-
-				case DISPLAY_3D_LIGHT_LEVEL_LOW:
-				{
-
-					ambient_light.red = 0.0;
-					ambient_light.green = 0.48;
-					ambient_light.blue = 0.0;
-
-					main_light.red = 0.0;
-					main_light.green = 0.12;
-					main_light.blue = 0.0;
-
-					break;
-				}
-
-				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
-				{
-
-					ambient_light.red = 0.0;
-					ambient_light.green = 0.64;
-					ambient_light.blue = 0.0;
-
-					main_light.red = 0.0;
-					main_light.green = 0.16;
-					main_light.blue = 0.0;
-
-					break;
-				}
-
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.8;
+					ambient_light.green = 0.0;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.0;
-					main_light.green = 0.2;
-					main_light.blue = 0.0;
+					main_light.red = 0.1;
+					main_light.green = 0.1;
+					main_light.blue = 0.1;
 
 					break;
 				}
 			}
-*/
+
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
 
 			direction.x = -visual_3d_vp->zv.x;
@@ -1584,14 +1513,41 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 
-			fog_colour.r = ambient_light.red * 128;
-			fog_colour.g = ambient_light.green * 128;
-			fog_colour.b = ambient_light.blue * 128;
+			fog_colour.r = 64;
+			fog_colour.g = 64;
+			fog_colour.b = 64;
 
 			fog_colour.a = 0;
 
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 
+			break;
+		}
+
+		case DISPLAY_3D_TINT_LLLTV:
+		{
+			float 
+				fog_distance_min,
+				fog_distance_max;
+			
+			set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+
+			fog_colour.r = fog_colour.g = fog_colour.b = (main_3d_env->fog_colour.red + main_3d_env->fog_colour.green + main_3d_env->fog_colour.blue) / 3;;
+			fog_colour.a = 0;
+
+			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
+			set_3d_fog_colour ( main_3d_env, fog_colour );
+			get_3d_fog_distances(main_3d_env, &fog_distance_min, &fog_distance_max);
+			set_3d_fog_distances ( main_3d_env, 0.0, min(10000.0, 2 * fog_distance_max) );
+			
+			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 3;
+			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 3;
+
+			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
+			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
+			set_3d_main_light_source ( main_3d_env, &main_light, &main_3d_env->main_3d_light.light_direction, FALSE );
+
+			
 			break;
 		}
 
@@ -1612,7 +1568,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, INFRARED_OFF );
+			set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
 	
 			//
 			// Set the fogmode

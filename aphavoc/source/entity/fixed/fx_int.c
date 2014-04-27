@@ -382,7 +382,7 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case INT_TYPE_WARHEAD_EFFECTIVE_CLASS:
+		case INT_TYPE_ARMOR_LEVEL:
 		////////////////////////////////////////
 		{
 
@@ -390,19 +390,19 @@ static int get_local_int_value (entity *en, int_types type)
 			{
 				case 2:
 				{
-					value = WARHEAD_EFFECTIVE_HARDENED_BUILDING;
+					value = 40;
 
 					break;
 				}
 				case 1:
 				{
-					value = WARHEAD_EFFECTIVE_STONE_BUILDING;
+					value = 15;
 
 					break;
 				}
 				default:
 				{
-					value = WARHEAD_EFFECTIVE_LIGHT_BUILDING;
+					value = 3;
 
 					break;
 				}
@@ -485,7 +485,7 @@ void overload_fixed_int_value_functions (entity_types type)
 
 	fn_get_local_entity_int_value				[type][INT_TYPE_TASK_TARGET_TYPE]							= get_local_int_value;
 
-	fn_get_local_entity_int_value				[type][INT_TYPE_WARHEAD_EFFECTIVE_CLASS]					= get_local_int_value;
+	fn_get_local_entity_int_value				[type][INT_TYPE_ARMOR_LEVEL]					= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

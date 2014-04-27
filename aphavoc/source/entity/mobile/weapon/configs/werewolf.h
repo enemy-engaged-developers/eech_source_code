@@ -105,8 +105,8 @@
 		#define NUM_S8_ROCKETS							(20)
 		#define NUM_S13_ROCKETS							(5)
 		#define NUM_CANNON_POD_ROUNDS					(250)
-		#define NUM_CHAFFS								(30)
-		#define NUM_FLARES								(30)
+		#define NUM_CHAFFS								(32)
+		#define NUM_FLARES								(32)
 		#define NUM_BLADES								(1)
 		#define NUM_PILOTS								(1)
 		#define NUM_CO_PILOTS							(1)
@@ -123,6 +123,23 @@
 		#define VIKHR_RACK_MIN_PITCH_LIMIT			(rad (-10.0))
 		#define VIKHR_RACK_MAX_PITCH_LIMIT			(rad (2.0))
 
+//		sub_type, number, heading_depth, pitch_depth, muzzle_depth, make_weapon_system_ready, rotate, salvo_size, heading_rate, min_heading_limit, max_heading_limit, pitch_rate, min_pitch_limit, max_pitch_limit, muzzle_rotate_rate, rotate_inhibit_velocity, heading_share_mask, pitch_share_mask, muzzle_flash_type
+
+		#define WEAPON_CHAFF(HEADING) ENTITY_SUB_TYPE_WEAPON_CHAFF, NUM_CHAFFS, HEADING, CHAFF_VECTOR, 0, FALSE, FALSE, 4, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_INVALID,
+		#define WEAPON_FLARE(HEADING) ENTITY_SUB_TYPE_WEAPON_FLARE, NUM_FLARES, HEADING, FLARE_VECTOR, 0, FALSE, FALSE, 4, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_INVALID,
+		#define WEAPON_2A42_30MM_HE_ROUND ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, NUM_HE_CANNON_ROUNDS, CANNON_TURRET, CANNON_BARREL, 0, FALSE, TRUE, 1, CANNON_TURRET_HEADING_RATE, CANNON_TURRET_MIN_HEADING_LIMIT, CANNON_TURRET_MAX_HEADING_LIMIT, CANNON_BARREL_PITCH_RATE, CANNON_BARREL_MIN_PITCH_LIMIT, CANNON_BARREL_MAX_PITCH_LIMIT, rad (0.0), knots_to_metres_per_second (10000.0), SHARE_WEAPON_PACKAGE5 + SHARE_WEAPON_PACKAGE6, SHARE_WEAPON_PACKAGE5 + SHARE_WEAPON_PACKAGE6, MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,
+		#define WEAPON_2A42_30MM_AP_ROUND ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND, NUM_AP_CANNON_ROUNDS, CANNON_TURRET, CANNON_BARREL, 0, FALSE, TRUE, 1, CANNON_TURRET_HEADING_RATE, CANNON_TURRET_MIN_HEADING_LIMIT, CANNON_TURRET_MAX_HEADING_LIMIT, CANNON_BARREL_PITCH_RATE, CANNON_BARREL_MIN_PITCH_LIMIT, CANNON_BARREL_MAX_PITCH_LIMIT, rad (0.0), knots_to_metres_per_second (10000.0), SHARE_WEAPON_PACKAGE5 + SHARE_WEAPON_PACKAGE6, SHARE_WEAPON_PACKAGE5 + SHARE_WEAPON_PACKAGE6, MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,
+		#define WEAPON_HOKUM_BLADE(HEADING) ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE, NUM_BLADES, HEADING, BLADE_EJECT_VECTOR, 0, FALSE, FALSE, 6, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,
+		#define WEAPON_HOKUM_PILOT ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT, NUM_PILOTS, PILOT_EJECT, CREW_EJECT_VECTOR, 0, FALSE, FALSE, 1, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,
+		#define WEAPON_HOKUM_CO_PILOT ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT, NUM_CO_PILOTS, CO_PILOT_EJECT, CREW_EJECT_VECTOR, 0, FALSE, FALSE, 1, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,
+		#define WEAPON_HOKUM_LH_DOOR ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR, NUM_DOORS, PILOT_DOOR_EJECT, DOOR_EJECT_VECTOR, 0, FALSE, FALSE, 1, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_INVALID,
+		#define WEAPON_HOKUM_RH_DOOR ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR, NUM_DOORS, CO_PILOT_DOOR_EJECT, DOOR_EJECT_VECTOR, 0, FALSE, FALSE, 1, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_INVALID,
+		#define WEAPON_VIKHR(HEADING) ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR, NUM_VIKHR_MISSILES, HEADING, VIKHR_RACK, 0, FALSE, TRUE, 1, rad (0.0), rad (0.0), rad (0.0), VIKHR_RACK_PITCH_RATE, VIKHR_RACK_MIN_PITCH_LIMIT, VIKHR_RACK_MAX_PITCH_LIMIT, rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_SMALL_ROCKET,
+		#define WEAPON_IGLA_V(HEADING) ENTITY_SUB_TYPE_WEAPON_9M39_IGLA_V, NUM_IGLA_MISSILES, HEADING, IGLA_PYLON, 0, FALSE, FALSE, 1, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_SMALL_ROCKET,
+		#define WEAPON_S8(HEADING) ENTITY_SUB_TYPE_WEAPON_S8, NUM_S8_ROCKETS, HEADING, B8_POD, 0, FALSE, FALSE, 2, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_MEDIUM_ROCKET,
+		#define WEAPON_S13(HEADING) ENTITY_SUB_TYPE_WEAPON_S13, NUM_S13_ROCKETS, HEADING, B13_POD, 0, FALSE, FALSE, 2, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_LARGE_ROCKET,
+		#define WEAPON_GSH23L_23MM_ROUND(HEADING) ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND, NUM_CANNON_POD_ROUNDS, HEADING, CANNON_POD, 0, FALSE, FALSE, 2, rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), rad (0.0), knots_to_metres_per_second (10000.0), 0, 0, MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,
+				
 		////////////////////////////////////////
 		//
 		// WEAPON_CONFIG_TYPE_KA50_HOKUM_1
@@ -130,361 +147,37 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 18
@@ -525,405 +218,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -960,405 +289,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -1395,405 +360,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -1830,405 +431,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -2265,405 +502,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -2700,449 +573,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -3175,449 +644,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -3650,449 +715,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -4125,449 +786,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_VIKHR,								// sub_type
-				NUM_VIKHR_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				VIKHR_RACK,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				VIKHR_RACK_PITCH_RATE,											// pitch_rate
-				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
-				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_VIKHR(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -4600,405 +857,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -5035,449 +928,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -5510,449 +999,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -5985,449 +1070,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -6460,449 +1141,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT2,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -6935,405 +1212,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -7370,449 +1283,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -7845,449 +1354,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -8320,449 +1425,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -8795,449 +1496,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -9270,405 +1567,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -9705,449 +1638,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -10180,449 +1709,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -10655,449 +1780,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -11130,449 +1851,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT2,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -11605,405 +1922,41 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 19
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 20
@@ -12040,449 +1993,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				LHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_IGLA_V,							// sub_type
-				NUM_IGLA_MISSILES,											// number
-				RHS_HARDPOINT1,												// heading_depth
-				IGLA_PYLON,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_IGLA_V(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -12515,449 +2064,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S8,									// sub_type
-				NUM_S8_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B8_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S8(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -12990,449 +2135,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				LHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_S13,								// sub_type
-				NUM_S13_ROCKETS,												// number
-				RHS_HARDPOINT1,												// heading_depth
-				B13_POD,															// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_S13(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -13465,449 +2206,45 @@
 		////////////////////////////////////////
 		{
 			// WEAPON PACKAGE 1
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(LHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 2
-			{
-				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
-				NUM_CHAFFS,														// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
-				CHAFF_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_CHAFF(RHS_CHAFF_DISPENSER) },
 			// WEAPON PACKAGE 3
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				LHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(LHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 4
-			{
-				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
-				NUM_FLARES,														// number
-				RHS_FLARE_DISPENSER,											// heading_depth
-				FLARE_VECTOR,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_FLARE(RHS_FLARE_DISPENSER) },
 			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,			// sub_type
-				NUM_HE_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_HE_ROUND },
 			// WEAPON PACKAGE 6
-			{
-				ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,			// sub_type
-				NUM_AP_CANNON_ROUNDS,										// number
-				CANNON_TURRET,													// heading_depth
-				CANNON_BARREL,													// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				TRUE,																// rotate
-				1,																	// salvo_size
-				CANNON_TURRET_HEADING_RATE,								// heading_rate
-				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
-				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
-				CANNON_BARREL_PITCH_RATE,									// pitch_rate
-				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
-				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
-				SHARE_WEAPON_PACKAGE6,
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_2A42_30MM_AP_ROUND },
 			// WEAPON PACKAGE 7
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE1_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE1_EJECT) },
 			// WEAPON PACKAGE 8
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE2_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE2_EJECT) },
 			// WEAPON PACKAGE 9
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE3_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE3_EJECT) },
 			// WEAPON PACKAGE 10
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE4_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE4_EJECT) },
 			// WEAPON PACKAGE 11
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE5_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE5_EJECT) },
 			// WEAPON PACKAGE 12
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_BLADE,						// sub_type
-				NUM_BLADES,														// number
-				BLADE6_EJECT,													// heading_depth
-				BLADE_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				6,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_BLADE(BLADE6_EJECT) },
 			// WEAPON PACKAGE 13
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT,						// sub_type
-				NUM_PILOTS,														// number
-				PILOT_EJECT,													// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_PILOT },
 			// WEAPON PACKAGE 14
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT,					// sub_type
-				NUM_CO_PILOTS,													// number
-				CO_PILOT_EJECT,												// heading_depth
-				CREW_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_LARGE_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_CO_PILOT },
 			// WEAPON PACKAGE 15
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_LH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				PILOT_DOOR_EJECT,												// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_LH_DOOR },
 			// WEAPON PACKAGE 16
-			{
-				ENTITY_SUB_TYPE_WEAPON_HOKUM_RH_DOOR,					// sub_type
-				NUM_DOORS,														// number
-				CO_PILOT_DOOR_EJECT,											// heading_depth
-				DOOR_EJECT_VECTOR,											// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
+			{ WEAPON_HOKUM_RH_DOOR },
 			// WEAPON PACKAGE 17
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT1) },
 			// WEAPON PACKAGE 18
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT1,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT1) },
 			// WEAPON PACKAGE 19
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(LHS_HARDPOINT2) },
 			// WEAPON PACKAGE 20
-			{
-				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
-				NUM_CANNON_POD_ROUNDS,										// number
-				RHS_HARDPOINT2,												// heading_depth
-				CANNON_POD,														// pitch_depth
-				0,																	// muzzle_depth
-				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,																	// heading_share_mask
-				0,																	// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
-			},
+			{ WEAPON_GSH23L_23MM_ROUND(RHS_HARDPOINT2) },
 			// WEAPON PACKAGE 21
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 22
@@ -13986,3 +2323,18 @@
 		#undef CANNON_BARREL_PITCH_RATE
 		#undef CANNON_BARREL_MIN_PITCH_LIMIT
 		#undef CANNON_BARREL_MAX_PITCH_LIMIT
+
+		#undef WEAPON_CHAFF
+		#undef WEAPON_FLARE
+		#undef WEAPON_2A42_30MM_HE_ROUND
+		#undef WEAPON_2A42_30MM_AP_ROUND
+		#undef WEAPON_HOKUM_BLADE
+		#undef WEAPON_HOKUM_PILOT
+		#undef WEAPON_HOKUM_CO_PILOT
+		#undef WEAPON_HOKUM_LH_DOOR
+		#undef WEAPON_HOKUM_RH_DOOR
+		#undef WEAPON_VIKHR
+		#undef WEAPON_IGLA_V
+		#undef WEAPON_S8
+		#undef WEAPON_S13
+		#undef WEAPON_GSH23L_23MM_ROUND
