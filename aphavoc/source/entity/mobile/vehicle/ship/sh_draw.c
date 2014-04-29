@@ -128,6 +128,7 @@ static void draw_local_3d_object (entity *en, float range)
 	{
 		animate_and_draw_entity_muzzle_flash_effect (en);
 
+		raw->vh.inst3d->object_diffuse_value = 255;
 		raw->vh.inst3d->object_internal_lighting = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 		raw->vh.inst3d->object_sprite_lights = raw->vh.inst3d->object_internal_lighting;
 	}

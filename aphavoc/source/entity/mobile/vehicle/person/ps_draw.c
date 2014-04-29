@@ -111,6 +111,7 @@ static void draw_local_3d_object (entity *en, float range)
 		raw->vh.inst3d->object_diffuse_value = 0; //32;
 	else
 	{
+		raw->vh.inst3d->object_diffuse_value = 255;
 		animate_and_draw_entity_muzzle_flash_effect (en);
 	}
 

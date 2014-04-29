@@ -131,7 +131,10 @@ static void draw_local_3d_object (entity *en, float range)
 			inst3d->object_sprite_lights = FALSE;
 		}
 		else
+		{
+			inst3d->object_diffuse_value = 255;				
 			inst3d->object_sprite_lights = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
+		}
 
 		insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
 	}
