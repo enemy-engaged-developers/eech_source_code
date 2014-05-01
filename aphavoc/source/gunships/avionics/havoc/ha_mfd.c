@@ -3115,7 +3115,7 @@ static void draw_3d_flir_mfd (void)
 
 static void draw_2d_flir_mfd (int valid_3d, int scaled_3d)
 {
-	if (command_line_advanced_avionics && command_line_colour_mfd && draw_large_mfd)
+	if (command_line_advanced_mfd && command_line_colour_mfd && draw_large_mfd)
 		draw_adv_2d_eo_display (&havoc_flir, TARGET_ACQUISITION_SYSTEM_FLIR, valid_3d, scaled_3d);
 	else
 		draw_2d_eo_display (&havoc_flir, TARGET_ACQUISITION_SYSTEM_FLIR, valid_3d, scaled_3d);
@@ -3142,7 +3142,7 @@ static void draw_3d_llltv_mfd (void)
 
 static void draw_2d_llltv_mfd (int valid_3d, int scaled_3d)
 {
-	if (command_line_advanced_avionics && command_line_colour_mfd && draw_large_mfd)
+	if (command_line_advanced_mfd && command_line_colour_mfd && draw_large_mfd)
 		draw_adv_2d_eo_display (&havoc_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, valid_3d, scaled_3d);
 	else
 		draw_2d_eo_display (&havoc_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, valid_3d, scaled_3d);

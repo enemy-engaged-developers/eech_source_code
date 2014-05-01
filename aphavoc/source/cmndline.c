@@ -150,8 +150,8 @@ int
 	command_line_capture_aircraft								= TRUE,  ////Moje 040304 customizing a bit..
 	command_line_dynamics_sonic_buildup 					= TRUE,
 	command_line_player_start_rank							= PILOT_RANK_LIEUTENANT,
-	command_line_3d_visual_screen_width						= 640,
-	command_line_3d_visual_screen_height					= 480,
+	command_line_3d_visual_screen_width						= 800,
+	command_line_3d_visual_screen_height					= 600,
 	command_line_3d_reset									= FALSE,
 	command_line_force_resolution							= FALSE,
 	command_line_3d_visual_clear_edges						= FALSE,
@@ -161,8 +161,8 @@ int
 	command_line_no_dx9zbuffer_fix							= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 32, // Casm 03MAR10 32 bits by default
-	command_line_max_smoke_time								= 5,
-	command_line_smoke_optimisation							= 1,
+	command_line_max_smoke_time								= 30,
+	command_line_smoke_optimization							= 1,
 	command_line_cloud_puffs								= 1, // Casm 20MAY2012
 	command_line_no_mission_complete_music					= FALSE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
@@ -209,7 +209,7 @@ int
 	command_line_pilot_as_periscope_default							= 0,     // GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
 	command_line_eo_full_range						= 0,		// GCsDriver  08-12-2007
-	command_line_render_shadows							= 1,     // GCsDriver  08-12-2007
+	command_line_render_shadows							= 2,     // GCsDriver  08-12-2007
 	command_line_trees_fog										= 2,	// thealx 130430
 	command_line_fly_any_airplane								= TRUE,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
@@ -243,7 +243,7 @@ int
 	command_line_mouse_tsd_target_select            = TRUE,
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	command_line_shared_mem_export					= 0,	// Retro 14Aug2006
-	command_line_advanced_avionics					= 1,	// /thealx/
+	command_line_advanced_mfd					= 1,	// /thealx/
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background
 	global_mipmapping									= 1,  //VJ 050530 mipmapping on/off
@@ -263,7 +263,7 @@ int
 	session_planner_goto_button					= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model					= FALSE, // camcom bugs removed
 	session_ground_radar_ignores_infantry		= 1,
-	session_camcom										= 1,
+	session_camcom										= 0,
 // Jabberwock 031118 ends
 // mue 070223 export_mfd
 	command_line_export_mfd						=FALSE,
@@ -274,7 +274,7 @@ int
 	command_line_export_mfd_right_pos[4]				={384,0,640,256},
 	command_line_export_mfd_single_pos[4]				={0,0,256,256},
 	command_line_ui_sounds_muted = FALSE, //ataribaby 29/12/2008 for muted UI sounds
-	command_line_real_radio_msgs = TRUE;		
+	command_line_radio_msgs_noise = TRUE;		
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,

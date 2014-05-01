@@ -614,8 +614,8 @@ entity *create_local_sound_effect_entity
 			{
 				amp = adjust_radio_message_amplification (amp, &pos);
 
-				if (command_line_real_radio_msgs)
-					pitch -= 0.1 * frand1();
+				if (command_line_radio_msgs_noise)
+					pitch -= 0.05 * frand1();
 			}
 			else
 			{	

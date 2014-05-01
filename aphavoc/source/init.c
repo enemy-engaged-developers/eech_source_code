@@ -1010,10 +1010,6 @@ void full_initialise_game (void)
 	set_ui_object_text ( initialising_text, get_trans ("Finished Initialisation") );
 
 	ui_force_update ();
-
-#ifndef DEBUG
-	ASSERT("INITIALISATION COMPLETED");
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -183,7 +183,8 @@ void initialise_medal_and_promotion_names (void)
 
 const char *get_pilot_rank_name (int rank)
 {
-	ASSERT ((rank > PILOT_RANK_NONE) && (rank < NUM_PILOT_RANKS));
+	if (!(rank > PILOT_RANK_NONE && rank < NUM_PILOT_RANKS))
+		debug_fatal("Current player pfofile is corrupted!");
 
 	switch ( rank )
 	{

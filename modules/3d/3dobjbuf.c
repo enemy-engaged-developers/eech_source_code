@@ -2091,26 +2091,8 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 
 				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
-//				set_d3d_int_state ( D3DRENDERSTATE_FOGENABLE, TRUE );
-//				set_d3d_int_state ( D3DRENDERSTATE_FOGTABLEMODE, D3DFOG_LINEAR );
-//				set_3d_fogmode ( active_3d_environment, FOGMODE_ON_MANUAL );
-//				set_3d_fog_distances ( active_3d_environment, 0.0, 10.0 );
-//				{
-//
-//					rgb_colour
-//						single_light_fog_colour;
-//
-//					single_light_fog_colour.r = 255;
-//					single_light_fog_colour.g = 255;
-//					single_light_fog_colour.b = 255;
-//					single_light_fog_colour.a = 255;
-//
-//					set_3d_fog_colour ( active_3d_environment, single_light_fog_colour );
-//				}
-//
-//				set_d3d_alpha_fog_zbuffer ( TRUE, TRUE, TRUE, FALSE );
+
 				draw_3d_sprite ( &object_order->sprite );
-//				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 
 				break;
 			}

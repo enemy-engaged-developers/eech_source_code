@@ -261,7 +261,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		insert_local_entity_into_parents_child_list (en, LIST_TYPE_SECTOR, get_local_sector_entity (&raw->eff.position), NULL);
 		
-		if (command_line_smoke_optimisation && raw->eff.special_effect_link.parent && (raw->smoke_type == SMOKE_LIST_TYPE_FIRE || raw->smoke_type == SMOKE_LIST_TYPE_SMALL_FIRE)) // kill neighbor fire smoke source 
+		if (command_line_smoke_optimization && raw->eff.special_effect_link.parent && (raw->smoke_type == SMOKE_LIST_TYPE_FIRE || raw->smoke_type == SMOKE_LIST_TYPE_SMALL_FIRE)) // kill neighbor fire smoke source 
 		{
 			entity 
 				*smoke,

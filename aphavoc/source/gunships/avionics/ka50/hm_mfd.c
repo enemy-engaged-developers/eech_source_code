@@ -2566,7 +2566,7 @@ static void draw_3d_flir_mfd (int full_screen)
 
 static void draw_2d_flir_mfd (int valid_3d)
 {
-	if (command_line_advanced_avionics && command_line_colour_mfd && draw_large_mfd)
+	if (command_line_advanced_mfd && command_line_colour_mfd && draw_large_mfd)
 		draw_adv_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
 	else
 		draw_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);

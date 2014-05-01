@@ -138,7 +138,7 @@ extern int
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
 	command_line_max_smoke_time,								// arneh 2007-07-10 // updated /thealx/
-	command_line_smoke_optimisation,
+	command_line_smoke_optimization,
 	command_line_cloud_puffs,								// Casm 20MAY2012
 	command_line_no_mission_complete_music,
 	command_line_mouse_look,									// Retro 030317
@@ -219,7 +219,7 @@ extern int
 	command_line_mouse_tsd_target_select,                       // arneh, feb 2008
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
 	command_line_shared_mem_export,								// Retro 14Aug2006
-	command_line_advanced_avionics,								// /thealx/
+	command_line_advanced_mfd,								// /thealx/
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha, 									// VJ 050126 hud mod: background
 	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
@@ -249,7 +249,7 @@ extern int
 	command_line_export_mfd_left_pos[4],
 	command_line_export_mfd_single_pos[4],
 	command_line_ui_sounds_muted, //ataribaby 29/12/2008 for muted UI sounds
-	command_line_real_radio_msgs;
+	command_line_radio_msgs_noise;
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
