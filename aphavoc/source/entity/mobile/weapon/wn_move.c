@@ -88,14 +88,16 @@
 
 //HELLFIRE//
 
-#define HELLFIRE_MINIMUM_CLIMB_TIME (3.0)  // 1 seconds of burm, 3 remaining
+#define HELLFIRE_LOBL_CLIMB_RATIO	(0.14)
+#define HELLFIRE_LOBL_DIVE_RATIO	(0.31)
+#define HELLFIRE_LOAL_CLIMB1_RATIO	(0.084)
+#define HELLFIRE_LOAL_CLIMB2_RATIO	(0.22)
+#define HELLFIRE_LOAL_DIVE_RATIO	(0.5)
 #define HELLFIRE_LOAL_CLIMB1_TIME	(0.0)
-#define HELLFIRE_LOAL_CLIMB2_TIME	(-12.0)
-#define HELLFIRE_LOAL_CLIMB1_XZ	(1000.0)
+#define HELLFIRE_LOAL_CLIMB2_TIME	(-10.0)
+#define HELLFIRE_LOAL_XZ	(1000.0)
 #define HELLFIRE_LOAL_CLIMB1_Y		(300.0)
-#define HELLFIRE_LOAL_CLIMB2_XZ	(6000.0)
-#define HELLFIRE_LOAL_CLIMB2_Y		(450.0)
-#define HELLFIRE_LOAL_DIVE_XZ		(7500.0)
+#define HELLFIRE_LOAL_CLIMB2_Y		(40.0)
 #define HELLFIRE_LOAL_DIVE_Y		(-400.0)
 
 //HELLFIRE//
@@ -300,7 +302,7 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercept_point)
+static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercept_point, int loal)
 {
 	weapon
 		*raw;
@@ -315,7 +317,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 		time_elapsed,
 		current_life_time;
 	int
-		engine_mode = 0;
+		engine_mode = 0,
+		target_lost = FALSE;
 	vec3d
 		uvec_intercept_point;
 
@@ -356,31 +359,31 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		float range, dive_ratio;
 		vec3d
-			horizontal_range_point = *intercept_point,
 			*weapon_position;
 
 		weapon_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
-		horizontal_range_point.y = weapon_position->y;
-		range = get_2d_range (weapon_position, &horizontal_range_point);
+		range = get_2d_range (weapon_position, intercept_point);
 
-		dive_ratio = (intercept_point->y - weapon_position->y) / range;
+		dive_ratio = (weapon_position->y - intercept_point->y) / range;
+//		debug_log("DIVE_RATIO %f, loal mode %i, phase %i", dive_ratio, raw->loal_mode, raw->missile_phase);
 
-		if (raw->loal_mode)
+		if (raw->loal_mode && !loal)
 		{
 				switch (raw->missile_phase)
 				{
 				case MISSILE_PHASE1:
-					if (raw->weapon_lifetime > HELLFIRE_LOAL_CLIMB1_TIME)
+					if (dive_ratio > HELLFIRE_LOAL_DIVE_RATIO || range < 1800)
 					{
-						if (range < 10.0)
-							raw->missile_phase = MISSILE_FINAL_PHASE;
-						else
-						{
-						// initial climb of 30%
-							float new_aim_y = weapon_position->y + range * 0.3;
-							intercept_point->y = max(new_aim_y, intercept_point->y);
-						}
+						raw->missile_phase = MISSILE_FINAL_PHASE;
+						break;
+					}
+					
+					if (dive_ratio < HELLFIRE_LOAL_CLIMB1_RATIO && range > 3000)
+					{
+					// initial climb of 30%
+						float new_aim_y = weapon_position->y + range * 0.3;
+						intercept_point->y = max(new_aim_y, intercept_point->y);
 						break;
 					}
 
@@ -388,12 +391,13 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 					// fall through
 
 				case MISSILE_PHASE2:
-					if (range < 800.0)
+					if (dive_ratio > HELLFIRE_LOAL_DIVE_RATIO || range < 1500)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
 					}
-					else if (dive_ratio > -0.25)
+
+					if (dive_ratio < HELLFIRE_LOAL_CLIMB2_RATIO && range > 2500)
 					{
 						// seconds phase climb at 4%
 						float new_aim_y = weapon_position->y + range * 0.04;
@@ -406,39 +410,35 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 					// fall through
 
 				case MISSILE_PHASE3:
-					if (range < 500.0)
+					if (dive_ratio > HELLFIRE_LOAL_DIVE_RATIO || range < 1000)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
 					}
-					else if (dive_ratio > -0.55)
+					else
 					{
 						// third phase dive at 20%
-						float new_aim_y = weapon_position->y + range * -0.2;
+						float new_aim_y = weapon_position->y - range * 0.2;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
 
 						break;
 					}
-
-					// final phase goes straigt for target (in approximate 60% dive)
-					raw->missile_phase = MISSILE_FINAL_PHASE;
-					break;
 				default:
 					ASSERT(FALSE);
 				}
 		}
-		else  // lobl mode
+		else if (!raw->loal_mode)  // lobl mode
 		{
 				switch (raw->missile_phase)
 				{
 				case MISSILE_PHASE1:
-					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 900.0)
+					if (dive_ratio > HELLFIRE_LOBL_DIVE_RATIO || range < 2000)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
 					}
 
-					if (dive_ratio > -0.15)
+					if (dive_ratio < HELLFIRE_LOBL_CLIMB_RATIO && range > 2500)
 					{
 						// intial phase climb at 7%
 						float new_aim_y = weapon_position->y + range * 0.07;
@@ -449,22 +449,21 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 					raw->missile_phase = MISSILE_PHASE2;
 				case MISSILE_PHASE2:
-					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 750.0)
+					if (dive_ratio > HELLFIRE_LOBL_DIVE_RATIO || range < 1500)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
 					}
-
-					if (dive_ratio > -0.3)
+					else
 					{
 						// second phase dive at 3%
-						float new_aim_y = weapon_position->y + range * -0.03;
+						float new_aim_y = weapon_position->y - range * 0.03;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
 
 						break;
 					}
 
-					raw->missile_phase = MISSILE_FINAL_PHASE;
+//					raw->missile_phase = MISSILE_FINAL_PHASE;
 
 					break;
 				default:
@@ -486,8 +485,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	// make higher trajectory /thealx/
 	
-	time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 4 sec elapsed
-	uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath rised 10m
+	if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr != 1)
+	{
+		time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 4 sec elapsed
+		uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath rised 10m
+	}
 
 	//
 	// guard against divide by zero (weapon must be very close to the intercept point)
@@ -515,7 +517,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time)  // weapon armed after 1 second
+		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)  // weapon armed after 1 second
 		{
 
 			#if DEBUG_MODULE
@@ -527,60 +529,68 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 			return;
 		}
+		else
+			target_lost = TRUE;
 	}
 
-	//
-	// get attitude matrix (where y-axis is perpendicular to turn demand plane)
-	//
-
-	get_3d_vector_cross_product (&raw->mob.yv, &raw->mob.zv, &uvec_intercept_point);
-
-	normalise_3d_vector (&raw->mob.yv);
-
-	get_3d_vector_cross_product (&raw->mob.xv, &raw->mob.yv, &raw->mob.zv);
-
-	normalise_3d_vector (&raw->mob.xv);
-
-	//
-	// close angle (rotate about y-axis)
-	//
-
-	turn_demand = acos (cos_turn_demand);
-
-	//
-	// damp turn rate during inhibit period
-	//
-
-	if (current_life_time < weapon_database[raw->mob.sub_type].inhibit_time)
+	if (!target_lost)
 	{
+
 		//
-		// damp using y = x * x curve
+		// get attitude matrix (where y-axis is perpendicular to turn demand plane)
 		//
 
-		ASSERT (weapon_database[raw->mob.sub_type].inhibit_time > 0.0);
+		get_3d_vector_cross_product (&raw->mob.yv, &raw->mob.zv, &uvec_intercept_point);
 
-		inhibit_damp_factor = current_life_time / weapon_database[raw->mob.sub_type].inhibit_time;
+		normalise_3d_vector (&raw->mob.yv);
 
-		inhibit_damp_factor *= inhibit_damp_factor;
+		get_3d_vector_cross_product (&raw->mob.xv, &raw->mob.yv, &raw->mob.zv);
 
+		normalise_3d_vector (&raw->mob.xv);
+
+		//
+		// close angle (rotate about y-axis)
+		//
+
+		turn_demand = acos (cos_turn_demand);
+
+		//
+		// damp turn rate during inhibit period
+		//
+
+		if (current_life_time < weapon_database[raw->mob.sub_type].inhibit_time)
+		{
+			//
+			// damp using y = x * x curve
+			//
+
+			ASSERT (weapon_database[raw->mob.sub_type].inhibit_time > 0.0);
+
+			inhibit_damp_factor = current_life_time / weapon_database[raw->mob.sub_type].inhibit_time;
+
+			inhibit_damp_factor *= inhibit_damp_factor;
+
+		}
+		else if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1 && raw->missile_phase != MISSILE_FINAL_PHASE)
+		{
+			// arneh - limit turn rate in first phases of hellfire trajectory to get a smoother arc
+			
+			inhibit_damp_factor = 0.5;
+		}
+
+		max_turn_rate = G * weapon_database[raw->mob.sub_type].g_max / raw->mob.velocity * inhibit_damp_factor;
+		turn_rate = bound (turn_demand, - max_turn_rate, max_turn_rate);
+		get_3d_transformation_matrix (m1, turn_rate * get_delta_time (), 0.0, 0.0);
+		multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
+
+		//
+		// set roll to zero to remove jitter on weapon view
+		//
+
+		get_3d_transformation_matrix (raw->mob.attitude, get_heading_from_attitude_matrix (m2), get_pitch_from_attitude_matrix (m2), 0.0);
 	}
-	else if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1 && raw->missile_phase != MISSILE_FINAL_PHASE)
-	{
-		// arneh - limit turn rate in first phases of hellfire trajectory to get a smoother arc
-		
-		inhibit_damp_factor = 0.5;
-	}
-
-	max_turn_rate = G * weapon_database[raw->mob.sub_type].g_max / raw->mob.velocity * inhibit_damp_factor;
-	turn_rate = bound (turn_demand, - max_turn_rate, max_turn_rate);
-	get_3d_transformation_matrix (m1, turn_rate * get_delta_time (), 0.0, 0.0);
-	multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
-
-	//
-	// set roll to zero to remove jitter on weapon view
-	//
-
-	get_3d_transformation_matrix (raw->mob.attitude, get_heading_from_attitude_matrix (m2), get_pitch_from_attitude_matrix (m2), 0.0);
+	else
+		turn_rate = 0;
 
 	update_guided_weapon (raw, new_position, get_delta_time (), turn_rate, length, TRUE);
 	
@@ -823,7 +833,7 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
 				#if DEBUG_MODULE
-				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
+//				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
 				#endif
 
 				// no target if no laser designation
@@ -1071,7 +1081,7 @@ void weapon_movement (entity *en)
 			{
 				if (!raw->mob.target_link.parent)  // has no target
 				{
-					if (!weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 1)
+					if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr != 1)
 					{
 						check_guidance_source (raw, en, FALSE);
 					}
@@ -1202,7 +1212,7 @@ void weapon_movement (entity *en)
 
 	if (intercept_point_valid && (raw->weapon_lifetime > 0 || raw->mob.velocity > 200))
 	{
-		move_guided_weapon (en, &new_position, &intercept_point);
+		move_guided_weapon (en, &new_position, &intercept_point, FALSE);
 	}
 	else
 	{
@@ -1228,24 +1238,24 @@ void weapon_movement (entity *en)
 
 			if (raw->weapon_lifetime > HELLFIRE_LOAL_CLIMB1_TIME)
 			{
-				intercept_point.x += HELLFIRE_LOAL_CLIMB1_XZ * raw->mob.zv.x;
+				intercept_point.x += HELLFIRE_LOAL_XZ * raw->mob.zv.x;
 				intercept_point.y += HELLFIRE_LOAL_CLIMB1_Y;
-				intercept_point.z += HELLFIRE_LOAL_CLIMB1_XZ * raw->mob.zv.z;
+				intercept_point.z += HELLFIRE_LOAL_XZ * raw->mob.zv.z;
 			}
 			else if (raw->weapon_lifetime > HELLFIRE_LOAL_CLIMB2_TIME)
 			{
-				intercept_point.x += HELLFIRE_LOAL_CLIMB2_XZ * raw->mob.zv.x;
+				intercept_point.x += HELLFIRE_LOAL_XZ * raw->mob.zv.x;
 				intercept_point.y += HELLFIRE_LOAL_CLIMB2_Y;
-				intercept_point.z += HELLFIRE_LOAL_CLIMB2_XZ * raw->mob.zv.z;
+				intercept_point.z += HELLFIRE_LOAL_XZ * raw->mob.zv.z;
 			}
 			else
 			{
-				intercept_point.x += HELLFIRE_LOAL_DIVE_XZ * raw->mob.zv.x;
+				intercept_point.x += HELLFIRE_LOAL_XZ * raw->mob.zv.x;
 				intercept_point.y += HELLFIRE_LOAL_DIVE_Y;
-				intercept_point.z += HELLFIRE_LOAL_DIVE_XZ * raw->mob.zv.z;
+				intercept_point.z += HELLFIRE_LOAL_XZ * raw->mob.zv.z;
 			}
 
-			move_guided_weapon (en, &new_position, &intercept_point);
+			move_guided_weapon (en, &new_position, &intercept_point, TRUE);
 
 			//HELLFIRE//
 		}
