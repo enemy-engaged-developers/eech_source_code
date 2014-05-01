@@ -1083,7 +1083,7 @@ void update_flight_dynamics (void)
 
 	/// ForceFeedback by thealx 130224 ///////////////////////////////
 	
-	if (command_line_forcefeedback == 1)
+	if (command_line_forcefeedback && feedback_device)
 	{
 	    int state = get_local_entity_undercarriage_state (get_gunship_entity ());
 		vec3d pilot_forces;

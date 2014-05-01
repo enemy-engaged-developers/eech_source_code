@@ -413,7 +413,7 @@ int setup_sdl_joysticks( void ) {
 	
 	if (device_capabilities.dwFlags & DIDC_FORCEFEEDBACK)
 	{
-	
+
 		debug_log ("Got a force feedback joystick");
 		
 		feedback_device = device;
@@ -1303,7 +1303,7 @@ float
 
 void play_ffb_weapon_effect (char* eff_name, float rate)
 {
-	if (feedback_device != NULL && ffb == 1 && command_line_forcefeedback == 1 && command_line_ffb_recoil > 0)    
+	if (feedback_device && ffb == 1 && command_line_forcefeedback == 1 && command_line_ffb_recoil > 0)    
 	{
 		HRESULT
 			di_err;
@@ -1379,7 +1379,7 @@ void play_ffb_weapon_effect (char* eff_name, float rate)
 
 void set_joystick_force_feedback_forces ()
 {
-	if (feedback_device != NULL && ffb == 1 && command_line_forcefeedback == 1)    
+	if (feedback_device && ffb == 1 && command_line_forcefeedback == 1)    
 	{
 		HRESULT
 			di_err;

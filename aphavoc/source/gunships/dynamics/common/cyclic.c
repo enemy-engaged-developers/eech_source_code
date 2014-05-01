@@ -495,7 +495,7 @@ void update_cyclic_pressure_inputs (void)
 				else
 					input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 				
-				if (command_line_nonlinear_cyclic == 1 && command_line_forcefeedback == 1)
+				if (command_line_nonlinear_cyclic == 1 && command_line_forcefeedback && feedback_device)
 				{
 					trim = - current_flight_dynamics->input_data.cyclic_x_trim.value / 100;
 					if (trim >= 0)
@@ -506,7 +506,7 @@ void update_cyclic_pressure_inputs (void)
 					trim += trim;
 					trim *= 50;
 				}
-				else if (command_line_forcefeedback == 1)
+				else if (command_line_forcefeedback && feedback_device)
 					trim = - current_flight_dynamics->input_data.cyclic_x_trim.value;
 					
 				if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
@@ -518,7 +518,7 @@ void update_cyclic_pressure_inputs (void)
 				current_flight_dynamics->input_data.cyclic_x.value = input;
         
         //ataribaby 1/1/2009 allow trim with ALT HOLD
-				if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) && command_line_forcefeedback != 1)
+				if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) && (!command_line_forcefeedback || !feedback_device))
 					current_flight_dynamics->input_data.cyclic_x.value += current_flight_dynamics->input_data.cyclic_x_trim.value;
 				else if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
 					ff_xtrim = 100 * trim;
@@ -552,7 +552,7 @@ void update_cyclic_pressure_inputs (void)
 				else
 					input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
 
-				if (command_line_nonlinear_cyclic == 1 && command_line_forcefeedback == 1)
+				if (command_line_nonlinear_cyclic == 1 && command_line_forcefeedback && feedback_device)
 				{
 					trim = current_flight_dynamics->input_data.cyclic_y_trim.value / 100;
 					if (trim >= 0)
@@ -563,7 +563,7 @@ void update_cyclic_pressure_inputs (void)
 					trim += trim;
 					trim *= 50;
 				}
-				else if (command_line_forcefeedback == 1)
+				else if (command_line_forcefeedback && feedback_device)
 					trim = current_flight_dynamics->input_data.cyclic_y_trim.value;
 								
 				if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
@@ -575,7 +575,7 @@ void update_cyclic_pressure_inputs (void)
 				current_flight_dynamics->input_data.cyclic_y.value = input;
         
         //ataribaby 1/1/2009 allow trim with ALT HOLD 
-				if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) && command_line_forcefeedback != 1)
+				if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) && (!command_line_forcefeedback || !feedback_device))
 					current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
 				else if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
 					ff_ytrim = 100 * trim;
