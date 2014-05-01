@@ -874,7 +874,7 @@ void lase_range_for_ballistics_sight(void)
 	angle_of_drop = 0.0;
 
 	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-		get_ballistic_pitch_deflection(wpn_type, range, current_flight_dynamics->pitch.value, &angle_of_drop, &time_of_flight, FALSE, TRUE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
+		get_ballistic_pitch_deflection(wpn_type, range, current_flight_dynamics->pitch.value, &angle_of_drop, &time_of_flight, FALSE, TRUE, weapon_database [wpn_type].acquire_parent_forward_velocity * get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
 
 	ballistics_sight_calibrated_drop = angle_of_drop;
 }
@@ -904,7 +904,7 @@ float get_weapon_drop(entity_sub_types wpn_type) // boresight weapon
 		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC || weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 		{
 			angle_of_projection = 0.0;
-			get_ballistic_pitch_deflection(wpn_type, range, source_position->y - target_position.y, &angle_of_projection, &time_of_flight, FALSE, FALSE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
+			get_ballistic_pitch_deflection(wpn_type, range, source_position->y - target_position.y, &angle_of_projection, &time_of_flight, FALSE, FALSE, weapon_database [wpn_type].acquire_parent_forward_velocity * get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY));
 			angle_of_projection += asin((source_position->y - target_position.y) / range);
 		}
 		else
@@ -1041,7 +1041,7 @@ float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* hud_aim
 		// state where it continousely overcorrects in alternating directions
 		*hud_aim_range += 0.25 * range_diff;
 
-		if (!get_ballistic_pitch_deflection(weapon_sub_type, *hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE, get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY)))
+		if (!get_ballistic_pitch_deflection(weapon_sub_type, *hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE, weapon_database [weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY)))
 			angle_of_drop = 0.0;
 	}
 

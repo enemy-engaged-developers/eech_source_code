@@ -1489,7 +1489,7 @@ void set_attack_guide_fire_position (entity *en)
 				target_range = 0.5 * get_3d_range(aggressor_position, target_pos); // launch will happens at half way to target, also aggressor has high speed so decrease range 4 times
 				pitch =  - asin(0.5 * (aggressor_position->y - target_pos->y) / target_range);
 						
-				if (get_ballistic_pitch_deflection(selected_weapon, target_range, pitch, &angle, &time, FALSE, TRUE, get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY)))
+				if (get_ballistic_pitch_deflection(selected_weapon, target_range, pitch, &angle, &time, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY)))
 					position.y += cos(pitch) * target_range * sin(angle); // apply drop angle correction
 			}
 

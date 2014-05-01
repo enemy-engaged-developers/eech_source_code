@@ -117,7 +117,7 @@ int
 #define WRITE_STEP 250.0
 #define PITCH_STEP 5
 #define VELOCITY_TESTS 1 + 4
-#define VELOCITY_TEST_STEP 50
+#define VELOCITY_TEST_STEP 50.0
 #define NUM_SINGLE_DEGREE_VALUES 61
 #define NUM_NEGATIVE_PITCH_VALUES (((90 - (NUM_SINGLE_DEGREE_VALUES - 1) / 2) / PITCH_STEP))
 #define TOTAL_PITCH_INDICES (2*NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES)
@@ -985,10 +985,7 @@ void weapon_movement (entity *en)
 
 	if (raw->decoy_timer && !weapon_database[raw->mob.sub_type].decoy_type && raw->weapon_lifetime <= - raw->decoy_timer) // time for fireworks!
 	{
-		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
-			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-		
-		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS && get_comms_model () == COMMS_MODEL_SERVER) // create submunitions if it's needed, TODO: make it work for client
+		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS) // create submunitions if it's needed
 		{
 			viewpoint vp;
 			int count = (int) weapon_database[raw->mob.sub_type + 1].burst_duration;
@@ -996,13 +993,13 @@ void weapon_movement (entity *en)
 			memcpy ( vp.attitude, raw->mob.attitude, sizeof ( matrix3x3 ) );
 			vp.position = raw->mob.position;
 
-			while (count)
-			{
-				create_client_server_entity_submunition_weapon(raw->launched_weapon_link.parent, raw->mob.target_link.parent, raw->mob.sub_type + 1, ENTITY_INDEX_DONT_CARE, &vp, raw->mob.velocity);
-				count--;
-			}
+			while (count--)
+				create_client_server_entity_submunition_weapon(raw->launched_weapon_link.parent, raw->mob.target_link.parent, raw->mob.sub_type + 1, ENTITY_INDEX_DONT_CARE, &vp, raw->mob.velocity * weapon_database[raw->mob.sub_type + 1].acquire_parent_forward_velocity);
 		}
 
+		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
+			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
+		
 		raw->decoy_timer = 0;
 	
 		#if DEBUG_MODULE > 1
@@ -1600,8 +1597,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 	int
 		i,
 		pitch_index = 0,
-		num_range_values,
-		last_write_range = 0;
+		num_range_values;
 
 	float
 		pitch,
@@ -1659,7 +1655,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			ballistics_data
 					*source_ptr = ballistics_table[velocity_test - 1][wpn->mob.sub_type][pitch_index],
 					*dest_ptr = ballistics_table[velocity_test][wpn->mob.sub_type][pitch_index];
-
+		
 			memcpy(dest_ptr, source_ptr, sizeof(ballistics_data) * num_range_values);
 			pitch_index++;
 			continue;
@@ -1669,7 +1665,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 
 		// initialize weapon for new firing
 		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].boost_time + weapon_database[wpn->mob.sub_type].sustain_time;
-		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity + velocity_test * (float) VELOCITY_TEST_STEP;
+		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity + velocity_test * VELOCITY_TEST_STEP;
 
 		wpn->mob.position.x = 0.0;
 		wpn->mob.position.y = 0.0;
@@ -1707,12 +1703,11 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 				break;
 			
 			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
-			if (wpn->mob.velocity < 150.0)
-			{
+
+			if (wpn->mob.velocity < 75.0)
+				delta_time = 0.1;
+			else if (wpn->mob.velocity < 150.0)
 				delta_time = 0.04;
-				if (wpn->mob.velocity < 75.0)
-					delta_time = 0.1;
-			}
 			else
 				delta_time = 0.02;
 
@@ -2043,7 +2038,7 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_diff_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int fixed_pitch, float velocity)
+int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_diff_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int fixed_pitch, float parent_velocity)
 {
 	float
 		pitch_delta,
@@ -2095,12 +2090,12 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 
 	// prepare velocity test
 	
-	velocity = bound(velocity, 0, (VELOCITY_TESTS - 1) * VELOCITY_TEST_STEP - 1);
+	parent_velocity = bound(parent_velocity, 0, ((float)VELOCITY_TESTS - 1) * VELOCITY_TEST_STEP - 1);
 
-	if (velocity > 1 && weapon_database[wpn_type].acquire_parent_forward_velocity)
+	if (parent_velocity > 1)
 	{
-		velocity_test = (int) (velocity / VELOCITY_TEST_STEP);
-		velocity_multiplier = 1 - (velocity / (float) VELOCITY_TEST_STEP - velocity_test);
+		velocity_test = (int) (parent_velocity / VELOCITY_TEST_STEP);
+		velocity_multiplier = 1 - (parent_velocity / VELOCITY_TEST_STEP - velocity_test);
 	}
 	
 	ASSERT(range >= 0.0);
@@ -2121,14 +2116,14 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]
 
 	#if DEBUG_MODULE > 1
-	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_diff_or_pitch);
+	debug_log("WN_MOVE: simple range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_diff_or_pitch);
 	#endif
 
 	// refine drop_compensation - do it several times because as we adjust
 	// cannon pitch we have to use a different ballistics table.  Do it a few
 	// times so that it stabalizes somewhat
 
-	for (k = velocity_test; k <= velocity_test + 1 * (velocity > 1 && weapon_database[wpn_type].acquire_parent_forward_velocity); k++)
+	for (k = velocity_test; k <= velocity_test + (parent_velocity > 1); k++)
 	{
 		for (i = 0; i < iterations; i++)
 		{
@@ -2155,7 +2150,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 
 			// first average the next ranges
 			compensation_grid[0][0].drop_angle = drop_compensation[l];
-			compensation_grid[0][0].flight_time = *time_of_flight;
+			compensation_grid[0][0].flight_time = time[l];
 
 			compensation_grid[0][1].drop_angle = ballistics_table[k][wpn_type][pitch_index][range_index+1].drop_angle;
 			compensation_grid[0][1].flight_time = ballistics_table[k][wpn_type][pitch_index][range_index+1].flight_time;
@@ -2178,7 +2173,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 			time[l] = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
 
 			#if DEBUG_MODULE > 1
-				debug_log("range: %.0f, pitch %.3f, average over drop: %.3f", range, deg(straight_pitch), deg(drop_compensation[l]));
+				debug_log("velocity_test: %f, velocity_multiplier %.2f, range: %.0f, pitch %.3f, drop: %.3f, time %.2f", (float)k * VELOCITY_TEST_STEP, velocity_multiplier, range, deg(straight_pitch), deg(drop_compensation[l]), time[l]);
 			#endif
 		}
 		
@@ -2187,6 +2182,10 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 
 	*aiming_pitch = drop_compensation[0] * velocity_multiplier + drop_compensation[1] * (1 - velocity_multiplier);
 	*time_of_flight = time[0] * velocity_multiplier + time[1] * (1 - velocity_multiplier);
+
+	#if DEBUG_MODULE > 1
+		debug_log("result pitch %.3f, time %.2f", *aiming_pitch, *time_of_flight);
+	#endif
 
 	if (!fixed_pitch)
 		*aiming_pitch += straight_pitch; // get absolute angle only if straight_pitch wasn't given

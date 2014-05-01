@@ -289,7 +289,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 					time,
 					pitch = - asin((en_pos.y - target_pos->y) / range);
 				
-				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
+				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [raw->selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
 				{
 					weapon_to_target_vector->x = target_pos->x - en_pos.x;
 					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
@@ -565,7 +565,7 @@ void update_aircraft_weapon_fire (entity *en)
 					time,
 					pitch = - asin((en_pos.y - target_pos->y) / range);
 				
-				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
+				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [raw->selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
 				{
 					weapon_to_target_vector->x = target_pos->x - en_pos.x;
 					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);

@@ -926,7 +926,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 (
 	vec3d *pitch_device_position,
 	entity_sub_types wpn_type,
-	float weapon_velocity,
+	float parent_velocity,
 	entity *source,
 	entity *target,
 	vec3d *intercept_point,
@@ -999,8 +999,6 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		{
 			// moving target
 
-			result = TRUE;
-
 			get_local_entity_vec3d (target, VEC3D_TYPE_MOTION_VECTOR, &target_motion_vector);
 			normalise_3d_vector_given_magnitude (&target_motion_vector, target_true_velocity);
 			new_intercept_point = *intercept_point;
@@ -1011,7 +1009,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			else
 				number_of_iterations = 3;
 
-			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, number_of_iterations > 1, FALSE, get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY)))
+			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, number_of_iterations > 1, FALSE, parent_velocity))
 				return FALSE;
 
 			while (number_of_iterations > 0)
@@ -1023,8 +1021,8 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				new_intercept_point.z = current_target_position.z + (target_motion_vector.z * target_move_distance);
 
 				*intercept_point = new_intercept_point;
-				#ifdef DEBUG_MODULE
-//					debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+				#if DEBUG_MODULE
+					debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
 				#endif
 				if (!point_inside_map_area (&new_intercept_point))
 					break;
@@ -1041,21 +1039,26 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				if (number_of_iterations == 1)
 					range += 5 * sfrand1();
 					
-				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, number_of_iterations > 1, FALSE, get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY)))
+				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, number_of_iterations > 1, FALSE, parent_velocity))
 					return FALSE;
 
 				number_of_iterations--;
 			}
-			#ifdef DEBUG_MODULE
-//			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+			#if DEBUG_MODULE
+			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
 			#endif
 		}
 		else
 		{
 			// stationary target
 
-			result = TRUE;
-			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, FALSE, FALSE, get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY)))
+			if (get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, FALSE, FALSE, parent_velocity))
+			{
+				#if DEBUG_MODULE
+				debug_log("static point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+				#endif
+			}
+			else
 				return FALSE;
 		}
 	}
@@ -1065,16 +1068,15 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		// target off map
 		//
 
-		result = get_angle_of_projection (pitch_device_position, intercept_point, weapon_velocity, angle_of_projection);
+		return get_angle_of_projection (pitch_device_position, intercept_point, parent_velocity, angle_of_projection);
 	}
 
 	#if DEBUG_MODULE
 	create_rotated_debug_3d_object (intercept_point, rad (0.0), rad (0.0), rad (0.0), OBJECT_3D_INTERCEPT_POINT_RED, 0.0, 0.5);
 	#endif
 
-	return (result);
+	return TRUE;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1189,19 +1191,19 @@ static int get_pitch_device_to_target_vector
 		case WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC:
 		////////////////////////////////////////
 		{
-			weapon_velocity = weapon_database[weapon_sub_type].cruise_velocity;
-
-			if (weapon_database[weapon_sub_type].acquire_parent_forward_velocity)
-			{
-				weapon_velocity += get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY);
-			}
+//			weapon_velocity = weapon_database[weapon_sub_type].cruise_velocity;
+//
+//			if (weapon_database[weapon_sub_type].acquire_parent_forward_velocity)
+//			{
+//				weapon_velocity += get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY);
+//			}
 
 			if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
 			{
 //				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION) // not suitable for new external ballistics /thealx/
 //					result = get_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_velocity, source, target, &target_position, &pitch);
 //				else
-					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_velocity, source, target, &target_position, &pitch, &time_of_flight);
+					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_database[weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY), source, target, &target_position, &pitch, &time_of_flight);
 			}
 			else
 			{
@@ -1219,7 +1221,7 @@ static int get_pitch_device_to_target_vector
 //				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 //					result = get_angle_of_projection (pitch_device_position, &target_position, weapon_velocity, &pitch);
 //				else
-					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_velocity, source, target, &target_position, &pitch, &time_of_flight);
+					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_database[weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY), source, target, &target_position, &pitch, &time_of_flight);
 			}
 
 			if (result)
@@ -1653,7 +1655,7 @@ void update_entity_weapon_systems (entity *source)
 											float height_diff;
 											float range;
 
-											#ifdef DEBUG_MODULE
+											#if DEBUG_MODULE
 											debug_log("Aiming for point lock at %.0f, %.0f,  %.0f", tracking_point->x, tracking_point->y, tracking_point->z);
 											#endif
 
@@ -1674,7 +1676,7 @@ void update_entity_weapon_systems (entity *source)
 												range = 1000.0;   // use 1000 meters if unable to determine range
 
 											// adjust weapon elevation for range
-											if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE, get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY)))
+											if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY)))
 											{
 												matrix3x3 m;
 												float dx, dz;

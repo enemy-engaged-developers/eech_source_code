@@ -209,7 +209,7 @@ void calculate_attack_guide_intercept_point (entity *aggressor, entity *target, 
 			pitch = -atan(height_diff / get_2d_range(aggressor_pos, get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION))),
 			tof;
 
-		if (get_ballistic_pitch_deflection(selected_weapon, mid_salvo_distance, pitch, &aiming_pitch, &tof, FALSE, TRUE, get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY)))
+		if (get_ballistic_pitch_deflection(selected_weapon, mid_salvo_distance, pitch, &aiming_pitch, &tof, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY)))
 		{
 			float
 				projectile_drop_angle = aiming_pitch - pitch,  // aiming pitch is absolute, but we need to figure out how much higher we need to aim

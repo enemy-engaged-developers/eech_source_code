@@ -79,7 +79,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 viewpoint
-	*weapon_viewpoint;
+	*weapon_viewpoint = NULL;
 float
 	weapon_velocity = 0.0;
 
@@ -97,7 +97,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 	int
 		seed,
-		submunition = (weapon_velocity != 0); // if it's submunition, we will use weapon position, attitude and velocity values
+		submunition = (weapon_viewpoint && weapon_velocity); // if it's submunition, we will use parent weapon position, attitude and velocity values
 
 	viewpoint
 		vp;
@@ -239,14 +239,18 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			target = get_local_entity_parent (raw->launched_weapon_link.parent, LIST_TYPE_TARGET);
 			
 			if (target)
-				if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(&raw->mob.position, raw->mob.sub_type, 0, en, target, &intercept_point, &dummy, &time_of_flight))
+				if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(&raw->mob.position, raw->mob.sub_type, raw->mob.velocity - weapon_database[raw->mob.sub_type].muzzle_velocity, en, target, &intercept_point, &dummy, &time_of_flight))
 				{
 					raw->decoy_timer = - (weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time - time_of_flight + 0.5 * sfrand1() * weapon_database[raw->mob.sub_type].cruise_time_max_error);
 					
 					if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS)
-						raw->decoy_timer -= 1;
+						raw->decoy_timer -= 1.0;
 					
 					raw->decoy_timer = max(0, raw->decoy_timer);
+					
+					#if DEBUG_MODULE
+						debug_log("DECOY TIMER %f, velocity %f", raw->decoy_timer, raw->mob.velocity - weapon_database[raw->mob.sub_type].muzzle_velocity);
+					#endif
 				}
 		}
 
@@ -317,6 +321,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		}
 	}
 
+	weapon_viewpoint = NULL;
 	weapon_velocity = 0;
 	
 	return (en);
@@ -626,7 +631,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 				smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
-				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && !(!decoy && command_line_smoke_optimisation && (salvo % 4 != 0))) // smoke optimisation, only for weapons
+				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && !(!decoy && command_line_smoke_optimization && (salvo % 4 != 0))) // smoke optimization, only for weapons
 				{
 					struct OBJECT_3D_BOUNDS
 						*bounding_box;
@@ -999,7 +1004,7 @@ void create_client_server_entity_submunition_weapon (entity *launcher, entity *t
 
 		set_force_local_entity_create_stack_attributes (FALSE);
 	}
-/*	else
+	else
 	{
 		if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 		{
@@ -1053,7 +1058,8 @@ void create_client_server_entity_submunition_weapon (entity *launcher, entity *t
 
 			set_force_local_entity_create_stack_attributes (FALSE);
 		}
-	}*/
+	}
 	
+	weapon_viewpoint = NULL;
 	weapon_velocity = 0;
 }
