@@ -1150,7 +1150,7 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 		}
 
 		if (get_local_entity_int_value (mb, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
-			raise_client_server_entity_undercarriage (mb);
+			lower_client_server_entity_undercarriage (mb);
 
 		mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
 	}
@@ -2498,7 +2498,7 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 				close_client_server_entity_cargo_doors (leader);
         
         //ataribaby 31/12/2008 fix for player heli
-        if (leader != get_gunship_entity ())
+        if (get_local_entity_int_value (leader, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
 				  raise_client_server_entity_undercarriage (leader);
 			}
 		}
