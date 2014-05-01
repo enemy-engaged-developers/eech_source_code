@@ -517,11 +517,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)  // weapon armed after 1 second
+		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].detonation_radius >= length)  // weapon armed after 1 second
 		{
 
 			#if DEBUG_MODULE
-				debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)),
+				debug_log("%s overshot target (%0.1f degrees, limit %.2f, range %.2f, detonation radius %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand), length, weapon_database[raw->mob.sub_type].detonation_radius),
 					deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
 			#endif
 
