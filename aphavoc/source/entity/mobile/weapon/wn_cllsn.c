@@ -88,7 +88,8 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 		range,
 		weapon_velocity,
 		time_to_impact,
-		sqr_velocity;
+		sqr_velocity,
+		range_to_target;
 
 	vec3d
 		*target_position,
@@ -159,6 +160,7 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 				target_old_position.x = target_new_position.x - target_motion_vector->x * get_delta_time ();
 				target_old_position.y = target_new_position.y - target_motion_vector->y * get_delta_time ();
 				target_old_position.z = target_new_position.z - target_motion_vector->z * get_delta_time ();
+				range_to_target = get_3d_range(&target_new_position, get_local_entity_vec3d_ptr(weapon, VEC3D_TYPE_POSITION));
 			}
 			else
 			{
@@ -167,29 +169,34 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 				target_new_position.x = target_old_position.x + target_motion_vector->x * get_delta_time ();
 				target_new_position.y = target_old_position.y + target_motion_vector->y * get_delta_time ();
 				target_new_position.z = target_old_position.z + target_motion_vector->z * get_delta_time ();
+				range_to_target = get_3d_range(&target_new_position, get_local_entity_vec3d_ptr(weapon, VEC3D_TYPE_POSITION));
 			}
 
-			if (get_3d_vector_cube_cube_intersect (weapon_old_position, weapon_new_position, &target_old_position, &target_new_position))
-			{
-				line_line_3d_intercept
-				(
-					weapon_old_position,
-					weapon_new_position,
-					&target_old_position,
-					&target_new_position,
-					&weapon_intercept_point,
-					&target_intercept_point
-				);
-
-				range = get_3d_range (&weapon_intercept_point, &target_intercept_point);
-
-				if (range < COLLISION_THRESHOLD)
-				{
-					*weapon_new_position = weapon_intercept_point;
-
-					return (TRUE);
-				}
-			}
+			if (range_to_target < 3 * COLLISION_THRESHOLD)
+				if (collision_test_weapon_with_any_target (weapon, weapon_old_position, weapon_new_position))
+					return TRUE;
+			
+//			if (get_3d_vector_cube_cube_intersect (weapon_old_position, weapon_new_position, &target_old_position, &target_new_position))
+//			{
+//				line_line_3d_intercept
+//				(
+//					weapon_old_position,
+//					weapon_new_position,
+//					&target_old_position,
+//					&target_new_position,
+//					&weapon_intercept_point,
+//					&target_intercept_point
+//				);
+//
+//				range = get_3d_range (&weapon_intercept_point, &target_intercept_point);
+//
+//				if (range < COLLISION_THRESHOLD)
+//				{
+//					*weapon_new_position = weapon_intercept_point;
+//
+//					return (TRUE);
+//				}
+//			}
 		}
 		else
 		{
