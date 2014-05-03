@@ -121,9 +121,9 @@ terrain_classes get_ground_impact_point (vec3d *above_ground, vec3d *below_groun
 	ASSERT (ground_impact_point);
 
 	if(!point_above_ground (above_ground))
-	{
 		above_ground->y = get_3d_terrain_elevation (above_ground->x, above_ground->z) + 0.001;
-	}
+	if(point_above_ground (below_ground))
+		below_ground->y = get_3d_terrain_elevation (below_ground->x, below_ground->z) - 0.001;
 
 	ASSERT (point_inside_map_area (above_ground));
 

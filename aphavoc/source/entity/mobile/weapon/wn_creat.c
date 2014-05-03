@@ -227,9 +227,9 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		else
 			raw->mob.position = weapon_viewpoint->position;
 
-		// shells or convertional munitions with remote fuze, decoy_timer is time value
+		// shells or CONVENTIONAL munitions with remote fuze, decoy_timer is time value
 		
-		if ((weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT || weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS) && 
+		if ((weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT || weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS) && 
 				!weapon_database[raw->mob.sub_type].guidance_type)
 		{
 			entity *target;
@@ -243,7 +243,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 				{
 					raw->decoy_timer = - (weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time - time_of_flight + 0.5 * sfrand1() * weapon_database[raw->mob.sub_type].cruise_time_max_error);
 					
-					if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS)
+					if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS)
 						raw->decoy_timer -= 1.0;
 					
 					raw->decoy_timer = max(0, raw->decoy_timer);

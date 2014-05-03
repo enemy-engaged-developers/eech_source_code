@@ -985,7 +985,7 @@ void weapon_movement (entity *en)
 
 	if (raw->decoy_timer && !weapon_database[raw->mob.sub_type].decoy_type && raw->weapon_lifetime <= - raw->decoy_timer) // time for fireworks!
 	{
-		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS) // create submunitions if it's needed
+		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS) // create submunitions if it's needed
 		{
 			viewpoint vp;
 			int count = (int) weapon_database[raw->mob.sub_type + 1].burst_duration;
@@ -1217,7 +1217,8 @@ void weapon_movement (entity *en)
 		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2 || (raw->weapon_lifetime <= 0 && raw->mob.velocity <= 200))
 		{
 			weapon* weapon = (struct WEAPON *) get_local_entity_data (en);
-			move_unguided_weapon (weapon, &new_position, get_delta_time(), TRUE);
+			
+			move_unguided_weapon (weapon, &new_position, get_delta_time(), weapon_database[raw->mob.sub_type].aiming_type != 2);
 		}
 		else
 		{

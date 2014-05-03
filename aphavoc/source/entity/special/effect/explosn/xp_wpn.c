@@ -310,7 +310,7 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 				return META_EXPLOSION_TYPE_NONE;
 			}
 			case WEAPON_WARHEAD_TYPE_SOLID_SHOT:
-			case WEAPON_WARHEAD_TYPE_CONVERTIONAL_MUNITIONS:
+			case WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS:
 			case WEAPON_WARHEAD_TYPE_ILLUMINATION_FLARE:
 			{
 				criteria_table = &ball_explosion_criteria_table;
