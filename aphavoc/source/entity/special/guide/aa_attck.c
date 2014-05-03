@@ -257,9 +257,7 @@ void attack_guide_fire_intercept_reached (entity *en)
 	
 	// Fire Weapon
 
-	set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 20);
-
-	if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL) == AIRCRAFT_FIRE_OK)
+	if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, get_local_entity_type (aggressor) != ENTITY_TYPE_FIXED_WING) == AIRCRAFT_FIRE_OK)
 		if (attack_guide_find_best_weapon (en))
 		{
 			if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)

@@ -161,7 +161,7 @@ static void play_aircraft_weapon_launched_speech (entity *en, int weapon_type)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
+aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags, int increase_accuracy)
 {
 	entity
 		*target;
@@ -173,7 +173,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 		*target_pos,
 		en_pos,
 		*weapon_vector,
-		*weapon_to_target_vector;
+		weapon_to_target_vector;
 	float
 		launch_angle_error,
 		range;
@@ -256,6 +256,8 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 	if (check_flags & AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY)
 	{
+		float launch_angle_modifier;
+		
 		if (!get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY))
 		{
 			if (debug_flag)
@@ -280,7 +282,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 		ASSERT (weapon_vector);
 
-		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+		get_local_entity_vec3d (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR, &weapon_to_target_vector);
 
 		if (!weapon_database [raw->selected_weapon].guidance_type && weapon_database [raw->selected_weapon].aiming_type)
 		{
@@ -291,23 +293,28 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 				
 				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [raw->selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
 				{
-					weapon_to_target_vector->x = target_pos->x - en_pos.x;
-					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
-					weapon_to_target_vector->z = target_pos->z - en_pos.z;
+					weapon_to_target_vector.x = target_pos->x - en_pos.x;
+					weapon_to_target_vector.y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
+					weapon_to_target_vector.z = target_pos->z - en_pos.z;
 
-					normalise_3d_vector(weapon_to_target_vector);
+					normalise_3d_vector(&weapon_to_target_vector);
 				}
 		}
 
-		ASSERT (weapon_to_target_vector);
+		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, &weapon_to_target_vector));
 
-		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
-
-		if (fabs (launch_angle_error) > weapon_database[raw->selected_weapon].max_launch_angle_error)
+		if (increase_accuracy && weapon_database[raw->selected_weapon].guidance_type) // make them not launch misiles into ground
+			launch_angle_modifier = 0.25;
+		else if (increase_accuracy)
+			launch_angle_modifier = 0.5; // sharpshooter mode on!
+		else
+			launch_angle_modifier = 1.0;
+		
+		if (fabs (launch_angle_error) > launch_angle_modifier * weapon_database[raw->selected_weapon].max_launch_angle_error)
 		{
 			if (debug_flag)
 			{
-				debug_log ("AC_WPN: Fire Weapon Error - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
+				debug_log ("AC_WPN: Fire Weapon Error - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), launch_angle_modifier * deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
 			}
 			
 			return AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY;
@@ -423,11 +430,10 @@ void update_aircraft_weapon_fire (entity *en)
 
 	if (raw->weapon_burst_timer <= 0)
 	{
-		float old_value = raw->weapon_launch_delay;
+		int old_value = (int)raw->weapon_launch_delay;
 		
 		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0, old_value - get_delta_time ()));
-
-		if ((int)old_value == (int)raw->weapon_launch_delay) // update once per second
+		if (old_value == (int)raw->weapon_launch_delay) // update once per second
 			return;
 		
 		if (raw->weapon_launch_delay <= 0)
@@ -592,6 +598,53 @@ void update_aircraft_weapon_fire (entity *en)
 			return;
 		}
 	}
+
+	// line of sight checks
+
+	{
+		int
+			criteria;
+
+		if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+		{
+			criteria = MOBILE_LOS_CHECK_ALL;
+		}
+		else
+		{
+			criteria = MOBILE_LOS_CHECK_COURSE_TERRAIN;
+		}
+
+		en_pos.y -= (get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE) + 2.0);
+
+		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, (mobile_los_check_criteria) criteria))
+		{
+			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
+				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
+			{
+				if (debug_flag)
+				{
+					debug_log("AC_WPN: Switching to LOAL mode to fire at target without LOS ((Aircraft %s (%d), Target %s (%d))",
+										get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+										get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+				}
+				
+				set_local_entity_int_value(en, INT_TYPE_LOCK_ON_AFTER_LAUNCH, TRUE);
+
+			}
+			else
+			{
+				if (debug_flag)
+				{
+					debug_log ("AC_WPN: Fire Weapon Error - NO LOS (Aircraft %s (%d), Target %s (%d))",
+										get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+										get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+				}
+				
+				return;
+			}
+		}
+	}
+	
 	// fire weapon
 
 	if (debug_flag)

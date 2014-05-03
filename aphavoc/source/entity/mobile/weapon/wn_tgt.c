@@ -210,7 +210,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		{
 			weapon_type = weapon_config_database[config_type][package].sub_type;
 			
-			if (get_local_entity_type (target) == ENTITY_TYPE_FIXED_WING)
+			if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && get_local_entity_type (target) == ENTITY_TYPE_FIXED_WING)
 			{
 				// fixed wing
 
@@ -427,9 +427,9 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 				//	 guided weapons are generally more suitable for air target except close range
 
-				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && target_range > 1000)
+				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && target_range > 200)
 				{
-					total_damage_possible *= (int)max(target_range / 1000, 1);
+					total_damage_possible *= (int)max(target_range / 200, 1);
 				}
 				else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
 				{
@@ -437,7 +437,10 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					total_damage_possible *= accuracy_multiplier;
 				}
 
-				damage_by_type[weapon_type] += total_damage_possible;
+				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
+					damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
+				else
+					damage_by_type[weapon_type] += total_damage_possible; // summ all avialable weapons
 
 				if (total_damage_possible == 0)
 				{
@@ -483,9 +486,9 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 					//	 guided weapons are generally more suitable for air target except close range
 
-					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && target_range > 1000)
+					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && target_range > 200)
 					{
-						total_damage_possible *= (int)max(target_range/1000, 1);
+						total_damage_possible *= (int)max(target_range/200, 1);
 					}
 					else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
 					{
@@ -493,7 +496,10 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 						total_damage_possible *= accuracy_multiplier;
 					}
 
-					damage_by_type[weapon_type] += total_damage_possible;
+					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
+						damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
+					else
+						damage_by_type[weapon_type] += total_damage_possible; // summ all avialable weapons
 
 					if (debug_flag)
 					{

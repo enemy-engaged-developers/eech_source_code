@@ -457,7 +457,7 @@ void attack_guide_fire_reached (entity *en)
 		//
 		/////////////////////////////
 		{
-			switch (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL))
+			switch (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, FALSE))
 			{
 				case AIRCRAFT_FIRE_OK:
 				{
@@ -539,7 +539,7 @@ void attack_guide_fire_reached (entity *en)
 			set_attack_guide_disengage_position (en);
 
 			set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 30);
-			aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL);
+			aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, FALSE);
 				
 			break;
 		}
@@ -683,7 +683,7 @@ void attack_guide_hasty_fire_reached (entity *en)
 				//
 
 				set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 10);
-				aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL);
+				aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, FALSE);
 			}
 		}
 	}

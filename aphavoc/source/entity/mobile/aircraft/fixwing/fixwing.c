@@ -115,7 +115,7 @@ void update_fixed_wing_crate_dropping (entity *en)
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_CRATE)
 			{
 		
-				if (aircraft_fire_weapon (en, AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY) != AIRCRAFT_FIRE_OK)
+				if (aircraft_fire_weapon (en, AIRCRAFT_FIRE_WEAPON_SYSTEM_NOT_READY, FALSE) != AIRCRAFT_FIRE_OK)
 				{
 		
 					//
