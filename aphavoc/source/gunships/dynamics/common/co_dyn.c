@@ -1441,5 +1441,5 @@ void update_common_attitude_dynamics (void)
 	}
 		// arneh - add vibration if rotor damaged
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
-		create_advanced_rotor_vibration(1, TRUE);
+		create_advanced_rotor_vibration(2, TRUE);
 }

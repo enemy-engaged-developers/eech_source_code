@@ -190,6 +190,7 @@ int
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
 	command_line_downwash										= FALSE,	//VJ 050308 changed to false for MP, // Xhit 030328, VJ 030512 changed
+	command_line_blurred_rotor_blades						= FALSE, // thealx
 	command_line_wut												= FALSE,	// VJ 030330
 	command_line_dump_ini										= TRUE,	// VJ 030414 changed to true
 	command_line_cyclic_joystick_index						= -1,		// loke 030418

@@ -3931,7 +3931,7 @@ void create_advanced_rotor_vibration(float force, int damaged)
 	position.y = 0.0;
 
 	direction.x = position.x;
-	direction.y = 0;
+	direction.y = - damaged * rotor_radius / (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) ? 2 : 10);
 	direction.z = position.z;
 
 	add_dynamic_force ("Main rotor vibration", force, 0.0, &position, &direction, FALSE);

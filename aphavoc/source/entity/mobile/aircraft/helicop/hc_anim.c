@@ -139,7 +139,8 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		search_main_rotor_blade_section_static_depth,
 		search_main_rotor_blade_moving_depth,
 		ejected,
-		last_moving_blade_state;
+		last_moving_blade_state,
+		blades_dissolve;
 	
 	unsigned int subtype;
 
@@ -205,12 +206,13 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 	}
 
 	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
-	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
+	main_rotor_rpm = bound (main_rotor_rpm * (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) != OPERATIONAL_STATE_DEAD), 0.0, 100.0); // stop spinning if heli destroyed
 	main_rotor_blade_coning_angle = max (0.5 * main_rotor_blade_coning_angle, 0.0f);
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
 	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE) * 0.75;
 	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
+	blades_dissolve = 255 - 255 * command_line_blurred_rotor_blades * bound(1.1 * main_rotor_rpm - 70, 0, 30) / 30;
 	
 	switch (subtype)
 	{
@@ -333,12 +335,12 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 							search_main_rotor_blade_moving.result_sub_object->relative_pitch = main_rotor_rpm / 5000 + main_rotor_blade_coning_angle;
 							search_main_rotor_blade_moving.result_sub_object->relative_roll = 2 * main_rotor_direction * bound(- cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch + 
 									sin(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_roll + main_rotor_blade_coning_angle, rad(-10), rad(10));
-							if (get_time_acceleration () == TIME_ACCELERATION_PAUSE || ejected) // hide moving blades
+							if ((get_time_acceleration () == TIME_ACCELERATION_PAUSE && !command_line_blurred_rotor_blades) || ejected) // hide moving blades
 								search_main_rotor_blade_moving.result_sub_object->visible_object = last_moving_blade_state = 0;
 							else
 								search_main_rotor_blade_moving.result_sub_object->visible_object = (main_rotor_rpm >= 50);
-							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = max((main_rotor_rpm - 50) / 100, 0);
-							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.01;
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50) / 100, 0);
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.1;
 							if (search_main_rotor_blade_moving.result_sub_object->visible_object < last_moving_blade_state)
 								start_wind_down_sound = TRUE;							
 							last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object;
@@ -352,6 +354,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 							search_main_rotor_blade_root_static.result_sub_object->visible_object = !ejected;
 							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch + main_rotor_blade_droop_angle;
 							search_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
+							search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = blades_dissolve;
 	
 							// locate static blade sections and set blade droop angle
 
@@ -372,6 +375,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 									else
 									{
 										last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE; // disable moving blade if it's damaged
+										search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = 255;
 										break;
 									}
 								}
@@ -516,6 +520,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->visible_object = search_main_rotor_blade_root_static.result_sub_object->visible_object;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_root_static.result_sub_object->relative_pitch;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_root_static.result_sub_object->relative_roll;
+							search_cockpit_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value;
 	
 							// locate static blade sections and copy blade droop angle
 
