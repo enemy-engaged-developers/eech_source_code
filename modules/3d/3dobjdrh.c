@@ -1975,7 +1975,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
-			if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || ( current_object_3d_texture->contains_alpha ) || current_object_3d_dissolve_value < 255 )
+			if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || ( current_object_3d_texture->contains_alpha ) || current_object_3d_dissolve_value < 200 )
 			{
 
 				add_transparent_surface ();
@@ -2164,7 +2164,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 		else
 		{
 
-			if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 255 )
+			if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 200)
 			{
 
 				add_transparent_surface ();

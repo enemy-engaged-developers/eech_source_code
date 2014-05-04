@@ -1334,10 +1334,11 @@ void weapon_movement (entity *en)
 			}
 			else
 			{
-				if (collision_test_weapon_with_given_target (en, raw->mob.target_link.parent, &old_position, &new_position))
-				{
+				int target_hit = collision_test_weapon_with_given_target (en, raw->mob.target_link.parent, &old_position, &new_position); // 1 - target, 2 - something else
+				if (target_hit == 1)
 					raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-				}
+				else if (target_hit == 2)
+					raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
 			}
 		}
 	}

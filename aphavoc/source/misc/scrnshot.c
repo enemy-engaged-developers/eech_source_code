@@ -152,7 +152,7 @@ void save_screen_image_and_viewpoint_data (void)
 		if (lock_screen (video_screen))
 		{
 
-			save_tga_screen (large_image_filename);
+			save_tga_screen_with_thumbnail (large_image_filename, small_image_filename);
 
 			unlock_screen (video_screen);
 		}

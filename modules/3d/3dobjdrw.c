@@ -1105,7 +1105,7 @@ void draw_3d_object_clipped_faces ( int object_number )
 			number_of_surface_points = 256;
 		}
 
-		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 255 )
+		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 200 )
 		{
 			add_transparent_surface ( TRUE );
 		}
@@ -1464,7 +1464,7 @@ void draw_3d_object_unclipped_faces ( int object_number )
 			number_of_surface_points = 256;
 		}
 
-		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 255 )
+		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) || current_object_3d_dissolve_value < 200 )
 		{
 			add_transparent_surface ( FALSE );
 		}

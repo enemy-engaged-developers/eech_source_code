@@ -74,6 +74,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define SAVE_THUMBNAIL FALSE
+
 struct TGA_IMAGE
 {
 
@@ -610,6 +612,8 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 		// Now, save the thumbnail as well.
 		//
 	
+#if SAVE_THUMBNAIL
+		
 		if ( ( fp = fopen ( thumbnail_filename, "wb" ) ) == NULL )
 		{
 	
@@ -673,6 +677,7 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 		
 			fclose (fp);
 		}
+#endif
 	}
 
 	if ( tga_image )

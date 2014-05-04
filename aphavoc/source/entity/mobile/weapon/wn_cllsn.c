@@ -173,9 +173,14 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 			}
 
 			if (range_to_target < 3 * COLLISION_THRESHOLD)
-				if (collision_test_weapon_with_any_target (weapon, weapon_old_position, weapon_new_position))
-					return TRUE;
-			
+			{
+				entity *collision_entity = collision_test_weapon_with_any_target (weapon, weapon_old_position, weapon_new_position);
+				
+				if (target == collision_entity)
+					return 1;
+				else if (collision_entity)
+					return 2;
+			}
 //			if (get_3d_vector_cube_cube_intersect (weapon_old_position, weapon_new_position, &target_old_position, &target_new_position))
 //			{
 //				line_line_3d_intercept
