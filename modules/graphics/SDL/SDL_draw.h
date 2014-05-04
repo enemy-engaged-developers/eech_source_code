@@ -211,7 +211,7 @@ extern BOOL ddraw_set_palette ( void );
 extern LPDIRECTDRAWSURFACEX ddraw_create_surface ( int width, int height, int video_memory );
 extern BOOL ddraw_destroy_surface ( LPDIRECTDRAWSURFACEX surface );
 extern BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level );
-extern void ddraw_validate_display_devices ( void );
+extern int ddraw_validate_display_devices ( void );
 extern int ddraw_internal_set_display_mode ( void *data );
 extern void get_ddraw_zbuffer_pixel_format ( DDPIXELFORMAT *format );
 

@@ -267,7 +267,7 @@ extern int ddraw_internal_set_cooperative_level( void *data );
 
 extern const char *get_ddraw_error_message ( HRESULT error );
 
-extern void ddraw_validate_display_devices ( void );
+extern int ddraw_validate_display_devices ( void );
 
 extern int ddraw_internal_set_display_mode ( void *data );
 

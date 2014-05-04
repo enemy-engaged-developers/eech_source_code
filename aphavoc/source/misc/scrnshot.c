@@ -81,6 +81,7 @@
 #define LARGE_IMAGE_PATH		("SCRNSHOT\\LARGE\\")
 #define SMALL_IMAGE_PATH		("SCRNSHOT\\SMALL\\")
 #define VIEWPOINT_DATA_PATH	("SCRNSHOT\\")
+#define WRITE_VIEWPOINT_DATA FALSE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,13 +102,6 @@ void save_screen_image_and_viewpoint_data (void)
 		large_image_filename[100],
 		small_image_filename[100],
 		viewpoint_data_filename[100];
-
-	FILE
-		*fp;
-
-	int
-		x_sec,
-		z_sec;
 
 	//
 	// find first screen shot index
@@ -158,40 +152,50 @@ void save_screen_image_and_viewpoint_data (void)
 		if (lock_screen (video_screen))
 		{
 
-			save_tga_screen_with_thumbnail (large_image_filename, small_image_filename);
+			save_tga_screen (large_image_filename);
 
 			unlock_screen (video_screen);
 		}
 
 		////////////////////////////////////////
 
-		fp = safe_fopen (viewpoint_data_filename, "w");
+#if WRITE_VIEWPOINT_DATA
+		{
+			FILE
+				*fp;
 
-		fprintf (fp, "Image viewpoint data:\n\n");
+			int
+				x_sec,
+				z_sec;
 
-		fprintf (fp, "Map           : unknown\n");
+			fp = safe_fopen (viewpoint_data_filename, "w");
 
-		fprintf (fp, "X             : %.2f\n", main_vp.x);
-		fprintf (fp, "Y             : %.2f\n", main_vp.y);
-		fprintf (fp, "Z             : %.2f\n", main_vp.z);
+			fprintf (fp, "Image viewpoint data:\n\n");
 
-		get_terrain_3d_sector (main_vp.x, main_vp.z, &x_sec, &z_sec);
+			fprintf (fp, "Map           : unknown\n");
 
-		fprintf (fp, "X sector (3D) : %d\n", x_sec);
-		fprintf (fp, "Z sector (3D) : %d\n", z_sec);
+			fprintf (fp, "X             : %.2f\n", main_vp.x);
+			fprintf (fp, "Y             : %.2f\n", main_vp.y);
+			fprintf (fp, "Z             : %.2f\n", main_vp.z);
 
-		get_x_sector (x_sec, main_vp.x);
-		get_z_sector (z_sec, main_vp.z);
+			get_terrain_3d_sector (main_vp.x, main_vp.z, &x_sec, &z_sec);
 
-		fprintf (fp, "X sector (AI) : %d\n", x_sec);
-		fprintf (fp, "Z sector (AI) : %d\n", z_sec);
+			fprintf (fp, "X sector (3D) : %d\n", x_sec);
+			fprintf (fp, "Z sector (3D) : %d\n", z_sec);
 
-		fprintf (fp, "Heading (degs): %.2f\n", deg (get_heading_from_attitude_matrix (main_vp.attitude)));
-		fprintf (fp, "Pitch (degs)  : %.2f\n", deg (get_pitch_from_attitude_matrix (main_vp.attitude)));
-		fprintf (fp, "Roll (degs)   : %.2f\n", deg (get_roll_from_attitude_matrix (main_vp.attitude)));
+			get_x_sector (x_sec, main_vp.x);
+			get_z_sector (z_sec, main_vp.z);
 
-		safe_fclose (fp);
+			fprintf (fp, "X sector (AI) : %d\n", x_sec);
+			fprintf (fp, "Z sector (AI) : %d\n", z_sec);
 
+			fprintf (fp, "Heading (degs): %.2f\n", deg (get_heading_from_attitude_matrix (main_vp.attitude)));
+			fprintf (fp, "Pitch (degs)  : %.2f\n", deg (get_pitch_from_attitude_matrix (main_vp.attitude)));
+			fprintf (fp, "Roll (degs)   : %.2f\n", deg (get_roll_from_attitude_matrix (main_vp.attitude)));
+
+			safe_fclose (fp);
+		}
+#endif
 		////////////////////////////////////////
 
 		screen_shot_index++;

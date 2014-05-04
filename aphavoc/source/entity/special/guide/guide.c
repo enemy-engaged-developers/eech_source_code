@@ -1099,7 +1099,10 @@ void get_local_guide_entity_pointers (entity *en, entity **aggressor, entity **w
 
 	agg = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
-	ASSERT (agg);
+	if (aggressor)
+	{
+		ASSERT (agg);
+	}
 
 	wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 

@@ -169,7 +169,7 @@ extern int ddraw_set_display_resolution ( int width, int height, int depth, disp
 
 extern int ddraw_change_display_resolution ( int width, int height, int depth );
 
-extern void ddraw_validate_display_devices ( void );
+extern int ddraw_validate_display_devices ( void );
 
 extern int ddraw_flip_surface ( void );
 

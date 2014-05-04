@@ -326,8 +326,8 @@ float_type_data
 		{
 			"FLOAT_TYPE_DECOY_TIMER",									// name
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,							// pack_type
-			4,																	// pack_num_whole_bits (excluding sign bit)
-			4,																	// pack_num_fractional_bits
+			6,																	// pack_num_whole_bits (excluding sign bit)
+			2,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},

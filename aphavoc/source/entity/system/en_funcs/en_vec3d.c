@@ -435,6 +435,9 @@ void pack_vec3d (entity *en, vec3d_types type, vec3d *v)
 				iz;
 
 			ASSERT (point_inside_map_volume (v) || v->y == -10000);
+			
+			if (!(point_inside_map_volume (v) || v->y == -10000))
+				bound_position_to_map_volume(v);
 
 			pack_float_4_fractional_bits (v->x, &ix);
 

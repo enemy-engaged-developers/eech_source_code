@@ -161,6 +161,17 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &v);
 
 		ASSERT (point_inside_map_volume (&v));
+		
+		if (!point_inside_map_volume (&v)) // something wrong, replace position with any other
+		{
+			get_local_entity_vec3d (raw->waypoint_link.parent, VEC3D_TYPE_POSITION, &v);
+			v.x += sin(get_local_entity_float_value(raw->waypoint_link.parent, FLOAT_TYPE_HEADING)) * 500;
+			v.z += cos(get_local_entity_float_value(raw->waypoint_link.parent, FLOAT_TYPE_HEADING)) * 500;
+			bound_position_to_map_area(&v);
+			v.y = get_3d_terrain_elevation(v.x, v.z) + 50;
+			
+			set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &v);
+		}
 
 		////////////////////////////////////////
 		//
