@@ -796,7 +796,7 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	scale = raw->scale;
 	alpha_percentage = raw->alpha_percentage;
 
-	if (active_3d_environment->render_filter != RENDER_CLEAR || smoke_info->additive)
+	if (smoke_info->additive)
 		ambient.red = ambient.green = ambient.blue = 1;
 	else
 	{

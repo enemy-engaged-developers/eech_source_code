@@ -765,7 +765,7 @@ static const struct config_option options[] =
 		INT(command_line_eo_quality) },
 	{ "dwash", "downwash", "rotor downwash (dust) (0 = off, 1 = on) (def = 0)",
 		INT(command_line_downwash) },
-	{ "blurred_rotor_blades", "", "Main rotor blurred main rotor blades (0 = disabled, 1 = enabled) (def = 0)",
+	{ "blurred_rotor_blades", "", "Blurred main rotor blades (Shift + R) (0 = disabled, 1 = enabled) (def = 0)",
 		INT(command_line_blurred_rotor_blades) },
 	{ "restricted_nvg_fov", "", "night vision restriction (0 = off, 1 = on) (def = 1)",
 		INT(command_line_restricted_nvg_fov) },

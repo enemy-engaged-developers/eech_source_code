@@ -1021,7 +1021,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			// start russian NVG WITHOUT FLIR by GCsDriver  08-12-2007
 			if(command_line_russian_nvg_no_ir)
 			{
-				set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+				set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
 			}else{
 				set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 			}
@@ -1196,7 +1196,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
 			if (tint == DISPLAY_3D_TINT_AMBER_VISUAL)
-				set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+				set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
 			else
 				set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 
@@ -1301,7 +1301,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
 			if (tint == DISPLAY_3D_TINT_GREEN_VISUAL)
-				set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+				set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
 			else
 				set_3d_infrared_mode ( main_3d_env, RENDER_INFRARED );
 
@@ -1517,7 +1517,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			fog_colour.g = 64;
 			fog_colour.b = 64;
 
-			fog_colour.a = 0;
+			fog_colour.a = 127;
 
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 
@@ -1526,10 +1526,6 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 		case DISPLAY_3D_TINT_LLLTV:
 		{
-			float 
-				fog_distance_min,
-				fog_distance_max;
-			
 			set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
 
 			fog_colour.r = fog_colour.g = fog_colour.b = (main_3d_env->fog_colour.red + main_3d_env->fog_colour.green + main_3d_env->fog_colour.blue) / 3;;
@@ -1537,8 +1533,6 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 			set_3d_fog_colour ( main_3d_env, fog_colour );
-			get_3d_fog_distances(main_3d_env, &fog_distance_min, &fog_distance_max);
-			set_3d_fog_distances ( main_3d_env, 0.0, min(10000.0, 2 * fog_distance_max) );
 			
 			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 3;
 			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 3;
@@ -1568,7 +1562,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+			set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
 	
 			//
 			// Set the fogmode

@@ -1506,7 +1506,7 @@ void helicopter_movement_calculate_rotor_rpm (entity *en, float lift)
 
 	ASSERT (aircraft_database [raw->ac.mob.sub_type].power_output != 0.0);
 
-	desired_rpm = (lift / aircraft_database [raw->ac.mob.sub_type].power_output) * 100.0;
+	desired_rpm = (lift / aircraft_database [raw->ac.mob.sub_type].power_output) * 150.0;
 
 	desired_rpm = min (desired_rpm, 100.0f);
 

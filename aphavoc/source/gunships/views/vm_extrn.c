@@ -672,6 +672,9 @@ void draw_external_3d_view (void)
 	}
 	else
 	{
+		if (night_vision_system_active)
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN_VISUAL, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_LOW);
+		else
 			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 	}
 

@@ -122,7 +122,7 @@ const effect_data
       },
       // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE
       {
-         TRUE,																// constructed locally
+         FALSE,																// constructed locally
       },
       // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE
       {

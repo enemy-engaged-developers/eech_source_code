@@ -807,7 +807,7 @@ void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour co
 void calculate_luminous_colour ( real_colour *colour )
 {
 
-	if (active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME )
+	if (active_3d_environment->render_filter != RENDER_CLEAR)
 	{
 	
 

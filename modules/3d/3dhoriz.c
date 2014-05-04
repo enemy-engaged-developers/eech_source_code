@@ -845,7 +845,7 @@ void draw_3d_horizon ( void )
 	current_object_3d_surface = objects_3d_data[object_number].surfaces;
 	current_object_3d_surface_point_list = objects_3d_data[object_number].surface_points;
 
-//	if (active_3d_environment->render_filter != RENDER_INFRARED )
+	if (active_3d_environment->render_filter == RENDER_CLEAR )
 	{
 
 		int
@@ -860,7 +860,7 @@ void draw_3d_horizon ( void )
 		rgb_colour
 			colour_filter;
 
-		apply_monochrome_filter = active_3d_environment->render_filter == RENDER_MONOCHROME || active_3d_environment->render_filter == RENDER_INFRARED; //  // get_monochrome_mode(active_3d_environment);
+		apply_monochrome_filter = FALSE;//active_3d_environment->render_filter == RENDER_MONOCHROME || active_3d_environment->render_filter == RENDER_INFRARED; //  // get_monochrome_mode(active_3d_environment);
 		colour_filter = get_3d_fog_colour(active_3d_environment);
 
 		point_reference_index = 0;
@@ -897,53 +897,53 @@ void draw_3d_horizon ( void )
 			current_object_3d_surface++;
 		}
 	}
-//	else
-//	{
-//
-//		int
-//			surface,
-//			number_of_surface_points,
-//			surface_face_count;
-//
-//		int
-//			point_reference_index;
-//
-//		point_reference_index = 0;
-//
-//		for ( surface = 0; surface < objects_3d_data[object_number].number_of_surfaces; surface++ )
-//		{
-//	
-//			surface_face_count = current_object_3d_surface->number_of_faces;
-//	
-//			number_of_surface_points = current_object_3d_surface->number_of_points;
-//	
-//			if ( number_of_surface_points == 0 )
-//			{
-//	
-//				number_of_surface_points = 256;
-//			}
-//
-//			surface_face_count = objects_3d_data[object_number].surfaces[surface].number_of_faces;
-//	
-//			for ( count = surface_face_count; count > 0; count-- )
-//			{
-//	
-//				if ( faces->number_of_points > 2 )
-//				{
-//	
-//					render_3d_horizon_infrared_face ( faces, surface, point_reference_index, this_object_3d_info );
-//				}
-//	
-//				point_reference_index += faces->number_of_points;
-//	
-//				faces++;
-//			}
-//	
-//			current_object_3d_surface_point_list += number_of_surface_points;
-//
-//			current_object_3d_surface++;
-//		}
-//	}
+	else
+	{
+
+		int
+			surface,
+			number_of_surface_points,
+			surface_face_count;
+
+		int
+			point_reference_index;
+
+		point_reference_index = 0;
+
+		for ( surface = 0; surface < objects_3d_data[object_number].number_of_surfaces; surface++ )
+		{
+	
+			surface_face_count = current_object_3d_surface->number_of_faces;
+	
+			number_of_surface_points = current_object_3d_surface->number_of_points;
+	
+			if ( number_of_surface_points == 0 )
+			{
+	
+				number_of_surface_points = 256;
+			}
+
+			surface_face_count = objects_3d_data[object_number].surfaces[surface].number_of_faces;
+	
+			for ( count = surface_face_count; count > 0; count-- )
+			{
+	
+				if ( faces->number_of_points > 2 )
+				{
+	
+					render_3d_horizon_infrared_face ( faces, surface, point_reference_index, this_object_3d_info );
+				}
+	
+				point_reference_index += faces->number_of_points;
+	
+				faces++;
+			}
+	
+			current_object_3d_surface_point_list += number_of_surface_points;
+
+			current_object_3d_surface++;
+		}
+	}
 
 	//
 	// Turn fogging back on again

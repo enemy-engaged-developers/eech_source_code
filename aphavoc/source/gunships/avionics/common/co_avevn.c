@@ -216,6 +216,16 @@ static void toggle_blurred_main_rotors_visible_from_cockpit_event (event *ev)
 	}
 }
 
+static void toggle_blurred_main_rotors_event (event *ev)
+{
+	command_line_blurred_rotor_blades = !command_line_blurred_rotor_blades;
+
+	if (command_line_blurred_rotor_blades)
+		set_status_message (get_trans ("Blurred main rotor blades ON"), STATUS_MESSAGE_TYPE_NONE);
+	else
+		set_status_message (get_trans ("Blurred main rotor blades OFF"), STATUS_MESSAGE_TYPE_NONE);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -945,6 +955,7 @@ void set_common_avionics_events (void)
 	set_event (DIK_R, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, rearm_refuel_repair_event);
 
 	set_event (DIK_R, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_blurred_main_rotors_visible_from_cockpit_event);
+	set_event (DIK_R, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_blurred_main_rotors_event);
 
 	////////////////////////////////////////
 
