@@ -523,6 +523,7 @@ static void kill_local (entity *en)
 	//
 
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN);
+	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN);
 
 	//
 	// kill engine sound effects

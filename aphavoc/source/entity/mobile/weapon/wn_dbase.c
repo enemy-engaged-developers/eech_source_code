@@ -2291,7 +2291,7 @@ weapon_data
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
-			ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN,					// launch_sound_effect_sub_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN,					// launch_sound_effect_sub_type
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MACHINE_GUN,						// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect

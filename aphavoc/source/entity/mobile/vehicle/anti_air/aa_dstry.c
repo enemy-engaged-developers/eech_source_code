@@ -430,6 +430,7 @@ static void kill_local (entity *en)
 	//
 
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN);
+	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN);
 
 	//unlink_local_entity_children (en, LIST_TYPE_SPECIAL_EFFECT);
 
@@ -645,6 +646,7 @@ void kill_local_restored_anti_aircraft_entity (entity *en)
 	//
 
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN);
+	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN);
 
 	//
 	// Notify the GROUP that the mobile has been killed  (N.B. must be done AFTER mobile is unlinked from member list)
