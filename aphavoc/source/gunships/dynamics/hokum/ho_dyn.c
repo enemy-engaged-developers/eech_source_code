@@ -557,7 +557,10 @@ void set_dynamics_defaults (entity *en)
 	// havoc 1
 	// apache -1
 
-	current_flight_dynamics->rotor_rotation_direction = - 1.0;
+	if (command_line_dynamics_flight_model == 2)
+		current_flight_dynamics->rotor_rotation_direction = - 1.0;
+	else
+		current_flight_dynamics->rotor_rotation_direction = 1.0;
 
 	current_flight_dynamics->rotor_brake = TRUE;
 
