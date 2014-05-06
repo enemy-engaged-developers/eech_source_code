@@ -117,7 +117,7 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 
 	if (day_segment_type == DAY_SEGMENT_TYPE_NIGHT)
 	{
-		tint = DISPLAY_3D_TINT_GREEN;
+		tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 	}
 	else
 	{
@@ -178,7 +178,7 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 
 	if (day_segment_type == DAY_SEGMENT_TYPE_NIGHT)
 	{
-		tint = DISPLAY_3D_TINT_GREEN;
+		tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 	}
 	else
 	{

@@ -113,7 +113,7 @@ static void deselect_ka50_target_acquisition_system (target_acquisition_systems 
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
@@ -177,10 +177,10 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
-			if (!ka50_damage.flir)
+			if (!ka50_damage.llltv)
 			{
 				target_acquisition_system = system;
 
@@ -192,7 +192,7 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
-			damaged = ka50_damage.flir;
+			damaged = ka50_damage.llltv;
 
 			break;
 		}
@@ -262,14 +262,14 @@ void update_ka50_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
-			update_ka50_eo (&ka50_flir);
+			update_ka50_eo (&ka50_llltv);
 
 			update_common_eo ();
 
-			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_FLIR);
+			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_LLLTV);
 
 			break;
 		}
@@ -336,7 +336,7 @@ void update_ka50_target_acquisition_system (void)
 
 					break;
 				}
-				case TARGET_ACQUISITION_SYSTEM_FLIR:
+				case TARGET_ACQUISITION_SYSTEM_LLLTV:
 				{
 					los_to_target = TRUE;
 
@@ -377,7 +377,7 @@ void centre_ka50_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			centre_ka50_eo ();
@@ -408,7 +408,7 @@ void toggle_ka50_lock_target (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			toggle_eo_lock();
@@ -456,7 +456,7 @@ void set_ka50_lock_target (int lock)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
 			set_eo_lock(lock);

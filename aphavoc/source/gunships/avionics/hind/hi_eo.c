@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 eo_params
-	hind_flir,
+	hind_dtv,
 	hind_llltv;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ eo_params
 
 void initialise_hind_eo (void)
 {
-	eo_sensor							= TARGET_ACQUISITION_SYSTEM_FLIR;
+	eo_sensor							= TARGET_ACQUISITION_SYSTEM_DTV;
 
 	eo_azimuth							= rad (0.0);
 	eo_min_azimuth						= rad (-30.0);
@@ -91,9 +91,9 @@ void initialise_hind_eo (void)
 	eo_max_visual_range				= 5000.0,
 	eo_ground_stabilised					= 0;
 
-	hind_flir.field_of_view		= EO_FOV_WIDE;
-	hind_flir.min_field_of_view	= EO_FOV_MEDIUM;
-	hind_flir.max_field_of_view	= EO_FOV_WIDE;
+	hind_dtv.field_of_view		= EO_FOV_WIDE;
+	hind_dtv.min_field_of_view	= EO_FOV_MEDIUM;
+	hind_dtv.max_field_of_view	= EO_FOV_WIDE;
 
 	hind_llltv.field_of_view		= EO_FOV_WIDE;
 	hind_llltv.min_field_of_view	= EO_FOV_MEDIUM;
@@ -364,7 +364,7 @@ void update_hind_eo (eo_params *eo)
 		single_target_acquisition_system_select_previous_designated_key--;
 	}
 
-	 // POV flir control thealx 130215
+	 // POV dtv control thealx 130215
 		
 		if ( (command_line_eo_pan_joystick_index == -1) && (command_line_mouse_look == MOUSELOOK_ON))
 		{						

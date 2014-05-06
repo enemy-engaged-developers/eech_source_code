@@ -905,7 +905,8 @@ void weapon_movement (entity *en)
 		seed,
 		intercept_point_valid,
 		high_precision_collision,
-		hit_ground;
+		hit_ground,
+		tracking_point;
 
 	terrain_classes
 		terrain_class;
@@ -1038,6 +1039,16 @@ void weapon_movement (entity *en)
 	//
 	////////////////////////////////////////
 
+	// check tracking point
+	
+	{
+		vec3d tracking_point_position;
+		
+		get_local_entity_vec3d(raw->launched_weapon_link.parent, VEC3D_TYPE_EO_TRACKING_POINT, &tracking_point_position);
+
+		tracking_point = eo_tracking_point_valid(&tracking_point_position);
+	}
+	
 	switch (weapon_database[raw->mob.sub_type].guidance_type)
 	{
 		////////////////////////////////////////
@@ -1149,7 +1160,7 @@ void weapon_movement (entity *en)
 			}
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
-				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET)))
+				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || (!tracking_point && !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))))
 			{
 				intercept_point_valid = FALSE;
 			}
@@ -1165,7 +1176,7 @@ void weapon_movement (entity *en)
 			check_guidance_source (raw, en, TRUE);
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
-				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET)))
+				&& (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON) || (!tracking_point && !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))))
 			{
 				intercept_point_valid = FALSE;
 			}
@@ -1190,7 +1201,7 @@ void weapon_movement (entity *en)
 			check_guidance_source (raw, en, FALSE);
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
-				&& !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))
+				&& !tracking_point && !get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))
 			{
 				intercept_point_valid = FALSE;
 			}

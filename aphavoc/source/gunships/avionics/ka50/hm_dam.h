@@ -72,7 +72,7 @@ union KA50_DAMAGE_FLAGS
 	struct
 	{
 		unsigned int
-			flir						:1,	// 1
+			llltv						:1,	// 1
 			laser_designator		:1,	// 2
 			radar_jammer			:1,	// 3
 			infra_red_jammer		:1,	// 4

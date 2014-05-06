@@ -79,11 +79,11 @@ static void select_target_acquisition_system_off_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void select_target_acquisition_system_flir_event (event *ev)
+static void select_target_acquisition_system_llltv_event (event *ev)
 {
 	if (!get_global_simple_avionics ())
 	{
-		select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
+		select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
 	}
 }
 
@@ -779,7 +779,7 @@ void set_ka50_avionics_events (void)
 
 	set_event (DIK_DELETE, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
+	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
 
 	set_event (DIK_PRIOR, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
@@ -789,7 +789,7 @@ void set_ka50_avionics_events (void)
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
-	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
+	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
 
 	//
 	// target acquisition system control

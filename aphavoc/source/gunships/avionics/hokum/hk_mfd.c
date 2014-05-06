@@ -2524,24 +2524,24 @@ static display_3d_noise_levels
 		},
 		// WEATHERMODE_LIGHT_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_HEAVY_RAIN
 		{
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_NOISE_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
-		},
-		// WEATHERMODE_SNOW
-		{
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_SNOW
+		{
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 	};
 
@@ -2886,7 +2886,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	set_active_screen (eo_3d_texture_screen);
 
 	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
-
+	
 	//
 	// draw 3D scene (temporarily adjust the virtual cockpit position relative to EO sensor position)
 	//
@@ -2937,41 +2937,11 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		virtual_cockpit_inst3d->vp = tmp_vp;
 	}
 
-//	if ( active_3d_environment->render_filter == RENDER_INFRARED )
-//	{
-//		DWORD
-//			dwTFactor;
-//
-//		dwTFactor = ( 0xFF << 24 ) | ( (255-76) << 16) | ( (255-150) << 8) |(255- 29);
-//		f3d_render_state ( D3DRENDERSTATE_TEXTUREFACTOR, dwTFactor );
-////		f3d_set_texture_state(0, D3DTSS_COLOROP,D3DTOP_MODULATE4X);
-////		f3d_set_texture_state(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-////		f3d_set_texture_state(0, D3DTSS_COLORARG2, D3DTA_TFACTOR );
-//
-//		f3d_set_texture(0,eo_3d_texture_screen );
-//
-//		f3d_set_texture_state(0,D3DTSS_COLOROP,   D3DTOP_MODULATECOLOR_ADDALPHA );
-//		f3d_set_texture_state(0,D3DTSS_COLORARG1, D3DTA_TEXTURE);
-//		f3d_set_texture_state(0,D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-//
-//		// Set the diffuse light map.
-////		f3d_set_texture(1,eo_3d_texture_screen );
-//
-//		// Set the blend stage.
-////		f3d_set_texture_state(1, D3DTSS_COLOROP, D3DTOP_DOTPRODUCT3 );
-////		f3d_set_texture_state(1, D3DTSS_COLORARG1, D3DTA_CURRENT );
-//
-//	}
-
 	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
 
 	set_active_screen (video_screen);
-//
-//	f3d_set_texture_state(0,D3DTSS_COLOROP, D3DTOP_SELECTARG1 );
-//	f3d_set_texture_state(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

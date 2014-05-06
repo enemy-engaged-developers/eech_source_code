@@ -73,10 +73,10 @@
 
 #ifdef OLD_EO
 eo_params
-	ka50_flir;
+	ka50_llltv;
 #else
 eo_params_dynamic_move
-	ka50_flir;
+	ka50_llltv;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ eo_params_dynamic_move
 
 void initialise_ka50_eo (void)
 {
-	eo_sensor									= TARGET_ACQUISITION_SYSTEM_FLIR;
+	eo_sensor									= TARGET_ACQUISITION_SYSTEM_LLLTV;
 
 	eo_azimuth									= rad (0.0);
 	eo_min_azimuth								= rad (-35.0);
@@ -97,13 +97,13 @@ void initialise_ka50_eo (void)
 	eo_ground_stabilised					= 0;
 
 #ifdef OLD_EO
-	ka50_flir.field_of_view				= EO_FOV_MEDIUM;
-	ka50_flir.min_field_of_view			= EO_FOV_NARROW;
-	ka50_flir.max_field_of_view			= EO_FOV_MEDIUM;
+	ka50_llltv.field_of_view				= EO_FOV_MEDIUM;
+	ka50_llltv.min_field_of_view			= EO_FOV_NARROW;
+	ka50_llltv.max_field_of_view			= EO_FOV_MEDIUM;
 #else
-	ka50_flir.zoom							= 1/7.0;
-	ka50_flir.min_zoom						= 1/7.0;
-	ka50_flir.max_zoom						= 1/23.0;
+	ka50_llltv.zoom							= 1/7.0;
+	ka50_llltv.min_zoom						= 1/7.0;
+	ka50_llltv.max_zoom						= 1/23.0;
 #endif
 };
 
@@ -573,8 +573,8 @@ void inc_ka50_eo_zoom(void)
 {
 	switch (eo_sensor)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-			dec_eo_field_of_view(&ka50_flir);
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			dec_eo_field_of_view(&ka50_llltv);
 			break;
 		default:
 			break;
@@ -585,8 +585,8 @@ void dec_ka50_eo_zoom(void)
 {
 	switch (eo_sensor)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-			inc_eo_field_of_view(&ka50_flir);
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			inc_eo_field_of_view(&ka50_llltv);
 			break;
 		default:
 			break;
@@ -606,12 +606,12 @@ void slave_ka50_eo_to_current_target (void)
 	{
 		switch (eo_sensor)
 		{
-			case TARGET_ACQUISITION_SYSTEM_FLIR:
+			case TARGET_ACQUISITION_SYSTEM_LLLTV:
 			{
 #ifdef OLD_EO
-				ka50_flir.field_of_view = ka50_flir.min_field_of_view;
+				ka50_llltv.field_of_view = ka50_llltv.min_field_of_view;
 #else
-				ka50_flir.zoom = 0.0;
+				ka50_llltv.zoom = 0.0;
 #endif
 				break;
 			}
@@ -621,12 +621,12 @@ void slave_ka50_eo_to_current_target (void)
 	{
 		switch (eo_sensor)
 		{
-			case TARGET_ACQUISITION_SYSTEM_FLIR:
+			case TARGET_ACQUISITION_SYSTEM_LLLTV:
 			{
 #ifdef OLD_EO
-				ka50_flir.field_of_view = ka50_flir.min_field_of_view;
+				ka50_llltv.field_of_view = ka50_llltv.min_field_of_view;
 #else
-				ka50_flir.zoom = 0.0;
+				ka50_llltv.zoom = 0.0;
 #endif
 				break;
 			}

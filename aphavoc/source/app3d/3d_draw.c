@@ -708,8 +708,8 @@ void render_infrared_interference ( int alpha )
 	else
 	{
 		fog_colour = get_3d_fog_colour ( main_3d_env );
-		fog_intensity = (fog_colour.red + fog_colour.green + fog_colour.blue) / 3;
-		fog_colour.alpha = fog_intensity / 2;
+//		fog_intensity = (fog_colour.red + fog_colour.green + fog_colour.blue) / 3;
+		fog_colour.alpha = 96;
 
 		noise = 0;
 	}

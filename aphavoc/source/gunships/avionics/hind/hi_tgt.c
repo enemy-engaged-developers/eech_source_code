@@ -133,7 +133,7 @@ static void deselect_hind_target_acquisition_system (target_acquisition_systems 
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
@@ -224,10 +224,10 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
-			if (!hind_damage.flir)
+			if (!hind_damage.dtv)
 			{
 				target_acquisition_system = system;
 
@@ -236,7 +236,7 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
-			damaged = hind_damage.flir;
+			damaged = hind_damage.dtv;
 
 			break;
 		}
@@ -328,14 +328,14 @@ void update_hind_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
-			update_hind_eo (&hind_flir);
+			update_hind_eo (&hind_dtv);
 
 			update_common_eo ();
 
-			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_FLIR);
+			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_DTV);
 
 			break;
 		}
@@ -455,7 +455,7 @@ void update_hind_target_acquisition_system (void)
 
 					break;
 				}
-				case TARGET_ACQUISITION_SYSTEM_FLIR:
+				case TARGET_ACQUISITION_SYSTEM_DTV:
 				case TARGET_ACQUISITION_SYSTEM_LLLTV:
 				{
 					los_to_target = TRUE;
@@ -513,7 +513,7 @@ void centre_hind_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			centre_hind_eo ();
@@ -566,7 +566,7 @@ void toggle_hind_show_allied_targets (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			break;
@@ -617,7 +617,7 @@ void toggle_hind_auto_target (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			break;
@@ -668,7 +668,7 @@ void toggle_hind_lock_target (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
@@ -733,7 +733,7 @@ void set_hind_lock_target (int lock)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
@@ -797,7 +797,7 @@ void hind_target_acquisition_system_misc_function1 (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			break;
@@ -854,7 +854,7 @@ void hind_target_acquisition_system_misc_function2 (void)
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
 			break;

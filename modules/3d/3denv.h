@@ -539,7 +539,7 @@ extern void set_3d_infrared_mode ( env_3d *env, render_filters mode );
 extern void set_3d_render_filter ( env_3d *env, render_filters mode );
 
 extern void set_3d_main_light_source ( env_3d *env, light_colour *colour, vec3d *direction, int shadows_enabled );
-
+extern void get_3d_main_light_level ( float* red, float* green, float* blue );
 extern void set_3d_ambient_light ( env_3d *env, light_colour *colour );
 
 extern void set_3d_fog_colour ( env_3d *env, struct REAL_COLOUR fog_colour );

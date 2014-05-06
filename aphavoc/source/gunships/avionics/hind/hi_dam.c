@@ -142,7 +142,7 @@ void fully_repair_hind_damage (void)
 
 	////////////////////////////////////////
 
-	hind_damage.flir = FALSE;
+	hind_damage.dtv = FALSE;
 
 	////////////////////////////////////////
 
@@ -264,9 +264,9 @@ void partially_repair_hind_damage (void)
 
 	////////////////////////////////////////
 
-	if (hind_damage.flir)
+	if (hind_damage.dtv)
 	{
-		hind_damage.flir = frand1 () > 0.90;
+		hind_damage.dtv = frand1 () > 0.90;
 	}
 
 	////////////////////////////////////////
@@ -496,21 +496,21 @@ static void damage_systems (hind_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (damage.flir)
+	if (damage.dtv)
 	{
-		if (!hind_damage.flir)
+		if (!hind_damage.dtv)
 		{
 			activate_hind_master_caution_lamp ();
 
-			hind_damage.flir = TRUE;
+			hind_damage.dtv = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
-			set_hind_ekran_display_text ("FLIR", "FAILURE", NULL, NULL);
+			set_hind_ekran_display_text ("DTV", "FAILURE", NULL, NULL);
 
-			play_client_server_warning_message (en, SPEECH_SYSTEM_FLIR_FAILURE);
+			play_client_server_warning_message (en, SPEECH_SYSTEM_DTV_FAILURE);
 
-			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV)
 			{
 				select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
 			}

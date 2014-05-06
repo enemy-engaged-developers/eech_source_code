@@ -118,6 +118,8 @@ float
 	eo_min_elevation,
 	eo_max_elevation,
 	eo_max_visual_range,
+	fog_range,
+	visible_range,
 	fog_start,
 	fog_end;
 
@@ -728,10 +730,8 @@ static void update_eo_visibility (void)
 	vec3d
 		*position;
 
-	eo_low_light = FALSE;
-
 	// start full_eo_range by GCsDriver  08-12-2007
-	if (command_line_eo_full_range)
+//	if (command_line_eo_full_range)
 	{
 		entity
 			*current_target;
@@ -748,6 +748,8 @@ static void update_eo_visibility (void)
 		}
 	}
 	// end full_eo_range by GCsDriver  08-12-2007
+
+	eo_low_light = FALSE;
 
 	switch (eo_sensor)
 	{
@@ -1111,7 +1113,7 @@ static entity *get_eo_boresight_target (void)
 
 	target = NULL;
 
-	if (!eo_low_light)
+//	if (!eo_low_light)
 	{
 		//
 		// first pass (eo boresight start -> eo boresight end)
@@ -1322,10 +1324,14 @@ void update_common_eo (void)
 		if (!eo_is_tracking_point())
 		{
 			// try locking onto point on ground
+			eo_max_visual_range = fog_range;
+
 			if (get_eo_los_intercept_point(&eo_tracking_point) < eo_max_visual_range)
 				eo_target_locked = POINT_LOCK;
 			else
 				eo_stop_tracking();
+
+			eo_max_visual_range = visible_range;
 
 			// have to update server's tracking point so that missiles will aim in multiplayer
 			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
@@ -1381,7 +1387,7 @@ void activate_common_eo (void)
 	eo_sensor = target_acquisition_system;
 
 	// start full_eo_range by GCsDriver  08-12-2007
-	if (command_line_eo_full_range)
+//	if (command_line_eo_full_range)
 	{
 		update_eo_max_visual_range();
 	}
@@ -1454,7 +1460,7 @@ static void slew_eo(float elevation, float azimuth)
 
 	eo_on_target = FALSE;
 
-	if (!eo_low_light && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+	if (/*!eo_low_light && */get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
 	{
 		if
 		(
@@ -1686,7 +1692,7 @@ void select_next_eo_target (void)
 
 	new__target = NULL;
 
-	if (!eo_low_light)
+//	if (!eo_low_light)
 	{
 		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -1747,7 +1753,7 @@ void select_previous_eo_target (void)
 
 	new__target = NULL;
 
-	if (!eo_low_light)
+//	if (!eo_low_light)
 	{
 		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -1870,7 +1876,7 @@ void select_next_designated_eo_target (void)
 
 	new__target = NULL;
 
-	if (!eo_low_light)
+//	if (!eo_low_light)
 	{
 		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -1924,7 +1930,7 @@ void select_previous_designated_eo_target (void)
 
 	new__target = NULL;
 
-	if (!eo_low_light)
+//	if (!eo_low_light)
 	{
 		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -2051,6 +2057,8 @@ static void switch_to_point_lock(void)
 
 	lock_target = FALSE;
 
+	eo_max_visual_range = fog_range;
+
 	if (target && !get_local_entity_int_value(target, INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 		// get position of target
@@ -2071,6 +2079,8 @@ static void switch_to_point_lock(void)
 		eo_target_locked = 0;
 		eo_stop_tracking();
 	}
+	
+	eo_max_visual_range = visible_range;
 
 }
 
@@ -2499,8 +2509,12 @@ void update_eo_max_visual_range(void)
 {
 	//see 3d_init.c & 3dview.c
 	//eo_max_visual_range = main_3d_env->fog_end;
+	float amb_red, amb_green, amb_blue,
+			sun_red, sun_green, sun_blue;
 
 	get_3d_fog_distances (main_3d_env, &fog_start, &fog_end);
+	get_3d_ambient_light_level (&amb_red, &amb_green, &amb_blue);
+	get_3d_main_light_level (&sun_red, &sun_green, &sun_blue);
 
 	//eo_max_visual_range = fog_end;
 
@@ -2508,23 +2522,18 @@ void update_eo_max_visual_range(void)
 	{
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_DVO:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		{
-			eo_max_visual_range = fog_end - 2000.0;
+			fog_range = fog_end - 500; // how far will be possible to lock ground point
+			visible_range = fog_range * bound((amb_red + amb_green + amb_blue + sun_red + sun_green + sun_blue) / 3, 0.0, 1.0); // target recognition tange
+			visible_range /= 1 + eo_low_light; // decrease recognition tange
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		{
-			eo_max_visual_range = fog_end - 500.0;
-			break;
-		}
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		{
-			eo_max_visual_range = fog_end - 2000.0;
-			break;
-		}
-		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-		{
-			eo_max_visual_range = fog_end - 500.0;
+			fog_range = 9000 / (1 + eo_low_light) - 500; // synch it with FLIR fog value in 3d_init.c!!
+			visible_range = fog_range; // lock on target at any range
 			break;
 		}
 		default:
@@ -2533,6 +2542,10 @@ void update_eo_max_visual_range(void)
 			break;
 		}
 	}
+	
+	eo_max_visual_range = visible_range;
+	
+	debug_log("eo_max_visual_range %f, fog end %f, eo_low_light %i", eo_max_visual_range, fog_range, eo_low_light);
 }
 // end full_eo_range by GCsDriver  08-12-2007
 

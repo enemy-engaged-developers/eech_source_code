@@ -179,7 +179,7 @@ static rgb_colour
 
 ////////////////////////////////////////
 //
-// FLIR
+// DTV
 //
 ////////////////////////////////////////
 
@@ -270,7 +270,7 @@ static display_3d_noise_levels
 ////////////////////////////////////////
 
 static display_3d_light_levels
-	flir_light_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	dtv_light_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
 	{
 		// WEATHERMODE_INVALID
 		{
@@ -310,7 +310,7 @@ static display_3d_light_levels
 	};
 
 static display_3d_noise_levels
-	flir_noise_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	dtv_noise_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
 	{
 		// WEATHERMODE_INVALID
 		{
@@ -843,7 +843,7 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 	{
 		case EO_FOV_MEDIUM:
 		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			if (system == TARGET_ACQUISITION_SYSTEM_DTV)
 				fov = 4.0 * ONE_OVER_SQRT2;
 			else  // DTV or DVO
 				fov = 2.0 * ONE_OVER_SQRT2;
@@ -852,7 +852,7 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 		}
 		case EO_FOV_WIDE:
 		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			if (system == TARGET_ACQUISITION_SYSTEM_DTV)
 				fov = 15.0 * ONE_OVER_SQRT2;
 			else  // DVO
 				fov = 9.0 * ONE_OVER_SQRT2;
@@ -900,10 +900,10 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 
 	switch (system)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		{
-			light_level = flir_light_levels[weather_mode][day_segment_type];
-			noise_level = flir_noise_levels[weather_mode][day_segment_type];
+			light_level = dtv_light_levels[weather_mode][day_segment_type];
+			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 			tint = DISPLAY_3D_TINT_AMBER_VISUAL;
 
 			break;
@@ -993,7 +993,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	switch (system)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
 		{
 			print_mono_font_string ("DAY FILTER");
 
@@ -1360,8 +1360,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 static void draw_hind_ort_symbology(int dummy)
 {
-	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
-		draw_2d_eo_display (&hind_flir, TARGET_ACQUISITION_SYSTEM_FLIR, hind_damage.flir, TRUE);
+	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_DTV)
+		draw_2d_eo_display (&hind_dtv, TARGET_ACQUISITION_SYSTEM_DTV, hind_damage.dtv, TRUE);
 	else
 		draw_2d_eo_display (&hind_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, hind_damage.llltv, TRUE);
 }
@@ -1383,11 +1383,11 @@ void draw_hind_virtual_cockpit_ort_view (int x_min, int x_max)
 	int
 		damaged = FALSE;
 
-	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
+	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_DTV)
 	{
-		eo = &hind_flir;
-		system = TARGET_ACQUISITION_SYSTEM_FLIR;
-		damaged = hind_damage.flir;
+		eo = &hind_dtv;
+		system = TARGET_ACQUISITION_SYSTEM_DTV;
+		damaged = hind_damage.dtv;
 	}
 	else
 	{
@@ -1486,7 +1486,7 @@ int get_hind_eo_display_visible (void)
 {
 	return
 	(
-		(mfd_mode == MFD_MODE_FLIR) ||
+		(mfd_mode == MFD_MODE_DTV) ||
 		(mfd_mode == MFD_MODE_LLLTV)
 	);
 }

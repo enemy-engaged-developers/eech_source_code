@@ -82,7 +82,7 @@ static char
 	{
 		"KA50_MFD_MODE_OFF",
 		"KA50_MFD_MODE_DAMAGED",
-		"KA50_MFD_MODE_FLIR",
+		"KA50_MFD_MODE_LLLTV",
 		"KA50_MFD_MODE_TSD",
 		"KA50_MFD_MODE_ASE",
 		"KA50_MFD_MODE_WEAPON",
@@ -1371,12 +1371,12 @@ static void draw_sideslip_scale (void)
 
 ////////////////////////////////////////
 //
-// FLIR
+// LLLTV
 //
 ////////////////////////////////////////
 
 static display_3d_light_levels
-	flir_light_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	llltv_light_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
 	{
 		// WEATHERMODE_INVALID
 		{
@@ -1387,36 +1387,36 @@ static display_3d_light_levels
 		},
 		// WEATHERMODE_DRY
 		{
-			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,	 	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM, 	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_LIGHT_RAIN
 		{
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM, 	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_LOW, 		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_HEAVY_RAIN
 		{
 			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_LOW, 		// DAY_SEGMENT_TYPE_DAY
 			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
 			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 		// WEATHERMODE_SNOW
 		{
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
-			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM, 	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_LOW, 		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
 		},
 	};
 
 static display_3d_noise_levels
-	flir_noise_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	llltv_noise_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
 	{
 		// WEATHERMODE_INVALID
 		{
@@ -1461,7 +1461,7 @@ static display_3d_noise_levels
 
 static int get_undamaged_eo_display_mode (ka50_mfd_modes mode)
 {
-	if ((mode == KA50_MFD_MODE_FLIR) && (!ka50_damage.flir))
+	if ((mode == KA50_MFD_MODE_LLLTV) && (!ka50_damage.llltv))
 	{
 		return (TRUE);
 	}
@@ -1542,11 +1542,11 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	switch (system)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
-			light_level = flir_light_levels[weather_mode][day_segment_type];
+			light_level = llltv_light_levels[weather_mode][day_segment_type];
 
-			noise_level = flir_noise_levels[weather_mode][day_segment_type];
+			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
 
 			tint = DISPLAY_3D_TINT_LLLTV;
 
@@ -1703,11 +1703,11 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 
 	switch (system)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
-			light_level = flir_light_levels[weather_mode][day_segment_type];
+			light_level = llltv_light_levels[weather_mode][day_segment_type];
 
-			noise_level = flir_noise_levels[weather_mode][day_segment_type];
+			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
 
 			break;
 		}
@@ -1873,9 +1873,9 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	switch (system)
 	{
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
-			print_mono_font_string ("FLIR");
+			print_mono_font_string ("LLLTV");
 
 			break;
 		}
@@ -2539,23 +2539,23 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// FLIR
+// LLLTV
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_3d_flir_mfd (int full_screen)
+static void draw_3d_llltv_mfd (int full_screen)
 {
-	if (!ka50_damage.flir)
+	if (!ka50_damage.llltv)
 	{
 		if (full_screen)
 		{
-			draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_LLLTV);
+			draw_full_screen_3d_eo_display (&ka50_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, DISPLAY_3D_TINT_LLLTV);
 		}
 		else
 		{
-			draw_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
+			draw_3d_eo_display (&ka50_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV);
 		}
 	}
 }
@@ -2564,12 +2564,12 @@ static void draw_3d_flir_mfd (int full_screen)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_flir_mfd (int valid_3d)
+static void draw_2d_llltv_mfd (int valid_3d)
 {
 	if (command_line_advanced_mfd && command_line_colour_mfd && draw_large_mfd)
-		draw_adv_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
+		draw_adv_2d_eo_display (&ka50_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, ka50_damage.llltv, valid_3d);
 	else
-		draw_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
+		draw_2d_eo_display (&ka50_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, ka50_damage.llltv, valid_3d);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3107,9 +3107,9 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 
 				break;
 			}
-			case TARGET_ACQUISITION_SYSTEM_FLIR:
+			case TARGET_ACQUISITION_SYSTEM_LLLTV:
 			{
-				s = "EOS FLIR";
+				s = "EOS LLLTV";
 
 				break;
 			}
@@ -4942,7 +4942,7 @@ static void draw_system_display_mfd (void)
 		width_adjust = 1.0;
 	}
 
-	y_adjust = print_mfd_system_message ("FLIR", "FAIL", ka50_damage.flir, y_adjust, width_adjust);
+	y_adjust = print_mfd_system_message ("LLLTV", "FAIL", ka50_damage.llltv, y_adjust, width_adjust);
 
 	y_adjust = print_mfd_system_message ("LASER DESIGNATOR", "FAIL", ka50_damage.laser_designator, y_adjust, width_adjust);
 
@@ -6716,10 +6716,10 @@ static void draw_mfd (screen *mfd_screen, ka50_mfd_modes* mode, ka50_mfd_locatio
 				break;
 			}
 			////////////////////////////////////////
-			case KA50_MFD_MODE_FLIR:
+			case KA50_MFD_MODE_LLLTV:
 			////////////////////////////////////////
 			{
-				draw_2d_flir_mfd (FALSE);
+				draw_2d_llltv_mfd (FALSE);
 
 				break;
 			}
@@ -7231,9 +7231,9 @@ void draw_ka50_mfd (void)
 			{
 				switch (get_mfd_mode_for_eo_sensor ())
 				{
-					case KA50_MFD_MODE_FLIR:
+					case KA50_MFD_MODE_LLLTV:
 					{
-						draw_3d_flir_mfd (FALSE);
+						draw_3d_llltv_mfd (FALSE);
 
 						break;
 					}
@@ -7247,9 +7247,9 @@ void draw_ka50_mfd (void)
 
 					switch (get_mfd_mode_for_eo_sensor ())
 					{
-						case KA50_MFD_MODE_FLIR:
+						case KA50_MFD_MODE_LLLTV:
 						{
-							draw_2d_flir_mfd (TRUE);
+							draw_2d_llltv_mfd (TRUE);
 
 							break;
 						}
@@ -7393,9 +7393,9 @@ void draw_ka50_full_screen_display (void)
 
 	switch (mode)
 	{
-		case KA50_MFD_MODE_FLIR:
+		case KA50_MFD_MODE_LLLTV:
 		{
-			draw_3d_flir_mfd (TRUE);
+			draw_3d_llltv_mfd (TRUE);
 
 			break;
 		}
@@ -7452,9 +7452,9 @@ void draw_ka50_full_screen_display (void)
 
 		switch (mode)
 		{
-			case KA50_MFD_MODE_FLIR:
+			case KA50_MFD_MODE_LLLTV:
 			{
-				draw_2d_flir_mfd (TRUE);
+				draw_2d_llltv_mfd (TRUE);
 
 				break;
 			}
@@ -7791,12 +7791,12 @@ static void draw_overlaid_mfd (screen *mfd_screen, ka50_mfd_modes mode, ka50_mfd
 			break;
 		}
 		////////////////////////////////////////
-		case KA50_MFD_MODE_FLIR:
+		case KA50_MFD_MODE_LLLTV:
 		////////////////////////////////////////
 		{
-			if (!ka50_damage.flir)
+			if (!ka50_damage.llltv)
 			{
-				draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_LLLTV);
+				draw_full_screen_3d_eo_display (&ka50_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV, DISPLAY_3D_TINT_LLLTV);
 			}
 			else
 			{
@@ -7813,7 +7813,7 @@ static void draw_overlaid_mfd (screen *mfd_screen, ka50_mfd_modes mode, ka50_mfd
 
 				draw_layout_grid ();
 
-				draw_2d_flir_mfd (TRUE);
+				draw_2d_llltv_mfd (TRUE);
 
 				flush_screen_texture_graphics (mfd_screen);
 
@@ -8250,9 +8250,9 @@ static ka50_mfd_modes get_mfd_mode_for_eo_sensor (void)
 	ka50_mfd_modes
 		mfd_mode;
 
-	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
+	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_LLLTV)
 	{
-		mfd_mode = KA50_MFD_MODE_FLIR;
+		mfd_mode = KA50_MFD_MODE_LLLTV;
 	}
 	else
 	{
@@ -8279,7 +8279,7 @@ static ka50_mfd_modes get_default_mfd_mode (ka50_mfd_locations mfd_location)
 		case KA50_MFD_LOCATION_SHKVAL:
 		////////////////////////////////////////
 		{
-			mfd_mode = KA50_MFD_MODE_FLIR;
+			mfd_mode = KA50_MFD_MODE_LLLTV;
 
 			break;
 		}
@@ -8740,7 +8740,7 @@ void auto_page_ka50_ase_mfd (void)
 
 void select_ka50_eo_mfd (void)
 {
-	if (shkval_mfd_mode == KA50_MFD_MODE_FLIR)
+	if (shkval_mfd_mode == KA50_MFD_MODE_LLLTV)
 	{
 		return;
 	}

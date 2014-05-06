@@ -103,11 +103,11 @@ static void select_target_acquisition_system_off_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void select_target_acquisition_system_flir_event (event *ev)
+static void select_target_acquisition_system_dtv_event (event *ev)
 {
 	if (!get_global_simple_avionics ())
 	{
-		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
+		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 	}
 }
 
@@ -651,7 +651,7 @@ void set_hind_avionics_events (void)
 
 	set_event (DIK_DELETE, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
+	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_dtv_event);
 
 	set_event (DIK_END, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
 
@@ -665,7 +665,7 @@ void set_hind_avionics_events (void)
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
-	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
+	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_dtv_event);
 
 	set_event (DIK_5, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
 

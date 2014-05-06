@@ -73,7 +73,7 @@ union HIND_DAMAGE_FLAGS
 	{
 		unsigned int
 			radar		  		:1,	// 1
-			flir				:1,	// 2
+			dtv				:1,	// 2
 			spare_1				:1,	// 3
 			llltv				:1,	// 4
 			laser_range_finder  		:1,	// 5

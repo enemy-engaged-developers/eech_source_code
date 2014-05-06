@@ -830,7 +830,7 @@ static void update_status_panel_lamps (void)
 {
 	hind_lamps.status_1 = hind_damage.radar;
 
-	hind_lamps.status_2 = hind_damage.flir;
+	hind_lamps.status_2 = hind_damage.dtv;
 
 	hind_lamps.status_3 = hind_damage.llltv;
 

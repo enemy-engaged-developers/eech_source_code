@@ -209,7 +209,7 @@ int
 	command_line_unpadlock_on_handover							= 0,     // GCsDriver  08-12-2007
 	command_line_pilot_as_periscope_default							= 0,     // GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
-	command_line_eo_full_range						= 0,		// GCsDriver  08-12-2007
+	command_line_eo_full_range						= 1,		// GCsDriver  08-12-2007
 	command_line_render_shadows							= 2,     // GCsDriver  08-12-2007
 	command_line_trees_fog										= 2,	// thealx 130430
 	command_line_fly_any_airplane								= TRUE,     // VJ 030424
