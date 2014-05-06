@@ -2545,7 +2545,7 @@ void update_eo_max_visual_range(void)
 	
 	eo_max_visual_range = visible_range;
 	
-	debug_log("eo_max_visual_range %f, fog end %f, eo_low_light %i", eo_max_visual_range, fog_range, eo_low_light);
+//	debug_log("eo_max_visual_range %f, fog end %f, eo_low_light %i", eo_max_visual_range, fog_range, eo_low_light);
 }
 // end full_eo_range by GCsDriver  08-12-2007
 

@@ -399,6 +399,9 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		
 		ASSERT (target_damage_level > 0);
 
+		if (target_damage_level <= 0) // something wrong, abort
+			return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
 		if (debug_flag)
 		{
 			debug_log ("WN_TGT : Damage Filter ( target damage level = %d ) :", target_damage_level / 2);
@@ -406,7 +409,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			float accuracy_multiplier = 1;
+			float damage_multiplier = 1;
 			
 			if (suitability[package])
 			{
@@ -423,24 +426,27 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 									* weapon_database[weapon_type].burst_duration / 60;
 				}
 
-				total_damage_possible = min (damage_capability, target_damage_level);
-
-				//	 guided weapons are generally more suitable for air target except close range
-
-				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && target_range > 200)
+				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE) //	 guided weapons are generally more suitable for air target except close range
 				{
-					total_damage_possible *= (int)max(target_range / 200, 1);
-				}
-				else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
-				{
-					accuracy_multiplier = min (1, 10 / (weapon_database[weapon_type].circular_error_probable * target_range)); // what chance to get 50% hits in 10m radius circle from this distance
-					total_damage_possible *= accuracy_multiplier;
-				}
+					damage_multiplier = target_range / 1000 + 1;
 
-				if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
-					damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
+					if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && !(weapon_database[weapon_type].weapon_class & WEAPON_CLASS_AIR_TO_SURFACE))
+						damage_multiplier *= 2;
+
+					total_damage_possible = damage_multiplier * min (damage_capability, target_damage_level);
+				}
 				else
-					damage_by_type[weapon_type] += total_damage_possible; // summ all avialable weapons
+				{
+					if (weapon_database[weapon_type].circular_error_probable) // what chance to get 50% hits in 1m radius circle from this distance
+						damage_multiplier = min (1, 1 / (weapon_database[weapon_type].circular_error_probable * target_range));
+
+					total_damage_possible = min (damage_multiplier * damage_capability, target_damage_level);
+				}
+
+				if (weapon_database[weapon_type].rate_of_fire != FIRE_SINGLE_WEAPON)
+					damage_by_type[weapon_type] = min(damage_by_type[weapon_type] + total_damage_possible, target_damage_level); // summ all avialable weapons
+				else
+					damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
 
 				if (total_damage_possible == 0)
 				{
@@ -448,12 +454,12 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					
 					if (debug_flag)
 					{
-						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, damage multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, damage_multiplier);
 					}
 				}
 				else if (debug_flag)
 				{
-					debug_log ("WN_TGT : (%d) %s (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+					debug_log ("WN_TGT : (%d) %s (damage %d, damage multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, damage_multiplier);
 				}
 			}
 		}
@@ -461,11 +467,12 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 	else // ANTI MISSILE WEAPON SYSTEMS
 	{
 		int
+			damage_capability,
 			total_damage_possible;
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
-			float accuracy_multiplier = 1;
+			float damage_multiplier = 1;
 			
 			if (suitability[package])
 			{
@@ -475,35 +482,46 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				{
 					if (weapon_database[weapon_type].rate_of_fire == FIRE_SINGLE_WEAPON)
 					{
-						total_damage_possible = weapon_database[weapon_type].damage_capability * weapon_config_database[config_type][package].salvo_size;
+						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size;
 					}
 					else
 					{
-						total_damage_possible = weapon_database[weapon_type].damage_capability
+						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
 										* weapon_database[weapon_type].rate_of_fire
 										* weapon_database[weapon_type].burst_duration / 60;
 					}
 
-					//	 guided weapons are generally more suitable for air target except close range
-
-					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE && target_range > 200)
+					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE) //	 guided weapons are generally more suitable for air target except close range
 					{
-						total_damage_possible *= (int)max(target_range/200, 1);
-					}
-					else if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE && weapon_database[weapon_type].circular_error_probable)
-					{
-						accuracy_multiplier = min (1, 10 / (weapon_database[weapon_type].circular_error_probable * target_range));
-						total_damage_possible *= accuracy_multiplier;
-					}
+						damage_multiplier = target_range / 1000 + 1;
 
-					if (weapon_database[weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
-						damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
+						total_damage_possible = damage_multiplier * damage_capability;
+					}
 					else
-						damage_by_type[weapon_type] += total_damage_possible; // summ all avialable weapons
-
-					if (debug_flag)
 					{
-						debug_log ("WN_TGT : (%d) %s (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+						if (weapon_database[weapon_type].circular_error_probable) // what chance to get 50% hits in 1m radius circle from this distance
+							damage_multiplier = min (1, 1 / (weapon_database[weapon_type].circular_error_probable * target_range));
+
+						total_damage_possible = min (damage_multiplier * damage_capability, target_damage_level);
+					}
+
+					if (weapon_database[weapon_type].rate_of_fire != FIRE_SINGLE_WEAPON)
+						damage_by_type[weapon_type] = damage_by_type[weapon_type] + total_damage_possible; // summ all avialable weapons
+					else
+						damage_by_type[weapon_type] = max(damage_by_type[weapon_type], total_damage_possible);
+
+					if (total_damage_possible == 0)
+					{
+						suitable_weapon_count --;
+
+						if (debug_flag)
+						{
+							debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, damage multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, damage_multiplier);
+						}
+					}
+					else if (debug_flag)
+					{
+						debug_log ("WN_TGT : (%d) %s (damage %d, damage multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, damage_multiplier);
 					}
 				}
 				else
@@ -511,7 +529,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					suitable_weapon_count --;
 					if (debug_flag)
 					{
-						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, accuracy multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, accuracy_multiplier);
+						debug_log ("WN_TGT : (%d) %s EXCLUDED (damage %d, damage multiplier %.2f)", package, weapon_database[weapon_type].full_name, total_damage_possible, damage_multiplier);
 					}
 				}
 			}
