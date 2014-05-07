@@ -1256,10 +1256,16 @@ void update_tail_rotor_thrust_dynamics (void)
 		desired = (((10 * PI * Mrpm * Md * Pmax) / (1649.0 * Tl))) / (Pmax);
 
 	current_flight_dynamics->cross_coupling_effect.value += (desired - current_flight_dynamics->cross_coupling_effect.value) * get_model_delta_time ();
-	blade_pitch_induced_thrust_percentage = (((100.0 - current_flight_dynamics->cross_coupling_effect.value) /
+
+	if (command_line_dynamics_flight_model != 2)
+		blade_pitch_induced_thrust_percentage = (((100.0 - current_flight_dynamics->cross_coupling_effect.value) /
 															current_flight_dynamics->tail_blade_pitch.max) *
 															current_flight_dynamics->tail_blade_pitch.value +
 															current_flight_dynamics->cross_coupling_effect.value) / 100.0;
+
+	else
+		blade_pitch_induced_thrust_percentage = current_flight_dynamics->tail_blade_pitch.value /
+				(current_flight_dynamics->tail_blade_pitch.max - current_flight_dynamics->tail_blade_pitch.min);
 
 	current_flight_dynamics->tail_rotor_induced_air.value = 0.0;
 

@@ -57,10 +57,10 @@ altitude value = 0.000000, min = 0.000000, max = 20000.000000, modifier = 1.0000
 drag_x value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000
 drag_y value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000
 drag_z value = 0.000000, min = 0.010000, max = 0.100000, modifier = 1.200000
-heading_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 20.000000
+heading_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 16.000000
 pitch_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 40.000000
 roll_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 30.000000
-heading_moment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.500000
+heading_moment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 2.000000
 pitch_moment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 roll_moment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 heading_moment_reaction value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000

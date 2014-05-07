@@ -165,7 +165,7 @@ void clear_trim_control (event *ev)
 
 		current_flight_dynamics->input_data.cyclic_x_trim.value = 0.0;
 		current_flight_dynamics->input_data.cyclic_y_trim.value = centre_trim;
-		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) || command_line_dynamics_flight_model == 2)
 			current_flight_dynamics->input_data.pedal_trim.value = 0.0;
 		else
 			current_flight_dynamics->input_data.pedal_trim.value = centre_pedal_trim;
@@ -580,6 +580,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// tail rotor disc
 	////////////////////////////////////////////
+	if (!coaxial)
 	{
 
 		tail_angular_force = tail_rotor_induced_air_value * current_flight_dynamics->tail_boom_length.value;
@@ -785,8 +786,12 @@ void update_common_attitude_dynamics (void)
 			rotor_friction = u * f;
 			rotor_parasitic = (u * u) * p;
 			rotor_induced = (u * u) * i * deg (fabs (blade_pitch + relative_air_flow_angle));
-			rotor_drag = rotor_friction + rotor_parasitic + rotor_induced;
 
+			if (!coaxial)
+				rotor_drag = rotor_induced * current_flight_dynamics->cross_coupling_effect.modifier;
+			else
+				rotor_drag = rotor_friction + rotor_parasitic + rotor_induced;
+//			debug_log("blade_pitch %f, rotor_drag %f", deg (fabs (blade_pitch + relative_air_flow_angle)), rotor_drag);
 			a = (torque - rotor_drag) / mass;
 
 			v = (a * get_model_delta_time ());
@@ -803,7 +808,7 @@ void update_common_attitude_dynamics (void)
 
 			position.x = 0.0;
 			position.y = 0.0; // -0.08022;
-			position.z = -current_flight_dynamics->tail_boom_length.value;
+			position.z = - rotor_radius;
 
 			if (!coaxial)
 				direction.x = current_flight_dynamics->rotor_rotation_direction;
@@ -813,7 +818,7 @@ void update_common_attitude_dynamics (void)
 			direction.y = 0.0;
 			direction.z = 0.0;
 
-			main_angular_force += pow(current_flight_dynamics->tail_rotor_diameter.value, 2) * sqr_main_rotor_rpm;
+//			main_angular_force += pow(current_flight_dynamics->tail_rotor_diameter.value, 2) * sqr_main_rotor_rpm;
 
 			add_dynamic_force ("Main rotor angular torque", main_angular_force, 0.0, &position, &direction, FALSE);
 		}
@@ -871,8 +876,8 @@ void update_common_attitude_dynamics (void)
 
 		scaling = min (fabs (scaling), 1.0f);
 
-		if (!coaxial)
-			reaction_force += (tail_angular_force - main_angular_force) * scaling;
+//		if (!coaxial)
+//			reaction_force += (tail_angular_force - main_angular_force) * scaling;
 
 		position.x = 0.0;
 		position.y = 0.0; //-0.08022;
