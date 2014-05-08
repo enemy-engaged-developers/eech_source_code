@@ -953,8 +953,9 @@ void scan_3d_terrain ( void )
 									dx,
 									dy,
 									dz,
-									test_range,
-									range;
+									range,
+									view_range,
+									temp;
 
 								x = cloud_puffs->x;
 								y = cloud_puffs->y;
@@ -966,9 +967,10 @@ void scan_3d_terrain ( void )
 
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
-								test_range = 6000.0 - 40.0 * min ( cloud_puffs->scale, 10.0f );
+								get_3d_fog_distances (active_3d_environment, &temp, &view_range);
+								view_range = min (view_range, 6000.0) - 40.0 * min ( cloud_puffs->scale, 10.0f );
 
-								if ( range < test_range * test_range )
+								if ( range < view_range * view_range )
 								{
 									sorting_slot = get_3d_scene_slot ();
 
@@ -978,7 +980,7 @@ void scan_3d_terrain ( void )
 
 										sorting_slot->type = OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT;
 										sorting_slot->z = *( ( int * ) &range );
-										sorting_slot->terrain_cloud_puff.dissolve = 255.0 * ((range < test_range * 0.75) ? 1 : (1 - (range - test_range * 0.75) / (test_range * 0.25))); //thealx//
+										sorting_slot->terrain_cloud_puff.dissolve = 255.0 * ((range < view_range * 0.75) ? 1 : (1 - (range - view_range * 0.75) / (view_range * 0.25))); //thealx//
 										sorting_slot->terrain_cloud_puff.x = x;
 										sorting_slot->terrain_cloud_puff.y = y;
 										sorting_slot->terrain_cloud_puff.z = z;
