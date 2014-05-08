@@ -568,9 +568,9 @@ void initialise_apache_mfd (void)
 
 	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_NOALPHA);
 	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_NOALPHA);
-	cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD, TEXTURE_TYPE_NOALPHA);
-	cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD, TEXTURE_TYPE_NOALPHA);
-	ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
+	cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1, TEXTURE_TYPE_NOALPHA);
+	cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_1, TEXTURE_TYPE_NOALPHA);
+	ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_2, TEXTURE_TYPE_SCREEN);
 
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
@@ -10175,13 +10175,13 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 	{
 		mfd_mode = &cpg_lhs_mfd_mode;
 		mfd_texture_screen = cpg_lhs_mfd_texture_screen;
-		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
 	}
 	else if (location == MFD_LOCATION_CPG_RHS)
 	{
 		mfd_mode = &cpg_rhs_mfd_mode;
 		mfd_texture_screen = cpg_rhs_mfd_texture_screen;
-		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_1);
 	}
 	else
 	{
@@ -10197,7 +10197,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 			mfd_texture_screen = ort_texture_screen;
 		mfd_mode = &ort_mode;
 
-		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT);
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_2);
 
 		if (use_3d_texture)
 			if (cpg_lhs_mfd_mode == ort_mode || cpg_rhs_mfd_mode == ort_mode)
@@ -10386,11 +10386,11 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 				else if (location == MFD_LOCATION_PILOT_RHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 				else if (location == MFD_LOCATION_CPG_LHS)
-					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
 				else if (location == MFD_LOCATION_CPG_RHS)
-					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_1);
 				else if (location == MFD_LOCATION_ORT)
-					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_2);
 
 				if (*mfd_mode == MFD_MODE_FLIR)
 					draw_3d_eo_display_on_texture (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
@@ -10681,11 +10681,11 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 			copy_export_mfd(NULL,export_screen);
 			break;
 		case MFD_LOCATION_CPG_LHS:
-			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
 			copy_export_mfd(export_screen,NULL);
 			break;
 		case MFD_LOCATION_CPG_RHS:
-			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_HOKUM_COCKPIT_MFD_RHS_1);
 			copy_export_mfd(NULL,export_screen);
 			break;
 		}
