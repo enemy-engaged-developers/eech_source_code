@@ -2524,6 +2524,12 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 
 	ASSERT (get_gunship_entity ());
 
+	// clear lights and fog
+	
+	set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
+	set_3d_fogmode ( main_3d_env, FOGMODE_ON_AUTOMATIC );
+	recalculate_3d_environment_settings (main_3d_env);
+	
 	switch (get_global_gunship_type())
 	{
 	case  GUNSHIP_TYPE_APACHE:

@@ -245,7 +245,8 @@ void draw_application_3d_scene (void)
 
 		scan_3d_terrain ();
 
-		scan_3d_clouds ();
+		if (get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
+			scan_3d_clouds ();
 
 		scan_local_entity_3d_objects (&main_vp);
 
@@ -253,8 +254,9 @@ void draw_application_3d_scene (void)
 
 		draw_3d_sun ();
 
-		if (get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED )
+		if (get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
 		{
+
 			draw_3d_stars ();
 
 			draw_3d_moon ();
@@ -264,10 +266,11 @@ void draw_application_3d_scene (void)
 
 		if ( ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED ) && ( application_3d_rain_active ) )
 		{
-			draw_3d_rain ();
-		}
 
-		draw_3d_lightning_strikes ();
+			draw_3d_rain ();
+
+			draw_3d_lightning_strikes ();
+		}
 
 		end_3d_scene ();
 	}
@@ -556,7 +559,7 @@ void draw_application_ui_3d_scene (void)
 
 	scan_3d_terrain ();
 
-	if ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED )
+	if ( get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
 	{
 
 		scan_3d_clouds ();
@@ -682,8 +685,7 @@ void render_infrared_interference ( int alpha )
 
 	float
 		noise;
-	int
-		fog_intensity;
+
 	rgb_colour
 		fog_colour;
 
@@ -708,7 +710,7 @@ void render_infrared_interference ( int alpha )
 	else
 	{
 		fog_colour = get_3d_fog_colour ( main_3d_env );
-//		fog_intensity = (fog_colour.red + fog_colour.green + fog_colour.blue) / 3;
+
 		fog_colour.alpha = 96;
 
 		noise = 0;

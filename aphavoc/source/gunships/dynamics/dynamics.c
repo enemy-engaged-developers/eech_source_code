@@ -1909,8 +1909,15 @@ void load_dynamics_model (event *ev)
 	else
 	{
 
-		debug_log ("DYNAMICS: Can't load dynamics file. Creating new dynamics file");
-
+		if (command_line_dynamics_flight_model != 2)
+		{
+			debug_log ("DYNAMICS: Can't load dynamics file. Creating new dynamics file");
+		}
+		else
+		{
+			debug_fatal("Dynamics file is missing for this helicopter! DO NOT USE DYN FILES FROM DEFAULT FLIGHT MODEL! ");
+		}
+		
 		save_dynamics_model (NULL);
 	}
 }
