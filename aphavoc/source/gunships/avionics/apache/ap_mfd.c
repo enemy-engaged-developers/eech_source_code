@@ -11269,9 +11269,18 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 				damaged = apache_damage.dtv;
 				break;
 			case TARGET_ACQUISITION_SYSTEM_DVO:
-				ASSERT(location == MFD_LOCATION_ORT);  // only ORT can view DVO
-				*mfd_mode = MFD_MODE_DVO;
-				damaged = apache_damage.dvo;
+//				ASSERT(location == MFD_LOCATION_ORT);  // only ORT can view DVO
+				if (location == MFD_LOCATION_ORT)
+				{
+					*mfd_mode = MFD_MODE_DVO;
+					damaged = apache_damage.dvo;
+				}
+				else // we just used DVO with ORT and trying to render it now to MFD, switch on dtv
+				{
+					*mfd_mode = MFD_MODE_DTV;
+					damaged = apache_damage.dtv;
+				}
+
 				break;
 			}
 
