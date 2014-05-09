@@ -210,7 +210,7 @@ void reset_fly_by_camera (camera *raw)
 		theta = -theta;
 	}
 
-	raw->fly_by_camera_timer = duration;
+	raw->fly_by_camera_timer = duration * max(0.5, command_line_flyby_timer_multiplier);
 
 	//
 	// if velocity is small then use a random heading

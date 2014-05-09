@@ -868,6 +868,8 @@ static const struct config_option options[] =
 		SPEC(set_hud_code, get_hud_code) },
 	{ "wobbly-camera", "", "Make external cameras move wobbly and smoother (0 = off, 1 = on) (def = 1)",
 		INT(command_line_wobbly_camera) },
+	{ "flyby_timer_multiplier", "", "Timer multiplier for fly-by camera mode (F10) (def = 1.0)",
+		FLOAT(command_line_flyby_timer_multiplier) },
 	{ NULL, NULL, "",
 		NONE },
 
