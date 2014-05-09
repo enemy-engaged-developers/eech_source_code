@@ -285,9 +285,8 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			d_intensity *= current_object_3d_diffuse_factor;
 			
 			s_intensity = normal.x * lights->highlight_vector.x + normal.y * lights->highlight_vector.y + normal.z * lights->highlight_vector.z;
-
-//			d_intensity *= 1.0 / 32767.0;
-//			s_intensity *= 1.0 / 32767.0;
+				
+			s_intensity = pow(s_intensity, 10);
 
 			if ( *( ( int *) &d_intensity ) > *( ( int *) &float_value_zero ) )
 			{
@@ -306,13 +305,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			if ( *( ( int *) &s_intensity ) > *( ( int *) &float_value_zero ) )
 			{
 
-				s_intensity *= s_intensity;
-				s_intensity *= s_intensity;
-				s_intensity *= s_intensity;
-				s_intensity *= s_intensity;
-				s_intensity *= s_intensity;
-
-				s += s_intensity * lights->intensity;
+				s += s_intensity * (lights->colour.red * 0.3 +  lights->colour.green * 0.59 + lights->colour.blue * 0.11);
 			}
 
 			asm_convert_float_to_int ( ( r * 255 ), &int_light_bounds[0] );
@@ -402,7 +395,6 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 
 				temp_intensity = normal.x * this_light->lx + normal.y * this_light->ly + normal.z * this_light->lz;
 				temp_intensity *= current_object_3d_diffuse_factor;
-//				temp_intensity *= 1.0 / 32767.0;
 
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 				{
@@ -421,19 +413,13 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 				temp_intensity = normal.x * this_light->highlight_vector.x +
 										normal.y * this_light->highlight_vector.y +
 										normal.z * this_light->highlight_vector.z;
-
-//				temp_intensity *= 1.0 / 32767.0;
+				
+				temp_intensity = pow(temp_intensity, 10);
 
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 				{
 
-					temp_intensity *= temp_intensity;
-					temp_intensity *= temp_intensity;
-					temp_intensity *= temp_intensity;
-					temp_intensity *= temp_intensity;
-					temp_intensity *= temp_intensity;
-
-					specular += temp_intensity * this_light->intensity;
+					specular += temp_intensity * (this_light->colour.red * 0.3 +  this_light->colour.green * 0.59 + this_light->colour.blue * 0.11);
 				}
 
 				this_light = this_light->succ;
@@ -1317,9 +1303,8 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 				s_intensity =	normal.x * lights->highlight_vector.x +
 									normal.y * lights->highlight_vector.y +
 									normal.z * lights->highlight_vector.z;
-
-//				d_intensity *= 1.0 / 32767.0;
-//				s_intensity *= 1.0 / 32767.0;
+				
+				s_intensity = pow(s_intensity, (float)current_object_3d_surface->specularity / 5);
 
 				if ( *( ( int *) &d_intensity ) > *( ( int *) &float_value_zero ) )
 				{
@@ -1338,13 +1323,7 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 				if ( *( ( int *) &s_intensity ) > *( ( int *) &float_value_zero ) )
 				{
 
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-
-					s += s_intensity * lights->intensity;
+					s += s_intensity * (lights->colour.red * 0.3 +  lights->colour.green * 0.59 + lights->colour.blue * 0.11);
 				}
 
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
@@ -1432,18 +1411,12 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 											normal.y * this_light->highlight_vector.y +
 											normal.z * this_light->highlight_vector.z;
 
-//					temp_intensity *= 1.0 / 32767.0;
+					temp_intensity = pow(temp_intensity, (float)current_object_3d_surface->specularity / 5);
 
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
 
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-
-						specular += temp_intensity * this_light->intensity;
+						specular += temp_intensity * (this_light->colour.red * 0.3 +  this_light->colour.green * 0.59 + this_light->colour.blue * 0.11);
 					}
 
 					this_light = this_light->succ;
@@ -1560,6 +1533,8 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 				s_intensity =	normal.x * lights->highlight_vector.x +
 									normal.y * lights->highlight_vector.y +
 									normal.z * lights->highlight_vector.z;
+				
+				s_intensity = pow(s_intensity, (float)current_object_3d_surface->specularity / 5);
 
 //				d_intensity *= 1.0 / 32767.0;
 //				s_intensity *= 1.0 / 32767.0;
@@ -1581,13 +1556,7 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 				if ( *( ( int *) &s_intensity ) > *( ( int *) &float_value_zero ) )
 				{
 
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-					s_intensity *= s_intensity;
-
-					s += s_intensity * lights->intensity;
+					s += s_intensity * (lights->colour.red * 0.3 +  lights->colour.green * 0.59 + lights->colour.blue * 0.11);
 				}
 
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
@@ -1675,18 +1644,12 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 											normal.y * this_light->highlight_vector.y +
 											normal.z * this_light->highlight_vector.z;
 
-//					temp_intensity *= 1.0 / 32767.0;
+					temp_intensity = pow(temp_intensity, (float)current_object_3d_surface->specularity / 5);
 
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
 
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-						temp_intensity *= temp_intensity;
-
-						specular += temp_intensity * this_light->intensity;
+						specular += temp_intensity * (this_light->colour.red * 0.3 +  this_light->colour.green * 0.59 + this_light->colour.blue * 0.11);
 					}
 
 					this_light = this_light->succ;
