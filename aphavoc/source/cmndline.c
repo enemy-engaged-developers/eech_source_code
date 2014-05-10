@@ -125,7 +125,7 @@ int
 	command_line_comms_show_stats								= FALSE,
 	command_line_comms_packet_throttle_limit				= 10,
 	command_line_comms_resend_list_size						= 1000,
-	command_line_comms_packet_data_size						= 512,                  // Moje 040507 changed back to RW default
+	command_line_comms_packet_data_size						= 640,
 	command_line_comms_packet_rerequest_limit				= 10,
 	command_line_comms_connection_receive_size			= (210 * 1024),
 	command_line_comms_data_record_size						= (210 * 1024),

@@ -445,19 +445,19 @@ void pack_signed_data (int unpacked_data, int number_of_bits_to_pack)
 	// check data can be packed into given number of bits
 	//
 
-//	#ifdef DEBUG
-//	{
-//		int
-//			residue;
-//
-//		residue = unpacked_data >> (number_of_bits_to_pack - 1);
-//
-//		if ((residue != 0) && (residue != -1))
-//		{
-//			debug_fatal ("pack_signed_data: exceeded pack width (value = %d, width = %d)", unpacked_data, number_of_bits_to_pack);
-//		}
-//	}
-//	#endif
+	#ifdef DEBUG
+	{
+		int
+			residue;
+
+		residue = unpacked_data >> (number_of_bits_to_pack - 1);
+
+		if ((residue != 0) && (residue != -1))
+		{
+			debug_fatal ("pack_signed_data: exceeded pack width (value = %d, width = %d)", unpacked_data, number_of_bits_to_pack);
+		}
+	}
+	#endif
 
 	count = number_of_bits_to_pack;
 

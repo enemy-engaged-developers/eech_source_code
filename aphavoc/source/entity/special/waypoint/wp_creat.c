@@ -160,8 +160,6 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &v);
 
-		ASSERT (point_inside_map_volume (&v));
-		
 		if (!point_inside_map_volume (&v)) // something wrong, replace position with any other
 		{
 			get_local_entity_vec3d (raw->waypoint_link.parent, VEC3D_TYPE_POSITION, &v);
@@ -173,6 +171,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &v);
 		}
 
+		ASSERT (point_inside_map_volume (&v));
+		
 		////////////////////////////////////////
 		//
 		// RESOLVE DEFAULT VALUES

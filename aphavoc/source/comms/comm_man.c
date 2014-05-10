@@ -494,7 +494,7 @@ void send_comms_data (void)
         transmit_entity_comms_message (ENTITY_COMMS_END, NULL);
     }
 
-    ASSERT (!get_pack_buffer_overflow ());
+//    ASSERT (!get_pack_buffer_overflow ());
 
     packet_data_size = close_pack_buffer ();
 
@@ -2084,7 +2084,7 @@ void comms_process_data (void)
 
                             //#if DEBUG_MODULE
 
-                            debug_log ("COMMS MAN: sending packet %d frame %d to recently joined client", loop1, 0);
+                            debug_log ("COMMS MAN: sending packet %d frame %d to recently joined client", 1, loop1);
 
                             //#endif
 

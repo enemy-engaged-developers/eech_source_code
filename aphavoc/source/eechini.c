@@ -677,7 +677,7 @@ static const struct config_option options[] =
 		INT(command_line_comms_data_record_size) },
 	{ "cpbs", "comms_pack_buffer_size", "pack buffer size, similar to above (def = 215040)",
 		INT(command_line_comms_pack_buffer_size) },
-	{ "cpds", "comms_packet_data_size", "packet data size (def = 512)",
+	{ "cpds", "comms_packet_data_size", "packet data size (def = 640)",
 		INT(command_line_comms_packet_data_size) },
 	{ "cgs", "command_line_comms_guaranteed_send", "force the comms to use DirectPlay guaranteed send instead of its own (0 = off, 1 = on) (def = 1)",
 		SPECINT(command_line_comms_guaranteed_send, set_guarsend, get_int) },

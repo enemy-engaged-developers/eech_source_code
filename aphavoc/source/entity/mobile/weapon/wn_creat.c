@@ -1004,7 +1004,7 @@ void create_client_server_entity_submunition_weapon (entity *launcher, entity *t
 
 		set_force_local_entity_create_stack_attributes (FALSE);
 	}
-	else
+/*	else // TODO: make it work for client
 	{
 		if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 		{
@@ -1058,7 +1058,7 @@ void create_client_server_entity_submunition_weapon (entity *launcher, entity *t
 
 			set_force_local_entity_create_stack_attributes (FALSE);
 		}
-	}
+	}*/
 	
 	weapon_viewpoint = NULL;
 	weapon_velocity = 0;

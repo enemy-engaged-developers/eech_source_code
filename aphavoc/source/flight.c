@@ -307,12 +307,6 @@ void flight (void)
 	while (!get_exit_flight_loop ())
 	{
 
-		if (!ddraw_validate_display_devices())
-		{
-			system_sleep(2);
-			continue;
-		}
-		
 		//
 		// tidy up screen for cards that dont draw to the screen extents.
 		//
