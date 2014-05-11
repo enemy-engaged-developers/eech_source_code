@@ -1458,9 +1458,15 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		
 		dwStyle = GetWindowStyle ( application_window );
 		
-		dwStyle &= ~WS_POPUP;
+//		dwStyle &= ~WS_POPUP;
+//		
+//		dwStyle |= WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX;
+
+		// to play in windowed mode for Win8 users
 		
-		dwStyle |= WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX;
+		dwStyle &= ~( WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX );
+		
+		dwStyle |= WS_POPUP;
 		
 		SetWindowLong ( application_window, GWL_STYLE, dwStyle );
 		

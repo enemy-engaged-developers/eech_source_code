@@ -569,7 +569,7 @@ int setup_sdl_joysticks( void ) {
 	
 	else
 	{
-	    		di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	    di_err = IDirectInputDevice7_SetCooperativeLevel (device, application_window, DISCL_EXCLUSIVE | DISCL_BACKGROUND);
 	
 		if (di_err != DI_OK)
 		{

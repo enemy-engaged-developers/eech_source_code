@@ -189,12 +189,13 @@ void initialise_mouse ( void )
 		// JB 030311 from Andrew
 		// Sometimes a double mouse is visible (when the resilution in EECH is different from the desktop)
 		// VJ 030430 Double mouse problem, Changed last param to NONEXCLUSIVE
+		// exclusive for windowed mode - lock coursor into the window /thealx/
+		
+		if (command_line_full_screen)
+			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
+		else
+			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
 
-#ifdef DEBUG // exclusive for debug build - more comfortable in windowed mode /thealx/
-		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
-#else
-		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
-#endif
 		if ( ret != DI_OK )
 		{
 	
@@ -237,7 +238,10 @@ void initialise_mouse ( void )
 
 		ret = IDirectInputDevice7_Acquire ( direct_input_mouse );
 
-		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
+		if (command_line_full_screen)
+			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
+		else
+			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
 	}
 	else
 	{
