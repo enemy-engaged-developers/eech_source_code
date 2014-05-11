@@ -2043,13 +2043,16 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 			multiply_matrix3x3_vec3d(&helicopter_route [count - loop], helicopter_att, &helicopter_route [count - loop]);			
 			new_route [loop].x = helicopter_pos->x + helicopter_route [count - loop].x;
 			new_route [loop].z = helicopter_pos->z + helicopter_route [count - loop].z;
+
+			ASSERT(point_inside_map_area(&new_route [loop]));
+	
 			new_route [loop].y = get_3d_terrain_elevation(new_route [loop].x, new_route [loop].z);
 			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
 		}
 	}
 	else
 	{
-		debug_fatal("Can't found proper troop take off route");
+		debug_fatal("Can't find proper troops take off route for aircraft %i", get_local_entity_int_value (helicopter, INT_TYPE_ENTITY_SUB_TYPE));
 	}
 
 	// troops from helicopter -> keysite
@@ -2058,6 +2061,9 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 	{
 		new_route [loop].x = new_route [loop - 1].x + 50 * sfrand1();
 		new_route [loop].z = new_route [loop - 1].z + 50 * sfrand1();
+
+		ASSERT(point_inside_map_area(&new_route [loop]));
+	
 		new_route [loop].y = get_3d_terrain_elevation(new_route [loop].x, new_route [loop].z);
 
 		new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;

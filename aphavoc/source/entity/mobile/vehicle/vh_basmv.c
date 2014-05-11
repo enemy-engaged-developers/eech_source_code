@@ -237,6 +237,8 @@ void basic_vehicle_movement (entity *en)
 	new_pos.y = raw->mob.position.y + (new_velocity * raw->mob.zv.y * get_delta_time ());
 	new_pos.z = raw->mob.position.z + (new_velocity * raw->mob.zv.z * get_delta_time ());
 
+	ASSERT(point_inside_map_area(&new_pos));
+	
 	new_pos.y = get_3d_terrain_elevation (new_pos.x, new_pos.z);
 
 	set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &new_pos);

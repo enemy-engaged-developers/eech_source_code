@@ -99,6 +99,9 @@ void initialise_safe_view (void)
 
 	position.x = MIN_MAP_X + ((MAX_MAP_X - MIN_MAP_X) * frand1 ());
 	position.z = MIN_MAP_Z + ((MAX_MAP_Z - MIN_MAP_Z) * frand1 ());
+
+	ASSERT(point_inside_map_area(&position));
+
 	position.y = get_3d_terrain_elevation (position.x, position.z) + 50.0;
 }
 

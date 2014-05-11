@@ -857,6 +857,8 @@ static int response_to_waypoint_defend_reached (entity_messages message, entity 
 
 		get_local_entity_vec3d (member, VEC3D_TYPE_POSITION, &new_pos);
 
+		ASSERT(point_inside_map_area(&new_pos));
+	
 		new_pos.y = get_3d_terrain_elevation (new_pos.x, new_pos.z);
 
 		set_client_server_entity_vec3d (member, VEC3D_TYPE_POSITION, &new_pos);

@@ -502,6 +502,8 @@ void attack_guide_fire_reached (entity *en)
 					// check position isn't too high
 					//
 
+					ASSERT(point_inside_map_area(&position));
+	
 					terrain_elevation = get_3d_terrain_elevation (position.x, position.z);
 
 					altitude = position.y - terrain_elevation;
@@ -894,6 +896,8 @@ void set_attack_guide_approach_position (entity *en)
 	// calculate guide position
 	//
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.x = target_pos->x + (direction.x * distance);
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 	position.z = target_pos->z + (direction.z * distance);
@@ -960,6 +964,8 @@ void set_attack_guide_seek_cover_position (entity *en)
 
 	get_local_entity_vec3d (aggressor, VEC3D_TYPE_POSITION, &position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	alt = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 
 	if (position.y > alt)
@@ -1088,6 +1094,8 @@ void attack_guide_no_cover_found (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
@@ -1309,6 +1317,8 @@ void set_attack_guide_climb_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 
 	set_client_server_entity_float_value (en, FLOAT_TYPE_VELOCITY, get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY));
@@ -1775,6 +1785,8 @@ void set_attack_guide_egress_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE);
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
@@ -1881,6 +1893,8 @@ void set_attack_guide_hasty_take_cover_position (entity *en)
 	// Helicopter remains at current location - just change altitude
 	//
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + 5.0;
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);

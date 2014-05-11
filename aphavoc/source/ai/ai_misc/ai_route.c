@@ -605,6 +605,7 @@ static int read_road_route_node_positions (char *name)
 
 		for (loop = 0; loop < number_of_road_nodes; loop ++)
 		{
+			ASSERT(point_inside_map_area(&road_node_positions [loop]));
 
 			terrain_elevation = get_3d_terrain_elevation (road_node_positions [loop].x, road_node_positions [loop].z);
 
@@ -748,6 +749,8 @@ static int read_road_route_node_link_positions (char *name)
 			{
 				float
 					terrain_elevation;
+
+				ASSERT(point_inside_map_area(&new_link->link_positions [loop]));
 
 				terrain_elevation = get_3d_terrain_elevation (new_link->link_positions [loop].x, new_link->link_positions [loop].z);
 	

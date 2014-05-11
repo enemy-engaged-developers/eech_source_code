@@ -321,6 +321,8 @@ void set_attack_guide_move_six_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE);
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
@@ -397,6 +399,8 @@ void set_attack_guide_move_circle_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
+	ASSERT(point_inside_map_area(&position));
+	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);

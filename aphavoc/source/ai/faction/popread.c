@@ -3744,6 +3744,7 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 
 		if (get_local_entity_int_value (get_parser_keysite (), INT_TYPE_ALIGN_WITH_TERRAIN))
 		{
+			ASSERT(point_inside_map_area(&position));
 
 			position.y = get_3d_terrain_elevation (position.x, position.z);
 		}

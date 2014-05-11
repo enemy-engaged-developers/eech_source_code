@@ -207,6 +207,8 @@ void initialise_campaign_screen_log_page_objects (void)
 	pos.x = MID_MAP_X;
 	pos.z = MID_MAP_Z;
 
+	ASSERT(point_inside_map_area(&pos));
+
 	pos.y = get_3d_terrain_elevation (pos.x, pos.z);
 
 	set_page_3d_viewpoint (&pos);

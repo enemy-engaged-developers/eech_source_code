@@ -309,6 +309,8 @@ void basic_aircraft_movement (entity *en)
 	new_pos.y = raw->mob.position.y + (new_velocity * raw->mob.zv.y * get_delta_time ());
 	new_pos.z = raw->mob.position.z + (new_velocity * raw->mob.zv.z * get_delta_time ());
 
+	ASSERT(point_inside_map_area(&new_pos));
+	
 	terrain_elevation = get_3d_terrain_elevation (new_pos.x, new_pos.z);
 
 	new_pos.y = max (new_pos.y, terrain_elevation + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE));

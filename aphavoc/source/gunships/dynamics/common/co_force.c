@@ -650,6 +650,8 @@ void resolve_dynamic_forces (void)
 				look_ahead_position.x += current_flight_dynamics->attitude [2][0] * look_ahead_distance;
 				look_ahead_position.z += current_flight_dynamics->attitude [2][2] * look_ahead_distance;
 
+				ASSERT(point_inside_map_area(&look_ahead_position));
+	
 				look_ahead_position.y = get_3d_terrain_elevation (look_ahead_position.x, look_ahead_position.z);
 
 				// take the highest point (either current_pos or look ahead point)

@@ -431,6 +431,7 @@ entity *create_landed_faction_members (entity *keysite, entity_sub_types member_
 
 				if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE)
 				{
+					ASSERT(point_inside_map_area(&pos));
 
 					pos.y = get_3d_terrain_elevation (pos.x, pos.z);
 				}
@@ -691,6 +692,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 
 			if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE)
 			{
+				ASSERT(point_inside_map_area(&pos));
 
 				pos.y = get_3d_terrain_elevation (pos.x, pos.z);
 			}
@@ -1242,6 +1244,7 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 
 			if (place_at_ground_height)
 			{
+				ASSERT(point_inside_map_area(&pos));
 	
 				pos.y = get_3d_terrain_elevation_and_face_normal (pos.x, pos.z, &face_normal, NULL);
 	

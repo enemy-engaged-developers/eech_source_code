@@ -650,6 +650,8 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 	// ensure that the weapon is above ground
 	//
 
+	ASSERT(point_inside_map_area(&vp->position));
+	
 	terrain_elevation = get_3d_terrain_elevation (vp->position.x, vp->position.z);
 
 	if (vp->position.y < terrain_elevation)

@@ -851,6 +851,8 @@ int load_3d_terrain ( const char *path )
 						}
 						while ( center_z < terrain_3d_min_map_z || center_z > terrain_3d_max_map_z );
 						
+						ASSERT( ( center_x > terrain_3d_min_map_x ) && ( center_x < terrain_3d_max_map_x ) && ( center_z > terrain_3d_min_map_z ) && ( center_z < terrain_3d_max_map_z ) );
+
 						y_center_min += get_3d_terrain_elevation ( center_x, center_z );
 						
 						center_y = (float)rand() / RAND_MAX * TERRAIN_3D_CLOUD_Y_CENTER_MAX + y_center_min;

@@ -632,6 +632,8 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 		}
 		#endif
 
+		ASSERT(point_inside_map_area(waypoint_pos));
+		
 		terrain_elevation = get_3d_terrain_elevation (waypoint_pos->x, waypoint_pos->z);
 
 		road_node = get_closest_road_node (waypoint_pos, 5.0);
@@ -1382,6 +1384,7 @@ int get_best_point (vec3d *start, vec3d *end, vec3d *best_point, entity_sides si
 		
 			for (loop = 1; loop <= route_biasing_database [movement_type].num_route_samples; loop ++)
 			{
+				ASSERT(point_inside_map_area(&test_point));
 	
 				best_point_terrain_elevations [loop] = ceil (get_3d_terrain_elevation (test_point.x, test_point.z));
 		

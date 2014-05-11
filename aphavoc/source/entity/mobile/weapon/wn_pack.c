@@ -213,6 +213,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->mob.position.z = bound (raw->mob.position.z, MIN_MAP_Z, MAX_MAP_Z);
 
+			ASSERT(point_inside_map_area(&raw->mob.position));
+	
 			raw->mob.position.y = max (raw->mob.position.y, get_3d_terrain_elevation (raw->mob.position.x, raw->mob.position.z) + 0.10f);
 
 			//

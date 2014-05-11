@@ -1894,6 +1894,8 @@ void validate_keysite_landing_site_heights (entity *keysite)
 
 				waypoint_position = get_local_entity_vec3d_ptr (waypoint, VEC3D_TYPE_POSITION);
 
+				ASSERT(point_inside_map_area(waypoint_position));
+	
 				terrain_elevation = get_3d_terrain_elevation (waypoint_position->x, waypoint_position->z);
 
 				delta_height = waypoint_position->y - terrain_elevation;

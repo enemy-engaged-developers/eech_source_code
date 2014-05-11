@@ -303,6 +303,8 @@ static void kill_local (entity *en)
 
 		get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &pos);
 
+		ASSERT(point_inside_map_area(&pos));
+	
 		pos.y = get_3d_terrain_elevation (pos.x, pos.z);
 
 		create_client_server_crater (CRATER_TYPE_LARGE_EXPLOSION, &pos);

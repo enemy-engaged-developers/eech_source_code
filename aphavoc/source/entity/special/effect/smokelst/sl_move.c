@@ -158,6 +158,8 @@ void smoke_list_movement( entity *en )
 		{
 			float alt_modifier;
 			
+			ASSERT(point_inside_map_area(smoke_pos));
+	
 			alt_modifier = bound((smoke_pos->y - get_3d_terrain_elevation(smoke_pos->x, smoke_pos->z)) / 100, 0.5, 4); // increase wind force at high altitude, decrease at low
 			smoke_mv->x += ( smoke_info->wind_affected * alt_modifier * ( wind_velocity.x + ( wind_velocity.x * sfrand1() * 0.5 ) ) - smoke_mv->x ) * dt;
 			smoke_mv->z += ( smoke_info->wind_affected * alt_modifier * ( wind_velocity.z + ( wind_velocity.z * sfrand1() * 0.5 ) ) - smoke_mv->z ) * dt;

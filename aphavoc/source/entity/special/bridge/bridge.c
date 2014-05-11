@@ -857,6 +857,8 @@ float get_bridge_max_leg_height (vec3d *end1, vec3d *end2, entity_sub_types type
 			pos.y += ( raw_vector.y * bridge_segment_length( segment_type ) * 0.5 );
 			pos.z += ( raw_vector.z * bridge_segment_length( segment_type ) * 0.5 );
 
+			ASSERT(point_inside_map_area(&pos));
+	
 			max_leg_height = max( max_leg_height, ( pos.y - get_3d_terrain_elevation( pos.x, pos.z ) ) );
 
 			pos.x += ( raw_vector.x * bridge_segment_length( segment_type ) * 0.5 );

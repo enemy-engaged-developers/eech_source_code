@@ -2042,6 +2042,8 @@ void terrain_elevation_soak_test (int samples_per_sector_side)
 
 				for (x = x_start; x < x_end; x += sample_distance)
 				{
+					ASSERT( ( x > terrain_3d_min_map_x ) && ( x < terrain_3d_max_map_x ) && ( z > terrain_3d_min_map_z ) && ( z < terrain_3d_max_map_z ) );
+
 					get_3d_terrain_point_data (x, z, NULL);
 				}
 			}
@@ -2170,6 +2172,8 @@ float get_3d_terrain_elevation_and_face_normal ( float x, float z, vec3d *normal
 	float
 		height;
 
+	ASSERT( ( x > terrain_3d_min_map_x ) && ( x < terrain_3d_max_map_x ) && ( z > terrain_3d_min_map_z ) && ( z < terrain_3d_max_map_z ) );
+
 	height = get_3d_terrain_point_data ( x, z, NULL );
 
 	if ( normal )
@@ -2187,6 +2191,7 @@ float get_3d_terrain_elevation_and_face_normal ( float x, float z, vec3d *normal
 
 void get_3d_terrain_face_normal ( vec3d *normal, float x, float z )
 {
+	ASSERT( ( x > terrain_3d_min_map_x ) && ( x < terrain_3d_max_map_x ) && ( z > terrain_3d_min_map_z ) && ( z < terrain_3d_max_map_z ) );
 
 	get_3d_terrain_point_data ( x, z, NULL );
 
