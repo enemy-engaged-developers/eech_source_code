@@ -802,7 +802,7 @@ void update_common_attitude_dynamics (void)
 			torque = bound (torque, 0.0, 120.0);
 
 			if (!coaxial)
-				main_angular_force = torque * 2.0 * PI * (current_flight_dynamics->main_rotor_diameter.value / 2.0) / 1649.0;
+				main_angular_force = 0.01 * current_flight_dynamics->cross_coupling_effect.modifier * torque;// * 2.0 * PI * (current_flight_dynamics->main_rotor_diameter.value / 2.0) / 1649.0;
 			else
 				main_angular_force = heading_moment_modifier / mass_percentage * torque * fabs(current_flight_dynamics->tail_blade_pitch.value / current_flight_dynamics->tail_blade_pitch.max) / 100;				
 
