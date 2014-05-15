@@ -218,23 +218,12 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 			return 0;
 		}
 	}
-	else
-	{
-		//
-		// invulnerability option for AI
-		//
-
-		if (damage_debug_invulnerable_flag)
-		{
-			return 0;
-		}
-	}
 
 	damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL);
 
 	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, FALSE, FALSE);
 
-	if (damage_capability > 0)
+	if (damage_capability > 0 && !damage_debug_invulnerable_flag)
 	{
 		damage_level -= damage_capability;
 

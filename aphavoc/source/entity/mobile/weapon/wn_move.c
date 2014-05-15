@@ -495,8 +495,12 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	// guard against divide by zero (weapon must be very close to the intercept point)
 	//
 
-	if (length < max(weapon_database[raw->mob.sub_type].detonation_radius, 1))
+	if (length < 1.0)
 	{
+		#if DEBUG_MODULE
+			debug_log("%s too close to target, hit counts", weapon_database[raw->mob.sub_type].full_name);
+		#endif
+
 		raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
 
 		return;
@@ -517,12 +521,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].detonation_radius >= length)  // weapon armed after 1 second
+		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].detonation_radius >= length)  // weapon will detonate if armed and close enough to target
 		{
 
 			#if DEBUG_MODULE
-				debug_log("%s overshot target (%0.1f degrees, limit %.2f, range %.2f, detonation radius %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand), length, weapon_database[raw->mob.sub_type].detonation_radius),
-					deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
+				debug_log("%s overshot target (%0.1f degrees, limit %.2f, range %.2f, detonation radius %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)), length, weapon_database[raw->mob.sub_type].detonation_radius);
 			#endif
 
 			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
@@ -1289,7 +1292,8 @@ void weapon_movement (entity *en)
 
 	if (raw->mob.target_link.parent)
 	{
-		if (get_local_entity_int_value (raw->mob.target_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+		if (get_local_entity_int_value (raw->mob.target_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI ||
+				get_3d_range(&new_position, get_local_entity_vec3d_ptr(raw->mob.target_link.parent, VEC3D_TYPE_POSITION)) < 50)
 		{
 			high_precision_collision = TRUE;
 		}
@@ -1307,7 +1311,7 @@ void weapon_movement (entity *en)
 	{
 		high_precision_collision = TRUE;
 	}
-
+	
 	////////////////////////////////////////
 	//
 	// target collision detection
@@ -1331,7 +1335,15 @@ void weapon_movement (entity *en)
 						delete_local_entity_from_parents_child_list (en, LIST_TYPE_TARGET);
 
 						insert_local_entity_into_parents_child_list (en, LIST_TYPE_TARGET, hit_target, NULL);
+
+						#if DEBUG_MODULE
+							debug_log("%s target switched", weapon_database[raw->mob.sub_type].full_name);
+						#endif
 					}
+
+					#if DEBUG_MODULE
+						debug_log("%s hit target", weapon_database[raw->mob.sub_type].full_name);
+					#endif
 
 					raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
 				}
@@ -1339,18 +1351,21 @@ void weapon_movement (entity *en)
 				{
 					if (collision_test_weapon_with_trees (&old_position, &new_position))
 					{
+						#if DEBUG_MODULE
+							debug_log("%s collision with trees", weapon_database[raw->mob.sub_type].full_name);
+						#endif
+
 						raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
 					}
 				}
 			}
-			else
-			{
-				int target_hit = collision_test_weapon_with_given_target (en, raw->mob.target_link.parent, &old_position, &new_position); // 1 - target, 2 - something else
-				if (target_hit == 1)
-					raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
-				else if (target_hit == 2)
-					raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-			}
+//			else
+//			{
+//				if (collision_test_weapon_with_given_target (en, raw->mob.target_link.parent, &old_position, &new_position))
+//				{
+//					raw->kill_code = WEAPON_KILL_CODE_HIT_TARGET;
+//				}
+//			}
 		}
 	}
 

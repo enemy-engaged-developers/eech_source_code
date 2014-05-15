@@ -1198,7 +1198,7 @@ entity *get_line_of_sight_collision_entity
 	{
 		create_debug_3d_line (source_old_position, source_new_position, LOS_COLOUR, collision_box_lifetime);
 	}
-
+	
 	////////////////////////////////////////
 	//
 	// get source min and max positions
@@ -1385,13 +1385,13 @@ entity *get_line_of_sight_collision_entity
 
 							radius = get_object_3d_radius (object_3d_index);
 
-							target_min_position.x -= radius;
-							target_min_position.y -= radius;
-							target_min_position.z -= radius;
+							target_min_position.x -= radius + 10;
+							target_min_position.y -= radius + 10;
+							target_min_position.z -= radius + 10;
 
-							target_max_position.x += radius;
-							target_max_position.y += radius;
-							target_max_position.z += radius;
+							target_max_position.x += radius + 10;
+							target_max_position.y += radius + 10;
+							target_max_position.z += radius + 10;
 
 							if
 							(
@@ -1448,68 +1448,61 @@ entity *get_line_of_sight_collision_entity
 							//
 
 	 						target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+							
+							radius = get_object_3d_radius (object_3d_index);
 
+							target_min_position.x = target_position->x - radius - 10;
+							target_min_position.y = target_position->y - radius - 10;
+							target_min_position.z = target_position->z - radius - 10;
+
+							target_max_position.x = target_position->x + radius + 10;
+							target_max_position.y = target_position->y + radius + 10;
+							target_max_position.z = target_position->z + radius + 10;
+							
 							if
 							(
-								(source_min_position.y <= (target_position->y + bounding_box->ymax)) &&
-								(source_max_position.y >= (target_position->y + bounding_box->ymin))
-							)
-							{
-								radius = get_object_3d_radius (object_3d_index);
-
-								target_min_position.x = target_position->x - radius;
-								target_min_position.y = target_position->y - radius;
-								target_min_position.z = target_position->z - radius;
-
-								target_max_position.x = target_position->x + radius;
-								target_max_position.y = target_position->y + radius;
-								target_max_position.z = target_position->z + radius;
-
-								if
-								(
 									(!(target_max_position.x < source_min_position.x)) &&
 									(!(target_min_position.x > source_max_position.x)) &&
 									(!(target_max_position.y < source_min_position.y)) &&
 									(!(target_min_position.y > source_max_position.y)) &&
 									(!(target_max_position.z < source_min_position.z)) &&
 									(!(target_min_position.z > source_max_position.z))
+							)
+							{
+								if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
+								{
+									draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
+									draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
+								}
+
+								if
+								(
+									accurate_stationary_bounding_box_collision_test
+									(
+										target,
+										source_old_position,
+										source_new_position,
+										object_3d_index,
+										bounding_box,
+										source_intercept_point,
+										face_normal
+									)
 								)
 								{
-									if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-									{
-										draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
-										draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
-									}
-
-									if
-									(
-										accurate_stationary_bounding_box_collision_test
-										(
-											target,
-											source_old_position,
-											source_new_position,
-											object_3d_index,
-											bounding_box,
-											source_intercept_point,
-											face_normal
-										)
-									)
-									{
-										return (target);
-									}
+									return (target);
 								}
-								else
+							}
+							else
+							{
+								#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
+
+								if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
 								{
-									#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
-
-									if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-									{
-										draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
-										draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
-									}
-
-									#endif
+									draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
+									draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
 								}
+
+								#endif
 							}
 						}
 					}
@@ -1575,67 +1568,60 @@ entity *get_line_of_sight_collision_entity
 
  												target_position = get_local_entity_vec3d_ptr (building, VEC3D_TYPE_POSITION);
 
+												radius = get_object_3d_radius (object_3d_index);
+
+												target_min_position.x = target_position->x - radius - 10;
+												target_min_position.y = target_position->y - radius - 10;
+												target_min_position.z = target_position->z - radius - 10;
+
+												target_max_position.x = target_position->x + radius + 10;
+												target_max_position.y = target_position->y + radius + 10;
+												target_max_position.z = target_position->z + radius + 10;
+
 												if
 												(
-													(source_min_position.y <= (target_position->y + bounding_box->ymax)) &&
-													(source_max_position.y >= (target_position->y + bounding_box->ymin))
+													(!(target_max_position.x < source_min_position.x)) &&
+													(!(target_min_position.x > source_max_position.x)) &&
+													(!(target_max_position.y < source_min_position.y)) &&
+													(!(target_min_position.y > source_max_position.y)) &&
+													(!(target_max_position.z < source_min_position.z)) &&
+													(!(target_min_position.z > source_max_position.z))
 												)
 												{
-													radius = get_object_3d_radius (object_3d_index);
-
-													target_min_position.x = target_position->x - radius;
-													target_min_position.y = target_position->y - radius;
-													target_min_position.z = target_position->z - radius;
-
-													target_max_position.x = target_position->x + radius;
-													target_max_position.y = target_position->y + radius;
-													target_max_position.z = target_position->z + radius;
+													if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
+													{
+														draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
+														draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
+													}
 
 													if
 													(
-														(!(target_max_position.x < source_min_position.x)) &&
-														(!(target_min_position.x > source_max_position.x)) &&
-														(!(target_max_position.y < source_min_position.y)) &&
-														(!(target_min_position.y > source_max_position.y)) &&
-														(!(target_max_position.z < source_min_position.z)) &&
-														(!(target_min_position.z > source_max_position.z))
+														accurate_stationary_bounding_box_collision_test
+														(
+															building,
+															source_old_position,
+															source_new_position,
+															object_3d_index,
+															bounding_box,
+															source_intercept_point,
+															face_normal
+														)
 													)
 													{
-														if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-														{
-															draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
-															draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
-														}
-
-														if
-														(
-															accurate_stationary_bounding_box_collision_test
-															(
-																building,
-																source_old_position,
-																source_new_position,
-																object_3d_index,
-																bounding_box,
-																source_intercept_point,
-																face_normal
-															)
-														)
-														{
-															return (building);
-														}
+														return (building);
 													}
-													else
+												}
+												else
+												{
+													#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
+
+													if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
 													{
-														#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
-
-														if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-														{
-															draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
-															draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
-														}
-
-														#endif
+														draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
+														draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
 													}
+
+													#endif
 												}
 
 												building = get_local_entity_child_succ (building, LIST_TYPE_CITY_BUILDING);
@@ -1668,66 +1654,59 @@ entity *get_line_of_sight_collision_entity
 
  								target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
+								radius = get_object_3d_radius (object_3d_index);
+
+								target_min_position.x = target_position->x - radius - 10;
+								target_min_position.y = target_position->y - radius - 10;
+								target_min_position.z = target_position->z - radius - 10;
+
+								target_max_position.x = target_position->x + radius + 10;
+								target_max_position.y = target_position->y + radius + 10;
+								target_max_position.z = target_position->z + radius + 10;
+
 								if
 								(
-									(source_min_position.y <= (target_position->y + bounding_box->ymax)) &&
-									(source_max_position.y >= (target_position->y + bounding_box->ymin))
+									(!(target_max_position.x < source_min_position.x)) &&
+									(!(target_min_position.x > source_max_position.x)) &&
+									(!(target_max_position.y < source_min_position.y)) &&
+									(!(target_min_position.y > source_max_position.y)) &&
+									(!(target_max_position.z < source_min_position.z)) &&
+									(!(target_min_position.z > source_max_position.z))
 								)
 								{
-									radius = get_object_3d_radius (object_3d_index);
-
-									target_min_position.x = target_position->x - radius;
-									target_min_position.y = target_position->y - radius;
-									target_min_position.z = target_position->z - radius;
-
-									target_max_position.x = target_position->x + radius;
-									target_max_position.y = target_position->y + radius;
-									target_max_position.z = target_position->z + radius;
+									if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
+									{
+										draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
+										draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
+									}
 
 									if
 									(
-										(!(target_max_position.x < source_min_position.x)) &&
-										(!(target_min_position.x > source_max_position.x)) &&
-										(!(target_max_position.y < source_min_position.y)) &&
-										(!(target_min_position.y > source_max_position.y)) &&
-										(!(target_max_position.z < source_min_position.z)) &&
-										(!(target_min_position.z > source_max_position.z))
+										accurate_stationary_bounding_box_collision_test
+										(
+											target,
+											source_old_position,
+											source_new_position,
+											object_3d_index,
+											bounding_box,
+											source_intercept_point,
+											face_normal
+										)
 									)
 									{
-										if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-										{
-											draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_HIT_COLOUR);
-											draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_HIT_COLOUR);
-										}
-
-										if
-										(
-											accurate_stationary_bounding_box_collision_test
-											(
-												target,
-												source_old_position,
-												source_new_position,
-												object_3d_index,
-												bounding_box,
-												source_intercept_point,
-												face_normal
-											)
-										)
-										{
-											return (target);
-										}
+										return (target);
 									}
-									else
+								}
+								else
+								{
+									if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
 									{
-										if (draw_collision_boxes && (get_view_mode () == VIEW_MODE_EXTERNAL))
-										{
-											#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
+										#if DEBUG_MODULE_ENABLE_COLLISION_BOX_MISS
 
-											draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
-											draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
+										draw_min_max_box (&source_min_position, &source_max_position, COLLISION_BOX_MISS_COLOUR);
+										draw_min_max_box (&target_min_position, &target_max_position, COLLISION_BOX_MISS_COLOUR);
 
-											#endif
-										}
+										#endif
 									}
 								}
 							}
