@@ -160,7 +160,7 @@ const crater_data
 			8.0,												// min scale
 			16.0,												// max scale
 	
-			600.0,											// lifetime
+			510.0,											// lifetime
 		},
 	};
 

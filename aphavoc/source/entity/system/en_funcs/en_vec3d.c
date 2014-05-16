@@ -550,15 +550,15 @@ void pack_vec3d (entity *en, vec3d_types type, vec3d *v)
 
 			pack_float_3_fractional_bits (v->x, &ix);
 
-			pack_signed_data (ix, 1 + 6 + 3);
+			pack_signed_data (ix, 1 + 8 + 3);
 
 			pack_float_3_fractional_bits (v->y, &iy);
 
-			pack_signed_data (iy, 1 + 6 + 3);
+			pack_signed_data (iy, 1 + 8 + 3);
 
 			pack_float_3_fractional_bits (v->z, &iz);
 
-			pack_signed_data (iz, 1 + 6 + 3);
+			pack_signed_data (iz, 1 + 8 + 3);
 
 			#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
@@ -751,15 +751,15 @@ void unpack_vec3d (entity *en, vec3d_types type, vec3d *v)
 				iy,
 				iz;
 
-			ix = unpack_signed_data (1 + 6 + 3);
+			ix = unpack_signed_data (1 + 8 + 3);
 
 			v->x = unpack_float_3_fractional_bits (ix);
 
-			iy = unpack_signed_data (1 + 6 + 3);
+			iy = unpack_signed_data (1 + 8 + 3);
 
 			v->y = unpack_float_3_fractional_bits (iy);
 
-			iz = unpack_signed_data (1 + 6 + 3);
+			iz = unpack_signed_data (1 + 8 + 3);
 
 			v->z = unpack_float_3_fractional_bits (iz);
 

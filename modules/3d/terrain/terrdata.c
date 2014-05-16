@@ -844,12 +844,12 @@ int load_3d_terrain ( const char *path )
 						{
 							center_x = (x + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
 						}
-						while ( center_x < terrain_3d_min_map_x || center_x > terrain_3d_max_map_x );
+						while ( center_x <= terrain_3d_min_map_x || center_x >= terrain_3d_max_map_x );
 						do
 						{
 							center_z = (z + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
 						}
-						while ( center_z < terrain_3d_min_map_z || center_z > terrain_3d_max_map_z );
+						while ( center_z <= terrain_3d_min_map_z || center_z >= terrain_3d_max_map_z );
 						
 						ASSERT( ( center_x > terrain_3d_min_map_x ) && ( center_x < terrain_3d_max_map_x ) && ( center_z > terrain_3d_min_map_z ) && ( center_z < terrain_3d_max_map_z ) );
 

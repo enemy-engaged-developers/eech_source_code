@@ -87,6 +87,7 @@ static void update_server (entity *en)
 
 	if (raw->crater_lifetime <= 0.0)
 	{
+		raw->crater_lifetime = 0.0;
 		destroy_client_server_entity_family (en);
 	}
 }

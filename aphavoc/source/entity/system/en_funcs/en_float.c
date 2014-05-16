@@ -1001,9 +1001,9 @@ float_type_data
 		},
 		{
 			"FLOAT_TYPE_REPAIR_TIMER",   			               // name
-			FLOAT_PACK_TYPE_SIGNED_VALUE,                      // pack_type
-			10,																// pack_num_whole_bits (excluding sign bit)
-			4,																	// pack_num_fractional_bits
+			FLOAT_PACK_TYPE_UNSIGNED_VALUE,                      // pack_type
+			12,																// pack_num_whole_bits (excluding sign bit)
+			2,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},

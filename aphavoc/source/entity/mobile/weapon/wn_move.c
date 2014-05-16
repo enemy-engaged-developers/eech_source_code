@@ -909,7 +909,7 @@ void weapon_movement (entity *en)
 		intercept_point_valid,
 		high_precision_collision,
 		hit_ground,
-		tracking_point;
+		tracking_point = FALSE;
 
 	terrain_classes
 		terrain_class;
@@ -1044,6 +1044,7 @@ void weapon_movement (entity *en)
 
 	// check tracking point
 	
+	if (raw->launched_weapon_link.parent)
 	{
 		vec3d tracking_point_position;
 		
@@ -2126,7 +2127,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		velocity_multiplier = 1 - (parent_velocity / VELOCITY_TEST_STEP - velocity_test);
 	}
 	
-	ASSERT(range >= 0.0);
+//	ASSERT(range >= 0.0);
 
 	if (range <= 0.1)
 	{
