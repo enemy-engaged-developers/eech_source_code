@@ -956,7 +956,7 @@ int helicopter_crash_movement (entity *en)
 	// Stop Aircraft ?
 	//
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
 	if (en == get_external_view_entity ())
 	{
@@ -1362,12 +1362,13 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vector, vec3d *model_acceleration_vector, int *return_flag)
 {
 	entity
-		*guide;
+		*guide,
+		*target;
 
 	float
 		pitch,
 		range;
-
+	
 	vec3d
 		guide_pos;
 
@@ -1430,6 +1431,51 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 		}
 	}
 
+	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
+	
+	if (target && (get_local_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY) || get_local_entity_float_value (en, FLOAT_TYPE_WEAPON_BURST_TIMER))) // AI waiting for proper conditions to engage or already engaging
+	{
+		vec3d
+			*weapon_vector,
+			*weapon_to_target_vector,
+			*target_pos = get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION),
+			*en_pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
+		int
+			selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+		float
+			dummie,
+			weapon_to_target_pitch,
+			weapon_pitch,
+			aircraft_pitch;
+		
+		weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
+		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+
+		ASSERT (weapon_vector);
+		ASSERT (weapon_to_target_vector);
+
+		aircraft_pitch = get_local_entity_float_value(en, FLOAT_TYPE_PITCH);
+
+
+		get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &dummie, &weapon_to_target_pitch);
+		get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &dummie, &weapon_pitch);
+
+		if (!weapon_database [selected_weapon].guidance_type && weapon_database [selected_weapon].aiming_type)
+		{
+			float
+				angle,
+				time,
+				pitch = - asin((en_pos->y - target_pos->y) / range);
+
+			if (get_ballistic_pitch_deflection(selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
+			{
+				weapon_to_target_pitch += cos(pitch) * range * sin(angle);
+			}
+		}
+
+		return bound(aircraft_pitch + weapon_to_target_pitch - weapon_pitch, - HELICOPTER_MAX_PITCH, HELICOPTER_MAX_PITCH);
+	}
+	
 	//
 	// Default case :-
 	//

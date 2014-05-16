@@ -1019,7 +1019,6 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 	entity
 		*aggressor,
 		*target,
-		*wp,
 		*task,
 		*sector,
 		*structure;
@@ -1043,7 +1042,14 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 	unsigned char
 		score;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	raw = (guide *) get_local_entity_data (en);
 
@@ -1240,7 +1246,6 @@ int update_guide_seek_cover_forest_search (entity *en)
 	entity
 		*aggressor,
 		*target,
-		*wp,
 		*task,
 		*sector;
 
@@ -1271,7 +1276,14 @@ int update_guide_seek_cover_forest_search (entity *en)
 	unsigned char
 		score;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	raw = (guide *) get_local_entity_data (en);
 
@@ -1517,7 +1529,6 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 	entity
 		*aggressor,
 		*target,
-		*wp,
 		*task;
 
 	guide
@@ -1546,7 +1557,14 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 	unsigned char
 		score;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	raw = (guide *) get_local_entity_data (en);
 
@@ -1654,7 +1672,6 @@ int update_guide_seek_cover_current_position_search (entity *en)
 	entity
 		*aggressor,
 		*target,
-		*wp,
 		*task;
 
 	vec3d
@@ -1663,7 +1680,14 @@ int update_guide_seek_cover_current_position_search (entity *en)
 	unsigned char
 		score;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	aggressor_pos = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_POSITION);
 	

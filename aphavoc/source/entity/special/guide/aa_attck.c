@@ -103,6 +103,7 @@ void initialise_air_to_air_attack_guide (entity *en, entity *aggressor, entity *
 	
 	if (attack_guide_find_best_weapon (en))
 	{
+		ASSERT(get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER));
 		set_attack_guide_fire_intercept_position (en);
 	}
 }
@@ -114,19 +115,25 @@ void initialise_air_to_air_attack_guide (entity *en, entity *aggressor, entity *
 void attack_guide_move_six_reached (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+
 	#if DEBUG_MODULE
-		if (en == get_external_view_entity ())
+		if (aggressor == get_external_view_entity ())
 		{
 			debug_log("AA_ATTCK: attack_guide_move_six_reached");
 		}
 	#endif
-
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
 	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
 	{
@@ -143,6 +150,7 @@ void attack_guide_move_six_reached (entity *en)
 
 	if (attack_guide_find_best_weapon (en))
 	{
+		ASSERT(get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER));
 		set_attack_guide_fire_intercept_position (en);
 	}
 }
@@ -154,19 +162,25 @@ void attack_guide_move_six_reached (entity *en)
 void attack_guide_move_circle_reached (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+
 	#if DEBUG_MODULE
-		if (en == get_external_view_entity ())
+		if (aggressor == get_external_view_entity ())
 		{
 			debug_log("AA_ATTCK: attack_guide_move_circle_reached");
 		}
 	#endif
-
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
 	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
 	{
@@ -183,6 +197,7 @@ void attack_guide_move_circle_reached (entity *en)
 
 	if (attack_guide_find_best_weapon (en))
 	{
+		ASSERT(get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER));
 		set_attack_guide_fire_intercept_position (en);
 	}
 }
@@ -194,19 +209,51 @@ void attack_guide_move_circle_reached (entity *en)
 void attack_guide_fire_intercept_reached (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target,
 		*weapon;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	vec3d
+		*target_pos,
+		*aggressor_pos;
+		
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+
+	if (get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) && get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) < 0.2 && 
+			attack_guide_find_best_weapon (en))
+	{
+		if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+			set_attack_guide_move_six_position (en);
+		else
+			set_attack_guide_move_circle_position (en);
+
+		return;
+	}	
+	
+	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
+	{
+		#if DEBUG_MODULE
+			if (aggressor == get_external_view_entity ())
+			{
+				debug_log ("AA_ATTCK: Aborting attack - weapons hold (fire intercept)");
+			}
+		#endif
+
+		delete_group_member_from_engage_guide (aggressor, en, FALSE);
+
+		return;
+	}
 
 	#if DEBUG_MODULE
-		if (en == get_external_view_entity ())
+		if (aggressor == get_external_view_entity ())
 		{
 			debug_log("AA_ATTCK: attack_guide_fire_intercept_reached");
 		}
@@ -225,7 +272,7 @@ void attack_guide_fire_intercept_reached (entity *en)
 				#if DEBUG_MODULE
 					if (aggressor == get_external_view_entity ())
 					{
-						debug_log("AG_ATTCK: abort attack_guide_fire_intercept, another missile is still alive");
+						debug_log("AA_ATTCK: abort attack_guide_fire_intercept, another missile is still alive");
 
 					}
 				#endif
@@ -241,30 +288,46 @@ void attack_guide_fire_intercept_reached (entity *en)
 		}
 	}
 
-	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPONS_HOLD))
+	aggressor_pos = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_POSITION);
+	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+	if (get_3d_range (aggressor_pos, target_pos) < frand1() * (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING ? 300 : 100)) // too close, move back
 	{
 		#if DEBUG_MODULE
-			if (en == get_external_view_entity ())
+			if (aggressor == get_external_view_entity ())
 			{
-				debug_log ("AA_ATTCK: Aborting attack - weapons hold (fire intercept)");
+				debug_log("AA_ATTCK: abort attack_guide_fire_intercept, too close to target");
+
 			}
 		#endif
 
-		delete_group_member_from_engage_guide (aggressor, en, FALSE);
-
+		if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+			set_attack_guide_move_six_position (en);
+		else
+			set_attack_guide_move_circle_position (en);
+		
 		return;
 	}
-	
+
 	// Fire Weapon
 
-	if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, get_local_entity_type (aggressor) != ENTITY_TYPE_FIXED_WING) == AIRCRAFT_FIRE_OK)
-		if (attack_guide_find_best_weapon (en))
+	if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER))
+	{
+		set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5);
+
+		if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, TRUE) == AIRCRAFT_FIRE_OK)
 		{
-			if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
-				set_attack_guide_move_six_position (en);
-			else
-				set_attack_guide_move_circle_position (en);
+			if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) && attack_guide_find_best_weapon (en))
+			{
+				if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+					set_attack_guide_move_six_position (en);
+				else
+					set_attack_guide_move_circle_position (en);
+			}
 		}
+		else if (get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER)) // update intercept point if it's possible
+			set_attack_guide_fire_intercept_position(en);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,6 +341,7 @@ void set_attack_guide_move_six_position (entity *en)
 
 	vec3d
 		*target_pos,
+		*aggressor_position,
 		*target_zv,
 		position;
 
@@ -290,9 +354,18 @@ void set_attack_guide_move_six_position (entity *en)
 	entity_sub_types
 		selected_weapon;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AA_MOVE_SIX);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+	wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
+	ASSERT (wp);
 
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING);
 
@@ -304,26 +377,27 @@ void set_attack_guide_move_six_position (entity *en)
 
 	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
 	
-	weapon_effective_range = weapon_database [selected_weapon].effective_range;
+	weapon_effective_range = max(1000, weapon_database [selected_weapon].effective_range);
 
 	//
 	// calculate position of targets "six"
 	//
 
 	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
+	aggressor_position = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_POSITION);
+	
 	target_zv = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_ZV);
 
 	ASSERT (target_zv);
 
-	position.x = target_pos->x - (target_zv->x * weapon_effective_range);
-	position.z = target_pos->z - (target_zv->z * weapon_effective_range);
+	position.x = target_pos->x - frand1() * (target_zv->x * weapon_effective_range);
+	position.z = target_pos->z - frand1() * (target_zv->z * weapon_effective_range);
 
 	bound_position_to_adjusted_map_volume (&position);
 
 	ASSERT(point_inside_map_area(&position));
 	
-	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE);
+	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
 
@@ -353,14 +427,20 @@ void set_attack_guide_move_circle_position (entity *en)
 		direction;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AA_MOVE_CIRCLE);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_HELICOPTER);
 
@@ -381,7 +461,12 @@ void set_attack_guide_move_circle_position (entity *en)
 	// calculate guide position 
 	//
 
-	rotate_2d_vector (&direction, rad (10.0));
+	if (distance >= 200)
+		rotate_2d_vector (&direction, rad (10.0));
+	else
+		rotate_2d_vector (&direction, frand1() * rad (90.0));
+
+	distance = max(frand1() * distance, 200);
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);
@@ -394,18 +479,25 @@ void set_attack_guide_move_circle_position (entity *en)
 
 	ASSERT (target_mv);
 
-	position.x += (target_mv->x * 5.0);
-	position.z += (target_mv->z * 5.0);
+	position.x += (target_mv->x);
+	position.z += (target_mv->z);
 
 	bound_position_to_adjusted_map_volume (&position);
 
 	ASSERT(point_inside_map_area(&position));
 	
-	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
+	position.y = max(get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE), target_pos->y);
+	
+	#if DEBUG_MODULE
+		if (aggressor == get_external_view_entity ())
+		{
+			debug_log("AA_ATTCK: set circle position");
+		}
+	#endif
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_RADIUS, TRUE, 50.0);
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_RADIUS, TRUE, 25.0);
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, FALSE, 0.0);
 
@@ -426,7 +518,8 @@ void set_attack_guide_fire_intercept_position (entity *en)
 		target_range,
 		lead_distance,
 		time,
-		radius;
+		radius,
+		aiming_pitch;
 
 	vec3d
 		position,
@@ -434,14 +527,23 @@ void set_attack_guide_fire_intercept_position (entity *en)
 		*aggressor_pos;
 		
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	matrix3x3
+		attitude;
+
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AA_FIRE_INTERCEPT);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	//
 	// find aggressors selected weapon, and it's effective range
@@ -465,19 +567,31 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	target_range = get_3d_range (aggressor_pos, target_pos);
 
-	time = target_range / (0.75 * weapon_database[selected_weapon].cruise_velocity);
-
-	lead_distance = time * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY);
-
-	lead_distance = max (lead_distance, 0.5f * KILOMETRE);
-
 	//
 	// calculate guide position (relative to target)
 	//
 
-	position.x = 0.0;
-	position.y = 0.0;
-	position.z = lead_distance;
+	if (weapon_database [selected_weapon].guidance_type)
+	{
+		time = target_range / (0.75 * weapon_database[selected_weapon].cruise_velocity);
+		lead_distance = min (time * get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY), 500);
+
+		position.x = 0.0;
+		position.y = 0.0;
+		position.z = lead_distance;
+	}
+	else
+	{
+//		get_ballistic_pitch_deflection(selected_weapon, target_range, - asin((aggressor_pos->y - target_pos->y) / target_range), &aiming_pitch, &time, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY));
+		get_lead_and_ballistic_intercept_point_and_angle_of_projection (target_pos, selected_weapon, weapon_database[selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY), aggressor, target, &position, &aiming_pitch, &time);
+
+		position.x -= target_pos->x;
+		position.y -= target_pos->y;
+		position.z -= target_pos->z;
+		
+		get_local_entity_attitude_matrix (target, attitude);
+		multiply_matrix3x3_vec3d (&position, attitude, &position);
+	}
 
 	set_client_server_guide_entity_new_position (en, &position, target);
 

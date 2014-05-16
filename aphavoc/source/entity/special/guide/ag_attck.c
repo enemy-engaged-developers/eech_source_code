@@ -254,7 +254,6 @@ void attack_guide_take_cover_reached (entity *en)
 		*group,
 		*leader,
 		*task,
-		*wp,
 		*target,
 		*aggressor;
 
@@ -262,11 +261,15 @@ void attack_guide_take_cover_reached (entity *en)
 		best_weapon,
 		selected_weapon;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
-	ASSERT(aggressor);
+	ASSERT(en);
 	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+
 	group = get_local_entity_parent (en, LIST_TYPE_GUIDE_STACK);
 
 	ASSERT (group);
@@ -576,14 +579,17 @@ void attack_guide_egress_reached (entity *en)
 
 	entity
 		*task,
-		*wp,
 		*target,
 		*aggressor;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	if (get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) > 0.0)
 	{
@@ -705,17 +711,20 @@ void attack_guide_hasty_take_cover_reached (entity *en)
 {
 	entity
 		*task,
-		*wp,
 		*target,
 		*aggressor;
 
 	entity_sub_types
 		best_weapon;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	if (get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) > 0.0)
 	{
@@ -785,7 +794,6 @@ void set_attack_guide_approach_position (entity *en)
 		position;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -793,12 +801,16 @@ void set_attack_guide_approach_position (entity *en)
 	int
 		force_new_position;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_APPROACH);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	//
 	// find aggressors selected weapon, and it's max range
@@ -941,7 +953,6 @@ void set_attack_guide_approach_position (entity *en)
 void set_attack_guide_seek_cover_position (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -952,9 +963,16 @@ void set_attack_guide_seek_cover_position (entity *en)
 	float
 		alt;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_SEEK_COVER);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_HELICOPTER);
 
@@ -1021,7 +1039,6 @@ void set_attack_guide_seek_cover_position (entity *en)
 void attack_guide_no_cover_found (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -1037,7 +1054,14 @@ void attack_guide_no_cover_found (entity *en)
 	float
 		distance;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 
 	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
@@ -1118,7 +1142,6 @@ void attack_guide_no_cover_found (entity *en)
 void set_attack_guide_fly_to_cover_position (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -1126,12 +1149,16 @@ void set_attack_guide_fly_to_cover_position (entity *en)
 	vec3d
 		*position;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_FLY_TO_COVER);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	set_client_server_entity_float_value (en, FLOAT_TYPE_VELOCITY, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_VELOCITY));
 
@@ -1181,17 +1208,20 @@ void set_attack_guide_take_cover_position (entity *en)
 		*position;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_TAKE_COVER);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_HELICOPTER);
 
@@ -1254,17 +1284,20 @@ void set_attack_guide_climb_position (entity *en)
 		position;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_CLIMB);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	//
 	// find aggressors selected weapon, and it's max range
@@ -1356,17 +1389,20 @@ void set_attack_guide_dive_position (entity *en)
 		*agg_pos;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_DIVE);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
 
@@ -1418,15 +1454,18 @@ void set_attack_guide_fire_position (entity *en)
 		position;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	ASSERT(en);
+	
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	switch (get_local_entity_type (aggressor))
 	{
@@ -1540,7 +1579,6 @@ void set_attack_guide_fire_position (entity *en)
 void set_attack_guide_disengage_position (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -1561,6 +1599,8 @@ void set_attack_guide_disengage_position (entity *en)
 		*target_pos,
 		*aggressor_pos;
 
+	ASSERT(en);
+	
 	virtual_ = FALSE;
 
 	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
@@ -1589,10 +1629,12 @@ void set_attack_guide_disengage_position (entity *en)
 		}
 	}
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING);
 
@@ -1677,12 +1719,18 @@ void set_attack_guide_egress_position (entity *en)
 	int
 		member_number;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_EGRESS);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
+	wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
+	ASSERT (wp);
 	
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING);
 
@@ -1816,7 +1864,6 @@ void set_attack_guide_egress_position (entity *en)
 void set_attack_guide_hasty_fire_position (entity *en)
 {
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
@@ -1824,12 +1871,16 @@ void set_attack_guide_hasty_fire_position (entity *en)
 	vec3d
 		position;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_HASTY_FIRE);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_HELICOPTER);
 
@@ -1873,17 +1924,20 @@ void set_attack_guide_hasty_take_cover_position (entity *en)
 		position;
 
 	entity
-		*wp,
 		*task,
 		*aggressor,
 		*target;
 
+	ASSERT(en);
+	
 	set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_HASTY_TAKE_COVER);
 
-	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
-
-	ASSERT(target);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 	ASSERT(aggressor);
+	task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
+	ASSERT(task);
+	target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+	ASSERT(target);
 	
 	ASSERT (get_local_entity_type (aggressor) == ENTITY_TYPE_HELICOPTER);
 
