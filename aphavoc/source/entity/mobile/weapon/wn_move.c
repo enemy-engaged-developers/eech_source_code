@@ -680,8 +680,8 @@ static void update_guided_weapon (weapon* raw, vec3d* new_position, float delta_
 		{
 			float timer = wrap_angle(0.75 * PI2 * raw->weapon_lifetime);
 
-			displacement.x -= displacement_modifier * (sin(timer) > 0 ? 1 : - 1) * sqrt(sin(timer));
-			displacement.y += displacement_modifier * (cos(timer) > 0 ? 1 : - 1) * cos(timer) * cos(timer);
+			displacement.x -= displacement_modifier * sign(sin(timer)) * sqrt(sin(timer));
+			displacement.y += displacement_modifier * sign(cos(timer)) * cos(timer) * cos(timer);
 		}
 
 		if (deviation)
@@ -691,7 +691,7 @@ static void update_guided_weapon (weapon* raw, vec3d* new_position, float delta_
 				angle_y = sin((wrap_angle(get_3d_vector_magnitude(new_position) / 111) + wrap_angle(get_system_time() / 2000)) / 2);
 
 			displacement.x += deviation * displacement_modifier * sign(angle_x) * sin(angle_x) * sin(angle_x);
-			displacement.y += deviation * displacement_modifier * sign(angle_y) * sin(angle_y) * sin(angle_y);
+			displacement.y += deviation * displacement_modifier * (sign(angle_y) * sin(angle_y) * sin(angle_y) + 0.5) / 2;
 //			debug_log("angle x %f y %f", angle_x, angle_y);
 		}
 	
