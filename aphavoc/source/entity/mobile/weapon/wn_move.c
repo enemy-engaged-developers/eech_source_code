@@ -487,8 +487,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	
 	if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr != 1)
 	{
-		time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 4 sec elapsed
-		uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath rised 10m
+		time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 2 secs left
+		uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath raised 10m
 	}
 
 	//
@@ -680,8 +680,8 @@ static void update_guided_weapon (weapon* raw, vec3d* new_position, float delta_
 		{
 			float timer = wrap_angle(0.75 * PI2 * raw->weapon_lifetime);
 
-			displacement.x -= displacement_modifier * sign(sin(timer)) * sqrt(sin(timer));
-			displacement.y += displacement_modifier * sign(cos(timer)) * cos(timer) * cos(timer);
+			displacement.x -= displacement_modifier * sin(timer) * (1 + 0.2 * frand1());
+			displacement.y += displacement_modifier * cos(timer) * (0.5 + 0.5 * frand1());
 		}
 
 		if (deviation)
