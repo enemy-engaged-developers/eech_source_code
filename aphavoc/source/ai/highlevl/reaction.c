@@ -824,7 +824,7 @@ void create_reaction_to_map_click (entity *objective)
 	
 					if (efficiency < keysite_database [sub_type].minimum_efficiency)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side) || session_camcom == 2)
 						{
 							new_task = create_troop_insertion_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
 	
@@ -836,7 +836,7 @@ void create_reaction_to_map_click (entity *objective)
 				{
 					if (efficiency >= keysite_database [sub_type].minimum_efficiency)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, task_side) || session_camcom == 2)
 						{
 							new_task = create_ground_strike_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_GROUND_STRIKE].task_priority, NULL, NULL);
 						}
@@ -846,13 +846,13 @@ void create_reaction_to_map_click (entity *objective)
 				{
 					if (keysite_database [sub_type].oca_target)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_STRIKE, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_STRIKE, task_side) || session_camcom == 2)
 						{
 							new_task = create_oca_strike_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_OCA_STRIKE].task_priority, NULL, NULL);
 	
 						}
 					
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_SWEEP, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_SWEEP, task_side) || session_camcom == 2)
 						{
 							new_task = create_oca_sweep_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_OCA_SWEEP].task_priority, NULL, NULL);
 		
@@ -882,7 +882,7 @@ void create_reaction_to_map_click (entity *objective)
 
 					if (member_count > 0)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_SEAD, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_SEAD, task_side) || session_camcom == 2)
 						{
 							new_task = create_sead_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_SEAD].task_priority, NULL, NULL);
 	
@@ -903,7 +903,7 @@ void create_reaction_to_map_click (entity *objective)
 
 					if (member_count > 0)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_BAI, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_BAI, task_side) || session_camcom == 2)
 						{
 							new_task = create_bai_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_BAI].task_priority, NULL, NULL);
 
@@ -927,7 +927,7 @@ void create_reaction_to_map_click (entity *objective)
 				case ENTITY_SUB_TYPE_GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT:
 				case ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT:
 				{
-					if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT, task_side))
+					if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT, task_side) || session_camcom == 2)
 					{
 						new_task = create_close_air_support_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT].task_priority, NULL, NULL);
 					}

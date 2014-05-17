@@ -939,7 +939,7 @@ static const struct config_option options[] =
 		INT(command_line_manual_laser_radar) },
 	{ "targeting_system_auto_page", "", "autoswitch MFD to according targeting system (0 = off, 1 = on) (def = 1)",
 		INT(command_line_targeting_system_auto_page) },
-	{ "camcom", "", "Campaign Commander (0 = off, 1 = on) (def = 0)",
+	{ "camcom", "", "Campaign Commander (0 = off, 1 = on, 2 = unlimited amount of missions for same objective) (def = 0)",
 		INT(command_line_camcom) },
 	{ "campaign_map_mode", "", "campaign map resolution (1 = default resolution, 2 = high resolution) (def = 1)",
 		INT(command_line_campaign_map) },
