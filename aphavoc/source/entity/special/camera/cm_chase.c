@@ -209,8 +209,8 @@ void update_chase_camera (camera *raw)
 		// No TIR window, use mouse;
 		// OR trackir active, but user doesn't want this in outside view
 
-		if ((query_TIR_active() == FALSE)||
-			(!command_line_external_trackir))
+//		if ((query_TIR_active() == FALSE)||
+//			(!command_line_external_trackir))
 		{
 			temp_h = get_absolute_mouse_x ();
 			temp_p = get_absolute_mouse_y ();
@@ -232,7 +232,8 @@ void update_chase_camera (camera *raw)
 				set_absolute_mouse_x(16383);
 			}
 		}
-		else	// TrackIR - TIR is am absolute device and hence can not wrap. Vertical pan is limited as above
+
+		if (query_TIR_active() && command_line_external_trackir)
 		{
 			temp_h = (float) GetYaw();
 			temp_p = (float) GetPitch();
@@ -245,8 +246,8 @@ void update_chase_camera (camera *raw)
 			temp_h = 180*temp_h/16383;
 			temp_p = -90*temp_p/16383;
 
-			raw->chase_camera_pitch = rad(temp_p);
-			raw->chase_camera_heading = rad(temp_h);
+			raw->chase_camera_pitch += rad(temp_p);
+			raw->chase_camera_heading -= rad(temp_h);
 		}
 
 		raw->chase_camera_pitch = max (CHASE_CAMERA_ROTATE_DOWN_LIMIT, raw->chase_camera_pitch);

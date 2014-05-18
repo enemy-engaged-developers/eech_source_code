@@ -75,6 +75,9 @@
 #define FREE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
 #define FREE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
 
+#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0f)
+#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0f)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +88,7 @@ void reset_free_camera (camera *raw)
 	raw->chase_camera_heading = get_heading_from_attitude_matrix(raw->attitude);
 	raw->chase_camera_pitch = get_pitch_from_attitude_matrix(raw->attitude);
 	multiply_transpose_matrix3x3_vec3d(&raw->velocity, raw->attitude, &raw->motion_vector);
+	raw->chase_camera_zoom = 0.77;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +104,12 @@ void update_free_camera (camera *raw)
 	float
 		max_velocity = 100.0;
 
-	float dh, dp;
+	float dh, dp, dz;
+
+	static float
+		tir_h = 0,
+		tir_p = 0,
+		tir_z = 0;
 
 	// adjust direction (pan)
 
@@ -115,6 +124,30 @@ void update_free_camera (camera *raw)
 		raw->chase_camera_heading -= rad(dh);
 	}
 
+	if (query_TIR_active() && command_line_external_trackir)
+	{
+		dh = (float) GetYaw();
+		dp = (float) GetPitch();
+		dz = (float) TIR_GetZ();
+
+		if (command_line_external_trackir_direction)	// Retro 31Jan2005
+		{
+			dh *= -1;
+		}
+
+		dh = 180*dh/16383;
+		dp = -90*dp/16383;
+		dz = dz/16383;
+
+		raw->chase_camera_pitch += rad(dp - tir_p);
+		raw->chase_camera_heading -= rad(dh - tir_h);
+		raw->chase_camera_zoom = bound(raw->chase_camera_zoom + dz - tir_z, CHASE_CAMERA_ZOOM_IN_LIMIT, CHASE_CAMERA_ZOOM_OUT_LIMIT);
+		
+		tir_p = dp;
+		tir_h = dh;
+		tir_z = dz;
+	}
+	
 	raw->chase_camera_pitch = bound(raw->chase_camera_pitch, FREE_CAMERA_ROTATE_DOWN_LIMIT, FREE_CAMERA_ROTATE_UP_LIMIT);
 
 	combined_heading = raw->chase_camera_heading;

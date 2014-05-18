@@ -1772,7 +1772,7 @@ void draw_havoc_hud_on_cockpit (int hud_enlarge)
 	// set active 3D environment now else 2D clipping will be affected
 	//
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
 	set_3d_active_environment (main_3d_env);
 
@@ -1862,7 +1862,7 @@ void draw_havoc_hud_on_texture (void)
 	// set active 3D environment now else 2D clipping will be affected
 	//
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
 	set_3d_active_environment (main_3d_env);
 
@@ -2015,7 +2015,7 @@ void draw_external_havoc_hud (void)
 	//
 	////////////////////////////////////////
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
 	set_3d_active_environment (main_3d_env);
 
@@ -2764,7 +2764,7 @@ void draw_havoc_hms (void)
 	//
 	////////////////////////////////////////
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
 	set_3d_active_environment (main_3d_env);
 

@@ -2499,7 +2499,7 @@ char buffer[255];
 	//
 	////////////////////////////////////////
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
 	set_3d_active_environment (main_3d_env);
 
@@ -2877,7 +2877,7 @@ void draw_comanche_hud_on_lens_texture (void)
 
 	set_active_screen (video_screen);
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

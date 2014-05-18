@@ -79,7 +79,7 @@ extern void set_main_3d_params
 	float height_view_angle
 );
 
-extern void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_levels light_level, display_3d_noise_levels noise_level);
+extern void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_levels light_level, display_3d_noise_levels noise_level, float zoom);
 
 extern void set_pilots_full_screen_params (int night_vision_system_active);
 

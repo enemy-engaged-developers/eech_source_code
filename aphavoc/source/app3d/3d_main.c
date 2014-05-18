@@ -117,7 +117,7 @@ void set_main_3d_params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_levels light_level, display_3d_noise_levels noise_level)
+void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_levels light_level, display_3d_noise_levels noise_level, float zoom)
 {
 	set_main_3d_params
 	(
@@ -128,8 +128,8 @@ void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_lev
 		full_screen_y_min,
 		full_screen_width,
 		full_screen_height,
-		full_screen_width_view_angle,
-		full_screen_height_view_angle
+		full_screen_width_view_angle * zoom,
+		full_screen_height_view_angle * zoom
 	);
 }
 
@@ -174,7 +174,7 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 		tint = DISPLAY_3D_TINT_CLEAR;
 		level = DISPLAY_3D_LIGHT_LEVEL_HIGH;
 	}
-	set_main_3d_full_screen_params (tint, level, DISPLAY_3D_NOISE_LEVEL_NONE);
+	set_main_3d_full_screen_params (tint, level, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
