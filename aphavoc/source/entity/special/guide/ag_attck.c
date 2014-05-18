@@ -908,12 +908,13 @@ void set_attack_guide_approach_position (entity *en)
 	// calculate guide position
 	//
 
-	ASSERT(point_inside_map_area(&position));
-	
 	position.x = target_pos->x + (direction.x * distance);
-	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 	position.z = target_pos->z + (direction.z * distance);
 
+	ASSERT(point_inside_map_area(&position));
+	
+	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
+	
 	bound_position_to_adjusted_map_volume (&position);
 
 	//

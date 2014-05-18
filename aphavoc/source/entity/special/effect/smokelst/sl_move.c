@@ -154,7 +154,7 @@ void smoke_list_movement( entity *en )
 		// update motion vector
 		//
 
-		if ( smoke_info->wind_affected )
+		if ( smoke_info->wind_affected && !bound_position_to_map_volume(smoke_pos))
 		{
 			float alt_modifier;
 			
