@@ -521,19 +521,21 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].detonation_radius >= length)  // weapon will detonate if armed and close enough to target
-		{
+		target_lost = TRUE;
 
-			#if DEBUG_MODULE
-				debug_log("%s overshot target (%0.1f degrees, limit %.2f, range %.2f, detonation radius %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)), length, weapon_database[raw->mob.sub_type].detonation_radius);
-			#endif
+		if (raw->mob.target_link.parent)
+			if (get_local_entity_int_value (raw->mob.target_link.parent, INT_TYPE_AIRBORNE_AIRCRAFT))
+				if (current_life_time > weapon_database[raw->mob.sub_type].inhibit_time && weapon_database[raw->mob.sub_type].detonation_radius >= length)  // weapon will detonate if armed and close enough to target
+				{
 
-			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
+					#if DEBUG_MODULE
+						debug_log("%s overshot airborne target (%0.1f degrees, limit %.2f, range %.2f, detonation radius %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)), length, weapon_database[raw->mob.sub_type].detonation_radius);
+					#endif
 
-			return;
-		}
-		else
-			target_lost = TRUE;
+					raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
+
+					return;
+				}
 	}
 
 	if (!target_lost)
