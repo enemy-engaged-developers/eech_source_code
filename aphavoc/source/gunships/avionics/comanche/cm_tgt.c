@@ -201,6 +201,9 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 	reset_common_target_acquisition_system_keys ();
 
+	if (eo_is_tracking_point())
+		eo_stop_tracking();
+			
 	deselect_comanche_target_acquisition_system (target_acquisition_system);
 
 	switch (system)

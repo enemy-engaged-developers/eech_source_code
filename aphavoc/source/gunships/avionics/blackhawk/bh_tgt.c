@@ -191,6 +191,9 @@ void select_blackhawk_target_acquisition_system (target_acquisition_systems syst
 
 	reset_common_target_acquisition_system_keys ();
 
+	if (eo_is_tracking_point())
+		eo_stop_tracking();
+			
 	deselect_blackhawk_target_acquisition_system (target_acquisition_system);
 
 	switch (system)

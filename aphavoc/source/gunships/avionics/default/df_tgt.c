@@ -198,6 +198,9 @@ void select_default_target_acquisition_system (target_acquisition_systems system
 
 	reset_common_target_acquisition_system_keys ();
 
+	if (eo_is_tracking_point())
+		eo_stop_tracking();
+			
 	deselect_default_target_acquisition_system (target_acquisition_system);
 
 	switch (system)

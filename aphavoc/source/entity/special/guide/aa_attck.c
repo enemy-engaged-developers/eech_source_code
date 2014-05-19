@@ -377,7 +377,7 @@ void set_attack_guide_move_six_position (entity *en)
 
 	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
 	
-	weapon_effective_range = max(1000, weapon_database [selected_weapon].effective_range);
+	weapon_effective_range = max(1500, weapon_database [selected_weapon].effective_range);
 
 	//
 	// calculate position of targets "six"
@@ -459,12 +459,12 @@ void set_attack_guide_move_circle_position (entity *en)
 	// calculate guide position 
 	//
 
-	if (distance >= 200)
+	if (distance >= 300)
 		rotate_2d_vector (&direction, rad (10.0));
 	else
 		rotate_2d_vector (&direction, frand1() * rad (90.0));
 
-	distance = max(frand1() * distance, 200);
+	distance = max(frand1() * distance, 300);
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);
