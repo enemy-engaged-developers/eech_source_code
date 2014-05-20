@@ -139,12 +139,12 @@ static entity_sub_types get_apache_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255;
@@ -250,7 +250,7 @@ static entity_sub_types get_apache_previous_available_weapon_sub_type (entity *e
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
@@ -261,7 +261,7 @@ static entity_sub_types get_apache_previous_available_weapon_sub_type (entity *e
 			case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II;
 
 				break;
 			}
@@ -603,12 +603,12 @@ static entity_sub_types get_comanche_next_available_weapon_sub_type (entity *en)
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II;
 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255;
@@ -714,7 +714,7 @@ static entity_sub_types get_comanche_previous_available_weapon_sub_type (entity 
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			////////////////////////////////////////
 			{
 				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
@@ -725,7 +725,7 @@ static entity_sub_types get_comanche_previous_available_weapon_sub_type (entity 
 			case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
 			////////////////////////////////////////
 			{
-				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II;
+				weapon_sub_type = ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II;
 
 				break;
 			}

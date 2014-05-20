@@ -3477,6 +3477,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 			break;
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			s = "MSL";
 			break;
 		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
@@ -3500,7 +3501,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 	// launch mode
 	s = NULL;
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE || ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+	if (weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE && weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II)
 	{
 		float flight_time = get_default_missile_flight_time ();
 
@@ -6152,7 +6153,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+	if ((weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) && (weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II))
 	{
 		if (draw_large_mfd)
 		{
@@ -6480,7 +6481,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 				}
 			}
 
-			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II)
 			{
 				if ((weapon_sub_type == selected_weapon) && (!damaged))
 				{
@@ -6829,7 +6830,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 				}
 			}
 
-			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II)
 			{
 				if ((weapon_sub_type == selected_weapon) && (!damaged))
 				{
@@ -7982,6 +7983,7 @@ int pylon_start, pylon_end;
 			{
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			{
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon

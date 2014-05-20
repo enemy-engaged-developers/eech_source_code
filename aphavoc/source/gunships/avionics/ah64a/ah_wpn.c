@@ -208,6 +208,7 @@ void update_ah64a_weapon_systems (void)
 		////////////////////////////////////////
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 		////////////////////////////////////////
 		{
 			if (!get_local_entity_int_value (en, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
@@ -418,7 +419,7 @@ float get_ah64a_missile_flight_time (void)
 	{
 		weapon_sub_type = get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE);
 
-		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+		if ((weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) && (weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II))
 		{
 			target = get_local_entity_parent (weapon, LIST_TYPE_TARGET);
 

@@ -378,8 +378,6 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","min_range");
 	fprintf(fout,"%s,","max_range");
 	fprintf(fout,"%s,","effective_range");
-	fprintf(fout,"%s,","min_range_loal");
-	fprintf(fout,"%s,","max_range_loal");
 	fprintf(fout,"%s,","circular_error_probable");
 	fprintf(fout,"%s,","muzzle_velocity");
 	fprintf(fout,"%s,","muzzle_velocity_max_error");
@@ -455,8 +453,6 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%g,",weapon_database[i].min_range);// metres
 		fprintf(fout,"%g,",weapon_database[i].max_range);// metres
 		fprintf(fout,"%g,",weapon_database[i].effective_range);// metres
-		fprintf(fout,"%g,",weapon_database[i].min_range_loal);// metres
-		fprintf(fout,"%g,",weapon_database[i].max_range_loal);// metres
 		fprintf(fout,"%g,",weapon_database[i].circular_error_probable);// max range error/max range
 		fprintf(fout,"%g,",weapon_database[i].muzzle_velocity);// meters/second
 		fprintf(fout,"%g,",weapon_database[i].muzzle_velocity_max_error);// meters/second
@@ -1435,8 +1431,6 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].min_range                 = FloatValue(p);
 		weapon_database[i].max_range                 = FloatValue(p);
 		weapon_database[i].effective_range           = FloatValue(p);
-		weapon_database[i].min_range_loal            = FloatValue(p);
-		weapon_database[i].max_range_loal            = FloatValue(p);
 		weapon_database[i].circular_error_probable	 = FloatValue(p);
 		weapon_database[i].muzzle_velocity           = FloatValue(p);
 		weapon_database[i].muzzle_velocity_max_error = FloatValue(p);

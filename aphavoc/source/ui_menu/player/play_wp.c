@@ -151,6 +151,7 @@ void rebuild_weapon_log_list (player_log_type *log, int side)
 			if ( (count == ENTITY_SUB_TYPE_WEAPON_AIM92A_STINGER) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II) ||
+					(count == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261) ||
 					(count == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND) ||

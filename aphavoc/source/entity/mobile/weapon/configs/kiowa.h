@@ -246,7 +246,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				LHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -762,7 +762,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				RHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -891,7 +891,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				RHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -913,7 +913,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				LHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -1040,7 +1040,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				RHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -1189,7 +1189,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				RHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -1338,7 +1338,7 @@
       },
 			// WEAPON PACKAGE 4
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				RHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -1638,7 +1638,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				LHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth
@@ -2363,7 +2363,7 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,	 								// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,	 								// sub_type
 				NUM_HELLFIRE_MISSILES,	 											// number
 				LHS_HARDPOINT1,												// heading_depth
 				HELLFIRE_RACK,			  												// pitch_depth

@@ -343,7 +343,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags,
 		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, (mobile_los_check_criteria) criteria))
 		{
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
-				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
+				&& get_2d_range(&en_pos, target_pos) > 0.5 * weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].max_range)
 			{
 				if (debug_flag)
 				{
@@ -619,7 +619,7 @@ void update_aircraft_weapon_fire (entity *en)
 		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, (mobile_los_check_criteria) criteria))
 		{
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
-				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
+				&& get_2d_range(&en_pos, target_pos) > 0.5 * weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].max_range)
 			{
 				if (debug_flag)
 				{

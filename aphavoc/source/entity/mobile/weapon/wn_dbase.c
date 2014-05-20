@@ -178,8 +178,6 @@ weapon_data
 			0.0,																	// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			0.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -260,8 +258,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -335,8 +331,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -410,8 +404,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -488,8 +480,6 @@ weapon_data
 			0.0,																	// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			884.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -566,8 +556,6 @@ weapon_data
 			0.0,																	// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			884.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -642,8 +630,6 @@ weapon_data
 			0.0,			 														// min_range
 			1600.0,																// max_range
 			500.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			884.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -718,8 +704,6 @@ weapon_data
 			0.0,																	// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1051.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -794,8 +778,6 @@ weapon_data
 			0.0,		  															// min_range
 			3500.0,																// max_range
 			2000.0,																// effective_range
-			0.0,																	// min_range_loal
-			3500.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1000.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -870,8 +852,6 @@ weapon_data
 			0.0,																	// min_range
 			1200.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1200.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1030.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -946,8 +926,6 @@ weapon_data
 			0.0,	 																// min_range
 			1200.0,																// max_range
 			800.0,																// effective_range
-			0.0,																	// min_range_loal
-			1200.0,	 															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			792.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1025,8 +1003,6 @@ weapon_data
 			2571.4,																// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
-			2571.4,																// min_range_loal
-			4000.0,			 													// max_range_loal
 			50.0 / 4000.0,		 												// max_range_error_ratio
 			198.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1104,8 +1080,6 @@ weapon_data
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,																// max_range_loal
 			50.0 / 4000.0,														// max_range_error_ratio
 			247.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1179,8 +1153,6 @@ weapon_data
 			0.0,		  															// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
-			0.0,																	// min_range_loal
-			30000.0,																// max_range_loal
 			150.0 / 30000.0, 													// max_range_error_ratio
 			542.5,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1258,8 +1230,6 @@ weapon_data
 			15801.5,																// min_range
 			31600.0,																// max_range
 			15000.0,																// effective_range
-			15801.5,																// min_range_loal
-			31600.0,			  													// max_range_loal
 			150.0 / 31600.0,													// max_range_error_ratio
 			556.8,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1334,8 +1304,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1410,8 +1378,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1486,8 +1452,6 @@ weapon_data
 			0.0,		  															// min_range
 			1800.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1800.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1562,8 +1526,6 @@ weapon_data
 			0.0,		  															// min_range
 			1500.0,																// max_range
 			800.0,																// effective_range
-			0.0,																	// min_range_loal
-			1500.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1638,8 +1600,6 @@ weapon_data
 			0.0,		  															// min_range
 			1600.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			600.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1714,8 +1674,6 @@ weapon_data
 			0.0,		  															// min_range
 			2000.0,																// max_range
 			500.0,																// effective_range
-			0.0,																	// min_range_loal
-			2000.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			930.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1790,8 +1748,6 @@ weapon_data
 			0.0,	  																// min_range
 			1600.0,																// max_range
 			800.0,																// effective_range
-			0.0,																	// min_range_loal
-			1600.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			800.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1865,8 +1821,6 @@ weapon_data
 			0.0,																	// min_range
 			2500.0,																// max_range
 			1500.0,																// effective_range
-			0.0,																	// min_range_loal
-			2500.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			960.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -1941,8 +1895,6 @@ weapon_data
 			0.0,			 														// min_range
 			4000.0,																// max_range
 			800.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1000.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2017,8 +1969,6 @@ weapon_data
 			0.0,			 														// min_range
 			2000.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			2000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1000.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2093,8 +2043,6 @@ weapon_data
 			0.0,			 														// min_range
 			2000.0,																// max_range
 			600.0,																// effective_range
-			0.0,																	// min_range_loal
-			2000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1000.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2169,8 +2117,6 @@ weapon_data
 			0.0,	 																// min_range
 			2000.0,																// max_range
 			1000.0,																// effective_range
-			0.0,																	// min_range_loal
-			2000.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			800.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2245,8 +2191,6 @@ weapon_data
 			0.0,																	// min_range
 			1500.0,																// max_range
 			800.0,																// effective_range
-			0.0,																	// min_range_loal
-			1500.0,	 															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			1000.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2320,8 +2264,6 @@ weapon_data
 			0.0,																	// min_range
 			1500.0,																// max_range
 			1000.0,																// effective_range
-			0.0,																	// min_range_loal
-			1500.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			800.0,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2395,8 +2337,6 @@ weapon_data
 			0.0,		  															// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,																// max_range_loal
 			50.0 / 4000.0,														// max_range_error_ratio
 			198.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2470,8 +2410,6 @@ weapon_data
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,																// max_range_loal
 			50.0 / 4000.0,		 												// max_range_error_ratio
 			198.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2545,8 +2483,6 @@ weapon_data
 			0.0,																	// min_range
 			4000.0,																// max_range
 			2000.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,																// max_range_loal
 			50.0 / 4000.0,		 												// max_range_error_ratio
 			198.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2624,8 +2560,6 @@ weapon_data
 			5209.4,	  															// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
-			5209.4,																// min_range_loal
-			30000.0,		 														// max_range_loal
 			150.0 / 30000.0,													// max_range_error_ratio
 			542.5,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2703,8 +2637,6 @@ weapon_data
 			0.0,																	// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
-			0.0,																	// min_range_loal
-			4000.0,			 													// max_range_loal
 			50.0 / 4000.0,														// max_range_error_ratio
 			289.1,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2778,8 +2710,6 @@ weapon_data
 			0.0,	 																// min_range
 			24000.0,																// max_range
 			12000.0,																// effective_range
-			0.0,																	// min_range_loal
-			24000.0,				 												// max_range_loal
 			150.0 / 24000.0,													// max_range_error_ratio
 			485.2,																// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2860,8 +2790,6 @@ weapon_data
 			100.0,																// min_range
 			5000.0,																// max_range
 			800.0,																// effective_range
-			100.0, 																// min_range_loal
-			5000.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -2935,8 +2863,6 @@ weapon_data
 			100.0,																// min_range
 			5000.0,																// max_range
 			800.0,																// effective_range
-			100.0,	  															// min_range_loal
-			5000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3010,8 +2936,6 @@ weapon_data
 			100.0,																// min_range
 			5000.0,																// max_range
 			800.0,																// effective_range
-			100.0,	  															// min_range_loal
-			5000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3085,8 +3009,6 @@ weapon_data
 			100.0,																// min_range
 			5000.0,																// max_range
 			750.0,																// effective_range
-			100.0,																// min_range_loal
-			5000.0,	 															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3160,8 +3082,6 @@ weapon_data
 			100.0,																// min_range
 			3000.0,																// max_range
 			600.0,																// effective_range
-			100.0,																// min_range_loal
-			3000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3235,8 +3155,6 @@ weapon_data
 			100.0,																// min_range
 			4000.0,																// max_range
 			600.0,																// effective_range
-			100.0,	  															// min_range_loal
-			4000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3310,8 +3228,6 @@ weapon_data
 			100.0,																// min_range
 			6000.0,																// max_range
 			600.0,																// effective_range
-			100.0, 																// min_range_loal
-			6000.0,		  														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3392,8 +3308,6 @@ weapon_data
 			500.0,																// min_range
 			5000.0,																// max_range
 			2500.0,																// effective_range
-			500.0,		 														// min_range_loal
-			5000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3467,8 +3381,6 @@ weapon_data
 			500.0,																// min_range
 			18000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			18000.0,	  															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3542,8 +3454,6 @@ weapon_data
 			500.0,																// min_range
 			65000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			65000.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3617,8 +3527,6 @@ weapon_data
 			500.0,																// min_range
 			5200.0,																// max_range
 			3000.0,																// effective_range
-			500.0,																// min_range_loal
-			5200.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3692,8 +3600,6 @@ weapon_data
 			500.0,																// min_range
 			8000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			10000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3767,8 +3673,6 @@ weapon_data
 			500.0,																// min_range
 			15000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			15000.0,	  															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3842,8 +3746,6 @@ weapon_data
 			500.0,																// min_range
 			40000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			40000.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3917,8 +3819,6 @@ weapon_data
 			500.0,																// min_range
 			20000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			20000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -3992,8 +3892,6 @@ weapon_data
 			500.0,																// min_range
 			30000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			30000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4074,8 +3972,6 @@ weapon_data
 			500.0,																// min_range
 			8000.0,																// max_range
 			3000.0,																// effective_range
-			1500.0,	  															// min_range_loal
-			8000.0,			//X-PATCH//5000.0,			 				// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4149,8 +4045,79 @@ weapon_data
 			500.0,																// min_range
 			8000.0,																// max_range
 			3000.0,																// effective_range
-			1500.0,																// min_range_loal
-			8000.0,			//X-PATCH//5000.0,							// max_range_loal
+			0.0,																	// max_range_error_ratio
+			50.0,																	// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			442.0,																// cruise_velocity
+			10.0 * G,															// g_max
+			3.996,																// burn_time
+			23.5,				//X-PATCH//15.876,							// cruise_time
+			0.0,																	// cruise_time_max_error
+			1.0,			  														// inhibit_time
+			0.0,																	// burst_duration
+			FIRE_SINGLE_WEAPON,												// rate_of_fire
+			0.0,																	// reload_time
+			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+			0.0,																	// drag_factor
+			1.0 / 100.0,															// inverse_rate_of_fire
+			0.0,																	// flightpath_deviation
+			0.0,																	// boost_power
+			0.0,																	// sustain_power
+			0.0,																	// sustain_time
+			0.0,																	// diameter
+			0.0,																	// detonation_radius
+			0.0,																	// rearming_time
+			0.0,																	// tracer_fire_time
+			0.0,																	// max_altitude	
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II
+		//
+		////////////////////////////////////////
+		{
+			"AGM-114R Hellfire II",											// full_name
+			"AGM(L)",	 				 										// hud_name
+			"AGM(L)",															// mfd_name
+			"AGM-114R",								  							// weapon_loading_list_name
+			"AGM-114R Hellfire II",				  							// weapon_loading_name_text
+
+			OBJECT_3D_AH64D_HELLFIRE_MISSILE,	 						// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER,					// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
+			THREAT_TYPE_LASER_MISSILE,										// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
+			SPEECH_CPG_SELECTING_HELLFIRES,								// weapon_selected_cpg_speech
+			SPEECH_CPG_HELLFIRES_LOW,										// weapon_low_cpg_speech
+			SPEECH_CPG_HELLFIRES_OUT,										// weapon_out_cpg_speech
+			SPEECH_CPG_FIRING_HELLFIRE,									// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,						// weapon_launched_wingman_speech
+			2,																		// report_weapon_low_count
+			FALSE,																// gun_shake
+			2000,																	// soft_damage_capability
+			2000,																	// hard_damage_capability
+			META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL,				// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,	  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			TRUE,																	// viewable_weapon
+			FALSE,																// boresight_weapon
+			TRUE,																	// flight_profile
+			0,																	// tracer_color
+			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
+
+			45.0,																	// start_weight
+			1.0,																	// final_weight
+			500.0,																// min_range
+			8000.0,																// max_range
+			3000.0,																// effective_range
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4224,8 +4191,6 @@ weapon_data
 			500.0,																// min_range
 			24000.0,																// max_range
 			6000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			24000.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4299,8 +4264,6 @@ weapon_data
 			500.0,																// min_range
 			24000.0,																// max_range
 			6000.0,																// effective_range
-			500.0,			  													// min_range_loal
-			24000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4374,8 +4337,6 @@ weapon_data
 			500.0,																// min_range
 			6000.0,																// max_range
 			3000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			6000.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4449,8 +4410,6 @@ weapon_data
 			500.0,																// min_range
 			10000.0,																// max_range
 			3000.0,																// effective_range
-			500.0,			  													// min_range_loal
-			10000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4524,8 +4483,6 @@ weapon_data
 			400.0,								// min_range
 			5000.0,								// max_range
 			3000.0,								// effective_range
-			400.0,		 						// min_range_loal
-			5000.0,		  						// max_range_loal
 			0.0,							// max_range_error_ratio
 			50.0,								// muzzle_velocity
 			0.0,							// muzzle_velocity_max_error
@@ -4599,8 +4556,6 @@ weapon_data
 			500.0,																// min_range
 			10000.0,																// max_range
 			4000.0,																// effective_range
-			500.0,			  													// min_range_loal
-			10000.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4674,8 +4629,6 @@ weapon_data
 			500.0,																// min_range
 			40000.0,																// max_range
 			6000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			40000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4756,8 +4709,6 @@ weapon_data
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
-			500.0,		 														// min_range_loal
-			5000.0,	 															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4831,8 +4782,6 @@ weapon_data
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
-			500.0,	  															// min_range_loal
-			5000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4906,8 +4855,6 @@ weapon_data
 			500.0,																// min_range
 			30000.0,																// max_range
 			15000.0,																// effective_range
-			500.0,				 												// min_range_loal
-			30000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -4981,8 +4928,6 @@ weapon_data
 			500.0,																// min_range
 			55000.0,																// max_range
 			15000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			55000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5056,8 +5001,6 @@ weapon_data
 			500.0,																// min_range
 			3200.0,																// max_range
 			2000.0,																// effective_range
-			500.0,	  															// min_range_loal
-			3200.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5131,8 +5074,6 @@ weapon_data
 			500.0,																// min_range
 			5000.0,																// max_range
 			3500.0,																// effective_range
-			500.0,		 														// min_range_loal
-			5000.0,	  															// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5206,8 +5147,6 @@ weapon_data
 			500.0,																// min_range
 			8000.0,																// max_range
 			5000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			8000.0, 																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5281,8 +5220,6 @@ weapon_data
 			500.0,																// min_range
 			24000.0,																// max_range
 			12000.0,																// effective_range
-			500.0,																// min_range_loal
-			24000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5356,8 +5293,6 @@ weapon_data
 			500.0,																// min_range
 			12000.0,																// max_range
 			8000.0,																// effective_range
-			500.0,																// min_range_loal
-			12000.0,		 														// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5438,8 +5373,6 @@ weapon_data
 			100.0,																// min_range
 			3750.0,																// max_range
 			3000.0,																// effective_range
-			100.0,		 														// min_range_loal
-			3750.0, 																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5513,8 +5446,6 @@ weapon_data
 			100.0,																// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
-			100.0,																// min_range_loal
-			4000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5588,8 +5519,6 @@ weapon_data
 			100.0,																// min_range
 			5000.0,																// max_range
 			3000.0,																// effective_range
-			100.0,		 														// min_range_loal
-			5000.0,																// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5663,8 +5592,6 @@ weapon_data
 			100.0,																// min_range
 			4000.0,																// max_range
 			3000.0,																// effective_range
-			100.0,																// min_range_loal
-			4000.0,			 													// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5745,8 +5672,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			20.0,																	// muzzle_velocity
 			5.0,																	// muzzle_velocity_max_error
@@ -5820,8 +5745,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			40.0,																	// muzzle_velocity
 			10.0,																	// muzzle_velocity_max_error
@@ -5895,8 +5818,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			6.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -5977,8 +5898,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			0.0,																	// muzzle_velocity
 			0.0,																	// muzzle_velocity_max_error
@@ -6059,8 +5978,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			15.0,																	// muzzle_velocity
 			5.0,																	// muzzle_velocity_max_error
@@ -6134,8 +6051,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			10.0,																	// muzzle_velocity_max_error
@@ -6209,8 +6124,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			50.0,																	// muzzle_velocity
 			10.0,																	// muzzle_velocity_max_error
@@ -6284,8 +6197,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			6.0,																	// muzzle_velocity
 			2.0,																	// muzzle_velocity_max_error
@@ -6359,8 +6270,6 @@ weapon_data
 			0.0,		 															// min_range
 			0.0,																	// max_range
 			0.0,																	// effective_range
-			0.0,																	// min_range_loal
-			0.0,																	// max_range_loal
 			0.0,																	// max_range_error_ratio
 			6.0,																	// muzzle_velocity
 			2.0,																	// muzzle_velocity_max_error
@@ -6471,10 +6380,6 @@ void validate_weapon_database (void)
 		debug_assert (weapon_database[sub_type].min_range >= 0.0);
 
 		debug_assert (weapon_database[sub_type].max_range >= weapon_database[sub_type].min_range);
-
-		debug_assert (weapon_database[sub_type].min_range_loal >= 0.0);
-
-		debug_assert (weapon_database[sub_type].max_range_loal >= weapon_database[sub_type].min_range_loal);
 
 		debug_assert (weapon_database[sub_type].circular_error_probable >= 0.0);
 

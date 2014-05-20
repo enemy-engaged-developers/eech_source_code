@@ -101,12 +101,12 @@ aircraft_data
          OBJECT_3D_AH64D_APACHE_LONGBOW,									// default_3d_shape
 			GUNSHIP_TYPE_APACHE,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_39,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1,					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50,					// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_42,					// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_39,					// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_47,					// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_6,					// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_36,					// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -178,10 +178,10 @@ aircraft_data
          OBJECT_3D_MI28N_HAVOC,												// default_3d_shape
 			GUNSHIP_TYPE_HAVOC,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_8,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_7,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,							// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_12,							// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_7,							// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_8,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_6,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
@@ -255,12 +255,12 @@ aircraft_data
          OBJECT_3D_RAH66,														// default_3d_shape
 			GUNSHIP_TYPE_COMANCHE,												// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_150,							// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_62,							// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1,							// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384,							// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_86,							// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_347,							// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_42,							// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_128,							// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_379,							// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_RAH66_COMANCHE_62,							// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -335,7 +335,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_7,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30,								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_12,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_7,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_8,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA52_HOKUM_B_6,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
@@ -411,13 +411,13 @@ aircraft_data
          OBJECT_3D_UH60_BLACKHAWK,							// default_3d_shape
 			GUNSHIP_TYPE_BLACKHAWK,							// gunship_type
 			ENTITY_FORCE_AIR,							// force
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_10,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_12,					// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_10,					// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_6,					// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_7,					// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,			// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,			// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,						// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,							// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,					// force_info_catagory
@@ -490,11 +490,11 @@ aircraft_data
          OBJECT_3D_MI24_HIND,													// default_3d_shape
 			GUNSHIP_TYPE_HIND,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_60,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_60,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_45,									// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_48,									// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_60,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_49,									// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_31,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
@@ -650,7 +650,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_2,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_1,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA29_HELIX_B_3,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_S5,											// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V,											// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,	 											// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -804,7 +804,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_MI17_HIP_2,									// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI17_HIP_1,									// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI17_HIP_3,									// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_S8,											// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,											// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -1659,7 +1659,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// max_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_22,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_24,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_18,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -1735,7 +1735,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_1,									// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_30,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_12,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_8,									// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_6,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
@@ -1812,10 +1812,10 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_8,						// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1,						// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_20,						// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_13,						// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_8,						// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_9,						// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_2,						// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -1969,7 +1969,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_2,								// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1,								// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_3,								// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_BGM_71D_TOW_2,								// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -2046,7 +2046,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_2,				 			// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1,				 			// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_3,				 			// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,								// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
 			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
@@ -2501,12 +2501,12 @@ aircraft_data
          OBJECT_3D_AH1Z,														// default_3d_shape
 			GUNSHIP_TYPE_VIPER,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_AH1Z_VIPER_14,				 			// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_17,				 			// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_1,				 			// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_18,				 			// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1Z_VIPER_10,				 			// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_14,				 			// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH1Z_VIPER_17,				 			// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH1Z_VIPER_2,				 			// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH1Z_VIPER_11,				 			// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND,								// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type

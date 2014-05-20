@@ -165,6 +165,7 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 			case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			////////////////////////////////////////
 			{
 				duration = 2.0;
@@ -483,7 +484,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	{
 		if (get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 		{
-			weapon_min_range = weapon_database[selected_weapon_type].min_range_loal;
+			weapon_min_range = 0.5 * weapon_database[selected_weapon_type].max_range;
 		}
 	}
 
@@ -500,7 +501,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	{
 		if (get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 		{
-			weapon_max_range = weapon_database[selected_weapon_type].max_range_loal;
+			weapon_max_range *= 1.1;
 		}
 	}
 
@@ -964,6 +965,7 @@ float get_missile_flight_time (void)
 		{
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 		case ENTITY_SUB_TYPE_WEAPON_9M120_ATAKA_V:
 		case ENTITY_SUB_TYPE_WEAPON_9K121_VIKHR:
 		case ENTITY_SUB_TYPE_WEAPON_9M114_SHTURM:

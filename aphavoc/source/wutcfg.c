@@ -441,8 +441,6 @@ void ReadWutFile(const char *fname)
 				if ( strstr(buf1, "Min Range {m}"                       )) { weapon_database[i].min_range = v2; }                                  
 				if ( strstr(buf1, "Max Range {m}"                       )) { weapon_database[i].max_range = v2; }                                  
 				if ( strstr(buf1, "Effective Range used by AI {m}"      )) { weapon_database[i].effective_range = v2; }                            
-				if ( strstr(buf1, "Min Range LOAL {m}"                  )) { weapon_database[i].min_range_loal = v2; }                             
-				if ( strstr(buf1, "Max Range LOAL {m}"                  )) { weapon_database[i].max_range_loal = v2; }                             
 				if ( strstr(buf1, "Max Range Error Ratio"               )) { weapon_database[i].circular_error_probable = v2; }                      
 				if ( strstr(buf1, "Muzzle Velocity {m/s}"               )) { weapon_database[i].muzzle_velocity = v2; }                            
 				if ( strstr(buf1, "Muzzle Velocity Max Error"           )) { weapon_database[i].muzzle_velocity_max_error = v2; }                  

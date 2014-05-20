@@ -103,7 +103,7 @@
 
 		////////////////////////////////////////
 		//
-		// WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_1
+		// WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_1
 		//
 		////////////////////////////////////////
 		{
@@ -355,7 +355,7 @@
 
 		////////////////////////////////////////
 		//
-		// WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_2
+		// WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_2
 		//
 		////////////////////////////////////////
 		{
@@ -515,7 +515,7 @@
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,
 				NUM_HELLFIRE_MISSILES,										// number
 				LHS_HARDPOINT2,												// heading_depth
 				HELLFIRE_RACK,													// pitch_depth
@@ -607,7 +607,7 @@
 
 		////////////////////////////////////////
 		//
-		// WEAPON_CONFIG_TYPE_AH1T_SEACOBRA_3
+		// WEAPON_CONFIG_TYPE_AH1W_SUPERCOBRA_3
 		//
 		////////////////////////////////////////
 		{
@@ -723,7 +723,7 @@
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II,					// sub_type
+				ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II,					// sub_type
 				NUM_HELLFIRE_MISSILES,										// number
 				LHS_HARDPOINT2,												// heading_depth
 				HELLFIRE_RACK,													// pitch_depth

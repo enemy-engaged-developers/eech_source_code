@@ -6314,7 +6314,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+	if ((weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) && (weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II))
 	{
 		if (draw_large_mfd)
 		{
@@ -6642,7 +6642,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 				}
 			}
 
-			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II)
 			{
 				if ((weapon_sub_type == selected_weapon) && (!damaged))
 				{
@@ -6991,7 +6991,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 				}
 			}
 
-			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II)
 			{
 				if ((weapon_sub_type == selected_weapon) && (!damaged))
 				{
@@ -7927,7 +7927,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 			&weapon_sub_type, &number, &damaged))
 		{
-			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+			if ((weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) && (weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II))
 			{
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon
@@ -10678,7 +10678,7 @@ void draw_alnum_weapons(void)
 				break;
 			}
 
-			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+			if ((weapon_sub_type >= ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) && (weapon_sub_type <= ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II))
 			{
 				// outer missiles are fired first, so need to know which side the pylon is on
 				int right_side = pylon == APACHE_RHS_INNER_PYLON || pylon == APACHE_RHS_OUTER_PYLON;
@@ -10797,6 +10797,7 @@ static const char* get_weapon_status(char* buffer, unsigned buffer_len)
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 	case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+	case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 		{
 			float flight_time;
 

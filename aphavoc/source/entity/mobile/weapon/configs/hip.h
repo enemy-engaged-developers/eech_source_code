@@ -503,12 +503,12 @@
 			},
 			// WEAPON PACKAGE 7
 			{
-				ENTITY_SUB_TYPE_WEAPON_S5,	  								// sub_type
-				NUM_S5_ROCKETS,												// number
-				LHS_HARDPOINT2,  	 											// heading_depth
-				B5_POD,	 	 													// pitch_depth
-				0,						  				 							// muzzle_depth
-				FALSE,				  				 							// make_weapon_system_ready
+				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
+				NUM_CANNON_POD_ROUNDS,										// number
+				LHS_HARDPOINT2,												// heading_depth
+				CANNON_POD,														// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
 				FALSE,															// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
@@ -519,18 +519,18 @@
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,		 															// heading_share_mask
-				0,		 		 													// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
+				0,																	// heading_share_mask
+				0,																	// pitch_share_mask
+				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 8
 			{
-				ENTITY_SUB_TYPE_WEAPON_S5,	  								// sub_type
-				NUM_S5_ROCKETS,												// number
-				RHS_HARDPOINT2,  	 											// heading_depth
-				B5_POD,	 	 													// pitch_depth
-				0,						  				 							// muzzle_depth
-				FALSE,				  				 							// make_weapon_system_ready
+				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
+				NUM_CANNON_POD_ROUNDS,										// number
+				RHS_HARDPOINT2,												// heading_depth
+				CANNON_POD,														// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
 				FALSE,															// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
@@ -541,9 +541,9 @@
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,		 															// heading_share_mask
-				0,		 		 													// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
+				0,																	// heading_share_mask
+				0,																	// pitch_share_mask
+				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 9
 			{

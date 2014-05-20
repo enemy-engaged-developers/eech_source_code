@@ -6164,6 +6164,7 @@ static void draw_weapon_display_mfd (void)
 			{
 			case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 			case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+			case ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II:
 			{
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon

@@ -131,8 +131,6 @@ struct WEAPON_DATA
 		min_range,							// metres
 		max_range,							// metres
 		effective_range,					// metres
-		min_range_loal,					// metres
-		max_range_loal,					// metres
 		circular_error_probable,			// max range error/max range
 		muzzle_velocity,              // meters/second
 		muzzle_velocity_max_error,		// meters/second
