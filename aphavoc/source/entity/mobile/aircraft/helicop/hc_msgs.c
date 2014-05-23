@@ -704,6 +704,8 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		
 				if (get_local_entity_int_value (receiver, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 				{
+					entity *target;
+					
 					weapon_vector = get_local_entity_vec3d_ptr (receiver, VEC3D_TYPE_WEAPON_VECTOR);
 			
 					ASSERT (weapon_vector);
@@ -712,11 +714,36 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 			
 					ASSERT (weapon_to_target_vector);
 			
-					launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
-		
-					if (fabs (launch_angle_error) > weapon_database[selected_weapon].max_launch_angle_error)
+					target = get_local_entity_parent (receiver, LIST_TYPE_TARGET);
+					
+					if (target && !weapon_database [selected_weapon].guidance_type && weapon_database [selected_weapon].aiming_type)
 					{
-						return FALSE;
+						vec3d
+							*en_pos = get_local_entity_vec3d_ptr(receiver, VEC3D_TYPE_POSITION),
+							intercept_point;
+						float
+							angle,
+							time,
+							pitch,
+							heading;
+
+						get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &heading, &pitch);
+
+						if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(en_pos, selected_weapon, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (receiver, FLOAT_TYPE_VELOCITY), 
+								receiver, target, &intercept_point, &angle, &time ))
+							get_3d_unit_vector_from_heading_and_pitch(weapon_to_target_vector, heading, angle);
+
+						launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+
+						if (fabs (launch_angle_error) > atan(weapon_database[selected_weapon].circular_error_probable))
+							return FALSE;
+					}
+					else
+					{
+						launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+
+						if (fabs (launch_angle_error) > weapon_database[selected_weapon].max_launch_angle_error)
+							return FALSE;
 					}
 				}
 			}

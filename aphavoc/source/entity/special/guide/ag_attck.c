@@ -478,7 +478,7 @@ void attack_guide_fire_reached (entity *en)
 				case AIRCRAFT_FIRE_NO_TARGET:
 				case AIRCRAFT_FIRE_SUPPRESSED:
 				{
-					set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5);
+					set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 10);
 					set_attack_guide_seek_cover_position (en);
 
 					break;
@@ -543,7 +543,7 @@ void attack_guide_fire_reached (entity *en)
 
 			set_attack_guide_disengage_position (en);
 
-			set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 30);
+			set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 10);
 			aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, FALSE);
 				
 			break;

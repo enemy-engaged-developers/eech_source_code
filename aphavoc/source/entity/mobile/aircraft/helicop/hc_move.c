@@ -1367,7 +1367,8 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 
 	float
 		pitch,
-		range;
+		range,
+		targeting_pitch = 0;
 	
 	vec3d
 		guide_pos;
@@ -1380,6 +1381,7 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 
 	ASSERT (guide);
 
+#if 0
 	if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_WEAPON_VECTOR))
 	{
 		//
@@ -1430,23 +1432,24 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 			}
 		}
 	}
-
-	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
+#endif
 	
-	if (target && (get_local_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY) || get_local_entity_float_value (en, FLOAT_TYPE_WEAPON_BURST_TIMER))) // AI waiting for proper conditions to engage or already engaging
+	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
+
+	if (target && (get_guide_criteria_valid (guide, GUIDE_CRITERIA_WEAPON_VECTOR) || 
+			get_local_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY) || 
+			get_local_entity_float_value (en, FLOAT_TYPE_WEAPON_BURST_TIMER))) // AI waiting for proper conditions to engage or already engaging
 	{
 		vec3d
 			*weapon_vector,
 			*weapon_to_target_vector,
-			*target_pos = get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION),
 			*en_pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
 		int
 			selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 		float
 			dummie,
 			weapon_to_target_pitch,
-			weapon_pitch,
-			aircraft_pitch;
+			weapon_pitch;
 		
 		weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
 		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
@@ -1454,26 +1457,28 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 		ASSERT (weapon_vector);
 		ASSERT (weapon_to_target_vector);
 
-		aircraft_pitch = get_local_entity_float_value(en, FLOAT_TYPE_PITCH);
-
-
 		get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &dummie, &weapon_to_target_pitch);
-		get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &dummie, &weapon_pitch);
+		get_heading_and_pitch_from_3d_unit_vector(weapon_vector, &dummie, &weapon_pitch);
 
 		if (!weapon_database [selected_weapon].guidance_type && weapon_database [selected_weapon].aiming_type)
 		{
 			float
 				angle,
-				time,
-				pitch = - asin((en_pos->y - target_pos->y) / range);
+				time;
+			vec3d
+				intercept_point;
 
-			if (get_ballistic_pitch_deflection(selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
-			{
-				weapon_to_target_pitch += cos(pitch) * range * sin(angle);
-			}
+			if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(en_pos, selected_weapon, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY), 
+					en, target, &intercept_point, &angle, &time ))
+				weapon_to_target_pitch = angle;
 		}
 
-		return bound(aircraft_pitch + weapon_to_target_pitch - weapon_pitch, - HELICOPTER_MAX_PITCH, HELICOPTER_MAX_PITCH);
+		targeting_pitch = weapon_to_target_pitch - weapon_pitch;
+		
+		if(targeting_pitch >= 0)
+			targeting_pitch -= rad(2.0);
+		else
+			targeting_pitch += rad(2.0);
 	}
 	
 	//
@@ -1504,7 +1509,18 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 		pitch += get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_SHAFT_ANGLE);
 	}
 
-	return pitch;
+	#if DEBUG_MODULE > 1
+
+	if (en == get_external_view_entity ())
+	{
+		float aircraft_pitch = get_local_entity_float_value(en, FLOAT_TYPE_PITCH);
+
+		debug_log ("HC_MOVE movement pitch %f, targeting_pitch %f, desired pitch %f, AC pitch %f", deg(pitch), deg(targeting_pitch), deg(aircraft_pitch));
+	}
+
+	#endif
+
+	return bound(targeting_pitch ? targeting_pitch : pitch, - HELICOPTER_MAX_PITCH, HELICOPTER_MAX_PITCH);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1657,7 +1673,7 @@ float helicopter_movement_structure_avoidance (entity *en)
 			{
 				max_height = max (max_height, get_local_entity_float_value (structure, FLOAT_TYPE_FIXED_STRUCTURE_HEIGHT));
 
-				#if DEBUG_MODULE
+				#if DEBUG_MODULE > 1
 
 				if (en == get_external_view_entity ())
 				{

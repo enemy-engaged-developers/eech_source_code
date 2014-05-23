@@ -432,7 +432,7 @@ void update_aircraft_weapon_fire (entity *en)
 	{
 		int old_value = (int)raw->weapon_launch_delay;
 		
-		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0, old_value - get_delta_time ()));
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0, raw->weapon_launch_delay - get_delta_time ()));
 		if (old_value == (int)raw->weapon_launch_delay) // update once per second
 			return;
 		
@@ -441,6 +441,8 @@ void update_aircraft_weapon_fire (entity *en)
 			if (debug_flag)
 			{
 				debug_log ("AC_WPN: weapon launch delay expired");
+				
+				return;
 			}
 		}
 	}

@@ -395,7 +395,7 @@ void set_attack_guide_move_six_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
-	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
+	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y + 20.0, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
 
