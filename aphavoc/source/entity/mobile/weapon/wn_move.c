@@ -537,6 +537,10 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 					return;
 				}
 	}
+	
+	if (target_lost && raw->mob.sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II && raw->weapon_lifetime > 0)
+		target_lost = FALSE; // some magic stuff with inertial unit, only when motor is alive
+		
 
 	if (!target_lost)
 	{
@@ -583,7 +587,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 			inhibit_damp_factor = 0.5;
 		}
 
-		max_turn_rate = G * weapon_database[raw->mob.sub_type].g_max / raw->mob.velocity * inhibit_damp_factor;
+		max_turn_rate = G * weapon_database[raw->mob.sub_type].g_max * (raw->weapon_lifetime > 0 ? 1.25 : 1) / raw->mob.velocity * inhibit_damp_factor;
 		turn_rate = bound (turn_demand, - max_turn_rate, max_turn_rate);
 		get_3d_transformation_matrix (m1, turn_rate * get_delta_time (), 0.0, 0.0);
 		multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
@@ -2215,7 +2219,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	*time_of_flight = time[0] * velocity_multiplier + time[1] * (1 - velocity_multiplier);
 
 	#if DEBUG_MODULE > 1
-		debug_log("result pitch %.3f, time %.2f", *aiming_pitch, *time_of_flight);
+		debug_log("result pitch %.3f, time %.2f", deg(*aiming_pitch), *time_of_flight);
 	#endif
 
 	if (!fixed_pitch)

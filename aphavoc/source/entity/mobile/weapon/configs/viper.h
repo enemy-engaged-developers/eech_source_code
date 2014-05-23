@@ -863,7 +863,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -885,7 +885,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -1820,7 +1820,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -1842,7 +1842,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2107,7 +2107,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2129,7 +2129,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2398,7 +2398,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2420,7 +2420,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2729,7 +2729,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2751,7 +2751,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2773,7 +2773,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -2795,7 +2795,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -3726,7 +3726,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -3748,7 +3748,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -4803,7 +4803,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -4825,7 +4825,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5130,7 +5130,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5152,7 +5152,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5461,7 +5461,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5483,7 +5483,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5832,7 +5832,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5854,7 +5854,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5876,7 +5876,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
@@ -5898,7 +5898,7 @@
 				HYDRA_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit

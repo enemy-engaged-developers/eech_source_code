@@ -1193,38 +1193,7 @@ static int get_pitch_device_to_target_vector
 		case WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC:
 		////////////////////////////////////////
 		{
-//			weapon_velocity = weapon_database[weapon_sub_type].cruise_velocity;
-//
-//			if (weapon_database[weapon_sub_type].acquire_parent_forward_velocity)
-//			{
-//				weapon_velocity += get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY);
-//			}
-
-			if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
-			{
-//				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION) // not suitable for new external ballistics /thealx/
-//					result = get_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_velocity, source, target, &target_position, &pitch);
-//				else
-					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_database[weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY), source, target, &target_position, &pitch, &time_of_flight);
-			}
-			else
-			{
-				get_local_entity_target_point (target, &target_position);
-
-				//
-				// target point differs to position so test inside map area before terrain elevation check
-				//
-
-				if (point_inside_map_area (&target_position))
-				{
-					target_position.y = get_3d_terrain_elevation (target_position.x, target_position.z);
-				}
-
-//				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
-//					result = get_angle_of_projection (pitch_device_position, &target_position, weapon_velocity, &pitch);
-//				else
-					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_database[weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY), source, target, &target_position, &pitch, &time_of_flight);
-			}
+			result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_database[weapon_sub_type].acquire_parent_forward_velocity * get_local_entity_float_value (source, FLOAT_TYPE_VELOCITY), source, target, &target_position, &pitch, &time_of_flight);
 
 			if (result)
 			{

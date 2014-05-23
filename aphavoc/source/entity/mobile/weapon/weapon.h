@@ -1965,7 +1965,7 @@ extern int guidance_type_can_use_point_lock(weapon_guidance_types type);
 
 extern unsigned get_number_of_pods_firing(entity* launcher, entity_sub_types weapon_type);
 
-extern int get_lead_and_ballistic_intercept_point_and_angle_of_projection (vec3d *pitch_device_position,entity_sub_types wpn_type,float weapon_velocity,
+extern int get_lead_and_ballistic_intercept_point_and_angle_of_projection (vec3d *pitch_device_position,entity_sub_types wpn_type,float parent_velocity,
 		entity *source,entity *target,vec3d *intercept_point,float *angle_of_projection,float *time_of_flight);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,8 +84,14 @@
 		#define NUM_CHAINGUN_POD_ROUNDS				(500)
 		#define NUM_CHAFFS								(0)
 		#define NUM_FLARES								(0)
+  
+		#define HYDRA_POD_PITCH_RATE					(rad (20.0))
+		#define HYDRA_POD_MIN_PITCH_LIMIT			(rad (-7.5))
+		#define HYDRA_POD_MAX_PITCH_LIMIT			(rad (2.45))
 
-    ////////////////////////////////////////
+		#define HYDRA_POD_ROTATE_INHIBIT_VELOCITY	(knots_to_metres_per_second (100.0))
+
+  ////////////////////////////////////////
     //
     // WEAPON_CONFIG_TYPE_OH58D_KIOWA_WARRIOR_1
     //
@@ -510,16 +516,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -1217,16 +1223,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -1942,16 +1948,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2218,16 +2224,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2347,16 +2353,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2496,16 +2502,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2645,16 +2651,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2667,16 +2673,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2794,16 +2800,16 @@
 				HYDRA70_M261_POD,			  												// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
-				FALSE,		 													// rotate
+				TRUE,		 													// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				HYDRA_POD_PITCH_RATE,												// pitch_rate
+				HYDRA_POD_MIN_PITCH_LIMIT,											// min_pitch_limit
+				HYDRA_POD_MAX_PITCH_LIMIT,											// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				HYDRA_POD_ROTATE_INHIBIT_VELOCITY,					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
@@ -2904,3 +2910,9 @@
 		#undef NUM_HYDRA70_ROCKETS
 		#undef NUM_CHAFFS
 		#undef NUM_FLARES
+
+		#undef HYDRA_POD_PITCH_RATE
+		#undef HYDRA_POD_MIN_PITCH_LIMIT
+		#undef HYDRA_POD_MAX_PITCH_LIMIT
+
+		#undef HYDRA_POD_ROTATE_INHIBIT_VELOCITY

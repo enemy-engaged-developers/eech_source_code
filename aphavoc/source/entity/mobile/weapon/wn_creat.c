@@ -209,7 +209,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		seed = get_client_server_entity_random_number_seed (en);
 
-		raw->mob.velocity += weapon_database[raw->mob.sub_type].muzzle_velocity_max_error * frand1x (&seed);
+		raw->mob.velocity += 0.499 * weapon_database[raw->mob.sub_type].muzzle_velocity_max_error * sfrand1x (&seed);
 
 		raw->weapon_lifetime = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time;
 
