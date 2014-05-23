@@ -82,9 +82,6 @@ static object_3d_index_numbers
 	*destroyed_object_table,
 	*restored_object_table;
 
-static int
-	damage_debug_invulnerable_flag = FALSE;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +220,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, FALSE, FALSE);
 
-	if (damage_capability > 0 && !damage_debug_invulnerable_flag)
+	if (damage_capability > 0 && !command_line_debug_damage_invulnerable)
 	{
 		damage_level -= damage_capability;
 
@@ -644,7 +641,7 @@ float get_player_damage_modifier (entity *en)
 
 int get_damage_debug_invulnerable_flag (void)
 {
-	return damage_debug_invulnerable_flag;
+	return command_line_debug_damage_invulnerable;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -653,9 +650,9 @@ int get_damage_debug_invulnerable_flag (void)
 
 int toggle_damage_debug_invulnerable_flag (void)
 {
-	damage_debug_invulnerable_flag = !damage_debug_invulnerable_flag;
+	command_line_debug_damage_invulnerable = !command_line_debug_damage_invulnerable;
 
-	return damage_debug_invulnerable_flag;
+	return command_line_debug_damage_invulnerable;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

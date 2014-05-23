@@ -899,8 +899,6 @@ static const struct config_option options[] =
 		FLOAT(command_line_dynamics_yaw_altitude_loss) },
 	{ "debug_show_force_vectors", "", "show force vectors on own helicopter for debuging purposes",
 		SPEC(set_force_vectors, get_force_vectors) },
-	{ "debug_show_damage", "", "show caused by weapons damage",
-		INT(command_line_debug_show_damage) },
 	{ NULL, NULL, "",
 		NONE },
 
@@ -963,6 +961,10 @@ static const struct config_option options[] =
 		INT(command_line_mouse_tsd_target_select) },
 	{ "co_pilot_reports_targets", "", "Co-pilot will report targets he finds, and add them to TSD",
 		INT(global_co_pilot_scans_for_targets) },
+	{ "debug_show_damage", "", "show caused by weapons damage for debug purposes",
+		INT(command_line_debug_show_damage) },
+	{ "debug_damage_invulnerable", "", "make all units and objects invulnerable for weapon damage for testing purposes",
+		INT(command_line_debug_damage_invulnerable) },
 	{ NULL, NULL, "",
 		NONE },
 
