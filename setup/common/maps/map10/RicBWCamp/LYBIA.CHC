@@ -1,0 +1,539 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:START
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:TITLE  Border War
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+:SHORT_TEXT_START
+
+Border conflict between Libya and Chad 
+--------------------------------------
+After the fall of Gaddafi's regime the new Libyan government is struggling to maintain its popularity among the Libyan people and therefore decides in a gamble to launch a military operation in order to occupy the contested of the Aouzou strip which has been claimed by the Libyans as being their territory and gain popular support even despite the International Court of Justice ruled in 1994 that the Aouzou Strip belongs to Chad. Sudan which is claimed to be supporting Libya is suspected to have sent Su-25 attack aircraft and helicopters to southern Libya.
+Opposing the Libyan military offensive and defending the Aouzou Strip is the combined military forces of Chad and Cameroon. With this the old conflict over the contested territory of Aouzou strip reemerges.  
+*
+mission by Ricnunes
+
+
+:TEXT_END
+
+:CAMPAIGN_DATA
+   :FILENAME ..\COMMON\MAPS\MAP10\RicBWCamp\LYBIA.SID
+   :FILENAME ..\COMMON\MAPS\MAP10\RicBWCamp\LYBIA.BIN
+
+   :MAP_X_SIZE 71
+   :MAP_Z_SIZE 42
+   :MAP_SECTOR_SIZE 4096
+
+   :FACTION
+   :SIDE SIDE_BLUE_FORCE
+   :COLOUR COL_BLUE
+
+   :FACTION
+   :SIDE SIDE_RED_FORCE
+   :COLOUR COL_RED
+
+   :END
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:FACTION
+:SIDE SIDE_BLUE_FORCE
+:COLOUR COL_BLUE
+:ATTITUDE FORCE_ATTITUDE_NORMAL
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//:TASK_GENERATION
+//:TYPE TASK_ENGAGE 0
+
+:HARDWARE_RESERVES
+:TYPE ARMED_FIXED_WING
+:COUNT 0
+:TYPE UNARMED_FIXED_WING
+:COUNT 0
+:TYPE ARMED_HELICOPTER
+:COUNT 0
+:TYPE UNARMED_HELICOPTER
+:COUNT 0
+:TYPE ARMED_ROUTED_VEHICLE
+:COUNT 160
+:TYPE UNARMED_ROUTED_VEHICLE
+:COUNT 160
+:TYPE ARMED_SHIP_VEHICLE
+:COUNT 0
+:TYPE UNARMED_SHIP_VEHICLE
+:COUNT 0
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Aozou Airbase
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 12 Helicopter Sites
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_RECON_ATTACK_HELICOPTER
+:TYPE HELICOPTER_LIGHT_RECON_ATTACK_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+
+// :CREATE_GROUP
+// :GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+// :TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+:CREATE_GROUP
+:GROUP GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_HEAVY_LIFT_GROUP
+// 1 member
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Oun Airport
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 12 Helicopter Sites
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+///////////////////////////////////////////
+
+// :CREATE_GROUP
+// :GROUP GROUP_MULTI_ROLE_FIGHTER
+// :TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Tchad Airport
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 12 Helicopter Sites
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_RECON_ATTACK_HELICOPTER
+:TYPE HELICOPTER_LIGHT_RECON_ATTACK_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+:CREATE_GROUP
+:GROUP GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_HEAVY_LIFT_GROUP
+// 1 member
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Military Base
+:TYPE LANDING_FIXED_WING
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+
+///////////////////////////////////////////
+:REGEN_FREQUENCY 200
+:FRONTLINE_FORCES 10
+///////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:FACTION
+:SIDE SIDE_RED_FORCE
+:COLOUR COL_RED
+:ATTITUDE FORCE_ATTITUDE_NORMAL
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//:TASK_GENERATION
+//:TYPE TASK_ENGAGE 0
+
+:HARDWARE_RESERVES
+:TYPE ARMED_FIXED_WING
+:COUNT 0
+:TYPE UNARMED_FIXED_WING
+:COUNT 0
+:TYPE ARMED_HELICOPTER
+:COUNT 0
+:TYPE UNARMED_HELICOPTER
+:COUNT 0
+:TYPE ARMED_ROUTED_VEHICLE
+:COUNT 100
+:TYPE UNARMED_ROUTED_VEHICLE
+:COUNT 100
+:TYPE ARMED_SHIP_VEHICLE
+:COUNT 0
+:TYPE UNARMED_SHIP_VEHICLE
+:COUNT 0
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Jamahiriya Airbase
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 18 Helicopter Sites
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_RECON_ATTACK_HELICOPTER
+:TYPE HELICOPTER_LIGHT_RECON_ATTACK_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+// :CREATE_GROUP
+// :GROUP GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER
+// :TYPE HELICOPTER_HEAVY_LIFT_GROUP_B
+// 2 members
+
+///////////////////////////////////////////
+// 16 FIxed Wing Sites
+
+:CREATE_GROUP
+:GROUP GROUP_CLOSE_AIR_SUPPORT_AIRCRAFT
+:TYPE FIXED_WING_CLOSE_AIR_SUPPORT_GROUP
+// 4 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+:CREATE_GROUP
+:GROUP GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_HEAVY_LIFT_GROUP
+// 1 member
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Eoj Wahs Airport
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 16 Helicopter Sites
+
+// :CREATE_GROUP
+// :GROUP GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER
+// :TYPE HELICOPTER_HEAVY_LIFT_GROUP_B
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_RECON_ATTACK_HELICOPTER
+:TYPE HELICOPTER_LIGHT_RECON_ATTACK_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Tuzugu Airport
+:TYPE LANDING_FIXED_WING
+:TYPE LANDING_HELICOPTER
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+// 20 Helicopter Sites
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_ASSAULT_HELICOPTER
+:TYPE HELICOPTER_LIGHT_ASSAULT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_RECON_ATTACK_HELICOPTER
+:TYPE HELICOPTER_LIGHT_RECON_ATTACK_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_MEDIUM_LIFT_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER
+:TYPE HELICOPTER_HEAVY_LIFT_GROUP_A
+// 2 members
+
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+:CREATE_GROUP
+:GROUP GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_MEDIUM_LIFT_GROUP
+// 1 member
+
+:CREATE_GROUP
+:GROUP GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT
+:TYPE FIXED_WING_HEAVY_LIFT_GROUP
+// 1 member
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:KEYSITE KEYSITE_AIRBASE
+:NAME Tibesti Airbase
+:TYPE LANDING_FIXED_WING
+:AMMO_SUPPLIES 100
+:FUEL_SUPPLIES 100
+///////////////////////////////////////////
+
+:CREATE_GROUP
+:GROUP GROUP_MULTI_ROLE_FIGHTER
+:TYPE FIXED_WING_MULTI_ROLE_GROUP
+// 2 members
+
+///////////////////////////////////////////
+:REGEN_FREQUENCY 200
+:FRONTLINE_FORCES 10
+///////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Order Of Battle 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+:DIVISION_ID_LIST SIDE_BLUE_FORCE 
+
+:TYPE DIVISION_AIRBORNE_HELICOPTER_DIVISION
+:LIST 63 64 -1
+
+:TYPE DIVISION_AIRBORNE_FIXED_WING_DIVISION
+:LIST 10 11 -1
+
+:TYPE DIVISION_AIRBORNE_TRANSPORT_DIVISION
+:LIST 31 32 -1
+
+:TYPE DIVISION_ARMOURED_DIVISION
+:LIST 12 21 38 45 76 23 18 57 -1
+
+:TYPE DIVISION_CARRIER_DIVISION
+:LIST 12 14 -1
+
+:TYPE DIVISION_INFANTRY_DIVISION
+:LIST 24 80 -1
+
+:TYPE DIVISION_HC_ATTACK_COMPANY
+:LIST 5 8 10 11 12 62 63 64 112 114 115 118 -1
+
+:TYPE DIVISION_HC_TRANSPORT_COMPANY
+:LIST 51 52 54 142 144 -1
+
+:TYPE DIVISION_FW_ATTACK_COMPANY
+:LIST 4 21 22 27 28 83 84 88 -1 
+
+:TYPE DIVISION_FW_FIGHTER_COMPANY
+:LIST 7 24 25 86 87 89 138 139 -1
+
+:TYPE DIVISION_FW_TRANSPORT_COMPANY
+:LIST 204 206 208 242 -1
+
+:TYPE DIVISION_ADA_COMPANY
+:LIST 155 158 252 254 338 250 251 255 334 331 257 335 336 -1
+
+:TYPE DIVISION_ARMOURED_COMPANY
+:LIST 42 44 47 83 85 86 88 241 243 244 245 320 326 323 16 -1
+
+:TYPE DIVISION_ARTILLERY_COMPANY
+:LIST 61 62 64 67 261 264 265 266 268 269 262 263 267 260 -1
+
+:TYPE DIVISION_INFANTRY_COMPANY
+:LIST 2 10 12 4 5 -1
+
+:TYPE DIVISION_SPECIAL_FORCES_COMPANY
+:LIST 2 5 6 8 14 -1
+
+:TYPE DIVISION_CARRIER_COMPANY
+:LIST 67 69 78 -1
+
+///////////////////////////////////////////
+
+:DIVISION_ID_LIST SIDE_RED_FORCE 
+
+:TYPE DIVISION_AIRBORNE_HELICOPTER_DIVISION
+:LIST 32 33 -1
+
+:TYPE DIVISION_AIRBORNE_FIXED_WING_DIVISION
+:LIST 27 28 -1
+
+:TYPE DIVISION_AIRBORNE_TRANSPORT_DIVISION
+:LIST 11 12 -1
+
+:TYPE DIVISION_ARMOURED_DIVISION
+:LIST 42 66 8 188 191 194 220 112 18 23 -1
+
+:TYPE DIVISION_CARRIER_DIVISION
+:LIST 3 9 8 -1
+
+:TYPE DIVISION_CARRIER_COMPANY
+:LIST 67 69 78 -1
+
+:TYPE DIVISION_INFANTRY_DIVISION
+:LIST 15 16 -1
+
+:TYPE DIVISION_HC_ATTACK_COMPANY
+:LIST 11 42 44 45 47 180 182 185 224 226 229 113 71 72 75 121 122 123 125 127 128 129 130 -1
+
+:TYPE DIVISION_HC_TRANSPORT_COMPANY
+:LIST 14 15 18 19 192 198 312 314 316 317 318 311 191 194 10 310 -1 
+
+:TYPE DIVISION_FW_ATTACK_COMPANY
+:LIST 24 31 32 36 37 38 282 283 284 288 25 26 27 152 153 155 -1
+
+:TYPE DIVISION_FW_FIGHTER_COMPANY
+:LIST 17 34 35 286 287 289 32 16 14 11 39 30 330 -1 
+
+:TYPE DIVISION_FW_TRANSPORT_COMPANY
+:LIST 204 206 208 242 56 54 51 58 52 201 203 50 59 -1
+
+:TYPE DIVISION_ADA_COMPANY
+:LIST 162 167 168 58 55 59 334 335 337 338 51 52 55 -1
+
+:TYPE DIVISION_ARMOURED_COMPANY
+:LIST 12 14 17 183 188 41 46 47 49 210 216 15 16 19 120 121 123 306 308 302 307 310 212 215 218 219 -1
+
+:TYPE DIVISION_ARTILLERY_COMPANY
+:LIST 141 142 24 27 28 65 66 68 72 73 75 77 71 144 145 149 -1
+
+:TYPE DIVISION_INFANTRY_COMPANY
+:LIST 31 33 34 38 39 110 112 116 453 456 457 36 114 115 450 -1
+
+:TYPE DIVISION_SPECIAL_FORCES_COMPANY
+:LIST 12 16 17 31 38 -1
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ General campaign flags
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+:WEATHER_RAIN 0
+
+:CALL :FILENAME ..\COMMON\MAPS\MAP10\RicBWCamp\LYBIA.SCR
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+:END
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
