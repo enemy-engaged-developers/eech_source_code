@@ -2243,10 +2243,11 @@ void set_view_mode_events (void)
 
 	set_event (DIK_F1, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_default_3d_resolutions_event);
 
+#if DEBUG
 	set_event (DIK_F3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, decrease_3d_resolutions_event);
 
 	set_event (DIK_F4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, increase_3d_resolutions_event);
-
+#endif
 	////////////////////////////////////////
 	//
 	// select object to view

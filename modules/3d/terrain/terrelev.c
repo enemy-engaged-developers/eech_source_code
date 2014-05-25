@@ -1265,8 +1265,11 @@ float get_3d_terrain_point_data ( float x, float z, terrain_3d_point_data *point
 
 	if ( ( x < terrain_3d_min_map_x ) || ( x > terrain_3d_max_map_x ) || ( z < terrain_3d_min_map_z ) || ( z > terrain_3d_max_map_z ) )
 	{
-
-		debug_fatal ( "Terrain elevation off map (x = %.2f, z = %.2f", x, z );
+		ASSERT (!"Terrain elevation off map");
+	
+		bound(x, terrain_3d_min_map_x + 0.0001, terrain_3d_max_map_x - 0.0001);
+		bound(z, terrain_3d_min_map_z + 0.0001, terrain_3d_max_map_z - 0.0001);
+		
 	}
 
 	////////////////////////////////////////
