@@ -6,7 +6,7 @@ right_engine_rpm value = 0.000000, min = 0.000000, max = 100.000000, modifier = 
 right_engine_torque value = 0.000000, min = 0.000000, max = 120.000000, modifier = 1.000000
 right_engine_temp value = 800.000000, min = 0.000000, max = 1000.000000, modifier = 1.000000
 main_rotor_number_of_blades value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-main_rotor_induced_air value = 0.000000, min = 0.000000, max = 26.000000, modifier = 0.500000
+main_rotor_induced_air value = 0.000000, min = 0.000000, max = 26.000000, modifier = 0.550000
 main_rotor_induced_vortex_air_flow value = 0.000000, min = 5.153699, max = 0.000000, modifier = 0.300000
 main_rotor_diameter value = 14.630000, min = 0.000000, max = 0.000000, modifier = 1.000000
 main_rotor_area value = 168.104187, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -52,7 +52,7 @@ pitch value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 roll value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 heading value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 lift value = 0.000000, min = -10.000000, max = 20.000000, modifier = 1.000000
-translational_lift value = 3.000000, min = 8.000000, max = 15.000000, modifier = 0.010000
+translational_lift value = 0.000000, min = 0.600000, max = 1.000000, modifier = 0.400000
 altitude value = 0.000000, min = 0.000000, max = 20000.000000, modifier = 1.000000
 drag_x value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000
 drag_y value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000

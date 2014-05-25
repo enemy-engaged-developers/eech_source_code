@@ -309,7 +309,12 @@ void initialise_flight_dynamics (entity *en)
 	//
 
 	load_dynamics_model (NULL);
-
+	
+	// safe check
+	
+	ASSERT(current_flight_dynamics->translational_lift.max >= current_flight_dynamics->translational_lift.min);
+	ASSERT(current_flight_dynamics->translational_lift.modifier > 0.1 && current_flight_dynamics->translational_lift.modifier <= 1.0);
+		
 	//
 	//
 	//

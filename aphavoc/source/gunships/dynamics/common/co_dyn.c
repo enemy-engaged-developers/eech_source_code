@@ -443,7 +443,7 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 
 	if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR || current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
-		current_flight_dynamics->translational_lift.modifier = 0.5;
+		current_flight_dynamics->translational_lift.value = 0.5;
 	else if (get_current_dynamics_options (DYNAMICS_OPTIONS_TRANSITIONAL_LIFT))
 	{
 
@@ -454,6 +454,9 @@ void update_common_attitude_dynamics (void)
 
 		float
 			vel;
+		
+		dynamics_float_variable
+			*tl = &current_flight_dynamics->translational_lift;
 
 		normalised_model_motion_vector = model_motion_vector;
 
@@ -475,24 +478,23 @@ void update_common_attitude_dynamics (void)
 
 		normalised_model_motion_vector.y = 0.0;
 
-		vel = normalise_any_3d_vector (&normalised_model_motion_vector);
+		vel = min(get_3d_vector_magnitude(&normalised_model_motion_vector) / current_flight_dynamics->velocity_z.max, 1.0);
 
-		if (vel <= 0.4 * current_flight_dynamics->velocity_z.max)
-			current_flight_dynamics->translational_lift.modifier = 0.6 + 0.4 * pow(vel / (0.4 * current_flight_dynamics->velocity_z.max), 0.8);
+		if (vel <= tl->modifier)
+			tl->value = tl->min + (tl->max - tl->min) * pow(vel / tl->modifier, 0.4);
 		else
-			current_flight_dynamics->translational_lift.modifier = 0.6 + 0.4 * pow(1 - (vel - 0.4 * current_flight_dynamics->velocity_z.max) / (0.6 * current_flight_dynamics->velocity_z.max), 1.25);
+			tl->value = tl->min + (tl->max - tl->min) * pow((1 - vel) / (1 - tl->modifier), 0.4);
 
-//		debug_log("TRANSITIONAL %f", current_flight_dynamics->translational_lift.modifier);
+//		debug_log("TRANSITIONAL %f", current_flight_dynamics->translational_lift.value);
 	}
 	else
-		current_flight_dynamics->translational_lift.modifier = 1.0;
-
+		current_flight_dynamics->translational_lift.value = 1.0;
 
 	////////////////////////////////////////////
 	// middle of rotor disc
 	////////////////////////////////////////////
 	{
-		rotor_force = rotor_split * main_rotor_induced_air_value * current_flight_dynamics->translational_lift.modifier;
+		rotor_force = rotor_split * main_rotor_induced_air_value * current_flight_dynamics->translational_lift.value;
 
 		position.x = 0.0;
 		position.y = 0.0;
