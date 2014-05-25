@@ -260,6 +260,7 @@ int
 	command_line_saves_copies							= 1,  // make backup copies of save files /thealx/
 	command_line_debug_show_damage						= 0,
 	command_line_debug_damage_invulnerable				= FALSE,
+	command_line_debug_log								= FALSE,
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button					= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...

@@ -236,6 +236,7 @@ extern int
 	command_line_saves_copies,							// make backup copies of save files /thealx/
 	command_line_debug_show_damage,
 	command_line_debug_damage_invulnerable,					// for weapons testing
+	command_line_debug_log,
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,

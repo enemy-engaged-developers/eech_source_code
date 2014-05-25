@@ -65,6 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "system.h"
+#include "../../aphavoc/source/cmndline.h"
 
 static FILE *debug_log_file = NULL;
 
@@ -80,6 +81,9 @@ void process_assert (const char *exp, const char *file, int line)
 
 void write_debug_log(const char *exp, const char *file, int line)
 {
+	if (!command_line_debug_log)
+		return;
+	
 	if (!debug_log_file)
 		debug_log_file = fopen("debug_log.txt","a");
 

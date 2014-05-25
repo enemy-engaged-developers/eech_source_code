@@ -961,10 +961,6 @@ static const struct config_option options[] =
 		INT(command_line_mouse_tsd_target_select) },
 	{ "co_pilot_reports_targets", "", "Co-pilot will report targets he finds, and add them to TSD",
 		INT(global_co_pilot_scans_for_targets) },
-	{ "debug_show_damage", "", "show caused by weapons damage for debug purposes",
-		INT(command_line_debug_show_damage) },
-	{ "debug_damage_invulnerable", "", "make all units and objects invulnerable for weapon damage for testing purposes",
-		INT(command_line_debug_damage_invulnerable) },
 	{ NULL, NULL, "",
 		NONE },
 
@@ -1065,6 +1061,12 @@ static const struct config_option options[] =
 		INT(command_line_no_mission_complete_music) },
 	{ "disable_text_messages", "", "Disables the text messages displayed at top of screen (messages can still be heard) (def = 0)",
 		INT(command_line_disable_message_text) },
+	{ "debug_show_damage", "", "show caused by weapons damage for debug purposes (def = 0)",
+		INT(command_line_debug_show_damage) },
+	{ "debug_damage_invulnerable", "", "make all units and objects invulnerable for weapon damage for testing purposes (def = 0)",
+		INT(command_line_debug_damage_invulnerable) },
+	{ "debug_log", "", "write minor and fatal errors into debug_log.txt file (def = 0)",
+		INT(command_line_debug_log) },
 	{ NULL, "41", "",
 		NONE },
 
