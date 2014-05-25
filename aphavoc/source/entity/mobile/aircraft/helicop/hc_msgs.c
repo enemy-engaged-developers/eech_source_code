@@ -735,7 +735,7 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 
 						launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
 
-						if (fabs (launch_angle_error) > atan(weapon_database[selected_weapon].circular_error_probable))
+						if (fabs (launch_angle_error) > 4 * pow(frand1(), 6) * atan(weapon_database[selected_weapon].circular_error_probable)) // give some time to set proper pitch angle
 							return FALSE;
 					}
 					else

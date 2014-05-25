@@ -928,7 +928,7 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 
 	total = bound (total, 0.0, 1.0);
 
-	total *= 255.0;
+	total *= 255.0 * frand1(); // add random factor to avoid looping
 
 	result = (unsigned char)total; 
 
