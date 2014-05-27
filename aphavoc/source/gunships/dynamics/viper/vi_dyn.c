@@ -1175,7 +1175,7 @@ void update_main_rotor_thrust_dynamics (void)
 			(x - x_min) / (x_max - x_min));
 
 		current_flight_dynamics->main_rotor_induced_air.value *=
-			(current_flight_dynamics->air_density.value / current_flight_dynamics->air_density.max);
+			pow(current_flight_dynamics->air_density.value, current_flight_dynamics->air_density.modifier);
 	}
 
 	current_flight_dynamics->main_rotor_thrust.value =
@@ -2759,16 +2759,7 @@ void update_power_dynamics (void)
 
 void update_air_density_dynamics (void)
 {
-
-	float
-		Amax,
-		Amin;
-
-	Amax = current_flight_dynamics->air_density.max;
-
-	Amin = current_flight_dynamics->air_density.min;
-
-	current_flight_dynamics->air_density.value = Amax - (((Amax - Amin) / 10000) * current_flight_dynamics->position.y);
+	current_flight_dynamics->air_density.value = get_air_density(current_flight_dynamics->altitude.value) / 1.3;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

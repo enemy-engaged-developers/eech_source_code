@@ -130,15 +130,11 @@ float get_weapon_current_weight(float lifetime, entity_sub_types subtype)
 float get_weapon_drag(float speed, float alt, float diameter, float drag_coefficient)
 {
 	float
-		m = 0.0289644, // physics constants
-		r = 8.31447,
 		l = 0.0065,
-		p0 = 101325, // standard air pressure, Pa
 		t0 = 288.15, // standard temperature, K
 		area = PI * diameter * diameter / 4, // projectile area, m^2
 		t = t0 - l * alt, // actual temperature, K
-		p = p0 * exp(- (G * m * alt) / (r * t0)), // air pressure, Pa
-		air_density = p * m / (r * t), // kg/m^3
+		air_density = get_air_density(alt), // kg/m^3
 		mach = speed / (20.046 * sqrt(t)), // velocity, mach
 		cd; // drag coefficient
 

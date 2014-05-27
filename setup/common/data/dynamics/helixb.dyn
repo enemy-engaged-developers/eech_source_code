@@ -47,7 +47,7 @@ acceleration_z value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 world_velocity_x value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 world_velocity_y value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 world_velocity_z value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-air_density value = 1.000000, min = 0.000000, max = 1.000000, modifier = 1.000000
+air_density value = 1.000000, min = 0.000000, max = 1.000000, modifier = 0.900000
 pitch value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 roll value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 heading value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
