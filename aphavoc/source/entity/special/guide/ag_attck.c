@@ -76,7 +76,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define FIXED_WING_APPROACH_TIME		30.0
+#define FIXED_WING_APPROACH_TIME		15.0
 
 #define FIXED_WING_CLIMB_TIME			10.0
 
@@ -885,14 +885,13 @@ void set_attack_guide_approach_position (entity *en)
 
 			ASSERT (velocity > 0.0);
 
-//			if (weapon_database[selected_weapon].guidance_type)
-//				weapon_range = 0.8 * weapon_database[selected_weapon].max_range;
-//			else
-				weapon_range = weapon_database[selected_weapon].effective_range;
+			weapon_range = weapon_database[selected_weapon].effective_range;
 
 			distance = velocity * (FIXED_WING_APPROACH_TIME + FIXED_WING_CLIMB_TIME);
 
-			distance = weapon_range + distance;
+			distance += weapon_range;
+
+//			debug_log("pos.x %.1f, pos.z %.1f, velocity %.1f, distance %.1f, weapon_range %.1f", target_pos->x, target_pos->z, velocity, distance, weapon_range);
 
 			set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_RADIUS, TRUE, 2000);
 
@@ -911,12 +910,10 @@ void set_attack_guide_approach_position (entity *en)
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.z * distance);
 
-	ASSERT(point_inside_map_area(&position));
+	bound_position_to_adjusted_map_volume (&position);
 	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 	
-	bound_position_to_adjusted_map_volume (&position);
-
 	//
 	// Check existing cover position to see if it is within range - if so then use it instead
 	//
@@ -1119,8 +1116,6 @@ void attack_guide_no_cover_found (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
-	ASSERT(point_inside_map_area(&position));
-	
 	position.y = get_3d_terrain_elevation (position.x, position.z) + get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE);
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
