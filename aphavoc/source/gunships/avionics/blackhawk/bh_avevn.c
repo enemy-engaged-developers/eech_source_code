@@ -959,7 +959,7 @@ void set_blackhawk_avionics_events (void)
 	// Retro 18Jul2004
 // does not need gear event by GCsDriver 08-12-2007
 //	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
-	set_event (DIK_D, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cargo_doors_event);
+	set_event (DIK_C, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_cargo_doors_event);
 	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_cockpit_doors_event);
 	//
 	// select target acquisition system
