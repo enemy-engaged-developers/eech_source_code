@@ -520,7 +520,7 @@ static void rearm_refuel_repair_event (event *ev)
 		{
 			current_flight_dynamics->repairing = current_flight_dynamics->refueling = TRUE;
 			
-			debug_log("difficult lvl %i", get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_AIRCREW), INT_TYPE_DIFFICULTY_LEVEL);
+//			debug_log("difficult lvl %i", get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_AIRCREW), INT_TYPE_DIFFICULTY_LEVEL);
 		}
 		else
 		{

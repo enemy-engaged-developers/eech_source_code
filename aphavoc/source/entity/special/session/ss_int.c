@@ -332,13 +332,13 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_CHEATS_ENABLED:
 		////////////////////////////////////////
 		{
-			if (command_line_cheats_on)
-			{
-				value = TRUE;
-			}
-			else if (get_connection_list_head ())
+			if (get_connection_list_head ())
 			{
 				value = FALSE;
+			}
+			else if (command_line_cheats_on)
+			{
+				value = TRUE;
 			}
 			else
 			{
@@ -369,7 +369,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_INFINITE_FUEL:
 		////////////////////////////////////////
 		{
-			value = (raw->infinite_fuel && get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED));
+			value = (raw->infinite_fuel /*&& get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED)*/);
 
 			break;
 		}
@@ -377,7 +377,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_INFINITE_WEAPONS:
 		////////////////////////////////////////
 		{
-			value = (raw->infinite_weapons && get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED));
+			value = (raw->infinite_weapons /*&& get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED)*/);
 
 			break;
 		}
@@ -385,7 +385,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_INVULNERABLE_FROM_COLLISIONS:
 		////////////////////////////////////////
 		{
-			value = (raw->invulnerable_from_collisions && get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED));
+			value = (raw->invulnerable_from_collisions /*&& get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED)*/);
 
 			break;
 		}
@@ -393,7 +393,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_INVULNERABLE_FROM_WEAPONS:
 		////////////////////////////////////////
 		{
-			value = (raw->invulnerable_from_weapons && get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED));
+			value = (raw->invulnerable_from_weapons /*&& get_local_entity_int_value (en, INT_TYPE_CHEATS_ENABLED)*/);
 
 			break;
 		}

@@ -134,7 +134,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->session_complete = FALSE;
 
-		raw->cheats_enabled = TRUE;
+		raw->cheats_enabled = FALSE;
 
 		raw->start_time = get_session_random_start_time_of_day ();
 

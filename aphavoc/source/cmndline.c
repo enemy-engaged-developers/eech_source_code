@@ -138,7 +138,7 @@ int
 	command_line_comms_validate_connections				= TRUE, // Jabberwock - We need validate_connections...
 	command_line_game_initialisation_phase_game_type	= GAME_TYPE_INVALID,
 	command_line_game_initialisation_phase_gunship_type= NUM_GUNSHIP_TYPES,
-	command_line_max_frame_rate								= 30,
+	command_line_max_frame_rate								= 60,
 	command_line_max_game_update_rate						= 15,
 	command_line_max_game_update_rate_set					= FALSE,
 	command_line_run_mode										= RUN_MODE_NORMAL,
@@ -146,7 +146,7 @@ int
 	command_line_target_point_check							= FALSE,
 	command_line_no_pilot_rejection							= FALSE,
 	command_line_planner_goto_button							= FALSE,
-	command_line_cheats_on										= FALSE,
+	command_line_cheats_on										= TRUE,
 	command_line_capture_aircraft								= TRUE,  ////Moje 040304 customizing a bit..
 	command_line_dynamics_sonic_buildup 					= TRUE,
 	command_line_player_start_rank							= PILOT_RANK_LIEUTENANT,
@@ -203,7 +203,7 @@ int
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
 	command_line_nonlinear_pedals							= TRUE,		// arneh 2007-01-14
 	command_line_restricted_nvg_fov							= TRUE,     // arneh 2006-11-22
-	command_line_russian_nvg_no_ir							= 0,		// GCsDriver 08-12-2007
+	command_line_russian_nvg_no_ir							= TRUE,		// GCsDriver 08-12-2007
 	command_line_high_res_mfd									= TRUE,		// loke 030420
 	command_line_high_res_hud									= TRUE,     // arneh 20060808
 	command_line_unpadlock_on_handover							= 0,     // GCsDriver  08-12-2007
@@ -234,7 +234,7 @@ int
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_reverse_cyclic_x					= 0,	// /thealx/
 	command_line_reverse_cyclic_y					= 0,	// /thealx/
-	command_line_forcefeedback						= 1,	// /thealx/
+	command_line_forcefeedback						= FALSE,	// /thealx/
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005
 	command_line_wobbly_camera				= TRUE,
@@ -256,8 +256,8 @@ int
 //VJ 060120 OBSOLETE	global_zbuffer										= 0,	//VJ 051011 zbuffer correction //VJ 060120 OBSOLETE
 //VJ 051227 no longer needed, mapinfo structure	global_season										= 1,	//VJ 051011 add winter textures
 	command_line_texture_colour					= 2,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
-	command_line_autosave							= 0,  //Casm 17JUN05 Autosave option
-	command_line_saves_copies							= 1,  // make backup copies of save files /thealx/
+	command_line_autosave							= 30,  //Casm 17JUN05 Autosave option
+	command_line_saves_copies							= 0,  // make backup copies of save files /thealx/
 	command_line_debug_show_damage						= 0,
 	command_line_debug_damage_invulnerable				= FALSE,
 	command_line_debug_log								= FALSE,
