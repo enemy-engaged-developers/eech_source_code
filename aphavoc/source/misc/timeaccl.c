@@ -88,7 +88,7 @@ int
 int
    time_acceleration,
 	min_time_acceleration = 1,
-	max_time_acceleration = 4;
+	max_time_acceleration = 1;
 
 #endif
 
