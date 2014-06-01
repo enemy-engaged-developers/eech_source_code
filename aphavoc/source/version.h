@@ -91,7 +91,7 @@
 // used in comms/comm_man.c to make sure client and server use same version
 #define VERSION_NUMBER_INT 11520
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.15.2RC4"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.15.2"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *

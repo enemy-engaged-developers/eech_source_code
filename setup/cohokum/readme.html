@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.15.0</title>
+<title>EECH Community Release Version 1.15.2</title>
 <style>
 <!--
 a {
@@ -60,13 +60,12 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.15.0</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.15.2</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
-      release of COHOKUM.EXE.  Further information about the EECH
-      Community Development Program and new releases of COHOKUM.EXE
-      are available from <a
+      release of community mod.  Further information about the EECH
+      Community Development Program and new releases are available from <a
       href="http://eechcentral.simhq.com/">http://eechcentral.simhq.com/</span></a>
       and the <a
       href="http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html"
@@ -74,7 +73,7 @@ h4 {
       </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by clach04: 2013-07-04
+      italic;'>Last edited by thealx: 01.06.2014
       </p>
 
 
@@ -92,34 +91,43 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.15.0?</h2>
+      <h2>What's NEW in EECH 1.15.2?</h2>
       <ul>
 	<dl>
 	  <dd>Features</dd>
 	  <dt>
-	<li>OH-58D Kiowa Warrior cockpit and external (by Soczkien)
-	<li>AH-1Z Viper cockpit (by dfang)
-	<li>UH-60 Blackhawk external (by Soczkien)
-	<li>Ka-50 cockpit (unfinished) (by Soczkien)
-	<li>Hind moving map carret
-	<li>New map - Europe (by Soczkien)
-	<li>Clouds puffs (by Soczkien)
-	<li>Newer sound effects (by Doctor_Wibble)
-	<li>New Viper sounds (by dfang)
-	<li>Additional UI screens (by dfang)
-	<li>Added support of WAV files (mono PCM, 8 and 16 bits, any sane frequency)
-	<li>Improved explosions import
+	<li>Precise external ballistics calculations
+	<li>Complete suspension for all helicopters
+	<li>Tweaked smokes (by Zackin5)
+	<li>Water textures (by L_Viper)
+	<li>Loadout textures (by civilian)
+	<li>HESCO barriers (by messyhead)
+	<li>US pilots camo skins (by SKIP2008)
+	<li>Additional campaigns - Cuba Libre, Cuba Libre 2, Border War (by ricnunes)
+	<li>US ATC voice pack (by LazerPotatoe)
 	  </dt>
 	  <dd>Bug fixes</dd>
 	  <dt>
-	<li>Fixed payload for Blackhawk
-	<li>No crush while displaying destroyed Yak or Falcon
-	<li>Preserving proportions of background screens for wide displays
-	<li>No test of video modes on enumeration
-	  </dt>
+	<li>Europe tree's texture alpha layer missed 
+	<li>Helicopter models without proper LODs 
+	<li>Ballistics calculations problem 
+	<li>No sound with DirectSound EXE version 
+	<li>Wheels collision with water surface 
+	<li>Grey trees for some maps 
+	<li>Tail stabilizator is static for some helis 
+	<li>Ka-50 cockpit displacement 
+	<li>Non functional persistent_smoke string (replaced with max_smoke_time) 
+	<li>Nose-cannon related problems for MP client 
+	<li>Continuously repeated 'This is ground control. Requesting support at grid" radio message 
+	<li>Rear rotor sinking 
+	<li>Heli can slip from a carrier
+      </dt>
       </ul>
 
 
+      <strong><p>IMPORTANT: Because of major changes in weapon system
+	<br>compatible with previous GWUT versions is lost.</p>
+      </strong>
 
       <p align="right"><a href="#top">[top ^]</a></p>
 
@@ -544,8 +552,8 @@ lang=EN-GB>https://eech.codebasehq.com/</span></a> an account is currently requi
       </p>
       
       <p>More info on how to set up the Watcom compiler using DX libraries can be found at </span><a
-href="http://web.archive.org/web/20050308004716/http://home.planet.nl/~jette073/gotcha/"><span lang=EN-GB>Gotcha's site</span></a><span lang=EN-GB>. </span></p>
-      <p><span lang=EN-GB>This version seems to be pretty stable, both as single and multiplayer. If you find any bugs/odd behaviour please report it at the SimHQ forum:<br>
+href="http://eechcentral.simhq.com/index.php?title=Development"><span lang=EN-GB>related eechcentral page</span></a><span lang=EN-GB>. </span></p>
+      <p><span lang=EN-GB>If you find any bugs/odd behaviour please report it at <a href="http://bugs.enemyengaged.net/view_all_bug_page.php">EECH issue tracker</a> or at the SimHQ forum:<br>
         </span><a href="http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html"><span
 lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</span></a><br>
       </p>
@@ -567,6 +575,32 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.15.0</h2>
+      <ul>
+	<dl>
+	  <dd>Features</dd>
+	  <dt>
+	<li>OH-58D Kiowa Warrior cockpit and external (by Soczkien)
+	<li>AH-1Z Viper cockpit (by dfang)
+	<li>UH-60 Blackhawk external (by Soczkien)
+	<li>Ka-50 cockpit (unfinished) (by Soczkien)
+	<li>Hind moving map carret
+	<li>New map - Europe (by Soczkien)
+	<li>Clouds puffs (by Soczkien)
+	<li>Newer sound effects (by Doctor_Wibble)
+	<li>New Viper sounds (by dfang)
+	<li>Additional UI screens (by dfang)
+	<li>Added support of WAV files (mono PCM, 8 and 16 bits, any sane frequency)
+	<li>Improved explosions import
+	  </dt>
+	  <dd>Bug fixes</dd>
+	  <dt>
+	<li>Fixed payload for Blackhawk
+	<li>No crush while displaying destroyed Yak or Falcon
+	<li>Preserving proportions of background screens for wide displays
+	<li>No test of video modes on enumeration
+	  </dt>
+      </ul>
       <h4>Fixes/features in 1.14.1?</h4>
       <ul>
 	<dl>
