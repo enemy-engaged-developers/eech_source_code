@@ -442,50 +442,105 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	200;		// red
-		item->green_start			=	200;		// green
-		item->blue_start 			=	200;		// blue
-		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	0.1;		// radius
+		item->red_start			=	60;		// red
+		item->green_start			=	60;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	40;		// alpha
+		item->radius_start		=	0.5;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	220;		// red
-		item->green_1 				=	220;		// green
-		item->blue_1 				=	220;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	10.0;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	80;			// alpha
+		item->radius_1 			=	2.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	200;			// red
-		item->green_2				=	200;			// green
-		item->blue_2				=	200;			// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2 			=	20.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	80;			// red
+		item->green_2				=	80;			// green
+		item->blue_2				=	80;			// blue
+		item->alpha_2				=	60;			// alpha
+		item->radius_2 			=	6.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	100;		// red
 		item->green_end			=	100;		// green
 		item->blue_end				=	100;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end 			=	30.0;		// radius
+		item->radius_end 			=	14.0;		// radius
 
-		item->final_vertical_velocity	=	1.5;
-		item->vertical_acceleration	=	-0.5;
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.1;
 
-		item->initial_velocity_noise	=	1.0;
+		item->initial_velocity_noise	=	0.25;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	120.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_GREY_TRAIL_SPRITES
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_TRAIL_SPRITES]);
+
+		// START COLOUR
+		item->red_start			=	60;		// red
+		item->green_start			=	60;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	40;		// alpha
+		item->radius_start		=	0.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	80;			// alpha
+		item->radius_1 			=	2.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	80;			// red
+		item->green_2				=	80;			// green
+		item->blue_2				=	80;			// blue
+		item->alpha_2				=	60;			// alpha
+		item->radius_2 			=	10.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	100;		// red
+		item->green_end			=	100;		// green
+		item->blue_end				=	100;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end 			=	20.0;		// radius
+
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.1;
+
+		item->initial_velocity_noise	=	0.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -501,46 +556,102 @@ void initialise_smoke_list_database (void)
 		item->green_start			=	255;		// green
 		item->blue_start 			=	255;		// blue
 		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	0.1;		// radius
+		item->radius_start		=	1.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	255;		// red
-		item->green_1 				=	255;		// green
-		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	5.0;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	200;		// red
+		item->green_1 				=	200;		// green
+		item->blue_1 				=	200;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	1.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	100;		// red
-		item->green_2				=	100;		// green
-		item->blue_2				=	100;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	5.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	180;		// red
+		item->green_2				=	180;		// green
+		item->blue_2				=	180;		// blue
+		item->alpha_2				=	180;			// alpha
+		item->radius_2				=	4.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	100;		// red
-		item->green_end			=	100;		// green
-		item->blue_end				=	100;		// blue
+		item->red_end				=	180;		// red
+		item->green_end			=	180;		// green
+		item->blue_end				=	180;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	5.0;		// radius
+		item->radius_end			=	12.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	1.0;
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.5;
 
-		item->initial_velocity_noise	=	0.5;
+		item->initial_velocity_noise	=	0.25;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	120.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_WHITE_TRAIL_SPRITES
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_WHITE_TRAIL_SPRITES]);
+
+		// START COLOUR
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;		// blue
+		item->alpha_start 		=	255;		// alpha
+		item->radius_start		=	0.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	200;		// red
+		item->green_1 				=	200;		// green
+		item->blue_1 				=	200;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	1.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	180;		// red
+		item->green_2				=	180;		// green
+		item->blue_2				=	180;		// blue
+		item->alpha_2				=	180;			// alpha
+		item->radius_2				=	7.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	180;		// red
+		item->green_end			=	180;		// green
+		item->blue_end				=	180;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	22.0;		// radius
+
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.5;
+
+		item->initial_velocity_noise	=	0.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -552,50 +663,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_ADDITIVE_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	100;		// red
-		item->green_start			=	50;		// green
-		item->blue_start 			=	0;			// blue
-		item->alpha_start 		=	0;			// alpha
-		item->radius_start		=	0.1;		// radius
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;			// blue
+		item->alpha_start 		=	255;			// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.1;		// colour change 1 lifescale
-		item->red_1					=	100;		// red
-		item->green_1 				=	50;		// green
-		item->blue_1 				=	0;			// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	2.0;		// radius
+		item->colour_change_1	=	0.2;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
+		item->blue_1 				=	255;			// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	1.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.3;		// colour change 2 lifescale
-		item->red_2					=	100;		// red
-		item->green_2				=	50;		// green
-		item->blue_2				=	0;			// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	1.0;		// radius
+		item->colour_change_2	=	0.6;		// colour change 2 lifescale
+		item->red_2					=	255;		// red
+		item->green_2				=	255;		// green
+		item->blue_2				=	255;			// blue
+		item->alpha_2				=	255;			// alpha
+		item->radius_2				=	0.5;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
-		item->alpha_end			=	0;			// alpha
+		item->red_end				=	255;			// red
+		item->green_end			=	255;			// green
+		item->blue_end				=	255;			// blue
+		item->alpha_end			=	255;			// alpha
 		item->radius_end			=	0.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	1.0;
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.0;
 
-		item->initial_velocity_noise	=	0.5;
+		item->initial_velocity_noise	=	2.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_ADDITIVE_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	0.5;
+		item->animation_rate				=	0.1;
 
 		item->additive						=	TRUE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -607,50 +718,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_LARGE_ADDITIVE_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	200;		// red
-		item->green_start			=	100;		// green
-		item->blue_start 			=	30;		// blue
-		item->alpha_start 		=	0;			// alpha
-		item->radius_start		=	0.1;		// radius
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;		// blue
+		item->alpha_start 		=	255;			// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.12;		// colour change 1 lifescale
-		item->red_1					=	200;		// red
-		item->green_1 				=	100;		// green
-		item->blue_1 				=	30;		// blue
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	0;		// red
+		item->green_1 				=	0;		// green
+		item->blue_1 				=	0;		// blue
 		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	1.5;		// radius
+		item->radius_1 			=	1.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	200;		// red
-		item->green_2				=	100;		// green
-		item->blue_2				=	30;		// blue
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	0;		// red
+		item->green_2				=	0;		// green
+		item->blue_2				=	0;		// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	3.5;		// radius
+		item->radius_2				=	0.00001;		// radius
 
 		// END COLOUR
-		item->red_end				=	200;		// red
-		item->green_end			=	100;		// green
-		item->blue_end				=	60;		// blue
+		item->red_end				=	0;		// red
+		item->green_end			=	0;		// green
+		item->blue_end				=	0;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	5.0;		// radius
+		item->radius_end			=	0.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->final_vertical_velocity	=	9.5;
+		item->vertical_acceleration	=	7.5;
 
-		item->initial_velocity_noise	=	2.0;
+		item->initial_velocity_noise	=	1.0;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_ADDITIVE_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_FLARE;
+		item->texture_size				=	2.1;
+		item->animation_rate				=	0.1;
 
 		item->additive						=	TRUE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -662,39 +773,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_FIRE]);
 
 		// START COLOUR
-		item->red_start			=	80;		// red
-		item->green_start			=	30;		// green
-		item->blue_start 			=	30;		// blue
+		item->red_start			=	22;		// red
+		item->green_start			=	22;		// green
+		item->blue_start 			=	22;		// blue
 		item->alpha_start 		=	0;		// alpha
-		item->radius_start		=	10.5;		// radius
+		item->radius_start		=	21.5;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.05;		// colour change 1 lifescale
-		item->red_1					=	40;		// red
-		item->green_1 				=	40;		// green
-		item->blue_1 				=	40;		// blue
-		item->alpha_1 				=	90;		// alpha
-		item->radius_1 			=	30.5;		// radius
+		item->red_1					=	33;		// red
+		item->green_1 				=	33;		// green
+		item->blue_1 				=	33;		// blue
+		item->alpha_1 				=	55;		// alpha
+		item->radius_1 			=	44.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.125;		// colour change 2 lifescale
-		item->red_2					=	 60;		// red
-		item->green_2				=	 60;		// green
-		item->blue_2				=	 60;		// blue
-		item->alpha_2				=	30;		// alpha
-		item->radius_2				=	101.5;		// radius
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	 44;		// red
+		item->green_2				=	 44;		// green
+		item->blue_2				=	 44;		// blue
+		item->alpha_2				=	33;		// alpha
+		item->radius_2				=	88.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	80;		// red
-		item->green_end			=	80;		// green
-		item->blue_end				=	80;		// blue
+		item->red_end				=	55;		// red
+		item->green_end			=	55;		// green
+		item->blue_end				=	52;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	300.0;		// radius
+		item->radius_end			=	150.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.7;
+		item->final_vertical_velocity	=	1.5;
+		item->vertical_acceleration	=	0.6;
 
-		item->initial_velocity_noise	=	12.0;
+		item->initial_velocity_noise	=	10.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -705,64 +816,8 @@ void initialise_smoke_list_database (void)
 		item->flat							=	FALSE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	0.5;
 	}
-
-	////////////////////////////////////////
-	//
-	//	SMOKE_LIST_TYPE_FLAME
-	//
-	////////////////////////////////////////
-	{
-		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLAME]);
-
-		// START COLOUR
-		item->red_start			=	80;		// red
-		item->green_start			=	80;		// green
-		item->blue_start 			=	50;		// blue
-		item->alpha_start 		=	100;		// alpha
-		item->radius_start		=	3.5;		// radius
-
-		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.1;		// colour change 1 lifescale
-		item->red_1					=	80;		// red
-		item->green_1 				=	50;		// green
-		item->blue_1 				=	40;		// blue
-		item->alpha_1 				=	160;		// alpha
-		item->radius_1 			=	5.5;		// radius
-
-		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	60;		// red
-		item->green_2				=	30;		// green
-		item->blue_2				=	15;		// blue
-		item->alpha_2				=	60;		// alpha
-		item->radius_2				=	8.5;		// radius
-
-		// END COLOUR
-		item->red_end				=	30;		// red
-		item->green_end			=	10;		// green
-		item->blue_end				=	10;		// blue
-		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	11.0;		// radius
-
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	2.2;
-
-		item->initial_velocity_noise	=	1.0;
-
-		item->texture						=	TEXTURE_ANIMATION_INDEX_CANNON_FLARE;
-		item->texture_size				=	1.0;
-		item->animation_rate				=	1.0;
-
-		item->additive						=	TRUE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
-		item->flat							=	FALSE;
-		item->ground_based				=	TRUE;
-		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
-	}
-
 
 	////////////////////////////////////////
 	//
@@ -773,39 +828,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_SMALL_FIRE]);
 
 		// START COLOUR
-		item->red_start			=	30;		// red
-		item->green_start			=	30;		// green
-		item->blue_start 			=	30;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.33;		// radius
+		item->red_start			=	22;		// red
+		item->green_start			=	22;		// green
+		item->blue_start 			=	22;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.1;		// colour change 1 lifescale
-		item->red_1					=	30;		// red
-		item->green_1 				=	30;		// green
-		item->blue_1 				=	30;		// blue
-		item->alpha_1 				=	100;		// alpha
-		item->radius_1 			=	0.5;		// radius
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	33;		// red
+		item->green_1 				=	33;		// green
+		item->blue_1 				=	33;		// blue
+		item->alpha_1 				=	55;		// alpha
+		item->radius_1 			=	8.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	30;		// red
-		item->green_2				=	30;		// green
-		item->blue_2				=	30;		// blue
-		item->alpha_2				=	100;		// alpha
-		item->radius_2				=	1.5;		// radius
+		item->red_2					=	 44;		// red
+		item->green_2				=	 44;		// green
+		item->blue_2				=	 44;		// blue
+		item->alpha_2				=	33;		// alpha
+		item->radius_2				=	16.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	60;		// red
-		item->green_end			=	60;		// green
-		item->blue_end				=	60;		// blue
+		item->red_end				=	55;		// red
+		item->green_end			=	55;		// green
+		item->blue_end				=	52;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	3.0;		// radius
+		item->radius_end			=	32.0;		// radius
 
-		item->final_vertical_velocity	=	0.5;
-		item->vertical_acceleration	=	0.25;
+		item->final_vertical_velocity	=	0.7;
+		item->vertical_acceleration	=	0.3;
 
-		item->initial_velocity_noise	=	0.15;
+		item->initial_velocity_noise	=	1.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -816,7 +871,7 @@ void initialise_smoke_list_database (void)
 		item->flat							=	FALSE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	FALSE;
+		item->wind_affected				=	0.5;
 	}
 
 	////////////////////////////////////////
@@ -828,11 +883,11 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_PURPLE_FLARE]);
 
 		// START COLOUR
-		item->red_start			=	232;		// red
-		item->green_start			=	232;		// green
-		item->blue_start 			=	232;		// blue
-		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	5.0;		// radius
+		item->red_start			=	202;		// red
+		item->green_start			=	202;		// green
+		item->blue_start 			=	202;		// blue
+		item->alpha_start 		=	205;		// alpha
+		item->radius_start		=	15.0;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.2;		// colour change 1 lifescale
@@ -840,7 +895,7 @@ void initialise_smoke_list_database (void)
 		item->green_1 				=	210;		// green
 		item->blue_1 				=	200;		// blue
 		item->alpha_1 				=	200;		// alpha
-		item->radius_1 			=	13.0;		// radius
+		item->radius_1 			=	23.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	0.5;		// colour change 2 lifescale
@@ -848,14 +903,14 @@ void initialise_smoke_list_database (void)
 		item->green_2				=	160;		// green
 		item->blue_2				=	160;		// blue
 		item->alpha_2				=	40;		// alpha
-		item->radius_2				=	24.0;		// radius
+		item->radius_2				=	34.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	132;		// red
 		item->green_end			=	132;			// green
 		item->blue_end				=	132;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	24.0;		// radius
+		item->radius_end			=	44.0;		// radius
 
 		item->final_vertical_velocity	=	-1.0;
 		item->vertical_acceleration	=	0.2;
@@ -871,7 +926,7 @@ void initialise_smoke_list_database (void)
 		item->flat							=	FALSE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	FALSE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -883,19 +938,19 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_LARGE_DUST_CLOUD]);
 
 		// START COLOUR
-		item->red_start			=	100;		// red
-		item->green_start			=	100;		// green
-		item->blue_start 			=	100;		// blue
-		item->alpha_start 		=	100;		// alpha
-		item->radius_start		=	25.0;		// radius
+		item->red_start			=	33;		// red
+		item->green_start			=	33;		// green
+		item->blue_start 			=	33;		// blue
+		item->alpha_start 		=	70;		// alpha
+		item->radius_start		=	332.0;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.2;		// colour change 1 lifescale
-		item->red_1					=	160;		// red
-		item->green_1 				=	160;		// green
-		item->blue_1 				=	160;		// blue
-		item->alpha_1 				=	200;		// alpha
-		item->radius_1 			=	50.0;		// radius
+		item->red_1					=	40;		// red
+		item->green_1 				=	40;		// green
+		item->blue_1 				=	40;		// blue
+		item->alpha_1 				=	40;		// alpha
+		item->radius_1 			=	390.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
@@ -903,19 +958,19 @@ void initialise_smoke_list_database (void)
 		item->green_2				=	120;		// green
 		item->blue_2				=	120;		// blue
 		item->alpha_2				=	0;		// alpha
-		item->radius_2				=	95.0;		// radius
+		item->radius_2				=	450.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	0;			// red
 		item->green_end			=	0;			// green
 		item->blue_end				=	0;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	1.0;		// radius
+		item->radius_end			=	511.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	0.2;
+		item->final_vertical_velocity	=	63.0;
+		item->vertical_acceleration	=	0.7;
 
-		item->initial_velocity_noise	=	5.0;
+		item->initial_velocity_noise	=	33.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -926,7 +981,7 @@ void initialise_smoke_list_database (void)
 		item->flat							=	FALSE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	FALSE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -938,50 +993,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	120;		// red
-		item->green_start			=	120;		// green
-		item->blue_start 			=	0;			// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	1.75;		// radius
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;			// blue
+		item->alpha_start 		=	255;		// alpha
+		item->radius_start		=	1.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.1;		// colour change 1 lifescale
-		item->red_1					=	120;		// red
-		item->green_1 				=	0;			// green
-		item->blue_1 				=	0;			// blue
-		item->alpha_1 				=	100;		// alpha
-		item->radius_1 			=	4.0;		// radius
+		item->colour_change_1	=	1.0;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;			// green
+		item->blue_1 				=	255;			// blue
+		item->alpha_1 				=	255;		// alpha
+		item->radius_1 			=	1.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	0;			// red
-		item->green_2				=	0;			// green
-		item->blue_2				=	0;			// blue
-		item->alpha_2				=	100;		// alpha
-		item->radius_2				=	5.5;		// radius
+		item->colour_change_2	=	1.0;		// colour change 2 lifescale
+		item->red_2					=	255;			// red
+		item->green_2				=	255;			// green
+		item->blue_2				=	255;			// blue
+		item->alpha_2				=	255;		// alpha
+		item->radius_2				=	1.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	40;		// red
-		item->green_end			=	40;		// green
-		item->blue_end				=	40;		// blue
-		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	15.0;		// radius
+		item->red_end				=	255;		// red
+		item->green_end			=	255;		// green
+		item->blue_end				=	255;		// blue
+		item->alpha_end			=	255;			// alpha
+		item->radius_end			=	1.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	0.5;
+		item->final_vertical_velocity	=	-90.0;
+		item->vertical_acceleration	=	10.0;
 
-		item->initial_velocity_noise	=	1.3;
+		item->initial_velocity_noise	=	30.0;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_DEBRIS;
 		item->texture_size				=	1.0;
-		item->animation_rate				=	1.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
-		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->lock_to_parent				=	FALSE;
+		item->wind_affected				=	0.0;
 	}
 
 	////////////////////////////////////////
@@ -994,18 +1049,18 @@ void initialise_smoke_list_database (void)
 
 		// START COLOUR
 		item->red_start			=	80;		// red
-		item->green_start			=	60;		// green
-		item->blue_start 			=	20;		// blue
+		item->green_start			=	70;		// green
+		item->blue_start 			=	60;		// blue
 		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	2.4;		// radius
+		item->radius_start		=	12.5;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;		// colour change 1 lifescale
 		item->red_1					=	80;		// red
-		item->green_1 				=	60;		// green
-		item->blue_1 				=	20;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	15.0;		// radius
+		item->green_1 				=	70;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	100;			// alpha
+		item->radius_1 			=	12.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
@@ -1013,30 +1068,30 @@ void initialise_smoke_list_database (void)
 		item->green_2				=	0;			// green
 		item->blue_2				=	0;			// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	15.0;		// radius
+		item->radius_2				=	12.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	0;			// red
 		item->green_end			=	0;			// green
 		item->blue_end				=	0;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	15.0;		// radius
+		item->radius_end			=	5.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	0.5;
+		item->final_vertical_velocity	=	-60.0;
+		item->vertical_acceleration	=	5.0;
 
-		item->initial_velocity_noise	=	1.5;
+		item->initial_velocity_noise	=	5.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
-		item->animation_rate				=	1.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -1078,20 +1133,75 @@ void initialise_smoke_list_database (void)
 		item->radius_end			=	15.0;		// radius
 
 		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	0.5;
+		item->vertical_acceleration	=	1.5;
 
 		item->initial_velocity_noise	=	1.5;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
-		item->animation_rate				=	1.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_LARGE_WATER_PARTICLE_TRAIL
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_LARGE_WATER_PARTICLE_TRAIL]);
+
+		// START COLOUR
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	8.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.01;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
+		item->blue_1 				=	255;		// blue
+		item->alpha_1 				=	240;		// alpha
+		item->radius_1 			=	24.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.05;		// colour change 2 lifescale
+		item->red_2					=	255;		// red
+		item->green_2				=	255;		// green
+		item->blue_2				=	255;		// blue
+		item->alpha_2				=	180;			// alpha
+		item->radius_2				=	32.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	240;			// red
+		item->green_end			=	240;			// green
+		item->blue_end				=	240;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	56.0;		// radius
+
+		item->final_vertical_velocity	=	-10.0;
+		item->vertical_acceleration	=	1.0;
+
+		item->initial_velocity_noise	=	4.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	2.0;
 	}
 
 	////////////////////////////////////////
@@ -1103,39 +1213,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_DUST_TRAIL_1]);
 
 		// START COLOUR
-		item->red_start			=	120;		// red
-		item->green_start			=	110;		// green
-		item->blue_start 			=	90;		// blue
-		item->alpha_start 		=	64;		// alpha
-		item->radius_start		=	1.0;		// radius
+		item->red_start			=	140;		// red
+		item->green_start			=	120;		// green
+		item->blue_start 			=	100;		// blue
+		item->alpha_start 		=	120;		// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.7;		// colour change 1 lifescale
-		item->red_1					=	150;		// red
-		item->green_1 				=	140;		// green
-		item->blue_1 				=	120;		// blue
-		item->alpha_1 				=	32;		// alpha
-		item->radius_1 			=	5.0;		// radius
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	140;		// red
+		item->green_1 				=	120;		// green
+		item->blue_1 				=	100;		// blue
+		item->alpha_1 				=	100;		// alpha
+		item->radius_1 			=	4.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	150;		// red
-		item->green_2				=	140;		// green
-		item->blue_2				=	120;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	10.0;		// radius
+		item->colour_change_2	=	0.3;		// colour change 2 lifescale
+		item->red_2					=	140;		// red
+		item->green_2				=	120;		// green
+		item->blue_2				=	100;		// blue
+		item->alpha_2				=	40;			// alpha
+		item->radius_2				=	8.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	140;			// red
+		item->green_end			=	120;			// green
+		item->blue_end				=	100;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	10.0;		// radius
+		item->radius_end			=	16.0;		// radius
 
-		item->final_vertical_velocity	=	2.0;
-		item->vertical_acceleration	=	1.0;
+		item->final_vertical_velocity	=	0.0;
+		item->vertical_acceleration	=	0.0;
 
-		item->initial_velocity_noise	=	1.0;
+		item->initial_velocity_noise	=	0.5;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -1144,9 +1254,9 @@ void initialise_smoke_list_database (void)
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
-		item->ground_based				=	TRUE;
+		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	0.2;
 	}
 
 	////////////////////////////////////////
@@ -1158,39 +1268,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_DUST_TRAIL_2]);
 
 		// START COLOUR
-		item->red_start			=	80;		// red
-		item->green_start			=	80;		// green
-		item->blue_start 			=	80;		// blue
-		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	5.0;		// radius
+		item->red_start			=	90;		// red
+		item->green_start			=	90;		// green
+		item->blue_start 			=	90;		// blue
+		item->alpha_start 		=	90;		// alpha
+		item->radius_start		=	21.75;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	180;		// red
-		item->green_1 				=	180;		// green
-		item->blue_1 				=	180;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	50.0;		// radius
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	90;		// red
+		item->green_1 				=	90;		// green
+		item->blue_1 				=	90;		// blue
+		item->alpha_1 				=	100;			// alpha
+		item->radius_1 			=	14.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	0;			// red
-		item->green_2				=	0;			// green
-		item->blue_2				=	0;			// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	50.0;		// radius
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	90;			// red
+		item->green_2				=	90;			// green
+		item->blue_2				=	90;			// blue
+		item->alpha_2				=	100;			// alpha
+		item->radius_2				=	10.5;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	40;			// red
+		item->green_end			=	40;			// green
+		item->blue_end				=	40;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	50.0;		// radius
+		item->radius_end			=	5.0;		// radius
 
-		item->final_vertical_velocity	=	1.0;
+		item->final_vertical_velocity	=	-1.0;
 		item->vertical_acceleration	=	0.5;
 
-		item->initial_velocity_noise	=	2.0;
+		item->initial_velocity_noise	=	18.3;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -1201,7 +1311,7 @@ void initialise_smoke_list_database (void)
 		item->flat							=	FALSE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 
 	////////////////////////////////////////
@@ -1216,47 +1326,47 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	255;		// red
 		item->green_start			=	255;		// green
 		item->blue_start 			=	255;		// blue
-		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	0.02;		// radius
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	10.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	180;		// red
-		item->green_1 				=	210;		// green
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
 		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	50.0;		// radius
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	12.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	180;		// red
-		item->green_2				=	210;		// green
+		item->colour_change_2	=	0.3;		// colour change 2 lifescale
+		item->red_2					=	255;		// red
+		item->green_2				=	255;		// green
 		item->blue_2				=	255;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	1.0;		// radius
+		item->alpha_2				=	180;			// alpha
+		item->radius_2				=	16.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	255;			// red
+		item->green_end			=	255;			// green
+		item->blue_end				=	255;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	1.0;		// radius
+		item->radius_end			=	18.0;		// radius
 
-		item->final_vertical_velocity	=	0.0;
-		item->vertical_acceleration	=	0.0;
+		item->final_vertical_velocity	=	0.001;
+		item->vertical_acceleration	=	1.0;
 
 		item->initial_velocity_noise	=	0.0;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SHIP_WAKE;
-		item->texture_size				=	64.0;
-		item->animation_rate				=	0.25;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_REAR_SHIP_WAKE;
+		item->texture_size				=	128.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	TRUE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	FALSE;
+		item->wind_affected				=	0.0;
 	}
 
 	////////////////////////////////////////
@@ -1271,47 +1381,47 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	255;		// red
 		item->green_start			=	255;		// green
 		item->blue_start 			=	255;		// blue
-		item->alpha_start 		=	255;		// alpha
-		item->radius_start		=	5.0;		// radius
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	24.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	180;		// red
-		item->green_1 				=	210;		// green
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
 		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	120.0;	// radius
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	30.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	0;			// red
-		item->green_2				=	0;			// green
-		item->blue_2				=	0;			// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	0.0;		// radius
+		item->colour_change_2	=	0.3;		// colour change 2 lifescale
+		item->red_2					=	255;		// red
+		item->green_2				=	255;		// green
+		item->blue_2				=	255;		// blue
+		item->alpha_2				=	180;			// alpha
+		item->radius_2				=	42.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	255;			// red
+		item->green_end			=	255;			// green
+		item->blue_end				=	255;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	0.0;		// radius
+		item->radius_end			=	84.0;		// radius
 
-		item->final_vertical_velocity	=	0.0;
-		item->vertical_acceleration	=	0.0;
+		item->final_vertical_velocity	=	0.001;
+		item->vertical_acceleration	=	1.0;
 
 		item->initial_velocity_noise	=	0.0;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SHIP_WAKE;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_FRONT_SHIP_WAKE;
 		item->texture_size				=	128.0;
-		item->animation_rate				=	0.25;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	TRUE;
 		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	FALSE;
+		item->wind_affected				=	0.0;
 	}
 
 	////////////////////////////////////////
@@ -1323,50 +1433,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	130;		// red
-		item->green_start			=	130;		// green
-		item->blue_start 			=	130;		// blue
-		item->alpha_start 		=	100;		// alpha
-		item->radius_start		=	0.25;		// radius
+		item->red_start			=	150;		// red
+		item->green_start			=	150;		// green
+		item->blue_start 			=	150;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	0.1;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.12;		// colour change 1 lifescale
-		item->red_1					=	130;		// red
-		item->green_1 				=	130;		// green
-		item->blue_1 				=	130;		// blue
-		item->alpha_1 				=	100;		// alpha
-		item->radius_1 			=	1.5;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	150;		// red
+		item->green_1 				=	150;		// green
+		item->blue_1 				=	150;		// blue
+		item->alpha_1 				=	120;		// alpha
+		item->radius_1 			=	0.5;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	120;		// red
-		item->green_2				=	120;		// green
-		item->blue_2				=	120;		// blue
-		item->alpha_2				=	80;		// alpha
-		item->radius_2				=	3.5;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	180;		// red
+		item->green_2				=	180;		// green
+		item->blue_2				=	180;		// blue
+		item->alpha_2				=	60;		// alpha
+		item->radius_2				=	1.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	80;		// red
-		item->green_end			=	80;		// green
-		item->blue_end				=	80;		// blue
+		item->red_end				=	200;		// red
+		item->green_end			=	200;		// green
+		item->blue_end				=	200;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	5.0;		// radius
+		item->radius_end			=	2.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
 
-		item->initial_velocity_noise	=	1.0;
+		item->initial_velocity_noise	=	0.25;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	8.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.5;
 	}
 	////////////////////////////////////////
 	//
@@ -1377,50 +1487,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	30;		// red
-		item->green_start			=	30;		// green
-		item->blue_start 			=	30;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.2;		// radius
+		item->red_start			=	80;		// red
+		item->green_start			=	80;		// green
+		item->blue_start 			=	80;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.5;		// colour change 1 lifescale
-		item->red_1					=	30;		// red
-		item->green_1 				=	30;		// green
-		item->blue_1 				=	30;		// blue
-		item->alpha_1 				=	110;		// alpha
-		item->radius_1 			=	6.5;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	80;		// green
+		item->blue_1 				=	80;		// blue
+		item->alpha_1 				=	180;		// alpha
+		item->radius_1 			=	4.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	50;		// red
-		item->green_2				=	50;		// green
-		item->blue_2				=	50;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	20.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	85;		// red
+		item->green_2				=	85;		// green
+		item->blue_2				=	85;		// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	8.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	120;			// red
+		item->green_end			=	120;			// green
+		item->blue_end				=	120;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	1.0;		// radius
+		item->radius_end			=	24.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
 
-		item->initial_velocity_noise	=	1.0;
+		item->initial_velocity_noise	=	0.25;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	100.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.5;
 	}
 
 	////////////////////////////////////////
@@ -1432,50 +1542,50 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	130;		// red
-		item->green_start			=	130;		// green
-		item->blue_start 			=	130;		// blue
-		item->alpha_start 		=	100;		// alpha
-		item->radius_start		=	0.25;		// radius
+		item->red_start			=	150;		// red
+		item->green_start			=	150;		// green
+		item->blue_start 			=	150;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	0.4;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.12;		// colour change 1 lifescale
-		item->red_1					=	130;		// red
-		item->green_1 				=	130;		// green
-		item->blue_1 				=	130;		// blue
-		item->alpha_1 				=	100;		// alpha
-		item->radius_1 			=	1.5;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	150;		// red
+		item->green_1 				=	150;		// green
+		item->blue_1 				=	150;		// blue
+		item->alpha_1 				=	120;		// alpha
+		item->radius_1 			=	2.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	120;		// red
-		item->green_2				=	120;		// green
-		item->blue_2				=	120;		// blue
-		item->alpha_2				=	80;		// alpha
-		item->radius_2				=	3.5;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	180;		// red
+		item->green_2				=	180;		// green
+		item->blue_2				=	180;		// blue
+		item->alpha_2				=	60;		// alpha
+		item->radius_2				=	3.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	80;		// red
-		item->green_end			=	80;		// green
-		item->blue_end				=	80;		// blue
+		item->red_end				=	200;		// red
+		item->green_end			=	200;		// green
+		item->blue_end				=	200;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	5.0;		// radius
+		item->radius_end			=	6.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
 
-		item->initial_velocity_noise	=	1.0;
+		item->initial_velocity_noise	=	0.25;
 
-		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
-		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
 		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	1.0;
 	}
 	////////////////////////////////////////
 	//
@@ -1486,50 +1596,435 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	30;		// red
-		item->green_start			=	30;		// green
-		item->blue_start 			=	30;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.2;		// radius
+		item->red_start			=	80;		// red
+		item->green_start			=	80;		// green
+		item->blue_start 			=	80;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	4.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.5;		// colour change 1 lifescale
-		item->red_1					=	30;		// red
-		item->green_1 				=	30;		// green
-		item->blue_1 				=	30;		// blue
-		item->alpha_1 				=	110;		// alpha
-		item->radius_1 			=	6.5;		// radius
+		item->colour_change_1	=	0.025;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	80;		// green
+		item->blue_1 				=	80;		// blue
+		item->alpha_1 				=	180;		// alpha
+		item->radius_1 			=	8.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	50;		// red
-		item->green_2				=	50;		// green
-		item->blue_2				=	50;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	20.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	85;		// red
+		item->green_2				=	85;		// green
+		item->blue_2				=	85;		// blue
+		item->alpha_2				=	60;			// alpha
+		item->radius_2				=	12.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	0;			// red
-		item->green_end			=	0;			// green
-		item->blue_end				=	0;			// blue
+		item->red_end				=	120;			// red
+		item->green_end			=	120;			// green
+		item->blue_end				=	120;			// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	1.0;		// radius
+		item->radius_end			=	32.0;		// radius
 
-		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
+
+		item->initial_velocity_noise	=	0.25;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLAME
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLAME]);
+
+		// START COLOUR
+		item->red_start			=	125;		// red
+		item->green_start			=	165;		// green
+		item->blue_start 			=	185;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	6.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	105;		// red
+		item->green_1 				=	115;		// green
+		item->blue_1 				=	125;		// blue
+		item->alpha_1 				=	130;		// alpha
+		item->radius_1 			=	5.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	80;		// red
+		item->green_2				=	80;		// green
+		item->blue_2				=	85;		// blue
+		item->alpha_2				=	50;		// alpha
+		item->radius_2				=	5.5;		// radius
+
+		// END COLOUR
+		item->red_end				=	40;		// red
+		item->green_end			=	4;		// green
+		item->blue_end				=	4;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	4.0;		// radius
+
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	2.2;
 
 		item->initial_velocity_noise	=	1.0;
 
+		item->texture						=	TEXTURE_ANIMATION_INDEX_FLAME_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	19.0;
+
+		item->additive						=	TRUE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLAME_2
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLAME_2]);
+
+		// START COLOUR
+		item->red_start			=	125;		// red
+		item->green_start			=	165;		// green
+		item->blue_start 			=	185;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	4.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	105;		// red
+		item->green_1 				=	115;		// green
+		item->blue_1 				=	125;		// blue
+		item->alpha_1 				=	130;		// alpha
+		item->radius_1 			=	4.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	80;		// red
+		item->green_2				=	80;		// green
+		item->blue_2				=	85;		// blue
+		item->alpha_2				=	50;		// alpha
+		item->radius_2				=	3.5;		// radius
+
+		// END COLOUR
+		item->red_end				=	40;		// red
+		item->green_end			=	4;		// green
+		item->blue_end				=	4;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	2.0;		// radius
+
+		item->final_vertical_velocity	=	4.0;
+		item->vertical_acceleration	=	5.0;
+
+		item->initial_velocity_noise	=	0.5;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_FLAME_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	19.0;
+
+		item->additive						=	TRUE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	2.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLYING_DIRT
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLYING_DIRT]);
+
+		// START COLOUR
+		item->red_start			=	80;		// red
+		item->green_start			=	70;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	7.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.01;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	70;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	10.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.5;		// colour change 2 lifescale
+		item->red_2					=	90;			// red
+		item->green_2				=	80;			// green
+		item->blue_2				=	70;			// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	13.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	110;			// red
+		item->green_end			=	100;			// green
+		item->blue_end				=	90;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	15.0;		// radius
+
+		item->final_vertical_velocity	=	1.0;
+		item->vertical_acceleration	=	10.0;
+
+		item->initial_velocity_noise	=	4.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	0.2;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLYING_DIRT_2
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLYING_DIRT_2]);
+
+		// START COLOUR
+		item->red_start			=	80;		// red
+		item->green_start			=	70;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	14.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.01;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	70;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	18.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.5;		// colour change 2 lifescale
+		item->red_2					=	90;			// red
+		item->green_2				=	80;			// green
+		item->blue_2				=	70;			// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	20.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	110;			// red
+		item->green_end			=	100;			// green
+		item->blue_end				=	90;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	22.0;		// radius
+
+		item->final_vertical_velocity	=	1.0;
+		item->vertical_acceleration	=	10.0;
+
+		item->initial_velocity_noise	=	6.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	0.2;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_GREY_SMOKE_PUFF
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_SMOKE_PUFF]);
+
+		// START COLOUR
+		item->red_start			=	50;		// red
+		item->green_start			=	50;		// green
+		item->blue_start 			=	50;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	10.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.02;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	200;			// alpha
+		item->radius_1 			=	12.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.5;		// colour change 2 lifescale
+		item->red_2					=	100;			// red
+		item->green_2				=	100;			// green
+		item->blue_2				=	100;			// blue
+		item->alpha_2				=	80;			// alpha
+		item->radius_2				=	16.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	120;			// red
+		item->green_end			=	120;			// green
+		item->blue_end				=	120;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	20.0;		// radius
+
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
+
+		item->initial_velocity_noise	=	2.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_GREY_SMOKE_PUFF_2
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_SMOKE_PUFF_2]);
+
+		// START COLOUR
+		item->red_start			=	50;		// red
+		item->green_start			=	50;		// green
+		item->blue_start 			=	50;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	20.0;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.02;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	240;			// alpha
+		item->radius_1 			=	24.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.5;		// colour change 2 lifescale
+		item->red_2					=	100;			// red
+		item->green_2				=	100;			// green
+		item->blue_2				=	100;			// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	32.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	120;			// red
+		item->green_end			=	120;			// green
+		item->blue_end				=	120;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	40.0;		// radius
+
+		item->final_vertical_velocity	=	2.0;
+		item->vertical_acceleration	=	0.5;
+
+		item->initial_velocity_noise	=	4.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_DIRT_TRAIL
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_DIRT_TRAIL]);
+
+		// START COLOUR
+		item->red_start			=	80;		// red
+		item->green_start			=	70;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	0.5;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.01;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	70;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	0.5;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.3;		// colour change 2 lifescale
+		item->red_2					=	90;			// red
+		item->green_2				=	80;			// green
+		item->blue_2				=	70;			// blue
+		item->alpha_2				=	200;			// alpha
+		item->radius_2				=	4.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	110;			// red
+		item->green_end			=	100;			// green
+		item->blue_end				=	90;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	6.0;		// radius
+
+		item->final_vertical_velocity	=	-2.0;
+		item->vertical_acceleration	=	0.25;
+
+		item->initial_velocity_noise	=	0.0;
+
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
-		item->texture_size				=	16.0;
-		item->animation_rate				=	1.0;
+		item->texture_size				=	20.0;
+		item->animation_rate				=	0.0;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
 		item->flat							=	FALSE;
-		item->ground_based				=	FALSE;
+		item->ground_based				=	TRUE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	0.2;
 	}
 
 	////////////////////////////////////////
@@ -1541,39 +2036,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_GUN_SMOKE]);
 
 		// START COLOUR
-		item->red_start			=	255;		// red
-		item->green_start			=	255;		// green
-		item->blue_start 			=	255;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.25;		// radius
+		item->red_start			=	60;		// red
+		item->green_start			=	60;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	2.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	255;		// red
-		item->green_1 				=	255;		// green
-		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	10.0;		// radius
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	120;			// alpha
+		item->radius_1 			=	4.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	255;		// red
-		item->green_2				=	255;		// green
-		item->blue_2				=	255;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	10.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	70;		// red
+		item->green_2				=	70;		// green
+		item->blue_2				=	70;		// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	6.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	255;		// red
-		item->green_end			=	255;		// green
-		item->blue_end				=	255;		// blue
+		item->red_end				=	80;		// red
+		item->green_end			=	80;		// green
+		item->blue_end				=	80;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	10.0;		// radius
+		item->radius_end			=	24.0;		// radius
 
-		item->final_vertical_velocity	=	0.25;
+		item->final_vertical_velocity	=	-0.5;
 		item->vertical_acceleration	=	0.1;
 
-		item->initial_velocity_noise	=	0.1;
+		item->initial_velocity_noise	=	2.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -1582,9 +2077,9 @@ void initialise_smoke_list_database (void)
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
-		item->ground_based				=	TRUE;
+		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	2.0;
 	}
 
 	////////////////////////////////////////
@@ -1596,39 +2091,39 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_GUN_SMOKE_2]);
 
 		// START COLOUR
-		item->red_start			=	255;		// red
-		item->green_start			=	255;		// green
-		item->blue_start 			=	255;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	0.25;		// radius
+		item->red_start			=	60;		// red
+		item->green_start			=	60;		// green
+		item->blue_start 			=	60;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	4.0;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	255;		// red
-		item->green_1 				=	255;		// green
-		item->blue_1 				=	255;		// blue
-		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	10.0;		// radius
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	60;		// red
+		item->green_1 				=	60;		// green
+		item->blue_1 				=	60;		// blue
+		item->alpha_1 				=	120;			// alpha
+		item->radius_1 			=	8.0;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	255;		// red
-		item->green_2				=	255;		// green
-		item->blue_2				=	255;		// blue
-		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	10.0;		// radius
+		item->colour_change_2	=	0.1;		// colour change 2 lifescale
+		item->red_2					=	70;		// red
+		item->green_2				=	70;		// green
+		item->blue_2				=	70;		// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	12.0;		// radius
 
 		// END COLOUR
-		item->red_end				=	255;		// red
-		item->green_end			=	255;		// green
-		item->blue_end				=	255;		// blue
+		item->red_end				=	80;		// red
+		item->green_end			=	80;		// green
+		item->blue_end				=	80;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	10.0;		// radius
+		item->radius_end			=	48.0;		// radius
 
-		item->final_vertical_velocity	=	0.25;
+		item->final_vertical_velocity	=	-0.5;
 		item->vertical_acceleration	=	0.1;
 
-		item->initial_velocity_noise	=	0.1;
+		item->initial_velocity_noise	=	4.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -1637,9 +2132,119 @@ void initialise_smoke_list_database (void)
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
 		item->flat							=	FALSE;
-		item->ground_based				=	TRUE;
+		item->ground_based				=	FALSE;
 		item->lock_to_parent				=	TRUE;
-		item->wind_affected				=	TRUE;
+		item->wind_affected				=	2.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLARE_TRAIL
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLARE_TRAIL]);
+
+		// START COLOUR
+		item->red_start			=	255;		// red
+		item->green_start			=	240;		// green
+		item->blue_start 			=	200;		// blue
+		item->alpha_start 		=	255;		// alpha
+		item->radius_start		=	0.5;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
+		item->red_1					=	240;		// red
+		item->green_1 				=	230;		// green
+		item->blue_1 				=	210;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	3.0;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.3;		// colour change 2 lifescale
+		item->red_2					=	230;		// red
+		item->green_2				=	230;		// green
+		item->blue_2				=	230;		// blue
+		item->alpha_2				=	120;			// alpha
+		item->radius_2				=	4.0;		// radius
+
+		// END COLOUR
+		item->red_end				=	230;		// red
+		item->green_end			=	230;		// green
+		item->blue_end				=	230;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	8.0;		// radius
+
+		item->final_vertical_velocity	=	0.5;
+		item->vertical_acceleration	=	10.1;
+
+		item->initial_velocity_noise	=	2.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	FALSE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	1.0;
+	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_SPARKS_TRAIL
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_SPARKS_TRAIL]);
+
+		// START COLOUR
+		item->red_start			=	255;		// red
+		item->green_start			=	255;		// green
+		item->blue_start 			=	255;		// blue
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	0.01;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	255;		// red
+		item->green_1 				=	255;		// green
+		item->blue_1 				=	255;		// blue
+		item->alpha_1 				=	255;			// alpha
+		item->radius_1 			=	0.01;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.9;		// colour change 2 lifescale
+		item->red_2					=	255;			// red
+		item->green_2				=	128;			// green
+		item->blue_2				=	0;			// blue
+		item->alpha_2				=	64;			// alpha
+		item->radius_2				=	0.02;		// radius
+
+		// END COLOUR
+		item->red_end				=	255;			// red
+		item->green_end			=	128;			// green
+		item->blue_end				=	0;			// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	0.02;		// radius
+
+		item->final_vertical_velocity	=	-10.0;
+		item->vertical_acceleration	=	10.1;
+
+		item->initial_velocity_noise	=	0.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_SPARK;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	0.0;
+
+		item->additive						=	TRUE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_TRAILS;
+		item->flat							=	FALSE;
+		item->ground_based				=	FALSE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	5.0;
 	}
 
 	// Xhit: The following smoke trails type downwash is for the downwash effect (030328)
