@@ -132,7 +132,7 @@ static void export_explosion_database(void)
 		*co;
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "w");
-	fprintf(file, "EXPLOSION;3\n");
+	fprintf(file, "EXPLOSION;4\n");
 	fprintf(file,
 		"#Explosion index;Explosion name;Damage radius;Show on map\n"
 		"#SPRITES;Animated texture;Sprites count;"
@@ -264,7 +264,7 @@ static void import_explosion_database(void)
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "r");
 	fgets(buf, sizeof(buf), file);
-	if (!strcmp(buf, "EXPLOSION;3\n"))
+	if (!strcmp(buf, "EXPLOSION;4\n"))
 	{
 		ex = NULL;
 		while (fgets(buf, sizeof(buf), file))

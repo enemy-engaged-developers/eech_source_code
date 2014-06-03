@@ -1,4 +1,4 @@
-SMOKE;1
+SMOKE;2
 #Smoke index;Smoke name;Texture animation;Start colour (red;green;blue;alpha;radius);Colour change #1 (change;red;green;blue;alpha;radius);Colour change #2 (change;red;green;blue;alpha;radius);End colour (red;green;blue;alpha;radius);Vertical velocity(final;acceleration;initial noise);Texture size;Animation rate;Additive;Draw type;Flat;Ground based;Lock to parent;Wind affected
 1;GREY_TRAIL;SMOKE_TRAIL;60;60;60;40;0.5;0.025;60;60;60;80;2;0.1;80;80;80;60;6;100;100;100;0;14;0;0.1;0.25;120;0;0;1;0;0;1;1
 2;GREY_TRAIL_SPRITES;SMOKE;60;60;60;40;0;0.025;60;60;60;80;2;0.1;80;80;80;60;10;100;100;100;0;20;0;0.1;0;1;0;0;0;0;0;1;1

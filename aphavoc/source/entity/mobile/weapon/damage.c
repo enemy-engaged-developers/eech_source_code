@@ -397,7 +397,9 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 	}
 	else if (high_explosive)
 	{
-		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - 3) / 3, 1.5));
+		float he_warheads = WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK; // subtract 1
+		
+		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5));
 		armor_modifier =  min(1, weapon_database[weapon_type].damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5));
 		
 		result = (int) (weapon_database[weapon_type].damage_capability * damage_modifier * armor_modifier * random_modifier);
