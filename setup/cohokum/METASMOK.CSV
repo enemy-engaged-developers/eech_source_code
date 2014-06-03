@@ -1,4 +1,4 @@
-META_SMOKE;2
+META_SMOKE;3
 #Meta Smoke index;Meta Smoke name
 #SPRITES;Animated texture;Sprite count;Color (red;green;blue;alpha);Animation frequency;Lifetime;Scale;Rotation rate;Additive
 #TRAILS;Trail type;Effect;Trail count;Infinite;Generator lifetime;Frequency;Smoke lifetime

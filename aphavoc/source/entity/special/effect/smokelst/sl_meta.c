@@ -736,7 +736,7 @@ static void export_meta_smoke_list_database (void)
 		*co;
 
 	file = safe_fopen (META_SMOKE_LIST_DATABASE_FILENAME, "w");
-	fprintf (file, "META_SMOKE;2\n");
+	fprintf (file, "META_SMOKE;3\n");
 	fprintf (file,
 		"#Meta Smoke index;Meta Smoke name\n"
 		"#SPRITES;Animated texture;Sprite count;"
@@ -814,7 +814,7 @@ static void import_meta_smoke_list_database (void)
 
 	file = safe_fopen(META_SMOKE_LIST_DATABASE_FILENAME, "r");
 	fgets(buf, sizeof (buf), file);
-	if (!strcmp(buf, "META_SMOKE;2\n"))
+	if (!strcmp(buf, "META_SMOKE;3\n"))
 	{
 		while (fgets(buf, sizeof (buf), file))
 		{

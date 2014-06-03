@@ -182,7 +182,7 @@ static void export_smoke_list_database (void)
 		*smoke;
 
 	file = safe_fopen (SMOKE_LIST_DATABASE_FILENAME, "w");
-	fprintf (file, "SMOKE;1\n");
+	fprintf (file, "SMOKE;2\n");
 	fprintf (file,
 		"#Smoke index;Smoke name;Texture animation;"
 		"Start colour (red;green;blue;alpha;radius);"
@@ -290,7 +290,7 @@ static void import_smoke_list_database (void)
 
 	file = safe_fopen (SMOKE_LIST_DATABASE_FILENAME, "r");
 	fgets (buf, sizeof (buf), file);
-	if (!strcmp (buf, "SMOKE;1\n"))
+	if (!strcmp (buf, "SMOKE;2\n"))
 	{
 		while (fgets (buf, sizeof (buf), file))
 		{

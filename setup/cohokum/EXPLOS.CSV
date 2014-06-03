@@ -1,4 +1,4 @@
-EXPLOSION;3
+EXPLOSION;4
 #Explosion index;Explosion name;Damage radius;Show on map
 #SPRITES;Animated texture;Sprites count;Colour (red;green;blue;alpha);Additive;Blast hemisphere only;Delay max;Lifetime min;Lifetime max;Scale min;Scale max;Blast radius;Animation frequency;Rotation rate
 #OBJECTS;Object 3D shape;Objects count;Colour (red;green;blue;alpha);Additive;Blast hemisphere only;Delay max;Lifetime min;Lifetime max;Scale min;Scale max;Blast radius
