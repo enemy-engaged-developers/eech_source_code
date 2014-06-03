@@ -83,6 +83,17 @@
 
 #define MAXIMUM_PLAYER_NAME 16
 
+enum PLAYERS_VERSIONS
+{
+	PLAYERS_VERSION_INVALID,
+	PLAYERS_BIN,
+	PLAYERS2_BIN,
+	PLAYERSV_BIN_3,
+	PLAYERSV_BIN_4,
+	// Add new old versions above
+	PLAYERS_VERSION_CURRENT,
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1441,6 +1452,11 @@ void player_select_side_function ( ui_object *obj, void *arg )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int int_cmp ( const void *a, const void *b )
+{
+	return * ( const int * ) a - * ( const int * ) b;
+}
+
 void load_player_list (void)
 {
 
@@ -1534,13 +1550,14 @@ void load_player_list (void)
 				{
 					int
 						gunships,
-						weapons;
+						number_of_weapons,
+						weapons[64];
 				}
-					change = { 0, 0 };
+					change = { 0, 1, { -1 } };
 
 				switch (version)
 				{
-				case 1:
+				case PLAYERS_BIN:
 					{
 						// size of original side log element was 756, it has changed now
 						version1_player_side_log_type v1_log;
@@ -1563,21 +1580,43 @@ void load_player_list (void)
 						break;
 					}
 
-				case 2:
+				case PLAYERS2_BIN:
 					change.gunships += 1;
 
-				case 3:
+				case PLAYERSV_BIN_3:
 					change.gunships += 1;
+
+				case PLAYERSV_BIN_4:
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_M16A2_5P56MM_ROUND;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_M60E4_7P62MM_ROUND;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_M61A1_CIWS_20MM_ROUND;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_AK_47_7P62MM_ROUND;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_PKM_7P62MM_ROUND;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_MK_40_FFAR;
+					change.weapons[change.number_of_weapons++] = ENTITY_SUB_TYPE_WEAPON_AGM114R_HELLFIRE_II;
+
+
+				// Add old versions above
 
 					{
-						player_side_log_type v2_side;
+						player_side_log_type
+							v2_side;
 						const size_t
-							size_1 = ( char * ) ( &v2_side.weapon_usage[NUM_ENTITY_SUB_TYPE_WEAPONS - change.weapons] ) - ( char * ) ( &v2_side ),
+							size_1 = ( char * ) ( &v2_side.weapon_usage ) - ( char * ) ( &v2_side ),
 							size_2 = ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_flying_seconds ),
 							size_3 = ( ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_missions ) + 3 ) & ~3,
 							size_4 = sizeof ( v2_side ) - ( ( char * ) &v2_side.helicopters_lost - ( char * ) &v2_side );
+						int
+							i;
+
 						memset ( &v2_side, 0, sizeof ( v2_side ) );
 						fread ( &v2_side, size_1, 1, file_ptr );
+						change.weapons[change.number_of_weapons] = NUM_ENTITY_SUB_TYPE_WEAPONS;
+						qsort ( change.weapons + 1, sizeof ( *change.weapons ), change.number_of_weapons - 1, int_cmp );
+						for ( i = 0; i < change.number_of_weapons; i++ )
+						{
+							fread ( &v2_side.weapon_usage[change.weapons[i] + 1], sizeof ( *v2_side.weapon_usage ), change.weapons[i + 1] - change.weapons[i] - 1, file_ptr );
+						}
 						fread ( v2_side.gunship_flying_seconds, size_2, 1, file_ptr );
 						fread ( v2_side.gunship_missions, size_3, 1, file_ptr );
 						fread ( &v2_side.helicopters_lost, size_4, 1, file_ptr );
@@ -1585,7 +1624,7 @@ void load_player_list (void)
 						break;
 					}
 
-				case 4:
+				case PLAYERS_VERSION_CURRENT:
 					{
 						fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
 						break;
@@ -1691,7 +1730,7 @@ void save_player_list (void)
 
 		file_ptr = safe_fopen ("playersv.bin", "wb");
 
-		version = 4;
+		version = PLAYERS_VERSION_CURRENT;
 
 		fwrite (&version, sizeof (int), 1, file_ptr);
 

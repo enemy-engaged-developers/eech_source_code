@@ -1367,11 +1367,15 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 
 	float
 		pitch,
+#if 0
 		range,
+#endif
 		targeting_pitch = 0;
-	
+
+#if 0
 	vec3d
 		guide_pos;
+#endif
 
 	ASSERT (en);
 
