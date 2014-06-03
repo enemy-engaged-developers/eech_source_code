@@ -1612,7 +1612,7 @@ void load_player_list (void)
 						memset ( &v2_side, 0, sizeof ( v2_side ) );
 						fread ( &v2_side, size_1, 1, file_ptr );
 						change.weapons[change.number_of_weapons] = NUM_ENTITY_SUB_TYPE_WEAPONS;
-						qsort ( change.weapons + 1, sizeof ( *change.weapons ), change.number_of_weapons - 1, int_cmp );
+						qsort ( change.weapons + 1, change.number_of_weapons - 1, sizeof ( *change.weapons ), int_cmp );
 						for ( i = 0; i < change.number_of_weapons; i++ )
 						{
 							fread ( &v2_side.weapon_usage[change.weapons[i] + 1], sizeof ( *v2_side.weapon_usage ), change.weapons[i + 1] - change.weapons[i] - 1, file_ptr );
