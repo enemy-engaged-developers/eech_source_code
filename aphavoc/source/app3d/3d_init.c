@@ -698,6 +698,8 @@ void initialise_application_3d_system (void)
 
 	set_3d_lightmode ( main_3d_single_light_env, LIGHTMODE_MANUAL_LIGHT );
 
+	set_3d_infrared_mode ( main_3d_single_light_env, RENDER_CLEAR );
+
 	{
 
 		light_colour

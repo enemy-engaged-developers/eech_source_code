@@ -705,9 +705,13 @@ void update_cockpits (void)
 
 void draw_cockpit (cockpit_panels panel)
 {
+	int specular = 	specular_rendering_enabled;
+	
 	ASSERT (initialised);
 
 	ASSERT (get_gunship_entity ());
+
+	specular_rendering_enabled = FALSE;
 
 	switch (gunship_type)
 	{
@@ -843,6 +847,8 @@ void draw_cockpit (cockpit_panels panel)
 		}
 */
 	}
+
+	specular_rendering_enabled = specular;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

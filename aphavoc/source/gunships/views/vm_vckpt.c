@@ -1464,10 +1464,14 @@ void draw_night_vision_mask (void)
 
 void draw_virtual_cockpit_3d_view (void)
 {
+	int specular = 	specular_rendering_enabled;
+
 	ASSERT (get_gunship_entity ());
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
 
+	specular_rendering_enabled = FALSE;
+	
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
@@ -2120,6 +2124,8 @@ void draw_virtual_cockpit_3d_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+	specular_rendering_enabled = specular;
+	
 	get_pilot_head_viewpoint ();
 }
 
@@ -2132,6 +2138,8 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	vec3d
 		position;
 
+	int specular = 	specular_rendering_enabled;
+
 	ASSERT (get_gunship_entity ());
 
 	ASSERT (get_comanche_hokum_gunship ());
@@ -2143,6 +2151,8 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	ASSERT (get_num_virtual_cockpit_cameras (get_crew_role ()) > 0);
 
 	ASSERT (get_current_virtual_cockpit_camera (get_crew_role ()) != INVALID_VIRTUAL_COCKPIT_CAMERA);
+
+	specular_rendering_enabled = FALSE;
 
 	////////////////////////////////////////
 	//
@@ -2288,6 +2298,8 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+	specular_rendering_enabled = specular;
+	
 	get_pilot_head_viewpoint ();
 }
 
@@ -2297,7 +2309,11 @@ void draw_virtual_cockpit_3d_crew_view (void)
 
 void draw_virtual_cockpit_3d_hud_view (void)
 {
+	int specular = 	specular_rendering_enabled;
+
 	ASSERT (get_gunship_entity ());
+
+	specular_rendering_enabled = FALSE;
 
 	switch (get_global_gunship_type ())
 	{
@@ -2507,6 +2523,8 @@ void draw_virtual_cockpit_3d_hud_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+	specular_rendering_enabled = specular;
+	
 	get_pilot_head_viewpoint ();
 }
 
@@ -2519,10 +2537,12 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	int
 		x_excess = ((full_screen_x_max - full_screen_x_min) - (full_screen_y_max - full_screen_y_min)) / 2,
 		x_min = full_screen_x_min + x_excess,
-		x_max = full_screen_x_max - x_excess;
-
+		x_max = full_screen_x_max - x_excess,
+		specular = 	specular_rendering_enabled;
 
 	ASSERT (get_gunship_entity ());
+
+	specular_rendering_enabled = FALSE;
 
 	// clear lights and fog
 	
@@ -2554,6 +2574,8 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+	specular_rendering_enabled = specular;
+	
 	get_pilot_head_viewpoint ();
 }
 
@@ -2565,6 +2587,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 {
 	//VJ# THIS CODE IS ONLY REACHED WHEN CLOSEUP F3 or F4!!!!!!!
 	//
+	int specular = 	specular_rendering_enabled;
+
+	specular_rendering_enabled = FALSE;
 
 	switch (get_global_gunship_type ())
 	{
@@ -2781,6 +2806,8 @@ void draw_virtual_cockpit_3d_display_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+	specular_rendering_enabled = specular;
+	
 	get_pilot_head_viewpoint ();
 }
 
