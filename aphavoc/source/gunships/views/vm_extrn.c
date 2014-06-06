@@ -644,10 +644,6 @@ static void display_external_view_text (void)
 
 void draw_external_3d_view (void)
 {
-	float zoom = 1.0;
-
-	camera *raw;
-
 	ASSERT (get_external_view_entity ());
 
 	////////////////////////////////////////
@@ -664,11 +660,6 @@ void draw_external_3d_view (void)
 
    get_local_entity_attitude_matrix (get_camera_entity (), main_vp.attitude);
 
-	raw = (camera *) get_local_entity_data (get_camera_entity ());
-
-	if (raw->camera_mode == CAMERA_MODE_FREE)
-		zoom = 0.33 + raw->chase_camera_zoom;
-
    //
    // draw 3D scene
    //
@@ -677,14 +668,14 @@ void draw_external_3d_view (void)
 	
 	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
 	{
-		set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUE_HAZE, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_MEDIUM, 1.0);
+		set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUE_HAZE, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_MEDIUM);
 	}
 	else
 	{
 		if (night_vision_system_active)
-			set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN_VISUAL, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_LOW, zoom);
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN_VISUAL, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_LOW);
 		else
-			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, zoom);
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 	}
 
 	draw_main_3d_scene (&main_vp);
@@ -736,7 +727,7 @@ void draw_external_3d_view (void)
 
 					restore_reverse_tactical_camera_values ();
 
-					set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
+					set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
 					break;
 				}

@@ -1468,7 +1468,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 	ASSERT (get_gunship_entity ());
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
 	specular_rendering_enabled = FALSE;
 	
@@ -2114,7 +2114,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 			restore_reverse_tactical_camera_values ();
 
-			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE, 1.0);
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 		}
 	}
 	// Jabberwock 031016 ends

@@ -336,8 +336,24 @@ static void update_field_of_view(void)
 {
 	int
 		max_fov = get_max_fov ();
+	camera
+		*raw;
 
-	if (command_line_field_of_view_joystick_index != -1)
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
+
+	ASSERT(raw);
+	
+	if (query_TIR_active() && command_line_external_trackir && 
+			raw->camera_mode == CAMERA_MODE_FREE && get_view_mode () == VIEW_MODE_EXTERNAL) // external free camera only
+	{
+		float
+			fov,
+			dz = bound(0.5 + (float) TIR_GetZ() / 32767, 0.0, 1.0);
+		
+		fov = rad(command_line_min_fov) + dz * (rad(max_fov) - rad(command_line_min_fov));
+		set_view_angles(fov);
+	}
+	else if (command_line_field_of_view_joystick_index != -1)
 	{
 		int joyval = get_joystick_axis(command_line_field_of_view_joystick_index, command_line_field_of_view_joystick_axis);
 		float fov;

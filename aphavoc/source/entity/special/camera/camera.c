@@ -505,17 +505,4 @@ void adjust_camera_zoom(camera* raw)
 		mouse_wheel_down--;
 	}
 	// Jabberwock 050103 ends	
-	
-	if (query_TIR_active() && command_line_external_trackir)
-	{
-		static float
-			tir_z = 0;
-		float
-			dz;
-
-		dz = (float) TIR_GetZ() / 16383;
-		
-		raw->chase_camera_zoom = bound(raw->chase_camera_zoom + dz - tir_z, CHASE_CAMERA_ZOOM_IN_LIMIT, CHASE_CAMERA_ZOOM_OUT_LIMIT);
-		tir_z = dz;
-	}	
 }
