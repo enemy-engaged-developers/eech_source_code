@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.15.0"
+	!define VERSION "1.15.2"
 
 	;Name and file
 	Name "EECH Dev maps release ${VERSION}"
@@ -54,7 +54,7 @@ SetCompressor /SOLID lzma
 ;--------------------------------
 ;Installer Sections
 
-	!define SRCDIR "D:\GAMES\EE_INST"
+	!define SRCDIR "G:\EE_INST"
 	!define EE_BASE_DIR "${SRCDIR}"
 	!define EE_MAPS_DIR "${EE_BASE_DIR}"
 
@@ -196,6 +196,14 @@ Section "EECH ${VERSION} maps" SectionMaps
 	File "${EE_MAPS_DIR}\common\maps\map10\camp03\LYBIA.CHC"
 	File "${EE_MAPS_DIR}\common\maps\map10\camp03\LYBIA.SCR"
 	File "${EE_MAPS_DIR}\common\maps\map10\camp03\LYBIA.SID"
+
+	SetOutPath "$INSTDIR\common\maps\map10\RicBWCamp"
+
+	File "${EE_MAPS_DIR}\common\maps\map10\RicBWCamp\LYBIA.BIN"
+	File "${EE_MAPS_DIR}\common\maps\map10\RicBWCamp\LYBIA.CHC"
+	File "${EE_MAPS_DIR}\common\maps\map10\RicBWCamp\FORMCOMP.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map10\RicBWCamp\LYBIA.SCR"
+	File "${EE_MAPS_DIR}\common\maps\map10\RicBWCamp\LYBIA.SID"
 
 	SetOutPath "$INSTDIR\common\maps\map10\route"
 
@@ -635,6 +643,23 @@ Section "EECH ${VERSION} maps" SectionMaps
 	File "${EE_MAPS_DIR}\common\maps\map2\RAFskirm04\CUBA.BIN"
 	File "${EE_MAPS_DIR}\common\maps\map2\RAFskirm04\Cuba.sid"
 	File "${EE_MAPS_DIR}\common\maps\map2\RAFskirm04\Cuba.skr"
+
+	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp"
+
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.BIN"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\Base_temp.BTP"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.CHC"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\FORMCOMP.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SCR"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SID"
+
+	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp2"
+
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.BIN"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.CHC"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\FORMCOMP.DAT"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SCR"
+	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SID"
 
 	SetOutPath "$INSTDIR\common\maps\map2\route"
 

@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.15.0"
+	!define VERSION "1.15.2"
 
 	;Name and file
 	Name "EECH Dev terrain textures release ${VERSION}"
@@ -54,7 +54,7 @@ SetCompressor /SOLID lzma
 ;--------------------------------
 ;Installer Sections
 
-	!define SRCDIR "D:\GAMES\EE_INST"
+	!define SRCDIR "G:\EE_INST"
 	!define EE_BASE_DIR "${SRCDIR}"
 	!define EE_TEXT_DIR "${EE_BASE_DIR}"
 
@@ -471,6 +471,7 @@ Section "EECH ${VERSION} terrain textures" SectionTT
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\CLOUDDRY.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\CLOUDHR.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\CLOUDLR.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\GREY_TERRAIN_TREE_CROSS.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\RED_STAR_64X64.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\RUSSIANSTAR_64X64.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\lebanon\TERRAIN_BARE_ROCK2.dds"
@@ -647,6 +648,7 @@ Section "EECH ${VERSION} terrain textures" SectionTT
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\CLOUDDRY.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\CLOUDHR.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\CLOUDLR.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\GREY_TERRAIN_TREE_CROSS.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\RED_STAR_64X64.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\RUSSIANSTAR_64X64.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\taiwan\TERRAIN_BARE_ROCK2.dds"

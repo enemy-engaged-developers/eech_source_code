@@ -1036,15 +1036,6 @@ Section "Additional campaigns" SectionCampaigns
 
 SectionEnd
 
-Section "Clear player profile" SectionPlayer
-
-	SetOutPath "$INSTDIR"
-	Delete "$INSTDIR\cohokum\playersv.bin"
-	Delete "$INSTDIR\cohokum\players2.bin"
-	Delete "$INSTDIR\cohokum\players.bin"
-
-SectionEnd
-
 Section "Clear EECH.INI" SectionINI
 
 	SetOutPath "$INSTDIR"
@@ -1063,7 +1054,6 @@ SectionEnd
 	LangString DESC_SectionFFB ${LANG_ENGLISH} "Forcefeedback effect files. Not necessary even if you have FFB joystick"
 	LangString DESC_SectionUSATC ${LANG_ENGLISH} "Install US ATC male voice pack v0.9"
 	LangString DESC_SectionCampaigns ${LANG_ENGLISH} "Install campaigns Cuba Libre, Cuba Libre 2 and Border War"
-	LangString DESC_SectionPlayer ${LANG_ENGLISH} "Necessary for first installation"
 	LangString DESC_SectionINI ${LANG_ENGLISH} "Necessary for first installation"
 
 	;Assign language strings to sections
@@ -1075,7 +1065,6 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionFFB} $(DESC_SectionFFB)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionUSATC} $(DESC_SectionUSATC)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionCampaigns} $(DESC_SectionCampaigns)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SectionPlayer} $(DESC_SectionPlayer)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionINI} $(DESC_SectionINI)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
