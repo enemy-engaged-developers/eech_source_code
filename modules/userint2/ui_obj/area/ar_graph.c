@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -70,9 +70,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_graphic (ui_object *obj, unsigned short int *graphic)
+#if 0
+static void set_area_ui_object_graphic (ui_object *obj, rgb_data *graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -96,9 +97,9 @@ static void set_area_ui_object_graphic (ui_object *obj, unsigned short int *grap
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static unsigned short int *get_area_ui_object_graphic (ui_object *obj)
+static rgb_data *get_area_ui_object_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -106,6 +107,7 @@ static unsigned short int *get_area_ui_object_graphic (ui_object *obj)
 
 	return (area->graphic);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,14 +115,17 @@ static unsigned short int *get_area_ui_object_graphic (ui_object *obj)
 
 static void set_area_ui_object_texture_graphic (ui_object *obj, struct TEXTURE_GRAPHIC *graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
 	area = (area_ui_object *) obj->data;
 
-	area->texture_graphic = graphic;
+	if (area->texture_graphic)
+		destroy_texture_graphic (area->texture_graphic);
+	area->texture_graphic = texture_graphic_addref (graphic);
 
+#if 0
 	if (graphic)
 	{
 
@@ -131,6 +136,7 @@ static void set_area_ui_object_texture_graphic (ui_object *obj, struct TEXTURE_G
 
 		set_ui_object_graphic_type (obj, UI_OBJECT_NO_GRAPHIC);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +145,7 @@ static void set_area_ui_object_texture_graphic (ui_object *obj, struct TEXTURE_G
 
 static struct TEXTURE_GRAPHIC *get_area_ui_object_texture_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -154,14 +160,17 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_texture_graphic (ui_object *ob
 
 static void set_area_ui_object_highlighted_texture_graphic (ui_object *obj, struct TEXTURE_GRAPHIC *graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
 	area = (area_ui_object *) obj->data;
 
-	area->highlighted_texture_graphic = graphic;
+	if (area->highlighted_texture_graphic)
+		destroy_texture_graphic (area->highlighted_texture_graphic);
+	area->highlighted_texture_graphic = texture_graphic_addref (graphic);
 
+#if 0
 	if (graphic)
 	{
 
@@ -172,6 +181,7 @@ static void set_area_ui_object_highlighted_texture_graphic (ui_object *obj, stru
 
 		set_ui_object_graphic_type (obj, UI_OBJECT_NO_GRAPHIC);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +190,7 @@ static void set_area_ui_object_highlighted_texture_graphic (ui_object *obj, stru
 
 static struct TEXTURE_GRAPHIC *get_area_ui_object_highlighted_texture_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -195,14 +205,17 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_highlighted_texture_graphic (u
 
 static void set_area_ui_object_selected_texture_graphic (ui_object *obj, struct TEXTURE_GRAPHIC *graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
 	area = (area_ui_object *) obj->data;
 
-	area->selected_texture_graphic = graphic;
+	if (area->selected_texture_graphic)
+		destroy_texture_graphic (area->selected_texture_graphic);
+	area->selected_texture_graphic = texture_graphic_addref (graphic);
 
+#if 0
 	if (graphic)
 	{
 
@@ -213,6 +226,7 @@ static void set_area_ui_object_selected_texture_graphic (ui_object *obj, struct 
 
 		set_ui_object_graphic_type (obj, UI_OBJECT_NO_GRAPHIC);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +235,7 @@ static void set_area_ui_object_selected_texture_graphic (ui_object *obj, struct 
 
 static struct TEXTURE_GRAPHIC *get_area_ui_object_selected_texture_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -234,9 +248,10 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_selected_texture_graphic (ui_o
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static void set_area_ui_object_memory_graphic (ui_object *obj, struct SCREEN *memory_graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -262,7 +277,7 @@ static void set_area_ui_object_memory_graphic (ui_object *obj, struct SCREEN *me
 
 static struct SCREEN *get_area_ui_object_memory_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -277,7 +292,7 @@ static struct SCREEN *get_area_ui_object_memory_graphic (ui_object *obj)
 
 static void set_area_ui_object_zoomable_palette_graphic (ui_object *obj, struct ZOOMABLE_GRAPHIC *graphic)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -303,7 +318,7 @@ static void set_area_ui_object_zoomable_palette_graphic (ui_object *obj, struct 
 
 static struct ZOOMABLE_GRAPHIC *get_area_ui_object_zoomable_palette_graphic (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -318,7 +333,7 @@ static struct ZOOMABLE_GRAPHIC *get_area_ui_object_zoomable_palette_graphic (ui_
 
 static void set_area_ui_object_graphic_type (ui_object *obj, int graphic_type)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -333,7 +348,7 @@ static void set_area_ui_object_graphic_type (ui_object *obj, int graphic_type)
 
 static int get_area_ui_object_graphic_type (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -348,7 +363,7 @@ static int get_area_ui_object_graphic_type (ui_object *obj)
 
 static void set_area_ui_object_graphic_zoom (ui_object *obj, int zoom)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -363,7 +378,7 @@ static void set_area_ui_object_graphic_zoom (ui_object *obj, int zoom)
 
 static int get_area_ui_object_graphic_zoom (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -371,6 +386,7 @@ static int get_area_ui_object_graphic_zoom (ui_object *obj)
 
 	return (area->zoom);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,7 +394,7 @@ static int get_area_ui_object_graphic_zoom (ui_object *obj)
 
 static void set_area_ui_object_active_screen (ui_object *obj, struct SCREEN *active_screen)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -393,7 +409,7 @@ static void set_area_ui_object_active_screen (ui_object *obj, struct SCREEN *act
 
 static struct SCREEN *get_area_ui_object_active_screen (ui_object *obj)
 {
-	
+
 	area_ui_object
 		*area;
 
@@ -409,9 +425,11 @@ static struct SCREEN *get_area_ui_object_active_screen (ui_object *obj)
 void overload_area_ui_object_graphic_functions (ui_object_types type)
 {
 
+#if 0
 	fn_set_ui_object_graphic [type] 								= set_area_ui_object_graphic;
 
 	fn_get_ui_object_graphic [type] 								= get_area_ui_object_graphic;
+#endif
 
 	fn_set_ui_object_texture_graphic [type] 					= set_area_ui_object_texture_graphic;
 
@@ -425,6 +443,7 @@ void overload_area_ui_object_graphic_functions (ui_object_types type)
 
 	fn_get_ui_object_selected_texture_graphic [type] 		= get_area_ui_object_selected_texture_graphic;
 
+#if 0
 	fn_set_ui_object_memory_graphic [type]						= set_area_ui_object_memory_graphic;
 
 	fn_get_ui_object_memory_graphic [type]						= get_area_ui_object_memory_graphic;
@@ -440,6 +459,7 @@ void overload_area_ui_object_graphic_functions (ui_object_types type)
 	fn_set_ui_object_graphic_zoom [type]						= set_area_ui_object_graphic_zoom;
 
 	fn_get_ui_object_graphic_zoom [type]						= get_area_ui_object_graphic_zoom;
+#endif
 
 	fn_set_ui_object_active_screen [type]						= set_area_ui_object_active_screen;
 

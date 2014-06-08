@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -132,7 +132,7 @@ const char
 		"RUSSIAN",
 		"POLISH",
 	};
-	
+
 language_struct
 	*translation_list,
 	*alphabet_pointers [NUM_ALPHABET_POINTERS];
@@ -154,7 +154,7 @@ void initialise_alphabet_pointers (void)
 		count;
 
 	ASSERT (translation_list);
-	
+
 	current = translation_list;
 
 	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
@@ -166,11 +166,11 @@ void initialise_alphabet_pointers (void)
 	{
 		alphabet_pointers [0] = translation_list;
 	}
-		
+
 	current = current->next;
 
 	count = 1;
-	
+
 	letter = 'A';
 
 	// get alphabet pointers
@@ -181,7 +181,7 @@ void initialise_alphabet_pointers (void)
 		if (a == toupper (letter))
 		{
 			letter++;
-			
+
 			alphabet_pointers [letter - 'A'] = current;
 		}
 		// in case there are no translations for current letter, move on.
@@ -239,7 +239,7 @@ void insert_translation (language_struct *insert_me)
 		while ((current != NULL) && (stricmp (insert_me->tag, current->tag) > 0))
 		{
 			previous = current;
-			
+
 			current = current->next;
 		}
 
@@ -252,9 +252,9 @@ void insert_translation (language_struct *insert_me)
 				{
 					#if DEBUG_LANGUAGES
 						debug_filtered_log ("WARNING: translation with same tags & different translations");
-						
+
 						debug_filtered_log ("old: %s  :  %s", current->tag, current->translation);
-	
+
 						debug_filtered_log ("new: %s  :  %s", insert_me->tag, insert_me->translation);
 					#endif
 				}
@@ -263,14 +263,14 @@ void insert_translation (language_struct *insert_me)
 					#if DEBUG_LANGUAGES
 						debug_filtered_log ("WARNING: deleting duplicate translation");
 					#endif
-	
+
 					delete_translation (NULL, insert_me);
-					
-					return;				
+
+					return;
 				}
 			}
 		}
-		
+
 		insert_me->next = current;
 
 		if (previous != NULL)
@@ -298,7 +298,7 @@ void delete_translation (language_struct *position, language_struct *delete_me)
 	{
 		position->next = delete_me->next;
 	}
-	
+
 	if (delete_me->tag)
 	{
 		safe_free (delete_me->tag);
@@ -325,14 +325,14 @@ void initialise_language_file (FILE *fp)
 
 	file_tags
 		tag;
-		
+
 	char
 		buf [BUFFER_SIZE];
-				
+
 	int
 		lang_type,
 		end = 0;
-		
+
 	ASSERT (fp);
 
 	// read entries
@@ -341,9 +341,9 @@ void initialise_language_file (FILE *fp)
 		tag = (file_tags) get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
-		{	
+		{
 			case FILE_TAG_START:
-			{		
+			{
 				continue;
 			}
 			case FILE_TAG_TRANSLATION:
@@ -361,7 +361,7 @@ void initialise_language_file (FILE *fp)
 				{
 					debug_fatal("LANGUAGE: initialise: failed to acquire language tag");
 				}
-				
+
 				// get enum until correct language is found
 				lang_type = get_next_file_enum (fp, language_strings, NUM_LANGUAGES);
 
@@ -372,8 +372,12 @@ void initialise_language_file (FILE *fp)
 						// if the string is present
 						if( get_next_file_string (fp, buf, BUFFER_SIZE) == 1)
 						{
+							if (lang->translation)
+							{
+								safe_free (lang->translation);
+							}
 							lang->translation = (char*) safe_malloc(sizeof(char) * (strlen(buf) +1) );
-		
+
 							strcpy(lang->translation, buf);
 						}
 						else
@@ -414,7 +418,7 @@ void initialise_language_file (FILE *fp)
 				{
 					debug_fatal("LANGUAGE: initialise: failed to acquire language tag");
 				}
-				
+
 				// get enum until correct language is found
 				lang_type = get_next_file_enum (fp, language_strings, NUM_LANGUAGES);
 
@@ -426,10 +430,14 @@ void initialise_language_file (FILE *fp)
 						// if the string is present
 						if( get_next_file_paragraph (fp, buf, BUFFER_SIZE) == 1)
 						{
+							if (lang->translation)
+							{
+								safe_free (lang->translation);
+							}
 							lang->translation = (char*) safe_malloc(sizeof(char) * (strlen(buf) +1) );
-		
+
 							strcpy(lang->translation, buf);
-		
+
 							fseek (fp, +1, SEEK_CUR);
 						}
 						else
@@ -440,10 +448,10 @@ void initialise_language_file (FILE *fp)
 					else
 					{
 						get_next_file_paragraph (fp, buf, BUFFER_SIZE);
-	
+
 						fseek (fp, +1, SEEK_CUR);
 					}
-						
+
 					lang_type = get_next_file_enum (fp, language_strings, NUM_LANGUAGES);
 				}
 
@@ -472,7 +480,7 @@ void initialise_language_database (void)
 {
 	FILE
 		*fp;
-		
+
 	directory_file_list
 		*directory_listing;
 
@@ -492,7 +500,7 @@ void initialise_language_database (void)
 	#if PREPROCESS_DAT_FILES
 		preprocess_language_database ();
 	#endif
-	
+
 	// ensure current selected language is allowed
 
 	if ((global_options.current_language < 0) || (global_options.current_language >= NUM_LANGUAGES))
@@ -555,15 +563,15 @@ const char *get_trans (const char *string)
 {
 	language_struct
 		*temp;
-		
+
 	const char
 		*result = NULL;
-		
+
 	int
 		not_found,
 		start,
 		end;
-		
+
 	if (isalpha (string [0]))
 	{
 		start = toupper (string [0]) - 64;
@@ -588,10 +596,10 @@ const char *get_trans (const char *string)
 			if( strcmp(temp->tag, string) == 0)
 			{
 				result = temp->translation;
-		
+
 				not_found = 0;
 			}
-	
+
 			temp = temp->next;
 		}
 	}
@@ -607,8 +615,8 @@ const char *get_trans (const char *string)
 
 			debug_filtered_log ("LANGUAGE.C: get_trans() couldn't find: %s", string);
 
-		#endif		
-	}	
+		#endif
+	}
 
 	return result;
 }
@@ -625,7 +633,7 @@ void deinitialise_language_database (void)
 	while (translation_list)
 	{
 		temp = translation_list->next;
-	
+
 		delete_translation (NULL, translation_list);
 
 		translation_list = temp;
@@ -652,7 +660,7 @@ void test_translation_list (void)
 {
 	language_struct
 		*temp;
-		
+
 	int
 		alphabet_count = 0,
 		count = 0;
@@ -664,12 +672,12 @@ void test_translation_list (void)
 		if (alphabet_pointers [alphabet_count] == temp)
 		{
 			debug_filtered_log ("\n~~~ ALPHABET_POINTER  %c ~~~\n", (alphabet_count + 64));
-	
+
 			alphabet_count++;
 		}
 
 		debug_filtered_log ("%3d:  %s  :  %s", count, temp->tag, temp->translation);
-		
+
 		temp = temp->next;
 
 		count++;
@@ -685,7 +693,7 @@ int get_next_file_translation (FILE *file_ptr, char *buffer, int size)
 
 	char
 		temp [BUFFER_SIZE];
-		
+
 	int
 		i,
 		start,
@@ -713,7 +721,7 @@ int get_next_file_translation (FILE *file_ptr, char *buffer, int size)
 
 			break;
 		}
-		
+
 		temp [count++] = character;
 	}
 
@@ -744,13 +752,13 @@ int get_next_file_translation (FILE *file_ptr, char *buffer, int size)
 			{
 				buffer [j] = temp [j];
 			}
-			
+
 			break;
 		}
-	}	
-	
+	}
+
 	strcat (buffer, "\n");
-	
+
 	#if DEBUG_MODULE
 		debug_filtered_log ("FILE_TAG: get_next_file_translation = %s, strlen (%d)", buffer, strlen (buffer));
 	#endif
@@ -766,16 +774,16 @@ void preprocess_language_file (FILE *fp, FILE *fp_out)
 {
 	file_tags
 		tag;
-		
+
 	char
 		buffer [BUFFER_SIZE];
-				
+
 	int
 		count = 0,
 		lang_type,
 		lang_count,
 		end = FALSE;
-		
+
 	ASSERT (fp);
 
 	// read entries
@@ -784,7 +792,7 @@ void preprocess_language_file (FILE *fp, FILE *fp_out)
 		tag = (file_tags) get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
-		{	
+		{
 			case FILE_TAG_START:
 			{
 				fprintf (fp_out, ":START\n\n");
@@ -889,7 +897,7 @@ void preprocess_language_database (void)
 	FILE
 		*fp,
 		*fp_out;
-		
+
 	directory_file_list
 		*directory_listing;
 

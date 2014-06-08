@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -100,13 +100,13 @@ void notify_session_screen (ui_object *obj, void *arg)
 	{
 
 		//session_filter = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE;
-	
+
 		initialise_session_list ();
-	
+
 		//
 		// destroy session info list
 		//
-	
+
 		ui_object_destroy_list_items (session_list);
 
 		ui_object_destroy_list_items (session_info_list);
@@ -114,63 +114,40 @@ void notify_session_screen (ui_object *obj, void *arg)
 		set_ui_list_spacing_proportional_to_font (session_info_list, -0.2);
 
 		#if DEBUG_MODULE
-	
+
 		debug_log ("SESS_FN: opening pack buffer");
-	
+
 		#endif
-		
+
 		set_current_game_session_invalid ();
-	
+
 		//
 		// We're not in demo mode - set the session list
 		//
-	
+
 		process_game_initialisation_phases ();
 
 		ui_set_user_function (session_update_session_list);
-	
+
 //		set_ui_object_drawable ( session_game_delete_button, FALSE );
-	
+
 //		set_ui_object_drawable ( session_screen_session_parameters_button, FALSE );
 
 		//
 		// Setup the screen
 		//
 
-		blit_front_buffer_to_render_buffer ();
-	
-		if ( session_screen_graphic )
-		{
-	
-			destroy_texture_graphic ( session_screen_graphic );
+		set_ui_object_texture_graphic ( session_screen, create_texture_graphic ( "graphics\\ui\\cohokum\\combat.psd", 0 ) );
 
-			session_screen_graphic = NULL;
-		}
-	
-		session_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\combat.psd" );
-	
-		set_ui_object_texture_graphic ( session_screen, session_screen_graphic );
-	
 		reset_time_values ( session_screen );
 
 		notify_clear_all_session_parameters ();
-	}
-	else
-	{
-
-		if ( session_screen_graphic )
-		{
-	
-			destroy_texture_graphic ( session_screen_graphic );
-
-			session_screen_graphic = NULL;
-		}
 	}
 
 	set_ui_object_drawable (session_screen_delete_button, FALSE);
 
 	set_ui_object_drawable (session_screen_rename_button, FALSE);
-	
+
 	{
 
 		ui_object
@@ -192,40 +169,48 @@ void notify_session_back_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
 
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
-	
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#endif
 
 		leave_mission ();
-	
+
 		ui_set_user_function (NULL);
-	
+
 		#if DEBUG_MODULE
-	
+
 		debug_log ("SESS_FN: closing pack buffer");
-		
+
 		#endif
-	
+
 		set_game_initialisation_phase (GAME_INITIALISATION_PHASE_GAME_TYPE);
-		
+
 		game_type_hilight_selection (NULL);
-	
+
 		pop_ui_screen (SCREEN_POP_ACTUAL);
 	}
 	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
-	
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
-	
+
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,22 +223,26 @@ void notify_session_next_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_SELECTED));
 
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#endif
 
 		if (get_valid_current_game_session ())
 		{
-	
+
 			//
 			// reset delta time to keep mobile creation happy in faction.c (and everything else)
 			//
-	
+
 			if (get_comms_model () == COMMS_MODEL_CLIENT)
 			{
 
@@ -266,9 +255,9 @@ void notify_session_next_button (ui_object *obj, void *arg)
 				case GAME_TYPE_CAMPAIGN:
 				case GAME_TYPE_FREE_FLIGHT:
 				{
-				
+
 					save_global_options_data ();
-	
+
 					push_ui_screen (gunships_screen);
 
 					break;
@@ -285,52 +274,64 @@ void notify_session_next_button (ui_object *obj, void *arg)
 			}
 		}
 	}
-	else 
+	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
 
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 // Jabberwock 031118 Server side settings
-				
+
 
 void notify_session_continue_button (ui_object *obj, void *arg)
 {
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_SELECTED));
 
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#endif
 
 		//if (get_valid_current_game_session ())
 		{
 			if (get_comms_model () == COMMS_MODEL_CLIENT)
 			{
 				send_packet (get_server_id (), PACKET_TYPE_SETTINGS_REQUEST, NULL, 0, SEND_TYPE_PERSONAL);
-				
+
 			}
 		}
 	}
-	else 
+	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (session_screen, TRUE);
+#endif
 	}
 
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 // Jabberwock 031118 ends
@@ -456,7 +457,7 @@ void session_list_function (ui_object *obj, void *arg)
 			#endif
 
             set_comms_model (COMMS_MODEL_SERVER);
-				
+
 			set_current_game_session (current_session_list);
 
 			ui_object_destroy_list_items (session_info_list);
@@ -468,7 +469,7 @@ void session_list_function (ui_object *obj, void *arg)
 			//set_game_initialisation_phase (GAME_INITIALISATION_PHASE_SETUP);
 
 			//process_game_initialisation_phases ();
-			
+
 			break;
 		}
 
@@ -505,11 +506,11 @@ void session_list_function (ui_object *obj, void *arg)
 // Jabberwock 031126 - Empty box fix
 
 			set_direct_play_inet_address (current_session_list->ip_address);
-			
+
 			set_comms_model (COMMS_MODEL_CLIENT);
-			
+
 			session_list_rescan_function (NULL, NULL); //Jabberwock
-			
+
 			ui_set_user_function (session_update_session_list);
 
 			break;
@@ -529,14 +530,14 @@ void session_list_function (ui_object *obj, void *arg)
 			debug_log ("JOININET: flushing session list...");
 //			initialise_session_list();
 			current_session_list = NULL;
-			
+
 			//bail out if we don't find any sessions
 			num_sessions = direct_play_enumerate_sessions();
 			debug_log ("JOININET: Sessions found: %i", num_sessions);
 
 			if (num_sessions <= 0)
 			  break;
-			
+
 			debug_log ("JOININET: getting first session on server...");
 			get_first_multi_session(&current_session_list);
 
@@ -545,7 +546,7 @@ void session_list_function (ui_object *obj, void *arg)
 			  debug_log ("JOININET: current_session_list is still NULL!");
 			  break;
 			}
-			
+
 //			debug_log ("JOININET: resetting current session type...");
 //			current_session_list->type = SESSION_LIST_TYPE_JOIN;
 
@@ -568,10 +569,10 @@ void session_list_function (ui_object *obj, void *arg)
 			process_game_initialisation_phases ();
 
 			debug_log ("JOININET: Done!");
-			
+
          break;*/
       }
-      
+
       case SESSION_LIST_TYPE_FILTER:
 	  {
 	  		if (strcmp(session_filter_value, "root") == 0)
@@ -582,9 +583,9 @@ void session_list_function (ui_object *obj, void *arg)
 			{
 				sprintf (session_filter_value, "%s", "root");
 			}
-	  		
+
 	  		ui_object_destroy_list_items (session_info_list);
-	  		
+
 	  		session_list_rescan_function (NULL, NULL); //Jabberwock
 
 			{
@@ -703,15 +704,11 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_HOST)
 	{
 
-		update_mouse_pointer ();
-
 		compile_single_session_list (&new_session_list);
 	}
-	
+
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_JOIN)
 	{
-
-		update_mouse_pointer ();
 
 		set_mouse_graphic_off ();
 
@@ -721,11 +718,9 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	}
 
 // Jabberwock 031118 MP bug - "No Games" bug
-	
+
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_MASTER)
 	{
-
-		update_mouse_pointer ();
 
 		set_mouse_graphic_off ();
 
@@ -733,15 +728,13 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 
 		set_mouse_graphic_on ();
 	}
-	
+
 // Jabberwock 031118 MP bug ends
 /*
-// Jabberwock 031210 Session filter 
+// Jabberwock 031210 Session filter
 
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_FILTER)
 	{
-
-		update_mouse_pointer ();
 
 		set_mouse_graphic_off ();
 
@@ -755,8 +748,6 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_RESTORE)
 	{
 
-		update_mouse_pointer ();
-
 		compile_restore_session_list (&new_session_list);
 	}
 
@@ -764,28 +755,28 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	{
 
 		// find new current_game_session
-	
+
 		new_session = new_session_list;
-	
+
 		while (new_session)
 		{
-	
+
 			if (strcmp (new_session->title, current_game_session->title) == 0)
 			{
-	
+
 				set_current_game_session (new_session);
 
 				session_child_head = new_session;
-	
+
 				break;
 			}
-	
+
 			new_session = new_session->next;
 		}
 
 		if (!get_current_game_session ())
 		{
-	
+
 			debug_log ("SESS_FN: session on longer exists");
 		}
 	}
@@ -819,7 +810,7 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 
 				break;
 			}
-			
+
 			selected_obj = get_ui_object_next (selected_obj);
 		}
 	}
@@ -863,14 +854,14 @@ void build_session_list (void)
 
 	if (list)
 	{
-	
+
 		while (list)
 		{
-	
+
 			#if DEBUG_MODULE
-	
+
 			debug_log ("SESSION: list item %s", list->title);
-	
+
 			#endif
 
 			if (list->type == SESSION_LIST_TYPE_HOST)
@@ -919,11 +910,11 @@ void build_session_list (void)
 				col.g = 220;
 				col.b = 220;
 				col.a = 255;
-					
+
 				list_item = add_to_pop_up_list (list->displayed_title, session_list, NULL, list->list_id, UI_FONT_ARIAL_16, col);
 
 				set_ui_frontend_list_object_highlightable (list_item);
-			}			
+			}
 			// Jabberwock 031210 ends
 
 
@@ -932,7 +923,7 @@ void build_session_list (void)
 	}
 	else
 	{
-	
+
 		add_to_pop_up_list ( get_trans ("No Games"), session_list, NULL, 0, UI_FONT_ARIAL_16, ui_colour_red );
 	}
 	/*
@@ -1065,7 +1056,7 @@ void session_name_input_function ( ui_object *obj, void *arg )
 		strcpy (limited_name, copy);
 
 		set_ui_object_text (object, limited_name);
-	
+
 		set_ui_object_drawable (object, TRUE);
 
 		free_mem ( copy );
@@ -1110,26 +1101,26 @@ void notify_session_rename_button ( ui_object *obj, void *arg )
 			ASSERT (list_item);
 
 			// move input object to correct position
-		
+
 			x = get_ui_object_virtual_x (list_item);
 
 			y = get_ui_object_virtual_y (list_item);
 
 			set_ui_object_virtual_x (session_name_input, x);
-	
+
 			set_ui_object_virtual_y (session_name_input, y);
 
 			// switch input on
-	
+
 			set_ui_object_item_number (session_name_input, (int) list_item);
-	
+
 			set_ui_object_drawable (list_item, FALSE);
-	
+
 			set_ui_object_drawable (session_name_entry_area, TRUE);
-	
+
 			set_ui_object_state (session_name_input, UI_OBJECT_STATE_ON);
 		}
-	}	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1177,15 +1168,15 @@ void notify_session_delete_button ( ui_object *obj, void *arg )
 				*ptr++ = 'S';
 				*ptr++ = 'A';
 				*ptr++ = 'V';
-	
+
 				if ( file_exist ( filename ) )
 				{
 					debug_log ( "Deleting game2 %s", filename );
-	
+
 					unlink ( filename );
 				}
 			}
-			
+
 			ui_object_destroy_list_items (session_info_list);
 
 			session_list_rescan_function ( NULL, NULL );

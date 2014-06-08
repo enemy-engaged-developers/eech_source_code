@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -167,7 +167,8 @@ static screen
 	*rhs_mfd_texture_screen,
 	*lhs_overlaid_mfd_texture_screen,
 	*rhs_overlaid_mfd_texture_screen,
-	*eo_3d_texture_screen;
+	*eo_3d_texture_screen,
+	*eo_3d_texture_screen_over;
 
 static rgb_colour
 	clear_mfd_colour;
@@ -651,7 +652,7 @@ static char
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 	};
-	
+
 static char
 	inverted_stinger_missile_data[] =
 	{
@@ -748,12 +749,13 @@ void initialise_blackhawk_mfd (void)
 	}
 	else
 		draw_large_mfd = TRUE;
-		
+
 	if (draw_large_mfd)
 	{
 		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
 		mfd_texture_size = MFD_TEXTURE_LARGE_SIZE;
 		eo_3d_texture_screen = large_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
 		draw_line_func = draw_2d_half_thick_line;
 	}
 	else
@@ -761,6 +763,7 @@ void initialise_blackhawk_mfd (void)
 		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
 		mfd_texture_size = MFD_TEXTURE_SMALL_SIZE;
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
 		draw_line_func = draw_2d_line;
 	}
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
@@ -779,7 +782,7 @@ void initialise_blackhawk_mfd (void)
 	set_rgb_colour (MFD_COLOUR6,  40,  68,  56, 255);
 
 	set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0);
-	
+
 	//VJ 030423 TSd render mod
 	set_rgb_colour (MFD_COLOUR1,              0, 255,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,              0, 200,   0, 255);
@@ -878,36 +881,6 @@ void select_blackhawk_mfd_mode (mfd_modes mfd_mode, mfd_locations location)
 		rhs_mfd_mode = mfd_mode;
 
 		debug_log ("RHS MFD: %s", mfd_mode_names[rhs_mfd_mode]);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// LAYOUT GRID
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_layout_grid (void)
-{
-	float
-		x,
-		y;
-
-	if (display_mfd_layout_grid)
-	{
-		for (x = -1.0; x <= 1.0; x += 0.1)
-		{
-			draw_2d_line (x, -1.0, x, 1.0, sys_col_red);
-		}
-
-		for (y = -1.0; y <= 1.0; y += 0.1)
-		{
-			draw_2d_line (-1.0, y, 1.0, y, sys_col_red);
-		}
 	}
 }
 
@@ -1487,7 +1460,7 @@ static void display_radar_target_details (entity *target, float target_range, ra
 
 		set_mono_font_rel_position (-width -1.0, y_adjust);
 
-		print_mono_font_string ("MARKED");		
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 }
@@ -1549,12 +1522,12 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 
 	rgb_colour
 		target_symbol_colour;
-		
+
 //VJ 030423 TSD render mod
 	entity_sides
 		source_side;
-	entity	
-		*source;		
+	entity
+		*source;
 
 	float
 		dx,
@@ -1571,7 +1544,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 
 //VJ 030423 TSD render mod
 	source = get_gunship_entity ();
-	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);	
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
@@ -1599,7 +1572,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			{
 					target_symbol_colour = MFD_COLOUR7;
 			}
-		}		
+		}
 		else
 			target_symbol_colour = MFD_COLOUR1;
 	}
@@ -1620,7 +1593,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			{
 					target_symbol_colour = MFD_COLOUR8;
 			}
-		}		
+		}
 		else
 			target_symbol_colour = MFD_COLOUR2;
 	}
@@ -1906,7 +1879,7 @@ static void draw_ground_radar_mfd (void)
 
 			break;
 		}
-		// Jabberwock 031107 ends	
+		// Jabberwock 031107 ends
 	}
 	//
 	// scan range
@@ -2730,8 +2703,6 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	ASSERT (eo_3d_texture_screen);
 
-	ASSERT (d3d_can_render_to_texture);
-
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
@@ -3207,9 +3178,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		print_mono_font_string ("LOCKED");
 	}
 // Jabberwock 031107 Designated targets
-	
+
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	
+
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
 		if (draw_large_mfd)
@@ -3222,12 +3193,12 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 
 		width = get_mono_font_string_width ("MARKED");
-		
+
 		set_2d_mono_font_position (1.0, -1.0);
 
 		set_mono_font_rel_position (-width - 1.0, y_adjust);
-		
-		print_mono_font_string ("MARKED");		
+
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 
@@ -3492,20 +3463,20 @@ static void draw_tactical_situation_display_mfd (void)
 		set_rgb_colour (MFD_COLOUR4,	148, 32,   0, 255);//dark red
 
 		set_rgb_colour (MFD_COLOUR6,	255, 255,  0, 255);
-		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini		
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
 		//VJ 030530 colour tweaks: black and dark gray are best
 		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
 		set_rgb_colour (MFD_COLOUR8,   0, 0, 0, 255);
-		
+
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, FALSE);
 	}
-	
+
 	////////////////////////////////////////
 	//
 	// contour map
 	//
 	////////////////////////////////////////
-	
+
 //VJ 030423 TSD render mod, added mfd_env
 	if (!blackhawk_damage.navigation_computer)
 		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd, FALSE);
@@ -3670,7 +3641,7 @@ static void draw_tactical_situation_display_mfd (void)
 						draw_2d_mono_sprite (large_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR2);
 					else
 						draw_2d_mono_sprite (large_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR5);
-	
+
 					set_2d_mono_font_position (wp1_rel_position.x, wp1_rel_position.z);
 
 					set_mono_font_rel_position (-2.0, -4.0);
@@ -3765,12 +3736,12 @@ static void draw_tactical_situation_display_mfd (void)
 //VJ 030423 TSD render mod, enemy of comanche so red
 //VJ 030511 TSD render mod, enemy optional in eech.ini
 //VJ 030530 TSD render mod, corrected colour vor original view MFD_COLOUR2
-							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE) 
+							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
 								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
-							else	
+							else
 								if (command_line_tsd_enemy_colours)
 									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-								else				
+								else
 									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
 						}
 					}
@@ -4278,7 +4249,7 @@ static void draw_tactical_situation_display_mfd (void)
 			print_mono_font_string (buffer);
 		}
 	}
-//VJ 030423 TSD render mod	
+//VJ 030423 TSD render mod
 	set_rgb_colour (MFD_COLOUR1,              0, 255,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,              0, 200,   0, 255);
 	set_rgb_colour (MFD_COLOUR3,              0, 176,   0, 255);
@@ -5000,6 +4971,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static rgb_alpha_masked_sprite_data
 	weapon_sprite;
 
@@ -6943,15 +6915,14 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if 0
 static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour)
 {
 	int x1, x2, y1, y2;
 	int inner_x1, inner_x2, inner_y1, inner_y2;
-	
+
 	get_2d_int_screen_coordinates (min(x1_c, x2_c), max(y1_c, y2_c), &x1, &y1);
 	get_2d_int_screen_coordinates (max(x1_c, x2_c), min(y1_c, y2_c), &x2, &y2);
-	
+
 	inner_x1 = x1+1;
 	inner_x2 = x2-1;
 	inner_y1 = y1+1;
@@ -6970,7 +6941,7 @@ static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rg
 static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
 {
 	float x1, x2, y1, y2;
-	
+
 	get_2d_float_screen_coordinates (x1_c, y1_c, &x1, &y1);
 	get_2d_float_screen_coordinates (x2_c, y2_c, &x2, &y2);
 
@@ -6979,7 +6950,7 @@ static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled,
 		float x_min = min(x1, x2), x_max = max(x1, x2);
 		float y_min = min(y1, y2), y_max = max(y1, y2);
 
-		// set block likes to have its smallest arguments first		
+		// set block likes to have its smallest arguments first
 		set_block(x_min, y_min, x_max, y_max, colour);
 	}
 	else
@@ -7013,12 +6984,12 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 	// draw helicopter outline
 	// nose
-	
+
 	get_2d_float_screen_coordinates (-0.25, 0.5, &x1, &y1);
 	get_2d_float_screen_coordinates (-0.1, 0.525, &x2, &y2);
 	get_2d_float_screen_coordinates (-0.075, 0.6, &x3, &y3);
 	get_2d_float_screen_x_coordinate (0.075, &x4);
-	
+
 	draw_line (x1, y1, x2, y2, MFD_COLOUR1);
 	draw_line (x2, y2, x3, y3, MFD_COLOUR1);
 	draw_line (x3, y3, x4, y3, MFD_COLOUR1);
@@ -7030,7 +7001,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	draw_line (x3, y2, x2, y1, MFD_COLOUR1);
 
 	// body
-	
+
 	get_2d_float_screen_y_coordinate (-0.1, &forward_wing);
 	get_2d_float_screen_y_coordinate (-0.5, &rear_wing);
 	get_2d_float_screen_x_coordinate (-0.97, &wing_tip_left);
@@ -7055,7 +7026,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 	// cannon
 	if ( get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
-		APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, 
+		APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 		&weapon_sub_type, &number, &damaged))
 	{
 		int selected = (weapon_sub_type == selected_weapon) && !damaged;
@@ -7066,11 +7037,11 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 		get_2d_float_screen_x_coordinate (-0.08, &x3);
 		get_2d_float_screen_x_coordinate (0.08, &x4);
 		get_2d_float_screen_y_coordinate (0.2, &y3);
-		
+
 		if (selected)
 		{
 			set_block (x1, y1, x2, y2, MFD_COLOUR1);
-			set_block (x3, y2, x4, y3, MFD_COLOUR1);	
+			set_block (x3, y2, x4, y3, MFD_COLOUR1);
 		}
 		else
 		{
@@ -7082,11 +7053,11 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			draw_line (x3, y2, x3, y3, MFD_COLOUR1);
 			draw_line (x4, y2, x4, y3, MFD_COLOUR1);
 		}
-		
+
 		get_2d_float_screen_coordinates (-0.2, 0.2, &x1, &y1);
 		get_2d_float_screen_coordinates (0.2, 0.05, &x2, &y2);
-		
-		set_mono_font_colour (MFD_COLOUR1);	
+
+		set_mono_font_colour (MFD_COLOUR1);
 		draw_line (x1, y1, x2, y1, MFD_COLOUR1);
 		draw_line (x1, y1, x1, y2, MFD_COLOUR1);
 		draw_line (x1, y2, x2, y2, MFD_COLOUR1);
@@ -7098,7 +7069,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			sprintf (s, "%4d", number);
 		else
 			sprintf (s, "XXXX");
-	
+
 		x_adjust = get_mono_font_string_width (s) * -0.5;
 		set_mono_font_rel_position (x_adjust, 0.0);
 		print_mono_font_string (s);
@@ -7108,7 +7079,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	set_2d_mono_font_position (0.0, -0.2);
 
 	s_ptr = "CHAFF";
-		
+
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
@@ -7123,7 +7094,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			sprintf (s, "%2d", number);
 		else
 			sprintf (s, "XX");
-	
+
 		x_adjust = get_mono_font_string_width (s) * -0.5;
 		set_mono_font_rel_position (x_adjust, 0.0);
 		print_mono_font_string (s);
@@ -7133,13 +7104,13 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	set_2d_mono_font_position (0.0, -0.45);
 
 	s_ptr = "FLARE";
-		
+
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
 
 	set_2d_mono_font_position (0.0, -0.55);
-	
+
 	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
 		BLACKHAWK_LHS1_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
 		&weapon_sub_type, &number, &damaged))
@@ -7148,7 +7119,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			sprintf (s, "%2d", number);
 		else
 			sprintf (s, "XX");
-	
+
 		x_adjust = get_mono_font_string_width (s) * -0.5;
 		set_mono_font_rel_position (x_adjust, 0.0);
 		print_mono_font_string (s);
@@ -7161,11 +7132,11 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 		s_ptr = "AUTO";
 	else
 		s_ptr = "MAN";
-		
+
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
-	
+
 	// master arm box
 
 	set_2d_mono_font_position (0.0, 0.89);
@@ -7176,18 +7147,18 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 		set_mono_font_colour (MFD_CLEAR_COLOUR);
 		s_ptr = "ARM";
-		
-		draw_box(-0.14, 0.93,-0.09, 1.00, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box(-0.03, 0.93, 0.03, 1.00, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box( 0.10, 0.93, 0.15, 1.00, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box(-0.25, 0.93,-0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box(-0.25, 0.77,-0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box( 0.25, 0.93, 0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box( 0.25, 0.77, 0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box(-0.14, 0.77,-0.09, 0.70, TRUE, MFD_CLEAR_COLOUR);	
-		draw_box(-0.03, 0.77, 0.03, 0.70, TRUE, MFD_CLEAR_COLOUR);	
+
+		draw_box(-0.14, 0.93,-0.09, 1.00, TRUE, MFD_CLEAR_COLOUR);
+		draw_box(-0.03, 0.93, 0.03, 1.00, TRUE, MFD_CLEAR_COLOUR);
+		draw_box( 0.10, 0.93, 0.15, 1.00, TRUE, MFD_CLEAR_COLOUR);
+		draw_box(-0.25, 0.93,-0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);
+		draw_box(-0.25, 0.77,-0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);
+		draw_box( 0.25, 0.93, 0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);
+		draw_box( 0.25, 0.77, 0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);
+		draw_box(-0.14, 0.77,-0.09, 0.70, TRUE, MFD_CLEAR_COLOUR);
+		draw_box(-0.03, 0.77, 0.03, 0.70, TRUE, MFD_CLEAR_COLOUR);
 		draw_box( 0.10, 0.77, 0.15, 0.70, TRUE, MFD_CLEAR_COLOUR);
-		
+
 		draw_box(-0.25, 0.7, 0.25, 1.0, FALSE, MFD_COLOUR1);
 	}
 	else
@@ -7195,7 +7166,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 		draw_box(-0.25, 0.7, 0.25, 1.0, FALSE, MFD_COLOUR1);
 		s_ptr = "SAFE";
 	}
-		
+
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
@@ -7229,7 +7200,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
-	
+
 	// range finding system
 	draw_box(0.85, 0.8, 0.4, 0.55, FALSE, MFD_COLOUR1);
 
@@ -7291,7 +7262,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	for (pylon = APACHE_LHS_INNER_PYLON; pylon <= APACHE_RHS_WING_TIP_MOUNT; pylon++)
 	{
 		float pylon_x, pylon_y;
-		
+
 		pylon_y = -0.35;
 		switch (pylon)
 		{
@@ -7314,7 +7285,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			pylon_x = 0.97;
 			break;
 		}
-		
+
 		if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
 			pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 			&weapon_sub_type, &number, &damaged))
@@ -7323,16 +7294,16 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 			{
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon
-				
+
 				if (pylon == APACHE_LHS_INNER_PYLON || pylon == APACHE_LHS_OUTER_PYLON)
 					last_offset = 0.07;
 				else
 					last_offset = -0.07;
-				
+
 				for (i = 1; i <= number; i++)
 				{
 					float missile_x, missile_y;
-					
+
 					switch(i)
 					{
 						case 1:
@@ -7358,12 +7329,12 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 					// remove wing
 					get_2d_float_screen_x_coordinate(missile_x + 0.06, &x1);
 					get_2d_float_screen_x_coordinate(missile_x - 0.06, &x2);
-	
+
 					if (missile_y > pylon_y)
 						draw_line(x1, forward_wing, x2, forward_wing, MFD_CLEAR_COLOUR);
 					else
 						draw_line(x1, rear_wing, x2, rear_wing, MFD_CLEAR_COLOUR);
-		
+
 					// draw missile
 					if ((weapon_sub_type == selected_weapon) && !damaged)
 					{
@@ -7377,12 +7348,12 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 					}
 					set_mono_font_type (MONO_FONT_TYPE_7X12);
 					set_2d_mono_font_position (missile_x, missile_y-0.05);
-		
+
 					if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
 						sprintf(s, "R");
 					else
 						sprintf(s, "L");
-						
+
 					x_adjust = get_mono_font_string_width (s) * -0.4;
 					set_mono_font_rel_position (x_adjust, 0.0);
 					print_mono_font_string (s);
@@ -7419,16 +7390,16 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 				set_mono_font_type (MONO_FONT_TYPE_7X12);
 				set_2d_mono_font_position (pylon_x, pylon_y);
-	
+
 				if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255)
 					sprintf(s, "MP");
 				else
 					sprintf(s, "RC");
-					
+
 				x_adjust = get_mono_font_string_width (s) * -0.4;
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
-				
+
 				set_2d_mono_font_position (pylon_x, pylon_y - 0.1);
 				sprintf(s, "%2d", number);
 				x_adjust = get_mono_font_string_width (s) * -0.4;
@@ -7491,12 +7462,12 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 						draw_2d_mono_sprite(stinger_missile_data, pylon_x, pylon_y - 0.05, MFD_COLOUR1);
 				}
 			}
-			
+
 			// if damaged, draw X across pylon
 			if (damaged)
 			{
 				float width, height = 0.7, x1, y1, x2, y2, y_offset = 0.0;
-				
+
 				if (pylon == APACHE_LHS_WING_TIP_MOUNT || pylon == APACHE_RHS_WING_TIP_MOUNT)
 				{
 					// stingers are narrower and drawn more forward than other pylons
@@ -7508,7 +7479,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 				get_2d_float_screen_coordinates(pylon_x - 0.5 * width, pylon_y - 0.5 * height, &x1, &y1);
 				get_2d_float_screen_coordinates(pylon_x + 0.5 * width, pylon_y + y_offset + 0.5 * height, &x2, &y2);
-				
+
 				draw_half_thick_line(x1, y1, x2, y2, MFD_COLOUR1);
 				draw_half_thick_line(x1, y2, x2, y1, MFD_COLOUR1);
 			}
@@ -7522,6 +7493,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture)
 {
+#if 0
 	char
 		buffer[80];
 
@@ -7533,6 +7505,7 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 
 	float
 		u;
+#endif
 
 	if (draw_large_mfd)
 	{
@@ -7541,6 +7514,7 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 		return;
 	}
 
+#if 0
 	////////////////////////////////////////
 	//
 	// select cockpit graphics wrt time of day - required here for hi-res virtual cockpits
@@ -7809,6 +7783,7 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 			}
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8697,7 +8672,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 
 	if (draw_large_mfd)
 	{
-		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;  
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
 	}
 	else
 	{
@@ -8832,7 +8807,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				unlock_screen (active_screen);
 			}
@@ -8845,7 +8820,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_damaged_mfd ();
 
@@ -8860,7 +8835,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_ground_radar_mfd ();
 
@@ -8875,7 +8850,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_air_radar_mfd ();
 
@@ -8892,7 +8867,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_flir_mfd (TRUE, FALSE);
 
@@ -8909,7 +8884,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dtv_mfd (TRUE, FALSE);
 
@@ -8926,7 +8901,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dvo_mfd (TRUE, FALSE);
 
@@ -8941,7 +8916,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_tactical_situation_display_mfd ();
 
@@ -8956,7 +8931,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_aircraft_survivability_equipment_display_mfd ();
 
@@ -8971,7 +8946,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_weapon_display_mfd (location, FALSE);
 
@@ -8986,7 +8961,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_system_display_mfd ();
 
@@ -9001,7 +8976,7 @@ void draw_blackhawk_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int
 		{
 			if (lock_screen (active_screen))
 			{
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_engine_display_mfd ();
 
@@ -9104,9 +9079,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
+				draw_mfd_layout_grid ();
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9123,11 +9096,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_damaged_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9144,11 +9115,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_ground_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9165,11 +9134,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_air_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9180,7 +9147,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_FLIR:
 		////////////////////////////////////////
 		{
-			if ((d3d_can_render_to_texture) && (!blackhawk_damage.flir))
+			if (!blackhawk_damage.flir)
 			{
 				ASSERT (eo_3d_texture_screen);
 
@@ -9195,17 +9162,17 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				draw_3d_eo_display_on_texture (&blackhawk_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
 
-				set_active_screen (eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen_over);
 
-				if (lock_screen (eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen_over))
 				{
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_flir_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen_over);
 
-					unlock_screen (eo_3d_texture_screen);
+					eo_3d_texture_merge (eo_3d_texture_screen, eo_3d_texture_screen_over);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -9218,11 +9185,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 				{
 					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_flir_mfd (FALSE, FALSE);
-
-					flush_screen_texture_graphics (mfd_texture_screen);
 
 					unlock_screen (mfd_texture_screen);
 				}
@@ -9234,7 +9199,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_DTV:
 		////////////////////////////////////////
 		{
-			if ((d3d_can_render_to_texture) && (!blackhawk_damage.dtv))
+			if (!blackhawk_damage.dtv)
 			{
 				ASSERT (eo_3d_texture_screen);
 
@@ -9249,17 +9214,17 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				draw_3d_eo_display_on_texture (&blackhawk_dtv, TARGET_ACQUISITION_SYSTEM_DTV);
 
-				set_active_screen (eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen_over);
 
-				if (lock_screen (eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen_over))
 				{
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_dtv_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen_over);
 
-					unlock_screen (eo_3d_texture_screen);
+					eo_3d_texture_merge (eo_3d_texture_screen, eo_3d_texture_screen_over);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -9272,11 +9237,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 				{
 					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_dtv_mfd (FALSE, FALSE);
-
-					flush_screen_texture_graphics (mfd_texture_screen);
 
 					unlock_screen (mfd_texture_screen);
 				}
@@ -9288,7 +9251,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
-			if ((d3d_can_render_to_texture) && (!blackhawk_damage.dvo))
+			if (!blackhawk_damage.dvo)
 			{
 				ASSERT (eo_3d_texture_screen);
 
@@ -9303,17 +9266,17 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				draw_3d_eo_display_on_texture (&blackhawk_dvo, TARGET_ACQUISITION_SYSTEM_DVO);
 
-				set_active_screen (eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen_over);
 
-				if (lock_screen (eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen_over))
 				{
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_dvo_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen_over);
 
-					unlock_screen (eo_3d_texture_screen);
+					eo_3d_texture_merge (eo_3d_texture_screen, eo_3d_texture_screen_over);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -9326,11 +9289,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 				{
 					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					draw_2d_dvo_mfd (FALSE, FALSE);
-
-					flush_screen_texture_graphics (mfd_texture_screen);
 
 					unlock_screen (mfd_texture_screen);
 				}
@@ -9348,11 +9309,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_tactical_situation_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9369,11 +9328,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_aircraft_survivability_equipment_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9390,11 +9347,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_weapon_display_mfd (MFD_LOCATION_DONT_CARE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9411,11 +9366,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_system_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9432,11 +9385,9 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_engine_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9450,12 +9401,12 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 	{
 		if(location == MFD_LOCATION_LHS)
 		{
-			left_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+			left_export = get_screen_of_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 			copy_export_mfd(left_export,NULL);
 		}
 		else
 		{
-			right_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+			right_export = get_screen_of_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 			copy_export_mfd(NULL,right_export);
 		}
 	}
@@ -9714,9 +9665,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
+				draw_mfd_layout_grid ();
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9737,11 +9686,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_damaged_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9762,11 +9709,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_ground_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9787,11 +9732,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_air_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9819,11 +9762,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_flir_mfd (TRUE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9853,11 +9794,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dtv_mfd (TRUE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9887,11 +9826,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dvo_mfd (TRUE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9914,11 +9851,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_tactical_situation_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9939,11 +9874,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_aircraft_survivability_equipment_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9964,11 +9897,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_weapon_display_mfd (MFD_LOCATION_DONT_CARE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -9989,11 +9920,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_system_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}
@@ -10014,11 +9943,9 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_engine_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_texture_screen);
 
 				unlock_screen (mfd_texture_screen);
 			}

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -81,7 +81,7 @@
 
 void draw_3d_terrain_unclipped_fan_word_face ( int number_of_points )
 {
-		
+
 	render_3d_terrain_word_fan ( number_of_points );
 }
 
@@ -91,7 +91,7 @@ void draw_3d_terrain_unclipped_fan_word_face ( int number_of_points )
 
 void draw_3d_terrain_unclipped_fan_byte_face ( int number_of_points )
 {
-		
+
 	render_3d_terrain_byte_fan ( number_of_points );
 }
 
@@ -321,12 +321,12 @@ void draw_3d_terrain_texture_z_colour_unclipped_strip_byte_face ( int number_of_
 
 void draw_3d_terrain_twopass_unclipped_fan_word_face ( int number_of_points )
 {
-		
+
 	render_3d_terrain_word_fan ( number_of_points );
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-	
+
 		render_3d_terrain_secondary_word_fan ( number_of_points );
 	}
 }
@@ -337,12 +337,12 @@ void draw_3d_terrain_twopass_unclipped_fan_word_face ( int number_of_points )
 
 void draw_3d_terrain_twopass_unclipped_fan_byte_face ( int number_of_points )
 {
-		
+
 	render_3d_terrain_byte_fan ( number_of_points );
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-			
+
 		render_3d_terrain_secondary_byte_fan ( number_of_points );
 	}
 }
@@ -358,7 +358,7 @@ void draw_3d_terrain_twopass_unclipped_strip_word_face ( int number_of_points )
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-		
+
 		render_3d_terrain_secondary_word_strip ( number_of_points );
 	}
 }
@@ -374,7 +374,7 @@ void draw_3d_terrain_twopass_unclipped_strip_byte_face ( int number_of_points )
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-				
+
 		render_3d_terrain_secondary_byte_strip ( number_of_points );
 	}
 }
@@ -390,7 +390,7 @@ void draw_3d_terrain_twopass_texture_x_unclipped_fan_word_face ( int number_of_p
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-			
+
 		render_3d_terrain_secondary_texture_zy_word_fan ( number_of_points );
 	}
 }
@@ -406,7 +406,7 @@ void draw_3d_terrain_twopass_texture_x_unclipped_fan_byte_face ( int number_of_p
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-					
+
 		render_3d_terrain_secondary_texture_zy_byte_fan ( number_of_points );
 	}
 }
@@ -422,7 +422,7 @@ void draw_3d_terrain_twopass_texture_z_unclipped_fan_word_face ( int number_of_p
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-				
+
 		render_3d_terrain_secondary_texture_xy_word_fan ( number_of_points );
 	}
 }
@@ -438,7 +438,7 @@ void draw_3d_terrain_twopass_texture_z_unclipped_fan_byte_face ( int number_of_p
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-						
+
 		render_3d_terrain_secondary_texture_xy_byte_fan ( number_of_points );
 	}
 }
@@ -454,7 +454,7 @@ void draw_3d_terrain_twopass_texture_x_unclipped_strip_word_face ( int number_of
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-			
+
 		render_3d_terrain_secondary_texture_zy_word_strip ( number_of_points );
 	}
 }
@@ -470,7 +470,7 @@ void draw_3d_terrain_twopass_texture_x_unclipped_strip_byte_face ( int number_of
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-					
+
 		render_3d_terrain_secondary_texture_zy_byte_strip ( number_of_points );
 	}
 }
@@ -486,7 +486,7 @@ void draw_3d_terrain_twopass_texture_z_unclipped_strip_word_face ( int number_of
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-				
+
 		render_3d_terrain_secondary_texture_xy_word_strip ( number_of_points );
 	}
 }
@@ -502,7 +502,7 @@ void draw_3d_terrain_twopass_texture_z_unclipped_strip_byte_face ( int number_of
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-						
+
 		render_3d_terrain_secondary_texture_xy_byte_strip ( number_of_points );
 	}
 }
@@ -518,7 +518,7 @@ void draw_3d_terrain_twopass_colour_unclipped_fan_word_face ( int number_of_poin
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-					
+
 		render_3d_terrain_secondary_word_fan ( number_of_points );
 	}
 }
@@ -534,7 +534,7 @@ void draw_3d_terrain_twopass_colour_unclipped_fan_byte_face ( int number_of_poin
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-							
+
 		render_3d_terrain_secondary_byte_fan ( number_of_points );
 	}
 }
@@ -550,7 +550,7 @@ void draw_3d_terrain_twopass_colour_unclipped_strip_word_face ( int number_of_po
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-					
+
 		render_3d_terrain_secondary_word_strip ( number_of_points );
 	}
 }
@@ -566,7 +566,7 @@ void draw_3d_terrain_twopass_colour_unclipped_strip_byte_face ( int number_of_po
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-							
+
 		render_3d_terrain_secondary_byte_strip ( number_of_points );
 	}
 }
@@ -582,7 +582,7 @@ void draw_3d_terrain_twopass_texture_x_colour_unclipped_fan_word_face ( int numb
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-						
+
 		render_3d_terrain_secondary_texture_zy_word_fan ( number_of_points );
 	}
 }
@@ -598,7 +598,7 @@ void draw_3d_terrain_twopass_texture_x_colour_unclipped_fan_byte_face ( int numb
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-								
+
 		render_3d_terrain_secondary_texture_zy_byte_fan ( number_of_points );
 	}
 }
@@ -614,7 +614,7 @@ void draw_3d_terrain_twopass_texture_z_colour_unclipped_fan_word_face ( int numb
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-							
+
 		render_3d_terrain_secondary_texture_xy_word_fan ( number_of_points );
 	}
 }
@@ -630,7 +630,7 @@ void draw_3d_terrain_twopass_texture_z_colour_unclipped_fan_byte_face ( int numb
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-									
+
 		render_3d_terrain_secondary_texture_xy_byte_fan ( number_of_points );
 	}
 }
@@ -646,7 +646,7 @@ void draw_3d_terrain_twopass_texture_x_colour_unclipped_strip_word_face ( int nu
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-						
+
 		render_3d_terrain_secondary_texture_zy_word_strip ( number_of_points );
 	}
 }
@@ -662,7 +662,7 @@ void draw_3d_terrain_twopass_texture_x_colour_unclipped_strip_byte_face ( int nu
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-								
+
 		render_3d_terrain_secondary_texture_zy_byte_strip ( number_of_points );
 	}
 }
@@ -678,7 +678,7 @@ void draw_3d_terrain_twopass_texture_z_colour_unclipped_strip_word_face ( int nu
 
 	if ( terrain_alpha_visible_word ( number_of_points, terrain_3d_sector_point_word_references ) )
 	{
-							
+
 		render_3d_terrain_secondary_texture_xy_word_strip ( number_of_points );
 	}
 }
@@ -694,7 +694,7 @@ void draw_3d_terrain_twopass_texture_z_colour_unclipped_strip_byte_face ( int nu
 
 	if ( terrain_alpha_visible_byte ( number_of_points, terrain_3d_sector_point_byte_references ) )
 	{
-									
+
 		render_3d_terrain_secondary_texture_xy_byte_strip ( number_of_points );
 	}
 }
@@ -799,16 +799,16 @@ void draw_terrain_line ( int index1, int index2 )
 
 		if ( outcode & CLIP_HITHER )
 		{
-	
+
 			line = hither_clip_3d_polygon ( line, &outcode );
 		}
-	
+
 		if ( line )
 		{
 
 			if ( outcode )
 			{
-		
+
 				line = clip_3d_polygon ( line, outcode );
 			}
 
@@ -823,7 +823,7 @@ void draw_terrain_line ( int index1, int index2 )
 				colour.blue = 0;
 				colour.alpha = 0;
 
-				d3d_fog_intensity = RGBA_MAKE ( 0, 0, 0, 255 );
+				d3d_fog_intensity = D3DCOLOR_RGBA ( 0, 0, 0, 255 );
 
 				draw_wbuffered_plain_line ( line, colour );
 			}

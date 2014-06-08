@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -236,9 +236,9 @@ void initialise_formation_database (void)
 		y,
 		z;
 
-	formation_component_database = NULL;
+	ASSERT ( formation_component_database == NULL );
 
-	formation_database = NULL;
+	ASSERT ( formation_database == NULL );
 
 	last_formation_index = NUM_FORMATION_TYPES;
 
@@ -297,37 +297,37 @@ void initialise_formation_database (void)
 
 				if (count > 0)
 				{
-	
+
 					new_formation->sites = (vec3d *) malloc_heap_mem (sizeof (vec3d) * (count));
-	
+
 					loop = 0;
-	
+
   					#if DEBUG_MODULE
 
 					debug_log ("EN_FORMS: loading formation %s", formation_names [new_formation->formation]);
 
 					#endif
-	
+
 					while (loop < count)
 					{
-	
+
 						result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 						ASSERT (result == FILE_TAG_POSITION);
-	
+
 						x = get_next_file_float (file_ptr);
 						y = get_next_file_float (file_ptr);
 						z = get_next_file_float (file_ptr);
-	
+
 						new_formation->sites [loop].x = x;
 						new_formation->sites [loop].y = y;
 						new_formation->sites [loop].z = z;
-	
+
 						#if DEBUG_MODULE
 
 						debug_log ("	adding site %f, %f, %f", x, y, z);
 
 						#endif
-	
+
 						loop ++;
 					}
 				}
@@ -377,7 +377,7 @@ void initialise_formation_database_table (void)
 	formation_database_table = (formation_type **) malloc_heap_mem (sizeof (formation_type *) * (last_formation_index + 1));
 
 	memset (formation_database_table, 0, sizeof (formation_type *) * (last_formation_index + 1));
-	
+
 	this_formation = formation_database;
 
 	while (this_formation)
@@ -743,17 +743,17 @@ void initialise_formation_component_database (void)
 
 				if (count > 0)
 				{
-	
+
 					new_formation_component->components = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * (count * 2));
-	
+
 					loop = 0;
-	
+
 					#if DEBUG_MODULE
 
 					debug_log ("EN_FORMS: loading formation components %s, formation %s", formation_component_names [new_formation_component->formation_component], formation_names [new_formation_component->formation]);
 
 					#endif
-	
+
 					while (loop < count * 2)
 					{
 
@@ -764,7 +764,7 @@ void initialise_formation_component_database (void)
 							case ENTITY_SUB_TYPE_LANDING_PEOPLE:
 							case ENTITY_SUB_TYPE_LANDING_SEA:
 							{
-		
+
 								type = get_next_file_enum (file_ptr, entity_sub_type_vehicle_names, NUM_ENTITY_SUB_TYPE_VEHICLES);
 
 								#if DEBUG_MODULE
@@ -778,7 +778,7 @@ void initialise_formation_component_database (void)
 							case ENTITY_SUB_TYPE_LANDING_FIXED_WING:
 							case ENTITY_SUB_TYPE_LANDING_FIXED_WING_TRANSPORT:
 							{
-		
+
 								type = get_next_file_enum (file_ptr, entity_sub_type_aircraft_names, NUM_ENTITY_SUB_TYPE_AIRCRAFT);
 
 								#if DEBUG_MODULE
@@ -788,9 +788,9 @@ void initialise_formation_component_database (void)
 								break;
 							}
 						}
-	
+
 						new_formation_component->components [loop] = type;
-	
+
 						loop ++;
 					}
 				}

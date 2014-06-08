@@ -566,6 +566,26 @@ void initialise_common_crew_skins (void)
 
 void deinitialise_common_crew_skins (void)
 {
+#ifdef DEBUG
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_FACE_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_FACE_01_LOW_RES);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_NECK_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_SKIN);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_WSO_FACE_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_WSO_FACE_01_LOW_RES);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_WSO_NECK_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_US_WSO_SKIN);
+
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_PILOT_FACE_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_PILOT_FACE_LOW_RES);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_PILOT_NECK_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_PILOT_SKIN);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_WSO_FACE_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_WSO_FACE_LOW_RES);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_WSO_NECK_01);
+	set_system_texture_screen (NULL, TEXTURE_INDEX_RUSSIAN_WSO_SKIN);
+#endif
+
 	destroy_screen (us_pilot_high_detail_face);
 	destroy_screen (us_pilot_low_detail_face);
 	destroy_screen (us_pilot_neck);

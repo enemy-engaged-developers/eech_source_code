@@ -527,13 +527,13 @@ static void draw_hud_centre_datum (int fixed)
 		y_scale /= (active_2d_environment->vp.y_max - active_2d_environment->vp.y_min) * 0.5;
 			//VJ 050204 bug fix scale not correct
 		y_scale *= hud_screen_y_scale * scalefactor;
-	
+
 		x = x_scale * pilot_head_heading * fixed,
 		y = - y_scale * pilot_head_pitch * fixed;
-		
+
 		clip_2d_point_to_hud_extent(&x, &y);
 	}
-	
+
 
 	draw_2d_line (-0.10 + x, 0.00 + y, -0.05 + x, 0.00 + y, hud_colour);
 	draw_2d_line (0.10 + x, 0.00 + y, 0.05 + x, 0.00 + y, hud_colour);
@@ -598,9 +598,9 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 
 		set_2d_window (hud_env, PITCH_LADDER_WINDOW_X_MIN, PITCH_LADDER_WINDOW_Y_MIN, PITCH_LADDER_WINDOW_X_MAX, PITCH_LADDER_WINDOW_Y_MAX);
 		vp_x_min = u + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_X_MIN);
-		vp_x_max = u + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_X_MAX) - 0.001;
+		vp_x_max = u + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_X_MAX);
 		vp_y_min = v + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_Y_MIN);
-		vp_y_max = v + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_Y_MAX) - 0.001;
+		vp_y_max = v + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_Y_MAX);
 		set_2d_viewport (hud_env, vp_x_min, vp_y_min, vp_x_max, vp_y_max);
 
 		set_2d_instance_rotation (hud_env, roll);
@@ -724,7 +724,7 @@ static void draw_heading_scale (void)
 
 	set_2d_window (hud_env, HDG_WINDOW_X_MIN * heading_width_ratio, HDG_WINDOW_Y_MIN, HDG_WINDOW_X_MAX * heading_width_ratio, HDG_WINDOW_Y_MAX);
 	mfd_vp_x_min = u - (hud_viewport_size * (heading_width_ratio * 0.5));
-	mfd_vp_x_max = u + (hud_viewport_size * (heading_width_ratio * 0.5)) - 0.001;
+	mfd_vp_x_max = u + (hud_viewport_size * (heading_width_ratio * 0.5));
 	set_2d_viewport (hud_env, mfd_vp_x_min, hud_viewport_y_min, mfd_vp_x_max, hud_viewport_y_max);
 
 	// aircraft heading readout
@@ -2433,7 +2433,6 @@ void draw_kiowa_hud (void)
 	{
 		if (get_global_draw_cockpit_graphics ())
 		{
-			if (d3d_modulate_alpha)
 			{
 				heading_offset = KIOWA_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
 
@@ -2456,13 +2455,6 @@ void draw_kiowa_hud (void)
 					alpha = (int) (max_offset * (200.0 / rad (25.0))) + 55;
 
 					alpha = bound (alpha, 0, 255);
-				}
-			}
-			else
-			{
-				if ((pilot_head_heading == KIOWA_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == KIOWA_INSTRUMENT_VIEW_PITCH))
-				{
-					return;
 				}
 			}
 		}
@@ -2502,9 +2494,9 @@ void draw_kiowa_hud (void)
 
 	hud_viewport_y_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
 
-	hud_viewport_x_max = HUD_VIEWPORT_SIZE - hud_viewport_x_min-0.001;
+	hud_viewport_x_max = HUD_VIEWPORT_SIZE - hud_viewport_x_min;
 
-	hud_viewport_y_max = HUD_VIEWPORT_SIZE - hud_viewport_y_min-0.001;
+	hud_viewport_y_max = HUD_VIEWPORT_SIZE - hud_viewport_y_min;
 
 //VJ 050126 hud mod end
 
@@ -2535,8 +2527,8 @@ void draw_kiowa_hud (void)
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (scale*640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (scale*480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (scale*640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (scale*480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (scale*640.0 * 2.0)) * full_screen_width);
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (scale*480.0 * 2.0)) * full_screen_height);
 
 		hud_screen_x_scale = scale*640.0 / full_screen_width;
 		hud_screen_y_scale = scale*480.0 / full_screen_height;
@@ -2603,8 +2595,6 @@ void draw_kiowa_hud (void)
 		}
 
 		hud_colour = store_hud_colour;
-
-		flush_screen_texture_graphics (hud_texture_screen);
 
 		unlock_screen (hud_texture_screen);
 	}
@@ -2729,8 +2719,6 @@ void draw_kiowa_hud_on_lens_texture (void)
 	{
 		set_block (0, 0, LENS_HUD_VIEWPORT_SIZE - 1, LENS_HUD_VIEWPORT_SIZE - 1, clear_lens_hud_colour);
 
-		flush_screen_texture_graphics (lens_outer_texture_screen);
-
 		unlock_screen (lens_outer_texture_screen);
 	}
 
@@ -2779,9 +2767,9 @@ void draw_kiowa_hud_on_lens_texture (void)
 
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = LENS_HUD_VIEWPORT_SIZE - 0.001;
+	hud_viewport_x_max = LENS_HUD_VIEWPORT_SIZE;
 
-	hud_viewport_y_max = LENS_HUD_VIEWPORT_SIZE - 0.001;
+	hud_viewport_y_max = LENS_HUD_VIEWPORT_SIZE;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -2792,8 +2780,8 @@ void draw_kiowa_hud_on_lens_texture (void)
 	hud_screen_x_min = 0.0;
 	hud_screen_y_min = 0.0;
 
-	hud_screen_x_max = LENS_HUD_VIEWPORT_SIZE - 0.001;
-	hud_screen_y_max = LENS_HUD_VIEWPORT_SIZE - 0.001;
+	hud_screen_x_max = LENS_HUD_VIEWPORT_SIZE;
+	hud_screen_y_max = LENS_HUD_VIEWPORT_SIZE;
 
 	hud_screen_x_scale = 1.0;
 	hud_screen_y_scale = 1.0;
@@ -2841,8 +2829,6 @@ void draw_kiowa_hud_on_lens_texture (void)
 		}
 
 		hud_colour = store_hud_colour;
-
-		flush_screen_texture_graphics (lens_hud_texture_screen);
 
 		unlock_screen (lens_hud_texture_screen);
 	}

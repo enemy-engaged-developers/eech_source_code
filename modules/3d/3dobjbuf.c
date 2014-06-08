@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -200,7 +200,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 	switch ( type )
 	{
-	
+
 		case OBJECT_3D_DRAW_TYPE_OBJECT:
 		{
 
@@ -225,68 +225,68 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 					if ( visible != OBJECT_3D_NOT_VISIBLE )
 					{
-	
+
 						buffer = get_3d_scene_slot ();
-			
+
 						if ( buffer )
 						{
-		
+
 							distance_bias += object->view_position.z;
-		
+
 							distance_bias += SHADOW_DISTANCE_BIAS;
-		
+
 							buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT_SHADOW;
-			
+
 							buffer->z = *( ( int * ) &distance_bias );
 
 							buffer->object = object;
-		
+
 							if ( get_3d_shadows_translucent () )
 							{
-		
+
 								insert_low_nonzbuffered_scene_slot_into_3d_scene ( buffer );
 							}
 							else
 							{
-			
+
 								insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 							}
 						}
 					}
 				}
-	
+
 				//
 				// Set the relative position & clip object
 				//
-	
+
 				set_object_3d_instance_relative_position ( object );
-	
+
 				visibility = get_object_3d_instance_visibility ( object );
-	
+
 				if ( visibility != OBJECT_3D_NOT_VISIBLE )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += object->view_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
 
 						buffer->object = object;
-	
+
 						if ( object->vp.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 
@@ -296,7 +296,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 //						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
-	
+
 //							pre_render_3d_object ( object );
 						}
 					}
@@ -329,16 +329,16 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 			{
 
 				buffer = get_3d_scene_slot ();
-	
+
 				if ( buffer )
 				{
 
 					distance_bias += object->relative_position.z;
 
 					buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT_SCENE;
-	
+
 					buffer->z = *( ( int * ) &distance_bias );
-	
+
 					buffer->scene = *object;
 
 					if ( object->position.y > middle_scene_slot_height )
@@ -374,35 +374,35 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 				//
 				// Set the relative position & clip object
 				//
-	
+
 				set_object_3d_instance_relative_position ( object );
-	
+
 				visibility = get_object_3d_instance_visibility ( object );
-	
+
 				if ( visibility != OBJECT_3D_NOT_VISIBLE )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += object->view_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->object = object;
-	
+
 						if ( object->vp.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 
@@ -412,7 +412,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 //						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
-	
+
 //							pre_render_3d_object ( object );
 						}
 					}
@@ -433,25 +433,25 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 			if ( !exclusive_3d_instance )
 			{
-	
+
 				sprite = ( object_3d_sprite * ) data;
-	
+
 				get_position_3d_relative_position ( &sprite->position, &relative_position );
-	
+
 				if ( relative_position.z >= clip_hither )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += relative_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_SPRITE;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->sprite.position = relative_position;
 
 						if (sprite->additive && (active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME))
@@ -463,15 +463,15 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						buffer->sprite.colour = sprite->colour;
 						buffer->sprite.additive = sprite->additive;
 						buffer->sprite.roll = sprite->roll;
-	
+
 						if ( sprite->position.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_nonzbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_nonzbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 					}
@@ -492,39 +492,39 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 
 			if ( !exclusive_3d_instance )
 			{
-	
+
 				explosion = ( object_3d_explosion * ) data;
-	
+
 				get_position_3d_relative_position ( &explosion->position, &relative_position );
-	
+
 				if ( relative_position.z >= clip_hither )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += relative_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_EXPLOSION;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->explosion.position = explosion->position;
 						buffer->explosion.relative_position = relative_position;
 						buffer->explosion.scale = explosion->scale;
 						buffer->explosion.animation = explosion->animation;
 						buffer->explosion.object_index = explosion->object_index;
-	
+
 						if ( explosion->position.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_nonzbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_nonzbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 					}
@@ -534,7 +534,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 			break;
 		}
 
-	
+
 		default:
 		{
 
@@ -572,14 +572,14 @@ void insert_object_shadow_into_3d_scene ( object_3d_instance *object )
 			{
 
 				buffer = get_3d_scene_slot ();
-	
+
 				if ( buffer )
 				{
 
 					buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT_SHADOW;
-	
+
 					buffer->z = *( ( int * ) &object->view_position.z );
-	
+
 					buffer->object = object;
 
 					if ( get_3d_shadows_translucent () )
@@ -589,7 +589,7 @@ void insert_object_shadow_into_3d_scene ( object_3d_instance *object )
 					}
 					else
 					{
-	
+
 						insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 					}
 				}
@@ -612,7 +612,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 
 	switch ( type )
 	{
-	
+
 		case OBJECT_3D_DRAW_TYPE_OBJECT:
 		{
 
@@ -638,33 +638,33 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 				object->view_position = *relative_position;
 
 //				set_object_3d_instance_relative_position ( object );
-	
+
 				visibility = get_object_3d_instance_visibility ( object );
-	
+
 				if ( visibility != OBJECT_3D_NOT_VISIBLE )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += object->view_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->object = object;
-	
+
 						if ( object->vp.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 
@@ -674,7 +674,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 
 //						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
-	
+
 //							pre_render_3d_object ( object );
 						}
 					}
@@ -701,35 +701,35 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 				//
 				// Set the relative position & clip object
 				//
-	
+
 				object->view_position = *relative_position;
 
 				visibility = get_object_3d_instance_visibility ( object );
-	
+
 				if ( visibility != OBJECT_3D_NOT_VISIBLE )
 				{
-	
+
 					buffer = get_3d_scene_slot ();
-		
+
 					if ( buffer )
 					{
-	
+
 						distance_bias += object->view_position.z;
-	
+
 						buffer->type = OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT;
-		
+
 						buffer->z = *( ( int * ) &distance_bias );
-		
+
 						buffer->object = object;
-	
+
 						if ( object->vp.y > middle_scene_slot_height )
 						{
-	
+
 							insert_high_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 						else
 						{
-	
+
 							insert_low_zbuffered_scene_slot_into_3d_scene ( buffer );
 						}
 
@@ -739,7 +739,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 
 //						if ( active_3d_environment->infrared_mode == RENDER_CLEAR )
 						{
-	
+
 //							pre_render_3d_object ( object );
 						}
 					}
@@ -773,7 +773,7 @@ void insert_zbiased_coloured_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 
 	switch ( type )
 	{
-	
+
 		case OBJECT_3D_DRAW_TYPE_OBJECT_COLOURED:
 		{
 
@@ -797,16 +797,16 @@ void insert_zbiased_coloured_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 			{
 
 				buffer = get_3d_scene_slot ();
-	
+
 				if ( buffer )
 				{
 
 					distance_bias += object->view_position.z;
 
 					buffer->type = OBJECT_3D_DRAW_TYPE_OBJECT_COLOURED;
-	
+
 					buffer->z = *( ( int * ) &distance_bias );
-	
+
 					buffer->object = object;
 
 					buffer->colour = colour;
@@ -870,7 +870,7 @@ void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void 
 
 	switch ( type )
 	{
-	
+
 		case OBJECT_3D_DRAW_TYPE_OBJECT:
 		{
 
@@ -901,7 +901,7 @@ void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void 
 
 			break;
 		}
-	
+
 		default:
 		{
 
@@ -1834,7 +1834,7 @@ void draw_3d_scene ( void )
 void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 {
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	if ( d3d_using_hardware_tnl )
 	{
@@ -1853,19 +1853,19 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 
 				if ( d3d_using_hardware_tnl )
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
-	
-						draw_hardware_3d_object ( object_order->object, FALSE );
+
+					set_d3d_int_state ( D3DRS_CLIPPING, TRUE );
+					set_d3d_int_state ( D3DRS_LIGHTING, TRUE );
+
+					draw_hardware_3d_object ( object_order->object, FALSE );
 				}
 				else
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-						draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
+					set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+					set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
+
+					draw_wbuffered_3d_object ( object_order->object, FALSE, FALSE );
 				}
 
 #if DRAW_OBJECT_BOUNDING_BOX
@@ -1882,18 +1882,18 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 
 				if ( d3d_using_hardware_tnl )
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
-	
+
+					set_d3d_int_state ( D3DRS_CLIPPING, TRUE );
+					set_d3d_int_state ( D3DRS_LIGHTING, TRUE );
+
 					draw_hardware_zbuffered_3d_object ( object_order->object, FALSE, FALSE );
 				}
 				else
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
-	
+
+					set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+					set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
+
 					draw_zbuffered_3d_object ( object_order->object, FALSE, FALSE );
 				}
 
@@ -1903,15 +1903,15 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_OBJECT_COLOURED:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				if ( shadows_enabled )
 				{
 
 					if ( object_order->object->object_has_shadow )
 					{
-	
+
 						draw_3d_object_shadow ( object_order->object );
 					}
 				}
@@ -1934,18 +1934,18 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 
 				if ( d3d_using_hardware_tnl )
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
-	
+
+					set_d3d_int_state ( D3DRS_CLIPPING, TRUE );
+					set_d3d_int_state ( D3DRS_LIGHTING, TRUE );
+
 					draw_hardware_3d_object ( object_order->object, FALSE );
 				}
 				else
 				{
-	
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
-	
+
+					set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+					set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
+
 					draw_wbuffered_3d_object ( object_order->object, FALSE, TRUE );
 				}
 
@@ -1955,8 +1955,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_POLYLINE:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				draw_3d_polyline ( &object_order->polyline );
 
@@ -1967,17 +1967,17 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLIPPED_SECTOR:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
-	
+
 					draw_3d_terrain_3d_clipped_bw_sector ( object_order );
 				}
 				else
 				{
-	
+
 					draw_3d_terrain_3d_clipped_sector ( object_order );
 				}
 
@@ -1987,8 +1987,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_2D_CLIPPED_SECTOR:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
@@ -2007,8 +2007,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_UNCLIPPED_SECTOR:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
@@ -2027,8 +2027,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				draw_3d_terrain_tree_object ( object_order );
 
@@ -2039,8 +2039,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				draw_3d_terrain_cloud_puff_object ( object_order );
 
@@ -2050,8 +2050,8 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_CLOUD_SECTOR:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				draw_3d_cloud_sector ( object_order );
 
@@ -2070,7 +2070,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 		object_order = object_order->succ;
 	}
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2089,8 +2089,8 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_SPRITE:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 				draw_3d_sprite ( &object_order->sprite );
 
@@ -2100,10 +2100,10 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_EXPLOSION:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_NONE );
 
 				draw_3d_explosion ( &object_order->explosion );
 
@@ -2113,10 +2113,10 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_SMOKE_TRAIL:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_NONE );
 
 				draw_3d_smoke_trail ( &object_order->smoke_trail );
 
@@ -2126,10 +2126,10 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_TRANSLUCENT_POLYGON_BUFFER:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 				draw_polygon_buffer ( object_order->translucent_buffer );
 
@@ -2139,10 +2139,10 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_OBJECT_SHADOW:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 				draw_3d_object_shadow ( object_order->object );
 
@@ -2152,22 +2152,22 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_TREE_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
-			
+
 				if ( command_line_trees_fog == 1 || command_line_trees_fog == 2 && (1 / get_delta_time_average() >= (20 + 10 * !fog)) ) // trees fog thealx 130501
 				{
 					fog = TRUE;
 					set_d3d_alpha_fog_zbuffer ( TRUE, TRUE, TRUE, FALSE );
-					draw_3d_terrain_tree_object ( object_order ); 
+					draw_3d_terrain_tree_object ( object_order );
 					set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 				}
 				else
 				{
-					draw_3d_terrain_tree_object ( object_order ); 
+					draw_3d_terrain_tree_object ( object_order );
 					fog = FALSE;
 				}
 
@@ -2178,10 +2178,10 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case	OBJECT_3D_DRAW_TYPE_TERRAIN_3D_CLOUD_PUFF_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+				set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+				set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 				draw_3d_terrain_cloud_puff_object ( object_order );
 
@@ -2191,23 +2191,23 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_TRANSLUCENT_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 				if ( d3d_using_hardware_tnl )
 				{
 
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
+					set_d3d_int_state ( D3DRS_CLIPPING, TRUE );
+					set_d3d_int_state ( D3DRS_LIGHTING, TRUE );
 
 					draw_3d_hardware_translucent_object ( object_order->translucent_surfaces );
 				}
 				else
 				{
 
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+					set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+					set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
-						draw_3d_translucent_object ( object_order->translucent_surfaces );
+					draw_3d_translucent_object ( object_order->translucent_surfaces );
 				}
 
 				break;
@@ -2216,21 +2216,21 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 			case OBJECT_3D_DRAW_TYPE_ZBUFFERED_TRANSLUCENT_OBJECT:
 			{
 
-				set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+				set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 				if ( d3d_using_hardware_tnl )
 				{
 
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, TRUE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, TRUE );
+					set_d3d_int_state ( D3DRS_CLIPPING, TRUE );
+					set_d3d_int_state ( D3DRS_LIGHTING, TRUE );
 
 					draw_3d_hardware_zbuffered_translucent_object ( object_order->translucent_surfaces );
 				}
 				else
 				{
 
-					set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
-					set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
+					set_d3d_int_state ( D3DRS_CLIPPING, FALSE );
+					set_d3d_int_state ( D3DRS_LIGHTING, FALSE );
 
 					draw_3d_translucent_object ( object_order->translucent_surfaces );
 				}
@@ -2259,9 +2259,9 @@ void draw_transparent_scene_objects ( scene_slot_drawing_list *object_order )
 void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order )
 {
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, FALSE);
-	set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, FALSE);
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_ZENABLE, FALSE);
+	set_d3d_int_state ( D3DRS_ZWRITEENABLE, FALSE);
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	while ( object_order )
 	{
@@ -2289,9 +2289,9 @@ void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order )
 		object_order = object_order->succ;
 	}
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, TRUE/*ddraw.use_z_buffer*/ );
-	set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, TRUE/*ddraw.use_z_buffer*/ );
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_ZENABLE, TRUE );
+	set_d3d_int_state ( D3DRS_ZWRITEENABLE, TRUE );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 }
 #endif
 
@@ -2370,7 +2370,7 @@ void set_up_tnl_hardware ( void )
 	if ( current_3d_lights )
 	{
 
-		D3DLIGHT7
+		D3DLIGHT9
 			light;
 
 		light_3d_source
@@ -2385,45 +2385,45 @@ void set_up_tnl_hardware ( void )
 
 		while ( this_light )
 		{
-	
+
 			memset ( &light, 0, sizeof ( light ) );
-	
-			light.dltType = D3DLIGHT_DIRECTIONAL;
-	
-			light.dcvDiffuse.r = this_light->colour.red;
-			light.dcvDiffuse.g = this_light->colour.green;
-			light.dcvDiffuse.b = this_light->colour.blue;
+
+			light.Type = D3DLIGHT_DIRECTIONAL;
+
+			light.Diffuse.r = this_light->colour.red;
+			light.Diffuse.g = this_light->colour.green;
+			light.Diffuse.b = this_light->colour.blue;
 
 			if ( count == 0 )
 			{
 
-				light.dcvAmbient.r = ambient_3d_light.colour.red;
-				light.dcvAmbient.g = ambient_3d_light.colour.green;
-				light.dcvAmbient.b = ambient_3d_light.colour.blue;
+				light.Ambient.r = ambient_3d_light.colour.red;
+				light.Ambient.g = ambient_3d_light.colour.green;
+				light.Ambient.b = ambient_3d_light.colour.blue;
 
 				if (active_3d_environment->render_filter == RENDER_INFRARED) // FLIR objects HW
-					light.dcvAmbient.r = light.dcvAmbient.g = light.dcvAmbient.b = 1.0;
+					light.Ambient.r = light.Ambient.g = light.Ambient.b = 1.0;
 			}
 			else
 			{
-	
-				light.dcvAmbient.r = 0;
-				light.dcvAmbient.g = 0;
-				light.dcvAmbient.b = 0;
+
+				light.Ambient.r = 0;
+				light.Ambient.g = 0;
+				light.Ambient.b = 0;
 			}
-	
-			light.dcvSpecular.r = this_light->colour.red;
-			light.dcvSpecular.g = this_light->colour.green;
-			light.dcvSpecular.b = this_light->colour.blue;
-	
-			light.dvDirection.x = -this_light->light_direction.x;
-			light.dvDirection.y = -this_light->light_direction.y;
-			light.dvDirection.z = -this_light->light_direction.z;
+
+			light.Specular.r = this_light->colour.red;
+			light.Specular.g = this_light->colour.green;
+			light.Specular.b = this_light->colour.blue;
+
+			light.Direction.x = -this_light->light_direction.x;
+			light.Direction.y = -this_light->light_direction.y;
+			light.Direction.z = -this_light->light_direction.z;
 
 			f3d_set_light(count, &light);
 
 			f3d_light_enable(count, TRUE);
-	
+
 			this_light = this_light->succ;
 
 			count++;
@@ -2447,7 +2447,7 @@ void set_up_tnl_hardware ( void )
 		rel.x = visual_3d_vp->attitude[0][0] * visual_3d_vp->x + visual_3d_vp->attitude[0][1] * visual_3d_vp->y + visual_3d_vp->attitude[0][2] * visual_3d_vp->z;
 		rel.y = visual_3d_vp->attitude[1][0] * visual_3d_vp->x + visual_3d_vp->attitude[1][1] * visual_3d_vp->y + visual_3d_vp->attitude[1][2] * visual_3d_vp->z;
 		rel.z = visual_3d_vp->attitude[2][0] * visual_3d_vp->x + visual_3d_vp->attitude[2][1] * visual_3d_vp->y + visual_3d_vp->attitude[2][2] * visual_3d_vp->z;
-	
+
 		m[0][0] = visual_3d_vp->attitude[0][0];
 		m[0][1] = visual_3d_vp->attitude[1][0];
 		m[0][2] = visual_3d_vp->attitude[2][0];
@@ -2470,7 +2470,7 @@ void set_up_tnl_hardware ( void )
 		}
 /*		else
 		{
-	
+
 			m[3][0] = -rel.x;
 			m[3][1] = -rel.y;
 			m[3][2] = -rel.z;
@@ -2478,8 +2478,8 @@ void set_up_tnl_hardware ( void )
 		m[3][3] = 1;
 
 		memcpy ( &d3d_matrix, m, sizeof ( D3DMATRIX ) );
-	
-		f3d_set_transform ( D3DTRANSFORMSTATE_VIEW, &d3d_matrix );
+
+		f3d_set_transform ( D3DTS_VIEW, &d3d_matrix );
 	}
 
 	//
@@ -2511,10 +2511,10 @@ void set_up_tnl_hardware ( void )
 		}
 
 		get_4d_projection_matrix ( m, near_plane, far_plane, view_width_angle, view_height_angle );
-	
+
 		memcpy ( &d3d_matrix, m, sizeof ( D3DMATRIX ) );
-	
-		f3d_set_transform ( D3DTRANSFORMSTATE_PROJECTION, &d3d_matrix );
+
+		f3d_set_transform ( D3DTS_PROJECTION, &d3d_matrix );
 	}
 
 	//
@@ -2534,21 +2534,21 @@ void set_up_tnl_hardware ( void )
 		// Create & set the viewport for the device2 interface.
 		//
 
-		D3DVIEWPORT7
+		D3DVIEWPORT9
 			viewdata;
 
 		//
 		// Set up the viewport values for initial values
 		//
 
-		viewdata.dwX = active_3d_environment->clip_xmin;
-		viewdata.dwY = active_3d_environment->clip_ymin;
+		viewdata.X = active_3d_environment->clip_xmin;
+		viewdata.Y = active_3d_environment->clip_ymin;
 
-		viewdata.dwWidth = active_3d_environment->clip_xmax - active_3d_environment->clip_xmin + 0.01;
-		viewdata.dwHeight = active_3d_environment->clip_ymax - active_3d_environment->clip_ymin + 0.01;
-		
-		viewdata.dvMinZ = 0.0;	//active_3d_environment->zbuffer_z_maximum_value;
-		viewdata.dvMaxZ = 1.0;	//active_3d_environment->zbuffer_z_minimum_value;
+		viewdata.Width = active_3d_environment->clip_xmax - active_3d_environment->clip_xmin + 0.01;
+		viewdata.Height = active_3d_environment->clip_ymax - active_3d_environment->clip_ymin + 0.01;
+
+		viewdata.MinZ = 0.0;	//active_3d_environment->zbuffer_z_maximum_value;
+		viewdata.MaxZ = 1.0;	//active_3d_environment->zbuffer_z_minimum_value;
 
 		f3d_set_viewport ( &viewdata );
 	}

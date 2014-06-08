@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -149,13 +149,13 @@ void create_campaign (session_list_data_type *session)
 
 	attach_session_sound_effects (get_session_entity ());
 
-   enable_entity_comms_messages ();
-   
+	enable_entity_comms_messages ();
+
 //VJ 060217 initialize map info after parsing the campaign file
 //VJ 060319 further bug fixes
-  	read_map_info_data();      
+ 	read_map_info_data();
 	debug_log("###CUSTOM TEXTURE STARTUP: faction.c: create_campaign: read_map_info_data");
-	  	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ void destroy_campaign (void)
    debug_log ("FACTION: deinitialise faction");
 
    #endif
-	
+
 	if (campaign_population_filename)
 	{
 
@@ -178,7 +178,7 @@ void destroy_campaign (void)
 	}
 
 	campaign_population_filename = NULL;
-	
+
 	if (population_placement_filename)
 	{
 
@@ -186,7 +186,7 @@ void destroy_campaign (void)
 	}
 
 	population_placement_filename = NULL;
-	
+
 	if (side_data_filename)
 	{
 
@@ -196,6 +196,8 @@ void destroy_campaign (void)
 	side_data_filename = NULL;
 
 	initialise_route_data ();
+
+	deinitialise_parser ();
 
 	deinitialise_division_database ();
 
@@ -304,7 +306,7 @@ entity *create_landed_faction_members (entity *keysite, entity_sub_types member_
    #endif
 
 	ASSERT (keysite);
-	
+
 	ASSERT (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE);
 
 	side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
@@ -381,7 +383,7 @@ entity *create_landed_faction_members (entity *keysite, entity_sub_types member_
 
 				if (!get_local_entity_int_value (keysite, INT_TYPE_IN_USE))
 				{
-	
+
 					set_local_entity_int_value (keysite, INT_TYPE_IN_USE, TRUE);
 
 					update_imap_sector_side (keysite, TRUE);
@@ -660,7 +662,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 			}
 			else
 			{
-				
+
 				member_type = formation_components->components [(loop * 2) + 1];
 			}
 
@@ -747,7 +749,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 	else
 	{
 		#ifdef DEBUG
-		
+
 		debug_fatal ("FACTION: No landing entity for group type %s at %s (%d)",
 								group_database [group_type].full_name,
 								get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
@@ -875,9 +877,9 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 					#if DEBUG_MODULE
 
 					debug_log ("FACTION: creation failed... can't lock landing/landed site");
-	
+
 					#endif
-  			
+
 					return NULL;
 				}
 			}
@@ -917,12 +919,12 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 				{
 
 					formation_position ++;
-	
+
 					formation_test = (1 << formation_position);
-	
+
 					if (formation_position >= get_local_entity_int_value (landing_en, INT_TYPE_TOTAL_LANDING_SITES))
 					{
-		
+
 						return NULL;
 					}
 				}
@@ -960,7 +962,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 				memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
 				ASSERT(point_inside_map_area(start_position));
-				
+
 				get_3d_terrain_point_data (start_position->x, start_position->z, &terrain_info);
 
 				normal = get_3d_terrain_point_data_normal (&terrain_info);
@@ -1009,7 +1011,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 			if (!get_local_entity_int_value (keysite, INT_TYPE_IN_USE))
 			{
 				set_client_server_entity_int_value (keysite, INT_TYPE_IN_USE, TRUE);
-	
+
 				update_imap_sector_side (keysite, TRUE);
 
 				transmit_entity_comms_message (ENTITY_COMMS_UPDATE_SECTOR_SIDE, keysite, TRUE);
@@ -1022,7 +1024,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 			//
 			// Link group to a division
 			//
-	
+
 			add_group_to_division (group, NULL);
 
 			return group;
@@ -1118,7 +1120,7 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 		memset (&point_data, 0, sizeof (terrain_3d_point_data));
 
 		ASSERT(point_inside_map_area(position));
-				
+
 		get_3d_terrain_point_data (position->x, position->z, &point_data);
 
 		if (group_database [group_type].registry_list_type == LIST_TYPE_GROUND_REGISTRY)
@@ -1134,7 +1136,7 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 		formation_components = get_formation_components (formation);
 
 		ASSERT (formation_components);
-		
+
 		//
 		// create group
 		//
@@ -1198,7 +1200,7 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 			}
 			else
 			{
-				
+
 				member_type = formation_components->components [(loop * 2) + 1];
 			}
 
@@ -1226,14 +1228,14 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 
 			if (get_local_entity_type (member) == ENTITY_TYPE_ROUTED_VEHICLE)
 			{
-		
+
 				if (formation_radius != 0.0)
 				{
 
 					delta.x = pos.x - position->x;
 					delta.y = pos.y - position->y;
 					delta.z = pos.z - position->z;
-			
+
 					pos.x = position->x + ((delta.x * radius) / formation_radius);
 					pos.y = position->y + ((delta.y * radius) / formation_radius);
 					pos.z = position->z + ((delta.z * radius) / formation_radius);
@@ -1245,9 +1247,9 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 			if (place_at_ground_height)
 			{
 				ASSERT(point_inside_map_area(&pos));
-	
+
 				pos.y = get_3d_terrain_elevation_and_face_normal (pos.x, pos.z, &face_normal, NULL);
-	
+
 				pos.y += get_local_entity_float_value (member, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
 			}
 
@@ -1365,7 +1367,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 		frontline_forces_data [node].side = get_local_entity_int_value (sector_en, INT_TYPE_SIDE);
 	}
-	
+
 	//
 	// Parse route data for Primary placement
 	//
@@ -1399,12 +1401,12 @@ void place_frontline_forces (entity *force, int force_size)
 				#endif
 
 				frontline_forces_data [node].force_placement_type = FRONTLINE_FORCE_PRIMARY;
-	
+
 				break;
 			}
 		}
 	}
-	
+
 	//
 	// Parse route data for Secondary placement
 	//
@@ -1524,24 +1526,24 @@ void place_frontline_forces (entity *force, int force_size)
 
 //					number = rand16 () % max (1, (int) (road_nodes [node].safe_radius / 3.0));
 					number = (int)((road_nodes [node].safe_radius / 4.0) + (sfrand1 () * 2.0));
-	
+
 					number = bound (number, 1, force_size);
-	
+
 					formation_component = FORMATION_COMPONENT_PRIMARY_FRONTLINE_GROUP;
-	
+
 					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
-	
+
 					ASSERT (keysite);
-	
+
 					group = create_faction_members (keysite, ENTITY_SUB_TYPE_GROUP_PRIMARY_FRONTLINE, formation_component, number, side, pos, TRUE, TRUE);
-	
+
 					if (group)
 					{
 						set_local_entity_int_value (group, INT_TYPE_ROUTE_NODE, node);
-		
+
 						road_nodes [node].side_occupying = side;
 					}
-	
+
 					//return; // debug just make 1 group
 				}
 
@@ -1556,32 +1558,32 @@ void place_frontline_forces (entity *force, int force_size)
 				if ((point_inside_adjusted_map_area (pos)) && (check_point_inside_population_area (pos)))
 				{
 					#if DEBUG_MODULE
-		
+
 					debug_log ("FACTION: placing SECONDARY forces at node %d", node);
-	
+
 					#endif
-	
+
 //					number = rand16 () % max (1, (int) (road_nodes [node].safe_radius / 3.0));
 					number = (int)((road_nodes [node].safe_radius / 4.0) + (sfrand1 () * 2.0));
-	
+
 					number = bound (number, 1, force_size);
-	
+
 					formation_component = FORMATION_COMPONENT_SECONDARY_FRONTLINE_GROUP;
-	
+
 					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
-	
+
 					ASSERT (keysite);
-	
+
 					group = create_faction_members (keysite, ENTITY_SUB_TYPE_GROUP_SECONDARY_FRONTLINE, formation_component, number, side, pos, TRUE, TRUE);
-	
+
 					if (group)
 					{
 						set_local_entity_int_value (group, INT_TYPE_ROUTE_NODE, node);
-		
+
 						road_nodes [node].side_occupying = side;
 					}
 				}
-				
+
 				break;
 			}
 
@@ -1602,11 +1604,11 @@ void place_frontline_forces (entity *force, int force_size)
 				if ((point_inside_adjusted_map_area (pos)) && (check_point_inside_population_area (pos)))
 				{
 					#if DEBUG_MODULE
-		
+
 					debug_log ("FACTION: placing ARTILLERY forces at node %d", node);
-	
+
 					#endif
-	
+
 					if (mlrs_flag)
 					{
 						formation_component = FORMATION_COMPONENT_MLRS_GROUP;
@@ -1615,34 +1617,34 @@ void place_frontline_forces (entity *force, int force_size)
 					{
 						formation_component = FORMATION_COMPONENT_ARTILLERY_GROUP;
 					}
-	
+
 					mlrs_flag = !mlrs_flag;
-	
+
 					formation_component_data = get_formation_components (formation_component);
-	
+
 					formation_data = get_formation (formation_component_data->formation);
-	
+
 //					number = rand16 () % max (1, (int) (road_nodes [node].safe_radius / 3.0));
 					number = (int)(road_nodes [node].safe_radius / 5.0);
-	
+
 					size = min (force_size, formation_component_data->count);
-	
+
 					number = bound (number, 1, size);
-	
+
 					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
-	
+
 					ASSERT (keysite);
-	
+
 					group = create_faction_members (keysite, formation_component_data->group_type, formation_component, number, side, pos, TRUE, TRUE);
-	
+
 					if (group)
 					{
 						set_local_entity_int_value (group, INT_TYPE_ROUTE_NODE, node);
-		
+
 						road_nodes [node].side_occupying = side;
 					}
 				}
-				
+
 				break;
 			}
 		}
@@ -1676,7 +1678,7 @@ entity *create_mobile_member (
 
 	entity
 		*member;
-	
+
 	member = NULL;
 
 	if ((!client_server_create) || (command_line_run_mode == RUN_MODE_AITOOL))
@@ -1684,14 +1686,14 @@ entity *create_mobile_member (
 		//
 		// Run mode "AI tool" - everything gets created local-only
 		//
-		
+
 		switch (type)
 		{
 
 			case ENTITY_TYPE_ANTI_AIRCRAFT:
 			{
 				member = create_local_entity_anti_aircraft (index, member_type, group, position);
-	
+
 				break;
 			}
 
@@ -1734,10 +1736,10 @@ entity *create_mobile_member (
 		//
 		// Run mode "normal" - everything gets created client-server
 		//
-	
+
 		switch (type)
 		{
-	
+
 			case ENTITY_TYPE_ANTI_AIRCRAFT:
 			{
 				member = create_client_server_entity_anti_aircraft (index, member_type, group, position);
@@ -1747,56 +1749,56 @@ entity *create_mobile_member (
 
 			case ENTITY_TYPE_FIXED_WING:
 			{
-		
+
 				member = create_client_server_entity_fixed_wing (index, member_type, group, position);
-	
+
 				set_client_server_entity_float_value (member, FLOAT_TYPE_UNDERCARRIAGE_STATE, uc_state);
-	
+
 				break;
 			}
-	
+
 			case ENTITY_TYPE_HELICOPTER:
 			{
-	
+
 				member = create_client_server_entity_helicopter (index, member_type, group, position);
-	
+
 				set_client_server_entity_float_value (member, FLOAT_TYPE_UNDERCARRIAGE_STATE, uc_state);
-	
+
 				break;
 			}
-	
+
 			case ENTITY_TYPE_ROUTED_VEHICLE:
 			{
-	
+
 				member = create_client_server_entity_routed_vehicle (index, member_type, group, position);
 
 				debug_log ("FACTION: created ROUTED_VEHICLE %s (%d) with formation %d", get_local_entity_string (member, STRING_TYPE_FULL_NAME), get_local_entity_index (member), formation_position);
-	
+
 				break;
 			}
-	
+
 			case ENTITY_TYPE_SHIP_VEHICLE:
 			{
-	
+
 				member = create_client_server_entity_ship (index, member_type, group, position);
-	
+
 				break;
 			}
-	
+
 			case ENTITY_TYPE_PERSON:
 			{
-	
+
 				member = create_client_server_entity_person (index, member_type, group, position);
-	
+
 				break;
 			}
-	
+
 			default:
 			{
 				debug_fatal ("FACTION : Invalid mobile created ( type %s )", entity_type_names [type]);
 			}
 		}
-	
+
 		set_client_server_entity_int_value (member, INT_TYPE_FORMATION_POSITION, formation_position);
 
 		set_client_server_entity_int_value (member, INT_TYPE_OPERATIONAL_STATE, operational_state);

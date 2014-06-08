@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -97,7 +97,7 @@ const char
 		"Exit Comanche Versus Hokum? (Y/N)",
 		"Press Space",
 		"KICKOUT",
-		"Exit Demo? (Y/N)",	
+		"Exit Demo? (Y/N)",
 		"Quit Mission? (Y/N)",
 		"",
 		"Press Space",
@@ -308,7 +308,7 @@ void start_game_exit (game_exit_types type, int pause_flag)
 	}
 	else
 	{
-		
+
 		set_min_time_acceleration (NULL);
 	}
 
@@ -330,7 +330,7 @@ void start_game_exit (game_exit_types type, int pause_flag)
 
 			if (get_event_stack_head_function () == exit_game_events)
 			{
-		
+
 				pop_event (exit_game_events);
 			}
 
@@ -361,14 +361,14 @@ void start_game_exit (game_exit_types type, int pause_flag)
 
 			if (get_event_stack_head_function () == exit_game_events)
 			{
-		
+
 				pop_event (exit_game_events);
 			}
-		
+
 			push_event (exit_game_events, "Exit Game Events");
 
 			set_display_exit_message (TRUE);
-		
+
 			notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_DEBRIEFING);
 
 			break;
@@ -469,13 +469,13 @@ void exit_game_function (event *ev)
 			pop_event (exit_game_events);
 
 			set_display_exit_message (FALSE);
-		
+
 			set_gunship_entity (NULL);
-		
+
 			set_in_flight_game_mode (IN_FLIGHT_GAME_MODE_PLANNER);
 
 			//set_game_initialisation_phase (GAME_INITIALISATION_PHASE_NONE); // needed?
-		
+
 			/////////////////////////////////////////////////////////////////
 			switch (get_game_type ())
 			{
@@ -487,7 +487,7 @@ void exit_game_function (event *ev)
 					push_ui_screen (campaign_screen);
 
 					#endif
-		
+
 					break;
 				}
 				case GAME_TYPE_FREE_FLIGHT:
@@ -506,12 +506,12 @@ void exit_game_function (event *ev)
 					push_ui_screen (game_type_screen);
 
 					set_exit_flight_loop (TRUE);
-		
+
 					break;
 				}
 			}
 			/////////////////////////////////////////////////////////////////
-		
+
 			break;
 		}
 
@@ -540,11 +540,11 @@ void exit_game_function (event *ev)
 			pop_event (pilot_ejected_events);
 
 			set_display_exit_message (FALSE);
-		
+
 			set_gunship_entity (NULL);
-		
+
 			set_in_flight_game_mode (IN_FLIGHT_GAME_MODE_PLANNER);
-		
+
 			/////////////////////////////////////////////////////////////////
 			switch (get_game_type ())
 			{
@@ -556,7 +556,7 @@ void exit_game_function (event *ev)
 					push_ui_screen (campaign_screen);
 
 					#endif
-		
+
 					break;
 				}
 				case GAME_TYPE_FREE_FLIGHT:
@@ -575,7 +575,7 @@ void exit_game_function (event *ev)
 					push_ui_screen (game_type_screen);
 
 					set_exit_flight_loop (TRUE);
-		
+
 					break;
 				}
 			}
@@ -627,7 +627,7 @@ void dont_exit_game_function (event *ev)
 {
 
 	set_min_time_acceleration (NULL);
-	
+
 	set_display_exit_message (FALSE);
 
 	pop_event (exit_game_events);
@@ -639,17 +639,17 @@ void dont_exit_game_function (event *ev)
 		case GAME_EXIT_MISSION:
 		case GAME_EXIT_CAMPAIGN:
 		{
-		
+
 			if ((get_gunship_entity ()) && (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE)))
 			{
-			
+
 				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_MODE_CHASE);
-			
+
 				set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
 			}
 			else
 			{
-		
+
 				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_AUTO_EDIT);
 			}
 
@@ -684,7 +684,7 @@ void set_display_exit_message (int flag)
 		case GAME_EXIT_CAMPAIGN:
 		{
 //			set_ui_object_text (planner_exit_message, get_localisation_text (text_translation_list, game_exit_type));
-		
+
 			break;
 		}
 
@@ -742,9 +742,9 @@ void display_exit_message (void)
 
 	if (display_exit_message_flag)
 	{
-	
+
 		set_viewport (full_screen_x_min, full_screen_y_min, full_screen_x_max, full_screen_y_max);
-	
+
 		if (begin_3d_scene ())	//lock_screen (active_screen))
 		{
 
@@ -758,7 +758,7 @@ void display_exit_message (void)
 			set_ui_font_colour (sys_col_yellow);
 
 			screen_x_offset = full_screen_x_mid - 320;
-	
+
 			screen_y_offset = full_screen_y_mid - 240;
 
 			switch (get_game_type ())
@@ -768,7 +768,7 @@ void display_exit_message (void)
 				{
 
 //					ui_draw_alpha_graphic (220 + screen_x_offset, 20 + screen_y_offset, 204 + screen_x_offset, 126 + screen_y_offset,
-//													(unsigned short int *) get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
+//													get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
 
 					if (game_exit_type == GAME_EXIT_SPECIAL_RESTART)
 					{
@@ -776,7 +776,7 @@ void display_exit_message (void)
 						// SPECIAL GAMES display session title, a heading for the high score table, and a message prompting
 						// the player to press the spacebar
 						//
-						
+
 						draw_special_restart_text ();
 
 						set_ui_font_type (UI_FONT_ARIAL_14);
@@ -785,11 +785,11 @@ void display_exit_message (void)
 
 						sprintf (buffer, "%s", game_exit_text [game_exit_type]);
 						string_length = ui_get_string_length ( buffer );
-					
+
 						x = (220 + (204 / 2)) - ( string_length / 2 );
-					
+
 						ui_display_text (buffer, x + screen_x_offset, 96 + screen_y_offset);
-					
+
 						set_ui_font_type (UI_FONT_ARIAL_18);
 
 						set_ui_font_colour (sys_col_yellow);
@@ -798,54 +798,54 @@ void display_exit_message (void)
 					{
 						sprintf (buffer, "%s", game_exit_text [game_exit_type]);
 						string_length = ui_get_string_length ( buffer );
-		
+
 						x = (220 + (204 / 2)) - ( string_length / 2 );
-			
+
 						ui_display_text (buffer, x + screen_x_offset, 83 + screen_y_offset);
 					}
-					
+
 					break;
 				}
 */
 				case GAME_TYPE_FREE_FLIGHT:
 				{
-	
+
 					sprintf (buffer, "%s", game_exit_text [game_exit_type]);
 					string_length = ui_get_string_length ( buffer );
-	
+
 //					ui_draw_alpha_graphic (220 + screen_x_offset, 180 + screen_y_offset, 204 + screen_x_offset, 126 + screen_y_offset,
-//													(unsigned short int *) get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
-	
+//													get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
+
 					x = (220 + (204 / 2)) - ( string_length / 2 );
-		
+
 					ui_display_text (buffer, x + screen_x_offset, 243 + screen_y_offset);
 
 					break;
 				}
 				default:
 				{
-		
+
 					switch (game_exit_type)
 					{
-		
+
 						case GAME_EXIT_DEBRIEF:
 						case GAME_EXIT_MISSION:
 						case GAME_EXIT_CRASH:
 						{
-	
+
 							sprintf (buffer, "%s", game_exit_text [game_exit_type]);
 							string_length = ui_get_string_length ( buffer );
-		
+
 //							ui_draw_alpha_graphic (340 + screen_x_offset, 170 + screen_y_offset, 204 + screen_x_offset, 126 + screen_y_offset,
-//															(unsigned short int *) get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
-		
+//															get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
+
 							x = (340 + (204 / 2)) - ( string_length / 2 );
-				
+
 							ui_display_text (buffer, x + screen_x_offset, 238 + screen_y_offset);
-			
+
 							break;
 						}
-		
+
 						case GAME_EXIT_CAMPAIGN:
 						case GAME_EXIT_APACHE_HAVOC:
 						case GAME_EXIT_DEMO:
@@ -859,16 +859,16 @@ void display_exit_message (void)
 							{
 								sprintf (buffer, "%s", game_exit_text [game_exit_type]);
 							}
-							
+
 							string_length = ui_get_string_length ( buffer );
-		
+
 //							ui_draw_alpha_graphic (218 + screen_x_offset, 178 + screen_y_offset, 204 + screen_x_offset, 126 + screen_y_offset,
-//															(unsigned short int *) get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
-		
+//															get_graphics_file_data ( GRAPHICS_UI_COMMON_APACHE_HAVOC_V ) );
+
 							x = (218 + (204 / 2)) - ( string_length / 2 );
-				
+
 							ui_display_text (buffer, x + screen_x_offset, 246 + screen_y_offset);
-			
+
 							break;
 						}
 						case GAME_EXIT_KICKOUT:

@@ -764,7 +764,7 @@ unsigned int assign_specific_engage_task_to_group (entity *group, entity *task, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_ENGAGE_RANGE	((16.0 * KILOMETRE) * (16.0 * KILOMETRE))			// aircraft only
+#define MAX_ENGAGE_RANGE	((16.0f * KILOMETRE) * (16.0f * KILOMETRE))			// aircraft only
 
 unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_members)
 {
@@ -928,7 +928,7 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 					priority [loop] = get_local_entity_float_value (target, FLOAT_TYPE_TARGET_PRIORITY_GROUND_ATTACK);
 				}
 
-				priority [loop] += max(0, 0.1 - 0.1 * get_sqr_2d_range(get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION), get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION)) / MAX_ENGAGE_RANGE); // close targets a more important
+				priority [loop] += max(0.0f, 0.1f - 0.1f * get_sqr_2d_range(get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION), get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION)) / MAX_ENGAGE_RANGE); // close targets a more important
 				
 				#if DEBUG_MODULE
 

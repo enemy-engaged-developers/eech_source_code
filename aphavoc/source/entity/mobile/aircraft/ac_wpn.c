@@ -432,7 +432,7 @@ void update_aircraft_weapon_fire (entity *en)
 	{
 		int old_value = (int)raw->weapon_launch_delay;
 		
-		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0, raw->weapon_launch_delay - get_delta_time ()));
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0f, raw->weapon_launch_delay - get_delta_time ()));
 		if (old_value == (int)raw->weapon_launch_delay) // update once per second
 			return;
 		
@@ -448,7 +448,7 @@ void update_aircraft_weapon_fire (entity *en)
 	}
 	else
 	{
-		raw->weapon_burst_timer = max(0, raw->weapon_burst_timer - get_delta_time ());
+		raw->weapon_burst_timer = max(0.0f, raw->weapon_burst_timer - get_delta_time ());
 
 		if (raw->weapon_burst_timer > 0.0)
 		{

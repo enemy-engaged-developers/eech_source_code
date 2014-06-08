@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -85,8 +85,10 @@
 entity
 	*pilot_entity = NULL;
 
+#if 0
 static float
 	flash_timer = 0.0;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +102,7 @@ struct PILOT_SCORE_TYPE
 
 	entity_sides
 		side;
-	
+
 	char
 		name [STRING_TYPE_PLAYERS_NAME_MAX_LENGTH + 1];
 };
@@ -135,7 +137,7 @@ void set_pilot_entity (entity *en)
 		ASSERT (pilot_entity == NULL);
 
 		ASSERT (get_local_entity_type (en) == ENTITY_TYPE_PILOT);
-	
+
 		pilot_entity = en;
 
 		// turn on NEXT button now Pilot entity has arrived
@@ -164,7 +166,7 @@ void set_pilot_entity (entity *en)
 		//
 		// Program MUST be in TX mode otherwise clients pilot will not be destroyed on the server
 		//
-		
+
 		store_data_flow = get_comms_data_flow ();
 
 		set_comms_data_flow (COMMS_DATA_FLOW_TX);
@@ -212,7 +214,7 @@ void send_pilot_joined_message (entity *en)
 	}
 
 	send_text_message (en, NULL, MESSAGE_TEXT_SYSTEM_NEW_PILOT, text);
-	
+
 	server_log (text); // Jabberwock Server log
 }
 
@@ -251,15 +253,15 @@ void send_pilot_quit_message (entity *en)
 	}
 
 	send_text_message (en, NULL, MESSAGE_TEXT_SYSTEM_NEW_PILOT, text);
-	
+
 	server_log (text); // Jabberwock Server log
-	
+
 	if ((command_line_pause_server) && (player_count <= 1)) // 040220 Jabberwock Pause server, changed to <=1 by Werewolf
 	{
 		force_pause_acceleration();
 		server_log ("Server paused");
 	}
-}	
+}
 // 040220 Jabberwock ends
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +275,7 @@ entity *create_new_pilot_entity (const char *name, entity_sides side, int rank, 
 		*force;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
-	
+
 	ASSERT (name);
 
 	force = get_local_force_entity (side);
@@ -307,7 +309,7 @@ void create_server_pilot (void)
 {
 	entity
 		*en;
-		
+
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
 	en = create_new_pilot_entity
@@ -371,7 +373,7 @@ int get_session_pilot_count (void)
 
 	int
 		count;
-	
+
 	ASSERT (get_session_entity ());
 
 	count = 0;
@@ -558,7 +560,7 @@ void qs_table (pilot_score_type *list, int left, int right)
          temp = list [i];
          list [i] = list [j];
          list [j] = temp;
-         
+
          i++;
          j--;
       }
@@ -573,6 +575,7 @@ void qs_table (pilot_score_type *list, int left, int right)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_high_score_table (void)
 {
 
@@ -598,11 +601,11 @@ void draw_high_score_table (void)
 		//
 		// draw leaderboard
 		//
-		
+
 		for (loop = 0; loop < NUM_TABLE_ENTRIES; loop ++)
 		{
 			item = &pilot_high_score_table [loop];
-			
+
 			if (item->valid)
 			{
 				set_ui_font_type (UI_FONT_ARIAL_14);
@@ -617,7 +620,7 @@ void draw_high_score_table (void)
 				}
 
 				length = ui_get_string_length (item->name);
-	
+
 				sprintf (buffer, "%s : %d", item->name, item->kills);
 
 				// print text assuming game-exit overlay is 640x480 centred in the screen whatever res.
@@ -638,6 +641,7 @@ void draw_high_score_table (void)
 
 	set_active_screen ( old_active_screen );
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -654,7 +658,7 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 
 	pilot_score_type
 		*item;
-		
+
 	rgb_colour
 		*col;
 
@@ -664,13 +668,13 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 	for (loop = 0; loop < NUM_TABLE_ENTRIES; loop ++)
 	{
 		item = &pilot_high_score_table [loop];
-			
+
 		if (item->valid)
 		{
 			if (item->side == ENTITY_SIDE_BLUE_FORCE)
 			{
 				col = &ui_colour_blue;
-	
+
 				list = blue_list_object;
 			}
 			else
@@ -681,7 +685,7 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 			}
 
 			sprintf (buffer, "%s: %d", item->name, item->kills);
-	
+
 			add_to_pop_up_list (buffer, list, NULL, UI_LIST_NO_SELECTION, UI_FONT_ARIAL_14, *col);
 		}
 	}
@@ -695,7 +699,7 @@ const char *get_high_score_table_entry (int index, int *side, int *kills)
 {
 	pilot_score_type
 		*item;
-		
+
 	ASSERT (side);
 
 	ASSERT (kills);
@@ -703,7 +707,7 @@ const char *get_high_score_table_entry (int index, int *side, int *kills)
 	ASSERT ((index >= 0) && (index < NUM_TABLE_ENTRIES));
 
 	item = &pilot_high_score_table [index];
-		
+
 	if (item->valid)
 	{
 		*side = item->side;
@@ -726,9 +730,9 @@ const char *get_high_score_table_first_name (void)
 {
 	pilot_score_type
 		*item;
-		
+
 	item = &pilot_high_score_table [0];
-		
+
 	if (item->valid)
 	{
 		return (item->name);
@@ -743,6 +747,7 @@ const char *get_high_score_table_first_name (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_special_restart_text (void)
 {
 	char
@@ -750,7 +755,7 @@ void draw_special_restart_text (void)
 
 	int
 		string_length;
-	
+
 	float
 		x;
 
@@ -785,6 +790,7 @@ void draw_special_restart_text (void)
 		ui_display_text (buffer, get_integer_screen_x_mid () - (string_length / 2), 420 + iy_640_480);
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

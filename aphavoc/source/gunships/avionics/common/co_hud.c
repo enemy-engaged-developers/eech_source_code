@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -89,8 +89,8 @@ vec3d
 hud_modes
 	hud_mode, previous_hud_mode;
 
-//VJ 050126 hud mod 
-hud_screen_data 
+//VJ 050126 hud mod
+hud_screen_data
 	hsd;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ void initialise_common_hud (void)
 	// happens at initialisation pahse, gunship not known yet
 	if (gt >= NUM_GUNSHIP_TYPES)
 		gt = 0;
-	
+
 	debug_log("hud colour %d %d",gt,hud_code[gt][HUD_CODES_COLOUR]);
 	set_global_hud_colour((hud_colours) hud_code[gt][HUD_CODES_COLOUR]);
 	global_hud_alpha = hud_code[gt][HUD_CODES_ALPHA];
@@ -117,7 +117,7 @@ void initialise_common_hud (void)
 	{
 		set_global_unscaled_displays (FALSE);
 	}
-	//<=== VJ 060212 save hud info mod 
+	//<=== VJ 060212 save hud info mod
 	global_mfd_size = hud_code[gt][HUD_CODES_MFD] / 20.0;
 
 	display_hud_layout_grid = FALSE;
@@ -142,10 +142,10 @@ void initialise_common_hud (void)
 	set_rgb_colour (hud_colour_table[HUD_COL_CYAN],      0, 255, 255, 255);
 	set_rgb_colour (hud_colour_table[HUD_COL_BLUE],     30, 144, 255, 255);
 	set_rgb_colour (hud_colour_table[HUD_COL_BLACK],     0,   0,   0, 255);
-	
+
    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"
-   set_rgb_colour (hud_colour_table[HUD_COL_ORANGE],     255,   128,    0, 255); 
-   set_rgb_colour (hud_colour_table[HUD_COL_D_ORANGE],   255,    68,    0, 255); 	
+   set_rgb_colour (hud_colour_table[HUD_COL_ORANGE],     255,   128,    0, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_D_ORANGE],   255,    68,    0, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_L_YELLO],    248,   255,  120, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_D_YELLO],    255,   191,    0, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_N1_GREEN],     34,  255,    0, 255);
@@ -153,7 +153,7 @@ void initialise_common_hud (void)
    set_rgb_colour (hud_colour_table[HUD_COL_N3_GREEN],   190,   255,   60, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_LAVENDER1],    195,   0,  114, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_LAVENDER2],   114,    0,  195, 255);
-   set_rgb_colour (hud_colour_table[HUD_COL_D_LAVENDER],  61,     0,  105, 255); 
+   set_rgb_colour (hud_colour_table[HUD_COL_D_LAVENDER],  61,     0,  105, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_D_BROWN],    125,    17,    0, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_PINK],       255,     0,  149, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_BLUE1],       68,   109,  140, 255);
@@ -200,7 +200,7 @@ void set_next_hud_colour (void)
 		col = (col <= NUM_HUD_COLOURS - 1) ? col : (hud_colours) 0;
 
 		set_global_hud_colour (col);
-		hud_colour = hud_colour_table[col];	
+		hud_colour = hud_colour_table[col];
 	}
 }
 
@@ -247,7 +247,7 @@ void switch_hud_mode(void)
 {
 	if (hud_mode == HUD_MODE_WEAPON)
 		return;
-	
+
 	if (hud_mode == HUD_MODE_TRANSITION)
 		hud_mode = HUD_MODE_NAVIGATION;
 	else
@@ -299,7 +299,7 @@ void display_hud_on_external_view (void)
 			case GUNSHIP_TYPE_COMANCHE:
 			////////////////////////////////////////
 			{
-				
+
 				draw_comanche_hud ();
 
 				break;
@@ -363,7 +363,7 @@ void display_hud_on_external_view (void)
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
-				
+
 				draw_kiowa_hud ();
 
 				break;
@@ -392,21 +392,19 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 {
 	vertex
 		quad[4];
-	
+
 	real_colour
-		clear_hud_colour, 
+		clear_hud_colour,
 		colour,
 		specular;
-	
+
 	set_active_screen (hd->hud_texture_screen);
 
 	if (lock_screen (hd->hud_texture_screen))
 	{
 		set_rgb_colour (clear_hud_colour, 255,255,255,255);
 
-		set_block (hd->hud_viewport_x_min, hd->hud_viewport_y_min, hd->hud_viewport_x_max, hd->hud_viewport_y_max, clear_hud_colour);  
-
-		flush_screen_texture_graphics (hd->hud_texture_screen);
+		set_block (hd->hud_viewport_x_min, hd->hud_viewport_y_min, hd->hud_viewport_x_max, hd->hud_viewport_y_max, clear_hud_colour);
 
 		unlock_screen (hd->hud_texture_screen);
 	}
@@ -443,7 +441,7 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 			set_d3d_texture_min_filtering (TRUE);
 			set_d3d_texture_mip_filtering (FALSE);
 		}
-		
+
 		switch (get_global_gunship_type ())
 		{
 			case GUNSHIP_TYPE_COMANCHE:
@@ -467,7 +465,7 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 		colour.green			= 48;
 		colour.blue	 			= 16;
 		colour.alpha  			= min(alpha, global_hud_alpha);
-		
+
 		specular.red 			= 0;
 		specular.green	 		= 0;
 		specular.blue 			= 0;

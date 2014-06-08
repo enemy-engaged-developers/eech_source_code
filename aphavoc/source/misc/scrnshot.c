@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -261,10 +261,10 @@ void save_high_res_screen_image ( void )
 		screen_height,
 		screen_pitch;
 
-	unsigned short int
+	unsigned int
 		*huge_screen_shot_memory;
 
-	unsigned char
+	unsigned
 		*screen_data;
 
 	x_repeat = 8;
@@ -275,7 +275,7 @@ void save_high_res_screen_image ( void )
 
 	screen_height = get_screen_height ( video_screen );
 
-	huge_screen_shot_memory = ( unsigned short int * ) safe_malloc ( sizeof ( unsigned short int ) * screen_width * screen_height * x_repeat * y_repeat );
+	huge_screen_shot_memory = ( unsigned int * ) safe_malloc ( sizeof ( unsigned int ) * screen_width * screen_height * x_repeat * y_repeat );
 
 	for ( y = 0; y < y_repeat; y++ )
 	{
@@ -283,7 +283,7 @@ void save_high_res_screen_image ( void )
 		for ( x = 0; x < x_repeat; x++ )
 		{
 
-			unsigned short int
+			unsigned int
 				*destination_ptr,
 				*screen_line;
 
@@ -298,23 +298,23 @@ void save_high_res_screen_image ( void )
 
 			if ( lock_screen ( video_screen ) )
 			{
-	
+
 				screen_data = get_screen_data ( video_screen );
-	
+
 				screen_pitch = get_screen_pitch ( video_screen );
-	
+
 				destination_ptr = huge_screen_shot_memory + ( y * x_repeat * screen_width * screen_height ) + ( x * screen_width );
-	
+
 				for ( screen_y = 0; screen_y < screen_height; screen_y++ )
 				{
-	
-					screen_line = ( unsigned short int * ) ( screen_data + ( screen_y * screen_pitch ) );
-	
-					memcpy ( destination_ptr, screen_line, screen_width * sizeof ( unsigned short int ) );
-	
+
+					screen_line = screen_data + ( screen_y * screen_pitch );
+
+					memcpy ( destination_ptr, screen_line, screen_width * sizeof ( unsigned int ) );
+
 					destination_ptr += x_repeat * screen_width;
 				}
-	
+
 				unlock_screen ( video_screen );
 			}
 		}
@@ -363,8 +363,8 @@ void save_high_res_screen_image ( void )
 		write_psd_screen_file ( image_filename,
 												screen_width * x_repeat,
 												screen_height * y_repeat,
-												screen_width * x_repeat * sizeof ( unsigned short int ),
-												( unsigned char * ) huge_screen_shot_memory );
+												screen_width * x_repeat,
+												huge_screen_shot_memory );
 
 		screen_shot_index++;
 	}
@@ -383,9 +383,7 @@ void save_high_res_screen_image ( void )
 void set_high_res_screen_image_viewangle_1 ( void )
 {
 
-	full_screen_width_view_angle = rad ( 59.99 );
-
-	full_screen_height_view_angle = rad ( 46.82 );
+	set_view_angles ( rad ( 59.99 ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,9 +393,7 @@ void set_high_res_screen_image_viewangle_1 ( void )
 void set_high_res_screen_image_viewangle_2 ( void )
 {
 
-	full_screen_width_view_angle = rad ( 90 );
-
-	full_screen_height_view_angle = rad ( 73.74 );
+	set_view_angles ( rad ( 90 ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,9 +403,7 @@ void set_high_res_screen_image_viewangle_2 ( void )
 void set_high_res_screen_image_viewangle_3 ( void )
 {
 
-	full_screen_width_view_angle = rad ( 120 );
-
-	full_screen_height_view_angle = rad ( 104.82 );
+	set_view_angles ( rad ( 120 ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -419,9 +413,7 @@ void set_high_res_screen_image_viewangle_3 ( void )
 void set_high_res_screen_image_viewangle_4 ( void )
 {
 
-	full_screen_width_view_angle = rad ( 20 );
-
-	full_screen_height_view_angle = rad ( 15.6 );
+	set_view_angles ( rad ( 20 ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

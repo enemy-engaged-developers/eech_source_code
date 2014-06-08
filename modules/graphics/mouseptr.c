@@ -65,172 +65,58 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
-#include "3d/3dfunc.h"
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int
-	mouse_graphic_needs_restoring = FALSE;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static int
-	mouse_graphic_position_x,
-	mouse_graphic_position_y,
-	mouse_graphic_on = FALSE,
-	mouse_graphic_drawn = FALSE;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_mouse_pointer ( const int x, const int y );
-
-void save_frontbuffer_screen_under_mouse_pointer ( int x, int y );
-
-static void save_backbuffer_screen_under_mouse_pointer ( int x, int y );
-
-void restore_screen_under_mouse_pointer ( void );
-
-static void restore_backbuffer_screen_under_mouse_pointer ( void );
-
-static void draw_backbuffer_mouse_pointer ( int x, int y );
-
-static void swap_mouse_screen_buffers ( void );
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct MOUSE_TRAIL_POSITION
-{
-
-	int
-		x,
-		y,
-		used;
-
-	struct MOUSE_TRAIL_POSITION
-		*next;
-};
-
-typedef struct MOUSE_TRAIL_POSITION mouse_trail_position;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-mouse_trail_position
-	mouse_trail_positions_array[256];
-
-volatile struct MOUSE_TRAIL_POSITION
-	*mouse_trails;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static screen
-	*mouse_pointer_screen,
-	*mouse_pointer_background,
-	*mouse_backbuffer_pointer_background;
-
-static int
-	mouse_pointer_width = 10,
-	mouse_pointer_height = 20;
+	*mouse_pointer;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_mouse_pointer ( rgb_packed *pointer )
+void initialise_mouse_pointer ( rgb_data *pointer )
 {
-
-	unsigned short int
-		*ptr;
-
 	int
-		x,
-		y,
-		count,
-		destpitch;
+		mouse_pointer_width,
+		mouse_pointer_height;
 
-	struct SCREEN
-		*old_active_screen;
-
-	mouse_trails = NULL;
-
-	for ( count = 0; count < 256; count++ )
+	for ( mouse_pointer_width = 1; mouse_pointer_width < pointer->width; mouse_pointer_width <<= 1 );
+	for ( mouse_pointer_height = 1; mouse_pointer_height < pointer->height; mouse_pointer_height <<= 1 );
+	mouse_pointer = create_user_texture_screen ( mouse_pointer_width, mouse_pointer_height, TEXTURE_TYPE_MULTIPLEALPHA, 1 );
+	while ( !lock_screen ( mouse_pointer ) )
 	{
-
-		mouse_trail_positions_array[count].used = FALSE;
-	}
-
-	ptr = pointer + 2;
-
-	mouse_pointer_screen = create_screen ( mouse_pointer_width, mouse_pointer_height, FALSE );
-
-	mouse_pointer_background = create_screen ( mouse_pointer_width, mouse_pointer_height, FALSE );
-
-	mouse_backbuffer_pointer_background = create_screen ( mouse_pointer_width, mouse_pointer_height, FALSE );
-
-	old_active_screen = get_active_screen ();
-
-	set_active_screen ( mouse_pointer_screen );
-
-	while ( !lock_screen ( active_screen ) )
-	{
-
 		Sleep ( 100 );
 	}
-
-	destpitch = get_screen_pitch ( active_screen );
-
-	if (destpitch == mouse_pointer_width * 4) // 32bpp
 	{
-		rgb_colour*
-			dest_rgba = ( rgb_colour* ) get_screen_data ( active_screen );
+		unsigned int
+			*ptr;
+		int
+			pitch,
+			x,
+			y;
+		rgb_colour
+			*image,
+			colour;
 
-		destpitch >>= 2; // bytes -> int's
-
-		for ( y = 0; y < mouse_pointer_height; y++ )
+		ptr = get_screen_data ( mouse_pointer );
+		pitch = get_screen_pitch ( mouse_pointer );
+		memset ( ptr, 0, pitch * mouse_pointer->height * 4 );
+		image = pointer->image;
+		for ( y = 0; y < pointer->height; y++ )
 		{
-			for ( x = 0; x < mouse_pointer_width; x++ )
+			for ( x = 0; x < pointer->width; x++ )
 			{
-				dest_rgba[x] = get_general_colour_value(*ptr++);
-//				dest_rgba[x].a = 0;
+				colour = *image++;
+				colour.alpha = colour.colour ? 255 : 0;
+				*ptr++ = colour.colour;
 			}
-
-			dest_rgba += destpitch;
+			ptr += pitch - pointer->width;
 		}
 	}
-	else // (hopefully) 16bpp
-	{
-		unsigned short int
-			*destptr = ( unsigned short int * ) get_screen_data ( active_screen );
-
-		destpitch >>= 1; // bytes -> shorts's
-
-		for ( y = 0; y < mouse_pointer_height; y++ )
-		{
-
-			for ( x = 0; x < mouse_pointer_width; x++ )
-			{
-
-				destptr[x] = *ptr++;
-			}
-
-			destptr += destpitch;
-		}
-	}
-
-	unlock_screen ( active_screen );
-
-	set_active_screen (old_active_screen);
+	unlock_screen ( mouse_pointer );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +125,7 @@ void initialise_mouse_pointer ( rgb_packed *pointer )
 
 void deinitialise_mouse_pointer ( void )
 {
+	destroy_screen ( mouse_pointer );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,8 +134,6 @@ void deinitialise_mouse_pointer ( void )
 
 void set_mouse_graphic_on ( void )
 {
-
-	mouse_graphic_on = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,8 +142,6 @@ void set_mouse_graphic_on ( void )
 
 void set_mouse_graphic_off ( void )
 {
-
-	mouse_graphic_on = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,137 +150,12 @@ void set_mouse_graphic_off ( void )
 
 int get_mouse_graphic_on ( void )
 {
-	return ( mouse_graphic_on );
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void update_mouse_pointer ( void )
-{
-
-	if ( mouse_graphic_on )
-	{
-
-		if ( ( !mouse_graphic_drawn ) || ( mouse_graphic_position_x != get_mouse_x () ) || ( mouse_graphic_position_y != get_mouse_y () ) )
-		{
-
-			draw_mouse_pointer ( get_mouse_x (), get_mouse_y () );
-
-			mouse_graphic_position_x = get_mouse_x ();
-
-			mouse_graphic_position_y = get_mouse_y ();
-
-			mouse_graphic_drawn = TRUE;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_mouse_pointer ( const int x, const int y )
-{
-
-	DDBLTFX
-		ddbltfx;
-
-	RECT
-		my_rc,
-		source_rc;
-
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		if ( mouse_graphic_needs_restoring )
-		{
-
-			//
-			// Restore the previous background
-			//
-
-			restore_screen_under_mouse_pointer ();
-
-			//
-			// Save the current background
-			//
-
-			save_frontbuffer_screen_under_mouse_pointer ( x, y );
-		}
-
-		//
-		// Draw the cursor
-		//
-
-		{
-
-			my_rc.left = 0;
-
-			my_rc.top = 0;
-
-			source_rc.left = 0;
-
-			source_rc.top = 0;
-
-			source_rc.right = mouse_pointer_width;
-
-			source_rc.bottom = mouse_pointer_height;
-
-			if ( ddraw.application_windowed )
-			{
-
-				//
-				// Adjust the top left part of the rectangle.
-				//
-
-				GetClientRect ( application_window, &my_rc );
-
-				ClientToScreen ( application_window, ( LPPOINT ) &my_rc );
-
-				ClientToScreen ( application_window, ( LPPOINT ) &my_rc + 1 );
-			}
-
-
-			my_rc.left += x;
-
-			my_rc.top += y;
-
-			my_rc.right = my_rc.left + mouse_pointer_width;
-
-			my_rc.bottom = my_rc.top + mouse_pointer_height;
-
-			if ( ( x + mouse_pointer_width ) > application_video_width )
-			{
-
-				source_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-
-				my_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-			}
-
-			if ( ( y + mouse_pointer_height ) > application_video_height )
-			{
-
-				source_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-
-				my_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-			}
-
-			memset ( &ddbltfx, 0, sizeof ( ddbltfx ) );
-
-			ddbltfx.dwSize = sizeof ( ddbltfx );
-
-			ddbltfx.dwROP = SRCCOPY;
-
-			ddbltfx.ddckSrcColorkey.dwColorSpaceLowValue = 0;
-
-			ddbltfx.ddckSrcColorkey.dwColorSpaceHighValue = 0;
-
-			f3d_surface_blt ( ddraw.lpFrontBuffer, &my_rc, mouse_pointer_screen->surface, &source_rc, DDBLT_KEYSRCOVERRIDE | DDBLT_WAIT, &ddbltfx );
-		}
-	}
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -405,441 +163,6 @@ void draw_mouse_pointer ( const int x, const int y )
 
 void draw_raw_mouse_pointer ( const int x, const int y )
 {
-
-	DDBLTFX
-		ddbltfx;
-
-	RECT
-		my_rc,
-		source_rc;
-
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		//
-		// Draw the cursor
-		//
-
-		{
-
-			my_rc.left = 0;
-
-			my_rc.top = 0;
-
-			source_rc.left = 0;
-
-			source_rc.top = 0;
-
-			source_rc.right = mouse_pointer_width;
-
-			source_rc.bottom = mouse_pointer_height;
-
-			my_rc.left += x;
-
-			my_rc.top += y;
-
-			my_rc.right = my_rc.left + mouse_pointer_width;
-
-			my_rc.bottom = my_rc.top + mouse_pointer_height;
-
-			if ( ( x + mouse_pointer_width ) > application_video_width )
-			{
-
-				source_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-
-				my_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-			}
-
-			if ( ( y + mouse_pointer_height ) > application_video_height )
-			{
-
-				source_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-
-				my_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-			}
-
-			memset ( &ddbltfx, 0, sizeof ( ddbltfx ) );
-
-			ddbltfx.dwSize = sizeof ( ddbltfx );
-
-			ddbltfx.dwROP = SRCCOPY;
-
-			ddbltfx.ddckSrcColorkey.dwColorSpaceLowValue = 0;
-
-			ddbltfx.ddckSrcColorkey.dwColorSpaceHighValue = 0;
-
-			f3d_surface_blt ( ddraw.lpBackBuffer, &my_rc, mouse_pointer_screen->surface, &source_rc, DDBLT_KEYSRCOVERRIDE | DDBLT_WAIT, &ddbltfx );
-		}
-	}
+	set_viewport ( 0, 0, application_video_width, application_video_height );
+	d3d_texture_draw ( mouse_pointer, x, y );
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void flip_video_screen_with_mouse ( void )
-{
-
-	ASSERT ( video_screen );
-
-	if ( ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		//
-		// Save the area underneath the mouse pointer
-		//
-
-		save_backbuffer_screen_under_mouse_pointer ( get_mouse_x (), get_mouse_y () );
-
-		//
-		// Draw the mouse cursor onto the back buffer
-		//
-
-		draw_backbuffer_mouse_pointer ( get_mouse_x (), get_mouse_y () );
-
-		ddraw_flip_surface ();
-
-		//
-		// Screen has been flipped, but the backbuffer still has a mouse image on it - restore it
-		//
-
-		restore_backbuffer_screen_under_mouse_pointer ();
-
-		//
-		// Now the area under the mouse on the front buffer & rectangle is stored in the back buffer variables
-		//
-
-		swap_mouse_screen_buffers ();
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-RECT
-	saved_screen_mouse_rectangle,
-	saved_screen_screen_rectangle,
-
-	saved_back_screen_mouse_rectangle,
-	saved_back_screen_screen_rectangle;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void save_frontbuffer_screen_under_mouse_pointer ( int x, int y )
-{
-
-	DDBLTFX
-		ddbltfx;
-
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		RECT
-			screen_rectangle;
-
-		saved_screen_screen_rectangle.left = 0;
-
-		saved_screen_screen_rectangle.top = 0;
-
-		saved_screen_mouse_rectangle.left = 0;
-
-		saved_screen_mouse_rectangle.top = 0;
-
-		saved_screen_mouse_rectangle.right = mouse_pointer_width;
-
-		saved_screen_mouse_rectangle.bottom = mouse_pointer_height;
-
-		saved_screen_screen_rectangle.left += x;
-
-		saved_screen_screen_rectangle.top += y;
-
-		saved_screen_screen_rectangle.right = saved_screen_screen_rectangle.left + mouse_pointer_width;
-
-		saved_screen_screen_rectangle.bottom = saved_screen_screen_rectangle.top + mouse_pointer_height;
-
-		if ( ( x + mouse_pointer_width ) > application_video_width )
-		{
-
-			saved_screen_mouse_rectangle.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-
-			saved_screen_screen_rectangle.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-		}
-
-		if ( ( y + mouse_pointer_height ) > application_video_height )
-		{
-
-			saved_screen_mouse_rectangle.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-
-			saved_screen_screen_rectangle.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-		}
-
-		screen_rectangle = saved_screen_screen_rectangle;
-
-		if ( ddraw.application_windowed )
-		{
-
-			RECT
-				my_rc;
-
-			//
-			// Adjust the top left part of the rectangle.
-			//
-
-			GetClientRect ( application_window, &my_rc );
-			ClientToScreen ( application_window, ( LPPOINT ) &my_rc );
-			ClientToScreen ( application_window, ( LPPOINT ) &my_rc + 1 );
-
-			screen_rectangle.left += my_rc.left;
-			screen_rectangle.right += my_rc.left;
-			screen_rectangle.top += my_rc.top;
-			screen_rectangle.bottom += my_rc.top;
-		}
-
-		memset ( &ddbltfx, 0, sizeof ( ddbltfx ) );
-
-		ddbltfx.dwSize = sizeof ( ddbltfx );
-
-		ddbltfx.dwROP = SRCCOPY;
-
-		f3d_surface_blt ( mouse_pointer_background->surface,
-															&saved_screen_mouse_rectangle,
-															ddraw.lpFrontBuffer,
-															&screen_rectangle,
-															DDBLT_ROP | DDBLT_WAIT, &ddbltfx );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void save_backbuffer_screen_under_mouse_pointer ( int x, int y )
-{
-
-	DDBLTFX
-		ddbltfx;
-
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		saved_back_screen_screen_rectangle.left = 0;
-
-		saved_back_screen_screen_rectangle.top = 0;
-
-		saved_back_screen_mouse_rectangle.left = 0;
-
-		saved_back_screen_mouse_rectangle.top = 0;
-
-		saved_back_screen_mouse_rectangle.right = mouse_pointer_width;
-
-		saved_back_screen_mouse_rectangle.bottom = mouse_pointer_height;
-
-		saved_back_screen_screen_rectangle.left += x;
-
-		saved_back_screen_screen_rectangle.top += y;
-
-		saved_back_screen_screen_rectangle.right = saved_back_screen_screen_rectangle.left + mouse_pointer_width;
-
-		saved_back_screen_screen_rectangle.bottom = saved_back_screen_screen_rectangle.top + mouse_pointer_height;
-
-		if ( ( x + mouse_pointer_width ) > application_video_width )
-		{
-
-			saved_back_screen_mouse_rectangle.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-
-			saved_back_screen_screen_rectangle.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-		}
-
-		if ( ( y + mouse_pointer_height ) > application_video_height )
-		{
-
-			saved_back_screen_mouse_rectangle.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-
-			saved_back_screen_screen_rectangle.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-		}
-
-		memset ( &ddbltfx, 0, sizeof ( ddbltfx ) );
-
-		ddbltfx.dwSize = sizeof ( ddbltfx );
-
-		ddbltfx.dwROP = SRCCOPY;
-
-		f3d_surface_blt ( mouse_backbuffer_pointer_background->surface,
-															&saved_back_screen_mouse_rectangle,
-															ddraw.lpBackBuffer,
-															&saved_back_screen_screen_rectangle,
-															DDBLT_ROP | DDBLT_WAIT, &ddbltfx );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void restore_screen_under_mouse_pointer ( void )
-{
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		DDBLTFX
-			ddbltfx;
-
-		RECT
-			screen_rectangle;
-
-		screen_rectangle = saved_screen_screen_rectangle;
-
-		if ( ddraw.application_windowed )
-		{
-
-			RECT
-				my_rc;
-
-			//
-			// Adjust the top left part of the rectangle.
-			//
-
-			GetClientRect ( application_window, &my_rc );
-			ClientToScreen ( application_window, ( LPPOINT ) &my_rc );
-			ClientToScreen ( application_window, ( LPPOINT ) &my_rc + 1 );
-
-			screen_rectangle.left += my_rc.left;
-			screen_rectangle.right += my_rc.left;
-			screen_rectangle.top += my_rc.top;
-			screen_rectangle.bottom += my_rc.top;
-		}
-
-		ddbltfx.dwSize = sizeof ( ddbltfx );
-
-		ddbltfx.dwROP = SRCCOPY;
-
-		f3d_surface_blt ( ddraw.lpFrontBuffer,
-															&screen_rectangle,
-															mouse_pointer_background->surface,
-															&saved_screen_mouse_rectangle,
-															DDBLT_ROP | DDBLT_WAIT, &ddbltfx );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void restore_backbuffer_screen_under_mouse_pointer ( void )
-{
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		DDBLTFX
-			ddbltfx;
-
-		ddbltfx.dwSize = sizeof ( ddbltfx );
-
-		ddbltfx.dwROP = SRCCOPY;
-
-		f3d_surface_blt ( ddraw.lpBackBuffer,
-															&saved_screen_screen_rectangle,
-															mouse_pointer_background->surface,
-															&saved_screen_mouse_rectangle,
-															DDBLT_ROP | DDBLT_WAIT, &ddbltfx );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_backbuffer_mouse_pointer ( int x, int y )
-{
-
-	DDBLTFX
-		ddbltfx;
-
-	RECT
-		my_rc,
-		source_rc;
-
-	if ( ( mouse_graphic_on ) && ( ddraw.ddraw ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
-	{
-
-		my_rc.left = 0;
-
-		my_rc.top = 0;
-
-		source_rc.left = 0;
-
-		source_rc.top = 0;
-
-		source_rc.right = mouse_pointer_width;
-
-		source_rc.bottom = mouse_pointer_height;
-
-		//
-		// Do not adjust the back buffer mouse position under a window run
-		//
-
-		my_rc.left += x;
-
-		my_rc.top += y;
-
-		my_rc.right = my_rc.left + mouse_pointer_width;
-
-		my_rc.bottom = my_rc.top + mouse_pointer_height;
-
-		if ( ( x + mouse_pointer_width ) > application_video_width )
-		{
-
-			source_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-
-			my_rc.right -= ( ( x + mouse_pointer_width ) - application_video_width );
-		}
-
-		if ( ( y + mouse_pointer_height ) > application_video_height )
-		{
-
-			source_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-
-			my_rc.bottom -= ( ( y + mouse_pointer_height ) - application_video_height );
-		}
-
-		memset ( &ddbltfx, 0, sizeof ( ddbltfx ) );
-
-		ddbltfx.dwSize = sizeof ( ddbltfx );
-
-		ddbltfx.dwROP = SRCCOPY;
-
-		ddbltfx.ddckSrcColorkey.dwColorSpaceLowValue = 0;
-
-		ddbltfx.ddckSrcColorkey.dwColorSpaceHighValue = 0;
-
-		f3d_surface_blt ( ddraw.lpBackBuffer, &my_rc, mouse_pointer_screen->surface, &source_rc, DDBLT_ROP | DDBLT_KEYSRCOVERRIDE | DDBLT_WAIT, &ddbltfx );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void swap_mouse_screen_buffers ( void )
-{
-
-	screen
-		*temp;
-
-	saved_screen_mouse_rectangle = saved_back_screen_mouse_rectangle;
-	saved_screen_screen_rectangle = saved_back_screen_screen_rectangle;
-
-	temp = mouse_pointer_background;
-
-	mouse_pointer_background = mouse_backbuffer_pointer_background;
-
-	mouse_backbuffer_pointer_background = temp;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

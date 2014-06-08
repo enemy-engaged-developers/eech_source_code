@@ -150,7 +150,7 @@ void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int v
 		vibrations_power = command_line_cockpit_vibrations;
 		inertia_power = command_line_g_force_head_movment_modifier;
 		movement = &head_movement;
-		vibration = &head_vibration;
+		vibration = head_vibration;
 		vibration_force = &head_vibration_force;
 	}
 	else
@@ -158,7 +158,7 @@ void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int v
 		vibrations_power = command_line_ffb_vibrations;
 		inertia_power = command_line_ffb_dynamics / 10;
 		movement = &ffb_movement;
-		vibration = &ffb_vibration;
+		vibration = ffb_vibration;
 		vibration_force = &ffb_vibration_force;
 	}
 	
@@ -168,7 +168,7 @@ void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int v
 				y_acceleration = *rotor_rpm * max((accel->y > 1.0) * (accel->y - 1.0),
 					(current_flight_dynamics->velocity_y.value < - 10.0) * (- current_flight_dynamics->velocity_y.value - 10.0));
 
-		*vibration_force = move_by_rate(*vibration_force, 0.000002 * (vibrations_power * max(z_velocity, y_acceleration) + max(0, vibrations_power - 1) * 5 * *rotor_rpm + 20 * max(0, 40 - fabs(*rotor_rpm - 50))), 0.01); // G force > 1.1, rotor spin-up, vortex ring or maximum speed
+		*vibration_force = move_by_rate(*vibration_force, 0.000002f * (vibrations_power * max(z_velocity, y_acceleration) + max(0.0f, vibrations_power - 1) * 5 * *rotor_rpm + 20 * max(0.0f, 40 - fabs(*rotor_rpm - 50))), 0.01f); // G force > 1.1, rotor spin-up, vortex ring or maximum speed
 		for (i = 0; i < 3; i++)
 			vibration[i] = (vibration[i] >= 0 ? -1 : 1) * frand1() * *vibration_force; // should be negative to previous
 	}

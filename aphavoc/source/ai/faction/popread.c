@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -821,23 +821,23 @@ void read_population_templates ( FILE *fp )
 
 		if ( population_file_version2 )
 		{
-	
+
 			fread ( &valid, sizeof ( int ), 1, fp );
-	
+
 			if ( valid )
 			{
-	
+
 				fread ( &string_length, sizeof ( int ), 1, fp );
-	
+
 				memset ( object_name, 0, 256 );
-	
+
 				fread ( object_name, string_length, 1, fp );
-	
+
 				temporary_templates[count].routes_object = get_object_index_from_name ( object_name );
-	
+
 				if ( temporary_templates[count].routes_object == OBJECT_3D_INVALID_OBJECT_INDEX )
 				{
-	
+
 					debug_log ( "Invalid approximation specified: %s", object_name );
 				}
 			}
@@ -927,7 +927,7 @@ void read_population_city_placements ( FILE *fp )
 
 	vec3d
 		keysite_pos;
-	
+
 	keysite_factory_count = 0;
 	keysite_oil_rig_count = 0;
 	keysite_placement_count = 0;
@@ -979,59 +979,59 @@ void read_population_city_placements ( FILE *fp )
 		if ( population_file_version2 )
 		/*
 		{
-	
+
 			switch ( temporary_templates[index].type )
 			{
-	
+
 				case TEMPLATE_TYPE_INDUSTRY:	{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_FACTORY; break; }
 				case TEMPLATE_TYPE_PORTSE:		{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_FACTORY; break; }
 				case TEMPLATE_TYPE_PORTNW:		{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_FACTORY; break; }
 			}
-	
+
 			if ( keysite_type != -1 )
 			{
-	
+
 				if ( keysite_placement_count == 0 )
 				{
-	
+
 					keysite_placement_count = 20;
-		
+
 					switch ( temporary_templates[index].type )
 					{
 						case TEMPLATE_TYPE_INDUSTRY:
 						{
 							sprintf ( keysite_name, "FACTORY %03d", keysite_factory_count );
-	
+
 							keysite_factory_count++;
-		
+
 							break;
 						}
 						case TEMPLATE_TYPE_PORTSE:
 						case TEMPLATE_TYPE_PORTNW:
 						{
 							sprintf ( keysite_name, "PORT %03d", keysite_factory_count );
-	
+
 							keysite_factory_count++;
-		
+
 							break;
 						}
 					}
-		
+
 					keysite_x = x;
 					keysite_z = current_map_max_z - z;
 					keysite_y = get_3d_terrain_point_data ( keysite_x, keysite_z, NULL );
-		
+
 					//
 					// create city template
 					//
-		
+
 					get_x_sector ( x_sec, keysite_x );
 					get_x_sector ( z_sec, keysite_z );
-	
+
 					keysite_side = get_initial_sector_side ( x_sec, z_sec );
-	
+
 					sector = get_local_raw_sector_entity ( x_sec, z_sec );
-	
+
 					keysite = create_local_entity
 					(
 						ENTITY_TYPE_KEYSITE,
@@ -1051,7 +1051,7 @@ void read_population_city_placements ( FILE *fp )
 				}
 				else
 				{
-	
+
 					keysite_placement_count--;
 				}
 			}
@@ -1063,7 +1063,7 @@ void read_population_city_placements ( FILE *fp )
 
 			switch ( temporary_templates[index].type )
 			{
-	
+
 				case TEMPLATE_TYPE_KEY_POWER:		{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_POWER_STATION; break; }
 				case TEMPLATE_TYPE_KEY_RADIO:		{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_RADIO_TRANSMITTER; break; }
 				case TEMPLATE_TYPE_KEY_INDUSTRY:	{ keysite_type = ENTITY_SUB_TYPE_KEYSITE_FACTORY; break; }
@@ -1077,23 +1077,23 @@ void read_population_city_placements ( FILE *fp )
 
 				int
 					important;
-		
+
 				keysite_totals[keysite_type]++;
-	
+
 				sprintf (keysite_name, "%s %d", get_trans (keysite_database[keysite_type].short_name), keysite_totals[keysite_type]);
-	
+
 				keysite_pos.x = x;
 				keysite_pos.z = current_map_max_z - z;
 				ASSERT(point_inside_map_area(&keysite_pos));
 				keysite_pos.y = get_3d_terrain_point_data ( keysite_pos.x, keysite_pos.z, NULL );
 
 				ASSERT (point_inside_adjusted_map_area (&keysite_pos));
-	
+
 				get_x_sector ( x_sec, keysite_pos.x );
 				get_x_sector ( z_sec, keysite_pos.z );
-	
+
 				keysite_side = get_initial_sector_side ( x_sec, z_sec );
-	
+
 				sector = get_local_raw_sector_entity ( x_sec, z_sec );
 
 				if ( population_importances )
@@ -1122,7 +1122,7 @@ void read_population_city_placements ( FILE *fp )
 									ENTITY_ATTR_INT_VALUE ( INT_TYPE_OBJECT_INDEX, temporary_templates[index].routes_object ),
 									ENTITY_ATTR_END
 								);
-	
+
 				keysite_group = get_local_entity_first_child ( keysite, LIST_TYPE_BUILDING_GROUP );
 			}
 		}
@@ -1158,10 +1158,10 @@ void read_population_city_placements ( FILE *fp )
 						pos.x = x;
 						pos.y = 0;
 						pos.z = z;
-						
+
 						ASSERT(point_inside_map_area(&pos));
 					}
-					
+
 					y = get_3d_terrain_point_data ( x, z, NULL );
 
 					break;
@@ -1181,7 +1181,7 @@ void read_population_city_placements ( FILE *fp )
 
 			if ( !keysite )
 			{
-	
+
 				city = create_local_entity
 				(
 					ENTITY_TYPE_CITY,
@@ -1206,19 +1206,19 @@ void read_population_city_placements ( FILE *fp )
 
 				if ( city )
 				{
-	
+
 					switch ( temporary_templates[index].type )
 					{
-		
+
 						case TEMPLATE_TYPE_PORTSE:
 						case TEMPLATE_TYPE_PORTNW:
 						{
-	
+
 							ASSERT ( city );
-	
+
 							if ( temporary_templates[index].base_object != OBJECT_3D_INVALID_OBJECT_INDEX )
 							{
-		
+
 								create_local_entity
 								(
 									ENTITY_TYPE_CITY_BUILDING,
@@ -1231,19 +1231,19 @@ void read_population_city_placements ( FILE *fp )
 									ENTITY_ATTR_END
 								);
 							}
-	
+
 							break;
 						}
-		
+
 						default:
 						{
-	
+
 							set_local_entity_int_value ( city, INT_TYPE_OBJECT_3D_SHAPE, temporary_templates[index].base_object );
-	
+
 							break;
 						}
 					}
-		
+
 					set_local_entity_int_value ( city, INT_TYPE_APPROXIMATION_OBJECT_3D_SHAPE, temporary_templates[index].approximation_object );
 				}
 				else if ( keysite )
@@ -1326,10 +1326,10 @@ void read_population_city_placements ( FILE *fp )
 						//
 						// Check for scene links ( SAMS on buildings! )
 						//
-	
+
 						if ( ( objects_3d_scene_database[object_number].number_of_scene_link_objects ) )
 						{
-	
+
 							int
 								scene_link_count;
 
@@ -1351,50 +1351,50 @@ void read_population_city_placements ( FILE *fp )
 								}
 								else
 								{
-		
+
 									if ( ( count % 4 ) == 1 )
 									{
-		
-		
+
+
 										vec3d
 											pos;
-			
+
 										vec3d
 											relative_position;
-			
+
 										matrix3x3
 											m;
-			
+
 										formation_component_types
 											formation_type;
-			
+
 										entity
 											*group,
 											*member;
-		
+
 										if (sam_placement_count & 1)
 										{
-		
+
 											formation_type = FORMATION_COMPONENT_INFANTRY_SAM_KNEELING;
 										}
 										else
 										{
-		
+
 											formation_type = FORMATION_COMPONENT_INFANTRY_SAM_STANDING;
 										}
-			
+
 										relative_position.x = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].x;
 										relative_position.y = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].y;
 										relative_position.z = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].z;
-			
+
 										get_3d_transformation_heading_matrix ( m, heading );
-			
+
 										multiply_matrix3x3_vec3d ( &pos, m, &relative_position );
-			
+
 										pos.x += world_x;
 										pos.y += world_y;
 										pos.z += world_z;
-		
+
 										if ( keysite )
 										{
 											closest_keysite = keysite;
@@ -1405,22 +1405,22 @@ void read_population_city_placements ( FILE *fp )
 										}
 
 										group = create_faction_members ( closest_keysite, ENTITY_SUB_TYPE_GROUP_STATIC_INFANTRY, formation_type, 1, sector_side, &pos, FALSE, FALSE );
-			
+
 										if ( group )
 										{
-			
+
 											float
 												relative_heading;
-			
+
 											relative_heading = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].heading + heading;
-			
+
 											member = get_local_entity_first_child ( group, LIST_TYPE_MEMBER );
-			
+
 											while ( member )
 											{
-			
+
 												set_local_entity_float_value ( member, FLOAT_TYPE_HEADING, relative_heading );
-			
+
 												member = get_local_entity_child_succ ( member, LIST_TYPE_MEMBER );
 											}
 										}
@@ -1482,7 +1482,7 @@ void read_population_airfield_placements ( FILE *fp )
 	//
 
 	#if DEBUG_MODULE
-	
+
 	debug_log ( "Starting airport placement" );
 
 	#endif
@@ -1539,24 +1539,24 @@ void read_population_airfield_placements ( FILE *fp )
 			//
 
 			current_airport_inst3d = construct_3d_object ( object_index );
-	
+
 			current_airport_inst3d->vp.position.x = x;
 			current_airport_inst3d->vp.position.y = y;
 			current_airport_inst3d->vp.position.z = z;
-	
+
 			current_airport_inst3d->object_has_shadow = FALSE;
 			current_airport_inst3d->object_internal_lighting = FALSE;
-	
+
 			get_3d_transformation_matrix ( current_airport_inst3d->vp.attitude, 0.0, 0.0, 0.0 );
 
 			insert_3d_object_into_terrain ( current_airport_inst3d );
 		}
 		else
 		{
-	
+
 			switch ( object_index )
 			{
-	
+
 				case OBJECT_3D_AMERICAN_AIRPORT01:
 				case OBJECT_3D_AMERICAN_AIRPORT02:
 				case OBJECT_3D_AMERICAN_AIRPORT03:
@@ -1573,18 +1573,18 @@ void read_population_airfield_placements ( FILE *fp )
 				case OBJECT_3D_RUSSIAN_AIRPORT12:
 				case OBJECT_3D_RUSSIAN_AIRPORT13:
 				{
-	
+
 					#if DEBUG_MODULE
-	
+
 					debug_log ( "Placing main airport at %f, %f", x, z );
-	
+
 					#endif
-	
+
 					keysite_sub_type = ENTITY_SUB_TYPE_KEYSITE_AIRBASE;
-	
+
 					break;
 				}
-	
+
 				case OBJECT_3D_RUSSIAN_FARP11:
 				case OBJECT_3D_AMERICAN_FARP11:
 				case OBJECT_3D_AMERICAN_FARP01:
@@ -1610,35 +1610,35 @@ void read_population_airfield_placements ( FILE *fp )
 				case OBJECT_3D_RUSSIAN_FARP09:
 				case OBJECT_3D_RUSSIAN_FARP10:
 				case OBJECT_3D_RUSSIAN_FARP12:
-				case OBJECT_3D_RUSSIAN_FARP13:					
+				case OBJECT_3D_RUSSIAN_FARP13:
 				{
-	
+
 					#if DEBUG_MODULE
-	
+
 					debug_log ( "Placing FARP at %f, %f", x, z );
-	
+
 					#endif
-	
+
 					keysite_sub_type = ENTITY_SUB_TYPE_KEYSITE_FARP;
-	
+
 					break;
 				}
-	
+
 				default:
 				{
-	
+
 					keysite_sub_type = ENTITY_SUB_TYPE_KEYSITE_AIRBASE;
 				}
 			}
-	
+
 			//
 			// Check the terrain type here
-	
+
 			{
-	
+
 				terrain_types
 					type;
-	
+
 				{
 					vec3d pos;
 					pos.x = x;
@@ -1649,25 +1649,25 @@ void read_population_airfield_placements ( FILE *fp )
 				}
 
 				get_3d_terrain_point_data ( x, z, NULL );
-	
+
 				type = get_3d_terrain_point_data_type ( NULL );
-	
+
 				if ( get_terrain_type_class ( type ) == TERRAIN_CLASS_WATER )
 				{
-	
+
 					int
 						x_sec,
 						z_sec;
 
 					entity_sides
 						side;
-	
+
 					//
 					// Change object to KIEV or TARAWA for routes
 					//
-	
+
 					get_x_sector ( x_sec, x );
-	
+
 					get_z_sector ( z_sec, z );
 
 					sector = get_local_raw_sector_entity ( x_sec, z_sec );
@@ -1676,98 +1676,98 @@ void read_population_airfield_placements ( FILE *fp )
 
 					if ( side == ENTITY_SIDE_RED_FORCE )
 					{
-	
+
 						#if DEBUG_MODULE
-	
+
 						debug_log ( "Placing a kiev keysite" );
 
 						#endif
-	
+
 						object_index = OBJECT_3D_KIEV_CLASS;
 					}
 					else if ( side == ENTITY_SIDE_BLUE_FORCE )
 					{
-	
+
 						#if DEBUG_MODULE
-	
+
 						debug_log ( "Placing a tarawa keysite" );
 
 						#endif
-	
+
 						object_index = OBJECT_3D_TARAWA;
 					}
 					else
 					{
-	
+
 						debug_fatal ( "Placing a sea keysite - but sector belongs to neither side" );
 					}
-	
+
 					keysite_sub_type = ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE;
 				}
 			}
-	
+
 			current_airport_inst3d = construct_3d_object ( object_index );
 
 			current_airport_inst3d->vp.position.x = x;
 	//VJ 060107 zbuffer fix for disappearing runways, simply elevate them above ground level by 0.05 m
 			current_airport_inst3d->vp.position.y = y+0.05;
 			current_airport_inst3d->vp.position.z = z;
-	
+
 			current_airport_inst3d->object_has_shadow = FALSE;
-	
+
 			get_3d_transformation_matrix ( current_airport_inst3d->vp.attitude, 0.0, 0.0, 0.0 );
-	
+
 	#if ( !DEBUG_MODULE )
-	
+
 			{
-	
+
 				//
 				// Remove the waypoint route objects
 				//
-	
+
 				object_3d_sub_object_search_data
 					search;
-	
+
 				search.search_object = current_airport_inst3d;
 				search.search_depth = 0;
 				search.sub_object_index = OBJECT_3D_SUB_OBJECT_WAYPOINT_ROUTES;
-	
+
 				if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 				{
-	
+
 					search.result_sub_object->visible_object = FALSE;
 				}
 			}
-	
+
 	#endif
-	
+
 			if ( keysite_sub_type != ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE )
 			{
-	
+
 				current_airport_inst3d->object_internal_lighting = TRUE;
-	
+
 				insert_3d_object_into_terrain ( current_airport_inst3d );
 			}
-	
+
 			//
 			// Create keysite,
 			//
-	
+
 			{
-	
+
 				entity
 					*force,
 					*sector,
 					*keysite;
-	
+
 				vec3d
 					position;
-	
+
 				char
 					buffer [256];
 				const char
 					*airfield_name;
-	
+
 				int
 					fixed_wing_flag,
 					helicopter_flag,
@@ -1779,10 +1779,10 @@ void read_population_airfield_placements ( FILE *fp )
 					important,
 					x_sec,
 					z_sec;
-	
+
 				entity_sides
 					keysite_side;
-	
+
 				object_3d_database_entry
 					*landing_route,
 					*takeoff_route,
@@ -1792,7 +1792,7 @@ void read_population_airfield_placements ( FILE *fp )
 				position.x = x;
 				position.y = y;
 				position.z = z;
-	
+
 				airfield_name = NULL;
 
 				keysite_id = -1;
@@ -1803,7 +1803,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 				if ( keysite_sub_type == ENTITY_SUB_TYPE_KEYSITE_AIRBASE )
 				{
-	
+
 					airfield_name = get_keysite_name ( x, z, &keysite_side );
 				}
 				else
@@ -1813,7 +1813,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 					sector = get_local_sector_entity (&position);
 				}
-	
+
 				if (keysite_sub_type == ENTITY_SUB_TYPE_KEYSITE_FARP)
 				{
 
@@ -1940,7 +1940,7 @@ void read_population_airfield_placements ( FILE *fp )
 				takeoff_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_FIXED_WING_TAKEOFF_ROUTE );
 				landing_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_FIXED_WING_LANDING_HOLDING_ROUTE );
 				takeoff_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_FIXED_WING_TAKEOFF_HOLDING_ROUTE );
-	
+
 				if ( ( landing_route ) && ( takeoff_route ) )
 				{
 
@@ -1959,7 +1959,7 @@ void read_population_airfield_placements ( FILE *fp )
 				takeoff_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_HELI_TAKEOFF_ROUTE );
 				landing_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_HELI_LANDING_HOLDING_ROUTE );
 				takeoff_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_HELI_TAKEOFF_HOLDING_ROUTE );
-	
+
 				if ( ( landing_route ) && ( takeoff_route ) )
 				{
 
@@ -1967,7 +1967,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 					insert_airport_helicopter_routes ( &position, landing_route, takeoff_route, landing_holding_route, takeoff_holding_route );
 				}
-	
+
 				//
 				// Insert ROUTED VEHICLE waypoint routes into keysite.
 				//
@@ -1976,7 +1976,7 @@ void read_population_airfield_placements ( FILE *fp )
 				takeoff_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_ROUTED_VEHICLE_TAKEOFF_ROUTE );
 				landing_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_ROUTED_VEHICLE_LANDING_HOLDING_ROUTE );
 				takeoff_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_ROUTED_VEHICLE_TAKEOFF_HOLDING_ROUTE );
-	
+
 				if ( ( landing_route ) && ( takeoff_route ) )
 				{
 
@@ -1986,12 +1986,12 @@ void read_population_airfield_placements ( FILE *fp )
 
 					insert_airport_holding_routes ( &position, landing_holding_route, takeoff_holding_route );
 				}
-	
-	
+
+
 				//
 				// Insert SHIP waypoint routes into keysite.
 				//
-	
+
 				landing_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_SHIP_LANDING_ROUTE );
 				takeoff_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_SHIP_TAKEOFF_ROUTE );
 				landing_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_SHIP_LANDING_HOLDING_ROUTE );
@@ -2006,7 +2006,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 					insert_airport_holding_routes ( &position, landing_holding_route, takeoff_holding_route );
 				}
-	
+
 				//
 				// Insert TRANSPORT waypoint routes into keysite.
 				//
@@ -2025,11 +2025,11 @@ void read_population_airfield_placements ( FILE *fp )
 
 					insert_airport_holding_routes ( &position, landing_holding_route, takeoff_holding_route );
 				}
-	
+
 				//
 				// Insert ASTHETIC PEOPLE waypoint routes into keysite.
 				//
-	
+
 				landing_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_PERSON_LANDING_ROUTE );
 				takeoff_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_PERSON_TAKEOFF_ROUTE );
 				landing_holding_route = get_airfield_waypoint_route_object ( current_airport_inst3d, OBJECT_3D_SUB_OBJECT_PERSON_LANDING_HOLDING_ROUTE );
@@ -2051,12 +2051,12 @@ void read_population_airfield_placements ( FILE *fp )
 
 				if ( keysite_sub_type != ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE )
 				{
-	
+
 					insert_airfield_buildings ( keysite_side, current_airport_inst3d );
 				}
 				else
 				{
-	
+
 					destruct_3d_object ( current_airport_inst3d );
 				}
 
@@ -2380,6 +2380,14 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 				destroy_routegen_waypoint_routes ();
 			}
+
+			if ( matching_slots )
+			{
+
+				safe_free ( matching_slots );
+
+				matching_slots = NULL;
+			}
 		}
 
 		//
@@ -2454,6 +2462,14 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 				destroy_routegen_waypoint_routes ();
 			}
+
+			if ( matching_slots )
+			{
+
+				safe_free ( matching_slots );
+
+				matching_slots = NULL;
+			}
 		}
 
 		//
@@ -2527,6 +2543,14 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
 				destroy_routegen_waypoint_routes ();
+			}
+
+			if ( matching_slots )
+			{
+
+				safe_free ( matching_slots );
+
+				matching_slots = NULL;
 			}
 		}
 
@@ -2946,7 +2970,7 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 	float
 		terrain_height,
 		height_offset;
-	
+
 	//
 	// Insert the landing routes
 	//
@@ -3046,10 +3070,10 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 //VJ FARP bug, date: 18-mar-03
 
 // ensure the waypoint elevation (y coord) is at the terrain elevation or higher (because ships are 20m above sealevel)
-// and add 10 cm to the elevation to ensure the aircraft touch the ground when landing, 
+// and add 10 cm to the elevation to ensure the aircraft touch the ground when landing,
 // this seems to trigger a change of status
 		ASSERT(point_inside_map_area(&waypoint_world_pos));
-		waypoint_world_pos.y = max(waypoint_world_pos.y,get_3d_terrain_point_data (waypoint_world_pos.x,waypoint_world_pos.z, NULL ));		
+		waypoint_world_pos.y = max(waypoint_world_pos.y,get_3d_terrain_point_data (waypoint_world_pos.x,waypoint_world_pos.z, NULL ));
 		waypoint_world_pos.y += 0.1;
 //VJ FARP bug, date: 18-mar-03, end
 
@@ -3393,6 +3417,14 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 		destroy_routegen_waypoint_routes ();
 	}
+
+	if ( matching_slots )
+	{
+
+		safe_free ( matching_slots );
+
+		matching_slots = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3557,6 +3589,14 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 	}
 
 	destroy_routegen_waypoint_routes ();
+
+	if ( matching_slots )
+	{
+
+		safe_free ( matching_slots );
+
+		matching_slots = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3790,14 +3830,14 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 						(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION) ||
 						(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED))
 					{
-	
+
 						wp_range = get_2d_range (get_local_entity_vec3d_ptr (wp, VEC3D_TYPE_POSITION), &position);
-	
+
 						if (wp_range < closest_wp_range)
 						{
-	
+
 							closest_wp_range = wp_range;
-	
+
 							closest_wp = wp;
 						}
 					}
@@ -3998,7 +4038,7 @@ void insert_keysite_or_city_object ( entity *city, entity *keysite, entity *keys
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 static const char *get_keysite_name (float x, float z, entity_sides *side)
 {
 
@@ -4033,17 +4073,17 @@ static const char *get_keysite_name (float x, float z, entity_sides *side)
 			pos.x = x - item->x;
 			pos.y = 0;
 			pos.z = z - item->z;
-	
+
 			range = get_3d_vector_magnitude (&pos);
-	
+
 			if ((range < best_range) && (range < (5.0 * KILOMETRE)))
 			{
 				best_range = range;
-	
+
 				best_item = item;
 			}
 		}
-		
+
 		item = item->next;
 	}
 
@@ -4072,7 +4112,7 @@ static const char *get_keysite_name (float x, float z, entity_sides *side)
 		#if DEBUG_MODULE
 
 		debug_log ("AI_DBASE: no match to closest city at %f, %f side %s", x, z, entity_side_names [*side]);
-	
+
 		#endif
 	}
 
@@ -4131,7 +4171,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 
 //	if ( !object_3d_troop_routes[object_index].landing_route )
 	{
-	
+
 		object = construct_3d_object ( object_index );
 
 		//
@@ -4141,30 +4181,30 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 		search.search_object = object;
 		search.search_depth = 0;
 		search.sub_object_index = OBJECT_3D_SUB_OBJECT_WAYPOINT_ROUTES;
-	
+
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
-	
+
 			object_3d_database_entry
 				*route;
-	
+
 			route = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LANDING_ROUTE );
-		
+
 			if ( route )
 			{
-	
+
 				int
 					count;
-	
+
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
-	
+
 				object_3d_troop_routes[object_index].landing_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
 				object_3d_troop_routes[object_index].number_of_landing_route_nodes = number_of_route_waypoint_positions;
-	
+
 				for ( count = 0; count < number_of_route_waypoint_positions; count++ )
 				{
-	
+
 					object_3d_troop_routes[object_index].landing_route[count].x = route_waypoint_positions[count].position.x;
 					object_3d_troop_routes[object_index].landing_route[count].y = route_waypoint_positions[count].position.y;
 					object_3d_troop_routes[object_index].landing_route[count].z = route_waypoint_positions[count].position.z;
@@ -4203,7 +4243,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 
 //	if ( !object_3d_troop_routes[object_index].takeoff_route )
 	{
-	
+
 		object = construct_3d_object ( object_index );
 
 		//
@@ -4213,30 +4253,30 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 		search.search_object = object;
 		search.search_depth = 0;
 		search.sub_object_index = OBJECT_3D_SUB_OBJECT_WAYPOINT_ROUTES;
-	
+
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
-	
+
 			object_3d_database_entry
 				*route;
-	
+
 			route = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE );
-		
+
 			if ( route )
 			{
-	
+
 				int
 					count;
-	
+
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
-	
+
 				object_3d_troop_routes[object_index].takeoff_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
 				object_3d_troop_routes[object_index].number_of_takeoff_route_nodes = number_of_route_waypoint_positions;
-	
+
 				for ( count = 0; count < number_of_route_waypoint_positions; count++ )
 				{
-	
+
 					object_3d_troop_routes[object_index].takeoff_route[count].x = route_waypoint_positions[count].position.x;
 					object_3d_troop_routes[object_index].takeoff_route[count].y = route_waypoint_positions[count].position.y;
 					object_3d_troop_routes[object_index].takeoff_route[count].z = route_waypoint_positions[count].position.z;
@@ -4300,7 +4340,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 
 	if ( !object_3d_troop_routes[object_index].landing_position_valid )
 	{
-	
+
 		object_3d_troop_routes[object_index].landing_position.x = 0;
 		object_3d_troop_routes[object_index].landing_position.y = 0;
 		object_3d_troop_routes[object_index].landing_position.z = 0;
@@ -4316,15 +4356,15 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 		search.search_object = object;
 		search.search_depth = 0;
 		search.sub_object_index = OBJECT_3D_SUB_OBJECT_WAYPOINT_ROUTES;
-	
+
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
-	
+
 			object_3d_database_entry
 				*troop_lz;
-	
+
 			troop_lz = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LZ );
-		
+
 			if ( troop_lz )
 			{
 

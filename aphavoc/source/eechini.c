@@ -122,22 +122,12 @@ static void get_string ( const struct config_option *option, char *value )
 	strcpy ( value, option->str_value );
 }
 
-static void set_32bit ( const struct config_option *option, const char *value )
-{
-	command_line_display_bpp = value && atoi ( value ) ? 32 : 16;
-}
-
-static void get_32bit ( const struct config_option *option, char *value )
-{
-	sprintf ( value, "%i", command_line_display_bpp == 32 );
-}
-
 static void set_3dreset ( const struct config_option *option, const char *value )
 {
 	if ( atoi ( value ) )
 	{
-		set_global_3d_visual_screen_width ( 640.0 );
-		set_global_3d_visual_screen_height ( 480.0 );
+		set_global_3d_visual_screen_width ( 800.0 );
+		set_global_3d_visual_screen_height ( 600.0 );
 	}
 }
 
@@ -503,7 +493,7 @@ static void get_cloud_puffs_colours ( const struct config_option *option, char *
 		count;
 
 	*value = '\0';
-	for ( count = 0; count < number_of_cloud_puffs_colours; count++ ) 
+	for ( count = 0; count < number_of_cloud_puffs_colours; count++ )
 	{
 		sprintf ( value, "%i,%i,%i;", cloud_puffs_colours[count].red, cloud_puffs_colours[count].green, cloud_puffs_colours[count].blue );
 		value += strlen ( value );
@@ -735,22 +725,12 @@ static const struct config_option options[] =
 		INT(command_line_full_screen) },
 	{ "mfr", "max_frame_rate", "maximum visual frame rate (n = frame rate) (def = 60)",
 		INT(command_line_max_frame_rate) },
-	{ "32bit", "", "32-bit rendering (0 = off, 1 = on) (def = 1)",
-		SPEC(set_32bit, get_32bit) },
-	{ "nrt", "", "rendering to texture (0 = enabled, 1 = disabled) (def = 0) (disable in case of visual problems with MFDs or TADS)",
-		INT(command_line_no_render_to_texture) },
 	{ "notnl", "", "GeForce \"TnL\" support (0 = enabled, 1 = disabled) (def = 0)",
 		INT(command_line_no_hardware_tnl) },
-	{ "nodx9zbufferfix", "", "Disable the dx9 zbuffer fix introduced in 1.11.1.  In case it causes graphical problems",
-		INT(command_line_no_dx9zbuffer_fix) },
-	{ "3dreset", "", "reset screen resolution to 640x480 (0 = off, 1 = on) (def = 0)",
+	{ "3dreset", "", "reset screen resolution to 800x600 (0 = off, 1 = on) (def = 0)",
 		SPEC(set_3dreset, get_zero) },
-	{ "dxtm", "directx_texture_management", "DirectX texture management (should fix \"unable to allocate hardware slot\" error) (0 = off, 1 = on) (def = 0)",
-		INT(command_line_d3d_use_texture_management) },
 	{ "cg", "clean_graphics", "(clean graphics) re-installs graphics files (0 = off, 1 = on) (def = 0)",
 		SPECINT(command_line_clean_graphics, set_int, get_zero) },
-	{ "palette", "", "use textures.pal (if videocard supports it) (0 = off, 1 = on) (def = 0)",
-		INT(d3d_allow_paletted_textures) },
 //	{ "eofullrange", "", "eo ranges near to max fog distance (and objects are drawn up to it) (0 = off, 1 = on) (def = 1)",
 //		INT(command_line_eo_full_range) },
 	{ "render-shadows", "", "(0 = off, 1 = all objects except trees, 2 = all objects) (def = 2)",
@@ -1134,14 +1114,12 @@ static const struct config_option options[] =
 		CSTR(command_line_game_initialisation_phase_directory) },
 	{ "filename", "command_line_game_initialisation_phase_filename", "/0",
 		CSTR(command_line_game_initialisation_phase_filename) },
-	{ "3dw", NULL, "640",
+	{ "3dw", NULL, "800",
 		SPECINT(command_line_3d_visual_screen_width, set_3dw, NULL) },
-	{ "3dh", NULL, "480",
+	{ "3dh", NULL, "600",
 		SPECINT(command_line_3d_visual_screen_height, set_3dh, NULL) },
 	{ "3dce", NULL, "1",
 		CINT(command_line_3d_visual_clear_edges) },
-	{ "cbt", NULL, "1",
-		CINT(command_line_cpu_blit_textures) },
 	{ "force_resolution", NULL, "1",
 		CINT(command_line_force_resolution) },
 	{ "vn", "version_number", "",

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -65,13 +65,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "terrain.h"
-#include "3d/3dfunc.h"
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define MAX_TERRAIN_BUFFERED_INDICES 4096
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,14 +92,14 @@ int
 screen
 	*terrain_buffered_polygons_texture;
 
-LPD3DTLVERTEX
+LPTLVERTEX
 	buffered_vertices;
 
 indices_info
 	vertex_buffer_indices[MAX_ALPHA_VERTEX_BUFFERS];
 
-WORD
-	buffered_indices[MAX_TERRAIN_BUFFERED_INDICES];
+static WORD
+	*buffered_indices;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,13 +109,14 @@ void reset_terrain_3d_buffered_polygons ( void )
 {
 
 	vertex_buffer = -1;
+	buffered_indices = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LPD3DTLVERTEX get_terrain_3d_buffered_vertices ( int number_of_vertices )
+LPTLVERTEX get_terrain_3d_buffered_vertices ( int number_of_vertices )
 {
 
 	if ( vertex_buffer == -1 )
@@ -133,16 +127,16 @@ LPD3DTLVERTEX get_terrain_3d_buffered_vertices ( int number_of_vertices )
 		//
 
 		base_index = 0;
-	
+
 		vertex_buffer = 0;
-	
+
 		vertex_buffer_indices[vertex_buffer].base_index = 0;
 		vertex_buffer_indices[vertex_buffer].number_of_vertices_buffered = 0;
 
 		buffered_vertices = get_d3d_alpha_vertex_buffer_vertices ( vertex_buffer );
 	}
 
-	if ( vertex_buffer_indices[vertex_buffer].number_of_vertices_buffered + number_of_vertices > 256 )
+	if ( vertex_buffer_indices[vertex_buffer].number_of_vertices_buffered + number_of_vertices > MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER )
 	{
 
 		//
@@ -167,6 +161,11 @@ LPD3DTLVERTEX get_terrain_3d_buffered_vertices ( int number_of_vertices )
 	return ( &buffered_vertices[vertex_buffer_indices[vertex_buffer].number_of_vertices_buffered] );
 }
 
+static void terrain_lock_buffered_indices ( void )
+{
+	f3d_index_lock ( d3d.alpha_index_buffer, D3DLOCK_NOSYSLOCK, &buffered_indices );
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +177,13 @@ void add_terrain_3d_buffered_triangle_fan ( int number_of_vertices, screen *text
 		point_count;
 
 	terrain_buffered_polygons_texture = texture;
+
+	if ( !buffered_indices )
+	{
+		terrain_lock_buffered_indices ();
+	}
+
+	ASSERT ( base_index + ( number_of_vertices - 1 ) * 3 < MAXIMUM_D3D_INDICES_IN_VERTEX_BUFFER );
 
 	for ( point_count = 1; point_count < ( number_of_vertices - 1 ); point_count++ )
 	{
@@ -204,6 +210,13 @@ void add_terrain_3d_buffered_triangle_strip ( int number_of_vertices, screen *te
 	terrain_buffered_polygons_texture = texture;
 
 	direction_toggle = FALSE;
+
+	if ( !buffered_indices )
+	{
+		terrain_lock_buffered_indices ();
+	}
+
+	ASSERT ( base_index + ( number_of_vertices - 2 ) * 3 < MAXIMUM_D3D_INDICES_IN_VERTEX_BUFFER );
 
 	for ( point_count = 0; point_count < ( number_of_vertices - 2 ); point_count++ )
 	{
@@ -255,6 +268,8 @@ void draw_terrain_3d_buffered_polygons ( void )
 			int
 				count;
 
+			f3d_index_unlock ( d3d.alpha_index_buffer );
+
 			//
 			// Flush any buffered primitives
 			//
@@ -264,32 +279,28 @@ void draw_terrain_3d_buffered_polygons ( void )
 			//
 			// Set the alpha blend modes
 			//
-	
+
 			set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-	
+
 			//
 			// Set the texture handle
 			//
-	
+
 			set_d3d_texture ( 0, terrain_buffered_polygons_texture );
-	
+
 			//
 			// Draw all the buffered vertex buffers
 			//
 
 			for ( count = 0; count <= vertex_buffer; count++ )
 			{
-				f3d_draw_vb ( D3DPT_TRIANGLELIST, d3d.alpha_vertex_buffer[count],
-																						0,
-																						vertex_buffer_indices[count].number_of_vertices_buffered,
-																						&buffered_indices[ vertex_buffer_indices[count].base_index ],
-																						vertex_buffer_indices[count].number );
+				f3d_dip ( D3DPT_TRIANGLELIST, d3d.alpha_vertex_buffer[count], 0, vertex_buffer_indices[count].number_of_vertices_buffered, d3d.alpha_index_buffer, vertex_buffer_indices[count].base_index, vertex_buffer_indices[count].number / 3, D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1, sizeof ( TLVERTEX ) );
 			}
 
 			//
 			// Turn the blend mode off
 			//
-	
+
 			set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 		}
 

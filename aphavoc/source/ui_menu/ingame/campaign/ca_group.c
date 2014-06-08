@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -92,8 +92,8 @@ static ui_object
 
 static ui_object
 	*view_button,
-	*page_3d_area, 
-	*page_map_area, 
+	*page_3d_area,
+	*page_map_area,
 	*page_map_view_area,
 	*page_map_view_mode_area,
 	*page_map_toggle,
@@ -145,7 +145,7 @@ int show_group_page (entity *group, int force_update)
 
 	vec3d
 		*pos;
-				
+
 	ASSERT (group);
 
 	ASSERT (get_local_entity_type (group) == ENTITY_TYPE_GROUP);
@@ -172,7 +172,7 @@ int show_group_page (entity *group, int force_update)
 
 	//
 	// NAME
-	//	
+	//
 
 	company = get_local_entity_parent (group, LIST_TYPE_DIVISION);
 
@@ -233,7 +233,7 @@ int show_group_page (entity *group, int force_update)
 	}
 
 	//
-	// MISSION GROUP IS CURRENTLY DOING 
+	// MISSION GROUP IS CURRENTLY DOING
 	//
 
 	mission = get_local_group_primary_task (group);
@@ -293,7 +293,7 @@ int show_group_page (entity *group, int force_update)
 				set_ui_object_virtual_x_size (group_page_member_list, 0.9);
 			}
 		}
-	
+
 		if (get_local_entity_int_value (member, INT_TYPE_GROUP_LEADER))
 		{
 			first_item = add_to_pop_up_list (buffer, group_page_member_list, NULL, get_local_entity_index (member), UI_FONT_ARIAL_10, ui_colour_yellow);
@@ -429,7 +429,7 @@ static void update_group_page_objects (ui_object *obj, void *arg)
 	{
 		entity
 			*pilot;
-			
+
 		pilot = get_local_entity_parent (group, LIST_TYPE_PILOT_LOCK);
 
 		if (pilot)
@@ -444,7 +444,7 @@ static void update_group_page_objects (ui_object *obj, void *arg)
 
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -453,7 +453,7 @@ static void notify_base_selected (ui_object *obj, void *arg)
 {
 	int
 		index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -470,7 +470,7 @@ static void notify_mission_selected (ui_object *obj, void *arg)
 {
 	int
 		index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -502,9 +502,9 @@ void update_member_list (ui_object *obj, void *arg)
 	//
 	// Clear Gunship Accept Button
 	//
-	
+
 	set_ui_object_drawable (gunship_accept_button, FALSE);
-	
+
 	set_ui_object_item_number (gunship_accept_button, ENTITY_INDEX_DONT_CARE);
 
 	set_ui_object_state (gunship_accept_button, UI_OBJECT_STATE_OFF);
@@ -538,7 +538,7 @@ void update_member_list (ui_object *obj, void *arg)
 					if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 					{
 						set_ui_object_drawable (gunship_accept_button, TRUE);
-	
+
 						set_ui_object_item_number (gunship_accept_button, index);
 					}
 				}
@@ -573,16 +573,16 @@ void notify_member_list (ui_object *obj, void *arg)
 		//
 		// 2D MAP
 		//
-	
+
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-	
+
 		ASSERT (pos);
-	
+
 		page_map_dimensions.x = pos->x;
 		page_map_dimensions.z = pos->z;
-	
+
 		page_map_dimensions.subject_entity = en;
-		
+
 		set_ui_object_item_number (page_map_area, index);
 	}
 }
@@ -623,9 +623,9 @@ static void notify_member_accept_button (ui_object *obj, void *arg)
 					//
 					// Automatically change list mode to Missions
 					//
-			
+
 					show_mission_list (NULL, NULL);
-	
+
 					mission = get_local_entity_primary_task (en);
 
 					if ((mission) && (get_local_entity_int_value (mission, INT_TYPE_TASK_STATE) == TASK_STATE_ASSIGNED))
@@ -671,7 +671,7 @@ static void notify_member_view_button (ui_object *obj, void *arg)
 	if (en)
 	{
 		ASSERT (get_local_entity_int_value (en, INT_TYPE_VIEWABLE));
-		
+
 		notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CINEMATIC);
 
 		set_external_view_entity (en);
@@ -741,15 +741,15 @@ static void draw_page_3d_scene (ui_object *obj, void *arg)
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 		ASSERT (pos);
-		
+
 		get_3d_unit_vector_from_heading_and_pitch (&vec, page_3d_heading, page_3d_pitch);
 
 		vp.x = pos->x + (page_3d_distance * vec.x);
 		vp.y = pos->y + (page_3d_distance * vec.y);
 		vp.z = pos->z + (page_3d_distance * vec.z);
-	
+
 		invert_3d_vector (&vec);
-	
+
 		get_matrix3x3_from_unit_vec3d (vp.attitude, &vec);
 
 		draw_campaign_screen_3d_scene (obj, &vp);
@@ -769,7 +769,7 @@ void rotate_group_page_3d_scene_heading (float delta_heading)
 		page_3d_heading = wrap_angle (page_3d_heading);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -783,7 +783,7 @@ void rotate_group_page_3d_scene_pitch (float delta_pitch)
 		page_3d_pitch = bound (page_3d_pitch, PI * (1.0 / 8.0), PI * 0.5);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -800,11 +800,11 @@ void zoom_group_page_3d_scene (int zoom)
 		{
 			page_3d_distance *= GROUP_3D_VIEW_MEDIUM_DISTANCE_INCREMENT;
 		}
-	
+
 		page_3d_distance = bound (page_3d_distance, 12.0, 1.2 * KILOMETRE);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -853,7 +853,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Title
-			
+
 	x1 = 0.044;
 	y1 = 0.044;
 	x2 = 0.45;
@@ -893,7 +893,7 @@ void define_campaign_screen_group_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :", get_trans ("Type"));
-	
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -1015,7 +1015,7 @@ void define_campaign_screen_group_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :", get_trans ("Base"));
-	
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -1058,7 +1058,7 @@ void define_campaign_screen_group_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :", get_trans ("Mission"));
-	
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -1204,7 +1204,7 @@ void define_campaign_screen_group_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -1222,7 +1222,7 @@ void define_campaign_screen_group_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -1275,7 +1275,7 @@ void define_campaign_screen_group_page_objects (void)
 			);
 
 	// Full View Button
-		
+
 	x1 = 0.66;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -1300,7 +1300,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// 3d Preview Area
-	
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -1319,7 +1319,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Map Area
-		
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -1341,7 +1341,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	///////////////////////////////////////////////////
 	// Accept Button
-		
+
 	x1 = 0.283;
 	y1 = 0.949;
 	x2 = 0.699;
@@ -1360,7 +1360,7 @@ void define_campaign_screen_group_page_objects (void)
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
 			UI_ATTR_FUNCTION (notify_member_accept_button),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\acptbtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\acptbtn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -1417,7 +1417,7 @@ static int response_to_group_destroyed (campaign_screen_messages message, entity
 		{
 			show_map_page ();
 		}
-		
+
 		set_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP], ENTITY_INDEX_DONT_CARE);
 	}
 
@@ -1449,13 +1449,13 @@ static int response_to_group_add_member (campaign_screen_messages message, entit
 {
 	entity
 		*group;
-		
+
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
 		group = get_local_entity_parent (sender, LIST_TYPE_MEMBER);
 
 		ASSERT (group);
-	
+
 		if (get_local_entity_safe_index (group) == get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]))
 		{
 			show_group_page (group, TRUE);
@@ -1475,11 +1475,11 @@ static int response_to_group_remove_member (campaign_screen_messages message, en
 		*group;
 
 	group = sender;
-		
+
 	ASSERT (group);
 
 	ASSERT (get_local_entity_type (group) == ENTITY_TYPE_GROUP);
-	
+
 	if (get_local_entity_safe_index (group) == get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
 		if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
@@ -1510,7 +1510,7 @@ static int response_to_mission_assigned (campaign_screen_messages message, entit
 {
 	entity
 		*group;
-		
+
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
 		group = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]));
@@ -1532,7 +1532,7 @@ static int response_to_mission_completed (campaign_screen_messages message, enti
 {
 	entity
 		*group;
-		
+
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
 		group = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]));

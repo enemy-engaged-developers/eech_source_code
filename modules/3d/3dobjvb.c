@@ -70,10 +70,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_VERTEX_BUFFER_SIZE 16384
-
-#define USE_D3D_SOFTWARE_TNL 0
-
 #define USE_ROUND_ROBIN_VBS 1
 
 #define REPORT_RERENDER 0
@@ -140,49 +136,19 @@ typedef struct D3D_VB_INFO d3d_vb_info;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-object_3d_extra_object_info
-	*objects_3d_extra_data = NULL;
-
-
-object_3d_surface_info
-	*objects_3d_extra_data_surfaces = NULL;
-
-WORD
-	*objects_3d_extra_data_indices = NULL;
-
-LPDIRECT3DVERTEXBUFFERX
-	*objects_3d_vertex_buffers = NULL;
-
-int
-	*objects_3d_vertex_buffer_sizes = NULL;
-
-int
-	total_number_of_d3d_object_surfaces = 0;
-
-int
-	current_vb_object = 0,
-	total_vb_created = 0,
-	total_vb_vertices = 0,
-	total_number_of_objects_3d_vertex_buffers = 0;
-
-WORD
-	d3d_hardware_vertex_indices[1024];
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define NUMBER_OF_PLAIN_D3D_VBS 16
-#define NUMBER_OF_TEXTURED_D3D_VBS 16
-#define NUMBER_OF_LIGHTMAP_D3D_VBS 2
-#define NUMBER_OF_VERTICES_IN_D3D_VBS 2048
+#define NUMBER_OF_PLAIN_D3D_VBS 128
+#define NUMBER_OF_TEXTURED_D3D_VBS 128
+#define NUMBER_OF_LIGHTMAP_D3D_VBS 32
+#define NUMBER_OF_VERTICES_IN_D3D_VBS 4096
 #define NUMBER_OF_INDICES_PER_SLOT_FACTOR 10
 #define NUMBER_OF_D3D_VB_SLOT_SIZES 4
 #define MAX_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT 256
-#define MIN_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT 32
 
-LPDIRECT3DVERTEXBUFFERX
+LPDIRECT3DVERTEXBUFFER9
 	*object_3d_d3d_vbs[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES];
+
+LPDIRECT3DINDEXBUFFER9
+	*object_3d_d3d_ibs[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES];
 
 d3d_vb_object_3d_info
 	*d3d_vb_slots[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES],
@@ -191,11 +157,9 @@ d3d_vb_object_3d_info
 	**object_3d_vb_slot_references;
 
 int
+	total_surfaces,
 	number_of_d3d_vb_slots[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES],
 	number_of_d3d_vbs[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES];
-
-WORD
-	*object_3d_d3d_vb_indices[D3D_VB_NUMBER_OF_TYPES][NUMBER_OF_D3D_VB_SLOT_SIZES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1145,7 +1109,6 @@ void initialise_3d_objects_in_d3d ( void )
 		object_vbs_restore_registered = FALSE;
 
 	int
-		total_surfaces,
 		count,
 		number_of_vertices_in_slot,
 		size_slot,
@@ -1190,43 +1153,35 @@ void initialise_3d_objects_in_d3d ( void )
 
 			d3d_vb_slots[type][size_slot] = ( d3d_vb_object_3d_info * ) safe_malloc ( sizeof ( d3d_vb_object_3d_info ) * number_of_d3d_vb_slots[type][size_slot] );
 
-			object_3d_d3d_vbs[type][size_slot] = ( LPDIRECT3DVERTEXBUFFERX * ) safe_malloc ( sizeof ( LPDIRECT3DVERTEXBUFFERX ) * number_of_d3d_vbs[type][size_slot] );
+			object_3d_d3d_vbs[type][size_slot] = ( LPDIRECT3DVERTEXBUFFER9 * ) safe_malloc ( sizeof ( LPDIRECT3DVERTEXBUFFER9 ) * number_of_d3d_vbs[type][size_slot] );
 
-			object_3d_d3d_vb_indices[type][size_slot] = ( WORD * ) safe_malloc ( sizeof ( WORD ) * ( number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR * number_of_d3d_vb_slots[type][size_slot] ) );
+			object_3d_d3d_ibs[type][size_slot] = ( LPDIRECT3DINDEXBUFFER9 * ) safe_malloc ( sizeof ( LPDIRECT3DINDEXBUFFER9 ) * number_of_d3d_vbs[type][size_slot] );
 
 			slot_index = 0;
 
 			for ( count = 0; count < number_of_d3d_vbs[type][size_slot]; count++ )
 			{
 
-				D3DVERTEXBUFFERDESC
-					desc;
+				unsigned
+					size,
+					fvf;
 
 				int
 					temp;
 
-				memset ( &desc, 0, sizeof ( D3DVERTEXBUFFERDESC ) );
-				desc.dwSize = sizeof ( D3DVERTEXBUFFERDESC );
-
-	#if USE_D3D_SOFTWARE_TNL
-				desc.dwCaps = ( d3d_using_hardware_tnl ) ? ( D3DVBCAPS_WRITEONLY ) : ( D3DVBCAPS_WRITEONLY | D3DVBCAPS_SYSTEMMEMORY );
-				desc.dwCaps |= D3DVBCAPS_SYSTEMMEMORY;
-	#else
-	//			desc.dwCaps = D3DVBCAPS_DONOTCLIP;
-				desc.dwCaps |= D3DVBCAPS_WRITEONLY;
-	#endif
-
-				desc.dwNumVertices = NUMBER_OF_VERTICES_IN_D3D_VBS;
+				size = NUMBER_OF_VERTICES_IN_D3D_VBS * sizeof ( float );
 
 				switch ( type )
 				{
 
-					case D3D_VB_PLAIN_TYPE:		desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0; break;
-					case D3D_VB_TEXTURED_TYPE:	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1; break;
-					case D3D_VB_LIGHTMAP_TYPE:	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX2; break;
+					case D3D_VB_PLAIN_TYPE:		fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0; size *= 6; break;
+					case D3D_VB_TEXTURED_TYPE:	fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1; size *= 8; break;
+					case D3D_VB_LIGHTMAP_TYPE:	fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX2; size *= 10; break;
 				}
 
-				f3d_vertex_create ( &desc, &object_3d_d3d_vbs[type][size_slot][count] );
+				f3d_vertex_create ( size, fvf, &object_3d_d3d_vbs[type][size_slot][count] );
+
+				f3d_index_create ( NUMBER_OF_VERTICES_IN_D3D_VBS * NUMBER_OF_INDICES_PER_SLOT_FACTOR, &object_3d_d3d_ibs[type][size_slot][count] );
 
 				//
 				// Now create the slots for this vertex buffer
@@ -1262,8 +1217,9 @@ void initialise_3d_objects_in_d3d ( void )
 					}
 
 					d3d_vb_slots[type][size_slot][slot_index].buffer = object_3d_d3d_vbs[type][size_slot][count];
-					d3d_vb_slots[type][size_slot][slot_index].indices = &object_3d_d3d_vb_indices[type][size_slot][slot_index * number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR];
+					d3d_vb_slots[type][size_slot][slot_index].ibuffer = object_3d_d3d_ibs[type][size_slot][count];
 					d3d_vb_slots[type][size_slot][slot_index].vertex_offset = temp * number_of_vertices_in_slot;
+					d3d_vb_slots[type][size_slot][slot_index].index_offset = temp * number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR;
 					d3d_vb_slots[type][size_slot][slot_index].number_of_vertices = 0;
 					d3d_vb_slots[type][size_slot][slot_index].number_of_indices = 0;
 					d3d_vb_slots[type][size_slot][slot_index].surface_reference = NULL;
@@ -1291,17 +1247,6 @@ void initialise_3d_objects_in_d3d ( void )
 	object_3d_vb_slot_references = ( d3d_vb_object_3d_info * * ) safe_malloc ( sizeof ( d3d_vb_object_3d_info * ) * total_surfaces );
 
 	memset ( object_3d_vb_slot_references, 0, ( sizeof ( d3d_vb_object_3d_info * ) * total_surfaces ) );
-
-	//
-	// Set line vertex indices
-	//
-
-	for ( count = 0; count < 1024; count += 2 )
-	{
-
-		d3d_hardware_vertex_indices[count] = count;
-		d3d_hardware_vertex_indices[count+1] = count+1;
-	}
 
 	//
 	// Register the restore routine for Alt-tab situations
@@ -1359,14 +1304,6 @@ void deinitialise_3d_objects_in_d3d ( void )
 				d3d_vb_slots[type][size_slot] = NULL;
 			}
 
-			if ( object_3d_d3d_vb_indices[type][size_slot] )
-			{
-
-				safe_free ( object_3d_d3d_vb_indices[type][size_slot] );
-
-				object_3d_d3d_vb_indices[type][size_slot] = NULL;
-			}
-
 			if ( object_3d_d3d_vbs[type][size_slot] )
 			{
 
@@ -1383,6 +1320,23 @@ void deinitialise_3d_objects_in_d3d ( void )
 
 				object_3d_d3d_vbs[type][size_slot] = NULL;
 			}
+
+			if ( object_3d_d3d_ibs[type][size_slot] )
+			{
+
+				for ( count = 0; count < number_of_d3d_vbs[type][size_slot]; count++ )
+				{
+
+					if ( object_3d_d3d_ibs[type][size_slot][count] )
+					{
+						f3d_index_release ( &object_3d_d3d_ibs[type][size_slot][count] );
+					}
+				}
+
+				safe_free ( object_3d_d3d_ibs[type][size_slot] );
+
+				object_3d_d3d_ibs[type][size_slot] = NULL;
+			}
 		}
 	}
 }
@@ -1394,18 +1348,16 @@ void deinitialise_3d_objects_in_d3d ( void )
 void object_3d_render_hardware_surface ( object_3d *object )
 {
 	int
-		prevent_rendering,
 		type,
 		global_surface_index,
 		size_slot,
 		number_of_vertices_in_slot,
-		half_number_of_vertices_in_slot,
 		number_of_surface_points;
 
 	d3d_vb_object_3d_info
 		*surface;
 
-	D3DVERTEX
+	NTVERTEX
 		*textured_vertices;
 
 	D3DPLAINVERTEX
@@ -1414,6 +1366,10 @@ void object_3d_render_hardware_surface ( object_3d *object )
 	D3DTEXTURE2VERTEX
 		*lightmap_vertices;
 
+	unsigned
+		fvf,
+		stride;
+
 	//
 	// Check current surface
 	//
@@ -1421,6 +1377,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 	ASSERT ( current_object_3d_surface->polygons );
 
 	global_surface_index = ( current_object_3d_surface - object_database_surfaces );
+	ASSERT ( global_surface_index > 0 && global_surface_index < total_surfaces );
 
 	surface = object_3d_vb_slot_references[global_surface_index];
 
@@ -1433,15 +1390,21 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		if ( current_object_3d_surface->has_luminosity_texture )
 		{
 			type = D3D_VB_LIGHTMAP_TYPE;
+			fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX2;
+			stride = sizeof ( *lightmap_vertices );
 		}
 		else
 		{
 			type = D3D_VB_TEXTURED_TYPE;
+			fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
+			stride = sizeof ( *textured_vertices );
 		}
 	}
 	else
 	{
 		type = D3D_VB_PLAIN_TYPE;
+		fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0;
+		stride = sizeof ( *plain_vertices );
 	}
 
 	//
@@ -1454,24 +1417,24 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		number_of_surface_points = 256;
 	}
 
-	size_slot = 0;
-	number_of_vertices_in_slot = MAX_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT;
-	half_number_of_vertices_in_slot = MAX_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT / 2;
+	ASSERT ( number_of_surface_points <= MAX_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT );
 
-	while ( ( number_of_surface_points < half_number_of_vertices_in_slot ) && ( half_number_of_vertices_in_slot >= MIN_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT ) )
+	number_of_vertices_in_slot = MAX_NUMBER_OF_VERTICES_IN_D3D_VB_SLOT >> 1;
+	for ( size_slot = 1; size_slot < NUMBER_OF_D3D_VB_SLOT_SIZES; size_slot++ )
 	{
-		size_slot++;
+		if ( number_of_surface_points > number_of_vertices_in_slot )
+		{
+			break;
+		}
 		number_of_vertices_in_slot >>= 1;
-		half_number_of_vertices_in_slot >>= 1;
 	}
+	size_slot--;
+	number_of_vertices_in_slot <<= 1;
 
-	prevent_rendering = FALSE;
+	ASSERT ( number_of_surface_points <= number_of_vertices_in_slot );
 
 	if ( !surface )
 	{
-		int
-			ret;
-
 		int
 			face_count,
 			vertex_count,
@@ -1515,14 +1478,16 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		plain_vertices = NULL;
 		lightmap_vertices = NULL;
 
-		lock_flags = DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR;
+		lock_flags = D3DLOCK_NOSYSLOCK;
 
 		switch ( type )
 		{
-			case D3D_VB_PLAIN_TYPE:		ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &plain_vertices ); break;
-			case D3D_VB_TEXTURED_TYPE: ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &textured_vertices ); break;
-			case D3D_VB_LIGHTMAP_TYPE: ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &lightmap_vertices ); break;
+			case D3D_VB_PLAIN_TYPE: f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &plain_vertices ); break;
+			case D3D_VB_TEXTURED_TYPE: f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &textured_vertices ); break;
+			case D3D_VB_LIGHTMAP_TYPE: f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &lightmap_vertices ); break;
 		}
+
+		f3d_index_lock ( surface->ibuffer, lock_flags, &indices );
 
 #if REPORT_RERENDER
 		switch ( type )
@@ -1533,19 +1498,10 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		}
 #endif
 
-		if ( !ret )
-		{
-			//
-			// Don't try to draw this vertex buffer!!!!
-			//
-
-			prevent_rendering = TRUE;
-		}
-		else
 		{
 			object_3d_vb_slot_references[global_surface_index] = surface;
 			surface->surface_reference = &object_3d_vb_slot_references[global_surface_index];
-			indices = surface->indices;
+			indices += surface->index_offset;
 
 			saved_object_3d_point_list = current_object_3d_point_list;
 			saved_object_3d_face_normal_list = current_object_3d_face_normal_list;
@@ -1835,7 +1791,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 					faces++;
 				}
 
-				ASSERT ( current_face_index_offset < ( number_of_surface_points * NUMBER_OF_INDICES_PER_SLOT_FACTOR ) );
+				ASSERT ( current_face_index_offset <= number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR );
 			}
 
 			//
@@ -1843,6 +1799,8 @@ void object_3d_render_hardware_surface ( object_3d *object )
 			//
 
 			f3d_vertex_unlock ( surface->buffer );
+
+			f3d_index_unlock ( surface->ibuffer );
 
 			//
 			// Fill in the surface attributes
@@ -1860,7 +1818,6 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		}
 	}
 
-	if ( !prevent_rendering )
 	{
 #if ( USE_ROUND_ROBIN_VBS )
 
@@ -1905,9 +1862,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 
 #endif
 
-		f3d_draw_vb ( D3DPT_TRIANGLELIST, surface->buffer,
-																			surface->vertex_offset, surface->number_of_vertices,
-																			surface->indices, surface->number_of_indices );
+		f3d_dip ( D3DPT_TRIANGLELIST, surface->buffer, surface->vertex_offset, surface->number_of_vertices, surface->ibuffer, surface->index_offset, surface->number_of_indices / 3, fvf, stride );
 	}
 }
 

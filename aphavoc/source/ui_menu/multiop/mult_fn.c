@@ -64,12 +64,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define INTERNAL_MODULES 1
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //static void initialise_service_provider_connection ( void );
 
 static void set_multiplayer_options_display ( void );
@@ -178,8 +172,6 @@ void notify_multi_player_setup (void)
 
 		this_connection = direct_play_get_connection_data ();
 
-		blit_front_buffer_to_render_buffer ();
-
 
 		// Setup the service provider cycle button
 
@@ -260,33 +252,9 @@ void notify_multi_player_setup (void)
 
 		// Lastly load in the stuff for the screen
 /*
-		if ( multiplayer_screen_graphic )
-		{
-
-			destroy_texture_graphic ( multiplayer_screen_graphic );
-
-			multiplayer_screen_graphic = NULL;
-		}
-
-		multiplayer_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\multi.psd" );
-
-		set_ui_object_texture_graphic ( multi_player_setup_area, multiplayer_screen_graphic );
-
-		blit_front_buffer_to_render_buffer ();
+		set_ui_object_texture_graphic ( multi_player_setup_area, create_texture_graphic ( "graphics\\ui\\cohokum\\multi.psd", 0 ) );
 
 		reset_time_values ( options_screen );
-*/
-//	}
-//	else
-//	{
-/*
-		if ( multiplayer_screen_graphic )
-		{
-
-			destroy_texture_graphic ( multiplayer_screen_graphic );
-
-			multiplayer_screen_graphic = NULL;
-		}
 */
 //	}
 

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -106,7 +106,7 @@ struct CLOUD_3D_TEXTURED_REFERENCE
 		//
 		// Reference number of transformed point ( index number )
 		//
-	
+
 		point;
 
 	float
@@ -120,10 +120,10 @@ struct CLOUD_3D_TEXTURED_REFERENCE
 
 	union
 	{
-	
+
 		struct
 		{
-		
+
 			unsigned char
 				blue,
 				green,
@@ -131,7 +131,7 @@ struct CLOUD_3D_TEXTURED_REFERENCE
 
 			union
 			{
-		
+
 				unsigned char
 					fog,
 					alpha;
@@ -160,10 +160,10 @@ struct CLOUD_3D_POINT
 
 	union
 	{
-	
+
 		struct
 		{
-		
+
 			unsigned char
 				blue,
 				green,
@@ -171,7 +171,7 @@ struct CLOUD_3D_POINT
 
 			union
 			{
-		
+
 				unsigned char
 					fog,
 					alpha;
@@ -460,7 +460,7 @@ void scan_3d_clouds ( void )
 			target_weather_texture = NULL;
 
 			cloud_weather_blend_factor = 0;
-		
+
 			cloud_weather_one_minus_blend_factor = 1.0;
 		}
 		else if ( cloud_weather_blend_factor == 0 )
@@ -471,7 +471,7 @@ void scan_3d_clouds ( void )
 			target_weather_texture = NULL;
 
 			cloud_weather_blend_factor = 0;
-		
+
 			cloud_weather_one_minus_blend_factor = 1.0;
 		}
 		else
@@ -490,7 +490,7 @@ void scan_3d_clouds ( void )
 		target_weather_texture = NULL;
 
 		cloud_weather_blend_factor = 0;
-	
+
 		cloud_weather_one_minus_blend_factor = 1.0;
 	}
 
@@ -589,29 +589,29 @@ void scan_3d_clouds ( void )
 				{
 
 					sorting_slot = get_3d_scene_slot ();
-		
+
 					if ( sorting_slot )
 					{
-		
+
 						sorting_slot->type = OBJECT_3D_DRAW_TYPE_CLOUD_SECTOR;
-		
+
 						//
 						// Use the integer representation of the float value
 						//
-		
+
 						sector_relative_centre.z += 32768;
-		
+
 						sorting_slot->z = *( ( int * ) &sector_relative_centre.z );
-		
+
 						sorting_slot->cloud_sector.x = current_sector_x;
-		
+
 						sorting_slot->cloud_sector.z = current_sector_z;
-		
+
 						insert_middle_scene_slot_into_3d_scene ( sorting_slot );
 					}
 					else
 					{
-		
+
 						debug_log ( "Run out of object slots!" );
 					}
 				}
@@ -649,8 +649,10 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 	cloud_3d_point
 		cloud_points[256];
 
+#if 0
 	float
 		cloud_polygon_alphas[256];
+#endif
 
 	cloud_3d_textured_reference
 		point_references[4];
@@ -684,6 +686,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 	set_d3d_fog_face_intensity ( 0 );
 
+#if 0
 	if ( d3d_flat_only_alpha )
 	{
 
@@ -739,19 +742,19 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 				point_vector.x = sector_centre.x + x_offset;
 				point_vector.y = 0;
 				point_vector.z = sector_centre.z + z_offset;
-	
+
 				distance = get_3d_vector_magnitude ( &point_vector );
 
 				if ( distance > 1 )
 				{
-	
+
 					normalise_3d_vector_given_magnitude ( &point_vector, distance );
-		
+
 					angle = ( ( point_vector.x * cloud_colour_blend_vector.x ) + ( point_vector.z * cloud_colour_blend_vector.z ) );
 					angle = bound ( angle, 0, 1 );
 					angle *= angle;
 					angle *= angle;
-		
+
 					colour_t = ( distance / CLOUD_MAXIMUM_COLOUR_BLEND_DISTANCE );
 					colour_t = bound ( colour_t, 0, 1 );
 					colour_t *= angle;
@@ -765,15 +768,15 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 				dr = active_3d_environment->cloud_light.object_colour.red - active_3d_environment->cloud_light.light__colour.red;
 				dg = active_3d_environment->cloud_light.object_colour.green - active_3d_environment->cloud_light.light__colour.green;
 				db = active_3d_environment->cloud_light.object_colour.blue - active_3d_environment->cloud_light.light__colour.blue;
-	
+
 				r = active_3d_environment->cloud_light.light__colour.red + ( colour_t * dr );
 				g = active_3d_environment->cloud_light.light__colour.green + ( colour_t * dg );
 				b = active_3d_environment->cloud_light.light__colour.blue + ( colour_t * db );
-	
+
 				convert_float_to_int ( r * 255.0, &ir );
 				convert_float_to_int ( g * 255.0, &ig );
 				convert_float_to_int ( b * 255.0, &ib );
-	
+
 				cloud_points[count].red = ir;
 				cloud_points[count].green = ig;
 				cloud_points[count].blue = ib;
@@ -802,7 +805,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 				alpha = ( ( cloud_3d_blend_constant - ( tempx + tempz ) ) * cloud_3d_adjusted_blend_factor );
 				alpha = bound ( alpha, 0, 1 );
-		
+
 				cloud_polygon_alphas[count] = alpha;
 
 				x_offset += CLOUD_3D_SECTOR_SIDE_LENGTH / ( number_of_sub_sectors * 1 );
@@ -842,38 +845,38 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 				if ( cloud_3d_base_height < visual_3d_vp->y )
 				{
-	
+
 					point_references[3].point = x + z_bottom_point_offset;
 					point_references[3].u = x_offset;
 					point_references[3].v = z_offset;
-	
+
 					point_references[2].point = x + z_bottom_point_offset + 1;
 					point_references[2].u = x_offset + ( 1.0 / number_of_sub_sectors );
 					point_references[2].v = z_offset;
-	
+
 					point_references[1].point = x + z_top_point_offset + 1;
 					point_references[1].u = x_offset + ( 1.0 / number_of_sub_sectors );
 					point_references[1].v = z_offset + ( 1.0 / number_of_sub_sectors );
-	
+
 					point_references[0].point = x + z_top_point_offset;
 					point_references[0].u = x_offset;
 					point_references[0].v = z_offset + ( 1.0 / number_of_sub_sectors );
 				}
 				else
 				{
-	
+
 					point_references[0].point = x + z_bottom_point_offset;
 					point_references[0].u = x_offset;
 					point_references[0].v = z_offset;
-	
+
 					point_references[1].point = x + z_bottom_point_offset + 1;
 					point_references[1].u = x_offset + ( 1.0 / number_of_sub_sectors );
 					point_references[1].v = z_offset;
-	
+
 					point_references[2].point = x + z_top_point_offset + 1;
 					point_references[2].u = x_offset + ( 1.0 / number_of_sub_sectors );
 					point_references[2].v = z_offset + ( 1.0 / number_of_sub_sectors );
-	
+
 					point_references[3].point = x + z_top_point_offset;
 					point_references[3].u = x_offset;
 					point_references[3].v = z_offset + ( 1.0 / number_of_sub_sectors );
@@ -881,7 +884,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 				for ( tmp = 0; tmp < 4; tmp++ )
 				{
-		
+
 					cloud_points[ point_references[tmp].point ].a = cloud_polygon_alphas[count];
 				}
 
@@ -906,20 +909,21 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 		}
 	}
 	else
+#endif
 	{
-	
+
 		cloud_points[0].x = -CLOUD_3D_SECTOR_SIDE_LENGTH/2;
 		cloud_points[0].y = 0;
 		cloud_points[0].z = -CLOUD_3D_SECTOR_SIDE_LENGTH/2;
-	
+
 		cloud_points[1].x = +CLOUD_3D_SECTOR_SIDE_LENGTH/2;
 		cloud_points[1].y = 0;
 		cloud_points[1].z = -CLOUD_3D_SECTOR_SIDE_LENGTH/2;
-	
+
 		cloud_points[2].x = +CLOUD_3D_SECTOR_SIDE_LENGTH/2;
 		cloud_points[2].y = 0;
 		cloud_points[2].z = +CLOUD_3D_SECTOR_SIDE_LENGTH/2;
-	
+
 		cloud_points[3].x = -CLOUD_3D_SECTOR_SIDE_LENGTH/2;
 		cloud_points[3].y = 0;
 		cloud_points[3].z = +CLOUD_3D_SECTOR_SIDE_LENGTH/2;
@@ -958,14 +962,14 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 			if ( distance > 1 )
 			{
-	
+
 				normalise_3d_vector_given_magnitude ( &point_vector, distance );
-	
+
 				angle = ( ( point_vector.x * cloud_colour_blend_vector.x ) + ( point_vector.z * cloud_colour_blend_vector.z ) );
 				angle = bound ( angle, 0, 1 );
 				angle *= angle;
 				angle *= angle;
-	
+
 				colour_t = ( distance / CLOUD_MAXIMUM_COLOUR_BLEND_DISTANCE );
 				colour_t = bound ( colour_t, 0, 1 );
 				colour_t *= angle;
@@ -975,7 +979,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 				colour_t = 0;
 			}
-	
+
 			alpha = ( ( cloud_3d_blend_constant - ( distance * distance ) ) * cloud_3d_adjusted_blend_factor );
 
 			cloud_points[count].a = bound ( alpha, 0, 1 );
@@ -1019,7 +1023,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 		if ( cloud_3d_base_height < visual_3d_vp->y )
 		{
-	
+
 			point_references[3].point = 0; point_references[3].u = 0; point_references[3].v = 0;
 			point_references[2].point = 1; point_references[2].u = 1; point_references[2].v = 0;
 			point_references[1].point = 2; point_references[1].u = 1; point_references[1].v = 1;
@@ -1027,7 +1031,7 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 		}
 		else
 		{
-	
+
 			point_references[0].point = 0; point_references[0].u = 0; point_references[0].v = 0;
 			point_references[1].point = 1; point_references[1].u = 1; point_references[1].v = 0;
 			point_references[2].point = 2; point_references[2].u = 1; point_references[2].v = 1;
@@ -1140,7 +1144,7 @@ void transform_cloud_points ( int number_of_points, cloud_3d_point *source_point
 		}
 
 		result_points++;
-	
+
 		source_points++;
 	}
 }
@@ -1202,14 +1206,14 @@ void render_cloud_polygon ( int number_of_points, cloud_3d_textured_reference *p
 
 	if ( !outcode2 )
 	{
-	
+
 		polygon = &cloud_transformed_3d_points[first_point];
 
 		clip_3d_coord = 0;
-	
+
 		if ( outcode & CLIP_HITHER )
 		{
-	
+
 			polygon = hither_clip_3d_polygon ( polygon, &outcode );
 
 			if ( !polygon )
@@ -1218,7 +1222,7 @@ void render_cloud_polygon ( int number_of_points, cloud_3d_textured_reference *p
 				return;
 			}
 		}
-	
+
 		if ( outcode )
 		{
 
@@ -1234,49 +1238,49 @@ void render_cloud_polygon ( int number_of_points, cloud_3d_textured_reference *p
 
 			remove_perspective_from_polygon_texture ( polygon );
 		}
-	
+
 		if ( polygon )
 		{
 
-			set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
-			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
+			set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+			set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+			set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
 			set_d3d_gouraud_shaded_textured_renderstate ( texture );
 
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+			set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
 
 			{
-			
+
 				int
 					number_of_vertices;
-			
+
 				vertex
 					*vert;
-			
-				LPD3DTLVERTEX
+
+				LPTLVERTEX
 					vertices,
 					vptr;
-			
+
 				vert = polygon;
-			
+
 				vertices = get_d3d_vertices_address ( polygon, &number_of_vertices );
-			
+
 				vptr = vertices;
-			
+
 				while ( vert )
 				{
-			
+
 					real_colour
 						specular;
-			
+
 					specular.colour = d3d_fog_intensity;
 					specular.red = vert->specular;
 					specular.green = vert->specular;
 					specular.blue = vert->specular;
-			
+
 					*( ( int * ) &vptr->sx ) = *( ( int * ) &vert->i );
 					*( ( int * ) &vptr->sy ) = *( ( int * ) &vert->j );
 					*( ( int * ) &vptr->tu ) = *( ( int * ) &vert->u );
@@ -1291,12 +1295,12 @@ void render_cloud_polygon ( int number_of_points, cloud_3d_textured_reference *p
 
 						vptr->sz = 0.999;
 					}
-		
+
 					vptr++;
-			
+
 					vert = vert->next_vertex;
 				}
-			
+
 				draw_fan_primitive ( number_of_vertices, vertices );
 			}
 

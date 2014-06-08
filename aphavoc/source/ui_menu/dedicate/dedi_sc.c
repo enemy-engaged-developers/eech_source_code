@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -81,9 +81,6 @@ static ui_object
 	*dedicated_server_map_text,
 	*dedicated_server_game_text,
 	*dedicated_server_time_text;
-
-texture_graphic
-	*dedicated_server_screen_texture;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +189,7 @@ void initialise_dedicated_server_screen (void)
 		float
 			x1, y1,
 			x2, y2;
-			
+
 		x1 = 0.125;
 		y1 = 0.175;
 		x2 = 0.6;
@@ -242,25 +239,31 @@ void notify_dedicated_server_quit_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
 
 		set_ui_object_redraw (dedicated_server_screen, TRUE);
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#endif
 
 		//deinitialise_base_system ();
-	
+
 		//setup_campaign_over_screen (get_local_force_entity (get_global_gunship_side ()), CAMPAIGN_CRITERIA_RESULT_SERVER_REJECTED);
 
 		start_game_exit (GAME_EXIT_APACHE_HAVOC, FALSE);
 	}
-	else 
+	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#endif
 
 		set_ui_object_redraw (dedicated_server_screen, TRUE);
 	}
@@ -289,31 +292,9 @@ void dedicated_server_function (ui_object *obj, void *arg)
 	if ( get_ui_object_drawable ( obj ) )
 	{
 
-		if ( main_screen_texture )
-		{
-	
-			destroy_texture_graphic (dedicated_server_screen_texture);
+		set_ui_object_texture_graphic (dedicated_server_screen, create_texture_graphic ( "graphics\\ui\\cohokum\\demoload.psd", 0));
 
-			dedicated_server_screen_texture = NULL;
-		}
-	
-		dedicated_server_screen_texture = create_texture_graphic ( "graphics\\ui\\cohokum\\demoload.psd" );
-	
-		set_ui_object_texture_graphic (dedicated_server_screen, dedicated_server_screen_texture);
-	
-		blit_front_buffer_to_render_buffer ();
-	
 		ui_set_user_function (NULL);
-	}
-	else
-	{
-		if (main_screen_texture)
-		{
-	
-			destroy_texture_graphic (dedicated_server_screen_texture);
-
-			dedicated_server_screen_texture = NULL;
-		}
 	}
 	//
 
@@ -367,7 +348,7 @@ static void dedicated_server_build_player_list (void)
 
 				add_to_pop_up_list (get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME), player_list, NULL, 0, UI_FONT_ARIAL_16, col);
 			}
-			
+
 			pilot = get_local_entity_child_succ (pilot, LIST_TYPE_PILOT);
 		}
 
@@ -413,7 +394,7 @@ void dedicated_screen_update_function (ui_object *obj, void *arg)
 		time = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME);
 
 		get_digital_countdown_values (time, NULL, &hours, &minutes, &seconds);
-	
+
 		sprintf (s, "Day %d, %02d:%02d:%02d", get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY), hours, minutes, seconds);
 
 		set_ui_object_text (dedicated_server_time_text, s);

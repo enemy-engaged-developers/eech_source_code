@@ -131,12 +131,7 @@ extern int
 	command_line_3d_reset,
 	command_line_force_resolution,
 	command_line_3d_visual_clear_edges,
-	command_line_cpu_blit_textures,
-	command_line_d3d_use_texture_management,
 	command_line_no_hardware_tnl,
-	command_line_no_dx9zbuffer_fix,
-	command_line_no_render_to_texture,
-	command_line_display_bpp,
 	command_line_max_smoke_time,								// arneh 2007-07-10 // updated /thealx/
 	command_line_smoke_optimization,
 	command_line_cloud_puffs,								// Casm 20MAY2012

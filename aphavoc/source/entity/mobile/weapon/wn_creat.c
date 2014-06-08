@@ -246,7 +246,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 					if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS)
 						raw->decoy_timer -= 1.0;
 					
-					raw->decoy_timer = max(0, raw->decoy_timer);
+					raw->decoy_timer = max(0.0f, raw->decoy_timer);
 					
 					#if DEBUG_MODULE
 						debug_log("DECOY TIMER %f, velocity %f", raw->decoy_timer, raw->mob.velocity - weapon_database[raw->mob.sub_type].muzzle_velocity);
@@ -895,7 +895,7 @@ void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_
 		return;
 	}
 
-	pods_firing = max(1, get_number_of_pods_firing(launcher, weapon_sub_type));
+	pods_firing = max(1u, get_number_of_pods_firing(launcher, weapon_sub_type));
 	
 	if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
 	{

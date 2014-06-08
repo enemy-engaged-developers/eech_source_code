@@ -406,7 +406,8 @@ void brief_initialise_game (void)
 		blue_mask,
 		alpha_mask;
 
-		get_screen_pixel_format ( &red_mask, &green_mask, &blue_mask, &alpha_mask );
+		red_mask = green_mask = blue_mask = 0;
+		alpha_mask = 0x6D736143;
 
 		if (	( red_mask != get_global_graphics_files_red_mask () ) ||
 				( green_mask != get_global_graphics_files_green_mask () ) ||
@@ -514,7 +515,7 @@ void brief_initialise_game (void)
 
 	debug_log ( "Initialising ui mouseptr" );
 
-	initialise_mouse_pointer ((rgb_packed *) get_graphics_file_data (GRAPHICS_UI_COMMON_MOUSE_POINTER));
+	initialise_mouse_pointer ( get_graphics_file_data ( GRAPHICS_UI_COMMON_MOUSE_POINTER ) );
 
 	debug_log ( "Finished brief install" );
 }
@@ -1005,7 +1006,7 @@ void full_initialise_game (void)
 
 	generate_ballistics_tables();
 	generate_guided_missiles_tables();
-	
+
 	debug_log ( "Finished Full initialise" );
 	set_ui_object_text ( initialising_text, get_trans ("Finished Initialisation") );
 

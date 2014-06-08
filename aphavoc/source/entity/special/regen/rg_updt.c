@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -238,7 +238,7 @@ entity *regen_update (entity *en)
 	task = get_local_entity_parent (wp, LIST_TYPE_WAYPOINT);
 
 	landing = get_local_entity_parent (task, LIST_TYPE_UNASSIGNED_TASK);
-			
+
 	keysite = get_local_entity_parent (landing, LIST_TYPE_LANDING_SITE);
 
 	force_en = get_local_force_entity ((entity_sides) raw->side);
@@ -252,7 +252,7 @@ entity *regen_update (entity *en)
 	//
 	// is there anything in the regen queues?
 	//
-	
+
 	if (m1->count == 0)
 	{
 		return NULL;
@@ -339,7 +339,7 @@ entity *regen_update (entity *en)
 	}
 
 	group_type = e1->group;
-	
+
 	member_type = e1->sub_type;
 
 	////////////////////////////////////////////////////////////////////////////
@@ -407,16 +407,16 @@ entity *regen_update (entity *en)
 
 			if (get_local_entity_int_value (group, INT_TYPE_FRONTLINE))
 			{
-	
+
 				route_node = get_closest_side_road_node ((entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE), &raw->position, 5 * KILOMETRE);
-	
+
 				set_client_server_entity_int_value (group, INT_TYPE_ROUTE_NODE, route_node);
 			}
 
 			//
 			//
 			//
-			
+
 			member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
 			//
@@ -461,30 +461,30 @@ entity *regen_update (entity *en)
 
 				if (transport_landing)
 				{
-	
+
 					transport_task = get_local_landing_entity_task (transport_landing, ENTITY_SUB_TYPE_TASK_LANDING);
 
 					ASSERT (transport_task);
-	
+
 					transport_wp = get_local_entity_first_child (transport_task, LIST_TYPE_WAYPOINT);
 
 					ASSERT (transport_wp);
-	
+
 					while (transport_wp)
 					{
-	
+
 						range = get_sqr_2d_range (get_local_entity_vec3d_ptr (transport_wp, VEC3D_TYPE_POSITION), get_local_entity_vec3d_ptr (building, VEC3D_TYPE_POSITION));
-	
+
 						if (range < best_range)
 						{
-	
+
 							wp = transport_wp;
-	
+
 							task = transport_task;
-	
+
 							best_range = range;
 						}
-	
+
 						transport_wp = get_local_entity_child_succ (transport_wp, LIST_TYPE_WAYPOINT);
 					}
 				}
@@ -513,7 +513,7 @@ entity *regen_update (entity *en)
 						entity_side_names [get_local_entity_int_value (keysite, INT_TYPE_SIDE)],
 						get_local_entity_type_name (member),
 						get_local_entity_index (member),
-						get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), 
+						get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
 						get_local_entity_int_value (landing, INT_TYPE_FREE_LANDING_SITES),
 						get_local_entity_int_value (landing, INT_TYPE_RESERVED_LANDING_SITES),
 						get_local_entity_int_value (landing, INT_TYPE_LANDING_LOCK),
@@ -548,7 +548,7 @@ entity *regen_update (entity *en)
 
 					break;
 				}
-				
+
 				case ENTITY_TYPE_ROUTED_VEHICLE:
 				case ENTITY_TYPE_SHIP_VEHICLE:
 				case ENTITY_TYPE_PERSON:
@@ -557,12 +557,12 @@ entity *regen_update (entity *en)
 
 					break;
 				}
-				
+
 				default:
 				{
 					debug_fatal ("RG_UPDT: Unknown entity type for debug");
 				}
-				
+
 			}
 			#endif
 
@@ -577,7 +577,7 @@ entity *regen_update (entity *en)
 		#if DEBUG_MODULE >= 2
 
 		debug_log ("RG_UPDT: not creating anything at keysite %s free landing sites %d, reserved %d, lock %d",
-						get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), 
+						get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
 						get_local_entity_int_value (landing, INT_TYPE_FREE_LANDING_SITES),
 						get_local_entity_int_value (landing, INT_TYPE_RESERVED_LANDING_SITES),
 						check_available_landing_route_lock (landing));
@@ -605,45 +605,45 @@ int get_regen_sub_type (int type)
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_HELICOPTER:
 		{
 			regen_type = ENTITY_SUB_TYPE_REGEN_HELICOPTER;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_ROUTED_VEHICLE:
 		{
 			regen_type = ENTITY_SUB_TYPE_REGEN_GROUND;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_SHIP_VEHICLE:
 		{
 			regen_type = ENTITY_SUB_TYPE_REGEN_SEA;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_PERSON:
 		{
 			regen_type = ENTITY_SUB_TYPE_REGEN_PEOPLE;
 
 			break;
 		}
-		
+
 		case ENTITY_SUB_TYPE_REGEN_NONE:
 		{
 			debug_fatal ("RG_UPDT: illegal regen sub type: ENTITY_SUB_TYPE_REGEN_NONE");
 		}
-		
+
 		default:
 		{
 			debug_fatal ("RG_UPDT: Unknown entity type");
 		}
-		
+
 	}
 
 	return regen_type;
@@ -660,16 +660,16 @@ void add_entity_to_regen_queue (entity_sides side, entity_types type, entity_sub
 
 	int
 		regen_type;
-		
+
 	e1.type = type;
-	e1.sub_type = sub_type;	
+	e1.sub_type = sub_type;
 	e1.group = group_type;
 
 	// get index into correct queue
 
 	regen_type = get_regen_sub_type (e1.type);
 
-	
+
 #if DEBUG_MODULE
 
 	switch (e1.type)
@@ -680,35 +680,35 @@ void add_entity_to_regen_queue (entity_sides side, entity_types type, entity_sub
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_HELICOPTER:
 		{
 			regen_ac_debug[e1.sub_type] = 1;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_ROUTED_VEHICLE:
 		{
 			regen_vh_debug[e1.sub_type] = 1;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_SHIP_VEHICLE:
 		{
 			regen_vh_debug[e1.sub_type] = 1;
 
 			break;
 		}
-		
+
 		case ENTITY_TYPE_PERSON:
 		{
 			regen_vh_debug[e1.sub_type] = 1;
 
 			break;
 		}
-		
+
 		default:
 		{
 			debug_fatal ("RG_UPDT: Unknown entity type");
@@ -796,11 +796,11 @@ void regen_queue_insert (entity_sides side, int regen_type, regen_list_element *
 	{
 		m1->count = min ((m1->count + 1), m1->size);
 	}
-	
+
 	ASSERT ((m1->count >= 0) && (m1->count <= m1->size));
 /*
 	#if DEBUG_MODULE
-	
+
 	debug_log ("INSERTED: Type:%3d Sub:%3d Group:%3d side:%2d",
 									e1->type,
 									e1->sub_type,
@@ -832,7 +832,7 @@ void regen_queue_use (entity_sides side, int regen_type)
 	ASSERT ((m1->count > 0) && (m1->count <= m1->size));
 /*
 	#if DEBUG_MODULE
-	
+
 		debug_log ("REGENED: Type:%d Subtype:%d Group:%d Side:%d",
 									e1->type,
 									e1->sub_type,
@@ -861,7 +861,7 @@ void regen_queue_use (entity_sides side, int regen_type)
 	m1->count --;
 
 	#if DEBUG_MODULE
-	
+
 	output_regen_data (side, regen_type);
 
 	#endif
@@ -881,7 +881,7 @@ int set_regen_queue_size (regen_management_element *m1, int size)
 	new_size = max (size, REGEN_QUEUE_MINIMUM_SIZE);
 
 	m1->size = new_size;
-	
+
 	return new_size;
 }
 
@@ -897,7 +897,7 @@ void initialise_regen_queues (void)
 	int
 		i,
 		j;
-		
+
 	memset (regen_manager, 0, sizeof (regen_management_element) * NUM_ENTITY_SIDES * NUM_ENTITY_SUB_TYPE_REGENS);
 
 	for (i = 0; i < NUM_ENTITY_SIDES; i++)
@@ -911,17 +911,21 @@ void initialise_regen_queues (void)
 				m1->size = REGEN_QUEUE_DEFAULT_SIZE;
 			}
 
+			if ( regen_queue [i][j] )
+			{
+				safe_free ( regen_queue [i][j] );
+			}
 			regen_queue [i][j] = (regen_list_element *) safe_malloc (sizeof (regen_list_element) * m1->size);
 
 			memset (regen_queue [i][j], -1, sizeof (regen_list_element) * m1->size);
 		}
-	}	
+	}
 
 	#if HACK_PEOPLE_INTO_REGEN_QUEUE
 	{
 		int
 			i;
-		
+
 		for (i = 0; i < 10; i++)
 		{
 			add_entity_to_regen_queue
@@ -939,7 +943,7 @@ void initialise_regen_queues (void)
 				ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY,
 				ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL
 			);
-		}		
+		}
 	}
 	#endif
 }
@@ -978,7 +982,7 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 	debug_log ("OLD LIST:");
 
 	output_regen_data (side, regen_type);
-	
+
 	#endif
 
 	// copy old queue
@@ -996,7 +1000,7 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 	new_size = m1->size + shift;
 
 	// set new size
-	
+
 	new_size = set_regen_queue_size (m1, new_size);
 
 	// free old queue
@@ -1041,7 +1045,7 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 	debug_log ("NEW LIST:");
 
 	output_regen_data (side, regen_type);
-	
+
 	#endif
 
 	return new_size;
@@ -1063,7 +1067,7 @@ void output_regen_data (int side, int regen_type)
 
 	int
 		i;
-		
+
 	//debug_log ("Regen Data %s - Type %s", entity_side_short_names [side], entity_sub_type_regen_names [regen_type]);
 
 	m1 = &regen_manager [side][regen_type];

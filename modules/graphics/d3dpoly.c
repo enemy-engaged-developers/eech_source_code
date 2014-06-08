@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -65,7 +65,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
-#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +84,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void check_primitive_vertices ( D3DTLVERTEX *base, int number_of_vertices );
+void check_primitive_vertices ( TLVERTEX *base, int number_of_vertices );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +133,7 @@ void reset_primitives ( void )
 	{
 
 		d3d.triangle_buffers[count].vertices = NULL;
+		d3d.triangle_buffers[count].indices = NULL;
 		d3d.triangle_buffers[count].texture.texture = 0;
 		d3d.triangle_buffers[count].texture.texture_settings = 0;
 		d3d.triangle_buffers[count].vertices_used = 0;
@@ -144,6 +144,7 @@ void reset_primitives ( void )
 	{
 
 		d3d.line_buffers[count].vertices = NULL;
+		d3d.line_buffers[count].indices = NULL;
 		d3d.line_buffers[count].texture.texture = 0;
 		d3d.line_buffers[count].texture.texture_settings = 0;
 		d3d.line_buffers[count].vertices_used = 0;
@@ -196,38 +197,40 @@ void force_flush_triangle_buffer ( vertex_buffer_header *buffer )
 		//
 		// Unlock the vertex buffer
 		//
-	
+
 		f3d_vertex_unlock ( buffer->buffer );
 
 #if DEBUG_REPORT_PRIMITIVES
 		debug_log ( "Drawing triangle primitive with %d vertices", buffer->vertices_used );
 #endif
-	
+
 #if DEBUG_ASSESS_VERTEX_CACHES
 		assess_vertex_cache_usage ( buffer->indices, buffer->indices_index );
 #endif
-	
+
+		f3d_index_unlock ( buffer->ibuffer );
+
 		//
 		// Make sure we're not telling D3D to clip or light
 		//
 
-		set_d3d_int_state_no_flush ( D3DRENDERSTATE_CLIPPING, FALSE );
-	
-		set_d3d_int_state_no_flush ( D3DRENDERSTATE_LIGHTING, FALSE );
+		set_d3d_int_state_no_flush ( D3DRS_CLIPPING, FALSE );
+
+		set_d3d_int_state_no_flush ( D3DRS_LIGHTING, FALSE );
 
 //		if ( d3d_texture_batching_vertex_maximum )
 		{
 
-//			ASSERT ( render_d3d_state_table[D3DRENDERSTATE_ALPHABLENDENABLE].value == FALSE );
+//			ASSERT ( render_d3d_state_table[D3DRS_ALPHABLENDENABLE].value == FALSE );
 
 //			set_d3d_current_texture_pointer ( &buffer->texture );
 		}
-		
-		f3d_draw_vb ( D3DPT_TRIANGLELIST, buffer->buffer, 0, buffer->vertices_used, ( LPWORD ) &buffer->indices[0], ( DWORD ) buffer->indices_index );
+
+		f3d_dip ( D3DPT_TRIANGLELIST, buffer->buffer, 0, buffer->vertices_used, buffer->ibuffer, 0, buffer->indices_index / 3, D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1, sizeof ( TLVERTEX ) );
 /*
 		if ( d3d_texture_batching_vertex_maximum )
 		{
-	
+
 			restore_d3d_current_texture_pointer ();
 		}
 */
@@ -237,6 +240,7 @@ void force_flush_triangle_buffer ( vertex_buffer_header *buffer )
 	}
 
 	buffer->vertices = NULL;
+	buffer->indices = NULL;
 	buffer->texture.texture = 0;
 	buffer->texture.texture_settings = 0;
 	buffer->vertices_used = 0;
@@ -255,7 +259,7 @@ void flush_line_primitives ( void )
 
 		if ( d3d_in_order_rendering )
 		{
-	
+
 			flush_triangle_primitives ();
 		}
 
@@ -280,20 +284,23 @@ void force_flush_line_buffer ( vertex_buffer_header *buffer )
 		debug_log ( "Drawing line primitive with %d vertices", buffer->vertices_used );
 #endif
 
+		f3d_index_unlock ( buffer->ibuffer );
+
 		//
 		// Make sure we're not telling D3D to clip or light
 		//
 
-		set_d3d_int_state_no_flush ( D3DRENDERSTATE_CLIPPING, FALSE );
-	
-		set_d3d_int_state_no_flush ( D3DRENDERSTATE_LIGHTING, FALSE );
+		set_d3d_int_state_no_flush ( D3DRS_CLIPPING, FALSE );
 
-		f3d_draw_vb ( D3DPT_LINELIST, buffer->buffer, 0, buffer->vertices_used, (LPWORD) &buffer->indices[0], (DWORD) buffer->indices_index );
+		set_d3d_int_state_no_flush ( D3DRS_LIGHTING, FALSE );
+
+		f3d_dip ( D3DPT_LINELIST, buffer->buffer, 0, buffer->vertices_used, buffer->ibuffer, 0, buffer->indices_index / 2, D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1, sizeof ( TLVERTEX ) );
 
 		number_of_d3d_line_primitives_drawn++;
 	}
 
 	buffer->vertices = NULL;
+	buffer->indices = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,20 +342,6 @@ void finalise_primitives ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*void render_alpha_vertex_buffer ( int buffer, LPWORD indices, int number_of_indices )
-{
-	f3d_draw_vb ( D3DPT_TRIANGLELIST,
-																			d3d.alpha_vertex_buffer[buffer],
-																			0,
-																			MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER,
-																			indices,
-																			number_of_indices );
-}*/
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 WORD *get_d3d_raw_primitive_indices_address ( void )
 {
 
@@ -361,7 +354,7 @@ WORD *get_d3d_raw_primitive_indices_address ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_fan_primitive ( int number_of_vertices, LPD3DTLVERTEX vertices )
+void draw_fan_primitive ( int number_of_vertices, LPTLVERTEX vertices )
 {
 
 	WORD
@@ -406,7 +399,7 @@ void draw_fan_primitive ( int number_of_vertices, LPD3DTLVERTEX vertices )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_strip_primitive ( int number_of_vertices, LPD3DTLVERTEX vertices )
+void draw_strip_primitive ( int number_of_vertices, LPTLVERTEX vertices )
 {
 
 	WORD
@@ -466,7 +459,7 @@ void draw_strip_primitive ( int number_of_vertices, LPD3DTLVERTEX vertices )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_line_primitive ( LPD3DTLVERTEX vertices )
+void draw_line_primitive ( LPTLVERTEX vertices )
 {
 
 	WORD
@@ -503,10 +496,10 @@ void draw_point_list_primitive ( int number_of_vertices )
 
 	if ( d3d.point_vertex_buffer )
 	{
-	
+
 		f3d_vertex_unlock ( d3d.point_vertex_buffer );
 
-		f3d_draw ( D3DPT_POINTLIST, d3d.point_vertex_buffer, 0, number_of_vertices );
+		f3d_dp ( D3DPT_POINTLIST, d3d.point_vertex_buffer, 0, number_of_vertices, D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1, sizeof ( TLVERTEX ) );
 	}
 }
 
@@ -610,7 +603,7 @@ void draw_special_quad_quad_primitive ( int number_of_vertices )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void check_primitive_vertices ( D3DTLVERTEX *base, int number_of_vertices )
+void check_primitive_vertices ( TLVERTEX *base, int number_of_vertices )
 {
 
 	int

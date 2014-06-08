@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -115,7 +115,7 @@ void initialise_campaign_screen_selection_objects (void)
 	set_ui_object_item_number (select_mission_button, ENTITY_INDEX_DONT_CARE);
 
 	set_ui_object_item_number (select_member_button, ENTITY_INDEX_DONT_CARE);
-	
+
 	set_currently_selected_mission (ENTITY_INDEX_DONT_CARE);
 
 	set_currently_selected_member (ENTITY_INDEX_DONT_CARE);
@@ -142,7 +142,7 @@ int activate_accept_selections_button (void)
 	if (get_gunship_entity ())
 	{
 		//
-		// player currently has a gunship 
+		// player currently has a gunship
 		//
 // GCsDriver
 		//ASSERT ((member == get_gunship_entity ()) || (member == NULL));
@@ -173,7 +173,7 @@ int activate_accept_selections_button (void)
 	set_ui_object_drawable (quit_current_mission_button, FALSE);
 
 	//
-	// Campaign complete? 
+	// Campaign complete?
 	//
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
@@ -195,7 +195,7 @@ int activate_accept_selections_button (void)
 	//
 	// Check member selected
 	//
-	
+
 	if (!member)
 	{
 		return FALSE;
@@ -208,7 +208,7 @@ int activate_accept_selections_button (void)
 	//
 	// Check mission selected
 	//
-	
+
 	mission = get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button));
 
 	if (!mission)
@@ -223,13 +223,13 @@ int activate_accept_selections_button (void)
 	if (get_local_entity_int_value (mission, INT_TYPE_TASK_STATE) == TASK_STATE_UNASSIGNED)
 	{
 		member_base = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
-	
+
 		ASSERT (member_base);
 
 		ASSERT (get_local_entity_type (member_base) == ENTITY_TYPE_KEYSITE);
 
 		mission_base = get_local_entity_parent (mission, get_local_task_list_type (mission));
-	
+
 		if (member_base != mission_base)
 		{
 			return FALSE;
@@ -285,7 +285,7 @@ static void set_raw_currently_selected_mission (int index)
 	if (get_pilot_entity ())
 	{
 		en = get_local_entity_first_child (get_pilot_entity (), LIST_TYPE_PILOT_LOCK);
-	
+
 		while (en)
 		{
 			next = get_local_entity_child_succ (en, LIST_TYPE_PILOT_LOCK);
@@ -294,11 +294,11 @@ static void set_raw_currently_selected_mission (int index)
 			{
 				set_client_server_entity_parent (en, LIST_TYPE_PILOT_LOCK, NULL);
 			}
-	
+
 			en = next;
 		}
 	}
-	
+
 	//
 	// Set selected mission
 	//
@@ -312,7 +312,7 @@ static void set_raw_currently_selected_mission (int index)
 		//
 
 		en = get_local_entity_parent (mission, LIST_TYPE_PILOT_LOCK);
-		
+
 		if ((en) && (get_pilot_entity ()) && (en != get_pilot_entity ()))
 		{
 			set_ui_object_item_number (select_mission_button, ENTITY_INDEX_DONT_CARE);
@@ -361,7 +361,7 @@ static void set_raw_currently_selected_member (int index)
 	if (get_pilot_entity ())
 	{
 		en = get_local_entity_first_child (get_pilot_entity (), LIST_TYPE_PILOT_LOCK);
-	
+
 		while (en)
 		{
 			next = get_local_entity_child_succ (en, LIST_TYPE_PILOT_LOCK);
@@ -370,11 +370,11 @@ static void set_raw_currently_selected_member (int index)
 			{
 				set_client_server_entity_parent (en, LIST_TYPE_PILOT_LOCK, NULL);
 			}
-	
+
 			en = next;
 		}
 	}
-	
+
 	//
 	// Set selected group
 	//
@@ -384,9 +384,9 @@ static void set_raw_currently_selected_member (int index)
 	if (member)
 	{
 		ASSERT (get_local_entity_suitable_for_player (member, get_pilot_entity ()));
-	
+
 		group = get_local_entity_parent (member, LIST_TYPE_MEMBER);
-	
+
 		ASSERT (group);
 
 		//
@@ -394,7 +394,7 @@ static void set_raw_currently_selected_member (int index)
 		//
 
 		en = get_local_entity_parent (group, LIST_TYPE_PILOT_LOCK);
-		
+
 		if ((en) && (get_pilot_entity ()) && (en != get_pilot_entity ()))
 		{
 			set_ui_object_item_number (select_member_button, ENTITY_INDEX_DONT_CARE);
@@ -448,15 +448,15 @@ void set_currently_selected_mission (int index)
 		//
 		// Set Group List Filter
 		//
-	
+
 		set_group_filter (index);
-		
+
 		//
 		// Clear Current Member if not available for mission, or at different base
 		//
 
 		member = get_local_entity_safe_ptr (get_ui_object_item_number (select_member_button));
-	
+
 		if (member)
 		{
 			mission = get_local_entity_primary_task (member);
@@ -482,7 +482,7 @@ void set_currently_selected_mission (int index)
 	//
 	// Set Current Mission
 	//
-		
+
 	set_raw_currently_selected_mission (index);
 
 	activate_accept_selections_button ();
@@ -509,14 +509,14 @@ void set_currently_selected_member (int index)
 			//
 			// Can't select a member if already got gunship
 			//
-			
+
 			return;
 		}
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
 		ASSERT (group);
-		
+
 		//
 		// Set base
 		//
@@ -530,15 +530,15 @@ void set_currently_selected_member (int index)
 		//
 		// Set Mission List Filter
 		//
-	
+
 		set_mission_filter (get_local_entity_safe_index (group));
-		
+
 		//
 		// Clear Current Mission if not at Members base
 		//
 
 		mission = get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button));
-	
+
 		if (mission)
 		{
 			if (get_local_entity_parent (mission, LIST_TYPE_UNASSIGNED_TASK) != base)
@@ -553,7 +553,7 @@ void set_currently_selected_member (int index)
 
 		mission = get_local_entity_primary_task (en);
 
-		if (mission) 
+		if (mission)
 		{
 			if (get_mission_player_suitability_status (mission))
 			{
@@ -565,7 +565,7 @@ void set_currently_selected_member (int index)
 	//
 	// Set Current Member
 	//
-		
+
 	set_raw_currently_selected_member (index);
 
 	activate_accept_selections_button ();
@@ -579,7 +579,7 @@ entity *get_currently_selected_mission (void)
 {
 	return get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button));
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -588,7 +588,7 @@ entity *get_currently_selected_member (void)
 {
 	return get_local_entity_safe_ptr (get_ui_object_item_number (select_member_button));
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -600,7 +600,7 @@ static void notify_select_mission_button (ui_object *obj, void *arg)
 
 	entity
 		*en;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -635,13 +635,13 @@ static void notify_select_member_button (ui_object *obj, void *arg)
 
 	entity
 		*group;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
 	{
 		group = get_local_entity_parent (get_local_entity_safe_ptr (index), LIST_TYPE_MEMBER);
-		
+
 		show_group_page (group, FALSE);
 	}
 	else
@@ -662,7 +662,7 @@ void notify_clear_current_selections (ui_object *obj, void *arg)
 		index;
 
 	index = ENTITY_INDEX_DONT_CARE;
-	
+
 	waiting_for_gunship = FALSE;
 
 	set_raw_currently_selected_mission (index);
@@ -736,10 +736,10 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 		ASSERT (get_local_entity_type (selected_base) == ENTITY_TYPE_KEYSITE);
 
 		mission = get_local_entity_primary_task (selected_member);
-	} 
+	}
 
 	if (mission)
-	{								
+	{
 		set_raw_currently_selected_mission (get_local_entity_safe_index (mission));
 
 		set_group_filter (get_local_entity_safe_index (mission));
@@ -775,7 +775,7 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 					//
 
 					group = get_local_entity_first_child (base, LIST_TYPE_KEYSITE_GROUP);
-	
+
 					while (group)
 					{
 						mission = NULL;
@@ -789,15 +789,15 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 								//
 
 								if (!get_local_group_primary_task (group))
-								{	
+								{
 									mission = get_local_entity_first_child (base, LIST_TYPE_UNASSIGNED_TASK);
-	
+
 									while (mission)
 									{
 										group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 										mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 										if ((task_database [mission_type].primary_task) && (task_database [mission_type].visible_task))
 										{
 											if (get_group_to_task_suitability (group_type, mission_type) > 0.0)
@@ -805,16 +805,16 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 												break;
 											}
 										}
-	
+
 										mission = get_local_entity_child_succ (mission, LIST_TYPE_UNASSIGNED_TASK);
 									}
 
 									//
 									// Set selected entities
-									//	
+									//
 
-									if (mission) 
-									{								
+									if (mission)
+									{
 										set_raw_currently_selected_mission (get_local_entity_safe_index (mission));
 
 										set_group_filter (get_local_entity_safe_index (mission));
@@ -961,7 +961,7 @@ static void notify_auto_select_member (ui_object *obj, void *arg)
 							}
 
 							if (mission)
-							{	
+							{
 								//
 								// Pick a member from the group
 								//
@@ -980,7 +980,7 @@ static void notify_auto_select_member (ui_object *obj, void *arg)
 
 								//
 								// Set selected entities
-								//	
+								//
 
 								if (member)
 								{
@@ -989,7 +989,7 @@ static void notify_auto_select_member (ui_object *obj, void *arg)
 									set_raw_currently_selected_member (get_local_entity_safe_index (member));
 
 									set_mission_filter (get_local_entity_safe_index (group));
-	
+
 									if ((group_current_mission) && (!selected_mission))
 									{
 										ASSERT (mission == group_current_mission);
@@ -1034,13 +1034,13 @@ static void notify_accept_current_selections (ui_object *obj, void *arg)
 	member = get_local_entity_safe_ptr (get_ui_object_item_number (select_member_button));
 
 	ASSERT (member);
-	
+
 	mission = get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button));
 
 	ASSERT (mission);
 
 	ASSERT (!get_gunship_entity ());
-	
+
 	waiting_for_gunship = TRUE;
 
 	//
@@ -1052,7 +1052,7 @@ static void notify_accept_current_selections (ui_object *obj, void *arg)
 	while (en)
 	{
 		next = get_local_entity_child_succ (en, LIST_TYPE_PILOT_LOCK);
-		
+
 		set_client_server_entity_parent (en, LIST_TYPE_PILOT_LOCK, NULL);
 
 		en = next;
@@ -1061,7 +1061,7 @@ static void notify_accept_current_selections (ui_object *obj, void *arg)
 	//
 	// Clear List Filters
 	//
-	
+
 	set_mission_filter (ENTITY_INDEX_DONT_CARE);
 
 	set_group_filter (ENTITY_INDEX_DONT_CARE);
@@ -1168,7 +1168,7 @@ static void update_current_selection_buttons (void)
 	mouse_en = get_ui_mouse_over_entity ();
 
 	timer += get_delta_time ();
-	
+
 	timer = frac (timer);
 
 	//
@@ -1179,19 +1179,19 @@ static void update_current_selection_buttons (void)
 	process_ingame_text_object_size (mission_title_area, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 	set_ui_object_x_end (select_mission_button, (get_ui_object_x_end (mission_title_area) + get_ui_object_virtual_x_size (mission_title_area)));
-		
+
 	set_ui_object_drawable (auto_select_mission_button, FALSE);
 
 	col = NULL;
 
-	en = get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button)); 
+	en = get_local_entity_safe_ptr (get_ui_object_item_number (select_mission_button));
 
 	if (en)
 	{
 		//
 		// Currently selected mission
 		//
-		
+
 		col = &ui_ingame_live_text_colour;
 	}
 	else
@@ -1199,7 +1199,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Mouse over task
 		//
-		
+
 		if (!en)
 		{
 			if ((mouse_en) && (get_local_entity_type (mouse_en) == ENTITY_TYPE_TASK) && (get_mission_player_suitability_status (mouse_en)))
@@ -1213,7 +1213,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Mouse over group
 		//
-	
+
 		if (!en)
 		{
 			if ((mouse_en) && (get_local_entity_type (mouse_en) == ENTITY_TYPE_GROUP))
@@ -1235,7 +1235,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Mouse over mobile
 		//
-	
+
 		if (!en)
 		{
 			if ((mouse_en) && (get_local_entity_type (mouse_en) == ENTITY_TYPE_HELICOPTER))
@@ -1257,7 +1257,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Mouse over briefing accept button
 		//
-/*			
+/*
 		if (!en)
 		{
 			if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_BRIEFING]))
@@ -1279,7 +1279,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Mouse over member accept button
 		//
-/*			
+/*
 		if (!en)
 		{
 			if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
@@ -1349,7 +1349,7 @@ static void update_current_selection_buttons (void)
 				break;
 			}
 		}
-		
+
 		set_ui_object_text (mission_time_area, string);
 
 		set_ui_object_drawable (mission_time_area, TRUE);
@@ -1363,7 +1363,7 @@ static void update_current_selection_buttons (void)
 		set_ui_object_drawable (mission_time_area, FALSE);
 
 		set_ui_object_drawable (mission_time_text, FALSE);
-		
+
 		if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 		{
 			set_ui_object_drawable (auto_select_mission_button, TRUE);
@@ -1384,7 +1384,7 @@ static void update_current_selection_buttons (void)
 	process_ingame_text_object_size (member_title_area, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 	set_ui_object_x_end (select_member_button, (get_ui_object_x_end (member_title_area) + get_ui_object_virtual_x_size (member_title_area)));
-		
+
 	set_ui_object_drawable (auto_select_member_button, FALSE);
 
 	col = NULL;
@@ -1409,11 +1409,11 @@ static void update_current_selection_buttons (void)
 
 			if (group) // TG added
 			{
-			
+
 				if (get_group_player_suitability_status (group))
 				{
 					en = mouse_en;
-		
+
 					col = &ui_ingame_dead_text_colour;
 				}
 			}
@@ -1445,7 +1445,7 @@ static void update_current_selection_buttons (void)
 		//
 		// Gunship status
 		//
-		
+
 		sprintf (string, "%s", get_trans (group_member_state_names [get_local_entity_int_value (en, INT_TYPE_GROUP_MEMBER_STATE)]));
 
 		set_ui_object_text (member_status_area, string);
@@ -1474,9 +1474,9 @@ static void update_current_selection_buttons (void)
 			//
 			// HACK because of problem where assigned entities doing transfer "belong" to the *objective* keysite
 			//
-			
+
 			current_mission = get_currently_selected_mission ();
-			
+
 			if (current_mission)
 			{
 				if (get_local_entity_int_value (current_mission, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER)
@@ -1497,7 +1497,7 @@ static void update_current_selection_buttons (void)
 	set_ui_object_font_colour (select_member_button, col->r, col->g, col->b, col->a);
 
 	resize_select_ui_objects (member_status_text, member_status_area);
-		
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1517,7 +1517,7 @@ void define_campaign_screen_selection_objects (void)
 {
 	char
 		string [256];
-		
+
 	float
 		x1,
 		y1,
@@ -1543,12 +1543,12 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
 			UI_ATTR_DRAW_FUNCTION (update_selection_area),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\mission.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\mission.psd", 0)),
 			UI_ATTR_END
 		);
 
 	/////////////////////////////////////////////////////////////////
-	// Currently selected mission 
+	// Currently selected mission
 
 	x1 = 0.2;
 	x2 = 0.2;
@@ -1609,7 +1609,7 @@ void define_campaign_screen_selection_objects (void)
 	y2 = 1.0;
 
 	sprintf (string, "%s: ", get_trans ("Expires"));
-	
+
 	mission_time_text = create_ui_object
 		(
 			UI_TYPE_AREA,
@@ -1805,7 +1805,7 @@ void define_campaign_screen_selection_objects (void)
 	process_ingame_text_object_size (auto_select_member_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 	/////////////////////////////////////////////////////////////////
-	// Accept current selections 
+	// Accept current selections
 	/////////////////////////////////////////////////////////////////
 
 	x1 = 0.831;
@@ -1827,7 +1827,7 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_DRAWABLE (FALSE),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\flybtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\flybtn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -1853,12 +1853,12 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_DRAWABLE (FALSE),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\flybtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\flybtn.psd", 0)),
 			UI_ATTR_END
 		);
 
 	/////////////////////////////////////////////////////////////////
-	// Clear current selections 
+	// Clear current selections
 
 	x1 = 0.468;
 	y1 = 0.949;
@@ -1878,7 +1878,7 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_HIGHLIGHTED_FONT_COLOUR (ui_ingame_highlight_text_colour.r, ui_ingame_highlight_text_colour.g, ui_ingame_highlight_text_colour.b, ui_ingame_highlight_text_colour.a),
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\cbtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\cbtn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -1904,7 +1904,7 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_FUNCTION (notify_quit_current_mission),
 			UI_ATTR_DRAWABLE (FALSE),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\cbtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\cbtn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -1928,7 +1928,7 @@ void define_campaign_screen_selection_objects (void)
 			UI_ATTR_HIGHLIGHTED_FONT_COLOUR (ui_ingame_highlight_text_colour.r, ui_ingame_highlight_text_colour.g, ui_ingame_highlight_text_colour.b, ui_ingame_highlight_text_colour.a),
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\exitbtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\exitbtn.psd", 0)),
 			UI_ATTR_FUNCTION (notify_quit_campaign),
 			UI_ATTR_END
 		);
@@ -2011,9 +2011,9 @@ void resize_select_ui_objects (ui_object *left_obj, ui_object *right_obj)
 
 	if (left_obj) // TG added
 	{
-	
+
 		set_ui_object_virtual_x_size (left_obj, 0.1);
-	
+
 		process_ingame_text_object_size (left_obj, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 	}
 }

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -470,7 +470,7 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		// Set the translucent rendering mode - and turn off specular highlighting
 		//
 
-		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
+		set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
 
 		if ( d3d_transparency_enabled )
 		{
@@ -861,150 +861,150 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 		//
 		// Calculate the relative camera position in the object viewspace
 		//
-	
+
 		{
-	
+
 			vec3d
 				rel_pos;
-	
+
 			rel_pos.x = visual_3d_vp->x - vp.x;
 			rel_pos.y = visual_3d_vp->y - vp.y;
 			rel_pos.z = visual_3d_vp->z - vp.z;
-	
+
 			object_camera_position.x = ( rel_pos.x * vp.attitude[0][0] + rel_pos.y * vp.attitude[0][1] + rel_pos.z * vp.attitude[0][2] );
 			object_camera_position.y = ( rel_pos.x * vp.attitude[1][0] + rel_pos.y * vp.attitude[1][1] + rel_pos.z * vp.attitude[1][2] );
 			object_camera_position.z = ( rel_pos.x * vp.attitude[2][0] + rel_pos.y * vp.attitude[2][1] + rel_pos.z * vp.attitude[2][2] );
-	
+
 			object_camera_direction.x = ( visual_3d_vp->zv.x * vp.attitude[0][0] + visual_3d_vp->zv.y * vp.attitude[1][0] + visual_3d_vp->zv.z * vp.attitude[2][0] );
 			object_camera_direction.y = ( visual_3d_vp->zv.x * vp.attitude[0][1] + visual_3d_vp->zv.y * vp.attitude[1][1] + visual_3d_vp->zv.z * vp.attitude[2][1] );
 			object_camera_direction.z = ( visual_3d_vp->zv.x * vp.attitude[0][2] + visual_3d_vp->zv.y * vp.attitude[1][2] + visual_3d_vp->zv.z * vp.attitude[2][2] );
 		}
-	
+
 		//
 		// Calculate the vector from the object to the viewpoint, in the object's view system
 		//
-	
+
 		{
-	
+
 			float
 				x,
 				y,
 				z;
-	
+
 			x = ( ( visual_3d_vp->x - vp.x ) * vp.xv.x );
 			x += ( ( visual_3d_vp->y - vp.y ) *  vp.xv.y );
 			x += ( ( visual_3d_vp->z - vp.z ) *  vp.xv.z );
-	
+
 			y = ( ( visual_3d_vp->x - vp.x ) * vp.yv.x );
 			y += ( ( visual_3d_vp->y - vp.y ) *  vp.yv.y );
 			y += ( ( visual_3d_vp->z - vp.z ) *  vp.yv.z );
-	
+
 			z = ( ( visual_3d_vp->x - vp.x ) * vp.zv.x );
 			z += ( ( visual_3d_vp->y - vp.y ) *  vp.zv.y );
 			z += ( ( visual_3d_vp->z - vp.z ) *  vp.zv.z );
-	
+
 			object_unit_pos.x = x;
 			object_unit_pos.y = y;
 			object_unit_pos.z = z;
-	
+
 			normalise_any_3d_vector ( &object_unit_pos );
 
 			current_object_3d_unit_position = &object_unit_pos;
 		}
-	
+
 		//
 		// Rotate the light source vector to be relative to the object.
 		//
-	
+
 		light = generate_relative_lights ( &vp, current_object_3d_unit_position, current_3d_lights );
-	
+
 		object_3d_object_base[object_3d_object_current_base].lights = light;
-	
+
 		//
 		//	Set up this objects' object info structure
 		//
-	
+
 		object_3d_object_base[object_3d_object_current_base].points_base = object_3d_points_current_base;
 		object_3d_object_base[object_3d_object_current_base].camera_position = object_camera_position;
 		object_3d_object_base[object_3d_object_current_base].camera_direction = object_camera_direction;
 		object_3d_object_base[object_3d_object_current_base].object_vp = &vp;
 		object_3d_object_base[object_3d_object_current_base].object_number = object_number;
-	
+
 		current_object_3d_object_base = &object_3d_object_base[object_3d_object_current_base];
-	
+
 		if ( objects_3d_data[object_number].number_of_points )
 		{
-		
+
 			int
 				object_outcode;
-	
+
 			//
 			// Setup the objects scaling information
 			//
-		
+
 			if ( !get_object_3d_outcode ( object_number, current_object_3d_relative_position, &object_outcode ) )
 			{
-		
+
 				illuminate_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 
 				if ( object_outcode )
 				{
-		
+
 					if ( current_3d_object_is_flat )
 					{
-			
+
 						transform_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 					else
 					{
-			
+
 						transform_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 				}
 				else
 				{
-		
+
 					if ( current_3d_object_is_flat )
 					{
-			
+
 						transform_unclipped_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 					else
 					{
-			
+
 						transform_unclipped_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 				}
-		
+
 				//
 				// Render the faces now.
 				//
-		
+
 				if ( object_outcode )
 				{
-		
+
 					if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 					{
-			
+
 						draw_3d_object_clipped_faces ( object_number );
 					}
 					else
 					{
-			
+
 						draw_3d_object_untextured_clipped_faces ( object_number );
 					}
 				}
 				else
 				{
-		
+
 					if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 					{
-			
+
 						draw_3d_object_unclipped_faces ( object_number );
 					}
 					else
 					{
-			
+
 						draw_3d_object_untextured_unclipped_faces ( object_number );
 					}
 				}
@@ -1021,30 +1021,30 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 
 		if ( ( obj ) && ( obj->sub_objects ) )
 		{
-	
+
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( obj->sub_objects[count].visible_object ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( &obj->sub_objects[count], &scene->sub_objects[count], &vp, current_object_3d_relative_position, infrared_override );
 				}
 			}
 		}
 		else
 		{
-	
+
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( scene->sub_objects[count].default_visibility ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( NULL, &scene->sub_objects[count], &vp, current_object_3d_relative_position, infrared_override );
 				}
 			}

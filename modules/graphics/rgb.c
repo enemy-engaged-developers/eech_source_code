@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -69,6 +69,12 @@
 #include "misc.h"
 
 #include "3d.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#if 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1553,7 +1559,7 @@ void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_f
 
 	if ( number_of_channels == 3 )
 	{
-	
+
 		compute_dithered_rgb_image ( width, height, ( psd_rgb * ) image, ( rgb_packed * ) destination_image );
 	}
 	else if ( number_of_channels == 4 )
@@ -1714,6 +1720,384 @@ void convert_and_dither_psd_to_rgb_alpha ( const char *psd_filename, const char 
 
 	safe_free ( image_data );
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#else
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void convert_psd_to_rgbx (const char *psd_filename, const char *rgbx_filename)
+{
+
+	FILE
+		*rgbx_file_ptr;
+
+	rgb_colour
+		colour;
+
+	unsigned char
+		*image;
+
+	unsigned short int
+		short_width,
+		short_height;
+
+	int
+		width,
+		height,
+		x_loop,
+		y_loop,
+		number_of_channels;
+
+	unsigned char
+		*destination_image;
+
+	rgb_colour
+		*destination_ptr;
+
+	//
+	// load psd file
+	//
+
+	image = ( unsigned char * ) load_psd_file (psd_filename, &width, &height, &number_of_channels);
+
+	//
+	// Open the destination file
+	//
+
+	if ((rgbx_file_ptr = fopen (rgbx_filename, "wb")) == NULL)
+	{
+
+		debug_fatal ( "Unable to open file %s during convert_psd_to_rgbx", rgbx_filename );
+	}
+
+	//
+	// Allocate space for the destination image
+	//
+
+	destination_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_colour ) );
+
+	ASSERT ( destination_image );
+
+	destination_ptr = ( rgb_colour * ) destination_image;
+
+	//
+	// Convert the rgb to rgbx format
+	//
+
+	colour.a = 0;
+
+	if (number_of_channels == 3)
+	{
+
+		psd_rgb
+			*this_pixel,
+			*image_data;
+
+		image_data = (psd_rgb *) image;
+
+		for (y_loop = 0; y_loop < height; y_loop++)
+		{
+
+			this_pixel = image_data + (width * y_loop);
+
+			for (x_loop = 0; x_loop < width; x_loop ++)
+			{
+
+				colour.b = this_pixel->b;
+
+				colour.g = this_pixel->g;
+
+				colour.r = this_pixel->r;
+
+				*destination_ptr++ = colour;
+
+				this_pixel ++;
+			}
+		}
+	}
+	else if (number_of_channels == 4)
+	{
+
+		psd_rgba
+			*this_pixel,
+			*image_data;
+
+		image_data = (psd_rgba *) image;
+
+		for (y_loop = 0; y_loop < height; y_loop++)
+		{
+
+			this_pixel = image_data + (width * y_loop);
+
+			for (x_loop = 0; x_loop < width; x_loop ++)
+			{
+
+				colour.b = this_pixel->b;
+
+				colour.g = this_pixel->g;
+
+				colour.r = this_pixel->r;
+
+				*destination_ptr++ = colour;
+
+				this_pixel ++;
+			}
+		}
+	}
+	else
+	{
+		debug_fatal ( "%s must have either 3 or 4 channels/pixel for convert_psd_to_rgbx", psd_filename);
+	}
+
+	//
+	// manually write out header (x, y sizes)
+	//
+
+	short_width = width;
+
+	short_height = height;
+
+	fwrite (&short_width, sizeof (short_width), 1, rgbx_file_ptr);
+
+	fwrite (&short_height, sizeof (short_height), 1, rgbx_file_ptr);
+
+	//
+	// write out image
+	//
+
+	fwrite ( destination_image, width * sizeof ( rgb_colour ), height, rgbx_file_ptr );
+
+	fclose (rgbx_file_ptr);
+
+	safe_free (destination_image);
+
+	safe_free (image);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void convert_psd_to_rgba (const char *psd_filename, const char *rgba_filename)
+{
+
+	FILE
+		*rgba_file_ptr;
+
+	rgb_colour
+		colour;
+
+	unsigned char
+		*image;
+
+	unsigned short int
+		short_width,
+		short_height;
+
+	int
+		width,
+		height,
+		x_loop,
+		y_loop,
+		number_of_channels;
+
+	unsigned char
+		*destination_image;
+
+	rgb_colour
+		*destination_ptr;
+
+	//
+	// load psd file
+	//
+
+	image = ( unsigned char * ) load_psd_file (psd_filename, &width, &height, &number_of_channels);
+
+	//
+	// Open the destination file
+	//
+
+	if ((rgba_file_ptr = fopen (rgba_filename, "wb")) == NULL)
+	{
+
+		debug_fatal ( "Unable to open file %s during convert_psd_to_rgba", rgba_filename );
+	}
+
+	//
+	// Allocate space for the destination image
+	//
+
+	destination_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_colour ) );
+
+	ASSERT ( destination_image );
+
+	destination_ptr = ( rgb_colour * ) destination_image;
+
+	//
+	// Convert the rgb to rgba format
+	//
+
+	colour.a = 0;
+
+	if (number_of_channels == 4)
+	{
+
+		psd_rgba
+			*this_pixel,
+			*image_data;
+
+		image_data = (psd_rgba *) image;
+
+		for (y_loop = 0; y_loop < height; y_loop++)
+		{
+
+			this_pixel = image_data + (width * y_loop);
+
+			for (x_loop = 0; x_loop < width; x_loop ++)
+			{
+
+				colour.b = this_pixel->b;
+
+				colour.g = this_pixel->g;
+
+				colour.r = this_pixel->r;
+
+				colour.a = this_pixel->a;
+
+				*destination_ptr++ = colour;
+
+				this_pixel ++;
+			}
+		}
+	}
+	else
+	{
+		debug_fatal ( "%s must have 4 channels/pixel for convert_psd_to_rgba", psd_filename);
+	}
+
+	//
+	// manually write out header (x, y sizes)
+	//
+
+	short_width = width;
+
+	short_height = height;
+
+	fwrite (&short_width, sizeof (short_width), 1, rgba_file_ptr);
+
+	fwrite (&short_height, sizeof (short_height), 1, rgba_file_ptr);
+
+	//
+	// write out image
+	//
+
+	fwrite ( destination_image, width * sizeof ( rgb_colour ), height, rgba_file_ptr );
+
+	fclose (rgba_file_ptr);
+
+	safe_free (destination_image);
+
+	safe_free (image);
+}
+
+void blit_rgb_clipped_graphic (const rgb_data *rgb_graphic, int x, int y)
+{
+	int
+		screen_pitch,
+		graphic_pitch,
+		width,
+		height;
+
+	const rgb_colour
+		*rd;
+
+	unsigned int
+		*screen_data,
+		*wt;
+
+	ASSERT (rgb_graphic);
+
+	screen_pitch = get_screen_pitch (active_screen);
+
+	screen_data = get_screen_data (active_screen);
+
+	graphic_pitch = rgb_graphic->width;
+
+	height = rgb_graphic->height;
+
+	//
+	// Clip to max screen extents
+	//
+
+	width = min (graphic_pitch, get_screen_width (active_screen) - x);
+
+	height = min (height, get_screen_height (active_screen) - y);
+
+	rd = rgb_graphic->image;
+
+	//
+	// Clip to min screen extents
+	//
+
+	if (y < 0)
+	{
+
+		rd += (0 - y) * graphic_pitch;
+
+		height -= (0 - y);
+
+		y = 0;
+	}
+
+	if (x < 0)
+	{
+
+		rd += (0 - x);
+
+		width -= (0 - x);
+
+		x = 0;
+	}
+
+	//
+	// Early out
+	//
+
+	if (height <= 0)
+	{
+
+		return;
+	}
+
+	if (width <= 0)
+	{
+
+		return;
+	}
+
+	//
+	// Blit
+	//
+
+	wt = screen_data + x + (y * screen_pitch);
+
+	width <<= 4;
+
+	while (height--)
+	{
+		memcpy (wt, rd, width);
+
+		rd += graphic_pitch;
+		wt += screen_pitch;
+	}
+}
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

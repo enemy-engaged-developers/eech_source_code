@@ -96,6 +96,7 @@ static int subnr;
 static float dx, dy, dz;
 
 
+#if 0
 static rgb_alpha_masked_sprite_data
 	sprite_values;
 
@@ -114,6 +115,7 @@ static rgb_alpha_masked_sprite_data
 		blit_rgb_alpha_masked_sprite (sprite_data, mask_data, &sprite_values);	\
 	}																									\
 }
+#endif
 
 #define LAMP1_WINDOW_X_MIN				(-1.0)
 #define LAMP1_WINDOW_Y_MIN				(-1.0)
@@ -152,6 +154,7 @@ static env_2d
 static screen
 	*lamp1_texture_screen;//,	*Lamp1_overlaid_texture_screen;
 
+#if 0
 static float
 	lamp1_viewport_size,
 	lamp1_viewport_x_org,
@@ -160,6 +163,7 @@ static float
 	lamp1_viewport_y_min,
 	lamp1_viewport_x_max,
 	lamp1_viewport_y_max;
+#endif
 
 
 
@@ -910,7 +914,6 @@ void draw_default_internal_virtual_cockpit_3d (unsigned int flags)
 
 	if
 	(
-		(d3d_can_render_to_texture) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
 		(flags & (VIRTUAL_COCKPIT_LHS_MFD_DISPLAY)) &&
 		(flags & (VIRTUAL_COCKPIT_RHS_MFD_DISPLAY))
@@ -1406,6 +1409,7 @@ void get_default_crew_viewpoint (int index, object_3d_instance   *virtual_cockpi
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_default_indicator_lamps_3d (void)
 {
 	unsigned char
@@ -1475,7 +1479,7 @@ void draw_default_indicator_lamps_3d (void)
 	}																									\
 }
 */
-
+#endif
 
 
 void initialise_default_lamp_screen (void)
@@ -1499,6 +1503,7 @@ void deinitialise_default_lamp_screen (void)
 }
 
 
+#if 0
 void draw_default_lamp_on_texture (void)
 {
 	screen
@@ -1532,8 +1537,8 @@ void draw_default_lamp_on_texture (void)
 	lamp1_viewport_y_org = LAMP1_VIEWPORT_TEXTURE_Y_ORG;
 	lamp1_viewport_x_min = lamp1_viewport_x_org - (lamp1_viewport_size * 0.5);
 	lamp1_viewport_y_min = lamp1_viewport_y_org - (lamp1_viewport_size * 0.5);
-	lamp1_viewport_x_max = lamp1_viewport_x_org + (lamp1_viewport_size * 0.5) - 0.001;
-	lamp1_viewport_y_max = lamp1_viewport_y_org + (lamp1_viewport_size * 0.5) - 0.001;
+	lamp1_viewport_x_max = lamp1_viewport_x_org + (lamp1_viewport_size * 0.5);
+	lamp1_viewport_y_max = lamp1_viewport_y_org + (lamp1_viewport_size * 0.5);
 
 	set_2d_viewport (lamp1_env, lamp1_viewport_x_min, lamp1_viewport_y_min, lamp1_viewport_x_max, lamp1_viewport_y_max);
 
@@ -1544,11 +1549,10 @@ void draw_default_lamp_on_texture (void)
 
 		draw_default_indicator_lamps_3d ();
 
-		flush_screen_texture_graphics (lamp1_texture_screen);
-
 		unlock_screen (lamp1_texture_screen);
 	}
 
 
 	set_active_screen (video_screen);
 }
+#endif

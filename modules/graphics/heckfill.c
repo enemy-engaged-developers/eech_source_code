@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -104,7 +104,7 @@ static int construct_triangle_gradients ( void );
 
 static void construct_triangle_edge ( int top, int bottom, triangle_edge_data *edge );
 
-static void fill_plain_horizontal_scanline ( unsigned short int *dst, triangle_edge_data *left, triangle_edge_data *right, unsigned int colour );
+static void fill_plain_horizontal_scanline ( unsigned int *dst, triangle_edge_data *left, triangle_edge_data *right, unsigned int colour );
 
 static void fill_software_plain_polygon ( unsigned int colour );
 
@@ -220,7 +220,7 @@ void construct_plain_triangle_edge ( int top, int bottom, triangle_edge_data *ed
 		dn = triangle_points[bottom].j - triangle_points[top].j;
 
 		dm = triangle_points[bottom].i - triangle_points[top].i;
-	
+
 		initial_numerator = ( dm * 16 * edge->j ) - ( dm * triangle_points[top].j ) +
 					( dn * triangle_points[top].i ) - ( 1 ) + ( dn * 16 );
 
@@ -313,12 +313,9 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 	if ( outcode2 == 0 )
 	{
 
-		rgb_packed
-			col;
-
 		unsigned int
 			triangle_colour;
-	
+
 		vertex
 			*fan_centre,
 			*point1,
@@ -336,43 +333,39 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 
 		if ( polygon )
 		{
-	
+
 			//
 			// Draw the polygon
 			//
 
-			col = get_packed_colour ( colour );
-
-			triangle_colour = col;
-			triangle_colour <<= 16;
-			triangle_colour |= col;
+			triangle_colour = colour.colour;
 
 			fan_centre = polygon;
-	
+
 			point1 = polygon->next_vertex;
-	
+
 			point2 = point1->next_vertex;
-	
+
 			while ( point2 )
 			{
-	
+
 				convert_float_to_int ( ( fan_centre->i * 16 ), &triangle_points[0].i );
 				convert_float_to_int ( ( fan_centre->j * 16 ), &triangle_points[0].j );
-	
+
 				convert_float_to_int ( ( point1->i * 16 ), &triangle_points[1].i );
 				convert_float_to_int ( ( point1->j * 16 ), &triangle_points[1].j );
-			
+
 				convert_float_to_int ( ( point2->i * 16 ), &triangle_points[2].i );
 				convert_float_to_int ( ( point2->j * 16 ), &triangle_points[2].j );
-	
+
 				triangle_point0 = fan_centre;
 				triangle_point1 = point1;
 				triangle_point2 = point2;
-	
+
 				fill_software_plain_polygon ( triangle_colour );
-	
+
 				point1 = point2;
-	
+
 				point2 = point2->next_vertex;
 			}
 		}
@@ -383,9 +376,10 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 #ifdef __WATCOMC__
 
-void solid_fill_horizontal_line ( unsigned short int *ptr, int colour, int count );
+void solid_fill_horizontal_line ( unsigned int *ptr, unsigned colour, int count );
 
 #pragma aux solid_fill_horizontal_line =	\
 	"test edi, 2"									\
@@ -416,6 +410,7 @@ void solid_fill_horizontal_line ( unsigned short int *ptr, int colour, int count
 "endprag:"											\
 parm [ edi ] [ ecx ]	[ edx ]					\
 modify exact [ eax ebx ecx edx edi ];
+#endif
 
 #else
 
@@ -423,12 +418,12 @@ modify exact [ eax ebx ecx edx edi ];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void solid_fill_horizontal_line ( unsigned short int *ptr, int colour, int count )
+void solid_fill_horizontal_line ( unsigned int *ptr, unsigned colour, int count )
 {
 	for ( ; count > 0; count-- )
 	{
 
-		*ptr++ = ( unsigned short int ) colour;
+		*ptr++ = colour;
 	}
 }
 
@@ -461,7 +456,7 @@ void fill_software_plain_polygon ( unsigned int colour )
 		*left_edge,
 		*right_edge;
 
-	unsigned char
+	unsigned int
 		*screen_ptr;
 
 	//
@@ -548,10 +543,10 @@ void fill_software_plain_polygon ( unsigned int colour )
 		int
 			width;
 
-		unsigned short int
+		unsigned int
 			*word_ptr;
 
-		word_ptr = ( unsigned short int * ) screen_ptr;
+		word_ptr = screen_ptr;
 
 		word_ptr += left_edge->i;
 
@@ -588,17 +583,17 @@ void fill_software_plain_polygon ( unsigned int colour )
 
 		right_edge = &middle_to_bottom_edge;
 	}
-	
+
 	while ( height--)
 	{
 
 		int
 			width;
 
-		unsigned short int
+		unsigned int
 			*word_ptr;
 
-		word_ptr = ( unsigned short int * ) screen_ptr;
+		word_ptr = screen_ptr;
 
 		word_ptr += left_edge->i;
 

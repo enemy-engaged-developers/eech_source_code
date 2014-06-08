@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -87,8 +87,8 @@ static ui_object
 	*page_back_button;
 
 static ui_object
-	*page_3d_area, 
-	*page_map_area, 
+	*page_3d_area,
+	*page_map_area,
 	*page_map_view_area,
 	*page_map_view_mode_area,
 	*page_map_toggle,
@@ -132,14 +132,14 @@ void show_base_page (entity *base, int force_update)
 	{
 		previous = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BASE]));
 	}
-	
+
 	pos = get_local_entity_vec3d_ptr (base, VEC3D_TYPE_POSITION);
 
 	ASSERT (pos);
 
 	//
 	// NAME
-	//	
+	//
 
 	set_ui_object_text (base_page_title, get_local_entity_string (base, STRING_TYPE_KEYSITE_NAME));
 
@@ -240,7 +240,7 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 	sub_type = get_local_entity_int_value (base, INT_TYPE_ENTITY_SUB_TYPE);
 
 	//
-	// STATUS 
+	// STATUS
 	//
 
 	{
@@ -307,7 +307,7 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 			supplies;
 
 		if (keysite_database [sub_type].report_ammo_level)
-		{	
+		{
 			supplies = get_local_entity_float_value (base, FLOAT_TYPE_AMMO_SUPPLY_LEVEL);
 
 			sprintf (s, "%.0f%%", supplies);
@@ -318,9 +318,9 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 		{
 			set_ui_object_text (base_page_ammo_box, "");
 		}
-		
+
 		if (keysite_database [sub_type].report_fuel_level)
-		{	
+		{
 			supplies = get_local_entity_float_value (base, FLOAT_TYPE_FUEL_SUPPLY_LEVEL);
 
 			sprintf (s, "%.0f%%", supplies);
@@ -339,7 +339,7 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +374,7 @@ static void draw_page_map (ui_object *obj, void *arg)
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BASE]));
 
 	ASSERT (en);
-	
+
 	draw_2d_map (obj, arg);
 }
 
@@ -401,15 +401,15 @@ static void draw_page_3d_scene (ui_object *obj, void *arg)
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 		ASSERT (pos);
-		
+
 		get_3d_unit_vector_from_heading_and_pitch (&vec, page_3d_heading, page_3d_pitch);
 
 		vp.x = pos->x + (page_3d_distance * vec.x);
 		vp.y = pos->y + (page_3d_distance * vec.y);
 		vp.z = pos->z + (page_3d_distance * vec.z);
-	
+
 		invert_3d_vector (&vec);
-	
+
 		get_matrix3x3_from_unit_vec3d (vp.attitude, &vec);
 
 		draw_campaign_screen_3d_scene (obj, &vp);
@@ -429,7 +429,7 @@ void rotate_base_page_3d_scene_heading (float delta_heading)
 		page_3d_heading = wrap_angle (page_3d_heading);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -443,7 +443,7 @@ void rotate_base_page_3d_scene_pitch (float delta_pitch)
 		page_3d_pitch = bound (page_3d_pitch, PI * (1.0 / 12.0), PI * 0.5);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -460,11 +460,11 @@ void zoom_base_page_3d_scene (int zoom)
 		{
 			page_3d_distance *= BASE_3D_VIEW_MEDIUM_DISTANCE_INCREMENT;
 		}
-	
+
 		page_3d_distance = bound (page_3d_distance, 20.0, 4.0 * KILOMETRE);
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,7 +487,7 @@ static void notify_base_destroy_button (ui_object *obj, void *arg)
 	{
 		return;
 	}
-	
+
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BASE]));
 
 	ASSERT (en);
@@ -510,7 +510,7 @@ static void notify_base_destroy_button (ui_object *obj, void *arg)
 }
 
 #endif
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,7 +556,7 @@ void define_campaign_screen_base_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Title
-			
+
 	x1 = 0.044;
 	y1 = 0.089;
 
@@ -582,8 +582,8 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Type"));
-			
-	create_ui_object	
+
+	create_ui_object
 			(
 				UI_TYPE_TEXT,
 				UI_ATTR_PARENT (page),
@@ -622,7 +622,7 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Sector"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -662,7 +662,7 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Status"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -701,7 +701,7 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Efficiency"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -741,7 +741,7 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Ammo"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -781,7 +781,7 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.2;
 
 	sprintf (output, "%s :", get_trans ("Fuel"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_TEXT,
@@ -825,7 +825,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -843,7 +843,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -897,7 +897,7 @@ void define_campaign_screen_base_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// 3d Preview Area
-		
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -916,7 +916,7 @@ void define_campaign_screen_base_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Map Area
-		
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;

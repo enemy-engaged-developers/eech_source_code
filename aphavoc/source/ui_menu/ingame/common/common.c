@@ -104,26 +104,119 @@ static void entity_mouse_over_function (ui_object *obj, void *arg);
 
 void initialise_ingame_screen (void)
 {
-	common_slider_graphic 						= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\sbckmap.psd" );
+	common_slider_graphic 						= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\sbckmap.psd", 1 );
 
-	common_slider_bar_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolprp.psd" );
-	common_slider_bar_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolwht.psd" );
-	common_slider_bar_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolyel.psd" );
+	common_slider_bar_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolprp.psd", 1 );
+	common_slider_bar_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolwht.psd", 1 );
+	common_slider_bar_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolyel.psd", 1 );
 
-	common_slider_up_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupprp.psd" );
-	common_slider_up_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupwht.psd" );
-	common_slider_up_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupyel.psd" );
+	common_slider_up_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupprp.psd", 1 );
+	common_slider_up_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupwht.psd", 1 );
+	common_slider_up_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupyel.psd", 1 );
 
-	common_slider_down_graphic 				= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwprp.psd" );
-	common_slider_down_highlighted_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwwht.psd" );
-	common_slider_down_selected_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwyel.psd" );
+	common_slider_down_graphic 				= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwprp.psd", 1 );
+	common_slider_down_highlighted_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwwht.psd", 1 );
+	common_slider_down_selected_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwyel.psd", 1 );
 
-	common_divider_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\divider.psd" );
-	common_purple_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\blockprp.psd" );
-	common_grey_alpha_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\greymask.psd" );
-	common_black_alpha_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\blkmask.psd" );
+	common_divider_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\divider.psd", 1 );
+	common_purple_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\blockprp.psd", 1 );
+	common_grey_alpha_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\greymask.psd", 1 );
+	common_black_alpha_mask = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\blkmask.psd", 1 );
 
 	load_map_textures ();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void deinitialise_ingame_screen (void)
+{
+	unload_map_textures ();
+
+	if ( common_slider_graphic )
+	{
+		destroy_texture_graphic ( common_slider_graphic );
+		common_slider_graphic = NULL;
+	}
+
+	if ( common_slider_bar_graphic )
+	{
+		destroy_texture_graphic ( common_slider_bar_graphic );
+		common_slider_bar_graphic = NULL;
+	}
+
+	if ( common_slider_bar_highlighted_graphic )
+	{
+		destroy_texture_graphic ( common_slider_bar_highlighted_graphic );
+		common_slider_bar_highlighted_graphic = NULL;
+	}
+
+	if ( common_slider_bar_selected_graphic )
+	{
+		destroy_texture_graphic ( common_slider_bar_selected_graphic );
+		common_slider_bar_selected_graphic = NULL;
+	}
+
+	if ( common_slider_up_graphic )
+	{
+		destroy_texture_graphic ( common_slider_up_graphic );
+		common_slider_up_graphic = NULL;
+	}
+
+	if ( common_slider_up_highlighted_graphic )
+	{
+		destroy_texture_graphic ( common_slider_up_highlighted_graphic );
+		common_slider_up_highlighted_graphic = NULL;
+	}
+
+	if ( common_slider_up_selected_graphic )
+	{
+		destroy_texture_graphic ( common_slider_up_selected_graphic );
+		common_slider_up_selected_graphic = NULL;
+	}
+
+	if ( common_slider_down_graphic )
+	{
+		destroy_texture_graphic ( common_slider_down_graphic );
+		common_slider_down_graphic = NULL;
+	}
+
+	if ( common_slider_down_highlighted_graphic )
+	{
+		destroy_texture_graphic ( common_slider_down_highlighted_graphic );
+		common_slider_down_highlighted_graphic = NULL;
+	}
+
+	if ( common_slider_down_selected_graphic )
+	{
+		destroy_texture_graphic ( common_slider_down_selected_graphic );
+		common_slider_down_selected_graphic = NULL;
+	}
+
+	if ( common_divider_graphic )
+	{
+		destroy_texture_graphic ( common_divider_graphic );
+		common_divider_graphic = NULL;
+	}
+
+	if ( common_purple_mask )
+	{
+		destroy_texture_graphic ( common_purple_mask );
+		common_purple_mask = NULL;
+	}
+
+	if ( common_grey_alpha_mask )
+	{
+		destroy_texture_graphic ( common_grey_alpha_mask );
+		common_grey_alpha_mask = NULL;
+	}
+
+	if ( common_black_alpha_mask )
+	{
+		destroy_texture_graphic ( common_black_alpha_mask );
+		common_black_alpha_mask = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

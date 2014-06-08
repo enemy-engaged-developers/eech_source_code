@@ -19,3 +19,4 @@ mt.dep
 *.pch
 *.idb
 *.pdb
+*.cod

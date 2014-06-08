@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -150,7 +150,7 @@ const char
 		"brief_rs.dat",
 		"brief_pl.dat",
 	};
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ void initialise_briefing_parser (void)
 	file_tags
 		tag;
 
-	extra_briefing_database = NULL;
+	ASSERT ( extra_briefing_database == NULL );
 
 	//
 	// read in briefing text
@@ -269,7 +269,7 @@ void initialise_briefing_parser (void)
 				task_type = get_next_file_enum (file_ptr, entity_sub_type_task_names, NUM_ENTITY_SUB_TYPE_TASKS);
 
 				task_briefing_database [task_type].task_type = task_type;
-					
+
 				task_briefing_database [task_type].briefing_text1_count = 0;
 				task_briefing_database [task_type].briefing_text2_count = 0;
 				task_briefing_database [task_type].briefing_text3_count = 0;
@@ -301,7 +301,7 @@ void initialise_briefing_parser (void)
 
 						case FILE_TAG_TEXT1:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -314,13 +314,13 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].briefing_text1_count ++;
-			
+
 							break;
 						}
 
 						case FILE_TAG_TEXT2:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -333,13 +333,13 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].briefing_text2_count ++;
-			
+
 							break;
 						}
 
 						case FILE_TAG_TEXT3:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -352,7 +352,7 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].briefing_text3_count ++;
-			
+
 							break;
 						}
 						default:
@@ -385,7 +385,7 @@ void initialise_briefing_parser (void)
 
 						case FILE_TAG_SUCCESS:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -398,13 +398,13 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].debriefing_text_success_count ++;
-			
+
 							break;
 						}
 
 						case FILE_TAG_PARTIAL:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -417,13 +417,13 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].debriefing_text_partial_count ++;
-			
+
 							break;
 						}
 
 						case FILE_TAG_FAILURE:
 						{
-			
+
 							memset (&temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 							task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
@@ -436,7 +436,7 @@ void initialise_briefing_parser (void)
 							#endif
 
 							task_briefing_database [task_type].debriefing_text_failure_count ++;
-			
+
 							break;
 						}
 						default:
@@ -481,9 +481,9 @@ void initialise_briefing_parser (void)
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TYPE);
-	
+
 					medal_type = (medal_types)get_next_file_enum (file_ptr, medal_type_names, NUM_MEDAL_TYPES);
-	
+
 					current_medal_list |= (1 << medal_type);
 				}
 
@@ -500,7 +500,7 @@ void initialise_briefing_parser (void)
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
-			
+
 					memset (&temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
@@ -545,7 +545,7 @@ void initialise_briefing_parser (void)
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
-			
+
 					memset (&temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
@@ -581,7 +581,7 @@ void initialise_briefing_parser (void)
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_TYPE);
-	
+
 				new_objective_briefing->type = EXTRA_BRIEFING_OBJECTIVES;
 
 				new_objective_briefing->sub_type = get_next_file_enum (file_ptr, entity_sub_type_keysite_names, NUM_ENTITY_SUB_TYPE_KEYSITES);
@@ -595,7 +595,7 @@ void initialise_briefing_parser (void)
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
-			
+
 					memset (&temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
@@ -647,7 +647,7 @@ void deinitialise_briefing_parser (void)
 
 	if (task_briefing_database)
 	{
-	
+
 		for (loop = 0; loop < NUM_ENTITY_SUB_TYPE_TASKS; loop ++)
 		{
 
@@ -658,45 +658,47 @@ void deinitialise_briefing_parser (void)
 
 				if (task_briefing_database [loop].briefing_text1 [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].briefing_text1 [loop2]);
 				}
-		
+
 				if (task_briefing_database [loop].briefing_text2 [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].briefing_text2 [loop2]);
 				}
-		
+
 				if (task_briefing_database [loop].briefing_text3 [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].briefing_text3 [loop2]);
 				}
 
 				// debriefing
-		
+
 				if (task_briefing_database [loop].debriefing_text_success [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].debriefing_text_success [loop2]);
 				}
-		
+
 				if (task_briefing_database [loop].debriefing_text_partial [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].debriefing_text_partial [loop2]);
 				}
-		
+
 				if (task_briefing_database [loop].debriefing_text_failure [loop2])
 				{
-		
+
 					free_mem (task_briefing_database [loop].debriefing_text_failure [loop2]);
 				}
 			}
 		}
 
 		free_mem (task_briefing_database);
+
+		task_briefing_database = NULL;
 	}
 
 	//
@@ -719,7 +721,7 @@ void deinitialise_briefing_parser (void)
 
 			if (this_medal->briefing_text [loop])
 			{
-	
+
 				free_mem (this_medal->briefing_text [loop]);
 			}
 		}
@@ -782,7 +784,7 @@ void build_substitution_info (entity *task, medal_types medal, pilot_rank_types 
 
 		for (loop = 0; loop < sizeof (briefing_substitutions) / sizeof (briefing_substitution_type); loop ++)
 		{
-	
+
 			if (briefing_substitutions [loop].position_ptr == temp_text)
 			{
 
@@ -804,7 +806,7 @@ void build_substitution_info (entity *task, medal_types medal, pilot_rank_types 
 			//
 
 			*text_ptr = *temp_text;
-	
+
 			text_ptr ++;
 
 			temp_text ++;
@@ -832,21 +834,21 @@ void briefing_add_position (entity *en, medal_types medal, pilot_rank_types rank
 
 		case ENTITY_TYPE_TASK:
 		{
-		
+
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_STOP_POSITION);
-		
+
 	  		break;
 		}
 
 		default:
 		{
-		
+
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 			break;
 		}
 	}
-		
+
 	sprintf (buffer, "%d : %d", (int) pos->x, (int) pos->z);
 
 	strcpy (*text, buffer);
@@ -876,21 +878,21 @@ void briefing_add_sector (entity *en, medal_types medal, pilot_rank_types rank, 
 
 		case ENTITY_TYPE_TASK:
 		{
-		
+
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_STOP_POSITION);
-		
+
 	  		break;
 		}
 
 		default:
 		{
-		
+
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 			break;
 		}
 	}
-		
+
 	get_x_sector (x, pos->x);
 	get_z_sector (z, pos->z);
 
@@ -902,7 +904,7 @@ void briefing_add_sector (entity *en, medal_types medal, pilot_rank_types rank, 
 	{
 		sprintf (buffer, " [%03d:%03d]", x, z);
 	}
-	
+
 
 	strcpy (*text, buffer);
 
@@ -927,21 +929,21 @@ void briefing_add_keysite (entity *en, medal_types medal, pilot_rank_types rank,
 
 			case ENTITY_TYPE_TASK:
 			{
-		
+
 				keysite = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
-		
+
 				if (keysite)
 				{
-		
+
 					if (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE)
 					{
-					
+
 						strcpy (*text, get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 						*text += strlen (get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 					}
 					else
 					{
-					
+
 						debug_fatal ("BRIEFING: Trying to build briefing text for %s (%d) mission but object isn't a keysite %s (%d)",
 										get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
 										get_local_entity_string (keysite, STRING_TYPE_FULL_NAME), get_local_entity_index (keysite));
@@ -953,7 +955,7 @@ void briefing_add_keysite (entity *en, medal_types medal, pilot_rank_types rank,
 
 			case ENTITY_TYPE_KEYSITE:
 			{
-		
+
 				strcpy (*text, get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME));
 				*text += strlen (get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME));
 
@@ -962,7 +964,7 @@ void briefing_add_keysite (entity *en, medal_types medal, pilot_rank_types rank,
 			}
 			default:
 			{
-				
+
 				debug_fatal ("BRIEFING: Trying to build briefing text for %s (%d) unknown type",
 								get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en));
 
@@ -981,13 +983,13 @@ void briefing_add_keysite_type (entity *keysite, medal_types medal, pilot_rank_t
 
 	if (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE)
 	{
-	
+
 		strcpy (*text, get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 		*text += strlen (get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 	}
 	else
 	{
-	
+
 		debug_fatal ("BRIEFING: Trying to build objective briefing but object isn't a keysite %s (%d)",
 						get_local_entity_string (keysite, STRING_TYPE_FULL_NAME), get_local_entity_index (keysite));
 	}
@@ -1024,13 +1026,13 @@ void briefing_add_group (entity *task, medal_types medal, pilot_rank_types rank,
 
 				strcpy (*text, ", ");
 				*text += strlen (", ");
-			
+
 				strcat (*text, get_local_entity_string (company, STRING_TYPE_DIVISION_NAME));
 				*text += strlen (get_local_entity_string (company, STRING_TYPE_DIVISION_NAME));
 			}
 			else
 			{
-			
+
 				debug_fatal ("BRIEFING: Trying to build briefing text for %s (%d) mission but object isn't a group %s (%d)",
 								get_local_entity_string (task, STRING_TYPE_FULL_NAME), get_local_entity_index (task),
 								get_local_entity_string (group, STRING_TYPE_FULL_NAME), get_local_entity_index (group));
@@ -1061,10 +1063,10 @@ void briefing_add_target_type (entity *task, medal_types medal, pilot_rank_types
 
 				default:
 				{
-	
+
 					strcpy (*text, get_local_entity_string (target, STRING_TYPE_FULL_NAME));
 					*text += strlen (get_local_entity_string (target, STRING_TYPE_FULL_NAME));
-	
+
 					break;
 				}
 			}
@@ -1149,10 +1151,10 @@ extra_briefing_type *get_extra_briefing_data (extra_briefing_types type, int sub
 
 				case EXTRA_BRIEFING_MEDAL:
 				{
-	
+
 					if (this_item->sub_type & (1 << sub_type))
 					{
-			
+
 						return this_item;
 					}
 
@@ -1164,7 +1166,7 @@ extra_briefing_type *get_extra_briefing_data (extra_briefing_types type, int sub
 
 					if (this_item->sub_type == sub_type)
 					{
-		
+
 						return this_item;
 					}
 				}
@@ -1203,46 +1205,46 @@ int get_briefing_text (entity *task, char *text1, char *text2, char *text3)
 	{
 
 		// text 1 choice
-	
+
 		// check if any texts
 		if (task_briefing->briefing_text1 [0])
 		{
-		
+
 			text1_choice = get_local_entity_index (task) % task_briefing->briefing_text1_count;
-			
+
 			remainder = get_local_entity_index (task) / task_briefing->briefing_text1_count;
-		
+
 			build_substitution_info (task, NUM_MEDAL_TYPES, NUM_PILOT_RANKS, task_briefing->briefing_text1 [text1_choice], text1);
 		}
-	
+
 		// text 2 choice
-	
+
 		// check if any texts
 		if (task_briefing->briefing_text2 [0])
 		{
-		
+
 			text2_choice = (remainder + get_local_entity_index (task)) % task_briefing->briefing_text2_count;
-		
+
 			build_substitution_info (task, NUM_MEDAL_TYPES, NUM_PILOT_RANKS, task_briefing->briefing_text2 [text2_choice], text2);
 		}
-	
+
 		// text 3 choice
-	
+
 		// check if any texts
 		if (task_briefing->briefing_text3 [0])
 		{
-		
+
 			remainder += get_local_entity_index (task) / task_briefing->briefing_text3_count;
-		
+
 			text3_choice = (remainder + get_local_entity_index (task)) % task_briefing->briefing_text3_count;
-		
+
 			build_substitution_info (task, NUM_MEDAL_TYPES, NUM_PILOT_RANKS, task_briefing->briefing_text3 [text3_choice], text3);
 		}
-	
+
 		#if DEBUG_MODULE
-	
+
 		debug_log ("BRIEFING: using %d, %d, %d for text choice", text1_choice, text2_choice, text3_choice);
-	
+
 		#endif
 
 		return TRUE;
@@ -1267,7 +1269,7 @@ int get_debriefing_text (entity *task, char **debrief, char **ff_debrief)
 		*task_debriefing,
 		*ff_task_debriefing;
 
-	ASSERT (task); 
+	ASSERT (task);
 
 	*debrief = NULL;
 
@@ -1292,7 +1294,7 @@ int get_debriefing_text (entity *task, char **debrief, char **ff_debrief)
 
 			case TASK_COMPLETED_SUCCESS:
 			{
-	
+
 				text_choice = get_local_entity_index (task) % task_debriefing->debriefing_text_success_count;
 				*debrief = task_debriefing->debriefing_text_success [text_choice];
 
@@ -1308,7 +1310,7 @@ int get_debriefing_text (entity *task, char **debrief, char **ff_debrief)
 
 			case TASK_COMPLETED_PARTIAL:
 			{
-	
+
 				text_choice = get_local_entity_index (task) % task_debriefing->debriefing_text_partial_count;
 				*debrief = task_debriefing->debriefing_text_partial [text_choice];
 
@@ -1324,7 +1326,7 @@ int get_debriefing_text (entity *task, char **debrief, char **ff_debrief)
 
 			case TASK_COMPLETED_FAILURE:
 			{
-	
+
 				text_choice = get_local_entity_index (task) % task_debriefing->debriefing_text_failure_count;
 				*debrief = task_debriefing->debriefing_text_failure [text_choice];
 
@@ -1372,9 +1374,9 @@ int get_medal_briefing_text (entity *task, int medal_type, char *medal_text)
 	{
 
 		ASSERT (this_medal->text_count > 0);
-	
+
 		text_choice = get_local_entity_index (task) % this_medal->text_count;
-	
+
 		build_substitution_info (task, (medal_types) medal_type, NUM_PILOT_RANKS, this_medal->briefing_text [text_choice], medal_text);
 
 		return TRUE;
@@ -1408,9 +1410,9 @@ int get_promotion_briefing_text (entity *task, int rank_type, char *rank_text)
 	{
 
 		ASSERT (this_rank->text_count > 0);
-	
+
 		text_choice = get_local_entity_index (task) % this_rank->text_count;
-	
+
 		build_substitution_info (task, NUM_MEDAL_TYPES, (pilot_rank_types) rank_type, this_rank->briefing_text [text_choice], rank_text);
 
 		return TRUE;
@@ -1443,9 +1445,9 @@ int get_objective_briefing_text (entity *keysite, int objective_type, char *obje
 	{
 
 		ASSERT (this_objective->text_count > 0);
-	
+
 		text_choice = get_local_entity_index (keysite) % this_objective->text_count;
-	
+
 		build_substitution_info (keysite, NUM_MEDAL_TYPES, NUM_PILOT_RANKS, this_objective->briefing_text [text_choice], objective_text);
 
 		return TRUE;

@@ -65,7 +65,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
-#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,16 +83,6 @@ void set_pixel ( const int x, const int y, const rgb_colour colour )
 
 	if ( get_screen_locked ( active_screen ) )
 	{
-		if ( active_screen->pixel_length <= 16 )
-		{
-			unsigned short int
-				value;
-
-			value = get_packed_colour ( colour );
-
-			* ( (USHORT *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x ) = value;
-		}
-		else
 		{
 			unsigned int
 				value;
@@ -104,7 +93,7 @@ void set_pixel ( const int x, const int y, const rgb_colour colour )
 
 			value = colour.colour;
 
-			* ( (ULONG *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x ) = value;
+			* ( ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x ) = value;
 		}
 	}
 }
@@ -135,174 +124,12 @@ void set_clipped_pixel ( const int x, const int y, const rgb_colour colour )
 void get_pixel ( const int x, const int y, rgb_colour *colour )
 {
 
-	unsigned short int
-		value;
-
-	unsigned int
-		red,
-		green,
-		blue,
-		alpha;
-
 	ASSERT ( active_screen );
 	ASSERT ( colour );
 
-	value = * ( ( short int *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x );
-
-	red = value << active_screen_red_shift;
-	green = value << active_screen_green_shift;
-	blue = value << active_screen_blue_shift;
-	alpha = value << active_screen_alpha_shift;
-
-	red &= active_screen_red_mask;
-	green &= active_screen_green_mask;
-	blue &= active_screen_blue_mask;
-	alpha &= active_screen_alpha_mask;
-
-	colour->r = red >> 24;
-	colour->g = green >> 24;
-	colour->b = blue >> 24;
-	colour->a = alpha >> 24;
-}
-
-rgb_packed get_packed_pixel ( const int x, const int y )
-{
-
-	unsigned short int
-		value;
-
-	ASSERT ( active_screen );
-	ASSERT ( active_screen->pixel_length <= 16 );
-
-	value = * ( ( short int *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x );
-
-	return ( ( rgb_packed ) value );
+	colour->colour = * ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) + x );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-rgb_colour get_rgb_colour_value ( const unsigned long colour )
-{
-	unsigned int
-		red,
-		green,
-		blue,
-		alpha;
-
-	rgb_colour
-		colour_value;
-
-	red = colour << active_screen_red_shift;
-	green = colour << active_screen_green_shift;
-	blue = colour << active_screen_blue_shift;
-	alpha = colour << active_screen_alpha_shift;
-
-	red &= active_screen_red_mask;
-	green &= active_screen_green_mask;
-	blue &= active_screen_blue_mask;
-	alpha &= active_screen_alpha_mask;
-
-	colour_value.r = red >> 24;
-	colour_value.g = green >> 24;
-	colour_value.b = blue >> 24;
-	colour_value.a = alpha >> 24;
-
-	return ( colour_value );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-rgb_colour get_general_colour_value ( const rgb_packed colour )
-{
-	rgb_colour
-		colour_value;
-
-	colour_value.r = (colour & 0xF800) >> 8;
-	colour_value.g = (colour & 0x07E0) >> 3;
-	colour_value.b = (colour & 0x001F) << 3;
-	colour_value.a = 0;
-
-	return colour_value;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-rgb_colour get_user_rgb_colour_value ( const rgb_packed colour )
-{
-
-	unsigned int
-		red,
-		green,
-		blue,
-		alpha;
-
-	rgb_colour
-		colour_value;
-
-//	ASSERT ( pixel_width == 16 );
-
-	red = colour << user_screen_red_shift;
-	green = colour << user_screen_green_shift;
-	blue = colour << user_screen_blue_shift;
-	alpha = colour << user_screen_alpha_shift;
-
-	red &= user_screen_red_mask;
-	green &= user_screen_green_mask;
-	blue &= user_screen_blue_mask;
-	alpha &= user_screen_alpha_mask;
-
-	colour_value.r = red >> 24;
-	colour_value.g = green >> 24;
-	colour_value.b = blue >> 24;
-	colour_value.a = alpha >> 24;
-
-	return ( colour_value );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void set_pixel_format ( void )
-{
-	pixel_width = f3d_pixel_size();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void set_surface_shift_and_mask ( int source_mask, int *mask, int *shift )
-{
-
-	int
-		shiftcount;
-
-	shiftcount = 0;
-
-	if ( source_mask )
-	{
-
-		for ( shiftcount = 0; !( source_mask & 0x80000000 ); shiftcount++ )
-		{
-
-			source_mask <<= 1;
-		}
-	}
-
-	*shift = shiftcount;
-
-	*mask = source_mask;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

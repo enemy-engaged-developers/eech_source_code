@@ -123,8 +123,7 @@ static int
 	mfd_texture_size,
 	mfd_viewport_texture_x_org,
 	mfd_viewport_texture_y_org,
-	map_up_to_date = FALSE,
-	draw_large_mfd = TRUE;
+	map_up_to_date = FALSE;
 
 rgb_colour
 	clear_mfd_colour;
@@ -452,33 +451,20 @@ void initialise_hind_mfd (void)
 	map_up_to_date = FALSE;
 	map_active = TRUE;
 
-	if (custom_3d_models.arneh_mi24v_cockpit)
-	{
-		mfd_viewport_size = MFD_VIEWPORT_SIZE;
-		mfd_texture_size = MFD_TEXTURE_SIZE;
-		map_range = 25000.0;
-		map_scale = ROOT2 / 25000.0;
-	}
-	else
-	{
-		mfd_viewport_size = MFD_HAVOC_VIEWPORT_SIZE;
-		mfd_texture_size = MFD_HAVOC_TEXTURE_SIZE;
-		map_range = 25000.0;
-		map_scale = 1.0 / (25000.0 * ROOT2);
-	}
+	mfd_viewport_size = MFD_VIEWPORT_SIZE;
+	mfd_texture_size = MFD_TEXTURE_SIZE;
+	map_range = 25000.0;
+	map_scale = ROOT2 / 25000.0;
 
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
 	mfd_viewport_y_min = mfd_viewport_y_org - (mfd_viewport_size * 0.5);
-	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
-	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
+	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5);
+	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5);
 
-	if (custom_3d_models.arneh_mi24v_cockpit)
-		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HIND_MAP_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
-	else
-		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
+	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HIND_MAP_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
 
 	eo_texture_screen = create_system_texture_screen (EO_VIEWPORT_SIZE, EO_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -519,36 +505,6 @@ void deinitialise_hind_mfd (void)
 	destroy_screen (eo_texture_screen);
 
 //	destroy_screen (overlaid_mfd_texture_screen);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// LAYOUT GRID
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_layout_grid (void)
-{
-	float
-		x,
-		y;
-
-	if (display_mfd_layout_grid)
-	{
-		for (x = -1.0; x <= 1.0; x += 0.1)
-		{
-			draw_2d_line (x, -1.0, x, 1.0, sys_col_red);
-		}
-
-		for (y = -1.0; y <= 1.0; y += 0.1)
-		{
-			draw_2d_line (-1.0, y, 1.0, y, sys_col_red);
-		}
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -754,16 +710,8 @@ void draw_hind_mfd_on_texture (void)
 	// viewport
 	//
 
-	if (custom_3d_models.arneh_mi24v_cockpit)
-	{
-		mfd_viewport_size = MFD_VIEWPORT_SIZE;
-		mfd_texture_size = MFD_TEXTURE_SIZE;
-	}
-	else
-	{
-		mfd_viewport_size = MFD_HAVOC_VIEWPORT_SIZE;
-		mfd_texture_size = MFD_HAVOC_TEXTURE_SIZE;
-	}
+	mfd_viewport_size = MFD_VIEWPORT_SIZE;
+	mfd_texture_size = MFD_TEXTURE_SIZE;
 
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
@@ -775,8 +723,8 @@ void draw_hind_mfd_on_texture (void)
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
 	mfd_viewport_y_min = mfd_viewport_y_org - (mfd_viewport_size * 0.5);
-	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
-	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
+	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5);
+	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5);
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
@@ -794,11 +742,9 @@ void draw_hind_mfd_on_texture (void)
 		{
 			set_block (0, 0, mfd_viewport_size - 1, mfd_viewport_size - 1, clear_mfd_colour);
 
-			draw_layout_grid ();
+			draw_mfd_layout_grid ();
 
 			draw_map_display ();
-
-			flush_screen_texture_graphics (mfd_texture_screen);
 
 			unlock_screen (mfd_texture_screen);
 		}
@@ -808,7 +754,7 @@ void draw_hind_mfd_on_texture (void)
 /*
 	if(command_line_export_mfd)
 	{
-		export_screen=create_screen_for_system_texture (TEXTURE_INDEX_HIND_MAP_DISPLAY);
+		export_screen = get_screen_of_system_texture (TEXTURE_INDEX_HIND_MAP_DISPLAY);
 		copy_export_mfd(export_screen,NULL);
 	}
 */
@@ -1322,7 +1268,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	{
 		if (target)
 		{
-			if (!((!d3d_can_render_to_texture) && (!draw_large_mfd)))
 			{
 				tmp = main_vp;
 
@@ -1402,7 +1347,7 @@ void draw_hind_virtual_cockpit_ort_view (int x_min, int x_max)
 	black.a = 255;
 
 	// clear background, since we won't be drawing the 3D view over the entire screen
-	set_block(0, 0, full_screen_x_max, full_screen_y_max, black);
+	f3d_clear_screen ( black.colour );
 
 	if (!damaged)
 	{
@@ -1442,16 +1387,16 @@ void draw_hind_virtual_cockpit_ort_symbology(void)
 	mfd_viewport_x_min = 0.0;
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = EO_VIEWPORT_SIZE - 0.001;
-	mfd_viewport_y_max = EO_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_x_max = EO_VIEWPORT_SIZE;
+	mfd_viewport_y_max = EO_VIEWPORT_SIZE;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
 	mfd_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 	mfd_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-	mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	mfd_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width);
+	mfd_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 	i_translate_3d = mfd_screen_x_min;
 	j_translate_3d = mfd_screen_y_min;

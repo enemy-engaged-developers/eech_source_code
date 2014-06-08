@@ -932,7 +932,7 @@ static void load_map_icon (int icon, int side, const char *filename)
 
 	ASSERT (filename);
 
-	map_icons [side][icon] = create_texture_graphic (filename);
+	map_icons [side][icon] = create_texture_graphic (filename, 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -948,15 +948,15 @@ static void load_key_icons (int layer)
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%sprp.psd", layer_control_button_data [layer].graphic_filename);
 
-	key_icons [layer][0] = create_texture_graphic (filename);
+	key_icons [layer][0] = create_texture_graphic (filename, 1);
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%swht.psd", layer_control_button_data [layer].graphic_filename);
 
-	key_icons [layer][1] = create_texture_graphic (filename);
+	key_icons [layer][1] = create_texture_graphic (filename, 1);
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%syel.psd", layer_control_button_data [layer].graphic_filename);
 
-	key_icons [layer][2] = create_texture_graphic (filename);
+	key_icons [layer][2] = create_texture_graphic (filename, 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -970,15 +970,15 @@ static void load_misc_3state_icons (const char *name, texture_graphic **icons)
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%sprp.psd", name);
 
-	icons [0] = create_texture_graphic (filename);
+	icons [0] = create_texture_graphic (filename, 1);
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%swht.psd", name);
 
-	icons [1] = create_texture_graphic (filename);
+	icons [1] = create_texture_graphic (filename, 1);
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%syel.psd", name);
 
-	icons [2] = create_texture_graphic (filename);
+	icons [2] = create_texture_graphic (filename, 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -995,7 +995,7 @@ void load_map_textures (void)
 
 	if (!map_overlay)
 	{
-		map_overlay = create_user_texture_screen (MAP_OVERLAY_TEXTURE_SIZE, MAP_OVERLAY_TEXTURE_SIZE, TEXTURE_TYPE_MULTIPLEALPHA, 0);
+		map_overlay = create_user_texture_screen (MAP_OVERLAY_TEXTURE_SIZE, MAP_OVERLAY_TEXTURE_SIZE, TEXTURE_TYPE_MULTIPLEALPHA, 1);
 	}
 
 	ASSERT (map_overlay);
@@ -1090,9 +1090,81 @@ void load_map_textures (void)
 		load_misc_3state_icons ("zmout", zoom_out_icons);
 		load_misc_3state_icons ("goto", goto_icons);
 
-		map_key_backdrop_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\key\\key.psd");
+		map_key_backdrop_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\key\\key.psd", 1);
 
 		map_icons_loaded = TRUE;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void unload_misc_3state_icons (texture_graphic **icons)
+{
+	int
+		i;
+
+	for ( i = 0; i < 3; i++ )
+	{
+		if ( icons[i] )
+		{
+			destroy_texture_graphic ( icons[i] );
+			icons[i] = NULL;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void unload_map_textures (void)
+{
+	int
+		i,
+		j;
+
+	if ( map_overlay )
+	{
+		destroy_screen ( map_overlay );
+		map_overlay = NULL;
+	}
+
+	for ( i = 0; i < ARRAY_LENGTH ( map_icons ); i++ )
+	{
+		for ( j = 0; j < ARRAY_LENGTH ( map_icons[i] ); j++ )
+		{
+			if ( map_icons[i][j] )
+			{
+				destroy_texture_graphic ( map_icons[i][j] );
+				map_icons[i][j] = NULL;
+			}
+		}
+	}
+
+	for ( i = 0; i < ARRAY_LENGTH ( key_icons ); i++ )
+	{
+		for ( j = 0; j < ARRAY_LENGTH ( key_icons[i] ); j++ )
+		{
+			if ( key_icons[i][j] )
+			{
+				destroy_texture_graphic ( key_icons[i][j] );
+				key_icons[i][j] = NULL;
+			}
+		}
+	}
+
+	unload_misc_3state_icons ( goto_icons );
+	unload_misc_3state_icons ( zoom_in_icons );
+	unload_misc_3state_icons ( zoom_out_icons );
+	unload_misc_3state_icons ( minimise_icons );
+	unload_misc_3state_icons ( maximise_icons );
+
+	if ( map_key_backdrop_graphic )
+	{
+		destroy_texture_graphic ( map_key_backdrop_graphic );
+		map_key_backdrop_graphic = NULL;
 	}
 }
 
@@ -1107,6 +1179,25 @@ void initialise_map_data (void)
 	global_layer_controls = get_global_map_layer_options ();
 
 	initialise_layer_control_objects ();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void deinitialise_map_data (void)
+{
+	while ( map_events )
+	{
+		map_event_type
+			*next;
+
+		next = map_events->next;
+		free_mem ( map_events );
+		map_events = next;
+	}
+
+	map_events = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

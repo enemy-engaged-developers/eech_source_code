@@ -593,7 +593,7 @@ void helicopter_death_movement (entity *en)
 						power = (int) (bound(total_velocity / 5, 0, 4));
 						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_GROUND, power);
 						if (power > 1)
-							create_client_server_crater (CRATER_TYPE_SMALL_EXPLOSION + (power - 2), pos);
+							create_client_server_crater ((crater_types)(CRATER_TYPE_SMALL_EXPLOSION + (power - 2)), pos);
 						
 						break;
 					}
@@ -926,7 +926,7 @@ int helicopter_crash_movement (entity *en)
 
 	speed = normalise_any_3d_vector (velocity);
 
-	acc = max (8 * speed, 10.0);
+	acc = max (8 * speed, 10.0f);
 
 	speed -= (acc * get_entity_movement_delta_time ());
 
@@ -1799,7 +1799,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 		// was here to make helicopters avoid buildings when doing troop insertion, but it messed up the carrier landing.
 		//terrain_elevation = get_3d_terrain_point_data (pos->x, pos->z, &raw->ac.terrain_info);
 		//required_height = max (wp_pos->y, terrain_elevation + helicopter_movement_structure_avoidance (en));
-		required_height = wp_pos->y + min(2, raw->ac.mob.velocity);
+		required_height = wp_pos->y + min(2.0f, raw->ac.mob.velocity);
 	}
 
 	return required_height;

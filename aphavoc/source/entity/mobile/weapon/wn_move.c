@@ -487,7 +487,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	
 	if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr != 1)
 	{
-		time_elapsed = min (2, 0.5 * (max(length - 500, 0) / raw->mob.velocity)); // back to normal trajectory if < 2 secs left
+		time_elapsed = min (2.0f, 0.5f * (max(length - 500, 0.0f) / raw->mob.velocity)); // back to normal trajectory if < 2 secs left
 		uvec_intercept_point.y += 5 * time_elapsed * time_elapsed / 2; // flightpath raised 10m
 	}
 
@@ -684,7 +684,7 @@ static void update_guided_weapon (weapon* raw, vec3d* new_position, float delta_
 
 		if (spiral)
 		{
-			float timer = wrap_angle(0.75 * PI2 * raw->weapon_lifetime);
+			float timer = wrap_angle(0.75f * PI2 * raw->weapon_lifetime);
 
 			displacement.x -= displacement_modifier * sin(timer) * (1 + 0.2 * frand1());
 			displacement.y += displacement_modifier * cos(timer) * (0.5 + 0.5 * frand1());
@@ -1733,7 +1733,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
 
 			if (wpn->weapon_lifetime < - weapon_database[wpn->mob.sub_type].cruise_time ||
-					wpn->mob.position.y < max(- weapon_database[wpn->mob.sub_type].max_range, - 4000) ||
+					wpn->mob.position.y < max(- weapon_database[wpn->mob.sub_type].max_range, - 4000.0f) ||
 					wpn->mob.velocity < 20.0 && wpn->weapon_lifetime < 0)
 				break;
 			
@@ -1786,7 +1786,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			if (fake_z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
 			{
 				int
-					stop_index = (int)((fake_z + 1) / RANGE_STEP);
+					stop_index = min((int)((fake_z + 1) / RANGE_STEP), num_range_values);
 				float
 					drop_angle;
 
@@ -1797,7 +1797,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 				ASSERT(stop_index >= range_mark);
 
 				// if the projectile is really fast we might actually have passed several sample values, so set the value for all of them
-				for (; range_mark <= stop_index; range_mark++)
+				for (; range_mark < stop_index; range_mark++)
 				{
 					data[pitch_index][range_mark].drop_angle = drop_angle;
 					data[pitch_index][range_mark].flight_time = time;

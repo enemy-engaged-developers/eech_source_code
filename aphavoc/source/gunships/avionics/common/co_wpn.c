@@ -239,7 +239,7 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 		direction.x = 0;
 		direction.y = 0;
 		direction.z = - 1;
-		multiply_matrix3x3_vec3d(&direction, &vp.attitude, &direction);
+		multiply_matrix3x3_vec3d(&direction, vp.attitude, &direction);
 		add_dynamic_weapon_launch_force (&vp.position, &direction, strength, duration);
 		
 		play_ffb_weapon_effect((char*)weapon_database[selected_weapon].full_name, weapon_database[selected_weapon].rate_of_fire);

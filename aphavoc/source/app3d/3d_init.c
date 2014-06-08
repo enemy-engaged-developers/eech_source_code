@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -94,9 +94,9 @@ void initialise_application_3d_system (void)
 {
 
   float light_level = max(min(1.0f,global_night_light_level),0.0f);
-	
-	
-	
+
+
+
 	ASSERT ( !main_3d_env );
 
 	ASSERT ( !main_3d_single_light_env );
@@ -124,7 +124,7 @@ void initialise_application_3d_system (void)
 	debug_log ( "Loading textures" );
 
 	load_texturemap_data ( "3ddata" );
-	
+
 	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
 	// moved to beginning
 	debug_log("###CUSTOM TEXTURE STARTUP: initialise_application_3d_system: initialise_custom_map_info");
@@ -405,8 +405,8 @@ void initialise_application_3d_system (void)
 		rgb_colour
 			moon_colour[3],
 			moon_light_colour[3];
- 
-    
+
+
 		set_rgb_colour ( moon_colour[0],  0, 0, 0, 0 );
 		set_rgb_colour ( moon_colour[1],  255, 255, 255, 0 );
 		set_rgb_colour ( moon_colour[2],  255, 255, 255, 0 );
@@ -414,7 +414,7 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( moon_light_colour[0], 0, 0, 0, 0 );
 		set_rgb_colour ( moon_light_colour[1], 23, 33, 41, 0 ); // 24% 9pm, 12am,
 		set_rgb_colour ( moon_light_colour[2], 23, 33, 41, 0 ); // 24% 3am
-    
+
     //VJ060920 night light level mod
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
@@ -768,14 +768,6 @@ void initialise_application_3d_system (void)
 	//
 
 	set_3d_detail_levels ();
-
-	////////////////////////////////////////
-	//
-
-	original_d3d_can_render_to_texture = d3d_can_render_to_texture;
-
-	//
-	////////////////////////////////////////
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,6 +777,8 @@ void initialise_application_3d_system (void)
 void deinitialise_application_3d_system (void)
 {
 	display_terrain_elevation_statistics ();
+
+	deinitialise_3d_stars ();
 
 	destroy_3d_environment (main_3d_env);
 
@@ -814,7 +808,11 @@ void deinitialise_application_3d_system (void)
 
 	unload_terrain_simple_elevation_grid ();
 
+	deinitialise_3d_displacement_maps ();
+
 	report_objects_not_destructed ();
+
+	deinitialise_3d_objects ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1101,7 +1099,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 
 			break;
-			
+
 		}
 
 		case DISPLAY_3D_TINT_BLUE:
@@ -1540,33 +1538,33 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 			set_3d_fog_colour ( main_3d_env, fog_colour );
-			
+
 			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 3;
 			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 3;
 
 			direction.x = -visual_3d_vp->zv.x;
 			direction.y = -visual_3d_vp->zv.y;
 			direction.z = -visual_3d_vp->zv.z;
-			
+
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
 			set_3d_main_light_source ( main_3d_env, &main_light, &direction, FALSE );
 
-			
+
 			break;
 		}
 
 		// Jabberwock 031009 Satellite tint for satellite view
 		case DISPLAY_3D_TINT_BLUE_HAZE:
 		{
-			
+
 			int
 				interference;
-				
+
 			camera
 				*raw;
-				
-			
+
+
 			//
 			// Set the light modes
 			//
@@ -1574,7 +1572,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 
 			set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
-	
+
 			//
 			// Set the fogmode
 			//
@@ -1582,7 +1580,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 
 			raw = (camera *) get_local_entity_data (get_camera_entity ());
-						
+
 			interference = raw->fly_by_camera_timer;
 
 			if (interference < 180)
@@ -1597,8 +1595,8 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				fog_colour.g = 255;
 				fog_colour.b = 255;
 			}
-			
-			
+
+
 			//if (interference < 150)
 			//{
 				//fog_colour.a = frand1() * 40 + 150;
@@ -1609,7 +1607,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				fog_colour.a = interference;
 			//}
 
-	
+
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 
 			break;

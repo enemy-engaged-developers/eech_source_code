@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -86,7 +86,7 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 
 	display_3d_tints
 		tint;
-		
+
 	day_segment_types
 		day_segment_type;
 
@@ -162,8 +162,6 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 
 	ASSERT (scr);
 
-	ASSERT (d3d_can_render_to_texture);
-
 	memcpy (&main_vp, vp, sizeof (viewpoint));
 
 	x1 = 0.0;
@@ -236,7 +234,7 @@ void draw_campaign_screen_entity_3d_scene (ui_object *obj, float distance, vec3d
 	vp.x = pos->x + (direction->x * distance);
 	vp.y = pos->y + (direction->y * distance);
 	vp.z = pos->z + (direction->z * distance);
-	
+
 	//
 	// set camera attitude
 	//
@@ -254,7 +252,7 @@ void draw_campaign_screen_entity_3d_scene (ui_object *obj, float distance, vec3d
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_campaign_screen_texture_to_object (screen *scr, ui_object *obj) 
+void draw_campaign_screen_texture_to_object (screen *scr, ui_object *obj)
 {
 	vertex
 		quad[4];
@@ -288,45 +286,45 @@ void draw_campaign_screen_texture_to_object (screen *scr, ui_object *obj)
 		colour.green = 255;
 		colour.blue = 255;
 		colour.alpha = 255;
-	
+
 		specular.red = 0;
 		specular.green = 0;
 		specular.blue = 0;
 		specular.alpha = 255;
-	
+
 		quad[0].i = x1;
 		quad[0].j = y1;
 		quad[0].z = 0.5;
 		quad[0].q = 0.5;
 		quad[0].u = 0;
 		quad[0].v = 0;
-	
+
 		quad[1].i = x2;
 		quad[1].j = y1;
 		quad[1].z = 0.5;
 		quad[1].q = 0.5;
 		quad[1].u = 1;
 		quad[1].v = 0;
-	
+
 		quad[2].i = x2;
 		quad[2].j = y2;
 		quad[2].z = 0.5;
 		quad[2].q = 0.5;
 		quad[2].u = 1;
 		quad[2].v = 1;
-	
+
 		quad[3].i = x1;
 		quad[3].j = y2;
 		quad[3].z = 0.5;
 		quad[3].q = 0.5;
 		quad[3].u = 0;
 		quad[3].v = 1;
-	
+
 		quad[0].next_vertex = &quad[1];
 		quad[1].next_vertex = &quad[2];
 		quad[2].next_vertex = &quad[3];
 		quad[3].next_vertex = NULL;
-	
+
 		draw_wbuffered_flat_shaded_textured_polygon ( quad, colour, specular );
 	}
 }

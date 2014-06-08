@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -117,7 +117,7 @@ static void notify_free_flight_screen_entered (ui_object *obj, void *arg)
 {
  	if (command_line_ui_sounds_muted)
  		ui_sounds_muted = TRUE; //ataribaby 29/12/2008 for muted UI sounds
-  
+
 	set_mouse_graphic_on ();
 }
 
@@ -136,7 +136,7 @@ static void free_flight_screen_draw_function (ui_object *obj, void *arg)
 	//
 	// General
 	//
-	
+
 	ingame_screen_draw_function (obj, arg);
 }
 
@@ -175,8 +175,8 @@ static void notify_free_flight_cancel_quit_campaign_button (ui_object *obj, void
 static void free_flight_accept_quit_campaign (event *ev)
 {
 	if (command_line_ui_sounds_muted)
-		ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds 
-  
+		ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds
+
 	free_flight_cancel_quit_campaign (ev);
 
 	player_quit_session (NULL);
@@ -302,7 +302,7 @@ void initialise_free_flight_screen (void)
 			UI_ATTR_PARENT (free_flight_dialog_area),
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitcamp.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitcamp.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -380,7 +380,7 @@ entity *free_flight_auto_assign_gunship (void)
 {
 	vec3d
 		*pos;
-	
+
 	entity
 		*force,
 		*new_task,
@@ -423,7 +423,7 @@ entity *free_flight_auto_assign_gunship (void)
 	count = 0;
 
 	en = get_local_entity_first_child (force, LIST_TYPE_AIR_REGISTRY);
-	
+
 	while (en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
@@ -453,13 +453,13 @@ entity *free_flight_auto_assign_gunship (void)
 	//
 	// Create list of candidates
 	//
-	
+
 	gunship_list = (entity **) safe_malloc (sizeof (entity *) * count);
 
 	count = 0;
 
 	en = get_local_entity_first_child (force, LIST_TYPE_AIR_REGISTRY);
-	
+
 	while (en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
@@ -502,9 +502,9 @@ entity *free_flight_auto_assign_gunship (void)
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 		new_task = create_user_task (en, ENTITY_SUB_TYPE_TASK_FREE_FLIGHT, pos, NULL, NULL);
-					
+
 		set_assign_create_waypoint_route (FALSE);
-					
+
 		if (assign_primary_task_to_group (group, new_task))
 		{
 			set_gunship_entity (en);
@@ -518,7 +518,7 @@ entity *free_flight_auto_assign_gunship (void)
 			return en;
 		}
 		else
-		{						
+		{
 			debug_log ("FLIGHT: can't assign user to Created task");
 
 			destroy_client_server_entity (new_task);
@@ -550,7 +550,7 @@ gunship_types get_free_flight_gunship_type()
 
 void set_free_flight_gunship_type(gunship_types type)
 {
-	free_flight_gunship_type = type;	
+	free_flight_gunship_type = type;
 }
 
 int free_flight_gunship_type_matches(entity_sub_types entity_type)

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -75,7 +75,7 @@ int
 	object_3d_object_current_base,
 	object_3d_light_3d_current_base,
 	object_3d_perform_lod_calculations = TRUE;
-	
+
 object_3d_info
 	*current_object_3d_object_base,
 	object_3d_object_base[512];							// Allow 512 objects in one object ( z-sorted only )
@@ -151,7 +151,7 @@ point_3d_plain_reference
 object_3d_face
 	*current_object_3d_faces;
 
-LPD3DTLVERTEX
+LPTLVERTEX
 	current_object_3d_surface_vertices;
 
 unsigned char
@@ -243,7 +243,7 @@ int get_3d_object_approximation_number ( object_3d_instance *obj )
 
 	vec3d
 		*pos;
-	
+
 	//
 	// Calculate the object's position relative to the view.
 	//
@@ -336,7 +336,7 @@ void pre_render_3d_object ( object_3d_instance *obj )
 
 void pre_render_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *scene )
 {
-	
+
 	int
 		count,
 		object_number;
@@ -392,17 +392,17 @@ void pre_render_object_faces ( int object_number )
 
 			if ( current_object_3d_surface->texture_animation )
 			{
-		
+
 				int
 					frame;
-		
+
 				frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
 
 				current_object_3d_texture = system_textures[ texture_animations[current_object_3d_surface->texture_index].texture_indices[frame] ];
 			}
 			else
 			{
-		
+
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
@@ -413,17 +413,17 @@ void pre_render_object_faces ( int object_number )
 
 				if ( current_object_3d_surface->luminosity_texture_animation )
 				{
-			
+
 					int
 						frame;
-			
+
 					frame = texture_animations[current_object_3d_surface->luminosity_texture_index].current_frame;
-			
+
 					current_object_3d_luminosity_texture = system_textures[ texture_animations[current_object_3d_surface->luminosity_texture_index].texture_indices[frame] ];
 				}
 				else
 				{
-			
+
 					current_object_3d_luminosity_texture = system_textures[current_object_3d_surface->luminosity_texture_index];
 				}
 
@@ -444,7 +444,7 @@ void draw_3d_object_bounding_box ( object_3d_instance *obj )
 
 	vec3d
 		*object_relative_position;
-	
+
 	object_3d_scene_database_entry
 		*scene;
 
@@ -513,7 +513,7 @@ void draw_3d_object_bounding_box ( object_3d_instance *obj )
 
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 	set_d3d_texture ( 0, NULL );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 
 
 	{
@@ -746,7 +746,7 @@ void transform_object_3d_points ( vertex *points, vec3d *object_relative_positio
 void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour col )
 {
 
-	int 
+	int
 		outcode,
 		outcode2;
 
@@ -768,31 +768,31 @@ void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour co
 	{
 
 		clip_3d_coord = 0;
-	
+
 		if ( outcode & CLIP_HITHER )
 		{
-	
+
 			line = hither_clip_3d_polygon ( line, &outcode );
-	
+
 			if ( !line )
 			{
-	
+
 				return;
 			}
 		}
-	
+
 		if ( outcode )
 		{
-	
+
 			line = clip_3d_polygon ( line, outcode );
-	
+
 			if ( !line )
 			{
-	
+
 				return;
 			}
 		}
-	
+
 		{
 
 			draw_wbuffered_plain_line ( line, col );
@@ -809,14 +809,14 @@ void calculate_luminous_colour ( real_colour *colour )
 
 	if (active_3d_environment->render_filter != RENDER_CLEAR)
 	{
-	
+
 
 		float
 			red,
 			green,
 			blue,
 			alpha;
-	
+
 		int
 			ired,
 			igreen,
@@ -828,33 +828,33 @@ void calculate_luminous_colour ( real_colour *colour )
 
 			float
 				grey;
-	
+
 			red = current_object_3d_surface->red;
 			green = current_object_3d_surface->green;
 			blue = current_object_3d_surface->blue;
 
 			grey = red * 0.3 + green * 0.59 + blue * 0.11;
 			grey *= current_object_3d_dissolve_factor;
-	
+
 			asm_convert_float_to_int ( ( grey * ambient_3d_light.colour.red ), &ired );
 			asm_convert_float_to_int ( ( grey * ambient_3d_light.colour.green ), &igreen );
 			asm_convert_float_to_int ( ( grey * ambient_3d_light.colour.blue ), &iblue );
-	
+
 			colour->red = ired;
 			colour->green = igreen;
 			colour->blue = iblue;
 		}
 		else
 		{
-	
+
 			red = current_object_3d_surface->red;
 			green = current_object_3d_surface->green;
 			blue = current_object_3d_surface->blue;
-	
+
 			asm_convert_float_to_int ( ( red * ambient_3d_light.colour.red ), &ired );
 			asm_convert_float_to_int ( ( green * ambient_3d_light.colour.green ), &igreen );
 			asm_convert_float_to_int ( ( blue * ambient_3d_light.colour.blue ), &iblue );
-	
+
 			colour->red = ired;
 			colour->green = igreen;
 			colour->blue = iblue;
@@ -870,35 +870,35 @@ void calculate_luminous_colour ( real_colour *colour )
 			}
 			else
 			{
-	
+
 				colour->alpha = current_object_3d_dissolve_value;
 			}
 		}
 	}
 	else
 	{
-	
+
 		if ( current_object_3d_surface->additive )
 		{
-	
+
 			float
 				red,
 				green,
 				blue;
-	
+
 			int
 				ired,
 				igreen,
 				iblue;
-	
+
 			red = current_object_3d_surface->red;
 			green = current_object_3d_surface->green;
 			blue = current_object_3d_surface->blue;
-	
+
 			asm_convert_float_to_int ( ( red * current_object_3d_dissolve_factor ), &ired );
 			asm_convert_float_to_int ( ( green * current_object_3d_dissolve_factor ), &igreen );
 			asm_convert_float_to_int ( ( blue * current_object_3d_dissolve_factor ), &iblue );
-	
+
 			colour->red = ired;
 			colour->green = igreen;
 			colour->blue = iblue;
@@ -911,7 +911,7 @@ void calculate_luminous_colour ( real_colour *colour )
 
 			int
 				ialpha;
-	
+
 			colour->red = current_object_3d_surface->red;
 			colour->green = current_object_3d_surface->green;
 			colour->blue = current_object_3d_surface->blue;
@@ -927,7 +927,7 @@ void calculate_luminous_colour ( real_colour *colour )
 			}
 			else
 			{
-	
+
 				colour->alpha = current_object_3d_dissolve_value;
 			}
 		}
@@ -953,10 +953,10 @@ void calculate_lightmap_luminous_colour ( real_colour *colour )
 
 	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
-	
+
 		float
 			grey;
-	
+
 		red = current_object_3d_surface->red;
 		green = current_object_3d_surface->green;
 		blue = current_object_3d_surface->blue;
@@ -974,7 +974,7 @@ void calculate_lightmap_luminous_colour ( real_colour *colour )
 	}
 	else
 	{
-	
+
 		red = current_object_3d_surface->red;
 		green = current_object_3d_surface->green;
 		blue = current_object_3d_surface->blue;
@@ -1240,7 +1240,7 @@ void generate_environment_coordinates ( int object_index, object_short_3d_point 
 	//
 
 	ndotr = ( ray.x * normal->x + ray.y * normal->y + ray.z * normal->z ) * 2.0;
-	
+
 	reflected_ray.x = ndotr * normal->x - ray.x;
 	reflected_ray.y = ndotr * normal->y - ray.y;
 	reflected_ray.z = ndotr * normal->z - ray.z;
@@ -1250,12 +1250,12 @@ void generate_environment_coordinates ( int object_index, object_short_3d_point 
 	//
 
 	multiply_matrix3x3_vec3d ( &ray, attitude, &reflected_ray );
-	
+
 	normalise_any_3d_vector ( &ray );
-	
+
 	denominator = get_inverse_square_root ( ray.z + 1 );
 	denominator *= ( 1 / ( 1.4142135623730904880 * 2 ) );
-	
+
 	*u = 0.5 + ( ray.x * denominator );
 	*v = 0.5 + ( ray.y * denominator );
 
@@ -1269,7 +1269,7 @@ void generate_environment_coordinates ( int object_index, object_short_3d_point 
 //	ray.x = camera_position->x - point->x;
 //	ray.y = camera_position->y - point->y;
 //	ray.z = camera_position->z - point->z;
-	
+
 //	multiply_matrix3x3_vec3d ( normal, attitude, &reflected_ray );
 
 //	normalise_any_3d_vector ( &reflected_ray );
@@ -1349,17 +1349,17 @@ void get_textured_surface_face_colour ( real_colour *colour, real_colour *specul
 
 		if ( current_object_3d_specular )
 		{
-	
+
 			int
 				ispecular;
-	
+
 			float
 				specular;
-	
+
 			specular = current_object_3d_surface->specularity * current_object_3d_transformed_normals[current_object_3d_face_normal_list->point].specular;
-	
+
 			asm_convert_float_to_int ( specular, &ispecular );
-	
+
 			specular_colour->red = ispecular;
 			specular_colour->green = ispecular;
 			specular_colour->blue = ispecular;
@@ -1378,7 +1378,7 @@ void get_surface_face_colour ( real_colour *colour, real_colour *specular_colour
 	{
 
 		calculate_luminous_colour ( colour );
-	
+
 		specular_colour->colour = d3d_fog_intensity;
 	}
 	else
@@ -1399,21 +1399,21 @@ void get_surface_face_colour ( real_colour *colour, real_colour *specular_colour
 		//
 		// Look up the colour of the face normal
 		//
-	
+
 		red = current_object_3d_transformed_normals[current_object_3d_face_normal_list->point].r;
 		green = current_object_3d_transformed_normals[current_object_3d_face_normal_list->point].g;
 		blue = current_object_3d_transformed_normals[current_object_3d_face_normal_list->point].b;
 		specular = current_object_3d_transformed_normals[current_object_3d_face_normal_list->point].specular;
-	
+
 		red /= 255.0;
 		green /= 255.0;
 		blue /= 255.0;
-	
+
 		asm_convert_float_to_int ( ( red * current_object_3d_surface->red ), &ir );
 		asm_convert_float_to_int ( ( green * current_object_3d_surface->green ), &ig );
 		asm_convert_float_to_int ( ( blue * current_object_3d_surface->blue ), &ib );
 		asm_convert_float_to_int ( ( specular * current_object_3d_surface->specularity ), &ispecular );
-	
+
 		colour->red = ir;
 		colour->green = ig;
 		colour->blue = ib;
@@ -1503,18 +1503,18 @@ light_3d_source *generate_relative_lights ( viewpoint *vp, vec3d *object_unit_po
 					distance = 1 - ( distance / light_ptr->radius );
 
 					this_light = &light_3d_array[object_3d_light_3d_current_base];
-			
+
 					object_3d_light_3d_current_base++;
-		
+
 					if ( prev_light )
 					{
-		
+
 						prev_light->succ = this_light;
 					}
-		
+
 					this_light->pred = prev_light;
 					this_light->succ = NULL;
-		
+
 					this_light->type = light_ptr->type;
 
 					this_light->colour.red = light_ptr->colour.red * distance;
@@ -1527,38 +1527,38 @@ light_3d_source *generate_relative_lights ( viewpoint *vp, vec3d *object_unit_po
 					lx = ( vector.x * vp->attitude[0][0] );
 					lx += ( vector.y * vp->attitude[0][1] );
 					lx += ( vector.z * vp->attitude[0][2] );
-		
+
 					ly = ( vector.x * vp->attitude[1][0] );
 					ly += ( vector.y * vp->attitude[1][1] );
 					ly += ( vector.z * vp->attitude[1][2] );
-		
+
 					lz = ( vector.x * vp->attitude[2][0] );
 					lz += ( vector.y * vp->attitude[2][1] );
 					lz += ( vector.z * vp->attitude[2][2] );
-		
+
 					this_light->lx = lx;
 					this_light->ly = ly;
 					this_light->lz = lz;
-		
+
 					prev_light = this_light;
 				}
 			}
 			else
 			{
-	
+
 				this_light = &light_3d_array[object_3d_light_3d_current_base];
-		
+
 				object_3d_light_3d_current_base++;
-	
+
 				if ( prev_light )
 				{
-	
+
 					prev_light->succ = this_light;
 				}
-	
+
 				this_light->pred = prev_light;
 				this_light->succ = NULL;
-	
+
 				this_light->type = light_ptr->type;
 
 				this_light->colour.red = light_ptr->colour.red;
@@ -1569,16 +1569,16 @@ light_3d_source *generate_relative_lights ( viewpoint *vp, vec3d *object_unit_po
 				lx = ( light_ptr->lx * vp->attitude[0][0] );
 				lx +=  ( light_ptr->ly * vp->attitude[0][1] );
 				lx += ( light_ptr->lz * vp->attitude[0][2] );
-	
+
 				ly = ( light_ptr->lx * vp->attitude[1][0] );
 				ly += ( light_ptr->ly * vp->attitude[1][1] );
 				ly += ( light_ptr->lz * vp->attitude[1][2] );
-	
-	
+
+
 				lz = ( light_ptr->lx * vp->attitude[2][0] );
 				lz += ( light_ptr->ly * vp->attitude[2][1] );
 				lz += ( light_ptr->lz * vp->attitude[2][2] );
-	
+
 				this_light->lx = lx;
 				this_light->ly = ly;
 				this_light->lz = lz;
@@ -1595,7 +1595,7 @@ light_3d_source *generate_relative_lights ( viewpoint *vp, vec3d *object_unit_po
 
 				prev_light = this_light;
 			}
-	
+
 			light_ptr = light_ptr->succ;
 		}
 	}

@@ -195,7 +195,7 @@ static long initialise_internal_debug_system ( void * data );
 
 static long WINAPI debug_window_notify ( HWND window_handle, UINT message, WPARAM wParam, LPARAM lParam );
 
-static void application_monitor_process_thread ( void );
+static DWORD WINAPI application_monitor_process_thread ( LPVOID data );
 
 static int debug_initialise_message_id;
 
@@ -474,7 +474,7 @@ long initialise_internal_debug_system ( void * data )
 				(
 					(LPSECURITY_ATTRIBUTES) NULL,
 					0,
-					(LPTHREAD_START_ROUTINE) application_monitor_process_thread,
+					application_monitor_process_thread,
 					0,
 					0,
 					&monitor_thread_id
@@ -993,7 +993,7 @@ void debug_fatal ( const char *string, ... )
 		else
 			fp = NULL;
 #endif
-		
+
 		if ( fp )
 		{
 
@@ -2033,7 +2033,7 @@ void update_debug_windows ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void application_monitor_process_thread ( void )
+DWORD WINAPI application_monitor_process_thread ( LPVOID data )
 {
 
 	while ( !bExiting )
@@ -2047,6 +2047,8 @@ void application_monitor_process_thread ( void )
 
 		Sleep ( 200 );
 	}
+
+	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -342,7 +342,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 		if (raw->target_fire_timer > 0.0)
 		{
-			raw->target_fire_timer = max(0, raw->target_fire_timer - get_delta_time ());
+			raw->target_fire_timer = max(0.0f, raw->target_fire_timer - get_delta_time ());
 			
 			if (raw->target_fire_timer > 0.0)
 				return;
@@ -376,7 +376,7 @@ void update_vehicle_weapon_fire (entity *en)
 	
 	if (raw->weapon_burst_timer > 0)
 	{
-		raw->weapon_burst_timer = max(0, raw->weapon_burst_timer - get_delta_time ());
+		raw->weapon_burst_timer = max(0.0f, raw->weapon_burst_timer - get_delta_time ());
 
 		if (raw->weapon_burst_timer > 0.0)
 		{
@@ -817,7 +817,7 @@ void rearm_vehicle_weapons(entity *en)
 						#endif
 					}
 					else
-						package_status[package].rearming_timer = max(0, package_status[package].rearming_timer - get_delta_time());
+						package_status[package].rearming_timer = max(0.0f, package_status[package].rearming_timer - get_delta_time());
 					
 					if (!package_status[package].rearming_timer)
 					{

@@ -70,33 +70,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define fast_set_pixel(X,Y,COL) (*((USHORT *) (screen_data + (Y) * screen_pitch) + (X)) = (COL))
-#define fast_set_32bit_pixel(X,Y,COL) (*((ULONG *) (screen_data + (Y) * screen_pitch) + (X)) = (COL))
+#define fast_set_32bit_pixel(X,Y,COL) (*((screen_data + (Y) * screen_pitch) + (X)) = (COL))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define fast_set_clipped_pixel(X,Y,COL)	\
-{														\
-	int												\
-		x,												\
-		y;												\
-														\
-	x = (X);											\
-	y = (Y);											\
-														\
-	if													\
-	(													\
-		(x >= active_int_viewport.x_min) &&	\
-		(y >= active_int_viewport.y_min) &&	\
-		(x <= active_int_viewport.x_max) &&	\
-		(y <= active_int_viewport.y_max)		\
-	)													\
-	{													\
-		fast_set_pixel (x, y, (COL));  		\
-	}													\
-}
 
 #define fast_set_32bit_clipped_pixel(X,Y,COL)	\
 {														\
@@ -138,121 +117,12 @@ void draw_arc (const float x, const float y, const float r, unsigned part, const
       y_offset,
       decision;
 
-	unsigned char
+	unsigned
 		*screen_data;
 
 	ASSERT (active_screen);
 	ASSERT (get_screen_locked (active_screen));
 
-	if ( active_screen->pixel_length <= 16 )
-	{
-
-		USHORT
-			col;
-
-		convert_float_to_int (x, &x_centre);
-		convert_float_to_int (y, &y_centre);
-		convert_float_to_int (r, &radius);
-
-		//
-		// trivially reject
-		//
-
-		if ((x_min = x_centre - radius) > active_int_viewport.x_max) return;
-		if ((y_min = y_centre - radius) > active_int_viewport.y_max) return;
-		if ((x_max = x_centre + radius) < active_int_viewport.x_min) return;
-		if ((y_max = y_centre + radius) < active_int_viewport.y_min) return;
-
-		//
-		// get screen values
-		//
-
-		col = get_packed_colour (colour);
-
-		screen_data = get_screen_data (active_screen);
-
-		screen_pitch = get_screen_pitch (active_screen);
-
-		//
-		// draw circle
-		//
-
-		x_offset = 0;
-
-		y_offset = radius;
-
-		decision = 3 - (radius << 1);
-
-		if
-		(
-			(x_min >= active_int_viewport.x_min) &&
-			(y_min >= active_int_viewport.y_min) &&
-			(x_max <= active_int_viewport.x_max) &&
-			(y_max <= active_int_viewport.y_max)
-		)
-		{
-			//
-			// draw unclipped circle
-			//
-
-			while (x_offset <= y_offset)
-			{
-				if (part & ARC_BOTTOM_RIGHT)   fast_set_pixel (x_centre + x_offset, y_centre + y_offset, col);
-				if (part & ARC_TOP_RIGHT)      fast_set_pixel (x_centre + x_offset, y_centre - y_offset, col);
-				if (part & ARC_BOTTOM_LEFT)    fast_set_pixel (x_centre - x_offset, y_centre + y_offset, col);
-				if (part & ARC_TOP_LEFT)       fast_set_pixel (x_centre - x_offset, y_centre - y_offset, col);
-				if (part & ARC_RIGHT_DOWN)     fast_set_pixel (x_centre + y_offset, y_centre + x_offset, col);
-				if (part & ARC_RIGHT_UP)       fast_set_pixel (x_centre + y_offset, y_centre - x_offset, col);
-				if (part & ARC_LEFT_DOWN)      fast_set_pixel (x_centre - y_offset, y_centre + x_offset, col);
-				if (part & ARC_LEFT_UP)        fast_set_pixel (x_centre - y_offset, y_centre - x_offset, col);
-
-				if (decision < 0)
-				{
-					decision += (x_offset << 2) + 6;
-				}
-				else
-				{
-					decision += ((x_offset - y_offset) << 2) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-		else
-		{
-			//
-			// draw clipped circle
-			//
-
-			while (x_offset <= y_offset)
-			{
-				if (part & ARC_BOTTOM_RIGHT)   fast_set_clipped_pixel (x_centre + x_offset, y_centre + y_offset, col);
-				if (part & ARC_TOP_RIGHT)      fast_set_clipped_pixel (x_centre + x_offset, y_centre - y_offset, col);
-				if (part & ARC_BOTTOM_LEFT)    fast_set_clipped_pixel (x_centre - x_offset, y_centre + y_offset, col);
-				if (part & ARC_TOP_LEFT)       fast_set_clipped_pixel (x_centre - x_offset, y_centre - y_offset, col);
-				if (part & ARC_RIGHT_DOWN)     fast_set_clipped_pixel (x_centre + y_offset, y_centre + x_offset, col);
-				if (part & ARC_RIGHT_UP)       fast_set_clipped_pixel (x_centre + y_offset, y_centre - x_offset, col);
-				if (part & ARC_LEFT_DOWN)      fast_set_clipped_pixel (x_centre - y_offset, y_centre + x_offset, col);
-				if (part & ARC_LEFT_UP)        fast_set_clipped_pixel (x_centre - y_offset, y_centre - x_offset, col);
-
-				if (decision < 0)
-				{
-					decision += (x_offset << 2) + 6;
-				}
-				else
-				{
-					decision += ((x_offset - y_offset) << 2) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-	}
-	else
 	{
 
 		ULONG
@@ -380,121 +250,12 @@ void draw_circle (const float x, const float y, const float r, const rgb_colour 
       y_offset,
       decision;
 
-	unsigned char
+	unsigned int
 		*screen_data;
 
 	ASSERT (active_screen);
 	ASSERT (get_screen_locked (active_screen));
 
-	if ( active_screen->pixel_length <= 16 )
-	{
-
-		USHORT
-			col;
-
-		convert_float_to_int (x, &x_centre);
-		convert_float_to_int (y, &y_centre);
-		convert_float_to_int (r, &radius);
-
-		//
-		// trivially reject
-		//
-
-		if ((x_min = x_centre - radius) > active_int_viewport.x_max) return;
-		if ((y_min = y_centre - radius) > active_int_viewport.y_max) return;
-		if ((x_max = x_centre + radius) < active_int_viewport.x_min) return;
-		if ((y_max = y_centre + radius) < active_int_viewport.y_min) return;
-
-		//
-		// get screen values
-		//
-
-		col = get_packed_colour (colour);
-
-		screen_data = get_screen_data (active_screen);
-
-		screen_pitch = get_screen_pitch (active_screen);
-
-		//
-		// draw circle
-		//
-
-		x_offset = 0;
-
-		y_offset = radius;
-
-		decision = 3 - (radius << 1);
-
-		if
-		(
-			(x_min >= active_int_viewport.x_min) &&
-			(y_min >= active_int_viewport.y_min) &&
-			(x_max <= active_int_viewport.x_max) &&
-			(y_max <= active_int_viewport.y_max)
-		)
-		{
-			//
-			// draw unclipped circle
-			//
-
-			while (x_offset <= y_offset)
-			{
-				fast_set_pixel (x_centre + x_offset, y_centre + y_offset, col);
-				fast_set_pixel (x_centre + x_offset, y_centre - y_offset, col);
-				fast_set_pixel (x_centre - x_offset, y_centre + y_offset, col);
-				fast_set_pixel (x_centre - x_offset, y_centre - y_offset, col);
-				fast_set_pixel (x_centre + y_offset, y_centre + x_offset, col);
-				fast_set_pixel (x_centre + y_offset, y_centre - x_offset, col);
-				fast_set_pixel (x_centre - y_offset, y_centre + x_offset, col);
-				fast_set_pixel (x_centre - y_offset, y_centre - x_offset, col);
-
-				if (decision < 0)
-				{
-					decision += (x_offset << 2) + 6;
-				}
-				else
-				{
-					decision += ((x_offset - y_offset) << 2) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-		else
-		{
-			//
-			// draw clipped circle
-			//
-
-			while (x_offset <= y_offset)
-			{
-				fast_set_clipped_pixel (x_centre + x_offset, y_centre + y_offset, col);
-				fast_set_clipped_pixel (x_centre + x_offset, y_centre - y_offset, col);
-				fast_set_clipped_pixel (x_centre - x_offset, y_centre + y_offset, col);
-				fast_set_clipped_pixel (x_centre - x_offset, y_centre - y_offset, col);
-				fast_set_clipped_pixel (x_centre + y_offset, y_centre + x_offset, col);
-				fast_set_clipped_pixel (x_centre + y_offset, y_centre - x_offset, col);
-				fast_set_clipped_pixel (x_centre - y_offset, y_centre + x_offset, col);
-				fast_set_clipped_pixel (x_centre - y_offset, y_centre - x_offset, col);
-
-				if (decision < 0)
-				{
-					decision += (x_offset << 2) + 6;
-				}
-				else
-				{
-					decision += ((x_offset - y_offset) << 2) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-	}
-	else
 	{
 
 		ULONG
@@ -623,294 +384,12 @@ void draw_hatched_filled_circle ( const float x, const float y, const float r, c
 		y_offset,
 		decision;
 
-	unsigned char
+	unsigned int
 		*screen_data;
 
 	ASSERT ( active_screen );
 	ASSERT ( get_screen_locked ( active_screen ) );
 
-	if ( active_screen->pixel_length <= 16 )
-	{
-
-		USHORT
-			col;
-
-		convert_float_to_int ( x, &x_centre );
-		convert_float_to_int ( y, &y_centre );
-		convert_float_to_int ( r, &radius );
-
-		//
-		// trivially reject
-		//
-
-		if ( ( x_min = x_centre - radius ) > active_int_viewport.x_max ) return;
-		if ( ( y_min = y_centre - radius ) > active_int_viewport.y_max ) return;
-		if ( ( x_max = x_centre + radius ) < active_int_viewport.x_min ) return;
-		if ( ( y_max = y_centre + radius ) < active_int_viewport.y_min ) return;
-
-		//
-		// get screen values
-		//
-
-		col = get_packed_colour ( colour );
-
-		screen_data = get_screen_data ( active_screen );
-		screen_pitch = get_screen_pitch ( active_screen );
-
-		//
-		// draw circle
-		//
-
-		x_offset = 0;
-
-		y_offset = radius;
-
-		decision = 3 - (radius << 1);
-
-		if (	( x_min >= active_int_viewport.x_min ) && ( x_max <= active_int_viewport.x_max ) &&
-				( y_min >= active_int_viewport.y_min ) && ( y_max <= active_int_viewport.y_max ) )
-		{
-
-			//
-			// draw unclipped circle
-			//
-
-			while ( x_offset <= y_offset )
-			{
-
-				int
-					x,
-					xmin,
-					xmax,
-					y;
-
-				unsigned short int
-					*line_ptr;
-
-				xmin = x_centre - x_offset;
-
-				xmax = x_centre + x_offset;
-
-				y = y_centre + y_offset;
-
-				{
-
-					line_ptr = ( unsigned short int * ) ( screen_data + ( screen_pitch * y ) );
-
-					for ( x = xmin; x <= xmax; x++ )
-					{
-
-						if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-						{
-
-							line_ptr[x] = col;
-						}
-					}
-				}
-
-				y = y_centre - y_offset;
-
-				{
-
-					line_ptr = ( unsigned short int * ) ( screen_data + ( screen_pitch * y ) );
-
-					for ( x = xmin; x <= xmax; x++ )
-					{
-
-						if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-						{
-
-							line_ptr[x] = col;
-						}
-					}
-				}
-
-				xmin = x_centre - y_offset;
-
-				xmax = x_centre + y_offset;
-
-				y = y_centre + x_offset;
-
-				{
-
-					line_ptr = ( unsigned short int * ) ( screen_data + ( screen_pitch * y ) );
-
-					for ( x = xmin; x <= xmax; x++ )
-					{
-
-						if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-						{
-
-							line_ptr[x] = col;
-						}
-					}
-				}
-
-				y = y_centre - x_offset;
-
-				{
-
-					line_ptr = ( unsigned short int * ) ( screen_data + ( screen_pitch * y ) );
-
-					for ( x = xmin; x <= xmax; x++ )
-					{
-
-						if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-						{
-
-							line_ptr[x] = col;
-						}
-					}
-				}
-
-				if ( decision < 0 )
-				{
-
-					decision += ( x_offset << 2 ) + 6;
-				}
-				else
-				{
-
-					decision += ( ( x_offset - y_offset ) << 2 ) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-		else
-		{
-			//
-			// draw clipped circle
-			//
-
-			while ( x_offset <= y_offset )
-			{
-
-				int
-					x,
-					xmin,
-					xmax,
-					y;
-
-				USHORT
-					*line_ptr;
-
-				xmin = x_centre - x_offset;
-
-				xmax = x_centre + x_offset;
-
-				if ( !( ( xmax < active_int_viewport.x_min ) || ( xmin > active_int_viewport.x_max ) ) )
-				{
-
-					xmin = bound ( xmin, active_int_viewport.x_min, active_int_viewport.x_max );
-
-					xmax = bound ( xmax, active_int_viewport.x_min, active_int_viewport.x_max );
-
-					y = y_centre + y_offset;
-
-					if ( ( y >= active_int_viewport.y_min ) && ( y <= active_int_viewport.y_max ) )
-					{
-
-						line_ptr = ( USHORT * ) ( screen_data + ( screen_pitch * y ) );
-
-						for ( x = xmin; x <= xmax; x++ )
-						{
-
-							if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-							{
-
-								line_ptr[x] = col;
-							}
-						}
-					}
-
-					y = y_centre - y_offset;
-
-					if ( ( y >= active_int_viewport.y_min ) && ( y <= active_int_viewport.y_max ) )
-					{
-
-						line_ptr = ( USHORT * ) ( screen_data + ( screen_pitch * y ) );
-
-						for ( x = xmin; x <= xmax; x++ )
-						{
-
-							if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-							{
-
-								line_ptr[x] = col;
-							}
-						}
-					}
-				}
-
-				xmin = x_centre - y_offset;
-
-				xmax = x_centre + y_offset;
-
-				if ( !( ( xmax < active_int_viewport.x_min ) || ( xmin > active_int_viewport.x_max ) ) )
-				{
-
-					xmin = bound ( xmin, active_int_viewport.x_min, active_int_viewport.x_max );
-
-					xmax = bound ( xmax, active_int_viewport.x_min, active_int_viewport.x_max );
-
-					y = y_centre + x_offset;
-
-					if ( ( y >= active_int_viewport.y_min ) && ( y <= active_int_viewport.y_max ) )
-					{
-
-						line_ptr = ( USHORT * ) ( screen_data + ( screen_pitch * y ) );
-
-						for ( x = xmin; x <= xmax; x++ )
-						{
-
-							if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-							{
-
-								line_ptr[x] = col;
-							}
-						}
-					}
-
-					y = y_centre - x_offset;
-
-					if ( ( y >= active_int_viewport.y_min ) && ( y <= active_int_viewport.y_max ) )
-					{
-
-						line_ptr = ( USHORT * ) ( screen_data + ( screen_pitch * y ) );
-
-						for ( x = xmin; x <= xmax; x++ )
-						{
-
-							if ( ( 1 << ( 31 - ( x & 0x1f ) ) ) & graphics_hatch_pattern[ ( y & 0x1f ) ] )
-							{
-
-								line_ptr[x] = col;
-							}
-						}
-					}
-				}
-
-				if ( decision < 0 )
-				{
-
-					decision += ( x_offset << 2 ) + 6;
-				}
-				else
-				{
-
-					decision += ( ( x_offset - y_offset ) << 2 ) + 10;
-
-					y_offset--;
-				}
-
-				x_offset++;
-			}
-		}
-	}
-	else
 	{
 
 		ULONG
@@ -1428,7 +907,7 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 			if ( poly )
 			{
 
-				LPD3DTLVERTEX
+				LPTLVERTEX
 					vertices;
 
 				vertex

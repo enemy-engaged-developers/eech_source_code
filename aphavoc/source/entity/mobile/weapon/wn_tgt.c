@@ -352,13 +352,13 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					case VIEW_CATEGORY_COMBAT_HELICOPTERS:
 					{
 						if (weapon_database[weapon_type].guidance_type)
-							max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9 * weapon_database[weapon_type].max_range);
+							max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9f * weapon_database[weapon_type].max_range);
 						break;
 					}
 					case VIEW_CATEGORY_WARSHIPS:
 					case VIEW_CATEGORY_AIR_DEFENCE_UNITS:
 					{
-						max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9 * weapon_database[weapon_type].max_range);
+						max_weapon_range = max(weapon_database[weapon_type].effective_range, 0.9f * weapon_database[weapon_type].max_range);
 						break;
 					}
 				}
@@ -438,9 +438,9 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				else
 				{
 					if (weapon_database[weapon_type].circular_error_probable) // chance to get 50% hits in 1m radius circle from this distance, small advantage for unguided rockets
-						damage_multiplier = min (1, weapon_config_database[config_type][package].salvo_size / (weapon_database[weapon_type].circular_error_probable * target_range));
+						damage_multiplier = min (1.0f, weapon_config_database[config_type][package].salvo_size / (weapon_database[weapon_type].circular_error_probable * target_range));
 
-					total_damage_possible = min (damage_multiplier * damage_capability, target_damage_level);
+					total_damage_possible = min ((int)(damage_multiplier * damage_capability), target_damage_level);
 				}
 
 				if (weapon_database[weapon_type].rate_of_fire != FIRE_SINGLE_WEAPON)
@@ -500,7 +500,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					else
 					{
 						if (weapon_database[weapon_type].circular_error_probable) // chance to get 50% hits in 1m radius circle from this distance, small advantage for unguided rockets
-							damage_multiplier = min (1, weapon_config_database[config_type][package].salvo_size / (weapon_database[weapon_type].circular_error_probable * target_range));
+							damage_multiplier = min (1.0f, weapon_config_database[config_type][package].salvo_size / (weapon_database[weapon_type].circular_error_probable * target_range));
 
 						total_damage_possible = damage_multiplier * damage_capability;
 					}

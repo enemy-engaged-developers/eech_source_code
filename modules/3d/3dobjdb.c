@@ -869,6 +869,46 @@ static void add_animation_object (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, 
 	}
 }
 
+static void free_scene ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene )
+{
+	int
+		i;
+
+#define F(x) \
+	if ( scene->x ) \
+	{ \
+		safe_free ( scene->x ); \
+		scene->x = NULL; \
+	}
+
+	F ( texture_animations )
+	F ( approximations )
+	F ( cameras )
+	F ( scene_link_objects )
+	F ( sprite_lights )
+	F ( ambient_lights )
+	F ( distant_lights )
+	F ( keyframes )
+	F ( object_dissolve_keyframes )
+	F ( displacement_amplitude_keyframes )
+	F ( scene_sub_object_indices_array )
+	if ( scene->sub_objects )
+	{
+		for ( i = 0; i < scene->total_number_of_sub_objects; i++ )
+		{
+			F ( scene_sub_object_array[i].keyframes )
+			F ( scene_sub_object_array[i].object_dissolve_keyframes )
+		}
+	}
+	F( scene_sub_object_array );
+	if ( scene->sub_object_indices_table )
+	{
+		safe_free ( scene->sub_object_indices_table->sub_objects );
+	}
+	F ( sub_object_indices_table );
+#undef F
+}
+
 static void read_scene ( FILE *fp, int version )
 {
 	int
@@ -1348,22 +1388,6 @@ static void read_scene ( FILE *fp, int version )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// returns TRUE if all scenes between the parameters (including start and end index) have loaded successfully
-static int all_scenes_loaded_successfully(unsigned from_index, unsigned to_index)
-{
-	unsigned sceneno;
-
-	for (sceneno = from_index; sceneno <= to_index; sceneno++)
-		if (!objects_3d_scene_database[sceneno].succeeded)
-		{
-			debug_log("failed: %s", object_3d_scene_names[sceneno]);
-//			ASSERT(FALSE);
-			return FALSE;
-		}
-
-	return TRUE;
-}
-
 static void initialise_custom_scenes(const char* directory)
 {
 	/* 06FEB08 Casm Import of 3D scenes BEGIN */
@@ -1413,10 +1437,6 @@ static void initialise_custom_scenes(const char* directory)
 
 	_findclose ( handle );
 	/* 06FEB08 Casm Import of 3D scenes END */
-
-	/** check which custom scenes have loaded correctly **/
-	custom_3d_models.arneh_ah64d_cockpit = all_scenes_loaded_successfully(OBJECT_3D_ARNEH_AH64D_COCKPIT, OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
-	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_CANOPY_GLASS_DETAILS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1510,6 +1530,7 @@ void read_custom_scene ( const char* filename )
 	fread ( &version, sizeof ( int ), 1, fp );
 	if ( version <= -1 && version >= -2 )
 	{
+		free_scene ( &objects_3d_scene_database[sceneid] );
 		read_scene ( fp, version );
 	}
 	safe_fclose ( fp );
@@ -2360,28 +2381,9 @@ void deinitialise_3d_objects ( void )
 
 	deinitialise_3d_objects_in_d3d ();
 
-	for ( i = 0; i < total_number_of_objects; i++ )
+	for ( i = 0; i < OBJECT_3D_LAST; i++ )
 	{
-		if ( objects_3d_scene_database[i].texture_animations )
-			safe_free ( objects_3d_scene_database[i].texture_animations );
-		if ( objects_3d_scene_database[i].approximations )
-			safe_free ( objects_3d_scene_database[i].approximations );
-		if ( objects_3d_scene_database[i].cameras )
-			safe_free ( objects_3d_scene_database[i].cameras );
-		if ( objects_3d_scene_database[i].scene_link_objects )
-			safe_free ( objects_3d_scene_database[i].scene_link_objects );
-		if ( objects_3d_scene_database[i].sprite_lights )
-			safe_free ( objects_3d_scene_database[i].sprite_lights );
-		if ( objects_3d_scene_database[i].keyframes )
-			safe_free ( objects_3d_scene_database[i].keyframes );
-		if ( objects_3d_scene_database[i].object_dissolve_keyframes )
-			safe_free ( objects_3d_scene_database[i].object_dissolve_keyframes );
-		if ( objects_3d_scene_database[i].displacement_amplitude_keyframes )
-			safe_free ( objects_3d_scene_database[i].displacement_amplitude_keyframes );
-		if ( objects_3d_scene_database[i].scene_sub_object_indices_array )
-			safe_free ( objects_3d_scene_database[i].scene_sub_object_indices_array );
-		if ( objects_3d_scene_database[i].sub_objects )
-			safe_free ( objects_3d_scene_database[i].scene_sub_object_array );
+		free_scene ( &objects_3d_scene_database[i] );
 	}
 
 	//
@@ -2392,18 +2394,18 @@ void deinitialise_3d_objects ( void )
 
 	objects_3d_scene_database = NULL;
 
-	for ( i = 0; i < total_number_of_cameras; i++ )
-	{
-		if ( objects_3d_camera_database[i].keyframes )
-			safe_free ( objects_3d_camera_database[i].keyframes );
-	}
-
 	//
 	// Free up the cameras
 	//
 
 	if ( objects_3d_camera_database )
 	{
+
+		for ( i = 0; i < total_number_of_cameras; i++ )
+		{
+			if ( objects_3d_camera_database[i].keyframes )
+				safe_free ( objects_3d_camera_database[i].keyframes );
+		}
 
 		safe_free ( objects_3d_camera_database );
 
@@ -2508,9 +2510,34 @@ void deinitialise_3d_objects ( void )
 	// Now free the database array
 	//
 
+	for ( i = 0; i < total_number_of_objects; i++ )
+	{
+		if ( objects_3d_data[i].custom )
+		{
+			if ( objects_3d_data[i].points )
+				safe_free ( objects_3d_data[i].points );
+			if ( objects_3d_data[i].faces )
+				safe_free ( objects_3d_data[i].faces );
+			if ( objects_3d_data[i].point_normals )
+				safe_free ( objects_3d_data[i].point_normals );
+			if ( objects_3d_data[i].object_faces_point_plain_list )
+				safe_free ( objects_3d_data[i].object_faces_point_plain_list );
+			if ( objects_3d_data[i].object_face_normal_references )
+				safe_free ( objects_3d_data[i].object_face_normal_references );
+			if ( objects_3d_data[i].surface_texture_points )
+				safe_free ( objects_3d_data[i].surface_texture_points );
+			if ( objects_3d_data[i].surface_points )
+				safe_free ( objects_3d_data[i].surface_points );
+			if ( objects_3d_data[i].surface_point_normals )
+				safe_free ( objects_3d_data[i].surface_point_normals );
+		}
+	}
+
 	safe_free ( objects_3d_data );
 
 	objects_3d_data = NULL;
+
+	deinitialise_3d_objects_info ();
 
 	initialised_3d_objects = FALSE;
 }

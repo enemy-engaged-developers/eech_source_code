@@ -1,65 +1,65 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
-
+#if 0
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,11 +257,11 @@ void draw_zoomable_graphic ( zoomable_graphic *graphic, int x, int y, int screen
 
 		int
 			count;
-	
+
 		zoom_y_counter = zoom;
-	
+
 		graphic_y = y;
-	
+
 		for ( screen_y = screen_y_min; screen_y <= screen_y_max; screen_y++ )
 		{
 
@@ -269,43 +269,43 @@ void draw_zoomable_graphic ( zoomable_graphic *graphic, int x, int y, int screen
 				graphic_pixel_value;
 
 			screen_line_ptr = ( unsigned short int * ) ( screen_data + ( screen_y * screen_pitch ) );
-	
+
 			screen_line_ptr += screen_x_min;
 
 			graphic_data_line = &graphic->data[ ( graphic_y * graphic->width ) + x ];
-	
+
 			zoom_x_counter = zoom;
 
 			for ( count = ( screen_x_max - screen_x_min ); count >= 0; count-- )
 			{
-	
+
 				unsigned short int
 					pixel_value;
-	
+
 				graphic_pixel_value = *graphic_data_line;
-	
+
 				pixel_value = graphic->palette[graphic_pixel_value];
-	
+
 				zoom_x_counter--;
-	
+
 				if ( zoom_x_counter == 0 )
 				{
-	
+
 					graphic_data_line++;
 
 					zoom_x_counter = zoom;
 				}
-	
+
 				*screen_line_ptr++ = pixel_value;
 			}
 
 			zoom_y_counter--;
-	
+
 			if ( zoom_y_counter == 0 )
 			{
-	
+
 				graphic_y += graphic_y_increment;
-	
+
 				zoom_y_counter = zoom;
 			}
 		}
@@ -316,40 +316,40 @@ void draw_zoomable_graphic ( zoomable_graphic *graphic, int x, int y, int screen
 		zoom = -zoom;
 
 		graphic_y = y;
-	
+
 		for ( screen_y = screen_y_min; screen_y <= screen_y_max; screen_y++ )
 		{
-	
+
 			screen_line_ptr = ( unsigned short int * ) ( screen_data + ( screen_y * screen_pitch ) );
-	
+
 			screen_line_ptr += screen_x_min;
-	
+
 			graphic_data_line = &graphic->data[ ( graphic_y * graphic->width ) ];
-	
+
 			graphic_x = x;
-	
+
 			for ( screen_x = screen_x_min; screen_x <= screen_x_max; screen_x++ )
 			{
-	
+
 				unsigned char
 					graphic_pixel_value;
-	
+
 				unsigned short int
 					screen_pixel_value;
-	
+
 				//
 				// Plot the pixel
 				//
-	
+
 				graphic_pixel_value = graphic_data_line[graphic_x];	//graphic->data[ ( ( graphic_y * graphic->width ) + graphic_x ) ];
-	
+
 				screen_pixel_value = graphic->palette[graphic_pixel_value];
-	
+
 				*screen_line_ptr++ = screen_pixel_value;
 
 				graphic_x += zoom;
 			}
-	
+
 			graphic_y += zoom * graphic_y_increment;
 
 			graphic_y = bound ( graphic_y, 0, ( graphic->height - 1 ) );
@@ -391,4 +391,4 @@ void unload_zoomable_graphic ( zoomable_graphic *graphic )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#endif

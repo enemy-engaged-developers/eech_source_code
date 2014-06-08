@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -73,8 +73,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define SAVE_THUMBNAIL FALSE
 
 struct TGA_IMAGE
 {
@@ -475,7 +473,7 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 		*tga_image,
 		*image_ptr;
 
-	unsigned char
+	unsigned int
 		*source_ptr,
 		*source_line;
 
@@ -495,19 +493,15 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 
 	for ( loop_y = 0; loop_y < height; loop_y++ )
 	{
-        // Casm 18JUN05 Fixed to allow both 16- and 32- bit screns to be saved
-		unsigned char
+		unsigned int
 			*source_line_data;
-		int pixel_size;
 
-		source_line_data = ( unsigned char * ) source_line;
-		pixel_size = command_line_display_bpp == 16 ? 2 : 4;
+		source_line_data = source_line;
 
 		for ( loop_x = 0; loop_x < width; loop_x ++ )
 		{
-			colour = get_rgb_colour_value ( * ( unsigned long * ) source_line_data );
-
-			source_line_data += pixel_size;
+			colour.colour = *source_line_data;
+			source_line_data++;
 
 			*image_ptr ++ = colour.b;
 			*image_ptr ++ = colour.g;
@@ -528,156 +522,57 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 		tga.id_field_length = 0;
 		tga.colour_map_type = 0;
 		tga.image_type_code = 2;
-	
+
 		tga.colour_map_origin = 0;
 		tga.colour_map_length = 0;
-	
+
 		tga.colour_map_entry_size = 24;
-	
+
 		tga.x_origin = 0;
 		tga.y_origin = 0;
 		tga.width = width;
 		tga.height = height;
-	
+
 		tga.image_pixel_size = 24;
 		tga.image_descriptor = 0x20;
-	
+
 		// number of characters in identification field
-	
+
 		fwrite (&tga.id_field_length, 1, 1, fp);
-	
+
 		// colour map type
-	
+
 		fwrite (&tga.colour_map_type, 1, 1, fp);
-	
+
 		// image type code
-	
+
 		fwrite (&tga.image_type_code, 1, 1, fp);
-	
+
 		// colour map specification
-	
+
 		fwrite (&tga.colour_map_origin, 2, 1, fp);
-	
+
 		fwrite (&tga.colour_map_length, 2, 1, fp);
-	
+
 		fwrite (&tga.colour_map_entry_size, 1, 1, fp);
-	
+
 		// image specification
-	
+
 		fwrite (&tga.x_origin, 2, 1, fp);
-	
+
 		fwrite (&tga.y_origin, 2, 1, fp);
-	
+
 		fwrite (&width, 2, 1, fp);
-	
+
 		fwrite (&height, 2, 1, fp);
-	
+
 		fwrite (&tga.image_pixel_size, 1, 1, fp);
-	
+
 		fwrite (&tga.image_descriptor, 1, 1, fp);
 
 		fwrite (tga_image, width * 3, height, fp);
-	
+
 		fclose (fp);
-	}
-
-	if ( ( width == 640 ) && ( height == 480 ) )
-	{
-
-		//
-		// Now mess the data around to form a 160x120 image
-		//
-		
-		source_ptr = tga_image;
-	
-		image_ptr = image;
-	
-		for ( loop_y = 0; loop_y < 120; loop_y ++ )
-		{
-	
-			for ( loop_x = 0; loop_x < 160; loop_x ++ )
-			{
-	
-				*image_ptr++ = *source_ptr++;
-				*image_ptr++ = *source_ptr++;
-				*image_ptr++ = *source_ptr++;
-	
-				source_ptr += ( 3 * 3 );
-			}
-	
-			source_ptr += ( ( 640 * 3 ) * 3 );
-		}
-	
-		//
-		// Now, save the thumbnail as well.
-		//
-	
-#if SAVE_THUMBNAIL
-		
-		if ( ( fp = fopen ( thumbnail_filename, "wb" ) ) == NULL )
-		{
-	
-			debug_log ( "Unable to create thumbnail file %s during save_tga_screen_with_thumbnail", thumbnail_filename );
-		}
-		else
-		{
-		
-			tga.id_field_length = 0;
-			tga.colour_map_type = 0;
-			tga.image_type_code = 2;
-		
-			tga.colour_map_origin = 0;
-			tga.colour_map_length = 0;
-		
-			tga.colour_map_entry_size = 24;
-		
-			tga.x_origin = 0;
-			tga.y_origin = 0;
-			tga.width = 160;
-			tga.height = 120;
-		
-			tga.image_pixel_size = 24;
-			tga.image_descriptor = 0x20;
-		
-			// number of characters in identification field
-		
-			fwrite (&tga.id_field_length, 1, 1, fp);
-		
-			// colour map type
-		
-			fwrite (&tga.colour_map_type, 1, 1, fp);
-		
-			// image type code
-		
-			fwrite (&tga.image_type_code, 1, 1, fp);
-		
-			// colour map specification
-		
-			fwrite (&tga.colour_map_origin, 2, 1, fp);
-		
-			fwrite (&tga.colour_map_length, 2, 1, fp);
-		
-			fwrite (&tga.colour_map_entry_size, 1, 1, fp);
-		
-			// image specification
-		
-			fwrite (&tga.x_origin, 2, 1, fp);
-		
-			fwrite (&tga.y_origin, 2, 1, fp);
-		
-			fwrite (&tga.width, 2, 1, fp);
-		
-			fwrite (&tga.height, 2, 1, fp);
-		
-			fwrite (&tga.image_pixel_size, 1, 1, fp);
-		
-			fwrite (&tga.image_descriptor, 1, 1, fp);
-		
-			fwrite (&image, ( 160 * 120 * 3 ), 1, fp);
-		
-			fclose (fp);
-		}
-#endif
 	}
 
 	if ( tga_image )
@@ -818,85 +713,85 @@ void save_tga_greyscale_image (const char *filename, int width, int height, cons
 	}
 	else
 	{
-	
+
 		tga.id_field_length = 0;
 		tga.colour_map_type = 1;
 		tga.image_type_code = 1;
-	
+
 		tga.colour_map_origin = 0;
 		tga.colour_map_length = 256;
-	
+
 		tga.colour_map_entry_size = 24;
-	
+
 		tga.x_origin = 0;
 		tga.y_origin = 0;
 		tga.width = width;
 		tga.height = height;
-	
+
 		tga.image_pixel_size = 8;
 		tga.image_descriptor = 0;
-	
+
 		// number of characters in identification field
-	
+
 		fwrite (&tga.id_field_length, 1, 1, fp);
-	
+
 		// colour map type
-	
+
 		fwrite (&tga.colour_map_type, 1, 1, fp);
-	
+
 		// image type code
-	
+
 		fwrite (&tga.image_type_code, 1, 1, fp);
-	
+
 		// colour map specification
-	
+
 		fwrite (&tga.colour_map_origin, 2, 1, fp);
-	
+
 		fwrite (&tga.colour_map_length, 2, 1, fp);
-	
+
 		fwrite (&tga.colour_map_entry_size, 1, 1, fp);
-	
+
 		// image specification
-	
+
 		fwrite (&tga.x_origin, 2, 1, fp);
-	
+
 		fwrite (&tga.y_origin, 2, 1, fp);
-	
+
 		fwrite (&tga.width, 2, 1, fp);
-	
+
 		fwrite (&tga.height, 2, 1, fp);
-	
+
 		fwrite (&tga.image_pixel_size, 1, 1, fp);
-	
+
 		fwrite (&tga.image_descriptor, 1, 1, fp);
-	
+
 		//
 		// Palette
 		//
-	
+
 		for (count = 0; count < 256; count ++)
 		{
-	
+
 			unsigned char
 				value;
-	
+
 			value = count;
-	
+
 			fwrite (&value, 1, 1, fp);
 			fwrite (&value, 1, 1, fp);
 			fwrite (&value, 1, 1, fp);
 		}
-	
+
 		//
 		// Image data
 		//
-	
+
 		for (y = (height - 1); y >= 0; y --)
 		{
-	
+
 			fwrite (&data [y * width], width, 1, fp);
 		}
-	
+
 		fclose (fp);
 	}
 }

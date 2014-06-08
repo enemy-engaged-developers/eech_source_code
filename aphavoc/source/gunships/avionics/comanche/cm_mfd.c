@@ -328,6 +328,7 @@ static screen
 	*small_co_pilot_rhs_side_mfd_texture_screen,
 	*small_co_pilot_text_display_texture_screen,
 	*eo_3d_texture_screen,
+	*eo_3d_texture_screen_over,
 	*full_mfd_texture_screen;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -743,36 +744,6 @@ static void transform_mfd_screen_co_ords_to_mfd_texture_co_ords (float *i, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// LAYOUT GRID
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_layout_grid (void)
-{
-	float
-		x,
-		y;
-
-	if (display_mfd_layout_grid)
-	{
-		for (x = -1.0; x <= 1.0; x += 0.1)
-		{
-			draw_2d_line (x, -1.0, x, 1.0, sys_col_red);
-		}
-
-		for (y = -1.0; y <= 1.0; y += 0.1)
-		{
-			draw_2d_line (-1.0, y, 1.0, y, sys_col_red);
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // DAMAGED
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -960,7 +931,7 @@ static void draw_airspeed_scale (void)
 	draw_2d_line (x7, y_centre + scale_height_ratio, x7, y_centre - scale_height_ratio, MFD_COLOUR1);
 
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_height_ratio));
-	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_height_ratio)) - 0.001;
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_height_ratio));
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
 
 	//
@@ -1198,7 +1169,7 @@ static void draw_barometric_altitude_scale (void)
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
 
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom));
-	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom)) - 0.001;
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom));
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
 
@@ -1356,7 +1327,7 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 
 	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * heading_width_ratio, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * heading_width_ratio, MFD_WINDOW_Y_MAX);
 	mfd_vp_x_min = u - (mfd_viewport_size * (heading_width_ratio * 0.5));
-	mfd_vp_x_max = u + (mfd_viewport_size * (heading_width_ratio * 0.5)) - 0.001;
+	mfd_vp_x_max = u + (mfd_viewport_size * (heading_width_ratio * 0.5));
 	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
 
 	//
@@ -3797,7 +3768,6 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 		if (target || tracking_point)
 		{
-			if (!((!d3d_can_render_to_texture) && (!draw_large_mfd)))
 			{
 				if (target)
 					get_local_entity_target_point (target, &target_point);
@@ -5056,7 +5026,7 @@ static void draw_heading_scale_tsd (float heading, int draw_command_heading)
 
 	mfd_vp_x_min = u - (mfd_viewport_size * (heading_width_ratio * 0.5));
 
-	mfd_vp_x_max = u + (mfd_viewport_size * (heading_width_ratio * 0.5)) - 0.001;
+	mfd_vp_x_max = u + (mfd_viewport_size * (heading_width_ratio * 0.5));
 
 	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
 
@@ -10706,7 +10676,7 @@ static void draw_pitch_ladder (void)
 	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * size, MFD_WINDOW_Y_MIN * size, MFD_WINDOW_X_MAX * size, MFD_WINDOW_Y_MAX * size);
 
 	vp_size = mfd_viewport_size * size * 0.5;
-	set_2d_viewport (mfd_env, u - (vp_size * 1.5), v - vp_size, u + (vp_size * 1.5) - 0.001, v + (2.0 * vp_size) - 0.001);
+	set_2d_viewport (mfd_env, u - (vp_size * 1.5), v - vp_size, u + (vp_size * 1.5), v + (2.0 * vp_size));
 
 	upper_edge = 0.5 * size;
 	left_edge = -(size * 0.75);
@@ -12135,7 +12105,7 @@ static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes* mode, co
 
 	ASSERT (comanche_main_mfd_location_valid (location));
 
-	if ((get_undamaged_eo_display_mode (*mode) && d3d_can_render_to_texture))
+	if (get_undamaged_eo_display_mode (*mode))
 	{
 		return;
 	}
@@ -12148,7 +12118,7 @@ static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes* mode, co
 	{
 		set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, MFD_BACKGROUND_COLOUR);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		if (*mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 			*mode = COMANCHE_MAIN_MFD_MODE_GROUND_RADAR;
@@ -12277,8 +12247,6 @@ static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes* mode, co
 			}
 		}
 
-		flush_screen_texture_graphics (mfd_screen);
-
 		unlock_screen (mfd_screen);
 	}
 
@@ -12305,7 +12273,7 @@ static void draw_side_mfd (screen *mfd_screen, comanche_side_mfd_modes mode, com
 	{
 		set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, MFD_BACKGROUND_COLOUR);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		switch (mode)
 		{
@@ -12365,8 +12333,6 @@ static void draw_side_mfd (screen *mfd_screen, comanche_side_mfd_modes mode, com
 			}
 		}
 
-		flush_screen_texture_graphics (mfd_screen);
-
 		unlock_screen (mfd_screen);
 	}
 
@@ -12387,7 +12353,7 @@ static void draw_text_display (screen *text_screen)
 	{
 		set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, TEXT_BACKGROUND_COLOUR);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		set_mono_font_colour (TEXT_COLOUR1);
 
@@ -12423,8 +12389,6 @@ static void draw_text_display (screen *text_screen)
 
 			print_mono_font_string (text_display_line2);
 		}
-
-		flush_screen_texture_graphics (text_screen);
 
 		unlock_screen (text_screen);
 	}
@@ -12541,29 +12505,29 @@ void initialise_comanche_mfd (void)
 	mfd_env = create_2d_environment ();
 
 	////////////////////////////////////////
-	large_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	large_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
-	large_co_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	large_co_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
-	small_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_pilot_text_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	small_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_pilot_text_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
-	small_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_text_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	small_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_text_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
 	full_mfd_texture_screen = create_system_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -12853,6 +12817,7 @@ void draw_comanche_mfd (void)
 		co_pilot_text_display_texture_screen = large_co_pilot_text_display_texture_screen;
 
 		eo_3d_texture_screen = large_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
 	}
 	else
 	{
@@ -12871,6 +12836,7 @@ void draw_comanche_mfd (void)
 		co_pilot_text_display_texture_screen = small_co_pilot_text_display_texture_screen;
 
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
 	}
 
 	if (get_crew_role () == CREW_ROLE_PILOT)
@@ -13038,17 +13004,17 @@ void draw_comanche_mfd (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = mfd_viewport_size - 0.001;
+	mfd_viewport_x_max = mfd_viewport_size;
 
-	mfd_viewport_y_max = mfd_viewport_size - 0.001;
+	mfd_viewport_y_max = mfd_viewport_size;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
 	mfd_screen_x_min = 0.0;
 	mfd_screen_y_min = 0.0;
 
-	mfd_screen_x_max = mfd_viewport_size - 0.001;
-	mfd_screen_y_max = mfd_viewport_size - 0.001;
+	mfd_screen_x_max = mfd_viewport_size;
+	mfd_screen_y_max = mfd_viewport_size;
 
 	mfd_screen_width = mfd_viewport_size;
 	mfd_screen_height = mfd_viewport_size;
@@ -13066,7 +13032,6 @@ void draw_comanche_mfd (void)
 		int
 			draw_eo_display;
 
-		if (d3d_can_render_to_texture)
 		{
 			ASSERT (eo_3d_texture_screen);
 
@@ -13130,11 +13095,11 @@ void draw_comanche_mfd (void)
 
 				draw_main_display = TRUE;
 
-				set_active_screen (eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen_over);
 
-				if (lock_screen (eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen_over))
 				{
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					switch (get_main_mfd_mode_for_eo_sensor ())
 					{
@@ -13158,9 +13123,9 @@ void draw_comanche_mfd (void)
 						}
 					}
 
-					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen_over);
 
-					unlock_screen (eo_3d_texture_screen);
+					eo_3d_texture_merge (eo_3d_texture_screen, eo_3d_texture_screen_over);
 				}
 
 				set_active_screen (video_screen);
@@ -13251,6 +13216,7 @@ void set_comanche_text_display_text (char *s1, char *s2)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_comanche_full_screen_display (void)
 {
 	comanche_main_mfd_modes
@@ -13376,9 +13342,6 @@ void draw_comanche_full_screen_display (void)
 	mfd_screen_width = mfd_screen_x_max - mfd_screen_x_min;
 	mfd_screen_height = mfd_screen_y_max - mfd_screen_y_min;
 
-	mfd_screen_x_max -= 0.001;
-	mfd_screen_y_max -= 0.001;
-
 	mfd_screen_x_scale = 256.0 / mfd_screen_width;
 	mfd_screen_y_scale = 256.0 / mfd_screen_height;
 
@@ -13428,9 +13391,9 @@ void draw_comanche_full_screen_display (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE;
 
-	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
@@ -13453,7 +13416,7 @@ void draw_comanche_full_screen_display (void)
 
       set_block (0, 0, LARGE_MFD_VIEWPORT_SIZE - 1, LARGE_MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		switch (mode)
 		{
@@ -13478,8 +13441,6 @@ void draw_comanche_full_screen_display (void)
 		}
 
 		MFD_COLOUR1 = store_mfd_colour;
-
-		flush_screen_texture_graphics (full_mfd_texture_screen);
 
 		unlock_screen (full_mfd_texture_screen);
 	}
@@ -13570,6 +13531,7 @@ void draw_comanche_full_screen_display (void)
 		end_3d_scene ();
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13737,9 +13699,7 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
-
-				flush_screen_texture_graphics (mfd_screen);
+				draw_mfd_layout_grid ();
 
 				unlock_screen (mfd_screen);
 			}
@@ -13760,11 +13720,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_damaged_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13785,11 +13743,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_ground_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13810,11 +13766,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_air_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13842,11 +13796,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_flir_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13876,11 +13828,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dtv_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13910,11 +13860,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_dvo_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13942,7 +13890,7 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				store_contour_colour	= MFD_CONTOUR_COLOUR;
 				store_river_colour	= MFD_RIVER_COLOUR;
@@ -13957,8 +13905,6 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 				MFD_CONTOUR_COLOUR	= store_contour_colour;
 				MFD_RIVER_COLOUR		= store_river_colour;
 				MFD_ROAD_COLOUR		= store_road_colour;
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -13979,11 +13925,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_aircraft_survivability_equipment_display_mfd (location);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14004,11 +13948,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_weapon_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14029,11 +13971,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_system_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14054,11 +13994,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_engine_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14082,7 +14020,7 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				store_background_colour = MFD_BACKGROUND_COLOUR;
 
@@ -14091,8 +14029,6 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 				draw_flight_display_mfd ();
 
 				MFD_BACKGROUND_COLOUR = store_background_colour;
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14113,11 +14049,9 @@ static void draw_overlaid_main_mfd (screen *mfd_screen, comanche_main_mfd_modes 
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_mission_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -14281,6 +14215,7 @@ void draw_overlaid_comanche_mfd (void)
       co_pilot_text_display_texture_screen = large_co_pilot_text_display_texture_screen;
 
       eo_3d_texture_screen = large_eo_3d_texture_screen;
+      eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
    }
 /*   else
    {
@@ -14299,6 +14234,7 @@ void draw_overlaid_comanche_mfd (void)
       co_pilot_text_display_texture_screen = small_co_pilot_text_display_texture_screen;
 
       eo_3d_texture_screen = small_eo_3d_texture_screen;
+      eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
    }
 */
 	set_system_texture_screen (pilot_lhs_main_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
@@ -14367,9 +14303,9 @@ void draw_overlaid_comanche_mfd (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = mfd_viewport_size - 0.001;
+	mfd_viewport_x_max = mfd_viewport_size;
 
-	mfd_viewport_y_max = mfd_viewport_size - 0.001;
+	mfd_viewport_y_max = mfd_viewport_size;
 
 	////////////////////////////////////////
 	//

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -140,15 +140,11 @@ ui_object
 static ui_object
 	*russian_medal_objects [NUMBER_OF_MEDAL_GRAPHICS],
 	*us_medal_objects [NUMBER_OF_MEDAL_GRAPHICS];
-	
-texture_graphic
-	*medals_screen_texture,
-	*medal_graphics [NUMBER_OF_MEDAL_GRAPHICS];
 
 // info arrays: Medal title, info text, hilite x & y offset, hilite x & y size
 
 player_medal_info
-	us_medal_info_array [NUM_MEDAL_TYPES] = 
+	us_medal_info_array [NUM_MEDAL_TYPES] =
 							{	{	"",	"",	0.000, 0.000, 0.000, 0.000}, //MEDAL_TYPE_NONE,
 								{	"",	"",	0.617, 0.000, 0.111, 0.319}, //MEDAL_SAUDI,
 								{	"",	"",	0.743, 0.026, 0.108, 0.345}, //MEDAL_LEBANON,
@@ -262,7 +258,7 @@ player_medal_criteria
 			0,										// multiplier
 		},
 	};
-								
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,7 +292,7 @@ void set_medal_states (ui_object *medal_objects[])
 	int
 		*medals,
 		i;
-		
+
 	player_log_type
 		*player;
 
@@ -326,7 +322,7 @@ void set_medal_states (ui_object *medal_objects[])
 	{
 		set_ui_object_drawable (medal_objects [MEDAL_DISTINGUISHED_SERVICE + 2], TRUE);
 	}
-	
+
 	if (medals [MEDAL_MEDAL_OF_HONOUR])
 	{
 		set_ui_object_drawable (medal_objects [MEDAL_MEDAL_OF_HONOUR + 2], FALSE);
@@ -346,44 +342,28 @@ void notify_medals_screen (ui_object *obj)
 
 	int
 		i;
+	texture_graphic
+		*medals_screen_texture;
 
 	if ( get_ui_object_drawable (obj) )
 	{
 
-		if (medals_screen_texture)
-		{
-			for (i = 1; i < NUMBER_OF_MEDAL_GRAPHICS; i++)
-			{
-				destroy_texture_graphic (medal_graphics [i]);
-	
-				medal_graphics [i] = NULL;
-			}
-	
-			destroy_texture_graphic (medals_screen_texture);
-
-			medals_screen_texture = NULL;
-		}
-
 		if (player_log_current_side == ENTITY_SIDE_BLUE_FORCE)
-		{	
+		{
 			set_ui_object_text (medals_title_text, get_trans("US"));
 
-			medals_screen_texture = create_texture_graphic ( "graphics\\ui\\cohokum\\medalsUS.psd" );
+			medals_screen_texture = create_texture_graphic ( "graphics\\ui\\cohokum\\medalsUS.psd", 0 );
 
 			set_ui_object_drawable (russian_area, FALSE);
-			
+
 			set_ui_object_drawable (us_area, TRUE);
-			
+
 			// create medal texture graphic objects, except MEDAL_TYPE_NONE
 			for (i = 1; i < NUMBER_OF_MEDAL_GRAPHICS; i++)
 			{
-				medal_graphics [i] = create_texture_graphic (us_medal_graphic_array[i].name);
-
-				set_ui_object_texture_graphic (us_medal_objects [i], medal_graphics [i]);
+				set_ui_object_texture_graphic (us_medal_objects [i], create_texture_graphic (us_medal_graphic_array[i].name, 0));
 			}
 
-			medal_graphics [0] = NULL;
-			
 			// set medal states
 			set_medal_states (us_medal_objects);
 		}
@@ -391,50 +371,27 @@ void notify_medals_screen (ui_object *obj)
 		{
 			set_ui_object_text (medals_title_text, get_trans("Russian"));
 
-			medals_screen_texture = create_texture_graphic ( "graphics\\ui\\cohokum\\medalsSV.psd" );
+			medals_screen_texture = create_texture_graphic ( "graphics\\ui\\cohokum\\medalsSV.psd", 0 );
 
 			set_ui_object_drawable (russian_area, TRUE);
-			
+
 			set_ui_object_drawable (us_area, FALSE);
 
 			// create medal texture graphic objects, except MEDAL_TYPE_NONE
 			for (i = 1; i < NUMBER_OF_MEDAL_GRAPHICS; i++)
-			{			
-				medal_graphics [i] = create_texture_graphic (russian_medal_graphic_array[i].name);
-
-				set_ui_object_texture_graphic (russian_medal_objects [i], medal_graphics [i]);
+			{
+				set_ui_object_texture_graphic (russian_medal_objects [i], create_texture_graphic (russian_medal_graphic_array[i].name, 0));
 			}
-			
-			medal_graphics [0] = NULL;
-			
+
 			// set medal states
-			set_medal_states (russian_medal_objects);	
+			set_medal_states (russian_medal_objects);
 		}
 
 		set_ui_object_texture_graphic (player_medals_screen, medals_screen_texture);
-	
+
 		recursively_set_object_time (player_medals_screen, MEDALS_AREA_FADE_TIME, MEDALS_AREA_OFFSET_TIME);
 
 		reset_time_values (player_medals_screen);
-
-		blit_front_buffer_to_render_buffer ();
-	}
-	else
-	{
-
-		if (medals_screen_texture )
-		{	
-			for (i = 1; i < NUMBER_OF_MEDAL_GRAPHICS; i++)
-			{
-				destroy_texture_graphic (medal_graphics [i]);
-	
-				medal_graphics [i] = NULL;
-			}
-	
-			destroy_texture_graphic (medals_screen_texture);
-
-			medals_screen_texture = NULL;
-		}
 	}
 
 	#if DEBUG_MODULE
@@ -586,7 +543,7 @@ void define_medals_page_objects (void)
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-			
+
 	// special case - reduce option bdrop width so it doesn't overlap the medal shadow on russian page...
 
 	set_text_option_backdrop_object (option_bdrop, temp_obj);
@@ -606,7 +563,7 @@ void define_us_medal_objects (void)
 		i;
 
 	// don't bother with text for object MEDAL_TYPE_NONE
-	
+
 	us_medal_info_array[MEDAL_SAUDI].name = get_trans ("Medal Saudi");
 	us_medal_info_array[MEDAL_SAUDI].info = get_trans ("Medal Campaign");
 
@@ -677,7 +634,7 @@ void define_us_medal_objects (void)
 	}
 
 	// create highlight areas
-	
+
 	for (i = MEDAL_TYPE_NONE; i < NUM_MEDAL_TYPES; i++)
 	{
 		create_ui_object
@@ -697,7 +654,7 @@ void define_us_medal_objects (void)
 					UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 #endif
 					UI_ATTR_END
-	
+
 				);
 	}
 
@@ -711,7 +668,7 @@ void define_russian_medal_objects (void)
 {
 	int
 		i;
-	
+
 	// don't bother with text for object MEDAL_TYPE_NONE
 
 	russian_medal_info_array [MEDAL_LEBANON].name = get_trans ("Medal SV Lebanon");
@@ -782,7 +739,7 @@ void define_russian_medal_objects (void)
 	}
 
 	// create highlight areas
-	
+
 	for (i = MEDAL_TYPE_NONE; i < NUM_MEDAL_TYPES; i++)
 	{
 		create_ui_object
@@ -802,7 +759,7 @@ void define_russian_medal_objects (void)
 					UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 #endif
 					UI_ATTR_END
-	
+
 				);
 	}
 
@@ -821,26 +778,34 @@ void notify_medals_screen_exit_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (player_medals_screen, TRUE);
+#endif
 
 		pop_ui_screen (SCREEN_POP_ACTUAL);
 	}
-	else 
+	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (player_medals_screen, TRUE);
+#endif
 	}
 
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -862,7 +827,7 @@ void highlight_us_medal_info (ui_object *obj, void *arg)
 
 	player_log_type
 		*player;
-		
+
 	char
 		name_text [128],
 		info_text [128];
@@ -874,7 +839,7 @@ void highlight_us_medal_info (ui_object *obj, void *arg)
 	player = get_current_player_log ();
 
 	medal_number = get_ui_object_item_number (obj);
-	
+
 	medal_count = player->side_log [player_log_current_side].medals [medal_number];
 
 	if (	(medal_number != MEDAL_MASTER_AVIATOR) &&
@@ -914,7 +879,7 @@ void highlight_russian_medal_info (ui_object *obj, void *arg)
 
 	player_log_type
 		*player;
-		
+
 	char
 		name_text [128],
 		info_text [128];
@@ -974,7 +939,7 @@ void notify_award_clicked_medal (ui_object *obj, void *arg)
 		*medals,
 		medal_number,
 		graphic_number;
-		
+
 	player = get_current_player_log ();
 
 	medals = player->side_log[player_log_current_side].medals;
@@ -990,19 +955,19 @@ void notify_award_clicked_medal (ui_object *obj, void *arg)
 	{
 		graphic_number = 13;
 	}
-	
+
 	if (player_log_current_side == ENTITY_SIDE_RED_FORCE)
 	{
 		if (medals [medal_number] == 0)
 		{
 			set_ui_object_drawable (us_medal_objects [graphic_number], TRUE);
-	
+
 			medals [medal_number] = 1;
 		}
 		else
 		{
 			set_ui_object_drawable (us_medal_objects [graphic_number], FALSE);
-	
+
 			medals [medal_number] = 0;
 		}
 	}
@@ -1011,13 +976,13 @@ void notify_award_clicked_medal (ui_object *obj, void *arg)
 		if (medals [medal_number] == 0)
 		{
 			set_ui_object_drawable (russian_medal_objects [graphic_number], TRUE);
-	
+
 			medals [medal_number] = 1;
 		}
 		else
 		{
 			set_ui_object_drawable (russian_medal_objects [graphic_number], FALSE);
-	
+
 			medals [medal_number] = 0;
 		}
 	}
@@ -1045,7 +1010,7 @@ int award_aviator_wings (int side)
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	award_medal = 1;
-	
+
 	player = get_current_player_log ();
 
 	medals = player->side_log[side].medals;
@@ -1080,7 +1045,7 @@ int award_aviator_wings (int side)
 		else
 		{
 			medals [medal_type] = 1;
-	
+
 			return medal_type;
 		}
 	}
@@ -1096,19 +1061,19 @@ int award_aviator_wings (int side)
 
 void award_campaign_medal (int side, int medal)
 {
-	
+
 	player_log_type
 		*player;
 
 	int
 		*medals;
-		
+
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	player = get_current_player_log ();
-	
+
 	medals = player->side_log [side].medals;
-	
+
 	if ((medal > MEDAL_TYPE_NONE) && (medal <= MEDAL_TAIWAN))
 	{
 		medals [medal] += 1;
@@ -1146,7 +1111,7 @@ int query_award_medal (player_log_type *log, int *medals, player_medal_criteria 
 	//
 	// ensure players rank is high enough
 	//
-	
+
 	if (criteria->pilot_rank > log->side_log[side].rank)
 	{
 		return FALSE;
@@ -1204,7 +1169,7 @@ int query_award_medal (player_log_type *log, int *medals, player_medal_criteria 
 		}
 	}
 
-	return TRUE;	
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1233,7 +1198,7 @@ int award_valour_medal (int side, int points)
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	i = award = 0;
-	
+
 	player = get_current_player_log ();
 
 	medals = player->side_log[side].medals;
@@ -1252,9 +1217,9 @@ int award_valour_medal (int side, int points)
 		if (!award)
 		{
 			i++;
-	
+
 			criteria++;
-	
+
 			medal_type = (medal_types)((int)medal_type - 1);
 		}
 	}
@@ -1310,20 +1275,20 @@ int award_purple_heart_medal (int side)
 		if (damage)
 		{
 			medals [MEDAL_PURPLE_HEART] += 1;
-	
+
 			#if DEBUG_MODULE
 
 			debug_filtered_log ("Awarded Purple Heart Medal");
 
 			#endif
-	
+
 			return MEDAL_PURPLE_HEART;
 		}
 	}
 
 	#if DEBUG_MODULE
 
-	debug_filtered_log ("Purple Heart Medal Not Awarded");	
+	debug_filtered_log ("Purple Heart Medal Not Awarded");
 
 	#endif
 
@@ -1340,32 +1305,32 @@ int award_air_medal_medal (int side, int success)
 {
 	player_log_type
 		*player;
-	
+
 	int
 		*medals;
-	
+
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
-	
+
 	player = get_current_player_log ();
-	
+
 	medals = player->side_log[side].medals;
-	
+
 	if (success)
 	{
 		player->side_log [side].air_medal_counter++;
-		
+
 		if (player->side_log [side].air_medal_counter >= NUM_NEEDED_TO_AWARD_AIR_MEDAL)
 		{
 			medals [MEDAL_AIR_MEDAL] += 1;
-			
+
 			player->side_log [side].air_medal_counter = 0;
-			
+
 			#if DEBUG_MODULE
 
 			debug_filtered_log ("Awarded Air Medal, reset counter");
 
 			#endif
-			
+
 			return MEDAL_AIR_MEDAL;
 		}
 		else
@@ -1375,7 +1340,7 @@ int award_air_medal_medal (int side, int success)
 			debug_filtered_log ("Air Medal Not Awarded (count = %d)", player->side_log[side].air_medal_counter);
 
 			#endif
-			
+
 			return MEDAL_TYPE_NONE;
 		}
 	}
@@ -1386,10 +1351,10 @@ int award_air_medal_medal (int side, int success)
 		debug_filtered_log ("Air Medal Not Awarded: resetting	air_medal_counter");
 
 		#endif
-		
+
 		player->side_log [side].air_medal_counter = 0;
 	}
-	
+
 	return MEDAL_TYPE_NONE;
 }
 

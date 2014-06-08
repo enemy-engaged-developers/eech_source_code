@@ -295,9 +295,7 @@ void deinitialise_joysticks (void)
 	// Create the device
 	//
 	
-//	di_err = IDirectInput7_CreateDeviceEx (direct_input, GUID_PREFIX device_instance->guidInstance, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
-
-	di_err = IDirectInput7_CreateDeviceEx (direct_input, &device_instance->guidInstance, &IID_IDirectInputDevice7, (void**)&device, NULL);
+	di_err = IDirectInput7_CreateDeviceEx (direct_input, GUID_PREFIX device_instance->guidInstance, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
 
 	if (di_err != DI_OK)
 	{

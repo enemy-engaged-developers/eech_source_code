@@ -73,7 +73,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="dinput.lib dsound.lib dxguid.lib ddraw.lib winmm.lib wsock32.lib AMSTRMID.LIB"
+				AdditionalDependencies="dinput.lib dsound.lib dxguid.lib d3d9.lib winmm.lib wsock32.lib AMSTRMID.LIB"
 				OutputFile="$(SolutionDir)GameTest\cohokum.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=".\modules\linklib"
@@ -166,7 +166,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="dinput.lib dsound.lib dxguid.lib ddraw.lib winmm.lib wsock32.lib"
+				AdditionalDependencies="dinput.lib dsound.lib dxguid.lib d3d9.lib winmm.lib wsock32.lib"
 				OutputFile="$(SolutionDir)GameTest\cohokum.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=".\modules\linklib"
@@ -6928,14 +6928,6 @@
 							>
 						</File>
 						<File
-							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_ekran.c"
-							>
-						</File>
-						<File
-							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_ekran.h"
-							>
-						</File>
-						<File
 							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_eo.c"
 							>
 						</File>
@@ -6965,14 +6957,6 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_mfd.h"
-							>
-						</File>
-						<File
-							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_radar.c"
-							>
-						</File>
-						<File
-							RelativePath=".\aphavoc\source\gunships\avionics\ka50\hm_radar.h"
 							>
 						</File>
 						<File
@@ -7085,6 +7069,94 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\avionics\kiowa\ki_thrt.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="viper"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_avevn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_avevn.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_avion.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_avlmp.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_avlmp.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_cowpn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_cowpn.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_dam.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_dam.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_eo.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_eo.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_hms.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_hms.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_hud.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_hud.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_mfd.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_mfd.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_tgt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_tgt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_thrt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\avionics\viper\vi_thrt.h"
 							>
 						</File>
 					</Filter>
@@ -7660,6 +7732,22 @@
 							>
 						</File>
 						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_crew.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_crew.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_doors.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_doors.h"
+							>
+						</File>
+						<File
 							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_erpm.h"
 							>
 						</File>
@@ -7693,6 +7781,14 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_lamps.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_pilot.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\ka50\hm_pilot.h"
 							>
 						</File>
 						<File
@@ -7857,6 +7953,74 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\cockpits\kiowa\ki_wiper.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="viper"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_ckpt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_ckpt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_cpg.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_cpg.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_crew.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_crew.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_doors.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_doors.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_lamps.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_lamps.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_pilot.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_pilot.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_vckpt.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_vckpt.h"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_wiper.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\cockpits\viper\vi_wiper.h"
 							>
 						</File>
 					</Filter>
@@ -8045,6 +8209,18 @@
 						</File>
 						<File
 							RelativePath=".\aphavoc\source\gunships\dynamics\kiowa\ki_dyn.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="viper"
+						>
+						<File
+							RelativePath=".\aphavoc\source\gunships\dynamics\viper\vi_dyn.c"
+							>
+						</File>
+						<File
+							RelativePath=".\aphavoc\source\gunships\dynamics\viper\vi_dyn.h"
 							>
 						</File>
 					</Filter>

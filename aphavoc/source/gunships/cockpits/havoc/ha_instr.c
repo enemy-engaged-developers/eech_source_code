@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -128,13 +128,16 @@ static rgb_colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static const char
 	*instrument_error = "Cannot draw instrument on panel";
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 // Casm Gauges Arrows mod
 
 enum TEXTURE_GAUGES
@@ -171,11 +174,13 @@ static float
 		blit_rgb_alpha_masked_sprite_zero_mask_value_scaled (sprite_data, mask_data, t_x * scale_x, t_y * scale_y, t_dx * scale_x, t_dy * scale_y, s_x, s_y, s_dx, s_dy, mask);
 
 // Casm end
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 #include "ha_aspd.h"
 
 #include "ha_balt.h"
@@ -197,6 +202,7 @@ static float
 #include "ha_rrpm.h"
 
 #include "ha_vsi.h"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,6 +510,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 	*drift = drift_needle_value;
 }
 
+#if 0
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2109,6 +2116,7 @@ void draw_havoc_fixed_cockpit_hsi_waypoint_identifier (cockpit_panels panel)
 		}
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2186,6 +2194,7 @@ void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 // Casm 10SEP05 begin Havoc Instruments
 
 void initialise_havoc_instruments (void)
@@ -2195,17 +2204,17 @@ void initialise_havoc_instruments (void)
 	int
 		texture;
 
-	//VJ 051221 included check for presense EEAH sprite 
-	if (get_global_apache_havoc_installed()) 
+	//VJ 051221 included check for presense EEAH sprite
+	if (get_global_apache_havoc_installed())
 	{
 		for (tg = 0; tg < TG_LAST; tg++)
 		{
 			for (texture = 0; texture < 3; texture++)
 			{
-				old_texture_screen[tg][texture] = create_screen_for_system_texture (textures[tg][texture]);
+				old_texture_screen[tg][texture] = get_screen_of_system_texture (textures[tg][texture]);
 				texture_width[tg][texture] = get_screen_width (old_texture_screen[tg][texture]);
 				texture_height[tg][texture] = get_screen_height (old_texture_screen[tg][texture]);
-	
+
 				texture_screen[tg][texture] = create_system_texture_screen (texture_width[tg][texture], texture_height[tg][texture], textures[tg][texture], TEXTURE_TYPE_NOALPHA_NOPALETTE);
 			}
 		}
@@ -2223,8 +2232,8 @@ void deinitialise_havoc_instruments (void)
 	int
 		texture;
 
-	//VJ 051221 included check for presense EEAH sprite 
-	if (get_global_apache_havoc_installed()) 
+	//VJ 051221 included check for presense EEAH sprite
+	if (get_global_apache_havoc_installed())
 	{
 		for (tg = 0; tg < TG_LAST; tg++)
 		{
@@ -2234,8 +2243,9 @@ void deinitialise_havoc_instruments (void)
 				destroy_screen (texture_screen[tg][texture]);
 			}
 		}
-	}	
+	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2243,6 +2253,7 @@ void deinitialise_havoc_instruments (void)
 
 void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 {
+#if 0
 	int
 		texture;
 	int
@@ -2266,12 +2277,12 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 	extern havoc_lamp_flags
 		havoc_lamps;
 
-	//VJ 051221 included check for presense EEAH sprite 
+	//VJ 051221 included check for presense EEAH sprite
 	if (get_global_apache_havoc_installed())
 	{
 
 		set_havoc_instrument_colours ();
-	
+
 		switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
 		{
 			case DAY_SEGMENT_TYPE_DAWN:
@@ -2299,14 +2310,14 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 				break;
 			}
 		}
-	
+
 		#if DEMO_VERSION
-	
+
 		texture = 0;
 		base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL1_BASE;
-	
+
 		#endif
-	
+
 		/* Copy original panels */
 		for (tg = 0; tg < TG_LAST; tg++)
 		{
@@ -2315,23 +2326,23 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 				height = texture_height[tg][texture];
 			blit_screens (old_texture_screen[tg][texture], texture_screen[tg][texture], 0, 0, width - 1, height - 1, 0, 0, width - 1, height - 1);
 		}
-	
+
 		/* Find sprites */
-	
+
 		sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
-	
+
 		mask_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES_MASK);
-	
+
 		/* Draw indicators */
-	
+
 		/* Lower Left Panel */
 		width = texture_width[TG_LLHS][texture];
 		height = texture_height[TG_LLHS][texture];
-	
+
 		if (lock_screen (texture_screen[TG_LLHS][texture]))
 		{
 			set_active_screen (texture_screen[TG_LLHS][texture]);
-	
+
 			/* Vertical speed indicator */
 			value = metres_per_minute (current_flight_dynamics->world_velocity_y.value);
 			value = bound (value, -300.0, 300.0);
@@ -2341,7 +2352,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x - cos (value) * 40 * width / 512;
 			dot_y = centre_y - sin (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Barometric altimeter long arrow */
 			value = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0f);
 			value *= rad (360.0) / 1000.0;
@@ -2350,7 +2361,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 40 * width / 512;
 			dot_y = centre_y - cos (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Barometric altimeter short arrow */
 			value = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0f);
 			value *= rad (360.0) / 10000.0;
@@ -2359,7 +2370,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 20 * width / 512;
 			dot_y = centre_y - cos (value) * 25 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Airspeed */
 			value = kilometres_per_hour (current_flight_dynamics->indicated_airspeed.value);
 			value = bound (value, -50.0, 450.0);
@@ -2369,7 +2380,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x - cos (value) * 40 * width / 512;
 			dot_y = centre_y - sin (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Slip */
 			value = kilometres_per_hour (current_flight_dynamics->indicated_slip.value);
 			value = bound (value, -100.0, 100.0);
@@ -2401,7 +2412,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 40 * width / 512;
 			dot_y = centre_y - cos (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, grey_needle_colour);
-	
+
 			/* RPM */
 			value = current_flight_dynamics->main_rotor_rpm.value;
 			value = bound (value, 0.0, 110.0);
@@ -2412,24 +2423,24 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 40 * width / 512;
 			dot_y = centre_y - cos (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Draw chaff & flare lamps */
 			draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_chaff_green, 172, 26, 40, 22, 481,  79,  22,  11,  51);
 			draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_flare_green, 218, 26, 40, 22, 503,  79,  22,  11,  48);
 			draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_chaff_red, 172, 26, 40, 22, 436,  54,  22,  11,  51);
 			draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_flare_red, 218, 26, 40, 22, 458,  54,  22,  11,  48);
-	
+
 			unlock_screen (texture_screen[TG_LLHS][texture]);
 		}
-	
+
 		/* Upper Left Panel */
 		width = texture_width[TG_ULHS][texture];
 		height = texture_height[TG_ULHS][texture];
-	
+
 		if (lock_screen (texture_screen[TG_ULHS][texture]))
 		{
 			set_active_screen (texture_screen[TG_ULHS][texture]);
-	
+
 			/* G meter */
 			value = current_flight_dynamics->g_force.value;
 			value = bound (value, -2.0, 4.0);
@@ -2439,7 +2450,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 35 * width / 512;
 			dot_y = centre_y - cos (value) * 35 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Radar altimeter */
 			value = current_flight_dynamics->radar_altitude.value;
 			value = bound (value, 0.0, 300.0);
@@ -2452,22 +2463,22 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 50 * width / 512;
 			dot_y = centre_y - cos (value) * 50 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
-	
+
 			/* Draw master caution lamp */
 			draw_sprite(width / 512, height / 512, havoc_lamps.master_caution, 315, 51, 124, 76, 213, 150,  42,  29, 232);
-	
+
 			unlock_screen (texture_screen[TG_ULHS][texture]);
 		}
-	
+
 		/* Lower Right Panel */
 		width = texture_width[TG_LRHS][texture];
 		height = texture_height[TG_LRHS][texture];
-	
+
 		if (lock_screen (texture_screen[TG_LRHS][texture]))
 		{
 			float lower_value, middle_value, upper_value;
 			set_active_screen (texture_screen[TG_LRHS][texture]);
-	
+
 			/* Left engine torque */
 			value = current_flight_dynamics->left_engine_torque.value;
 			value = bound (value, 0.0, 110.0);
@@ -2477,7 +2488,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 		    dot_x = centre_x;
 	    	dot_y = centre_y - value * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
-	
+
 			/* Right engine torque */
 			value = current_flight_dynamics->right_engine_torque.value;
 			value = bound (value, 0.0, 110.0);
@@ -2519,7 +2530,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 		    dot_x = centre_x;
 	    	dot_y = centre_y - value * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
-	
+
 			/* Left engine temperature */
 			value = current_flight_dynamics->left_engine_temp.value;
 			value = bound (value, 0.0, 1000.0);
@@ -2547,7 +2558,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 		    dot_x = centre_x;
 	    	dot_y = centre_y - value * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, red_needle_colour);
-	
+
 			/* Draw status lamps */
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_1 , 167,  48, 58, 26, 332,   2,  22,  11, 120);
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_2 , 227,  48, 58, 26, 354,   2,  22,  11, 117);
@@ -2567,10 +2578,10 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_16, 167, 189, 58, 26, 332,  57,  22,  11,  82);
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_17, 227, 189, 58, 26, 354,  57,  22,  11,  79);
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_18, 288, 189, 58, 26, 376,  57,  22,  11,  76);
-	
+
 			/* Draw radio lamp */
 			draw_sprite(width / 512, height / 512, havoc_lamps.radio, 374, 271, 86, 44, 401,  50,  29,  17,  74);
-	
+
 			/* Draw oil & temperature lamps */
 			draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_pressure_normal, 274, 392, 8, 30, 580,  55,   3,  13,  46);
 			draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_pressure_normal, 306, 392, 8, 30, 591,  55,   4,  13,  43);
@@ -2580,18 +2591,18 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_temperature_normal, 306, 292, 8, 34, 591,  72,   5,  15,  43);
 			draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_temperature_high, 274, 268, 8, 58, 576,  99,   4,  25,  46);
 			draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_temperature_high, 306, 268, 8, 58, 588,  99,   4,  25,  43);
-	
+
 			unlock_screen (texture_screen[TG_LRHS][texture]);
 		}
-	
+
 		/* Upper Right Panel */
 		width = texture_width[TG_URHS][texture];
 		height = texture_height[TG_URHS][texture];
-	
+
 		if (lock_screen (texture_screen[TG_URHS][texture]))
 		{
 			set_active_screen (texture_screen[TG_URHS][texture]);
-	
+
 			/* Draw warning lamps */
 			draw_sprite (width / 512, height / 512, havoc_lamps.warning_1, 118,  40, 68, 34, 539,   2,  22,  12,  71);
 			draw_sprite (width / 512, height / 512, havoc_lamps.warning_2, 193,  40, 68, 34, 561,   2,  23,  12,  69);
@@ -2601,7 +2612,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			draw_sprite (width / 512, height / 512, havoc_lamps.warning_6, 193, 116, 68, 34, 561,  25,  23,  11,  59);
 			draw_sprite (width / 512, height / 512, havoc_lamps.warning_7, 118, 154, 68, 34, 539,  36,  22,  12,  56);
 			draw_sprite (width / 512, height / 512, havoc_lamps.warning_8, 193, 154, 68, 34, 561,  36,  23,  12,  54);
-	
+
 			/* Draw threat warning lamps */
 			draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_1, 120, 377, 18, 10, 274, 230,   8,   6, 229);
 			draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_2, 143, 377, 18, 10, 282, 230,   8,   6, 227);
@@ -2648,18 +2659,18 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_above, 177, 274, 26, 12, 292, 202,  11,   4, 127);
 			draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_lh_lock, 161, 266, 24, 66, 286, 197,  11,  23, 125);
 			draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_rh_lock, 197, 266, 24, 66, 298, 197,  11,  23, 122);
-	
+
 			unlock_screen (texture_screen[TG_URHS][texture]);
 		}
-	
+
 		/* Centre Panel */
 		width = texture_width[TG_CEN][texture];
 		height = texture_height[TG_CEN][texture];
-	
+
 		if (lock_screen (texture_screen[TG_CEN][texture]))
 		{
 			set_active_screen (texture_screen[TG_CEN][texture]);
-	
+
 			/* Clock */
 			value = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 			get_analogue_clock_values (value, &hour_hand_value, &minute_hand_value, &second_hand_value);
@@ -2684,7 +2695,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 40 * width / 512;
 			dot_y = centre_y - cos (value) * 60 * height / 256;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 256, height / 128, red_needle_colour);
-	
+
 			/* Fuel */
 			value = current_flight_dynamics->fuel_weight.value;
 			value = bound (value, 0.0, 1600.0);
@@ -2696,14 +2707,15 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			centre_x = centre_x + sin (value) * 10 * width / 512;
 			centre_y = centre_y - cos (value) * 15 * height / 256;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 64, yellow_needle_colour);
-	
+
 			unlock_screen (texture_screen[TG_CEN][texture]);
 		}
-	
+
 		/* Restore */
 		set_active_screen (video_screen);
-	
+
 	} // check eeah files installed
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2711,4 +2723,3 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Casm 10SEP05 end
-

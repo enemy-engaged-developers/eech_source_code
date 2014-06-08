@@ -64,7 +64,14 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define INTERNAL_MODULES 1
+#include "userint2.h"
+
+#include "graphics.h"
+
+#include "misc.h"
+
+#include "3d.h"
+
 
 #define UNICODE 1
 
@@ -79,14 +86,6 @@
 #define RUSSIAN_VERSION 0
 
 #define POLISH_VERSION  0
-
-#include "userint2.h"
-
-#include "graphics.h"
-
-#include "misc.h"
-
-#include "3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -461,8 +460,8 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		y;
 
 	unsigned char
-		*aliased_character,
-		*glyph_character;
+		aliased_character[128 * 128],
+		glyph_character[128 * 128];
 
 	int
 		ithickness,
@@ -598,7 +597,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		unsigned
 			count;
 
-		for ( count = 0; count < strlen ( type_name ); count++ )
+		for ( count = 0; count <= strlen ( type_name ); count++ )
 		{
 
 			buf[count] = type_name[count];
@@ -628,8 +627,6 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			fonts_header_file = safe_fopen ( UI_FONT_HEADER_FILE, "wb") ;
 			fonts_data_file = safe_fopen ( UI_FONT_DATA_FILE, "wb" );
 		}
-
-		aliased_character = ( unsigned char * ) safe_malloc ( 128 * 128 );
 
 		old_active_screen = get_active_screen ();
 
@@ -670,11 +667,13 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		SelectObject ( hdc, my_font );
 
-		GetTextFace ( hdc, 32, buf );
+		GetTextFaceW ( hdc, 32, buf );
+
+		SelectObject ( hdc, GetStockObject ( DEFAULT_GUI_FONT ) );
 
 		ReleaseDC ( application_window, hdc );
 
-		for ( count = 0; count < strlen ( type_name ); count++ )
+		for ( count = 0; count <= strlen ( type_name ); count++ )
 		{
 
 			real_type_name[count] = type_name[count];
@@ -764,11 +763,11 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				memset ( &metrics, 0, sizeof ( metrics ) );
 
-				size = 128 * 128;
-
-				glyph_character = ( unsigned char * ) safe_malloc ( size );
+				size = sizeof ( glyph_character );
 
 				GetGlyphOutlineW ( hdc, actual_character, GGO_GRAY8_BITMAP, &metrics, size, glyph_character, &mat2 );
+
+				SelectObject ( hdc, GetStockObject ( DEFAULT_GUI_FONT ) );
 
 				ReleaseDC ( application_window, hdc );
 
@@ -920,11 +919,11 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				memset ( &metrics, 0, sizeof ( metrics ) );
 
-				size = 128 * 128;
-
-				glyph_character = ( unsigned char * ) safe_malloc ( size );
+				size = sizeof ( glyph_character );
 
 				GetGlyphOutlineW ( hdc, 'o', GGO_METRICS, &metrics, size, glyph_character, &mat2 );
+
+				SelectObject ( hdc, GetStockObject ( DEFAULT_GUI_FONT ) );
 
 				ReleaseDC ( application_window, hdc );
 
@@ -953,8 +952,6 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				font_character_maximum_width = max ( font_character_maximum_width, character_width );
 				font_character_maximum_height = max ( font_character_maximum_height, character_height );
 			}
-
-			safe_free ( glyph_character );
 		}
 
 		//
@@ -1089,6 +1086,8 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			number_of_screens = ( sizeof ( font_character_table ) / ( characters_wide * characters_high ) ) + 1;
 		}
 
+		new_font->number_of_screens = number_of_screens;
+
 		new_font->screens = ( screen * * ) safe_malloc ( sizeof ( screen * ) * number_of_screens );
 
 		memset ( new_font->screens, 0, sizeof ( screen * ) * number_of_screens );
@@ -1101,11 +1100,15 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		for ( count = 0; count < number_of_screens; count++ )
 		{
 
-			new_font->screens[count] = create_user_texture_screen ( texture_width, texture_height, TEXTURE_TYPE_MULTIPLEALPHA, 0 );
+			new_font->screens[count] = create_user_texture_screen ( texture_width, texture_height, TEXTURE_TYPE_MULTIPLEALPHA, 1 );
 
 			set_active_screen ( new_font->screens[count] );
 
+			lock_screen ( active_screen );
+
 			set_block ( 0, 0, texture_width - 1, texture_height - 1, colour );
+
+			unlock_screen ( active_screen );
 		}
 
 		character_x = 0;
@@ -1301,6 +1304,10 @@ void deinitialise_ui_font (void)
 			safe_free ( ui_fonts[count].screens );
 
 			ui_fonts[count].screens = NULL;
+
+			safe_free ( ui_fonts[count].type_name );
+
+			ui_fonts[count].type_name = NULL;
 		}
 	}
 
@@ -1430,23 +1437,23 @@ float ui_display_text (const char *text, float x, float y)
 			// Set renderstates
 			//
 
-			texture = get_screen_texture ( current_font->screens[0] );
+			texture = current_font->screens[0];
 
 			set_d3d_gouraud_shaded_textured_renderstate ( texture );
 
 			set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, FALSE, FALSE );
 
-			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
-			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
+			set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+			set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
 
-			set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, D3DCMP_ALWAYS );
+			set_d3d_int_state ( D3DRS_ZFUNC, D3DCMP_ALWAYS );
 
-			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
+			set_d3d_sampler_state_immediate ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+			set_d3d_sampler_state_immediate ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
 
-			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MAGFILTER, D3DTFG_POINT );
-			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MINFILTER, D3DTFN_POINT );
-			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MIPFILTER, D3DTFP_NONE );
+			set_d3d_sampler_state_immediate ( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+			set_d3d_sampler_state_immediate ( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+			set_d3d_sampler_state_immediate ( 0, D3DSAMP_MIPFILTER, D3DTEXF_NONE );
 
 			//
 			// loop the whole string
@@ -1503,6 +1510,8 @@ float ui_display_text (const char *text, float x, float y)
 //				char_end_x = char_start_x + character->width;	//current_font->letter_data [index].width;
 
 				char_end_y = char_start_y + character->height;	//current_font->font_height;
+
+				memset ( quad, 0, sizeof ( quad ) );
 
 				quad[0].u = character->u1;
 				quad[0].v = character->v1;
@@ -1583,7 +1592,7 @@ float ui_display_text (const char *text, float x, float y)
 						if ( poly )
 						{
 
-							set_d3d_gouraud_shaded_textured_renderstate ( get_screen_texture ( current_font->screens[character->screen_index] ) );
+							set_d3d_gouraud_shaded_textured_renderstate ( current_font->screens[character->screen_index] );
 
 							draw_wbuffered_flat_shaded_textured_polygon ( poly, shadow_colour, specular );	//, colour, specular );
 						}
@@ -1649,7 +1658,7 @@ float ui_display_text (const char *text, float x, float y)
 					if ( poly )
 					{
 
-						set_d3d_gouraud_shaded_textured_renderstate ( get_screen_texture ( current_font->screens[character->screen_index] ) );
+						set_d3d_gouraud_shaded_textured_renderstate ( current_font->screens[character->screen_index] );
 
 						draw_wbuffered_flat_shaded_textured_polygon ( poly, colour, specular );	//, colour, specular );
 					}

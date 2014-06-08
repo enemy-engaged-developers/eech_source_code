@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -65,7 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
-#include "3d/3dfunc.h"
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,21 +85,19 @@
 // All the Direct3D objects and flags
 //
 
+struct DIRECT_3D
+	d3d_common;
 struct DIRECT_3D_DATA
 	d3d_data;
+struct DIRECT_3D_EXPORT_MFD
+	d3d_export_mfd[2];
 struct DIRECT_3D_VECTORS
 	d3d;
 
 int
-	d3d_override_render_to_texture = FALSE,
-	d3d_use_rgb_device = FALSE,
 	d3d_initialised = FALSE,
 	d3d_valid = FALSE,
 	d3d_in_3d_scene = FALSE;
-
-int
-	d3d_number_of_executions,
-	d3d_number_of_texture_loads;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,77 +118,9 @@ static void ( *restore_vb_friend_function ) ( void ) = NULL;
 int
 
 	//
-	// We can only use square textures if this flag is TRUE
-	//
-
-	d3d_square_only_textures,
-
-	//
-	// We can't gouraud shade alpha component if this flag is TRUE
-	//
-
-	d3d_flat_only_alpha,
-
-	//
-	// We can't do table fog if this flag is TRUE
-	//
-
-	d3d_vertex_only_fog,
-
-	//
-	// We  can't do mipmapping
-	//
-
-	d3d_mipmap_textures,
-
-	//
-	// We can/can't do texturing from video memory
-	//
-
-	d3d_texture_video_memory,
-
-	//
-	// We can/can't do texturing from system memory
-	//
-
-	d3d_texture_system_memory,
-
-	//
-	// We can use vertices from video memory
-	//
-
-	d3d_vertex_buffer_in_video_memory,
-
-	//
-	// Can modulate colours on textures
-	//
-
-	d3d_modulate,
-
-	//
-	// Can modulate alpha on textures
-	//
-
-	d3d_modulate_alpha,
-
-	//
-	// Can render textured lines
-	//
-
-	d3d_textured_lines,
-
-	//
-	// Can do tri-linear texture filtering
-	//
-
-	d3d_trilinear_filtering,
-
-	//
 	// Texture dimension limits
 	//
 
-	d3d_minimum_texture_width,
-	d3d_minimum_texture_height,
 	d3d_maximum_texture_width,
 	d3d_maximum_texture_height,
 
@@ -201,30 +131,10 @@ int
 	d3d_use_dx_pipeline = FALSE,
 
 	//
-	// Can render to a texture
-	//
-
-	d3d_can_render_to_texture = TRUE,
-
-	//
 	// Hardware TnL is available
 	//
 
-	d3d_using_hardware_tnl,
-
-	//
-	// Hardware video memory available
-	//
-
-	d3d_total_video_memory,
-
-	d3d_total_video_texture_memory,
-
-	//
-	// Permedia2 detection
-	//
-
-	d3d_using_permedia2_chipset;
+	d3d_using_hardware_tnl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,17 +142,6 @@ int
 
 BOOL initialise_direct_3d ( void )
 {
-
-	int
-		count;
-
-
-	for ( count = 0; count < 256; count++ )
-	{
-
-		application_colour_table[count].peFlags |= D3DPAL_READONLY;
-	}
-
 	ASSERT ( get_graphics_system_initialised () );
 
 	register_exit_function ( d3d_release_objects );
@@ -269,7 +168,7 @@ BOOL initialise_direct_3d ( void )
 	//
 	//
 
-	d3d_data.recreate_d3d = FALSE;
+	d3d_common.recreate_d3d = FALSE;
 
 	return ( TRUE );
 }
@@ -290,214 +189,133 @@ void register_restore_vb_routine ( void ( *function ) ( void ) )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL check_valid_direct_3d_device_exists ( void )
+static int direct_3d_device_create ( void *params )
 {
-	/*
-
-	D3DFINDDEVICESEARCH
-		device_search_capabilities;
-
-	D3DFINDDEVICERESULT
-		device_search_result;
-
 	HRESULT
-		ret;
-
-	//
-	// We only match to hardware RGB drivers, with the following constraints:
-	//
-	//
-	// Compulsory features necessary to run the game:
-	//
-	//		CULL NONE
-	//
-	//		ZCOMPARE ALWAYS & ZCOMPARE GREATEREQUAL
-	//
-	//		SRCBLEND SRCALPHA
-	//		DESTBLEND INVSRCALPHA
-	//
-	//		ALPHA FLAT BLEND
-	//		COLOUR FLAT RGB
-	//		COLOUR GOURAUD RGB
-	//
-	//		TEXTURE ALPHA & TEXTURE PERSPECTIVE
-	//
-	//		TEXTURE BLEND MODULATE & TEXTURE BLEND MODULATE ALPHA
-	//
-	//
-	// After finding the 3d device, we have to check for the following:
-	//
-	//		Fog is supported as either fog table, or fog vertex.
-	//
-
-
-	//
-	// Set the size of the structures we are using.
-	//
-
-	device_search_capabilities.dwSize = sizeof ( D3DFINDDEVICESEARCH );
-
-	device_search_result.dwSize = sizeof ( D3DFINDDEVICERESULT );
-
-	device_search_capabilities.dwFlags = (
-														D3DFDS_COLORMODEL | D3DFDS_DSTBLENDCAPS | D3DFDS_HARDWARE |
-														D3DFDS_LINES | D3DFDS_MISCCAPS | D3DFDS_SHADECAPS |
-														D3DFDS_SRCBLENDCAPS | D3DFDS_TEXTUREBLENDCAPS | D3DFDS_TEXTURECAPS |
-														D3DFDS_TRIANGLES | D3DFDS_ZCMPCAPS
-														);
-
-	device_search_capabilities.bHardware = TRUE;
-
-	device_search_capabilities.dcmColorModel = D3DCOLOR_RGB;
-
-	device_search_capabilities.dpcPrimCaps.dwSize = sizeof ( D3DPRIMCAPS );
-
-	device_search_capabilities.dpcPrimCaps.dwMiscCaps = D3DPMISCCAPS_CULLNONE;
-
-
-	device_search_capabilities.dpcPrimCaps.dwZCmpCaps = D3DPCMPCAPS_ALWAYS | D3DPCMPCAPS_GREATEREQUAL;
-
-	device_search_capabilities.dpcPrimCaps.dwSrcBlendCaps = D3DPBLENDCAPS_SRCALPHA;
-
-	device_search_capabilities.dpcPrimCaps.dwDestBlendCaps = D3DPBLENDCAPS_INVSRCALPHA;
-
-	device_search_capabilities.dpcPrimCaps.dwShadeCaps = D3DPSHADECAPS_ALPHAFLATBLEND |
-																			D3DPSHADECAPS_COLORFLATRGB |
-																			D3DPSHADECAPS_COLORGOURAUDRGB;
-
-	device_search_capabilities.dpcPrimCaps.dwTextureCaps = D3DPTEXTURECAPS_ALPHA | D3DPTEXTURECAPS_PERSPECTIVE;
-
-	device_search_capabilities.dpcPrimCaps.dwTextureBlendCaps = D3DPTBLENDCAPS_MODULATE | D3DPTBLENDCAPS_MODULATEALPHA;
-
-//	ret = IDirect3D7_FindDevice ( d3d.d3d, &device_search_capabilities, &device_search_result );
-
-	if ( ret != D3D_OK )
+		res;
+	unsigned
+		flags;
+	flags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+#ifdef DEBUG
+	flags |= D3DCREATE_MULTITHREADED;
+#endif
+	if ( d3d_common.mfd == MFD_MULTIHEAD )
 	{
-
-		return ( FALSE );
+		flags |= D3DCREATE_ADAPTERGROUP_DEVICE;
 	}
-
-	//
-	// Now check the fogging capabilities ( we *must* be able to do some sort of fog )
-	//
-
-	if ( device_search_result.ddHwDesc.dwFlags & D3DDD_TRICAPS )
+	res = IDirect3D9_CreateDevice ( d3d_common.d3d, d3d_data.selected_adapter[D3D_MAIN], D3DDEVTYPE_HAL, application_window, flags, &d3d_data.d3dpp[D3D_MAIN], &d3d_data.device[D3D_MAIN] );
+	if ( FAILED ( res ) )
+		return res;
+	if ( d3d_common.mfd == MFD_WINDOW || d3d_common.mfd == MFD_FULLSCREEN )
 	{
-
-		if ( ( device_search_result.ddHwDesc.dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_FOGTABLE ) ||
-				( device_search_result.ddHwDesc.dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_FOGVERTEX ) )
-		{
-
-			//
-			// Matches the fog preconditions as well, so it is a valid rendering device
-			//
-
-			return ( TRUE );
-		}
-		else
-		{
-
-			return ( FALSE );
-		}
+		res = IDirect3D9_CreateDevice ( d3d_common.d3d, d3d_data.selected_adapter[D3D_MFD], D3DDEVTYPE_HAL, application_window, flags, &d3d_data.d3dpp[D3D_MFD], &d3d_data.device[D3D_MFD] );
 	}
-	else
-	{
-
-		return ( FALSE );
-	}
-
-	*/
-
-	return ( FALSE );
+	return res;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static int direct_3d_device_release ( void *params )
+{
+	int
+		count;
+
+	if ( d3d_data.device[D3D_MFD] )
+	{
+		for ( count = 0; count < ARRAY_LENGTH ( d3d_export_mfd ); count++ )
+		{
+			if ( d3d_export_mfd[count].texture )
+			{
+				IDirect3DTexture9_Release ( d3d_export_mfd[count].texture );
+			}
+		}
+		IDirect3DDevice9_Release ( d3d_data.device[D3D_MFD] );
+	}
+	return IDirect3DDevice9_Release ( d3d_data.device[D3D_MAIN] );
+}
+
+static int direct_3d_device_reset ( int d3d )
+{
+	HRESULT
+		res;
+
+	debug_log ( "Calling IDirect3DDevice9_TestCooperativeLevel" );
+	res = IDirect3DDevice9_TestCooperativeLevel ( d3d_data.device[d3d] );
+	debug_log ( "Cooperative level of d3d device: %s", get_d3d_error_message ( res ) );
+	if ( res == D3DERR_DEVICELOST )
+	{
+		return FALSE;
+	}
+	if ( res == D3DERR_DEVICENOTRESET )
+	{
+		debug_log ( "Resetting d3d device" );
+		res = IDirect3DDevice9_Reset ( d3d_data.device[d3d], &d3d_data.d3dpp[d3d] );
+		if ( FAILED ( res ) )
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+
+}
+static int direct_3d_device_lost ( void *params )
+{
+	if ( d3d_data.device[D3D_MFD] )
+		if ( !direct_3d_device_reset ( D3D_MFD ) )
+			return FALSE;
+	if ( !direct_3d_device_reset ( D3D_MAIN ) )
+		return FALSE;
+	return TRUE;
+}
 
 BOOL initialise_direct_3d_driver ( void )
 {
-
 	HRESULT
 		ret;
 
-
-	static int
-		render_target_set = FALSE;
-
-	D3DDEVICEDESC7
+	D3DCAPS9
 		hardware_desc;
 
-	//
-	// Query for a D3DDEVICE2 object
-	//
+	d3d_using_hardware_tnl = d3d_use_dx_pipeline;
 
-	if ( !d3d_use_rgb_device )
+	memset ( d3d_data.d3dpp, 0, sizeof ( d3d_data.d3dpp ) );
+
+	d3d_data.d3dpp[D3D_MAIN].BackBufferWidth = application_video_width;
+	d3d_data.d3dpp[D3D_MAIN].BackBufferHeight = application_video_height;
+	d3d_data.d3dpp[D3D_MAIN].BackBufferCount = 2;
+	d3d_data.d3dpp[D3D_MAIN].BackBufferFormat = D3DFMT_X8R8G8B8;
+	d3d_data.d3dpp[D3D_MAIN].SwapEffect = D3DSWAPEFFECT_DISCARD;
+	d3d_data.d3dpp[D3D_MAIN].hDeviceWindow = application_window;
+	d3d_data.d3dpp[D3D_MAIN].Windowed = application_video_windowed;
+	d3d_data.d3dpp[D3D_MAIN].EnableAutoDepthStencil = TRUE;
+	d3d_data.d3dpp[D3D_MAIN].AutoDepthStencilFormat = D3DFMT_D24S8;
+
+	if ( d3d_common.mfd != MFD_NONE )
 	{
-
-		if ( d3d_use_dx_pipeline )
-		{
-	
-#if USE_D3D_SOFTWARE_TNL
-			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
-#else
-			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DTnLHalDevice, ddraw.lpRenderBuffer, &d3d_data.device );
-#endif
-	
-			if ( FAILED ( ret ) )
-			{
-	
-				debug_log ( "Unable to create TnL: %s", get_ddraw_error_message ( ret ) );
-	
-				d3d_using_hardware_tnl = FALSE;
-	
-				ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
-			}
-			else
-			{
-
-				debug_log ( "Setting d3d hardware" );
-	
-				d3d_using_hardware_tnl = TRUE;
-			}
-		}
-		else
-		{
-
-			d3d_using_hardware_tnl = FALSE;
-
-			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
-		}
-	}
-	else
-	{
-
-		ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DRGBDevice, ddraw.lpRenderBuffer, &d3d_data.device );
+		d3d_data.d3dpp[D3D_MFD].BackBufferWidth = command_line_export_mfd_screen_width;
+		d3d_data.d3dpp[D3D_MFD].BackBufferHeight = command_line_export_mfd_screen_height;
+		d3d_data.d3dpp[D3D_MFD].BackBufferCount = 2;
+		d3d_data.d3dpp[D3D_MFD].BackBufferFormat = D3DFMT_X8R8G8B8;
+		d3d_data.d3dpp[D3D_MFD].SwapEffect = D3DSWAPEFFECT_DISCARD;
+		d3d_data.d3dpp[D3D_MFD].hDeviceWindow = export_window;
+		d3d_data.d3dpp[D3D_MFD].Windowed = d3d_common.mfd == MFD_WINDOW;
+		d3d_data.d3dpp[D3D_MFD].EnableAutoDepthStencil = d3d_common.mfd == MFD_MULTIHEAD;
+		d3d_data.d3dpp[D3D_MFD].AutoDepthStencilFormat = D3DFMT_D24S8;
 	}
 
-	if ( ret != DD_OK )
-	{
+	ret = system_thread_function ( direct_3d_device_create, NULL );
 
-		debug_fatal ( "Error creating d3d device2: %s", get_ddraw_error_message ( ret ) );
+	if ( FAILED ( ret ) )
+	{
+		debug_fatal ( "Unable to create direct3d device object: %s", get_d3d_error_message ( ret ) );
+
+		return FALSE;
 	}
 
-	//
-	// Get the capabilities of the device ( specifically looking for the square textures stuff at the moment )
-	//
+	ret = IDirect3DDevice9_GetDeviceCaps ( d3d_data.device[D3D_MAIN], &hardware_desc );
 
-	memset ( &hardware_desc, 0, sizeof ( hardware_desc ) );
-
-	ret = IDirect3DDevice7_GetCaps ( d3d_data.device, &hardware_desc );
-
-	if ( ret != DD_OK )
+	if ( FAILED ( ret ) )
 	{
-
-		debug_fatal ( "Error getting d3d device capabilities: %s", get_ddraw_error_message ( ret ) );
+		debug_fatal ( "Error getting d3d device capabilities: %s", get_d3d_error_message ( ret ) );
 	}
-
-	//
-	// Set the capabilities of the 3dvisual according to the capabilities of the card.
-	//
 
 	set_d3d_capabilities ( &hardware_desc );
 
@@ -505,41 +323,27 @@ BOOL initialise_direct_3d_driver ( void )
 	// Set render target
 	//
 
-//	if ( !render_target_set )
-	{
-
-		render_target_set = TRUE;
-
-		ret = IDirect3DDevice7_SetRenderTarget ( d3d_data.device, ddraw.lpRenderBuffer, 0 );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_fatal ( "Error setting render target: %s", get_ddraw_error_message ( ret ) );
-		}
-	}
-
 	{
 
 		//
 		// Create & set the viewport for the device2 interface.
 		//
 
-		D3DVIEWPORT7
+		D3DVIEWPORT9
 			viewdata;
 
 		//
 		// Set up the viewport values for initial values
 		//
 
-		viewdata.dwX = 0;
-		viewdata.dwY = 0;
+		viewdata.X = 0;
+		viewdata.Y = 0;
 
-		viewdata.dwWidth = application_video_width;
-		viewdata.dwHeight = application_video_height;
+		viewdata.Width = application_video_width;
+		viewdata.Height = application_video_height;
 
-		viewdata.dvMinZ = 0;
-		viewdata.dvMaxZ = 1;
+		viewdata.MinZ = 0;
+		viewdata.MaxZ = 1;
 
 		if ( !f3d_set_viewport ( &viewdata ) )
 		{
@@ -576,7 +380,7 @@ BOOL initialise_direct_3d_driver ( void )
 void destroy_d3d_vertex_buffers ( void )
 {
 
-	if ( d3d_data.d3d )
+	if ( d3d_common.d3d )
 	{
 
 		int
@@ -589,8 +393,10 @@ void destroy_d3d_vertex_buffers ( void )
 			{
 
 				f3d_vertex_release ( &d3d.triangle_buffers[count].buffer );
-	
+				f3d_index_release ( &d3d.triangle_buffers[count].ibuffer );
+
 				d3d.triangle_buffers[count].vertices = NULL;
+				d3d.triangle_buffers[count].indices = NULL;
 				d3d.triangle_buffers[count].texture.texture = 0;
 				d3d.triangle_buffers[count].texture.texture_settings = 0;
 				d3d.triangle_buffers[count].vertices_used = 0;
@@ -604,8 +410,10 @@ void destroy_d3d_vertex_buffers ( void )
 			if ( d3d.line_buffers[count].buffer )
 			{
 				f3d_vertex_release ( &d3d.line_buffers[count].buffer );
+				f3d_index_release ( &d3d.line_buffers[count].ibuffer );
 
 				d3d.line_buffers[count].vertices = NULL;
+				d3d.line_buffers[count].indices = NULL;
 				d3d.line_buffers[count].texture.texture = 0;
 				d3d.line_buffers[count].texture.texture_settings = 0;
 				d3d.line_buffers[count].vertices_used = 0;
@@ -627,6 +435,11 @@ void destroy_d3d_vertex_buffers ( void )
 			}
 		}
 
+		if ( d3d.alpha_index_buffer )
+		{
+			f3d_index_release ( &d3d.alpha_index_buffer );
+		}
+
 		if ( d3d.hardware_untransformed_buffer )
 		{
 
@@ -641,36 +454,23 @@ void destroy_d3d_vertex_buffers ( void )
 
 void create_d3d_vertex_buffers ( void )
 {
-
-	D3DVERTEXBUFFERDESC
-		desc;
+	unsigned int
+		size,
+		fvf;
 
 	int
 		count;
 
-	memset ( &desc, 0, sizeof ( D3DVERTEXBUFFERDESC ) );
-
-	desc.dwSize = sizeof ( D3DVERTEXBUFFERDESC );
-
-	desc.dwCaps = D3DVBCAPS_WRITEONLY | D3DVBCAPS_DONOTCLIP;
-
-	if ( !d3d_vertex_buffer_in_video_memory )
-	{
-
-//		desc.dwCaps |= D3DVBCAPS_SYSTEMMEMORY;
-	}
-
-	desc.dwCaps |= D3DVBCAPS_SYSTEMMEMORY;
-
-	desc.dwFVF = D3DFVF_TLVERTEX;
-
-	desc.dwNumVertices = MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER;
+	size = MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER * sizeof ( TLVERTEX );
+	fvf = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1;
 
 	for ( count = 0; count < MAXIMUM_TRIANGLE_BUFFERS; count++ )
 	{
-		f3d_vertex_create ( &desc, &d3d.triangle_buffers[count].buffer );
+		f3d_vertex_create ( size, fvf, &d3d.triangle_buffers[count].buffer );
+		f3d_index_create ( MAXIMUM_D3D_INDICES_IN_VERTEX_BUFFER, &d3d.triangle_buffers[count].ibuffer );
 
 		d3d.triangle_buffers[count].vertices = NULL;
+		d3d.triangle_buffers[count].indices = NULL;
 		d3d.triangle_buffers[count].texture.texture = 0;
 		d3d.triangle_buffers[count].vertices_used = 0;
 		d3d.triangle_buffers[count].indices_index = 0;
@@ -678,35 +478,29 @@ void create_d3d_vertex_buffers ( void )
 
 	for ( count = 0; count < MAXIMUM_LINE_BUFFERS; count++ )
 	{
-		f3d_vertex_create ( &desc, &d3d.line_buffers[count].buffer );
+		f3d_vertex_create ( size, fvf, &d3d.line_buffers[count].buffer );
+		f3d_index_create ( MAXIMUM_D3D_INDICES_IN_VERTEX_BUFFER, &d3d.line_buffers[count].ibuffer );
 
 		d3d.line_buffers[count].vertices = NULL;
+		d3d.line_buffers[count].indices = NULL;
 		d3d.line_buffers[count].texture.texture = 0;
 		d3d.line_buffers[count].vertices_used = 0;
 		d3d.line_buffers[count].indices_index = 0;
 	}
 
-	f3d_vertex_create ( &desc, &d3d.point_vertex_buffer );
+	f3d_vertex_create ( size, fvf, &d3d.point_vertex_buffer );
 
 	for ( count = 0; count < MAX_ALPHA_VERTEX_BUFFERS; count++ )
 	{
-		f3d_vertex_create ( &desc, &d3d.alpha_vertex_buffer[count] );
+		f3d_vertex_create ( size, fvf, &d3d.alpha_vertex_buffer[count] );
 	}
 
-	memset ( &desc, 0, sizeof ( D3DVERTEXBUFFERDESC ) );
+	f3d_index_create ( MAXIMUM_D3D_INDICES_IN_VERTEX_BUFFER, &d3d.alpha_index_buffer );
 
-	desc.dwSize = sizeof ( D3DVERTEXBUFFERDESC );
+	size = MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER * sizeof ( NTVERTEX );
+	fvf = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
 
-#if USE_D3D_SOFTWARE_TNL
-	desc.dwCaps = ( D3DVBCAPS_WRITEONLY | D3DVBCAPS_SYSTEMMEMORY );
-#else
-	desc.dwCaps = D3DVBCAPS_WRITEONLY;
-#endif
-
-	desc.dwNumVertices = 2048;
-	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
-
-	f3d_vertex_create ( &desc, &d3d.hardware_untransformed_buffer );
+	f3d_vertex_create ( size, fvf, &d3d.hardware_untransformed_buffer );
 
 	d3d.triangle_buffer = NULL;
 	d3d.line_buffer = NULL;
@@ -716,501 +510,15 @@ void create_d3d_vertex_buffers ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_d3d_capabilities ( LPD3DDEVICEDESC7 capabilities )
+void set_d3d_capabilities ( D3DCAPS9* capabilities )
 {
-
-	if ( capabilities->dwDevCaps & D3DDEVCAPS_TEXTURENONLOCALVIDMEM )	{ d3d_texture_system_memory = TRUE; }
-	else																					{ d3d_texture_system_memory = FALSE; }
-
-	if ( capabilities->dwDevCaps & D3DDEVCAPS_TEXTUREVIDEOMEMORY )	{ d3d_texture_video_memory = TRUE; }
-	else																				{ d3d_texture_video_memory = FALSE; }
-
-	if ( capabilities->dwDevCaps & D3DDEVCAPS_TLVERTEXVIDEOMEMORY )	{ d3d_vertex_buffer_in_video_memory = TRUE; }
-	else																					{ d3d_vertex_buffer_in_video_memory = FALSE; }
-
-	if ( capabilities->dwDevCaps & D3DDEVCAPS_SEPARATETEXTUREMEMORIES )	{ d3d_can_render_to_texture = FALSE; debug_log ( "SETTING NON RENDER" ); }
-	else																						{ d3d_can_render_to_texture = TRUE; }
-
-	if ( d3d_override_render_to_texture )
-	{
-
-		d3d_can_render_to_texture = FALSE;
-	}
-
-	if ( current_display_device )
-	{
-
-		if ( current_display_device->is_nondisplay )
-		{
-
-			d3d_can_render_to_texture = FALSE;
-		}
-	}
-
-	if ( capabilities->dwDevCaps & D3DDD_TRICAPS )
-	{
-
-		//
-		// Check the rasterisation capabilities of the device
-		//
-
-		if ( capabilities->dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_FOGTABLE  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Fog table supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_FOGVERTEX  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Fog vertex supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_MIPMAPLODBIAS )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "MipMapLOD supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_ZBIAS )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "ZBias supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_ZTEST  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Z Testing supported" );
-#endif
-		}
-
-		//
-		// Ensure we have the Z test we need
-		//
-
-		if ( capabilities->dpcTriCaps.dwZCmpCaps & D3DPCMPCAPS_GREATEREQUAL )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Z compare greater equal supported" );
-#endif
-		}
-
-		//
-		// Check the source alpha blending capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwSrcBlendCaps & D3DPBLENDCAPS_ONE  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Src blend one supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwSrcBlendCaps & D3DPBLENDCAPS_BOTHSRCALPHA )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "BOTHSRCBLEND supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwSrcBlendCaps & D3DPBLENDCAPS_SRCALPHA  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Src blend alpha supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwSrcBlendCaps & D3DPBLENDCAPS_INVSRCALPHA  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Src blend inv alpha supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwSrcBlendCaps & D3DPBLENDCAPS_ZERO  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Src blend zero supported" );
-#endif
-		}
-
-		//
-		// Check the destination alpha blending capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ONE  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Dest blend one supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_SRCALPHA  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Dest blend alpha supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_INVSRCALPHA  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Dest blend inv alpha supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ZERO  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Dest blend zero supported" );
-#endif
-		}
-
-		//
-		// Check the shading capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAFLATBLEND  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Alpha flat blend supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAFLATSTIPPLED  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Alpha flat stippled supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDBLEND  )
-		{
-
-			d3d_flat_only_alpha = FALSE;
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Alpha gouraud blend supported" );
-#endif
-		}
-		else
-		{
-
-			d3d_flat_only_alpha = TRUE;
-		}
-
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDSTIPPLED  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Alpha gouraud stippled supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_COLORFLATRGB  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Colour flat rgb supported" );
-#endif
-		}
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_COLORGOURAUDRGB  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Colour gouraud rgb supported" );
-#endif
-		}
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_FOGFLAT  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Fog flat supported" );
-#endif
-		}
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_FOGGOURAUD  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Fog gouraud supported" );
-#endif
-		}
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_SPECULARFLATRGB  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Specular flat supported" );
-#endif
-		}
-		if ( capabilities->dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_SPECULARGOURAUDRGB  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Specular gouraud supported" );
-#endif
-		}
-
-		//
-		// Make sure all the texture mapping modes we need are available
-		//
-
-		if ( capabilities->dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_ALPHA )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Alpha textures allowed" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Perspective Correction allowed" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY )
-		{
-
-			d3d_square_only_textures = TRUE;
-		}
-		else
-		{
-
-			d3d_square_only_textures = FALSE;
-		}
-
-		//
-		// Check the texture filtering capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_NEAREST  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Texture filter nearest supported" );
-#endif
-		}
-
-		if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Texture filter linear supported" );
-#endif
-		}
-
-
-		{
-
-			int
-				flag;
-
-			flag = FALSE;
-
-			if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_MIPNEAREST  )
-			{
-	
-				flag = TRUE;
-	
-#if ( DEBUG_MODULE )
-				debug_log ( "Texture filter mip-nearest supported" );
-#endif
-			}
-	
-			if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_MIPLINEAR  )
-			{
-	
-				flag = TRUE;
-	
-#if ( DEBUG_MODULE )
-				debug_log ( "Texture filter mip-linear supported" );
-#endif
-			}
-	
-			if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEARMIPNEAREST  )
-			{
-	
-				flag = TRUE;
-	
-#if ( DEBUG_MODULE )
-				debug_log ( "Texture filter linear-mip-nearest supported" );
-#endif
-			}
-	
-			if ( capabilities->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEARMIPLINEAR  )
-			{
-	
-#if ( DEBUG_MODULE )
-				debug_log ( "Texture filter linear-mip-linear supported" );
-#endif
-
-				flag = TRUE;
-	
-				d3d_trilinear_filtering = TRUE;
-			}
-			else
-			{
-
-				d3d_trilinear_filtering = FALSE;
-			}
-
-			d3d_mipmap_textures = flag;
-		}
-
-		//
-		// Check the texture blending capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwTextureBlendCaps & D3DPTBLENDCAPS_MODULATE )
-		{
-
-			//
-			// This capability *must* be supported
-			//
-
-			d3d_modulate = TRUE;
-		}
-		else
-		{
-
-			d3d_modulate = FALSE;
-		}
-
-		if ( capabilities->dpcTriCaps.dwTextureBlendCaps & D3DPTBLENDCAPS_MODULATEALPHA )
-		{
-
-			//
-			// Rage Pro *doesn't* support modulate alpha - but we can still run anyway :)
-			//
-
-			d3d_modulate_alpha = TRUE;
-		}
-		else
-		{
-
-			d3d_modulate_alpha = FALSE;
-		}
-
-		//
-		// Check the texture wrapping capabilities
-		//
-
-		if ( capabilities->dpcTriCaps.dwTextureAddressCaps & D3DPTADDRESSCAPS_WRAP  )
-		{
-
-#if ( DEBUG_MODULE )
-			debug_log ( "Texture wrapping supported" );
-#endif
-		}
-	}
-
-	{
-
-		if ( capabilities->dpcLineCaps.dwTextureCaps )
-		{
-
-			d3d_textured_lines = TRUE;
-		}
-		else
-		{
-
-			d3d_textured_lines = FALSE;
-		}
-	}
 
 	//
 	// Check texture map size capabilities
 	//
 
-	d3d_minimum_texture_width = capabilities->dwMinTextureWidth;
-	d3d_minimum_texture_height = capabilities->dwMinTextureHeight;
-
-	d3d_maximum_texture_width = capabilities->dwMaxTextureWidth;
-	d3d_maximum_texture_height = capabilities->dwMaxTextureHeight;
-
-	//
-	// If the card doesn't have 8Megs of memory, limit texture size to 256x256
-	//
-
-
-	if ( d3d_total_video_texture_memory < 8192*1024 )
-	{
-
-		d3d_maximum_texture_width = min ( d3d_maximum_texture_width, 256 );
-		d3d_maximum_texture_height = min ( d3d_maximum_texture_height, 256 );
-	}
-
-	d3d_using_permedia2_chipset = FALSE;
-
-	//
-	// Check for chipset specific stuff.
-	//
-
-	{
-
-		DDDEVICEIDENTIFIER2
-			did;
-
-		IDirectDraw7_GetDeviceIdentifier ( ddraw.ddraw, &did, 0 );
-
-		if ( did.dwVendorId ==0x12d2 )
-		{
-
-			if ( did.dwDeviceId == 0x18 || did.dwDeviceId == 0x19 )
-			{
-
-				//
-				// Its a riva 128 - disable trilinear filtering!!!
-				//
-
-				d3d_trilinear_filtering = FALSE;
-			}
-		}
-
-		if ( did.dwVendorId == 0x3d3d )
-		{
-
-			if ( ( did.dwDeviceId == 0x07 ) || ( did.dwDeviceId == 0x09 ) )
-			{
-
-				d3d_using_permedia2_chipset = TRUE;
-			}
-		}
-
-		if ( did.dwVendorId == 0x104c)
-		{
-
-			if ( did.dwDeviceId == 0x3d07 )
-			{
-
-				d3d_using_permedia2_chipset = TRUE;
-			}
-		}
-	}
+	d3d_maximum_texture_width = capabilities->MaxTextureWidth;
+	d3d_maximum_texture_height = capabilities->MaxTextureHeight;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1219,7 +527,6 @@ void set_d3d_capabilities ( LPD3DDEVICEDESC7 capabilities )
 
 void d3d_restore_objects ( int activate )
 {
-
 
 	if ( !activate )
 	{
@@ -1232,7 +539,7 @@ void d3d_restore_objects ( int activate )
 	}
 	else
 	{
-	
+
 		//
 		// Gaining focus
 		//
@@ -1244,7 +551,7 @@ void d3d_restore_objects ( int activate )
 			// Flag the fact we need to recreate the d3d devices/textures
 			//
 
-			d3d_data.recreate_d3d = TRUE;
+			d3d_common.recreate_d3d = TRUE;
 		}
 	}
 }
@@ -1260,33 +567,14 @@ void recreate_d3d ( void )
 	// Free all hardware textures up
 	//
 
-	free_all_hardware_textures ();
+	release_video_screens ();
 
-	//
-	// Release all the d3d interfaces
-	//
+	if ( !system_thread_function ( direct_3d_device_lost, NULL ) )
+		return;
 
-	d3d_release_objects ();
+	d3d_valid = TRUE;
 
-	//
-	// Re-create all the d3d interfaces
-	//
-
-	initialise_direct_3d_driver ();
-
-	//
-	// Create the vertex buffers
-	//
-
-	create_d3d_vertex_buffers ();
-
-	if ( restore_vb_friend_function )
-	{
-
-		restore_vb_friend_function ();
-	}
-
-	d3d_data.recreate_d3d = FALSE;
+	d3d_common.recreate_d3d = FALSE;
 
 	//
 	// Set the FPU to zero rounding!
@@ -1294,11 +582,13 @@ void recreate_d3d ( void )
 
 	set_fpu_rounding_mode_zero ();
 
+	initialise_d3d_state ();
+
 	//
 	// Recreate the render to texture screens
 	//
 
-	restore_graphics_screens ();
+	recreate_video_screens ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1309,22 +599,22 @@ void d3d_release_objects ( void )
 {
 
 	HRESULT
-		ddrval;
+		ret;
 
 	destroy_d3d_vertex_buffers ();
 
 	if ( d3d_data.device )
 	{
 
-		ddrval = IDirect3DDevice7_Release ( d3d_data.device );
+		ret = system_thread_function ( direct_3d_device_release, NULL );
 
-		if ( ddrval < DD_OK )
+		if ( FAILED ( ret ) )
 		{
 
-			debug_log ( "Unable to release d3d device7: %s", get_d3d_error_message ( ddrval ) );
+			debug_log ( "Unable to release d3d device: %s", get_d3d_error_message ( ret ) );
 		}
 
-		d3d_data.device = NULL;
+		d3d_data.device[D3D_MAIN] = NULL;
 	}
 }
 
@@ -1334,11 +624,7 @@ void d3d_release_objects ( void )
 
 BOOL d3d_begin_scene ( void )
 {
-	d3d_number_of_executions = 0;
-
-	d3d_number_of_texture_loads = 0;
-
-	if ( d3d_data.recreate_d3d )
+	if ( d3d_common.recreate_d3d )
 	{
 
 		recreate_d3d ();
@@ -1368,12 +654,12 @@ BOOL d3d_begin_scene ( void )
 #if ( REPORT_SCENE_BREAKS )
 			debug_log ( "BEGIN 3D SCENE" );
 #endif
-	
+
 			return ( TRUE );
 		}
 		else
 		{
-	
+
 			return ( FALSE );
 		}
 	}
@@ -1409,7 +695,7 @@ BOOL d3d_end_scene ( void )
 #if ( REPORT_SCENE_BREAKS )
 		debug_log ( "END 3D SCENE" );
 #endif
-	
+
 		return ( TRUE );
 	}
 	else
@@ -1423,18 +709,79 @@ BOOL d3d_end_scene ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void d3d_render_target_recreated ( void )
+void d3d_color_fill(unsigned int colour, int x1, int y1, int x2, int y2)
 {
+	ASSERT ( d3d_in_3d_scene );
 
-	HRESULT
-		ret;
-
-	ret = IDirect3DDevice7_SetRenderTarget ( d3d_data.device, ddraw.lpRenderBuffer, 0 );
-
-	if ( ret != DD_OK )
 	{
+		struct
+		{
+			float x, y, z, r;
+			unsigned colour;
+		} v[] =
+		{
+			{ 0, 0, 1, 1, 0 },
+			{ 0, 0, 1, 1, 0 },
+			{ 0, 0, 1, 1, 0 },
+			{ 0, 0, 1, 1, 0 },
+		};
+		v[0].x = x1;
+		v[0].y = y1;
+		v[0].colour = colour;
+		v[1].x = x2;
+		v[1].y = y1;
+		v[1].colour = colour;
+		v[2].x = x2;
+		v[2].y = y2;
+		v[2].colour = colour;
+		v[3].x = x1;
+		v[3].y = y2;
+		v[3].colour = colour;
 
-		debug_fatal ( "Error setting render target: %s", get_ddraw_error_message ( ret ) );
+		set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, FALSE, FALSE );
+		set_d3d_plain_renderstate ();
+		IDirect3DDevice9_SetFVF ( d3d_data.device[D3D_MAIN], D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX0 );
+		IDirect3DDevice9_DrawPrimitiveUP ( d3d_data.device[D3D_MAIN], D3DPT_TRIANGLEFAN, 2, v, sizeof ( *v ) );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void d3d_texture_draw ( screen *texture, int x, int y )
+{
+	if ( f3d_scene_begin () )
+	{
+		struct
+		{
+			float x, y, z, r;
+			float u, v;
+		} v[] =
+		{
+			{ 0, 0, 1, 1, 0, 0 },
+			{ 0, 0, 1, 1, 1, 0 },
+			{ 0, 0, 1, 1, 1, 1 },
+			{ 0, 0, 1, 1, 0, 1 },
+		};
+		v[0].x = x;
+		v[0].y = y;
+		v[1].x = x + texture->width;
+		v[1].y = y;
+		v[2].x = x + texture->width;
+		v[2].y = y + texture->height;
+		v[3].x = x;
+		v[3].y = y + texture->height;
+
+		set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, FALSE, FALSE );
+		set_d3d_texture_wrapping ( 0, FALSE );
+		set_d3d_texture_mip_filtering ( FALSE );
+		set_d3d_texture_mag_filtering ( FALSE );
+		set_d3d_texture_min_filtering ( FALSE );
+		set_d3d_flat_shaded_textured_renderstate ( texture );
+		IDirect3DDevice9_SetFVF ( d3d_data.device[D3D_MAIN], D3DFVF_XYZRHW | D3DFVF_TEX1 );
+		IDirect3DDevice9_DrawPrimitiveUP ( d3d_data.device[D3D_MAIN], D3DPT_TRIANGLEFAN, 2, v, sizeof ( *v ) );
+		f3d_scene_end ();
 	}
 }
 
@@ -1458,67 +805,6 @@ struct direct_3d_errors
 struct direct_3d_errors d3d_error_table[] =
 {
 	{ D3D_OK, "D3D_OK" },
-	{ D3DERR_BADMAJORVERSION, "D3DERR_BADMAJORVERSION" },
-	{ D3DERR_BADMINORVERSION, "D3DERR_BADMINORVERSION" },
-	{ D3DERR_INVALID_DEVICE, "D3DERR_INVALID_DEVICE" },
-	{ D3DERR_INITFAILED, "D3DERR_INITFAILED" },
-	{ D3DERR_DEVICEAGGREGATED, "D3DERR_DEVICEAGGREGATED" },
-	{ D3DERR_EXECUTE_CREATE_FAILED, "D3DERR_EXECUTE_CREATE_FAILED" },
-	{ D3DERR_EXECUTE_DESTROY_FAILED, "D3DERR_EXECUTE_DESTROY_FAILED" },
-	{ D3DERR_EXECUTE_LOCK_FAILED, "D3DERR_EXECUTE_LOCK_FAILED" },
-	{ D3DERR_EXECUTE_UNLOCK_FAILED, "D3DERR_EXECUTE_UNLOCK_FAILED" },
-	{ D3DERR_EXECUTE_LOCKED, "D3DERR_EXECUTE_LOCKED" },
-	{ D3DERR_EXECUTE_NOT_LOCKED, "D3DERR_EXECUTE_NOT_LOCKED" },
-	{ D3DERR_EXECUTE_FAILED, "D3DERR_EXECUTE_FAILED" },
-	{ D3DERR_EXECUTE_CLIPPED_FAILED, "D3DERR_EXECUTE_CLIPPED_FAILED" },
-	{ D3DERR_TEXTURE_NO_SUPPORT, "D3DERR_TEXTURE_NO_SUPPORT" },
-	{ D3DERR_TEXTURE_CREATE_FAILED, "D3DERR_TEXTURE_CREATE_FAILED" },
-	{ D3DERR_TEXTURE_DESTROY_FAILED, "D3DERR_TEXTURE_DESTROY_FAILED" },
-	{ D3DERR_TEXTURE_LOCK_FAILED, "D3DERR_TEXTURE_LOCK_FAILED" },
-	{ D3DERR_TEXTURE_UNLOCK_FAILED, "D3DERR_TEXTURE_UNLOCK_FAILED" },
-	{ D3DERR_TEXTURE_LOAD_FAILED, "D3DERR_TEXTURE_LOAD_FAILED" },
-	{ D3DERR_TEXTURE_SWAP_FAILED, "D3DERR_TEXTURE_SWAP_FAILED" },
-	{ D3DERR_TEXTURE_LOCKED, "D3DERR_TEXTURE_LOCKED" },
-	{ D3DERR_TEXTURE_NOT_LOCKED, "D3DERR_TEXTURE_NOT_LOCKED" },
-	{ D3DERR_TEXTURE_GETSURF_FAILED, "D3DERR_TEXTURE_GETSURF_FAILED" },
-	{ D3DERR_MATRIX_CREATE_FAILED, "D3DERR_MATRIX_CREATE_FAILED" },
-	{ D3DERR_MATRIX_DESTROY_FAILED, "D3DERR_MATRIX_DESTROY_FAILED" },
-	{ D3DERR_MATRIX_SETDATA_FAILED, "D3DERR_MATRIX_SETDATA_FAILED" },
-	{ D3DERR_MATRIX_GETDATA_FAILED, "D3DERR_MATRIX_GETDATA_FAILED" },
-	{ D3DERR_SETVIEWPORTDATA_FAILED, "D3DERR_SETVIEWPORTDATA_FAILED" },
-	{ D3DERR_INVALIDCURRENTVIEWPORT, "D3DERR_INVALIDCURRENTVIEWPORT" },
-	{ D3DERR_INVALIDPRIMITIVETYPE, "D3DERR_INVALIDPRIMITIVETYPE" },
-	{ D3DERR_INVALIDVERTEXTYPE, "D3DERR_INVALIDVERTEXTYPE" },
-	{ D3DERR_TEXTURE_BADSIZE, "D3DERR_TEXTURE_BADSIZE" },
-	{ D3DERR_INVALIDRAMPTEXTURE, "D3DERR_INVALIDRAMPTEXTURE" },
-	{ D3DERR_MATERIAL_CREATE_FAILED, "D3DERR_MATERIAL_CREATE_FAILED" },
-	{ D3DERR_MATERIAL_DESTROY_FAILED, "D3DERR_MATERIAL_DESTROY_FAILED" },
-	{ D3DERR_MATERIAL_SETDATA_FAILED, "D3DERR_MATERIAL_SETDATA_FAILED" },
-	{ D3DERR_MATERIAL_GETDATA_FAILED, "D3DERR_MATERIAL_GETDATA_FAILED" },
-	{ D3DERR_INVALIDPALETTE, "D3DERR_INVALIDPALETTE" },
-	{ D3DERR_ZBUFF_NEEDS_SYSTEMMEMORY, "D3DERR_ZBUFF_NEEDS_SYSTEMMEMORY" },
-	{ D3DERR_ZBUFF_NEEDS_VIDEOMEMORY, "D3DERR_ZBUFF_NEEDS_VIDEOMEMORY" },
-	{ D3DERR_SURFACENOTINVIDMEM, "D3DERR_SURFACENOTINVIDMEM" },
-	{ D3DERR_LIGHT_SET_FAILED, "D3DERR_LIGHT_SET_FAILED" },
-	{ D3DERR_LIGHTHASVIEWPORT, "D3DERR_LIGHTHASVIEWPORT" },
-	{ D3DERR_LIGHTNOTINTHISVIEWPORT, "D3DERR_LIGHTNOTINTHISVIEWPORT" },
-	{ D3DERR_SCENE_IN_SCENE, "D3DERR_SCENE_IN_SCENE" },
-	{ D3DERR_SCENE_NOT_IN_SCENE, "D3DERR_SCENE_NOT_IN_SCENE" },
-	{ D3DERR_SCENE_BEGIN_FAILED, "D3DERR_SCENE_BEGIN_FAILED" },
-	{ D3DERR_SCENE_END_FAILED, "D3DERR_SCENE_END_FAILED" },
-	{ D3DERR_INBEGIN, "D3DERR_INBEGIN" },
-	{ D3DERR_NOTINBEGIN, "D3DERR_NOTINBEGIN" },
-	{ D3DERR_NOVIEWPORTS, "D3DERR_NOVIEWPORTS" },
-	{ D3DERR_VIEWPORTDATANOTSET, "D3DERR_VIEWPORTDATANOTSET" },
-	{ D3DERR_VIEWPORTHASNODEVICE, "D3DERR_VIEWPORTHASNODEVICE" },
-	{ D3DERR_NOCURRENTVIEWPORT, "D3DERR_NOCURRENTVIEWPORT" },
-	{ D3DERR_INVALIDVERTEXFORMAT, "D3DERR_INVALIDVERTEXFORMAT" },
-	{ D3DERR_COLORKEYATTACHED, "D3DERR_COLORKEYATTACHED" },
-	{ D3DERR_VERTEXBUFFEROPTIMIZED, "D3DERR_VERTEXBUFFEROPTIMIZED" },
-	{ D3DERR_VBUF_CREATE_FAILED, "D3DERR_VBUF_CREATE_FAILED" },
-	{ D3DERR_VERTEXBUFFERLOCKED, "D3DERR_VERTEXBUFFERLOCKED" },
-	{ D3DERR_ZBUFFER_NOTPRESENT, "D3DERR_ZBUFFER_NOTPRESENT" },
-	{ D3DERR_STENCILBUFFER_NOTPRESENT, "D3DERR_STENCILBUFFER_NOTPRESENT" },
 	{ D3DERR_WRONGTEXTUREFORMAT, "D3DERR_WRONGTEXTUREFORMAT" },
 	{ D3DERR_UNSUPPORTEDCOLOROPERATION, "D3DERR_UNSUPPORTEDCOLOROPERATION" },
 	{ D3DERR_UNSUPPORTEDCOLORARG, "D3DERR_UNSUPPORTEDCOLORARG" },
@@ -1529,10 +815,19 @@ struct direct_3d_errors d3d_error_table[] =
 	{ D3DERR_UNSUPPORTEDFACTORVALUE, "D3DERR_UNSUPPORTEDFACTORVALUE" },
 	{ D3DERR_CONFLICTINGRENDERSTATE, "D3DERR_CONFLICTINGRENDERSTATE" },
 	{ D3DERR_UNSUPPORTEDTEXTUREFILTER, "D3DERR_UNSUPPORTEDTEXTUREFILTER" },
-	{ D3DERR_TOOMANYPRIMITIVES, "D3DERR_TOOMANYPRIMITIVES" },
-	{ D3DERR_INVALIDMATRIX, "D3DERR_INVALIDMATRIX" },
-	{ D3DERR_TOOMANYVERTICES, "D3DERR_TOOMANYVERTICES" },
 	{ D3DERR_CONFLICTINGTEXTUREPALETTE, "D3DERR_CONFLICTINGTEXTUREPALETTE" },
+	{ D3DERR_DRIVERINTERNALERROR, "D3DERR_DRIVERINTERNALERROR" },
+	{ D3DERR_NOTFOUND, "D3DERR_NOTFOUND" },
+	{ D3DERR_MOREDATA, "D3DERR_MOREDATA" },
+	{ D3DERR_DEVICELOST, "D3DERR_DEVICELOST" },
+	{ D3DERR_DEVICENOTRESET, "D3DERR_DEVICENOTRESET" },
+	{ D3DERR_NOTAVAILABLE, "D3DERR_NOTAVAILABLE" },
+	{ D3DERR_OUTOFVIDEOMEMORY, "D3DERR_OUTOFVIDEOMEMORY" },
+	{ D3DERR_INVALIDDEVICE, "D3DERR_INVALIDDEVICE" },
+	{ D3DERR_INVALIDCALL, "D3DERR_INVALIDCALL" },
+	{ D3DERR_DRIVERINVALIDCALL, "D3DERR_DRIVERINVALIDCALL" },
+	{ D3DERR_WASSTILLDRAWING, "D3DERR_WASSTILLDRAWING" },
+	{ D3DOK_NOAUTOGEN, "D3DOK_NOAUTOGEN" },
 	{ -1, "D3D_UNKNOWN ERROR" },
 };
 
@@ -1561,5 +856,3 @@ const char * get_d3d_error_message ( HRESULT error )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-

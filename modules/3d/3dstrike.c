@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -158,30 +158,30 @@ void add_3d_lightning_strike ( lightning_strike_types type, float time, float x,
 
 	if ( active_3d_environment )
 	{
-	
+
 		for ( count = 0; count < MAX_NUMBER_OF_LIGHTNING_STRIKES; count++ )
 		{
-	
+
 			if ( !lightning_strikes[count].in_use )
 			{
-	
+
 				lightning_strikes[count].in_use = TRUE;
-	
+
 				lightning_strikes[count].position.x = x;
 				lightning_strikes[count].position.z = z;
-	
+
 				lightning_strikes[count].position.y = 6000;
-	
+
 				lightning_strikes[count].type = ( enum LIGHTNING_STRIKE_TYPES ) type;
-	
+
 				lightning_strikes[count].current_frame_number = 0;
-	
+
 //				lightning_strikes[count].ground_height = get_3d_terrain_elevation ( x, z );
-	
+
 				lightning_strikes[count].time_started = get_3d_time_of_day ( active_3d_environment );
-	
+
 				lightning_strikes[count].time_length = time;
-	
+
 				break;
 			}
 		}
@@ -237,7 +237,7 @@ void update_3d_lightning_strikes ( env_3d *env )
 						lightning_strikes[count].in_use = FALSE;
 
 					}
-					
+
 					break;
 				}
 
@@ -264,7 +264,7 @@ void update_3d_lightning_strikes ( env_3d *env )
 
 						lightning_strikes[count].in_use = FALSE;
 					}
-					
+
 					break;
 				}
 
@@ -310,34 +310,34 @@ void draw_3d_lightning_strikes ( void )
 
 			if ( range < MAX_LIGHTNING_VISUAL_RANGE )
 			{
-	
+
 				switch ( lightning_strikes[count].type )
 				{
-	
+
 					case LIGHTNING_TYPE_CLOUD_BURST:
 					{
-	
+
 						draw_3d_lightning_cloud_burst ( &lightning_strikes[count] );
-	
+
 						break;
 					}
-	
+
 					case LIGHTNING_TYPE_FORKED_1:
 					case LIGHTNING_TYPE_FORKED_2:
 					case LIGHTNING_TYPE_FORKED_3:
 					case LIGHTNING_TYPE_FORKED_4:
 					{
-	
+
 						draw_3d_lightning_strike ( &lightning_strikes[count] );
-	
+
 						break;
 					}
-	
+
 					default:
 					{
-	
+
 						debug_fatal ( "Drawing unknown lightning type" );
-	
+
 						break;
 					}
 				}
@@ -434,17 +434,17 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 		//
 		// Rotate the polygon around to the users viewpoint
 		//
-	
+
 		vert = polygon;
 
 		rotation_3d[0][0] = ( visual_3d_vp->xv.x );
 		rotation_3d[0][1] = ( visual_3d_vp->yv.x );
 		rotation_3d[0][2] = ( visual_3d_vp->zv.x );
-	
+
 		rotation_3d[1][0] = ( visual_3d_vp->xv.y );
 		rotation_3d[1][1] = ( visual_3d_vp->yv.y );
 		rotation_3d[1][2] = ( visual_3d_vp->zv.y );
-	
+
 		rotation_3d[2][0] = ( visual_3d_vp->xv.z );
 		rotation_3d[2][1] = ( visual_3d_vp->yv.z );
 		rotation_3d[2][2] = ( visual_3d_vp->zv.z );
@@ -457,62 +457,62 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 
 		while ( vert )
 		{
-	
+
 			float
 				x,
 				y,
 				z;
-	
+
 			x = vert->x * rotation_3d[0][0] + vert->y * rotation_3d[1][0] + vert->z * rotation_3d[2][0] + relative_position.x;
 			y = vert->x * rotation_3d[0][1] + vert->y * rotation_3d[1][1] + vert->z * rotation_3d[2][1] + relative_position.y;
 			z = vert->x * rotation_3d[0][2] + vert->y * rotation_3d[1][2] + vert->z * rotation_3d[2][2] + relative_position.z;
-	
+
 			x *= active_3d_environment->screen_i_scale;
 			y *= active_3d_environment->screen_j_scale;
 
 			if ( *( ( int * ) &z ) >= *( ( int * ) &clip_hither ) )
 			{
-	
+
 				float
 					q,
 					i,
 					j;
-	
+
 				float
 					oxmax,
 					oxmin,
 					oymax,
 					oymin;
-			
+
 				int
 					ixmax,
 					ixmin,
 					iymax,
 					iymin;
-			
+
 				q = 1.0 / z;
-	
+
 				vert->x = x;
 				vert->y = y;
 				vert->z = z;
 				vert->q = q;
-	
+
 				i = ( x * q );
 				j = ( y * q );
-	
+
 				vert->j = active_3d_environment->y_origin - j;
 				vert->i = active_3d_environment->x_origin + i;
-	
+
 				oxmax = active_viewport.x_max - vert->i;
 				oxmin = vert->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - vert->j;
 				oymin = vert->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
 				iymin = *( ( int * ) &oymin );
-			
+
 				vert->outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
 
 				outcode |= vert->outcode;
@@ -520,7 +520,7 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 			}
 			else
 			{
-	
+
 				vert->outcode = CLIP_HITHER;
 				vert->z = z;
 				vert->x = x;
@@ -529,7 +529,7 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 				outcode |= vert->outcode;
 				outcode2 &= vert->outcode;
 			}
-	
+
 			vert = vert->next_vertex;
 		}
 
@@ -542,7 +542,7 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 
 		if ( outcode & CLIP_HITHER )
 		{
-	
+
 			polygon = hither_clip_3d_polygon ( polygon, &outcode );
 
 			if ( !polygon )
@@ -551,12 +551,12 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 				return;
 			}
 		}
-	
+
 		if ( outcode )
 		{
 
 			apply_perspective_to_polygon_texture ( polygon );
-			
+
 			polygon = clip_3d_polygon ( polygon, outcode );
 
 			if ( !polygon )
@@ -580,14 +580,14 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 			set_d3d_texture_stage_state ( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
-	
-			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE );
-			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
+
+			set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_ONE );
+			set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_ONE );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
+			set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
 
 			colour.red = 255;
 			colour.green = 255;
@@ -595,7 +595,7 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 			colour.alpha = 255;
 
 			specular.colour = 0;
-	
+
 			draw_wbuffered_flat_shaded_textured_polygon ( polygon, colour, specular );
 		}
 	}
@@ -700,17 +700,17 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 		//
 		// Rotate the polygon around to the users viewpoint
 		//
-	
+
 		vert = polygon;
-	
+
 		rotation_3d[0][0] = ( visual_3d_vp->xv.x );
 		rotation_3d[0][1] = ( visual_3d_vp->yv.x );
 		rotation_3d[0][2] = ( visual_3d_vp->zv.x );
-	
+
 		rotation_3d[1][0] = ( visual_3d_vp->xv.y );
 		rotation_3d[1][1] = ( visual_3d_vp->yv.y );
 		rotation_3d[1][2] = ( visual_3d_vp->zv.y );
-	
+
 		rotation_3d[2][0] = ( visual_3d_vp->xv.z );
 		rotation_3d[2][1] = ( visual_3d_vp->yv.z );
 		rotation_3d[2][2] = ( visual_3d_vp->zv.z );
@@ -723,12 +723,12 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 
 		while ( vert )
 		{
-	
+
 			float
 				x,
 				y,
 				z;
-	
+
 			x = vert->x * rotation_3d[0][0] + vert->y * rotation_3d[1][0] + vert->z * rotation_3d[2][0] + relative_position.x;
 			y = vert->x * rotation_3d[0][1] + vert->y * rotation_3d[1][1] + vert->z * rotation_3d[2][1] + relative_position.y;
 			z = vert->x * rotation_3d[0][2] + vert->y * rotation_3d[1][2] + vert->z * rotation_3d[2][2] + relative_position.z;
@@ -738,47 +738,47 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 
 			if ( *( ( int * ) &z ) >= *( ( int * ) &clip_hither ) )
 			{
-	
+
 				float
 					q,
 					i,
 					j;
-	
+
 				float
 					oxmax,
 					oxmin,
 					oymax,
 					oymin;
-			
+
 				int
 					ixmax,
 					ixmin,
 					iymax,
 					iymin;
-			
+
 				q = 1.0 / z;
-	
+
 				vert->x = x;
 				vert->y = y;
 				vert->z = z;
 				vert->q = q;
-	
+
 				i = ( x * q );
 				j = ( y * q );
-	
+
 				vert->j = active_3d_environment->y_origin - j;
 				vert->i = active_3d_environment->x_origin + i;
-	
+
 				oxmax = active_viewport.x_max - vert->i;
 				oxmin = vert->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - vert->j;
 				oymin = vert->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
 				iymin = *( ( int * ) &oymin );
-			
+
 				vert->outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
 
 				outcode |= vert->outcode;
@@ -786,7 +786,7 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 			}
 			else
 			{
-	
+
 				vert->outcode = CLIP_HITHER;
 				vert->z = z;
 				vert->x = x;
@@ -795,7 +795,7 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 				outcode |= vert->outcode;
 				outcode2 &= vert->outcode;
 			}
-	
+
 			vert = vert->next_vertex;
 		}
 
@@ -808,7 +808,7 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 
 		if ( outcode & CLIP_HITHER )
 		{
-	
+
 			polygon = hither_clip_3d_polygon ( polygon, &outcode );
 
 			if ( !polygon )
@@ -817,12 +817,12 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 				return;
 			}
 		}
-	
+
 		if ( outcode )
 		{
 
 			apply_perspective_to_polygon_texture ( polygon );
-			
+
 			polygon = clip_3d_polygon ( polygon, outcode );
 
 			if ( !polygon )
@@ -852,17 +852,17 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 			set_d3d_texture ( 0, texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 			set_d3d_texture_stage_state ( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
-	
-			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE );
-			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
+
+			set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_ONE );
+			set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_ONE );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
+			set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
+			set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
 
 			specular.colour = 0;
-	
+
 			draw_wbuffered_flat_shaded_textured_polygon ( polygon, colour, specular );
 		}
 	}

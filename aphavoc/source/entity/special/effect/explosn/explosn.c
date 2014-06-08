@@ -849,7 +849,7 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 		case WEAPON_KILL_CODE_OVERSHOT_TARGET:
 		case WEAPON_KILL_CODE_SELF_DESTRUCT:
 		{
-			explosion_type = get_suitable_weapon_explosion_type (en, FALSE);
+			explosion_type = get_suitable_weapon_explosion_type (en, WEAPON_KILL_CODE_OK);
 			break;
 		}
 		default:
@@ -1001,7 +1001,7 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target)
 	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
 	damage_capability = get_local_entity_int_value (en, INT_TYPE_DAMAGE_CAPABILITY);
 
-	damage_radius = sqrt(damage_capability);
+	damage_radius = sqrt((float)damage_capability);
 
 	if (damage_radius == 0.0)
 	{
@@ -1087,7 +1087,7 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target)
 
 									if (object->type != ENTITY_TYPE_WEAPON)
 										notify_local_entity (ENTITY_MESSAGE_COLLISION, object, en, damage_modifier);
-									else if (1 - pow(damage_modifier, pow((float)(warhead_type - 3) / 3, 1.5)) > 0.75 && get_local_entity_int_value (object, INT_TYPE_WEAPON_ROCKET))
+									else if (1 - pow(damage_modifier, pow((float)(warhead_type - 3) / 3, 1.5f)) > 0.75 && get_local_entity_int_value (object, INT_TYPE_WEAPON_ROCKET))
 									{
 										#if DEBUG_MODULE
 										debug_log ("EXPLOSN : MISSILE DESTROYED!");

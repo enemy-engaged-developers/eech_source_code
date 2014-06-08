@@ -411,8 +411,7 @@ void draw_hind_hud_on_texture (void)
 
 		if (get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
 		{
-			if (custom_3d_models.arneh_mi24v_cockpit)
-				get_hind_3d_cockpit_hud_view_position(&head_offset_x, &head_offset_y, &head_offset_z);
+			get_hind_3d_cockpit_hud_view_position(&head_offset_x, &head_offset_y, &head_offset_z);
 		}
 		else
 		{
@@ -429,7 +428,7 @@ void draw_hind_hud_on_texture (void)
 			// move texture UV coordinates to move and scale the texture
 			unsigned i;
 			float scale;
-			
+
 			if (d3d_using_hardware_tnl) // UV handling doesn't work in this case
 				scale = 1;
 			else
@@ -457,7 +456,7 @@ void draw_hind_hud_on_texture (void)
 					hud_display_model->surface_texture_points[i].v = v;
 				}
 			}
-			
+
 			x_offset = head_offset_x / hud_width * scale * 2.22;
 			y_offset = (head_offset_y - hud_position_y) / hud_height * scale * 2.22;
 			set_2d_view_offset(hud_env, x_offset, y_offset);
@@ -476,8 +475,8 @@ void draw_hind_hud_on_texture (void)
 
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5);
+	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5);
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -488,8 +487,8 @@ void draw_hind_hud_on_texture (void)
 	hud_screen_x_min = full_screen_x_mid - ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
 	hud_screen_y_min = full_screen_y_mid - ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
 
-	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
+	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
 
 	hud_screen_x_scale = 640.0 / full_screen_width;
 	hud_screen_y_scale = 480.0 / full_screen_height;
@@ -537,8 +536,6 @@ void draw_hind_hud_on_texture (void)
 		draw_line(0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, 0, clear_hud_colour);
 		draw_line(0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 		draw_line(HUD_VIEWPORT_SMALL_SIZE - 1, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-
-		flush_screen_texture_graphics (hud_texture_screen);
 
 		unlock_screen (hud_texture_screen);
 	}

@@ -461,7 +461,7 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 		// No need to set translucency on, its already on! but turn off specular
 		//
 
-		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
+		set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
 
 		draw_temporary_translucent_polygons ();
 	}
@@ -1197,7 +1197,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 
 		reset_deferred_state_changes ();
 
-		set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
+		set_deferred_d3d_int_state ( D3DRS_SPECULARENABLE, current_object_3d_specular );
 
 		if ( current_object_3d_surface->textured )
 		{
@@ -1207,11 +1207,11 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 			if ( current_object_3d_surface->texture_wrapped_v )	{ current_object_3d_texture_v_address = D3DTADDRESS_WRAP; }
 			else																	{ current_object_3d_texture_v_address = D3DTADDRESS_CLAMP; }
 
-			if ( current_object_3d_surface->texture_filtered )		{ current_object_3d_texture_filter = D3DTFG_LINEAR; }
-			else																	{ current_object_3d_texture_filter = D3DTFG_POINT; }
+			if ( current_object_3d_surface->texture_filtered )		{ current_object_3d_texture_filter = D3DTEXF_LINEAR; }
+			else																	{ current_object_3d_texture_filter = D3DTEXF_POINT; }
 
-			if ( current_object_3d_surface->texture_mipmapped )	{ current_object_3d_texture_mipmap = D3DTFN_LINEAR; }
-			else																	{ current_object_3d_texture_mipmap = D3DTFN_POINT; }
+			if ( current_object_3d_surface->texture_mipmapped )	{ current_object_3d_texture_mipmap = D3DTEXF_LINEAR; }
+			else																	{ current_object_3d_texture_mipmap = D3DTEXF_POINT; }
 
 			if ( current_object_3d_surface->texture_animation )
 			{
@@ -1228,10 +1228,10 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 
 			set_deferred_d3d_texture ( 0, current_object_3d_texture );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_mipmap );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, current_object_3d_texture_u_address );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, current_object_3d_texture_v_address );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, current_object_3d_texture_filter );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, current_object_3d_texture_mipmap );
 
 			if ( current_object_3d_surface->has_luminosity_texture )
 			{
@@ -1254,15 +1254,15 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 				if ( current_object_3d_surface->luminosity_texture_wrapped_v )	{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_WRAP; }
 				else																				{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_CLAMP; }
 
-				if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTFG_LINEAR; }
-				else																				{ current_object_3d_luminosity_texture_filter = D3DTFG_POINT; }
+				if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTEXF_LINEAR; }
+				else																				{ current_object_3d_luminosity_texture_filter = D3DTEXF_POINT; }
 
-				if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFN_LINEAR; }
-				else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFN_POINT; }
+				if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTEXF_LINEAR; }
+				else																				{ current_object_3d_luminosity_texture_mipmap = D3DTEXF_POINT; }
 
 				if ( current_object_3d_surface->smoothed )
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, this_object_3d_info->points_base, &current_object_3d_outcode ) )
@@ -1282,7 +1282,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 				}
 				else
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( current_object_3d_surface->polygons )
@@ -1325,7 +1325,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 			{
 				if ( current_object_3d_surface->smoothed )
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, this_object_3d_info->points_base, &current_object_3d_outcode ) )
@@ -1352,7 +1352,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 				}
 				else
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( current_object_3d_surface->polygons )
@@ -1397,7 +1397,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 			set_deferred_d3d_texture ( 0, NULL );
 			if ( current_object_3d_surface->smoothed )
 			{
-				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+				set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
 					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, this_object_3d_info->points_base, &current_object_3d_outcode ) )
@@ -1417,7 +1417,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 			}
 			else
 			{
-				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+				set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
 					if ( current_object_3d_surface->polygons )
@@ -1518,7 +1518,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 
 		reset_deferred_state_changes ();
 
-		set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
+		set_deferred_d3d_int_state ( D3DRS_SPECULARENABLE, current_object_3d_specular );
 
 		if ( current_object_3d_surface->textured )
 		{
@@ -1528,11 +1528,11 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 			if ( current_object_3d_surface->texture_wrapped_v )	{ current_object_3d_texture_v_address = D3DTADDRESS_WRAP; }
 			else																	{ current_object_3d_texture_v_address = D3DTADDRESS_CLAMP; }
 
-			if ( current_object_3d_surface->texture_filtered )		{ current_object_3d_texture_filter = D3DTFG_LINEAR; }
-			else																	{ current_object_3d_texture_filter = D3DTFG_POINT; }
+			if ( current_object_3d_surface->texture_filtered )		{ current_object_3d_texture_filter = D3DTEXF_LINEAR; }
+			else																	{ current_object_3d_texture_filter = D3DTEXF_POINT; }
 
-			if ( current_object_3d_surface->texture_mipmapped )	{ current_object_3d_texture_mipmap = D3DTFN_LINEAR; }
-			else																	{ current_object_3d_texture_mipmap = D3DTFN_POINT; }
+			if ( current_object_3d_surface->texture_mipmapped )	{ current_object_3d_texture_mipmap = D3DTEXF_LINEAR; }
+			else																	{ current_object_3d_texture_mipmap = D3DTEXF_POINT; }
 
 			if ( current_object_3d_surface->texture_animation )
 			{
@@ -1550,10 +1550,10 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 			set_deferred_d3d_texture ( 0, current_object_3d_texture );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
-			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_mipmap );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, current_object_3d_texture_u_address );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, current_object_3d_texture_v_address );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, current_object_3d_texture_filter );
+			set_deferred_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, current_object_3d_texture_mipmap );
 
 			if ( current_object_3d_surface->has_luminosity_texture )
 			{
@@ -1576,15 +1576,15 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 				if ( current_object_3d_surface->luminosity_texture_wrapped_v )	{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_WRAP; }
 				else																				{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_CLAMP; }
 
-				if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTFG_LINEAR; }
-				else																				{ current_object_3d_luminosity_texture_filter = D3DTFG_POINT; }
+				if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTEXF_LINEAR; }
+				else																				{ current_object_3d_luminosity_texture_filter = D3DTEXF_POINT; }
 
-				if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFN_LINEAR; }
-				else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFN_POINT; }
+				if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTEXF_LINEAR; }
+				else																				{ current_object_3d_luminosity_texture_mipmap = D3DTEXF_POINT; }
 
 				if ( current_object_3d_surface->smoothed )
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						wrender_unclipped_3d_object_gouraud_textured_lightmap_polygon ( current_object_3d_faces );
@@ -1594,7 +1594,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 				}
 				else
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( current_object_3d_surface->polygons )
@@ -1616,7 +1616,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 			{
 				if ( current_object_3d_surface->smoothed )
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( current_object_3d_specular )
@@ -1634,7 +1634,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 				}
 				else
 				{
-					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+					set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
 						if ( current_object_3d_surface->polygons )
@@ -1659,7 +1659,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 			set_deferred_d3d_texture ( 0, NULL );
 			if ( current_object_3d_surface->smoothed )
 			{
-				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+				set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
 					wrender_unclipped_3d_object_gouraud_polygon ( current_object_3d_faces );
@@ -1669,7 +1669,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 			}
 			else
 			{
-				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
+				set_deferred_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_FLAT );
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
 					if ( current_object_3d_surface->polygons )

@@ -320,7 +320,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	
 	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE && command_line_radio_msgs_noise)
 	{
-		float radio_noize = pow(raw->amplification, 1 - frand1()/2);
+		float radio_noize = pow(raw->amplification, 1.0f - (float)(frand1()/2));
 		v *= radio_noize;
 	}
 	else

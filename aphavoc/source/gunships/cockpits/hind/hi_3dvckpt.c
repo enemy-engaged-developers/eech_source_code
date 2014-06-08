@@ -620,7 +620,7 @@ void deinitialise_hind_3d_cockpit (void)
 	//
 
 	deinitialise_common_virtual_cockpit_cameras ();
-	
+
 	clear_head_movement_data();
 }
 
@@ -772,7 +772,7 @@ static void animate_doors(void)
 {
 	const float door_movement_rate = 0.7 * get_delta_time();
 	float new_state = door_state;
-	
+
 	if (open_door && door_handle_timer < 0.4)
 		new_state += max(-door_state, -door_movement_rate);
 	else
@@ -1201,13 +1201,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 		draw_hind_mfd_on_texture ();
 	}
 
-	// Casm 10SEP05 Havoc Instruments - temporary used for Hind
-	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
-	{
-		memcpy (&havoc_lamps, &hind_lamps, sizeof (havoc_lamps));
-		draw_havoc_virtual_cockpit_instruments_on_texture ();
-	}
-
 	////////////////////////////////////////
 	//
 	// draw 3D scene with lighting
@@ -1628,7 +1621,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 #if 0
 	if
 	(
-		(d3d_can_render_to_texture) &&
 		(get_hind_eo_display_visible ()) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
 		(flags & (VIRTUAL_COCKPIT_CRT_DISPLAY))
@@ -1765,7 +1757,7 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 				if (!(get_helicopter_main_rotors_blurred (get_gunship_entity ()) && (!get_global_blurred_main_rotors_visible_from_cockpit ())))
 				{
 					inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
-					
+
 					animate_helicopter_virtual_cockpit_main_rotors (get_gunship_entity (), virtual_cockpit_main_rotor_inst3d, inst3d);
 
 					memcpy (&virtual_cockpit_main_rotor_inst3d->vp, &vp, sizeof (viewpoint));

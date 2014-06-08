@@ -199,7 +199,7 @@ static void update_server (entity *en)
 		}
 		
 		if (damage_type > AIRCRAFT_DAMAGE_NONE)
-			if (frand1() < pow(damage_type, 4) * get_delta_time())
+			if (frand1() < pow((float)damage_type, 4) * get_delta_time())
 			{
 				int damage_level = max(0, get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) - 1);
 

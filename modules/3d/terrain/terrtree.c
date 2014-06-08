@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -231,17 +231,17 @@ void unload_terrain_3d_tree_database ( void )
 
 	if ( terrain_tree_sectors )
 	{
-	
+
 		mclose ( terrain_tree_database );
-	
+
 		for ( z_sector = 0; z_sector < terrain_3d_sector_z_max; z_sector++ )
 		{
-	
+
 			for ( x_sector = 0; x_sector < terrain_3d_sector_z_max; x_sector++ )
 			{
-	
+
 				terrain_tree_sectors[z_sector][x_sector].number_of_trees = 0;
-	
+
 				terrain_tree_sectors[z_sector][x_sector].data = NULL;
 			}
 		}
@@ -267,7 +267,7 @@ void draw_3d_terrain_tree_sector ( scene_slot_drawing_list *slot )
 	float
 		current_sector_x_offset,
 		current_sector_z_offset;
-	
+
 	current_tree_sector = &terrain_tree_sectors[slot->sector.z][slot->sector.x];
 
 	tree_data = current_tree_sector->data;
@@ -283,7 +283,7 @@ void draw_3d_terrain_tree_sector ( scene_slot_drawing_list *slot )
 
 		for ( count = 0; count < current_tree_sector->number_of_trees; count++ )
 		{
-	
+
 			float
 				x,
 				y,
@@ -326,7 +326,7 @@ void draw_3d_terrain_tree_sector ( scene_slot_drawing_list *slot )
 
 		draw_buffered_sorted_terrain_trees ();
 
-		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+		set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 	}
 }
 
@@ -399,24 +399,24 @@ void add_buffered_tree ( int index )
 			//
 			// Start searching BACKWARDS ( more distant trees drawn first )
 			//
-	
+
 			while ( this_tree )
 			{
-	
+
 				if ( distance >= this_tree->depth )
 				{
-	
+
 					break;
 				}
 				else
 				{
-	
+
 					previous_tree = this_tree;
-	
+
 					this_tree = this_tree->pred;
 				}
 			}
-	
+
 			if ( this_tree )
 			{
 
@@ -461,7 +461,7 @@ void add_buffered_tree ( int index )
 			}
 			else
 			{
-	
+
 				//
 				// Add this tree at the HEAD of the list
 				//
@@ -483,24 +483,24 @@ void add_buffered_tree ( int index )
 			//
 			// Start searching FORWARDS ( less distant trees drawn last )
 			//
-	
+
 			while ( this_tree )
 			{
-	
+
 				if ( distance <= this_tree->depth )
 				{
-	
+
 					break;
 				}
 				else
 				{
-	
+
 					previous_tree = this_tree;
-	
+
 					this_tree = this_tree->succ;
 				}
 			}
-	
+
 			if ( this_tree )
 			{
 
@@ -545,7 +545,7 @@ void add_buffered_tree ( int index )
 			}
 			else
 			{
-	
+
 				//
 				// Add this polygon at the TAIL of the list
 				//
@@ -678,7 +678,7 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 
 	vec3d
 		*pos;
-	
+
 	vec3d
 		object_camera_position,
 		object_pos;
@@ -836,18 +836,18 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 					distance = 1 - ( distance / light_ptr->radius );
 
 					this_light = &light_3d_array[object_3d_light_3d_current_base];
-			
+
 					object_3d_light_3d_current_base++;
-		
+
 					if ( prev_light )
 					{
-		
+
 						prev_light->succ = this_light;
 					}
-		
+
 					this_light->pred = prev_light;
 					this_light->succ = NULL;
-		
+
 					this_light->type = light_ptr->type;
 
 					this_light->colour.red = light_ptr->colour.red * distance;
@@ -860,65 +860,65 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 					lx = ( vector.x * obj->vp.attitude[0][0] );
 					lx += ( vector.y * obj->vp.attitude[0][1] );
 					lx += ( vector.z * obj->vp.attitude[0][2] );
-		
+
 					ly = ( vector.x * obj->vp.attitude[1][0] );
 					ly += ( vector.y * obj->vp.attitude[1][1] );
 					ly += ( vector.z * obj->vp.attitude[1][2] );
-		
+
 					lz = ( vector.x * obj->vp.attitude[2][0] );
 					lz += ( vector.y * obj->vp.attitude[2][1] );
 					lz += ( vector.z * obj->vp.attitude[2][2] );
-		
+
 					this_light->lx = lx;
 					this_light->ly = ly;
 					this_light->lz = lz;
-		
+
 					prev_light = this_light;
 				}
 			}
 			else
 			{
-	
+
 				this_light = &light_3d_array[object_3d_light_3d_current_base];
-		
+
 				object_3d_light_3d_current_base++;
-	
+
 				if ( prev_light )
 				{
-	
+
 					prev_light->succ = this_light;
 				}
-	
+
 				this_light->pred = prev_light;
 				this_light->succ = NULL;
-	
+
 				this_light->type = light_ptr->type;
 
 				this_light->colour.red = light_ptr->colour.red;
 				this_light->colour.green = light_ptr->colour.green;
 				this_light->colour.blue = light_ptr->colour.blue;
 //				this_light->colour.intensity = light_ptr->colour.intensity;
-	
+
 				lx = ( light_ptr->lx * obj->vp.attitude[0][0] );
 				lx +=  ( light_ptr->ly * obj->vp.attitude[0][1] );
 				lx += ( light_ptr->lz * obj->vp.attitude[0][2] );
-	
+
 				ly = ( light_ptr->lx * obj->vp.attitude[1][0] );
 				ly += ( light_ptr->ly * obj->vp.attitude[1][1] );
 				ly += ( light_ptr->lz * obj->vp.attitude[1][2] );
-	
-	
+
+
 				lz = ( light_ptr->lx * obj->vp.attitude[2][0] );
 				lz += ( light_ptr->ly * obj->vp.attitude[2][1] );
 				lz += ( light_ptr->lz * obj->vp.attitude[2][2] );
-	
+
 				this_light->lx = lx;
 				this_light->ly = ly;
 				this_light->lz = lz;
-	
+
 				prev_light = this_light;
 			}
-	
+
 			light_ptr = light_ptr->succ;
 		}
 	}
@@ -1007,7 +1007,7 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 
 		polygon_zdistance_bias = POLYGON_ZDISTANCE_NORMAL_BIAS;
 
-		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CW );
+		set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CW );
 
 		if ( object_outcode )
 		{
@@ -1020,7 +1020,7 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 			draw_3d_terrain_tree_unclipped_faces ( object_number, this_object_3d_info );
 		}
 
-		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+		set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 		if ( object_outcode )
 		{
@@ -1079,10 +1079,10 @@ void draw_3d_terrain_tree_clipped_faces ( int object_number, object_3d_info *thi
 
 			if ( current_object_3d_surface->texture_wrapped )	{ current_object_3d_texture_address = D3DTADDRESS_WRAP; }
 			else																{ current_object_3d_texture_address = D3DTADDRESS_CLAMP; }
-	
+
 			if ( current_object_3d_surface->texture_filtered )	{ current_object_3d_texture_filter = D3DFILTER_LINEAR; }
 			else																{ current_object_3d_texture_filter = D3DFILTER_NEAREST; }
-	
+
 			if ( current_object_3d_surface->texture_mipmapped ){ current_object_3d_texture_mipmap = D3DFILTER_MIPLINEAR; }
 			else																{ current_object_3d_texture_mipmap = D3DFILTER_NEAREST; }
 		}
@@ -1201,10 +1201,10 @@ void draw_3d_terrain_tree_unclipped_faces ( int object_number, object_3d_info *t
 
 			if ( current_object_3d_surface->texture_wrapped )	{ current_object_3d_texture_address = D3DTADDRESS_WRAP; }
 			else																{ current_object_3d_texture_address = D3DTADDRESS_CLAMP; }
-	
+
 			if ( current_object_3d_surface->texture_filtered )	{ current_object_3d_texture_filter = D3DFILTER_LINEAR; }
 			else																{ current_object_3d_texture_filter = D3DFILTER_NEAREST; }
-	
+
 			if ( current_object_3d_surface->texture_mipmapped ){ current_object_3d_texture_mipmap = D3DFILTER_MIPLINEAR; }
 			else																{ current_object_3d_texture_mipmap = D3DFILTER_NEAREST; }
 		}
@@ -1306,12 +1306,12 @@ void render_clipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_fac
 																		current_object_3d_texture_list,
 																		object_base->points_base );
 																		*/
-		
+
 		clip_3d_coord = 0;
 
 		if ( current_object_3d_outcode & CLIP_HITHER )
 		{
-	
+
 			poly = hither_clip_3d_polygon ( poly, &current_object_3d_outcode );
 
 			if ( !poly )
@@ -1325,7 +1325,7 @@ void render_clipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_fac
 		{
 
 			apply_perspective_to_polygon_texture ( poly );
-				
+
 			poly = clip_3d_polygon ( poly, current_object_3d_outcode );
 
 			if ( !poly )
@@ -1337,9 +1337,9 @@ void render_clipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_fac
 			remove_perspective_from_polygon_texture ( poly );
 		}
 
-//		set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMAG, current_object_3d_texture_filter );
-//		set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMIN, current_object_3d_texture_mipmap );
-//		set_d3d_int_state ( D3DRENDERSTATE_TEXTUREADDRESS, current_object_3d_texture_address );
+//		set_d3d_int_state ( D3DRS_TEXTUREMAG, current_object_3d_texture_filter );
+//		set_d3d_int_state ( D3DRS_TEXTUREMIN, current_object_3d_texture_mipmap );
+//		set_d3d_int_state ( D3DRS_TEXTUREADDRESS, current_object_3d_texture_address );
 
 //		draw_d3d_flat_shaded_textured_polygon ( poly, texture, colour );
 	}
@@ -1382,45 +1382,45 @@ void render_clipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( objec
 																									*/
 		if ( poly )
 		{
-		
+
 			if ( outcode )
 			{
-		
+
 				clip_3d_coord = 0;
 
 				if ( outcode & CLIP_HITHER )
 				{
-			
+
 					poly = hither_clip_3d_polygon ( poly, &outcode );
-		
+
 					if ( !poly )
 					{
-		
+
 						continue;
 					}
 				}
-			
+
 				if ( outcode )
 				{
-		
+
 					apply_perspective_to_polygon_texture ( poly );
-						
+
 					poly = clip_3d_polygon ( poly, outcode );
-		
+
 					if ( !poly )
 					{
-		
+
 						continue;
 					}
-		
+
 					remove_perspective_from_polygon_texture ( poly );
 				}
 			}
-		
 
-//			set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMAG, current_object_3d_texture_filter );
-//			set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMIN, current_object_3d_texture_mipmap );
-//			set_d3d_int_state ( D3DRENDERSTATE_TEXTUREADDRESS, current_object_3d_texture_address );
+
+//			set_d3d_int_state ( D3DRS_TEXTUREMAG, current_object_3d_texture_filter );
+//			set_d3d_int_state ( D3DRS_TEXTUREMIN, current_object_3d_texture_mipmap );
+//			set_d3d_int_state ( D3DRS_TEXTUREADDRESS, current_object_3d_texture_address );
 
 //			draw_d3d_gouraud_shaded_textured_polygon ( poly, texture );
 		}
@@ -1484,9 +1484,9 @@ void render_unclipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_f
 	colour.blue = iblue;
 	colour.alpha = current_tree_colour_alpha;
 
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMAG, current_object_3d_texture_filter );
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMIN, current_object_3d_texture_mipmap );
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREADDRESS, current_object_3d_texture_address );
+//	set_d3d_int_state ( D3DRS_TEXTUREMAG, current_object_3d_texture_filter );
+//	set_d3d_int_state ( D3DRS_TEXTUREMIN, current_object_3d_texture_mipmap );
+//	set_d3d_int_state ( D3DRS_TEXTUREADDRESS, current_object_3d_texture_address );
 
 	//
 	// Should draw a flat shaded polygon
@@ -1504,7 +1504,7 @@ void render_unclipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_f
 	{
 
 		vert = NULL;	//transformed_points + current_object_3d_point_list[count].point;
-	
+
 		*( ( int * ) &destination_vertices[count].sx ) = *( ( int * ) &vert->i );
 		*( ( int * ) &destination_vertices[count].sy ) = *( ( int * ) &vert->j );
 		destination_vertices[count].sz = vert->q;
@@ -1560,9 +1560,9 @@ void render_unclipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( obj
 
 	set_d3d_gouraud_shaded_textured_renderstate ( texture );
 
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMAG, current_object_3d_texture_filter );
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREMIN, current_object_3d_texture_mipmap );
-//	set_d3d_int_state ( D3DRENDERSTATE_TEXTUREADDRESS, current_object_3d_texture_address );
+//	set_d3d_int_state ( D3DRS_TEXTUREMAG, current_object_3d_texture_filter );
+//	set_d3d_int_state ( D3DRS_TEXTUREMIN, current_object_3d_texture_mipmap );
+//	set_d3d_int_state ( D3DRS_TEXTUREADDRESS, current_object_3d_texture_address );
 
 	destination_vertices = get_d3d_vertices_points_address ( this_face->number_of_points );
 
@@ -1573,7 +1573,7 @@ void render_unclipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( obj
 			ir,
 			ig,
 			ib;
-	
+
 		float
 			r,
 			g,
@@ -1583,7 +1583,7 @@ void render_unclipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( obj
 			colour;
 
 		vert = NULL;	//transformed_points + current_object_3d_point_list[count].point;
-	
+
 		*( ( int * ) &destination_vertices[count].sx ) = *( ( int * ) &vert->i );
 		*( ( int * ) &destination_vertices[count].sy ) = *( ( int * ) &vert->j );
 		destination_vertices[count].sz = vert->q;

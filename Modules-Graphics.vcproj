@@ -315,27 +315,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modules\graphics\dassess.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\dassess.h"
-				>
-			</File>
-			<File
 				RelativePath=".\modules\graphics\dirdraw.c"
 				>
 			</File>
 			<File
 				RelativePath=".\modules\graphics\dirdraw.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\dither.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\dither.h"
 				>
 			</File>
 			<File
@@ -348,14 +332,6 @@
 			</File>
 			<File
 				RelativePath=".\modules\graphics\fillasm.asm"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\gfxzoom.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\gfxzoom.h"
 				>
 			</File>
 			<File
@@ -431,14 +407,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modules\graphics\pixeltxt.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\pixeltxt.h"
-				>
-			</File>
-			<File
 				RelativePath=".\modules\graphics\polyd3d.c"
 				>
 			</File>
@@ -487,14 +455,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modules\graphics\rle.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\rle.h"
-				>
-			</File>
-			<File
 				RelativePath=".\modules\graphics\screens.c"
 				>
 			</File>
@@ -520,14 +480,6 @@
 			</File>
 			<File
 				RelativePath=".\modules\graphics\tempbuf.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\textscrn.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\textscrn.h"
 				>
 			</File>
 			<File
@@ -600,6 +552,14 @@
 			</File>
 			<File
 				RelativePath=".\modules\graphics\zbuffer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\modules\graphics\f3d.c"
+				>
+			</File>
+			<File
+				RelativePath=".\modules\graphics\f3d.h"
 				>
 			</File>
 		</Filter>

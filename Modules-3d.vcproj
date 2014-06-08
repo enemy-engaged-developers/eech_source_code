@@ -235,26 +235,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modules\3d\3DFUNC.C"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\modules\3d\3dhoriz.c"
 				>
 			</File>
@@ -422,10 +402,6 @@
 			</File>
 			<File
 				RelativePath=".\modules\3d\3dfclip.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\3d\3DFUNC.H"
 				>
 			</File>
 			<File

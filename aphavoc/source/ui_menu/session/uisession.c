@@ -64,8 +64,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define INTERNAL_MODULES 1
-
 #include "ai/parser/parsgen.h"
 #include "ai/faction/faction.h"
 
@@ -803,7 +801,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			break;
 
 		count++;
-		
+
 		sprintf (current_count, "_bak%i", count );
 
 		strncpy (current_savefile, data_filename, sizeof (data_filename));
@@ -829,12 +827,12 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			strcat (current_scriptfile, current_count);
 		}
 
-		strcat (current_savefile, ".sav");			
+		strcat (current_savefile, ".sav");
 		strcat (current_scriptfile, extension);
-		
+
 		saves_listing = get_first_directory_file (current_savefile);
 		scripts_listing = get_first_directory_file (current_scriptfile);
-		
+
 		if (count >= (command_line_saves_copies - 1))
 		{
 			if (!unlink(current_savefile) && !unlink(current_scriptfile))
@@ -853,7 +851,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			sprintf (current_count, "_bak%i", count + 1 );
 			strcat (new_savefile, current_count);
 			strcat (new_scriptfile, current_count);
-			strcat (new_savefile, ".sav");			
+			strcat (new_savefile, ".sav");
 			strcat (new_scriptfile, extension);
 			if (!rename(current_savefile, new_savefile) && !rename(current_scriptfile, new_scriptfile))
 			{

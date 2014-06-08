@@ -394,11 +394,10 @@ void flight (void)
 				// Check the resolution!
 				//
 
-				if (	( application_video_width != ( int ) full_screen_width ) ||
-						( application_video_colourdepth != full_screen_colourdepth ) )
+				if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 				{
 
-					ddraw_change_display_resolution ( ( int ) full_screen_width, ( int ) full_screen_height, full_screen_colourdepth );
+					ddraw_change_display_resolution ( ( int ) full_screen_width, ( int ) full_screen_height );
 				}
 
 				//
@@ -439,11 +438,11 @@ void flight (void)
 				// Check the resolution!
 				//
 
-				if ( application_video_width != get_global_3d_visual_screen_width () )
+				if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 				{
 
 					ddraw_change_display_resolution ( get_global_3d_visual_screen_width (),
-																	get_global_3d_visual_screen_height (), full_screen_colourdepth );
+																	get_global_3d_visual_screen_height () );
 				}
 
 				update_in_flight_menus ();
@@ -516,11 +515,11 @@ void flight (void)
 	// Check resolution we're in.
 	//
 
-	if ( application_video_width != get_global_3d_visual_screen_width () )
+	if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 	{
 
 		ddraw_change_display_resolution ( get_global_3d_visual_screen_width (),
-														get_global_3d_visual_screen_height (), full_screen_colourdepth );
+														get_global_3d_visual_screen_height () );
 	}
 
 	////////////////////////////////////////

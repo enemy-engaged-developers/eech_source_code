@@ -837,7 +837,7 @@ int load_3d_terrain ( const char *path )
 				{
 					float brightness,
 						y_center_min = TERRAIN_3D_CLOUD_Y_CENTER_MIN;
-					
+
 					if ( !( count % pack ) )
 					{
 						do
@@ -850,11 +850,11 @@ int load_3d_terrain ( const char *path )
 							center_z = (z + rand() / (RAND_MAX + 1.0)) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
 						}
 						while ( center_z <= terrain_3d_min_map_z || center_z >= terrain_3d_max_map_z );
-						
+
 						ASSERT( ( center_x > terrain_3d_min_map_x ) && ( center_x < terrain_3d_max_map_x ) && ( center_z > terrain_3d_min_map_z ) && ( center_z < terrain_3d_max_map_z ) );
 
 						y_center_min += get_3d_terrain_elevation ( center_x, center_z );
-						
+
 						center_y = (float)rand() / RAND_MAX * TERRAIN_3D_CLOUD_Y_CENTER_MAX + y_center_min;
 					}
 
@@ -1120,15 +1120,15 @@ void initialise_3d_terrain ( void )
 
 	//if ( d3d_trilinear_filtering )
 	{
-		terrain_texture_mag_filter = D3DTFG_LINEAR;
-		terrain_texture_min_filter = D3DTFN_LINEAR;
+		terrain_texture_mag_filter = D3DTEXF_LINEAR;
+		terrain_texture_min_filter = D3DTEXF_LINEAR;
 
 		//VJ 050619 if anisotropic is on set higher filter for blending
 		if( global_anisotropic )
-			{ terrain_texture_mip_filter = D3DTFP_LINEAR; }
+			{ terrain_texture_mip_filter = D3DTEXF_LINEAR; }
 		else
-			{ terrain_texture_mip_filter = D3DTFP_POINT; }
-//		terrain_texture_mip_filter = D3DTFP_POINT;
+			{ terrain_texture_mip_filter = D3DTEXF_POINT; }
+//		terrain_texture_mip_filter = D3DTEXF_POINT;
 	}
 	/*else
 	{
@@ -2202,9 +2202,9 @@ void set_terrain_3d_cloud_puffs_colours ( void )
 
 	for ( count = 0; count < number_of_cloud_puffs_colours; count++ )
 	{
-		terrain_3d_cloud_puff_colours[count].red = (unsigned char)min(cloud_puffs_colours[count].red , 255.0f);
-		terrain_3d_cloud_puff_colours[count].green = (unsigned char)min(cloud_puffs_colours[count].green, 255.0f);
-		terrain_3d_cloud_puff_colours[count].blue = (unsigned char)min(cloud_puffs_colours[count].blue, 255.0f);
+		terrain_3d_cloud_puff_colours[count].red = min(cloud_puffs_colours[count].red, (unsigned char)255);
+		terrain_3d_cloud_puff_colours[count].green = min(cloud_puffs_colours[count].green, (unsigned char)255);
+		terrain_3d_cloud_puff_colours[count].blue = min(cloud_puffs_colours[count].blue, (unsigned char)255);
 		terrain_3d_cloud_puff_colours[count].alpha = 255;
 	}
 }

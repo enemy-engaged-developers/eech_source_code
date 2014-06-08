@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -124,7 +124,7 @@ void initialise_campaign_screen_list_objects (void)
 {
 	int
 		loop;
-		
+
 	for (loop = 0; loop < NUM_COMMON_LIST_MODES; loop ++)
 	{
 		set_ui_object_drawable (common_list_area [loop], FALSE);
@@ -259,13 +259,13 @@ void build_mission_list (void)
 	if (get_common_list_available_only_state ())
 	{
 		en = list_filter [COMMON_LIST_MODE_MISSION];
-	
+
 		if (en)
 		{
 			if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 			{
 				group_filter = en;
-	
+
 				base_filter = get_local_entity_parent (en, LIST_TYPE_KEYSITE_GROUP);
 
 				ASSERT (base_filter);
@@ -374,8 +374,8 @@ void add_group_to_common_list (entity *en, int text_type)
 			keysite = get_local_entity_parent (company, LIST_TYPE_DIVISION_HEADQUARTERS);
 
 			ASSERT (keysite);
-				
-			sprintf (buffer, "  %s", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME)); 
+
+			sprintf (buffer, "  %s", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 
 			break;
 		}
@@ -393,7 +393,7 @@ void add_group_to_common_list (entity *en, int text_type)
 			//
 			// Suitable group - White
 			//
-			
+
 			new_item = add_to_pop_up_list (buffer, common_list [COMMON_LIST_MODE_GROUP], NULL, get_local_entity_index (en), CAMPAIGN_LIST_ITEM_FONT, ui_ingame_live_text_colour);
 
 			set_ui_mouse_over_entity_function (new_item);
@@ -406,7 +406,7 @@ void add_group_to_common_list (entity *en, int text_type)
 			//
 			// Unsuitable group - Grey
 			//
-			
+
 			new_item = add_to_pop_up_list (buffer, common_list [COMMON_LIST_MODE_GROUP], NULL, get_local_entity_index (en), CAMPAIGN_LIST_ITEM_FONT, ui_colour_grey);
 
 			set_ui_mouse_over_entity_function (new_item);
@@ -445,7 +445,7 @@ void build_group_list ()
 	{
 		return;
 	}
-	
+
 	#if DEBUG_MODULE
 
 	debug_log ("CA_LIST: Building Group List");
@@ -463,13 +463,13 @@ void build_group_list ()
 	if (get_common_list_available_only_state ())
 	{
 		en = list_filter [COMMON_LIST_MODE_GROUP];
-	
+
 		if (en)
 		{
 			if (get_local_entity_type (en) == ENTITY_TYPE_TASK)
 			{
 				mission_filter = en;
-	
+
 				base_filter = get_local_entity_parent (en, LIST_TYPE_UNASSIGNED_TASK);
 			}
 			else if (get_local_entity_type (en) == ENTITY_TYPE_KEYSITE)
@@ -482,7 +482,7 @@ void build_group_list ()
 			}
 		}
 	}
-	
+
 	//
 	//
 	//
@@ -563,7 +563,7 @@ void build_base_list ()
 	{
 		return;
 	}
-	
+
 	#if DEBUG_MODULE
 
 	debug_log ("CA_LIST: Building Base List");
@@ -703,7 +703,7 @@ static void common_list_mission_selected (ui_object *obj)
 			break;
 		}
 
-		default:	
+		default:
 		{
 			ASSERT ((state >= 0) && (state < NUM_TASK_STATE_TYPES));
 
@@ -726,7 +726,7 @@ static void common_list_group_selected (ui_object *obj)
 		state,
 		index,
 		member_index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	state = get_ui_object_item_number2 (obj);
@@ -746,7 +746,7 @@ static void common_list_group_selected (ui_object *obj)
 
 			break;
 		}
-	
+
 		default:
 		{
 			ASSERT ((state >= 0) && (state < NUM_GROUP_MODE_TYPES));
@@ -789,7 +789,7 @@ static void common_list_base_selected (ui_object *obj)
 
 			break;
 		}
-	
+
 		default:
 		{
 			ASSERT (state >= 0);
@@ -1016,15 +1016,15 @@ void define_campaign_screen_list_objects (void)
 	int
 		loop;
 
-	mission_group_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\mgbtn.psd");
-	mission_group_base_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\mgbbtn.psd");
+	mission_group_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\mgbtn.psd", 1);
+	mission_group_base_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\mgbbtn.psd", 1);
 
 	/////////////////////////////////////////////////////////////////
-	// Missions / Groups / Bases List 
+	// Missions / Groups / Bases List
 	/////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////
-	// List Options 
+	// List Options
 
 	x1 = 0.0;
 	y1 = 0.0;
@@ -1037,7 +1037,7 @@ void define_campaign_screen_list_objects (void)
 		UI_ATTR_PARENT (campaign_screen),
 		UI_ATTR_VIRTUAL_POSITION (x1, y1),
 		UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-		UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\avail.psd")),
+		UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\avail.psd", 0)),
 		UI_ATTR_END
 	);
 
@@ -1267,6 +1267,25 @@ void define_campaign_screen_list_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void undefine_campaign_screen_list_objects (void)
+{
+	if ( mission_group_graphic )
+	{
+		destroy_texture_graphic ( mission_group_graphic );
+		mission_group_graphic = NULL;
+	}
+
+	if ( mission_group_base_graphic )
+	{
+		destroy_texture_graphic ( mission_group_base_graphic );
+		mission_group_base_graphic = NULL;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static int response_to_mission_created (campaign_screen_messages message, entity *sender)
 {
 	update_current_common_list ();
@@ -1306,8 +1325,8 @@ static int response_to_mission_destroyed (campaign_screen_messages message, enti
 {
 	//
 	// Check if entity was currently selected list item
-	// 
-	
+	//
+
 	if (sender == get_local_entity_safe_ptr (get_ui_object_item_number (common_list [COMMON_LIST_MODE_MISSION])))
 	{
 		set_ui_object_item_number (common_list [COMMON_LIST_MODE_MISSION], ENTITY_INDEX_DONT_CARE);
@@ -1315,8 +1334,8 @@ static int response_to_mission_destroyed (campaign_screen_messages message, enti
 
 	//
 	// Check if entity was filter list item
-	// 
-	
+	//
+
 	if (sender == list_filter [COMMON_LIST_MODE_GROUP])
 	{
 		list_filter [COMMON_LIST_MODE_GROUP] = NULL;
@@ -1347,11 +1366,11 @@ static int response_to_group_destroyed (campaign_screen_messages message, entity
 	//
 	// sender is a group
 	//
-		
+
 	//
 	// Check if entity was currently selected list item
-	// 
-	
+	//
+
 	if (sender == get_local_entity_safe_ptr (get_ui_object_item_number (common_list [COMMON_LIST_MODE_GROUP])))
 	{
 		set_ui_object_item_number (common_list [COMMON_LIST_MODE_GROUP], ENTITY_INDEX_DONT_CARE);
@@ -1359,8 +1378,8 @@ static int response_to_group_destroyed (campaign_screen_messages message, entity
 
 	//
 	// Check if entity was filter list item
-	// 
-	
+	//
+
 	if (sender == list_filter [COMMON_LIST_MODE_MISSION])
 	{
 		list_filter [COMMON_LIST_MODE_MISSION] = NULL;
@@ -1396,7 +1415,7 @@ static int response_to_group_remove_member (campaign_screen_messages message, en
 	//
 	// sender is a mobile
 	//
-		
+
 	update_current_common_list ();
 
 	member = get_currently_selected_member ();
@@ -1428,8 +1447,8 @@ static int response_to_base_destroyed (campaign_screen_messages message, entity 
 {
 	//
 	// Check if entity was currently selected list item
-	// 
-	
+	//
+
 	if (sender == get_local_entity_safe_ptr (get_ui_object_item_number (common_list [COMMON_LIST_MODE_BASE])))
 	{
 		set_ui_object_item_number (common_list [COMMON_LIST_MODE_BASE], ENTITY_INDEX_DONT_CARE);

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -168,9 +168,9 @@ void update_application_3d_scene ( void )
 
 	if ( application_3d_rain_active )
 	{
-	
+
 		update_3d_rain (main_3d_env, get_3d_time_of_day (main_3d_env), main_vp.attitude);
-	
+
 		update_3d_lightning_strikes ( main_3d_env );
 	}
 }
@@ -196,7 +196,7 @@ void draw_application_3d_scene (void)
 
 	if ( application_3d_rain_active )
 	{
-	
+
 		set_main_3d_rain_wind ();
 	}
 
@@ -237,12 +237,6 @@ void draw_application_3d_scene (void)
 	{
 		clear_zbuffer_screen ();
 
-		if ( active_screen != video_screen )
-		{
-
-			clear_zbuffer_screen_using_viewport ();
-		}
-
 		scan_3d_terrain ();
 
 		if (get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
@@ -275,7 +269,7 @@ void draw_application_3d_scene (void)
 		end_3d_scene ();
 	}
 
-	if ( get_3d_render_filter ( main_3d_env ) != RENDER_CLEAR ) 
+	if ( get_3d_render_filter ( main_3d_env ) != RENDER_CLEAR )
 	{
 
 		switch ( current_3d_noise_level )
@@ -314,16 +308,16 @@ void draw_application_3d_scene (void)
 			}
 		}
 	}
-	
+
 	// Jabberwock 031009 - Get fog for satellite
-	
+
 	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
 	{
 		render_infrared_interference ( 0 ); // no matter, we use variable alpha anyway
 	}
-	
+
 	// Jabberwock 031009 ends
-	
+
 	update_application_3d_scene ();
 
 #if ( OEM_3DLABS_VERSION )
@@ -374,7 +368,7 @@ void draw_application_3d_scene (void)
 
 			set_mono_font_position (5.0, y);
 
-			sprintf (s, "%-20.20s: %d x %d x %d", "Resolution", ( int ) full_screen_width, ( int ) full_screen_height, full_screen_colourdepth );
+			sprintf (s, "%-20.20s: %d x %d", "Resolution", ( int ) full_screen_width, ( int ) full_screen_height );
 
 			print_mono_font_string (s);
 
@@ -481,15 +475,13 @@ void draw_application_highres_screen ( int x, int y, int x_repeat, int y_repeat 
 	if ( begin_3d_scene ())
 	{
 
-//		set_d3d_int_state ( D3DRENDERSTATE_FILLMODE, D3DFILL_SOLID );
-
 		clear_zbuffer_screen ();
 
 		if ( !in_recognition_guide )
 		{
-	
+
 			scan_3d_terrain ();
-	
+
 			scan_3d_clouds ();
 		}
 		else
@@ -503,20 +495,20 @@ void draw_application_highres_screen ( int x, int y, int x_repeat, int y_repeat 
 			col.b = 255;
 			col.a = 255;
 
-			set_block ( 0, 0, screen_width - 1, screen_height - 1, col );
+			f3d_clear_screen ( col.colour );
 		}
 
 		scan_local_entity_3d_objects (&main_vp);
 
 		if ( !in_recognition_guide )
 		{
-	
+
 			draw_3d_horizon ();
-	
+
 			draw_3d_stars ();
-	
+
 			draw_3d_sun ();
-	
+
 			draw_3d_moon ();
 		}
 
@@ -526,7 +518,7 @@ void draw_application_highres_screen ( int x, int y, int x_repeat, int y_repeat 
 		{
 
 			draw_3d_rain ();
-	
+
 			draw_3d_lightning_strikes ();
 		}
 
@@ -639,7 +631,7 @@ void draw_application_ui_3d_scene (void)
 
 void draw_application_3d_scene_to_texture (screen *scr, float size)
 {
-	set_3d_viewport ( main_3d_env, 0.0, 0.0, ( size - 0.001 ), ( size - 0.001 ) );
+	set_3d_viewport ( main_3d_env, 0.0, 0.0, size, size );
 	set_3d_origin ( main_3d_env, ( size / 2 ), ( size / 2 ) );
 	set_3d_active_environment (main_3d_env);
 
@@ -648,16 +640,15 @@ void draw_application_3d_scene_to_texture (screen *scr, float size)
 
 	if ( begin_3d_scene () )
 	{
-	
+
 		clear_zbuffer_screen ();
-		clear_zbuffer_screen_using_viewport ();
 		scan_3d_terrain ();
 		scan_local_entity_3d_objects (&main_vp);
 		draw_3d_horizon ();
 		draw_3d_sun ();
 		draw_3d_moon ();
 		draw_3d_scene ();
-	
+
 		end_3d_scene ();
 	}
 
@@ -688,16 +679,6 @@ void render_infrared_interference ( int alpha )
 
 	rgb_colour
 		fog_colour;
-
-	if ( !d3d_modulate_alpha )
-	{
-
-		//
-		// Graphics card can't render the interference properly.... don't bother.
-		//
-
-		return;
-	}
 
 	get_3d_viewport ( main_3d_env, &x1, &y1, &x2, &y2 );
 
@@ -739,9 +720,9 @@ void render_infrared_interference ( int alpha )
 		colour.red = fog_colour.r;
 		colour.green = fog_colour.g;
 		colour.blue = fog_colour.b;
-		
+
 		// Jabberwock 031009 Use fog_colour alpha for variable fog
-		
+
 		if ((fog_colour.a) > 0)
 		{
 			colour.alpha = fog_colour.a;
@@ -750,9 +731,9 @@ void render_infrared_interference ( int alpha )
 		{
 			colour.alpha = alpha;
 		}
-		
+
 		// Jabberwock 031009 ends
-		
+
 		specular.red = 0;
 		specular.green = 0;
 		specular.blue = 0;

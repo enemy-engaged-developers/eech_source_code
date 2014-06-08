@@ -64,41 +64,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define get_packed_colour_screen( colour, screen ) ((rgb_packed)( \
-	( ( ( ( ( unsigned int ) (colour).r ) << 24 ) & screen ## _screen_red_mask ) >> screen ## _screen_red_shift ) | \
-	( ( ( ( ( unsigned int ) (colour).g ) << 24 ) & screen ## _screen_green_mask ) >> screen ## _screen_green_shift ) | \
-	( ( ( ( ( unsigned int ) (colour).b ) << 24 ) & screen ## _screen_blue_mask ) >> screen ## _screen_blue_shift ) | \
-	( ( ( ( ( unsigned int ) (colour).a ) << 24 ) & screen ## _screen_alpha_mask ) >> screen ## _screen_alpha_shift ) \
-	))
-
-#define get_packed_colour( colour ) ( get_packed_colour_screen ( colour, active ) )
-#define get_user_packed_colour( colour ) ( get_packed_colour_screen ( colour, user ) )
-
-#define get_general_packed_colour( colour ) ((rgb_packed)( \
-	( ( ( ( unsigned int ) (colour).r ) << 8 ) & 0xF800 ) | \
-	( ( ( ( unsigned int ) (colour).g ) << 5 ) & 0x07E0 ) | \
-	( ( ( ( unsigned int ) (colour).b ) >> 3 ) & 0x001F ) \
-	))
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 extern void set_pixel ( const int x, const int y, const rgb_colour colour );
 
 extern void set_clipped_pixel ( const int x, const int y, const rgb_colour colour );
 
 extern void get_pixel ( const int x, const int y, rgb_colour *colour );
-
-extern rgb_packed get_packed_pixel ( const int x, const int y );
-
-extern rgb_colour get_rgb_colour_value ( const unsigned long colour );
-
-rgb_colour get_general_colour_value ( const rgb_packed colour );
-
-extern rgb_colour get_general_colour_value ( const rgb_packed colour );
-
-extern rgb_colour get_user_rgb_colour_value ( const rgb_packed colour );
 
 extern void set_pixel_format ( void );
 

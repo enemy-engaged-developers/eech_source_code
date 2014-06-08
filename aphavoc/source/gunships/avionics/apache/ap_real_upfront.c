@@ -169,8 +169,8 @@ static void display_messages (float x_org, float y_org)
 
 	x_min = x_org;
 	y_min = y_org;
-	x_max = x_org + VIEWPORT_WIDTH - 0.001;
-	y_max = y_org + VIEWPORT_HEIGHT - 0.001;
+	x_max = x_org + VIEWPORT_WIDTH;
+	y_max = y_org + VIEWPORT_HEIGHT;
 
 	set_viewport (x_min, y_min, x_max, y_max);
 
@@ -279,8 +279,6 @@ void draw_apache_upfront_display_on_texture (void)
 
 //		draw_line(0.0, 0.0, 255.0, 127.0, text_colour);
 //		draw_line(1.0, 1.0, -1.0, -1.0, text_colour);
-
-		flush_screen_texture_graphics (texture_screen);
 
 		unlock_screen (texture_screen);
 	}

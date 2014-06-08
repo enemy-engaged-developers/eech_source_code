@@ -534,8 +534,8 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 													object_3d_points_current_base );
 		}
 
-//		set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
-		set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_shadow_comparison );	//D3DCMP_GREATER );
+//		set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_default_comparison );
+		set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_shadow_comparison );	//D3DCMP_GREATER );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
@@ -545,15 +545,15 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
 
-		set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
-		set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
-		set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
-		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
-		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
+		set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+		set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
+		set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
+		set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
+		set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
 
-		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
-		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
-		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
+		set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+		set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+		set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_NONE );
 
 		shadow_intensity = bound ( shadow_intensity, 0, 255 );
 
@@ -713,9 +713,9 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		// Set the renderstates back to where they were
 		//
 
-		set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
+		set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_default_comparison );
 
-		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+		set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 	}
 	else
 	{
@@ -813,15 +813,15 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 				// Alpha blending is already on - set the Ztest & enable writing.
 				//
 
-				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_shadow_comparison );	//D3DCMP_GREATER );
-				set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, TRUE );
+				set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_shadow_comparison );	//D3DCMP_GREATER );
+				set_d3d_int_state ( D3DRS_ZWRITEENABLE, TRUE );
 
-				set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
-				set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
+				set_d3d_int_state ( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+				set_d3d_int_state ( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
 			}
 			else
 			{
-				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
+				set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_default_comparison );
 			}
 
 			{
@@ -890,8 +890,8 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 				// Set the renderstates back to where they were
 				//
 				//
-				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
-				set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, FALSE );
+				set_d3d_int_state ( D3DRS_ZFUNC, zbuffer_default_comparison );
+				set_d3d_int_state ( D3DRS_ZWRITEENABLE, FALSE );
 			}
 		}
 	}

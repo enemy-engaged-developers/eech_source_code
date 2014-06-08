@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -162,6 +162,15 @@ void initialise_main_campaign_screen (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void deinitialise_main_campaign_screen (void)
+{
+	deinitialise_map_data ();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void update_campaign_screen (void)
 {
 	update_campaign_screen_list_objects ();
@@ -175,7 +184,7 @@ static void notify_campaign_screen_entered (ui_object *obj, void *arg)
 {
   	if (command_line_ui_sounds_muted)
   		ui_sounds_muted = TRUE; //ataribaby 29/12/2008 for muted UI sounds
-     
+
 	if (get_ui_object_drawable (obj))
 	{
 		//
@@ -205,7 +214,7 @@ static void campaign_screen_draw_function (ui_object *obj, void *arg)
 	//
 	// General
 	//
-	
+
 	ingame_screen_draw_function (obj, arg);
 }
 
@@ -225,25 +234,25 @@ void display_campaign_page (campaign_pages page, int index, int add_to_history)
 	//
 	// Store history
 	//
-	
+
 	if (add_to_history)
 	{
 		current_page = -1;
-			
+
 		for (loop = 0; loop < NUM_CAMPAIGN_PAGES; loop ++)
 		{
 			if (get_ui_object_drawable (campaign_page [loop]))
 			{
 				current_page = loop;
-	
+
 				break;
 			}
 		}
-	
+
 		if (current_page != -1)
 		{
 			current_index = get_ui_object_item_number (campaign_page [current_page]);
-			
+
 			if ((page != current_page) || (index != current_index))
 			{
 				push_campaign_history ((campaign_pages) current_page, current_index);
@@ -266,9 +275,9 @@ void display_campaign_page (campaign_pages page, int index, int add_to_history)
 				//
 				// IF THIS HAPPENS - TELL ME (DAVE L)
 				//
-				
+
 				breakout (NULL);
-			}				
+			}
 			#endif
 			//
 
@@ -296,13 +305,13 @@ campaign_pages get_current_campaign_page (void)
 		current_page;
 
 	current_page = -1;
-			
+
 	for (loop = 0; loop < NUM_CAMPAIGN_PAGES; loop ++)
 	{
 		if (get_ui_object_drawable (campaign_page [loop]))
 		{
 			current_page = loop;
-	
+
 			break;
 		}
 	}
@@ -367,15 +376,15 @@ static void campaign_accept_quit_mission (event *ev)
 	if (get_gunship_entity ())
 	{
 		pop_event (ingame_screen_set_events);
-	
+
 		set_gunship_entity (NULL);
-	
+
 		push_event (ingame_screen_set_events, "ingame screen events");
 
 		//
 		// Force Debrief Page
 		//
-		
+
 		task = get_player_task (NULL);
 
 		if (task)
@@ -474,20 +483,20 @@ static void notify_campaign_cancel_quit_campaign_button (ui_object *obj, void *a
 static void campaign_accept_quit_campaign (event *ev)
 {
   	if (command_line_ui_sounds_muted)
-  		ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds 
-  
+  		ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds
+
 	campaign_cancel_quit_campaign (ev);
 
 	//
 	// Make all pages not drawable, otherwise last page will be added to history next time a game is started.
 	//
-	
+
 	display_campaign_page ((campaign_pages) -1, ENTITY_INDEX_DONT_CARE, FALSE);
 
 	//
 	// Quit
 	//
-	
+
 	player_quit_session (NULL);
 }
 
@@ -564,8 +573,8 @@ void initialise_campaign_screen (void)
 	char
 		string [256];
 
-	blue_campaign_complete_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\bvictory.psd" );
-	red_campaign_complete_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\rvictory.psd" );
+	blue_campaign_complete_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\bvictory.psd", 1 );
+	red_campaign_complete_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\rvictory.psd", 1 );
 
 	initialise_campaign_screen_message_responses ();
 
@@ -757,7 +766,7 @@ void initialise_campaign_screen (void)
 			UI_ATTR_HIGHLIGHTED_FONT_COLOUR (ui_ingame_highlight_text_colour.r, ui_ingame_highlight_text_colour.g, ui_ingame_highlight_text_colour.b, ui_ingame_highlight_text_colour.a),
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\okaybtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\okaybtn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -778,7 +787,7 @@ void initialise_campaign_screen (void)
 			UI_ATTR_PARENT (campaign_dialog_area),
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitmisn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitmisn.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -788,7 +797,7 @@ void initialise_campaign_screen (void)
 	y2 = 1.0;
 
 	sprintf (string, "%s?", get_trans ("QUIT MISSION"));
-	
+
 	create_ui_object
 		(
 			UI_TYPE_AREA,
@@ -875,7 +884,7 @@ void initialise_campaign_screen (void)
 			UI_ATTR_PARENT (campaign_dialog_area),
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitcamp.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\quitcamp.psd", 0)),
 			UI_ATTR_END
 		);
 
@@ -885,7 +894,7 @@ void initialise_campaign_screen (void)
 	y2 = 1.0;
 
 	sprintf (string, "%s?", get_trans ("Quit Campaign"));
-	
+
 	create_ui_object
 		(
 			UI_TYPE_AREA,
@@ -954,6 +963,31 @@ void initialise_campaign_screen (void)
 		);
 
 	process_ingame_text_object_size (temp, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void deinitialise_campaign_screen (void)
+{
+	undefine_campaign_screen_list_objects ();
+
+	undefine_campaign_screen_stats_page_objects ();
+
+	undefine_campaign_screen_weapon_loading_page_objects ();
+
+	if ( blue_campaign_complete_graphic )
+	{
+		destroy_texture_graphic ( blue_campaign_complete_graphic );
+		blue_campaign_complete_graphic = NULL;
+	}
+
+	if ( red_campaign_complete_graphic )
+	{
+		destroy_texture_graphic ( red_campaign_complete_graphic );
+		red_campaign_complete_graphic = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1072,7 +1106,7 @@ void campaign_completed (entity_sides side, campaign_completed_types complete)
 		ai_log ("CAMPAIGN WON BY %s SIDE", entity_side_short_names [side]);
 		ai_log ("###############################################");
 		ai_log ("###############################################");
-	
+
 		//
 		// Transmit message to clients
 		//
@@ -1092,7 +1126,7 @@ void campaign_completed (entity_sides side, campaign_completed_types complete)
 			if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
 			{
 				award_campaign_medal (side, get_local_entity_int_value (get_session_entity (), INT_TYPE_CAMPAIGN_MEDAL));
-	
+
 				inc_player_log_successful_tours (side, log);
 			}
 			else
@@ -1101,7 +1135,7 @@ void campaign_completed (entity_sides side, campaign_completed_types complete)
 			}
 		}
 	}
-	
+
 	//
 	// Set session state to complete
 	//
@@ -1126,7 +1160,7 @@ void campaign_screen_show_external_view_entity (event *ev)
 	//
 	// Switch back to campaign screen
 	//
-			
+
 	if (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_SIMULATOR)
 	{
 		set_in_flight_game_mode (IN_FLIGHT_GAME_MODE_PLANNER);

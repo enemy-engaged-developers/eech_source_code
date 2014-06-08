@@ -478,12 +478,12 @@ void update_common_attitude_dynamics (void)
 
 		normalised_model_motion_vector.y = 0.0;
 
-		vel = min(get_3d_vector_magnitude(&normalised_model_motion_vector) / current_flight_dynamics->velocity_z.max, 1.0);
+		vel = min(get_3d_vector_magnitude(&normalised_model_motion_vector) / current_flight_dynamics->velocity_z.max, 1.0f);
 
 		if (vel <= tl->modifier)
-			tl->value = tl->min + (tl->max - tl->min) * pow(vel / tl->modifier, 0.4);
+			tl->value = tl->min + (tl->max - tl->min) * pow(vel / tl->modifier, 0.4f);
 		else
-			tl->value = tl->min + (tl->max - tl->min) * pow((1 - vel) / (1 - tl->modifier), 0.4);
+			tl->value = tl->min + (tl->max - tl->min) * pow((1 - vel) / (1 - tl->modifier), 0.4f);
 
 //		debug_log("TRANSITIONAL %f", current_flight_dynamics->translational_lift.value);
 	}

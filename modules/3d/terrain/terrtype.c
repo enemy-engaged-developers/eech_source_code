@@ -349,7 +349,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 	//
 
 	//NOTE: dual_pass is TRUE normally !!!!
-	if ( ( dual_pass ) && ( d3d_modulate_alpha ) )
+	if ( ( dual_pass ) )
 	{
 
 		draw_unclipped_fan_word_face = draw_3d_terrain_twopass_unclipped_fan_word_face;

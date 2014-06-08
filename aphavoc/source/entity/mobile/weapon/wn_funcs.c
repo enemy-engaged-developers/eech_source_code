@@ -117,8 +117,8 @@ float get_weapon_current_weight(float lifetime, entity_sub_types subtype)
 		float boost_time_scale = weapon_database[subtype].boost_time / (weapon_database[subtype].boost_time + weapon_database[subtype].sustain_time);
 		float time_scale = lifetime / (weapon_database[subtype].boost_time + weapon_database[subtype].sustain_time);
 		float delta_weight = weapon_database[subtype].start_weight - weapon_database[subtype].final_weight;
-		float boost_fuel_weight = delta_weight * boost_scale * max(0, (time_scale - sustain_time_scale) / boost_time_scale);
-		float sustain_fuel_weight = sustain_time_scale ? (delta_weight * sustain_scale * min(1, time_scale / sustain_time_scale)) : 0;
+		float boost_fuel_weight = delta_weight * boost_scale * max(0.0f, (time_scale - sustain_time_scale) / boost_time_scale);
+		float sustain_fuel_weight = sustain_time_scale ? (delta_weight * sustain_scale * min(1.0f, time_scale / sustain_time_scale)) : 0;
 		
 		return weapon_database[subtype].final_weight + boost_fuel_weight + sustain_fuel_weight;
 	}

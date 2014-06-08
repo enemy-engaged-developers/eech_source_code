@@ -126,9 +126,6 @@ entity_sides
 int
 	player_creating_player;
 
-texture_graphic
-	*player_screen_graphic = NULL;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -944,33 +941,10 @@ void notify_select_player_screen (ui_object *obj, void *arg)
 
 		}
 
-		if ( player_screen_graphic )
-		{
-
-			destroy_texture_graphic ( player_screen_graphic );
-
-			player_screen_graphic = NULL;
-		}
-
-		player_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\pilots.psd" );
-
-		set_ui_object_texture_graphic ( select_player_screen, player_screen_graphic );
-
-		blit_front_buffer_to_render_buffer ();
+		set_ui_object_texture_graphic ( select_player_screen, create_texture_graphic ( "graphics\\ui\\cohokum\\pilots.psd", 0 ) );
 
 		reset_time_values ( select_player_screen );
 
-	}
-	else
-	{
-
-		if ( player_screen_graphic )
-		{
-
-			destroy_texture_graphic ( player_screen_graphic );
-
-			player_screen_graphic = NULL;
-		}
 	}
 
 	rebuild_player_log_list ();
@@ -990,26 +964,34 @@ void notify_select_player_exit_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (select_player_screen, TRUE);
+#endif
 
 		pop_ui_screen (SCREEN_POP_ACTUAL);
 	}
 	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#endif
 
 		set_ui_object_redraw (select_player_screen, TRUE);
 	}
 
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1452,7 +1434,11 @@ void player_select_side_function ( ui_object *obj, void *arg )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef _MSC_VER
+static int __cdecl int_cmp ( const void *a, const void *b )
+#else
 static int int_cmp ( const void *a, const void *b )
+#endif
 {
 	return * ( const int * ) a - * ( const int * ) b;
 }
@@ -1604,7 +1590,7 @@ void load_player_list (void)
 						const size_t
 							size_1 = ( char * ) ( &v2_side.weapon_usage ) - ( char * ) ( &v2_side ),
 							size_2 = ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_flying_seconds ),
-							size_3 = ( ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_missions ) + 3 ) & ~3,
+							size_3 = ( ( NUM_GUNSHIP_TYPES - change.gunships ) * sizeof ( *v2_side.gunship_missions ) + 3 ) & ~3u,
 							size_4 = sizeof ( v2_side ) - ( ( char * ) &v2_side.helicopters_lost - ( char * ) &v2_side );
 						int
 							i;

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -105,7 +105,7 @@ buffered_polygon
 	*buffered_sorted_translucent_polygons_insert,
 	buffered_translucent_polygons_array[MAX_BUFFERED_TRANSLUCENT_POLYGONS];
 
-D3DTLVERTEX
+TLVERTEX
 	buffered_translucent_vertices_array[MAX_BUFFERED_TRANSLUCENT_VERTICES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,9 +191,9 @@ int finalise_translucent_sorted_polygon_buffer ( polygon_buffer *buffer )
 		buffer->polygons = buffered_sorted_translucent_polygons_head;
 
 		buffered_sorted_translucent_polygons_head = NULL;
-	
+
 		buffered_sorted_translucent_polygons_tail = NULL;
-	
+
 		buffered_sorted_translucent_polygons_insert = NULL;
 
 		return ( TRUE );
@@ -241,17 +241,17 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 
 	polygon = buffer->polygons;
 
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
 	while ( polygon )
 	{
 
-		LPD3DTLVERTEX
+		LPTLVERTEX
 			vertices;
 
-		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, polygon->specular );
-		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, polygon->source_alpha_blend );
-		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, polygon->destination_alpha_blend );
+		set_d3d_int_state ( D3DRS_SPECULARENABLE, polygon->specular );
+		set_d3d_int_state ( D3DRS_SRCBLEND, polygon->source_alpha_blend );
+		set_d3d_int_state ( D3DRS_DESTBLEND, polygon->destination_alpha_blend );
 
 		if ( polygon->texture )
 		{
@@ -259,11 +259,11 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 			set_d3d_texture ( 0, polygon->texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, polygon->texture_u_address );
-			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, polygon->texture_v_address );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, polygon->texture_mag );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, polygon->texture_mag );
-			set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, polygon->texture_min );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, polygon->texture_u_address );
+			set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, polygon->texture_v_address );
+			set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, polygon->texture_mag );
+			set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, polygon->texture_mag );
+			set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, polygon->texture_min );
 		}
 		else
 		{
@@ -277,7 +277,7 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 
 			vertices = get_d3d_vertices_points_address ( polygon->number_of_vertices );
 
-			memcpy ( vertices, &buffered_translucent_vertices_array[polygon->point_offset], sizeof ( D3DTLVERTEX ) * polygon->number_of_vertices );
+			memcpy ( vertices, &buffered_translucent_vertices_array[polygon->point_offset], sizeof ( TLVERTEX ) * polygon->number_of_vertices );
 
 			draw_fan_primitive ( polygon->number_of_vertices, vertices );
 		}
@@ -286,7 +286,7 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 
 			vertices = get_d3d_line_vertices_points_address ();
 
-			memcpy ( vertices, &buffered_translucent_vertices_array[polygon->point_offset], sizeof ( D3DTLVERTEX ) * 2 );
+			memcpy ( vertices, &buffered_translucent_vertices_array[polygon->point_offset], sizeof ( TLVERTEX ) * 2 );
 
 			draw_line_primitive ( vertices );
 		}
@@ -328,24 +328,24 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 			//
 			// Start searching BACKWARDS ( more distant polygons drawn first )
 			//
-	
+
 			while ( this_polygon )
 			{
-	
+
 				if ( distance >= this_polygon->distance )
 				{
-	
+
 					break;
 				}
 				else
 				{
-	
+
 					previous_polygon = this_polygon;
-	
+
 					this_polygon = this_polygon->pred;
 				}
 			}
-	
+
 			if ( this_polygon )
 			{
 
@@ -390,7 +390,7 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 			}
 			else
 			{
-	
+
 				//
 				// Add this polygon at the HEAD of the list
 				//
@@ -412,24 +412,24 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 			//
 			// Start searching FORWARDS ( less distant polygons drawn last )
 			//
-	
+
 			while ( this_polygon )
 			{
-	
+
 				if ( distance <= this_polygon->distance )
 				{
-	
+
 					break;
 				}
 				else
 				{
-	
+
 					previous_polygon = this_polygon;
-	
+
 					this_polygon = this_polygon->succ;
 				}
 			}
-	
+
 			if ( this_polygon )
 			{
 
@@ -474,7 +474,7 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 			}
 			else
 			{
-	
+
 				//
 				// Add this polygon at the TAIL of the list
 				//
@@ -510,7 +510,7 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-D3DTLVERTEX *get_translucent_polygon_vertices ( void )
+TLVERTEX *get_translucent_polygon_vertices ( void )
 {
 
 	ASSERT ( number_of_buffered_translucent_vertices < MAX_BUFFERED_TRANSLUCENT_VERTICES );
@@ -576,7 +576,7 @@ buffered_polygon * buffer_wbuffered_plain_polygon ( vertex *polygon, real_colour
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -610,7 +610,7 @@ buffered_polygon * buffer_wbuffered_plain_polygon ( vertex *polygon, real_colour
 	}
 	else
 	{
-	
+
 		buffered_translucent_polygons_array[number_of_buffered_translucent_polygons].specular = FALSE;
 	}
 
@@ -678,7 +678,7 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_polygon ( vertex *polygon, fl
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -804,7 +804,7 @@ buffered_polygon * buffer_wbuffered_flat_shaded_textured_polygon ( vertex *polyg
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -906,7 +906,7 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_polygon ( vertex *po
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -1012,7 +1012,7 @@ buffered_polygon * buffer_wbuffered_flat_shaded_textured_line ( vertex *polygon,
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -1097,7 +1097,7 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_line ( vertex *polyg
 	vertex
 		*vert;
 
-	D3DTLVERTEX
+	TLVERTEX
 		*vptr;
 
 	float
@@ -1149,7 +1149,7 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_line ( vertex *polyg
 	*( ( int * ) &vptr->tv ) = *( ( int * ) &vert->v );
 		vptr->sz = ( vert->q * zbuffer_factor ) + zbuffer_constant;
 	*( ( int * ) &vptr->rhw ) = *( ( int * ) &vert->q );
-	vptr->color = RGBA_MAKE ( vert->red, vert->green, vert->blue, 255 );
+	vptr->color = D3DCOLOR_RGBA ( vert->red, vert->green, vert->blue, 255 );
 	vptr->specular = d3d_fog_intensity;
 
 	vptr++;
@@ -1162,7 +1162,7 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_line ( vertex *polyg
 	*( ( int * ) &vptr->tv ) = *( ( int * ) &vert->v );
 		vptr->sz = ( vert->q * zbuffer_factor ) + zbuffer_constant;
 	*( ( int * ) &vptr->rhw ) = *( ( int * ) &vert->q );
-	vptr->color = RGBA_MAKE ( vert->red, vert->green, vert->blue, 255 );
+	vptr->color = D3DCOLOR_RGBA ( vert->red, vert->green, vert->blue, 255 );
 	vptr->specular = d3d_fog_intensity;
 
 	distance /= 2.0;

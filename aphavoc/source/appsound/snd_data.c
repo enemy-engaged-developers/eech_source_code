@@ -2467,7 +2467,7 @@ static void load_from_file ( int sound_sample_index, int type, int rate, int siz
 	application_sound_effects[sound_sample_index].rate = rate * ( type == SAMPLE_TYPE_MONO_16BIT ? 2 : 1 );
 	application_sound_effects[sound_sample_index].size = size;
 
-	create_source_sound_sample ( sound_sample_index, type, rate, size );
+	create_source_sound_sample ( sound_sample_index, ( sample_types ) type, rate, size );
 	ptr = ( unsigned char * ) safe_malloc ( size );
 	fread ( ptr, 1, size, fp );
 	load_source_sound_sample ( sound_sample_index, ptr );
@@ -3040,6 +3040,7 @@ int get_sound_block_header_index ( char *filename, int sample_index )
 
 void destroy_application_sound_samples ( void )
 {
+	deallocate_source_sound_samples ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3099,7 +3100,17 @@ void initialise_application_sound_effects ( void )
 
 				sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
 
-				application_sound_effects[application_sound_samples[count].sound_sample_index].size = blocked_sound_samples[sound_block_header_index].sound_data_length;
+				if ( sound_block_header_index >= 0 )
+				{
+
+					application_sound_effects[application_sound_samples[count].sound_sample_index].size = blocked_sound_samples[sound_block_header_index].sound_data_length;
+				}
+				else
+				{
+					#if DEBUG_MODULE
+					debug_log ( "Cannot find blocked sound sample info for %s", filename );
+					#endif
+				}
 			}
 		}
 

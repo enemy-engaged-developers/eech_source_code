@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -170,7 +170,7 @@ enum HUD_COLOURS
 	HUD_COL_CYAN,
 	HUD_COL_BLUE,
 	HUD_COL_BLACK,
-    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"	
+    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"
         HUD_COL_ORANGE,
         HUD_COL_D_ORANGE,
         HUD_COL_L_YELLO,
@@ -341,7 +341,7 @@ typedef enum SESSION_WEATHER_SETTINGS session_weather_settings;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 051011 add season summer/winter/desert button	
+//VJ 051011 add season summer/winter/desert button
 enum SESSION_SEASON_SETTINGS
 {
 
@@ -955,7 +955,7 @@ extern global_options_data
 #define set_global_session_free_flight_time_of_day(VALUE) (global_options.session_free_flight_time_of_day = (VALUE))
 #define get_global_session_free_flight_time_of_day() (global_options.session_free_flight_time_of_day)
 
-#define set_global_season(VALUE) (current_map_info.season = (VALUE))   //VJ 051227 changed from global_season 
+#define set_global_season(VALUE) (current_map_info.season = (VALUE))   //VJ 051227 changed from global_season
 #define get_global_season() (current_map_info.season)                  //VJ 051227 changed from global_season
 
 #define set_global_session_campaign_time_of_day(VALUE) (global_options.session_campaign_time_of_day = (VALUE))
@@ -1056,19 +1056,6 @@ extern int get_localisation_y_size (game_text_translation_type *list, int button
 #define get_comanche_hokum_gunship() (new_gunship[get_global_gunship_type ()] != 0)
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-typedef struct
-{
-	unsigned 
-		arneh_ah64d_cockpit,
-		arneh_mi24v_cockpit;
-} installed_custom_3d_models;
-
-extern installed_custom_3d_models custom_3d_models;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

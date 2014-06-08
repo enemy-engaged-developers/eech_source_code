@@ -124,6 +124,11 @@ void deinitialise_event_stack (void)
 
 		this_event = event_stack_head->next;
 
+		if (event_stack_head->name)
+		{
+			safe_free (event_stack_head->name);
+		}
+
 		safe_free (event_stack_head);
 
 		event_stack_head = this_event;
@@ -622,14 +627,14 @@ void pop_event_delete(void ((*function) (void)), int delete_stack_item)
 
 		#endif
 
-		if (popped_event->name)
-		{
-
-			safe_free (popped_event->name);
-		}
-
 		if (delete_stack_item)
+		{
+			if (popped_event->name)
+			{
+				safe_free (popped_event->name);
+			}
 			safe_free (popped_event);
+		}
 	}
 }
 

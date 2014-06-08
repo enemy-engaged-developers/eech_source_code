@@ -107,9 +107,6 @@ static texture_graphic
 float
 	main_screen_t_value = 0.0;
 
-texture_graphic
-	*main_screen_texture;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,90 +143,42 @@ void initialise_main_screen (void)
 	int
 		i;
 
+	deinitialise_main_screen ();
+
 	/////////////////////////////////////////////////////////////////
 	// option area & button texture objects
 
-	if (options_box_small)
-	{
-		destroy_texture_graphic (options_box_small);
+	options_box_small = create_texture_graphic ( "graphics\\ui\\cohokum\\boxsmall.psd", 1 );
 
-		options_box_small = NULL;
-	}
+	options_box_medium = create_texture_graphic ( "graphics\\ui\\cohokum\\boxmed.psd", 1 );
 
-	options_box_small = create_texture_graphic ( "graphics\\ui\\cohokum\\boxsmall.psd" );
+	options_box_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxlarge.psd", 1 );
 
-	if (options_box_medium)
-	{
-		destroy_texture_graphic (options_box_medium);
+	options_box_extra_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxexlrg.psd", 1 );
 
-		options_box_medium = NULL;
-	}
+	text_box_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\Boxtext.psd", 1 );
 
-	options_box_medium = create_texture_graphic ( "graphics\\ui\\cohokum\\boxmed.psd" );
-
-	if (options_box_large)
-	{
-		destroy_texture_graphic (options_box_large);
-
-		options_box_large = NULL;
-	}
-
-	options_box_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxlarge.psd" );
-
-	if (options_box_extra_large)
-	{
-		destroy_texture_graphic (options_box_extra_large);
-
-		options_box_extra_large = NULL;
-	}
-
-	options_box_extra_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxexlrg.psd" );
-
-	if (text_box_graphic)
-	{
-		destroy_texture_graphic (text_box_graphic);
-
-		text_box_graphic = NULL;
-	}
-
-	text_box_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\Boxtext.psd" );
-
-	if (text_option_bdrop)
-	{
-		destroy_texture_graphic (text_option_bdrop);
-
-		text_option_bdrop = NULL;
-	}
-
-	text_option_bdrop = create_texture_graphic ( "graphics\\ui\\cohokum\\bstripe.psd" );
+	text_option_bdrop = create_texture_graphic ( "graphics\\ui\\cohokum\\bstripe.psd", 1 );
 
 	/////////////////////////////////////////////////////////////////
 	// List box graphics
 
-	if (list_box_graphic)
-	{
-
-		destroy_texture_graphic (list_box_graphic);
-
-		list_box_graphic = NULL;
-	}
-
-	list_box_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\BoxList.psd" );
+	list_box_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\BoxList.psd", 1 );
 
 	// initialise slider graphics
-	frontend_slider_bdrop_graphic					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\sbcklist.psd" );
+	frontend_slider_bdrop_graphic					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\sbcklist.psd", 1 );
 
-	frontend_slider_bar_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolblu.psd" );
-	frontend_slider_bar_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolwht.psd" );
-	frontend_slider_bar_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolyel.psd" );
+	frontend_slider_bar_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolblu.psd", 1 );
+	frontend_slider_bar_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolwht.psd", 1 );
+	frontend_slider_bar_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\scrolyel.psd", 1 );
 
-	frontend_slider_up_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupblu.psd" );
-	frontend_slider_up_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupwht.psd" );
-	frontend_slider_up_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupyel.psd" );
+	frontend_slider_up_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupblu.psd", 1 );
+	frontend_slider_up_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupwht.psd", 1 );
+	frontend_slider_up_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrupyel.psd", 1 );
 
-	frontend_slider_down_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwblu.psd" );
-	frontend_slider_down_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwwht.psd" );
-	frontend_slider_down_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwyel.psd" );
+	frontend_slider_down_graphic 					= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwblu.psd", 1 );
+	frontend_slider_down_highlighted_graphic 	= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwwht.psd", 1 );
+	frontend_slider_down_selected_graphic 		= create_texture_graphic ( "graphics\\ui\\cohokum\\map\\arrdwyel.psd", 1 );
 
 
 	/////////////////////////////////////////////////////////////////
@@ -359,7 +308,7 @@ void initialise_main_screen (void)
 					UI_ATTR_TIME_LENGTH (200),
 					UI_ATTR_OFFSET_TIME (600),
 					UI_ATTR_VIRTUAL_SIZE (0.155, 0.033),
-               UI_ATTR_GRAPHIC (get_graphics_file_data (GRAPHICS_UI_APACHE_MAIN_SCREEN_PLAYER_BUTTON)),
+               //UI_ATTR_GRAPHIC (get_graphics_file_data (GRAPHICS_UI_APACHE_MAIN_SCREEN_PLAYER_BUTTON)),
 					UI_ATTR_TEXT (get_trans ("UI_PILOTS")),
 					UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_22),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
@@ -619,6 +568,139 @@ void initialise_main_screen (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void deinitialise_main_screen (void)
+{
+	if (options_box_small)
+	{
+		destroy_texture_graphic (options_box_small);
+
+		options_box_small = NULL;
+	}
+
+	if (options_box_medium)
+	{
+		destroy_texture_graphic (options_box_medium);
+
+		options_box_medium = NULL;
+	}
+
+	if (options_box_large)
+	{
+		destroy_texture_graphic (options_box_large);
+
+		options_box_large = NULL;
+	}
+
+	if (options_box_extra_large)
+	{
+		destroy_texture_graphic (options_box_extra_large);
+
+		options_box_extra_large = NULL;
+	}
+
+	if (text_box_graphic)
+	{
+		destroy_texture_graphic (text_box_graphic);
+
+		text_box_graphic = NULL;
+	}
+
+	if (text_option_bdrop)
+	{
+		destroy_texture_graphic (text_option_bdrop);
+
+		text_option_bdrop = NULL;
+	}
+
+	if (list_box_graphic)
+	{
+		destroy_texture_graphic (list_box_graphic);
+
+		list_box_graphic = NULL;
+	}
+
+	if ( frontend_slider_bdrop_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_bdrop_graphic );
+
+		frontend_slider_bdrop_graphic = NULL;
+	}
+
+	if ( frontend_slider_bar_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_bar_graphic );
+
+		frontend_slider_bar_graphic = NULL;
+	}
+
+	if ( frontend_slider_bar_highlighted_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_bar_highlighted_graphic );
+
+		frontend_slider_bar_highlighted_graphic = NULL;
+	}
+
+	if ( frontend_slider_bar_selected_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_bar_selected_graphic );
+
+		frontend_slider_bar_selected_graphic = NULL;
+	}
+
+	if ( frontend_slider_up_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_up_graphic );
+
+		frontend_slider_up_graphic = NULL;
+	}
+
+	if ( frontend_slider_up_highlighted_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_up_highlighted_graphic );
+
+		frontend_slider_up_highlighted_graphic = NULL;
+	}
+
+	if ( frontend_slider_up_highlighted_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_up_highlighted_graphic );
+
+		frontend_slider_up_highlighted_graphic = NULL;
+	}
+
+	if ( frontend_slider_down_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_down_graphic );
+
+		frontend_slider_down_graphic = NULL;
+	}
+
+	if ( frontend_slider_down_highlighted_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_down_highlighted_graphic );
+
+		frontend_slider_down_highlighted_graphic = NULL;
+	}
+
+	if ( frontend_slider_down_selected_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_down_selected_graphic );
+
+		frontend_slider_down_selected_graphic = NULL;
+	}
+
+	if ( frontend_slider_up_selected_graphic )
+	{
+		destroy_texture_graphic ( frontend_slider_up_selected_graphic );
+
+		frontend_slider_up_selected_graphic = NULL;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void set_frontend_slider_graphics (ui_object *parent)
 {
 	ui_object
@@ -686,26 +768,34 @@ void notify_main_screen_exit_button (ui_object *obj, void *arg)
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_SELECTED));
 
 		set_ui_object_redraw (main_screen, TRUE);
+#endif
 	}
 	else if ((int) arg == BUTTON_STATE_UP)
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#endif
 
 		push_ui_screen ( exit_screen );
 	}
 	else
 	{
 
-		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
+#if 0
+		set_ui_object_graphic (obj, get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_BACK_BUTTON_UNSELECTED));
 
 		set_ui_object_redraw (main_screen, TRUE);
+#endif
 	}
 
+#if 0
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

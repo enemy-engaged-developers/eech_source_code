@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -293,15 +293,15 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 
 	if ( visual_3d_vp )
 	{
-	
+
 		if ( visual_3d_vp->position.y > get_cloud_3d_base_height () )
 		{
-	
+
 			creation_allowed = FALSE;
 		}
 		else
 		{
-	
+
 			creation_allowed = TRUE;
 		}
 	}
@@ -362,7 +362,7 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 
 			for ( z = -1; z <= 1; z++ )
 			{
-	
+
 				for ( x = -1; x <= 1; x++ )
 				{
 
@@ -388,9 +388,9 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 
 			if ( near_snow )
 			{
-	
+
 				old_rain_total = total_raindrop_number;
-	
+
 				total_raindrop_number = old_rain_total * 0.0;
 				total_snowdrop_number = old_rain_total * 1.0;
 			}
@@ -457,14 +457,14 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 		rain_streak_displacement.x = rain_3d_wind_direction.x * rain_3d_wind_speed * 0.05;
 		rain_streak_displacement.y = rain_3d_wind_direction.y * rain_3d_wind_speed * 0.05 + ( rain_3d_speed * 0.05 );
 		rain_streak_displacement.z = rain_3d_wind_direction.z * rain_3d_wind_speed * 0.05;
-	
+
 		displacement_magnitude = get_3d_vector_magnitude ( &rain_streak_displacement );
-	
+
 		if ( displacement_magnitude != 0 )
 		{
-	
+
 			displacement_magnitude = 1.5 / displacement_magnitude;
-	
+
 			rain_streak_displacement.x *= displacement_magnitude;
 			rain_streak_displacement.y *= displacement_magnitude;
 			rain_streak_displacement.z *= displacement_magnitude;
@@ -496,7 +496,7 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				//
 				// Update the rain position
 				//
-			
+
 				rain_3d_drops[count].current_position.x -= rain_displacement.x;
 				rain_3d_drops[count].current_position.y -= rain_displacement.y;
 				rain_3d_drops[count].current_position.z -= rain_displacement.z;
@@ -504,17 +504,17 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				rel.x = rain_3d_drops[count].current_position.x - visual_3d_vp->x;
 				rel.y = rain_3d_drops[count].current_position.y - visual_3d_vp->y;
 				rel.z = rain_3d_drops[count].current_position.z - visual_3d_vp->z;
-	
+
 				if (
 						( rel.x > RAINDROPS_AREA_WIDTH ) || ( rel.x < ( -RAINDROPS_AREA_WIDTH ) ) ||
 						( rel.y > RAINDROPS_AREA_HEIGHT ) || ( rel.y < ( -RAINDROPS_AREA_HEIGHT ) ) ||
 						( rel.z > RAINDROPS_AREA_DEPTH ) || ( rel.z < ( -RAINDROPS_AREA_DEPTH ) )
 					)
 				{
-	
-	
+
+
 					rain_3d_raindrops_valid--;
-	
+
 					rain_3d_drops[count].type = RAINDROP_INVALID;
 				}
 
@@ -540,7 +540,7 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				snow_noise.z = sfrand1 () * rain_3d_delta_time;	//0.1	;//snow_displacement_magnitude;
 
 				relative_speed = rain_3d_drops[count].relative_speed;
-			
+
 				rain_3d_drops[count].current_position.x -= ( snow_drift_displacement.x + snow_noise.x );
 				rain_3d_drops[count].current_position.y -= ( snow_drift_displacement.y );
 				rain_3d_drops[count].current_position.z -= ( snow_drift_displacement.z + snow_noise.x );
@@ -550,14 +550,14 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				rel.x = rain_3d_drops[count].current_position.x - visual_3d_vp->x;
 				rel.y = rain_3d_drops[count].current_position.y - visual_3d_vp->y;
 				rel.z = rain_3d_drops[count].current_position.z - visual_3d_vp->z;
-	
+
 				if (
 						( rel.x > SNOWDROPS_AREA_WIDTH ) || ( rel.x < ( -SNOWDROPS_AREA_WIDTH ) ) ||
 						( rel.y > SNOWDROPS_AREA_HEIGHT ) || ( rel.y < ( -SNOWDROPS_AREA_HEIGHT ) ) ||
 						( rel.z > SNOWDROPS_AREA_DEPTH ) || ( rel.z < ( -SNOWDROPS_AREA_DEPTH ) )
 					)
 				{
-	
+
 					rain_3d_snowdrops_valid--;
 
 					rain_3d_drops[count].type = RAINDROP_INVALID;
@@ -572,37 +572,37 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 
 			if ( rain_3d_raindrops_valid < total_raindrop_number )
 			{
-	
+
 				float
 					x,
 					y,
 					z,
 					creation_distance;
-	
+
 				//
 				// Generate a new rain drop randomly
 				//
-	
+
 				z = ( ( frand1 () * 0.8 ) + 0.2 ) * ( RAINDROPS_AREA_DEPTH / 5 );
 				x = sfrand1 () * ( RAINDROPS_AREA_WIDTH / 5 );
 				y = sfrand1 () * ( RAINDROPS_AREA_HEIGHT / 5 );
 
 				x *= z / 50;
 				y *= z / 50;
-	
+
 				//
 				// Now project along the motion vector
 				//
-	
+
 				creation_distance = frand1 () * 8;
 				x += creation_vector.x * creation_distance;
 				y += creation_vector.y * creation_distance;
 				z += creation_vector.z * creation_distance;
-	
+
 				//
 				// Rotate this back into the view coordinate system
 				//
-	
+
 				rain_3d_drops[count].current_position.x = x * view_attitude[0][0] + y * view_attitude[1][0] + z * view_attitude[2][0];
 				rain_3d_drops[count].current_position.y = x * view_attitude[0][1] + y * view_attitude[1][1] + z * view_attitude[2][1];
 				rain_3d_drops[count].current_position.z = x * view_attitude[0][2] + y * view_attitude[1][2] + z * view_attitude[2][2];
@@ -612,12 +612,12 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				rain_3d_drops[count].current_position.z += visual_3d_vp->z;
 
 				rain_3d_drops[count].type = RAINDROP_RAIN;
-	
+
 				rain_3d_raindrops_valid++;
 			}
 			else if ( rain_3d_snowdrops_valid < total_snowdrop_number )
 			{
-	
+
 				float
 					x,
 					y,
@@ -631,35 +631,35 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 				z = ( ( frand1 () * 0.8 ) + 0.2 ) * ( SNOWDROPS_AREA_DEPTH / 5 );
 				x = sfrand1 () * ( SNOWDROPS_AREA_WIDTH / 5 );
 				y = sfrand1 () * ( SNOWDROPS_AREA_HEIGHT / 5 );
-	
+
 				x *= z / 50;
 				y *= z / 50;
-	
+
 				//
 				// Now project along the motion vector
 				//
-	
+
 				creation_distance = frand1 () * 8;
 				x += creation_vector.x * creation_distance;
 				y += creation_vector.y * creation_distance;
 				z += creation_vector.z * creation_distance;
-	
+
 				//
 				// Rotate this back into the view coordinate system
 				//
-	
+
 				rain_3d_drops[count].current_position.x = x * view_attitude[0][0] + y * view_attitude[1][0] + z * view_attitude[2][0];
 				rain_3d_drops[count].current_position.y = x * view_attitude[0][1] + y * view_attitude[1][1] + z * view_attitude[2][1];
 				rain_3d_drops[count].current_position.z = x * view_attitude[0][2] + y * view_attitude[1][2] + z * view_attitude[2][2];
-	
+
 				rain_3d_drops[count].current_position.x += visual_3d_vp->x;
 				rain_3d_drops[count].current_position.y += visual_3d_vp->y;
 				rain_3d_drops[count].current_position.z += visual_3d_vp->z;
 
 				rain_3d_drops[count].relative_speed = ( frand1() * 0.5 ) + 0.5;
-	
+
 				rain_3d_drops[count].type = RAINDROP_SNOW;
-	
+
 				rain_3d_snowdrops_valid++;
 			}
 		}
@@ -674,7 +674,7 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 
 		if ( rain_3d_drops[count].type == RAINDROP_RAIN )
 		{
-	
+
 			rain_3d_drops[count].predicted_position.x = rain_3d_drops[count].current_position.x - rain_streak_displacement.x;
 			rain_3d_drops[count].predicted_position.y = rain_3d_drops[count].current_position.y - rain_streak_displacement.y;
 			rain_3d_drops[count].predicted_position.z = rain_3d_drops[count].current_position.z - rain_streak_displacement.z;
@@ -769,19 +769,19 @@ void draw_3d_rain ( void )
 		//
 		// Rotate the rain - putting the results in transformed_3d_points
 		//
-	
+
 		transform_3d_rain ();
-	
+
 		//
 		// Go through pairing up the transformed points, drawing lines between them.
 		//
-	
+
 		rain_point_references[0].point = 0;
 		rain_point_references[1].point = 1;
-	
+
 		set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 
-		set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+		set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
 		set_d3d_texture ( 0, NULL );
 
@@ -790,16 +790,16 @@ void draw_3d_rain ( void )
 
 		for ( count = 0; count < number_of_valid_raindrops; count++ )
 		{
-	
+
 			vertex
 				*line;
-	
+
 			//
 			// Construct the 3d line
 			//
-	
+
 			clip_3d_coord = 0;
-	
+
 			line = construct_3d_line ( rain_point_references, ( count * 2 ), &outcode );
 
 			if ( line )
@@ -814,59 +814,59 @@ void draw_3d_rain ( void )
 				line->next_vertex->green = rain_whiteness;
 				line->next_vertex->blue = rain_whiteness;
 				line->next_vertex->alpha = 192;
-		
+
 				if ( outcode & CLIP_HITHER )
 				{
-			
+
 					line = hither_clip_3d_polygon ( line, &outcode );
 				}
-	
+
 				if ( line )
 				{
-		
+
 					if ( outcode )
 					{
-				
+
 						line = clip_3d_polygon ( line, outcode );
 					}
-	
+
 					if ( line )
 					{
-	
+
 						vertex
 							*point1,
 							*point2;
-					
-						LPD3DTLVERTEX
+
+						LPTLVERTEX
 							vertices,
 							vptr;
 
 						vertices = get_d3d_line_vertices_points_address ();
-					
+
 						vptr = vertices;
-					
+
 						point2 = line;
-					
+
 						point1 = line->next_vertex;
-					
+
 						*( ( int * ) &vptr->sx ) = *( ( int * ) &point1->i );
 						*( ( int * ) &vptr->sy ) = *( ( int * ) &point1->j );
 						*( ( int * ) &vptr->rhw ) = *( ( int * ) &point1->q );
 						vptr->sz = ( point1->q * zbuffer_factor ) + zbuffer_constant;
-					
+
 						vptr->color = point1->colour;
 						vptr->specular = d3d_fog_intensity;
-					
+
 						vptr++;
-					
+
 						*( ( int * ) &vptr->sx ) = *( ( int * ) &point2->i );
 						*( ( int * ) &vptr->sy ) = *( ( int * ) &point2->j );
 						*( ( int * ) &vptr->rhw ) = *( ( int * ) &point2->q );
 						vptr->sz = ( point2->q * zbuffer_factor ) + zbuffer_constant;
-					
+
 						vptr->color = point2->colour;
 						vptr->specular = d3d_fog_intensity;
-					
+
 						draw_line_primitive ( vertices );
 					}
 				}
@@ -884,11 +884,11 @@ void draw_3d_rain ( void )
 		real_colour
 			snow_specular,
 			snow_colour;
-	
+
 		//
 		// Rotate the rain - putting the results in transformed_3d_points
 		//
-	
+
 		transform_3d_snow ();
 
 		set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, FALSE, FALSE );
@@ -899,10 +899,10 @@ void draw_3d_rain ( void )
 
 		set_d3d_texture ( 0, snow_3d_texture );
 
-		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
-		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
-		set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
-		set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
+		set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
+		set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
+		set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+		set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
@@ -918,7 +918,7 @@ void draw_3d_rain ( void )
 		snow_colour.alpha = 255;
 
 		snow_specular.colour = d3d_fog_intensity;
-	
+
 		for ( count = 0; count < rain_3d_snowdrops_valid; count++ )
 		{
 
@@ -1074,47 +1074,47 @@ void transform_3d_rain ( void )
 			rel.x = points->x - visual_3d_vp->x;
 			rel.y = points->y - visual_3d_vp->y;
 			rel.z = points->z - visual_3d_vp->z;
-	
+
 			z = rel.x * scaled_rotation[0][2] + rel.y * scaled_rotation[1][2] + rel.z * scaled_rotation[2][2];
 			x = rel.x * scaled_rotation[0][0] + rel.y * scaled_rotation[1][0] + rel.z * scaled_rotation[2][0];
 			y = rel.x * scaled_rotation[0][1] + rel.y * scaled_rotation[1][1] + rel.z * scaled_rotation[2][1];
-	
+
 			if ( *( ( int * ) &z ) >= *( ( int * ) &clip_hither ) )
 			{
-	
+
 				float
 					q,
 					i,
 					j;
-	
+
 				result_points->x = x;
 				result_points->y = y;
 				result_points->z = z;
-	
+
 				q = 1.0 / z;
 				i = ( x * q );
 				j = ( y * q );
-	
+
 				result_points->j = active_3d_environment->y_origin - j;
 				result_points->i = active_3d_environment->x_origin + i;
-	
+
 				result_points->q = q;
-	
+
 				oxmax = active_viewport.x_max - result_points->i;
 				oxmin = result_points->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - result_points->j;
 				oymin = result_points->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
 				iymin = *( ( int * ) &oymin );
-			
+
 				result_points->outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
 			}
 			else
 			{
-	
+
 				result_points->outcode = CLIP_HITHER;
 				result_points->z = z;
 				result_points->x = x;
@@ -1128,11 +1128,11 @@ void transform_3d_rain ( void )
 
 				rain_3d_raindrops_valid--;
 			}
-	
+
 			result_points++;
-	
+
 			points = &rain_3d_drops[count].predicted_position;
-	
+
 			rel.x = points->x - visual_3d_vp->x;
 			rel.y = points->y - visual_3d_vp->y;
 			rel.z = points->z - visual_3d_vp->z;
@@ -1143,35 +1143,35 @@ void transform_3d_rain ( void )
 
 			if ( *( ( int * ) &z ) >= *( ( int * ) &clip_hither ) )
 			{
-	
+
 				float
 					q,
 					i,
 					j;
-	
+
 				result_points->x = x;
 				result_points->y = y;
 				result_points->z = z;
-	
+
 				q = 1.0 / z;
 				i = ( x * q );
 				j = ( y * q );
-	
+
 				result_points->j = active_3d_environment->y_origin - j + 1;
 				result_points->i = active_3d_environment->x_origin + i + 1;
-	
+
 				result_points->q = q;
-	
+
 				oxmax = active_viewport.x_max - result_points->i;
 				oxmin = result_points->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - result_points->j;
 				oymin = result_points->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
 				iymin = *( ( int * ) &oymin );
-			
+
 				result_points->outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
 			}
 			else
@@ -1182,7 +1182,7 @@ void transform_3d_rain ( void )
 				result_points->x = x;
 				result_points->y = y;
 			}
-	
+
 			result_points++;
 		}
 	}
@@ -1256,7 +1256,7 @@ void transform_3d_snow ( void )
 
 		if ( rain_3d_drops[count].type == RAINDROP_SNOW )
 		{
-	
+
 			points = &rain_3d_drops[count].current_position;
 
 			rel.x = points->x - visual_3d_vp->x;
@@ -1269,42 +1269,42 @@ void transform_3d_snow ( void )
 
 			if ( *( ( int * ) &z ) >= *( ( int * ) &clip_hither ) )
 			{
-	
+
 				float
 					q,
 					i,
 					j;
-	
+
 				result_points->x = x;
 				result_points->y = y;
 				result_points->z = z;
-	
+
 				q = 1.0 / z;
 				i = ( x * q );
 				j = ( y * q );
-	
+
 				result_points->j = active_3d_environment->y_origin - j;
 				result_points->i = active_3d_environment->x_origin + i;
-	
+
 				result_points->q = q;
-	
+
 				oxmax = active_viewport.x_max - result_points->i;
 				oxmin = result_points->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - result_points->j;
 				oymin = result_points->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
 				iymin = *( ( int * ) &oymin );
-			
+
 				result_points->outcode = generate_lookup_outcode ( ixmin, iymin, ixmax, iymax );
 
 				result_points++;
 			}
 			else
 			{
-	
+
 				//
 				// Tag this snowdrop as invalid now
 				//

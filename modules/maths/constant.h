@@ -110,9 +110,9 @@
 //
 ////////////////////////////////////////
 
-#define KILOMETRE (1000 * METRE)
-
 #define METRE (1.0f)
+
+#define KILOMETRE (1000 * METRE)
 
 #define CENTIMETRE (0.01f)
 

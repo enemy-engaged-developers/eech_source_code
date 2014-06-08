@@ -66,13 +66,6 @@
 
 extern void get_hind_virtual_cockpit_hsi_needle_values (float *direction_finder, float *flight_path, float *drift);
 
-// Casm 10SEP05 Havoc Instruments - temporary used for Hind
-extern void initialise_havoc_instruments (void);
-
-extern void deinitialise_havoc_instruments (void);
-
-extern void draw_havoc_virtual_cockpit_instruments_on_texture (void);
-
 extern float get_mi24_airspeed_needle_value(void);
 extern float get_mi24_vertical_velocity_needle_value(void);
 extern float get_mi24_pitch_ladder_dispacement(void);

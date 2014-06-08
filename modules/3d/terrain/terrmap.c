@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -80,7 +80,7 @@
 
 extern int
 	command_line_campaign_map,
-	command_line_campaign_map_palette;	
+	command_line_campaign_map_palette;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,7 +331,7 @@ static void load_contour_map_lakes ( char *filename );
 
 static void load_contour_map_citybases ( char *filename );
 
-static void set_node_database_extents ( int number_of_nodes, contour_path *paths, vec3d *nodes );
+static void set_node_database_extents ( int number_of_paths, contour_path *paths, vec3d *nodes, int number_of_nodes );
 
 static void set_lake_database_extents ( int number_of_triangle_sets, contour_lake *lakes );
 
@@ -521,7 +521,7 @@ void draw_2d_terrain_map ( void )
 	// Turn off Z buffering for the 2d map.
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_ZENABLE, FALSE );
 
 	//
 	// Turn off fogging
@@ -535,15 +535,15 @@ void draw_2d_terrain_map ( void )
 
 	set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, FALSE, FALSE );
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_NONE );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, TERRAIN_TEXTURE_FILTER );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, TERRAIN_TEXTURE_MIN_FILTER );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, TERRAIN_TEXTURE_FILTER );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, TERRAIN_TEXTURE_MIN_FILTER );
 
 	if ( terrain_2d_map_textured )
 	{
@@ -848,7 +848,7 @@ void draw_2d_terrain_map ( void )
 	// Turn Z buffering back on again
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, TRUE );
+	set_d3d_int_state ( D3DRS_ZENABLE, TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -951,23 +951,23 @@ void generate_2d_terrain_contour_mipmaps ( void )
 
 					if ( ( ( ( y * 2 ) + y_av ) >= 0 ) && ( ( ( y * 2 ) + y_av ) < parent_height ) )
 					{
-	
+
 						for ( x_av = -1; x_av <= 1; x_av++ )
 						{
-	
+
 							if ( ( ( ( x * 2 ) + x_av ) >= 0 ) && ( ( ( x * 2 ) + x_av ) < parent_width ) )
 							{
 
 								if ( ( x_av == 0 ) && ( y_av == 0 ) )
 								{
-	
+
 									average += 4 * ( parent_data[(y*2+y_av)*parent_width+(x*2+x_av)] );
 
 									total += 4;
 								}
 								else
 								{
-	
+
 									average += parent_data[(y*2+y_av)*parent_width+(x*2+x_av)];
 
 									total++;
@@ -1040,7 +1040,7 @@ void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 	else
 	{
 		terrain_2d_contour_heights = safe_malloc ( sizeof ( float ) * number_of_heights );
-	
+
 		memcpy ( terrain_2d_contour_heights, heights, ( sizeof ( float ) * number_of_heights ) );
 	}
 #endif
@@ -1150,7 +1150,7 @@ void load_2d_terrain ( const char *path )
 
 	if ( file_exist ( node_file ) )
 	{
-	
+
 		load_contour_map_colours ( node_file );
 	}
 
@@ -1186,6 +1186,22 @@ void load_2d_terrain ( const char *path )
 
 void unload_2d_terrain ( void )
 {
+
+	int
+		count;
+
+	if ( contour_map_mipmaps )
+	{
+		for ( count = 0; count < contour_map_number_of_mipmaps; count++ )
+		{
+			if ( contour_map_mipmaps[count] )
+			{
+				safe_free ( contour_map_mipmaps[count] );
+			}
+		}
+		safe_free ( contour_map_mipmaps );
+		contour_map_mipmaps = NULL;
+	}
 
 	//
 	// Unload the lakes
@@ -1265,7 +1281,7 @@ void unload_2d_terrain ( void )
 
 	if ( contour_map_road_path_positions )
 	{
-		
+
 		safe_free ( contour_map_road_path_positions );
 
 		contour_map_road_path_positions = NULL;
@@ -1329,7 +1345,7 @@ void unload_2d_terrain ( void )
 
 	if ( contour_map_boundary_path_positions )
 	{
-		
+
 		safe_free ( contour_map_boundary_path_positions );
 
 		contour_map_boundary_path_positions = NULL;
@@ -1433,7 +1449,7 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 	// Go through setting all the node bounds
 	//
 
-	set_node_database_extents ( contour_map_number_of_river_paths, contour_map_river_paths, contour_map_river_nodes );
+	set_node_database_extents ( contour_map_number_of_river_paths, contour_map_river_paths, contour_map_river_nodes, contour_map_number_of_river_nodes );
 
 	return ( TRUE );
 }
@@ -1535,7 +1551,7 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 	// Go through setting all the node bounds
 	//
 
-	set_node_database_extents ( contour_map_number_of_road_paths, contour_map_road_paths, contour_map_road_nodes );
+	set_node_database_extents ( contour_map_number_of_road_paths, contour_map_road_paths, contour_map_road_nodes, contour_map_number_of_road_nodes );
 
 	return ( TRUE );
 }
@@ -1636,7 +1652,7 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 	// Go through setting all the node bounds
 	//
 
-	set_node_database_extents ( contour_map_number_of_boundary_paths, contour_map_boundary_paths, contour_map_boundary_nodes );
+	set_node_database_extents ( contour_map_number_of_boundary_paths, contour_map_boundary_paths, contour_map_boundary_nodes, contour_map_number_of_boundary_nodes );
 
 	return TRUE;
 }
@@ -1645,7 +1661,7 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_node_database_extents ( int number_of_paths, contour_path *paths, vec3d *nodes )
+void set_node_database_extents ( int number_of_paths, contour_path *paths, vec3d *nodes, int number_of_nodes )
 {
 
 	int
@@ -1662,6 +1678,9 @@ void set_node_database_extents ( int number_of_paths, contour_path *paths, vec3d
 			xmax,
 			zmin,
 			zmax;
+
+		ASSERT ( paths[path].from >= 0 && paths[path].from < number_of_nodes );
+		ASSERT ( paths[path].to >= 0 && paths[path].to < number_of_nodes );
 
 		xmin = min ( nodes[ paths[path].from ].x, nodes[ paths[path].to ].x );
 		xmax = max ( nodes[ paths[path].from ].x, nodes[ paths[path].to ].x );
@@ -1772,23 +1791,23 @@ void load_contour_map_colours ( const char *filename )
 			width,
 			height,
 			channels;
-	
+
 		char
 			*data;
 
 		data = load_psd_file ( filename, &width, &height, &channels );
-	
+
 		ASSERT ( channels == 3 );
-	
+
 		terrain_2d_contour_colours = safe_malloc ( sizeof ( rgb_colour ) * height );
-	
+
 		terrain_2d_contour_intensities = safe_malloc ( sizeof ( rgb_colour ) * height );
-	
+
 		terrain_2d_contour_intensities = safe_malloc(sizeof(contour_colours));
-	
+
 		for ( count = 0; count < height; count++ )
 		{
-	
+
 			float
 				intensity;
 
@@ -1799,12 +1818,12 @@ void load_contour_map_colours ( const char *filename )
 			intensity = ( float ) terrain_2d_contour_colours[count].r * 0.30;
 			intensity += ( float ) terrain_2d_contour_colours[count].g * 0.59;
 			intensity += ( float ) terrain_2d_contour_colours[count].b * 0.11;
-	
+
 			terrain_2d_contour_intensities[count].r = intensity;
 			terrain_2d_contour_intensities[count].g = intensity;
 			terrain_2d_contour_intensities[count].b = intensity;
 		}
-	
+
 		safe_free ( data );
 	}
 #endif
@@ -1870,7 +1889,7 @@ void load_contour_map_lakes ( char *filename )
 			point;
 
 		fread ( &number_of_lake_triangles, sizeof ( int ), 1, fp );
-	
+
 		fread ( vertices, sizeof ( vec3d ) * 3, number_of_lake_triangles, fp );
 
 		contour_lakes[count].number_of_triangles = number_of_lake_triangles;
@@ -1960,7 +1979,7 @@ void load_contour_map_citybases ( char *filename )
 			point;
 
 		fread ( &number_of_triangles, sizeof ( int ), 1, fp );
-	
+
 		fread ( vertices, sizeof ( vec3d ) * 3, number_of_triangles, fp );
 
 		contour_citybases[count].number_of_triangles = number_of_triangles;
@@ -2054,23 +2073,23 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 			}
 			else
 			{
-		
+
 				vec3d
 					*sub_positions;
-	
+
 				int
 					sub_count;
-	
+
 				sub_positions = contour_map_river_paths[count].points;
 
 				sub_count = 0;
-	
+
 				pt3.x = contour_map_river_nodes[ contour_map_river_paths[count].from ].x;
 				pt3.y = contour_map_river_nodes[ contour_map_river_paths[count].from ].z;
 
 				pt4.x = sub_positions[0].x;
 				pt4.y = sub_positions[0].z;
-		
+
 				if ( line_line_2d_intercept ( &pt1, &pt2, &pt3, &pt4, &intercept_point ) )
 				{
 
@@ -2100,22 +2119,22 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 
 					if ( line_line_2d_intercept ( &pt1, &pt2, &pt3, &pt4, &intercept_point ) )
 					{
-	
+
 						if ( dx > dy )
 						{
-	
+
 							t = ( intercept_point.x - pt1.x ) / ( pt2.x - pt1.x );
 						}
 						else
 						{
-	
+
 							t = ( intercept_point.y - pt1.y ) / ( pt2.y - pt1.y );
 						}
-	
+
 						return ( t );
 					}
 				}
-		
+
 
 				pt3.x = sub_positions[sub_count].x;
 				pt3.y = sub_positions[sub_count].z;
@@ -2224,9 +2243,9 @@ void draw_2d_shaded_terrain_contour_map ( void )
 
 	set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, FALSE, FALSE );
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_NONE );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 	set_d3d_texture ( 0, NULL );
@@ -2278,7 +2297,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 
 	{
 		int map_resolution = (command_line_campaign_map == 2) ? 120 : 60;
-		
+
 		new_total = x_total;
 
 		screen_width = fabs ( terrain_2d_map_screen_xmax - terrain_2d_map_screen_xmin );
@@ -2295,7 +2314,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		terrain_height_data_width = terrain_3d_simple_elevation_width - 1;
 		terrain_height_data_height = terrain_3d_simple_elevation_height - 1;
 
-		
+
 
 		while ( ( ratio > map_resolution ) && ( mipmap_index < ( contour_map_number_of_mipmaps - 1 ) ) && ( mipmap_level < 64 ) )
 		{
@@ -2391,7 +2410,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 	j1 = ( minimum_z * terrain_height_data_z_distance ) - terrain_2d_map_world_zcentre;
 	i2 = ( ( minimum_x + x_increment ) * terrain_height_data_x_distance ) - terrain_2d_map_world_xcentre;
 	j2 = ( ( minimum_z + z_increment ) * terrain_height_data_z_distance ) - terrain_2d_map_world_zcentre;
-	
+
 	i1 = ( i1 * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre;
 	j1 = ( j1 * terrain_2d_map_screen_yscale ) + terrain_2d_map_screen_ycentre;
 	i2 = ( i2 * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre;
@@ -2418,7 +2437,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		float
 			*elevation_grid[4],
 			elevation_data[4][4];
-	
+
 		int
 			z_indices[4],
 			x_indices[4];
@@ -2507,7 +2526,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 			{
 				elevation_grid[3][1] = GET_ELEVATION(3, 1);
 				elevation_grid[3][2] = GET_ELEVATION(3, 2);
-	
+
 				if (z_count > 0)
 					elevation_grid[3][0] = GET_ELEVATION(3, 0);
 				else  // it is outside, initalize to same as the one below
@@ -2628,7 +2647,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		lake_colour.g = terrain_2d_current_contour_colours[0].g;
 		lake_colour.b = terrain_2d_current_contour_colours[0].b;
 		lake_colour.a = terrain_2d_current_contour_colours[0].a;
-	
+
 		render_contour_triangle_database ( number_of_contour_lakes, contour_lakes, lake_colour );
 	}
 
@@ -2645,7 +2664,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		citybase_colour.g = 70;
 		citybase_colour.b = 70;
 		citybase_colour.a = 255;
-	
+
 		render_contour_triangle_database ( number_of_contour_citybases, contour_citybases, citybase_colour );
 	}
 
@@ -2665,7 +2684,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 	// Turn Z buffering back on again
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, TRUE );
+	set_d3d_int_state ( D3DRS_ZENABLE, TRUE );
 
 	d3d_in_order_rendering = FALSE;
 
@@ -2752,63 +2771,63 @@ void render_contour_triangle_database ( int number_of_triangle_sets, contour_lak
 			vertices[1].q = 0.1;
 			vertices[2].z = 10;
 			vertices[2].q = 0.1;
-		
+
 			for ( triangle = 0; triangle < lakes[count].number_of_triangles; triangle++ )
 			{
-	
+
 				int
 					outcode,
 					outcode2;
-	
+
 				vertices[0].i = ( points[0].x - terrain_2d_map_world_xcentre ) * terrain_2d_map_screen_xscale + terrain_2d_map_screen_xcentre;
 				vertices[0].j = ( points[0].z - terrain_2d_map_world_zcentre ) * terrain_2d_map_screen_yscale + terrain_2d_map_screen_ycentre;
-	
+
 				vertices[1].i = ( points[1].x - terrain_2d_map_world_xcentre ) * terrain_2d_map_screen_xscale + terrain_2d_map_screen_xcentre;
 				vertices[1].j = ( points[1].z - terrain_2d_map_world_zcentre ) * terrain_2d_map_screen_yscale + terrain_2d_map_screen_ycentre;
-	
+
 				vertices[2].i = ( points[2].x - terrain_2d_map_world_xcentre ) * terrain_2d_map_screen_xscale + terrain_2d_map_screen_xcentre;
 				vertices[2].j = ( points[2].z - terrain_2d_map_world_zcentre ) * terrain_2d_map_screen_yscale + terrain_2d_map_screen_ycentre;
-	
+
 				vertices[0].outcode = generate_contour_outcode ( vertices[0].i, vertices[0].j );
 				vertices[1].outcode = generate_contour_outcode ( vertices[1].i, vertices[1].j );
 				vertices[2].outcode = generate_contour_outcode ( vertices[2].i, vertices[2].j );
-	
+
 				vertices[0].next_vertex = &vertices[1];
 				vertices[1].next_vertex = &vertices[2];
 				vertices[2].next_vertex = NULL;
-	
+
 				outcode = vertices[0].outcode;
 				outcode2 = vertices[0].outcode;
-	
+
 				outcode |= vertices[1].outcode;
 				outcode2 &= vertices[1].outcode;
-	
+
 				outcode |= vertices[2].outcode;
 				outcode2 &= vertices[2].outcode;
-	
+
 				if ( outcode2 == 0 )
 				{
-		
+
 					vertex
 						*poly;
-		
+
 					poly = &vertices[0];
-		
+
 					clip_3d_coord = 0;
-		
+
 					if ( outcode )
 					{
 
 						poly = clip_3d_polygon ( poly, outcode );
 					}
-			
+
 					if ( poly )
 					{
-	
+
 						draw_wbuffered_plain_polygon ( poly, lake_colour, specular );
 					}
 				}
-	
+
 				points += 3;
 			}
 		}
@@ -2856,7 +2875,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 		contour_minimum_height = terrain_2d_contour_heights[contour_start_index];
 		contour_maximum_height = terrain_2d_contour_heights[contour_start_index+1];
-	
+
 		contour_colour.red = terrain_2d_current_contour_colours[contour_start_index].r;
 		contour_colour.green = terrain_2d_current_contour_colours[contour_start_index].g;
 		contour_colour.blue = terrain_2d_current_contour_colours[contour_start_index].b;
@@ -2880,7 +2899,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 		if ( quad_outcode == 0 )
 		{
-	
+
 			vertices[1].next_vertex = &vertices[3];
 			vertices[3].next_vertex = &vertices[2];
 			vertices[2].next_vertex = &vertices[0];
@@ -2893,54 +2912,54 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 			if ( triangle1_outcode2 == 0 )
 			{
-	
+
 				vertex
 					*poly;
-	
+
 				vertices[0].next_vertex = &vertices[1];
 				vertices[1].next_vertex = &vertices[2];
 				vertices[2].next_vertex = NULL;
 
 				poly = &vertices[0];
-	
+
 				clip_3d_coord = 0;
-	
+
 				if ( triangle1_outcode )
 				{
-		
+
 					poly = clip_contour_polygon ( poly, triangle1_outcode );
 				}
-		
+
 				if ( poly )
 				{
-				
+
 					render_shaded_contour_terrain_poly ( poly, contour_colour);
 				}
 			}
-	
+
 			if ( triangle2_outcode2 == 0 )
 			{
-	
+
 				vertex
 					*poly;
-	
+
 				vertices[2].next_vertex = &vertices[1];
 				vertices[1].next_vertex = &vertices[3];
 				vertices[3].next_vertex = NULL;
-	
+
 				poly = &vertices[2];
-	
+
 				clip_3d_coord = 0;
-	
+
 				if ( triangle2_outcode )
 				{
-		
+
 					poly = clip_contour_polygon ( poly, triangle2_outcode );
 				}
-		
+
 				if ( poly )
 				{
-				
+
 					render_shaded_contour_terrain_poly ( poly, contour_colour);
 				}
 			}
@@ -2954,10 +2973,10 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 		for ( count = contour_start_index; count <= contour_end_index; count++ )
 		{
-	
+
 			vertex
 				contour_line_vertices[4];
-	
+
 			int
 				line_vertex_index,
 				quad_outcode,
@@ -2969,9 +2988,9 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 			contour_minimum_height = terrain_2d_contour_heights[count];
 			contour_maximum_height = terrain_2d_contour_heights[count+1];
-	
+
 			line_vertex_index = 0;
-	
+
 			contour_colour.red = terrain_2d_current_contour_colours[count].r;
 			contour_colour.green = terrain_2d_current_contour_colours[count].g;
 			contour_colour.blue = terrain_2d_current_contour_colours[count].b;
@@ -2986,32 +3005,32 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			vertices[3].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 
 			{
-	
+
 				unsigned int
 					outcode_gen1,
 					outcode_gen2;
-	
+
 				float
 					foutcode_gen;
-		
+
 				foutcode_gen = vertices[0].y - contour_minimum_height; outcode_gen1 = *( ( int * ) &foutcode_gen );
 				foutcode_gen =  contour_maximum_height - vertices[0].y; outcode_gen2 = *( ( int * ) &foutcode_gen );
 				outcode_gen1 >>= 26; outcode_gen1 &= CLIP_HITHER;
 				outcode_gen2 >>= 27; outcode_gen2 &= CLIP_YONDER;
 				vertices[0].outcode |= ( outcode_gen1 | outcode_gen2 );
-	
+
 				foutcode_gen = vertices[1].y - contour_minimum_height; outcode_gen1 = *( ( int * ) &foutcode_gen );
 				foutcode_gen = contour_maximum_height - vertices[1].y; outcode_gen2 = *( ( int * ) &foutcode_gen );
 				outcode_gen1 >>= 26; outcode_gen1 &= CLIP_HITHER;
 				outcode_gen2 >>= 27; outcode_gen2 &= CLIP_YONDER;
 				vertices[1].outcode |= ( outcode_gen1 | outcode_gen2 );
-	
+
 				foutcode_gen = vertices[2].y - contour_minimum_height; outcode_gen1 = *( ( int * ) &foutcode_gen );
 				foutcode_gen = contour_maximum_height - vertices[2].y; outcode_gen2 = *( ( int * ) &foutcode_gen );
 				outcode_gen1 >>= 26; outcode_gen1 &= CLIP_HITHER;
 				outcode_gen2 >>= 27; outcode_gen2 &= CLIP_YONDER;
 				vertices[2].outcode |= ( outcode_gen1 | outcode_gen2 );
-	
+
 				foutcode_gen = vertices[3].y - contour_minimum_height; outcode_gen1 = *( ( int * ) &foutcode_gen );
 				foutcode_gen = contour_maximum_height - vertices[3].y; outcode_gen2 = *( ( int * ) &foutcode_gen );
 				outcode_gen1 >>= 26; outcode_gen1 &= CLIP_HITHER;
@@ -3023,16 +3042,16 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			quad_outcode2 = vertices[1].outcode;
 			quad_outcode |= vertices[2].outcode;
 			quad_outcode2 &= vertices[2].outcode;
-	
+
 			triangle1_outcode = quad_outcode | vertices[0].outcode;
 			triangle1_outcode2 = quad_outcode2 & vertices[0].outcode;
-	
+
 			triangle2_outcode = quad_outcode | vertices[3].outcode;
 			triangle2_outcode2 = quad_outcode2 & vertices[3].outcode;
-	
+
 			quad_outcode2 &= triangle1_outcode2;
 			quad_outcode2 &= triangle2_outcode2;
-	
+
 			if ( quad_outcode2 == 0 )
 			{
 				quad_outcode |= triangle1_outcode;
@@ -3044,7 +3063,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 					vertices[3].next_vertex = &vertices[2];
 					vertices[2].next_vertex = &vertices[0];
 					vertices[0].next_vertex = NULL;
-	
+
 					render_shaded_contour_terrain_poly ( &vertices[1], contour_colour);
 				}
 				else  // contour line goes through quad, split into triangles
@@ -3059,25 +3078,25 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 						vertices[2].next_vertex = NULL;
 
 						poly = &vertices[0];
-			
+
 						clip_3d_coord = 0;
-			
+
 						if ( triangle1_outcode & CLIP_HITHER )
 						{
-			
+
 							poly = bottom_clip_contour_polygon ( poly, &triangle1_outcode );
 
 							// set coordinates for the contour itself:
 							contour_line_vertices[line_vertex_index].i = clip_3d_crds[0].i;
 							contour_line_vertices[line_vertex_index].j = clip_3d_crds[0].j;
 							contour_line_vertices[line_vertex_index].outcode = clip_3d_crds[0].outcode;
-		
+
 							line_vertex_index++;
-		
+
 							contour_line_vertices[line_vertex_index].i = clip_3d_crds[1].i;
 							contour_line_vertices[line_vertex_index].j = clip_3d_crds[1].j;
 							contour_line_vertices[line_vertex_index].outcode = clip_3d_crds[1].outcode;
-		
+
 							line_vertex_index++;
 						}
 
@@ -3085,13 +3104,13 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 						{
 							if ( triangle1_outcode & CLIP_YONDER )
 								poly = top_clip_contour_polygon ( poly, &triangle1_outcode );
-			
+
 							if ( poly )
 							{
-			
+
 								if ( triangle1_outcode )
 									poly = clip_contour_polygon ( poly, triangle1_outcode );
-						
+
 								if ( poly )
 								{
 									vertex* new_v;
@@ -3107,12 +3126,12 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 										{
 											continue;
 										}
-										
+
 										delta_i = (new_v->i - vertices[0].i) * i_scale;
 										delta_j = (new_v->j - vertices[0].j) * j_scale;
 
 										// weighted average of corner xs (weighted according to distance to each corner
-										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) + 
+										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) +
 												   (delta_i       * (1 - delta_j) * vertices[1].x) +
 												   ((1 - delta_i) * delta_j       * vertices[2].x) +
 												   (delta_i       * delta_j       * vertices[3].x);
@@ -3123,57 +3142,57 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 							}
 						}
 					}
-			
+
 					if ( triangle2_outcode2 == 0 )
 					{
-			
+
 						vertex
 							*poly;
-			
+
 						vertices[2].next_vertex = &vertices[1];
 						vertices[1].next_vertex = &vertices[3];
 						vertices[3].next_vertex = NULL;
-			
+
 						poly = &vertices[2];
-			
+
 						clip_3d_coord = 0;
-			
+
 						if ( triangle2_outcode & CLIP_HITHER )
 						{
-			
+
 							poly = bottom_clip_contour_polygon ( poly, &triangle2_outcode );
-		
+
 							contour_line_vertices[line_vertex_index].i = clip_3d_crds[0].i;
 							contour_line_vertices[line_vertex_index].j = clip_3d_crds[0].j;
 							contour_line_vertices[line_vertex_index].outcode = clip_3d_crds[0].outcode;
-		
+
 							line_vertex_index++;
-		
+
 							contour_line_vertices[line_vertex_index].i = clip_3d_crds[1].i;
 							contour_line_vertices[line_vertex_index].j = clip_3d_crds[1].j;
 							contour_line_vertices[line_vertex_index].outcode = clip_3d_crds[1].outcode;
-		
+
 							line_vertex_index++;
 						}
-			
+
 						if ( poly )
 						{
-			
+
 							if ( triangle2_outcode & CLIP_YONDER )
 							{
-			
+
 								poly = top_clip_contour_polygon ( poly, &triangle2_outcode );
 							}
-			
+
 							if ( poly )
 							{
-			
+
 								if ( triangle2_outcode )
 								{
-						
+
 									poly = clip_contour_polygon ( poly, triangle2_outcode );
 								}
-						
+
 								if ( poly )
 								{
 									vertex* new_v;
@@ -3188,7 +3207,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 										{
 											continue;
 										}
-										
+
 										delta_i = (new_v->i - vertices[0].i) * i_scale;
 										delta_j = (new_v->j - vertices[0].j) * j_scale;
 
@@ -3196,7 +3215,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 //										ASSERT(delta_j >= 0.0 && delta_j <= 1.0);
 
 										// weighted average of corner xs (weighted according to distance to each corner
-										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) + 
+										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) +
 												   (delta_i       * (1 - delta_j) * vertices[1].x) +
 												   ((1 - delta_i) * delta_j       * vertices[2].x) +
 												   (delta_i       * delta_j       * vertices[3].x);
@@ -3207,7 +3226,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 							}
 						}
 					}
-	
+
 					//
 					// Draw the contour lines if there are any
 					//
@@ -3215,10 +3234,10 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 					if ( ( line_vertex_index > 0 ) && ( terrain_2d_map_contour_lines_drawn ) )
 					{
 						draw_contour_line ( &contour_line_vertices[0], contour_line_colour );
-		
+
 						if ( line_vertex_index > 2 )
 						{
-		
+
 							draw_contour_line ( &contour_line_vertices[2], contour_line_colour );
 						}
 					}
@@ -3239,7 +3258,7 @@ void render_contour_terrain_quad_quad ( vertex *vertices, int contour_start_inde
 		count;
 
 
-	LPD3DTLVERTEX
+	LPTLVERTEX
 		vptr;
 
 	float
@@ -3320,7 +3339,7 @@ void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colou
 	int
 		number_of_vertices;
 
-	LPD3DTLVERTEX
+	LPTLVERTEX
 		vertices,
 		vptr;
 
@@ -3338,7 +3357,7 @@ void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colou
 			g,
 			b,
 			shadow_factor;
-	
+
 		int
 			ir,
 			ig,
@@ -3347,12 +3366,12 @@ void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colou
 		r = contour_colour.red;
 		g = contour_colour.green;
 		b = contour_colour.blue;
-	
+
 		// adjust shade for steepness
 		shadow_factor = 1 - poly->x * 0.0025; // 0.0003;
 		if (shadow_factor < 0.25)
 			shadow_factor = 0.25;
-	
+
 		r *= shadow_factor;
 		g *= shadow_factor;
 		b *= shadow_factor;
@@ -3418,10 +3437,10 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 				( paths[node].type != TEMP_TERRAIN_TYPE_LAKE ) &&
 				( paths[node].type != TEMP_TERRAIN_TYPE_OFFROAD ) )
 		{
-	
+
 			if ( paths[node].count <= initial_node_skip )
 			{
-	
+
 				generate_world_position_vertex ( &nodes[paths[node].from], &vertices[0] );
 				generate_world_position_vertex ( &nodes[paths[node].to], &vertices[1] );
 
@@ -3429,40 +3448,40 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 			}
 			else
 			{
-		
+
 				vec3d
 					*sub_positions;
-	
+
 				int
 					outcode,
 					outcode1,
 					outcode2,
 					count;
-	
+
 				sub_positions = paths[node].points;
-	
+
 				//
 				// Outcode the stretch of road
 				//
-	
+
 				outcode = 0;
 				if ( paths[node].xmin < xmin )	outcode |= CLIP_LEFT;
 				if ( paths[node].xmin > xmax )	outcode |= CLIP_RIGHT;
 				if ( paths[node].zmin < zmin )	outcode |= CLIP_TOP;
 				if ( paths[node].zmin > zmax )	outcode |= CLIP_BOTTOM;
-	
+
 				outcode1 = outcode;
 				outcode2 = outcode;
-	
+
 				outcode = 0;
 				if ( paths[node].xmax < xmin )	outcode |= CLIP_LEFT;
 				if ( paths[node].xmax > xmax )	outcode |= CLIP_RIGHT;
 				if ( paths[node].zmax < zmin )	outcode |= CLIP_TOP;
 				if ( paths[node].zmax > zmax )	outcode |= CLIP_BOTTOM;
-	
+
 				outcode1 |= outcode;
 				outcode2 &= outcode;
-	
+
 				if ( outcode2 == 0 )
 				{
 
@@ -3471,12 +3490,12 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 					//
 					// Draw the start point
 					//
-	
+
 					generate_world_position_vertex ( &nodes[paths[node].from], &vertices[0] );
 					generate_world_position_vertex ( &sub_positions[0], &vertices[1] );
-		
+
 					draw_contour_line ( vertices, colour );
-			
+
 					for ( count = 0; count < ( paths[node].count - 1 ); count++ )
 					{
 
@@ -3489,7 +3508,7 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 							vertices[0].j = vertices[1].j;
 							vertices[0].outcode = vertices[1].outcode;
 							generate_world_position_vertex ( &sub_positions[count+1], &vertices[1] );
-				
+
 							draw_contour_line ( vertices, colour );
 						}
 						else
@@ -3498,12 +3517,12 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 							node_skip--;
 						}
 					}
-			
+
 					vertices[0].i = vertices[1].i;
 					vertices[0].j = vertices[1].j;
 					vertices[0].outcode = vertices[1].outcode;
 					generate_world_position_vertex ( &nodes[paths[node].to], &vertices[1] );
-			
+
 					draw_contour_line ( vertices, colour );
 				}
 			}
@@ -3548,10 +3567,10 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 				( paths[node].type != TEMP_TERRAIN_TYPE_LAKE ) &&
 				( paths[node].type != TEMP_TERRAIN_TYPE_OFFROAD ) )
 		{
-	
+
 			if ( paths[node].count <= initial_node_skip )
 			{
-	
+
 				generate_world_position_vertex ( &nodes[paths[node].from], &vertices[0] );
 				generate_world_position_vertex ( &nodes[paths[node].to], &vertices[1] );
 
@@ -3559,40 +3578,40 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 			}
 			else
 			{
-		
+
 				vec3d
 					*sub_positions;
-	
+
 				int
 					outcode,
 					outcode1,
 					outcode2,
 					count;
-	
+
 				sub_positions = paths[node].points;
-	
+
 				//
 				// Outcode the stretch of road
 				//
-	
+
 				outcode = 0;
 				if ( paths[node].xmin < xmin )	outcode |= CLIP_LEFT;
 				if ( paths[node].xmin > xmax )	outcode |= CLIP_RIGHT;
 				if ( paths[node].zmin < zmin )	outcode |= CLIP_TOP;
 				if ( paths[node].zmin > zmax )	outcode |= CLIP_BOTTOM;
-	
+
 				outcode1 = outcode;
 				outcode2 = outcode;
-	
+
 				outcode = 0;
 				if ( paths[node].xmax < xmin )	outcode |= CLIP_LEFT;
 				if ( paths[node].xmax > xmax )	outcode |= CLIP_RIGHT;
 				if ( paths[node].zmax < zmin )	outcode |= CLIP_TOP;
 				if ( paths[node].zmax > zmax )	outcode |= CLIP_BOTTOM;
-	
+
 				outcode1 |= outcode;
 				outcode2 &= outcode;
-	
+
 				if ( outcode2 == 0 )
 				{
 
@@ -3601,12 +3620,12 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 					//
 					// Draw the start point
 					//
-	
+
 					generate_world_position_vertex ( &nodes[paths[node].from], &vertices[0] );
 					generate_world_position_vertex ( &sub_positions[0], &vertices[1] );
-		
+
 					draw_thick_contour_line ( vertices, colour );
-			
+
 					for ( count = 0; count < ( paths[node].count - 1 ); count++ )
 					{
 
@@ -3619,7 +3638,7 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 							vertices[0].j = vertices[1].j;
 							vertices[0].outcode = vertices[1].outcode;
 							generate_world_position_vertex ( &sub_positions[count+1], &vertices[1] );
-				
+
 							draw_thick_contour_line ( vertices, colour );
 						}
 						else
@@ -3628,12 +3647,12 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 							node_skip--;
 						}
 					}
-			
+
 					vertices[0].i = vertices[1].i;
 					vertices[0].j = vertices[1].j;
 					vertices[0].outcode = vertices[1].outcode;
 					generate_world_position_vertex ( &nodes[paths[node].to], &vertices[1] );
-			
+
 					draw_thick_contour_line ( vertices, colour );
 				}
 			}
@@ -3654,7 +3673,7 @@ void generate_simple_elevation_vertex ( int x, int z, vertex *v )
 
 	fx = ( x * terrain_3d_simple_elevation_x_grid_size ) - terrain_2d_map_world_xcentre;
 	fy = ( z * terrain_3d_simple_elevation_z_grid_size ) - terrain_2d_map_world_zcentre;
-	
+
 	v->i = ( fx * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre;
 	v->j = ( fy * terrain_2d_map_screen_yscale ) + terrain_2d_map_screen_ycentre;
 }
@@ -3681,7 +3700,7 @@ unsigned char generate_contour_outcode ( float i, float j )
 		oxmin,
 		oymax,
 		oymin;
-	
+
 	unsigned int
 		ixmax,
 		ixmin,
@@ -3725,7 +3744,7 @@ void generate_world_position_vertex ( vec3d *position, vertex *v )
 
 	fx = position->x - terrain_2d_map_world_xcentre;
 	fy = position->z - terrain_2d_map_world_zcentre;
-	
+
 	v->i = ( fx * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre;
 	v->j = ( fy * terrain_2d_map_screen_yscale ) + terrain_2d_map_screen_ycentre;
 
@@ -3886,408 +3905,408 @@ vertex *clip_contour_polygon ( vertex *polygon, int outcode )
 
 	if ( outcode & CLIP_LEFT )
 	{
-	
+
 		//
 		// First clip against the left side of the viewing rectangle
 		//
-	
+
 		clip_list = NULL;
-	
+
 		clip_point = NULL;
-	
+
 		last_point = polygon;
-	
+
 		this_point = polygon->next_vertex;
-	
+
 		if ( polygon->i >= active_viewport.x_min )
 		{
-	
+
 			//
 			// Start the clipped list off.
 			//
-	
+
 			clip_list = polygon;
-	
+
 			clip_point = polygon;
-	
+
 			polygon->next_vertex = NULL;
 		}
-	
+
 		while ( this_point )
 		{
-	
+
 			if ( this_point->i >= active_viewport.x_min )
 			{
-	
+
 				//
 				// This point is inside the screen boundary
 				//
-	
+
 				if ( last_point->i < active_viewport.x_min )
 				{
-	
+
 					//
 					//	The last point isn't in the screen, but this one is, find intersection
 					//
-	
+
 					insert_xmin_contour_coordinate ( last_point, this_point );
 				}
-	
+
 				//
 				// Here, we are guaranteed to have a coordinate in the clip list - the above routine just put 1.0 in!
 				//
-	
+
 				clip_point->next_vertex = this_point;
-	
+
 				clip_point = this_point;
 			}
 			else
 			{
-	
+
 				//
 				// This point isn't in the screen area
 				//
-	
+
 				if ( last_point->i >= active_viewport.x_min )
 				{
-	
+
 					//
 					// The last point was visible - find intersection point
 					//
-					
+
 					insert_xmin_contour_coordinate ( last_point, this_point );
 				}
 			}
-	
+
 			last_point = this_point;
-	
+
 			this_point = this_point->next_vertex;
 		}
-	
+
 		if ( !clip_point )
 		{
-	
+
 			return ( NULL );						// If there are no valid points in the polygon, exit
 		}
-	
+
 		if ( ( last_point->i < active_viewport.x_min ) ^ ( polygon->i < active_viewport.x_min ) )
 		{
-	
+
 			//
 			// The last point in the polygon was off the screen, the first 1.0 isn't, so add a clip point
 			//
-	
+
 			insert_xmin_contour_coordinate ( last_point, polygon );
 		}
-	
+
 		clip_point->next_vertex = NULL;
-	
+
 		polygon = clip_list;
 	}
 
 	if ( outcode & CLIP_RIGHT )
 	{
-	
+
 		//
 		// Next clip against the right side of the viewing rectangle
 		//
-	
+
 		clip_list = NULL;
-	
+
 		clip_point = NULL;
-	
+
 		last_point = polygon;
-	
+
 		this_point = polygon->next_vertex;
-	
+
 		if ( polygon->i <= active_viewport.x_max )
 		{
-	
+
 			//
 			// Start the clipped list off.
 			//
-	
+
 			clip_list = polygon;
-	
+
 			clip_point = polygon;
-	
+
 			polygon->next_vertex = NULL;
 		}
-	
+
 		while ( this_point )
 		{
-	
+
 			if ( this_point->i <= active_viewport.x_max )
 			{
-	
+
 				//
 				// This point is inside the screen boundary
 				//
-	
+
 				if ( last_point->i > active_viewport.x_max )
 				{
-	
+
 					//
 					//	The last point isn't in the screen, but this one is, find intersection
 					//
-	
+
 					insert_xmax_contour_coordinate ( last_point, this_point );
 				}
-	
+
 				//
 				// Here, we are guaranteed to have a coordinate in the clip list - the above routine just put 1.0 in!
 				//
-	
+
 				clip_point->next_vertex = this_point;
-	
+
 				clip_point = this_point;
 			}
 			else
 			{
-	
+
 				//
 				// This point isn't in the screen area
 				//
-	
+
 				if ( last_point->i <= active_viewport.x_max )
 				{
-	
+
 					//
 					// The last point was visible - find intersection point
 					//
-					
+
 					insert_xmax_contour_coordinate ( last_point, this_point );
 				}
 			}
-	
+
 			last_point = this_point;
-	
+
 			this_point = this_point->next_vertex;
 		}
-	
+
 		if ( !clip_point )
 		{
-	
+
 			return ( NULL );
 		}
-	
+
 		if ( ( last_point->i > active_viewport.x_max ) ^ ( polygon->i > active_viewport.x_max ) )
 		{
-	
+
 			//
 			// The last point in the polygon was off the screen, the first 1.0 isn't, so add a clip point
 			//
-	
+
 			insert_xmax_contour_coordinate ( last_point, polygon );
 		}
-	
+
 		clip_point->next_vertex = NULL;
-	
+
 		polygon = clip_list;
 	}
 
 	if ( outcode & CLIP_TOP )
 	{
-	
+
 		//
 		// Next clip against the top of the viewing rectangle
 		//
-	
+
 		clip_list = NULL;
-	
+
 		clip_point = NULL;
-	
+
 		last_point = polygon;
-	
+
 		this_point = polygon->next_vertex;
-	
+
 		if ( polygon->j >= active_viewport.y_min )
 		{
-	
+
 			//
 			// Start the clipped list off.
 			//
-	
+
 			clip_list = polygon;
-	
+
 			clip_point = polygon;
-	
+
 			polygon->next_vertex = NULL;
 		}
-	
+
 		while ( this_point )
 		{
-	
+
 			if ( this_point->j >= active_viewport.y_min )
 			{
-	
+
 				//
 				// This point is inside the screen boundary
 				//
-	
+
 				if ( last_point->j < active_viewport.y_min )
 				{
-	
+
 					//
 					//	The last point isn't in the screen, but this one is, find intersection
 					//
-	
+
 					insert_ymin_contour_coordinate ( last_point, this_point );
 				}
-	
+
 				//
 				// Here, we are guaranteed to have a coordinate in the clip list - the above routine just put one in!
 				//
-	
+
 				clip_point->next_vertex = this_point;
-	
+
 				clip_point = this_point;
 			}
 			else
 			{
-	
+
 				//
 				// This point isn't in the screen area
 				//
-	
+
 				if ( last_point->j >= active_viewport.y_min )
 				{
-	
+
 					//
 					// The last point was visible - find intersection point
 					//
-					
+
 					insert_ymin_contour_coordinate ( last_point, this_point );
 				}
 			}
-	
+
 			last_point = this_point;
-	
+
 			this_point = this_point->next_vertex;
 		}
-	
+
 		if ( !clip_point )
 		{
-	
+
 			return ( NULL );
 		}
-	
+
 		if ( ( last_point->j < active_viewport.y_min ) ^ ( polygon->j < active_viewport.y_min ) )
 		{
-	
+
 			//
 			// The last point in the polygon was off the screen, the first one isn't, so add a clip point
 			//
-	
+
 			insert_ymin_contour_coordinate ( last_point, polygon );
 		}
-	
+
 		clip_point->next_vertex = NULL;
-	
+
 		polygon = clip_list;
 	}
 
 	if ( outcode & CLIP_BOTTOM )
 	{
-	
+
 		//
 		// Next clip against the bottom of the viewing rectangle
 		//
-	
+
 		clip_list = NULL;
-	
+
 		clip_point = NULL;
-	
+
 		last_point = polygon;
-	
+
 		this_point = polygon->next_vertex;
-	
+
 		if ( polygon->j <= active_viewport.y_max )
 		{
-	
+
 			//
 			// Start the clipped list off.
 			//
-	
+
 			clip_list = polygon;
-	
+
 			clip_point = polygon;
-	
+
 			polygon->next_vertex = NULL;
 		}
-	
+
 		while ( this_point )
 		{
-	
+
 			if ( this_point->j <= active_viewport.y_max )
 			{
-	
+
 				//
 				// This point is inside the screen boundary
 				//
-	
+
 				if ( last_point->j > active_viewport.y_max )
 				{
-	
+
 					//
 					//	The last point isn't in the screen, but this one is, find intersection
 					//
-	
+
 					insert_ymax_contour_coordinate ( last_point, this_point );
 				}
-	
+
 				//
 				// Here, we are guaranteed to have a coordinate in the clip list - the above routine just put 1.0 in!
 				//
-	
+
 				clip_point->next_vertex = this_point;
-	
+
 				clip_point = this_point;
 			}
 			else
 			{
-	
+
 				//
 				// This point isn't in the screen area
 				//
-	
+
 				if ( last_point->j <= active_viewport.y_max )
 				{
-	
+
 					//
 					// The last point was visible - find intersection point
 					//
-					
+
 					insert_ymax_contour_coordinate ( last_point, this_point );
 				}
 			}
-	
+
 			last_point = this_point;
-	
+
 			this_point = this_point->next_vertex;
 		}
-	
+
 		if ( !clip_point )
 		{
-	
+
 			return ( NULL );
 		}
-	
+
 		// Case 0 last point is on screen, first point is on screen			NO ACTION
 		//	Case 1 last point is off screen, first point is on screen		GENERATE CLIP
 		// Case 2 last point is on screen, first point is off screen		GENERATE CLIP
 		// Case 3 last point is off screen, first point is off screen		NO ACTION
-	
+
 		if ( ( last_point->j > active_viewport.y_max ) ^ ( polygon->j > active_viewport.y_max ) )
 		{
-	
+
 			//
 			// The last point in the polygon was off the screen, the first one isn't, so add a clip point
 			//
-	
+
 			insert_ymax_contour_coordinate ( last_point, polygon );
 		}
-	
+
 		clip_point->next_vertex = NULL;
 
 		polygon = clip_list;
@@ -4816,12 +4835,12 @@ vertex *bottom_clip_contour_polygon ( vertex *polygon, int *polygon_outcode )
 
 		if ( last_point->outcode & CLIP_HITHER )
 		{
-		
+
 			insert_bottom_contour_coordinate ( last_point, polygon );
 		}
 		else
 		{
-	
+
 			insert_bottom_contour_coordinate ( polygon, last_point );
 		}
 
@@ -4923,12 +4942,12 @@ vertex *top_clip_contour_polygon ( vertex *polygon, int *polygon_outcode )
 
 		if ( last_point->outcode & CLIP_YONDER )
 		{
-		
+
 			insert_top_contour_coordinate ( last_point, polygon );
 		}
 		else
 		{
-	
+
 			insert_top_contour_coordinate ( polygon, last_point );
 		}
 

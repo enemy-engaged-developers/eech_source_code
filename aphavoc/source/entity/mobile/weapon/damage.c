@@ -399,8 +399,8 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 	{
 		float he_warheads = WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK; // subtract 1
 		
-		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5));
-		armor_modifier =  min(1, weapon_database[weapon_type].damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5));
+		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5f));
+		armor_modifier =  min(1.0f, weapon_database[weapon_type].damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5f));
 		
 		result = (int) (weapon_database[weapon_type].damage_capability * damage_modifier * armor_modifier * random_modifier);
 
@@ -426,10 +426,10 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 			p = 1000;
 		
 		get_local_entity_vec3d (target, VEC3D_TYPE_POSITION, &temp_vp.position);
-		get_local_entity_attitude_matrix (wpn, &temp_vp.attitude);
+		get_local_entity_attitude_matrix (wpn, temp_vp.attitude);
 		temp_vec.x = 4;
 		temp_vec.y = temp_vec.z = 0;
-		multiply_matrix3x3_vec3d(&temp_vec, &temp_vp.attitude, &temp_vec);
+		multiply_matrix3x3_vec3d(&temp_vec, temp_vp.attitude, &temp_vec);
 		temp_vp.position.x -= 2 * temp_vec.x;
 		temp_vp.position.y -= 2 * temp_vec.y;
 		temp_vp.position.z -= 2 * temp_vec.z;

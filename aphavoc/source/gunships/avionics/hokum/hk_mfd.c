@@ -257,6 +257,7 @@ static screen
 	*small_co_pilot_rhs_mfd_texture_screen,
 	*small_ekran_display_texture_screen,
 	*eo_3d_texture_screen,
+	*eo_3d_texture_screen_over,
 	*full_mfd_texture_screen;
 
 static entity
@@ -822,36 +823,6 @@ static void transform_mfd_screen_co_ords_to_mfd_texture_co_ords (float *i, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// LAYOUT GRID
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_layout_grid (void)
-{
-	float
-		x,
-		y;
-
-	if (display_mfd_layout_grid)
-	{
-		for (x = -1.0; x <= 1.0; x += 0.1)
-		{
-			draw_2d_line (x, -1.0, x, 1.0, sys_col_red);
-		}
-
-		for (y = -1.0; y <= 1.0; y += 0.1)
-		{
-			draw_2d_line (-1.0, y, 1.0, y, sys_col_red);
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // DAMAGED
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1015,7 +986,7 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 
 	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
 
-	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5)) - 0.001;
+	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5));
 
 	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
 
@@ -1204,7 +1175,7 @@ static void draw_sideslip_scale (void)
 
 	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
 
-	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5)) - 0.001;
+	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5));
 
 	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
 
@@ -2886,7 +2857,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	set_active_screen (eo_3d_texture_screen);
 
 	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
-	
+
 	//
 	// draw 3D scene (temporarily adjust the virtual cockpit position relative to EO sensor position)
 	//
@@ -3687,7 +3658,6 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	{
 		if (target)
 		{
-			if (!((!d3d_can_render_to_texture) && (!draw_large_mfd)))
 			{
 				tmp = main_vp;
 
@@ -3758,7 +3728,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-	
+
 	draw_2d_box(-1.0, -1.0, 1.0, -0.85, TRUE, FALSE, MFD_COLOUR_DGREY);
 	draw_2d_box(-1.0, 1.0, 1.0, 0.8, TRUE, FALSE, MFD_COLOUR_DGREY);
 	draw_2d_box(-1.0, -1.0, -0.8, 1.0, TRUE, FALSE, MFD_COLOUR_DGREY);
@@ -3783,7 +3753,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	set_2d_mono_font_position (-0.88, -0.84);
 	set_mono_font_rel_position (0.0, 0.0);
 	draw_2d_box(-0.9, -0.83, -0.55, -0.89, TRUE, FALSE, MFD_COLOUR_LGREY);
-	
+
 	switch (system)
 	{
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
@@ -3807,21 +3777,21 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	}
 
 // Jabberwock 031107 Designated targets
-	
+
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
 		width = get_mono_font_string_width ("MARKED");
-		
+
 		set_2d_mono_font_position (1.0, -1.0);
 
 		set_mono_font_rel_position (-width - 1.0, -25.0);
-		
-		print_mono_font_string ("MARKED");		
+
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 
 	// gyro stabilization
-	
+
 	if (eo_ground_stabilised)
 	{
 		set_2d_mono_font_position (0.78, -0.84);
@@ -3832,7 +3802,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	}
 
 	// static markers
-	
+
 	draw_2d_half_thick_line (-0.6, 0, -0.5, 0, MFD_COLOUR_GREEN); // center left
 	draw_2d_half_thick_line (0.5, 0, 0.6, 0, MFD_COLOUR_GREEN); // center right
 
@@ -3851,7 +3821,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 
 	{
 		char string[10];
-		
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 
@@ -3882,7 +3852,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 
 		draw_2d_box(-0.07, 0.79, 0.07, 0.87, TRUE, FALSE, MFD_COLOUR_DGREY);
 		draw_2d_box(-0.07, 0.79, 0.07, 0.87, FALSE, FALSE, MFD_COLOUR_GREEN);
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_2d_mono_font_position (0.07, 0.87);
 		sprintf(string, "%.0f", deg(eo_azimuth));
@@ -3890,23 +3860,23 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		set_mono_font_rel_position (- 1 - width, 3);
 		print_mono_font_string (string);
 	}
-	
+
 	// elevation
 
 	{
 		char string[10];
-		
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 
 		draw_2d_line (0.95, 0.63, 0.95, - 0.81, MFD_COLOUR_GREEN);
 
 		f = 20;
-		
+
 		while (f >= - 80)
 		{
 			float elev = get_elevation_modifier(f);
-			
+
 			draw_2d_line(0.95, 0.15 + elev * 0.032, 0.92, 0.15 + elev * 0.032, MFD_COLOUR_GREEN);
 
 			if (f)
@@ -3917,7 +3887,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 				set_mono_font_rel_position (- 1 - width, - (2 + 4 * sign(f)));
 				print_mono_font_string (string);
 			}
-			
+
 			if (fabs(f) < 10 + sign(f))
 				f -= 5;
 			else if (fabs(f) < 20 + sign(f))
@@ -3930,7 +3900,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 
 		draw_2d_box(0.81, 0.11, 0.91, 0.19, TRUE, FALSE, MFD_COLOUR_DGREY);
 		draw_2d_box(0.81, 0.11, 0.91, 0.19, FALSE, FALSE, MFD_COLOUR_GREEN);
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_2d_mono_font_position (0.91, 0.19);
 		sprintf(string, "%.0f", deg(eo_elevation));
@@ -3938,21 +3908,21 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		set_mono_font_rel_position (- 1 - width, 3);
 		print_mono_font_string (string);
 	}
-	
+
 	// vertical_velocity
 
 	{
 		char string[10];
 		float x[3], y[3], velocity = kilometres_per_hour(current_flight_dynamics->world_velocity_y.value);
-		
+
 		x[0] = 0.61;
 		x[1] = 0.75;
 		y[0] = -0.04;
 		y[1] = 0.06;
-				
+
 		draw_2d_box(x[0], y[0], x[1], y[1], TRUE, FALSE, MFD_COLOUR_DGREY);
 		draw_2d_box(x[0] + 0.01, y[0], x[1] - 0.005, y[1], FALSE, FALSE, MFD_COLOUR_GREEN);
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_2d_mono_font_position (x[1], y[1]);
 		sprintf(string, "%.1f", fabs(velocity));
@@ -3976,7 +3946,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			y[0] = y[1] = -0.06;
 			y[2] = - 0.11;
 		}
-		
+
 		if (fabs(velocity) > 0.01)
 		{
 			draw_2d_line (x[0],y[0], x[1], y[1], MFD_COLOUR_GREEN);
@@ -3984,12 +3954,12 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			draw_2d_line (x[2], y[2], x[0], y[0], MFD_COLOUR_GREEN);
 		}
 	}
-	
+
 	// velocity
-	
+
 	{
 		char buffer[10];
-		
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_10X16);
 
@@ -3998,18 +3968,18 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		set_2d_mono_font_position (-0.20, 0.81);
 		set_mono_font_rel_position (- width, 1.0);
 		print_mono_font_string (buffer);
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_mono_font_rel_position (1.0, 8.0);
 		print_mono_font_string ("km/h");
 	}
-	
+
 	// altitude
-	
+
 	{
 		char buffer[10];
 		int radar = current_flight_dynamics->radar_altitude.value < 1500;
-		
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_10X16);
 
@@ -4017,12 +3987,12 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			sprintf(buffer, "%1.0f", current_flight_dynamics->radar_altitude.value);
 		else
 			sprintf(buffer, "%1.0f", current_flight_dynamics->barometric_altitude.value);
-		
+
 		width = get_mono_font_string_width (buffer);
 		set_2d_mono_font_position (0.33, 0.81);
 		set_mono_font_rel_position (- width, 1.0);
 		print_mono_font_string (buffer);
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_mono_font_rel_position (1.0, 8.0);
 
@@ -4031,15 +4001,15 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		else
 			print_mono_font_string ("b");
 	}
-	
+
 	// target range
-	
+
 	draw_2d_box(-0.13, -0.82, 0.13, -0.66, TRUE, FALSE, MFD_COLOUR_DGREY);
 
 	if (target)
 	{
 		char buffer[10];
-		
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 		set_2d_mono_font_position (0.13, -0.66);
@@ -4047,7 +4017,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		width = get_mono_font_string_width (buffer);
 		set_mono_font_rel_position (- width, 5.0);
 		print_mono_font_string (buffer);
-		
+
 		if(last_target_range > target_range + 0.01)
 		{
 			draw_2d_mono_sprite (range_arrow_left, - 0.13, - 0.74, MFD_COLOUR_GREEN);
@@ -4061,16 +4031,16 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 
 		last_target_range = target_range;
 	}
-	
+
 	// target gates
-	
+
 	{
 #ifdef OLD_EO
 		float scale = 8 / (2 * (float)eo->field_of_view + 1), x, y;
 #else
 		float scale = 4 * (int) (1 / eo->zoom / 64) + 1, x, y;
 #endif
-		
+
 		if (eo_is_locked())
 		{
 			move_targeting_gates(&x, &y);
@@ -4090,7 +4060,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			draw_2d_line(- 0.1 * scale, - 0.1 * scale, - 0.1 * scale, - 0.05 * scale, MFD_COLOUR_LGREY);
 			draw_2d_line(0.1 * scale, 0.1 * scale, 0.1 * scale, 0.05 * scale, MFD_COLOUR_LGREY);
 			draw_2d_line(0.1 * scale, - 0.1 * scale, 0.1 * scale, - 0.05 * scale, MFD_COLOUR_LGREY);
-			
+
 			set_2d_pixel(0.0, 0.0, MFD_COLOUR_LGREY);
 
 			reset_2d_instance(mfd_env);
@@ -4112,7 +4082,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		}
 	}
 	// weapon info
-	
+
 	{
 		entity_sub_types weapon_sub_type;
 		char s[10], weapon_1[20], weapon_2[20];
@@ -4123,7 +4093,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		{
 			float flight_time = get_missile_flight_time ();
 			int ammo_left = get_local_entity_weapon_available (get_gunship_entity (), weapon_sub_type);
-			
+
 			switch (weapon_sub_type)
 			{
 				case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND:
@@ -4160,9 +4130,9 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 					}
 				}
 			}
-			
+
 			sprintf(weapon_1, "%s  %i", weapon_1, ammo_left);
-			
+
 			set_mono_font_colour (MFD_COLOUR_GREEN);
 			set_mono_font_type (MONO_FONT_TYPE_3X6);
 			set_2d_mono_font_position (0.56, - 0.87);
@@ -4171,7 +4141,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			set_2d_mono_font_position (0.56, - 0.87);
 			set_mono_font_rel_position (0.0, 8.0);
 			print_mono_font_string (weapon_2);
-			
+
 			if (flight_time > 0.01)
 			{
 				set_mono_font_colour (MFD_COLOUR_GREEN);
@@ -4191,18 +4161,18 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 
 		}
 	}
-	
+
 	// pitch
-	
+
 	{
 		char string[10];
 		float x[2], y[2], pitch = deg(current_flight_dynamics->pitch.value);
-		
+
 		x[0] = - 0.785;
 		x[1] = - 0.675;
 		y[0] = -0.05;
 		y[1] = 0.05;
-				
+
 		draw_2d_box(x[0], y[0], x[1], y[1], TRUE, FALSE, MFD_COLOUR_DGREY);
 		draw_2d_box(x[0] + 0.01, y[0], x[1] - 0.005, y[1], FALSE, FALSE, MFD_COLOUR_GREEN);
 
@@ -4221,16 +4191,16 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	}
 
 	// pitch ladder
-	
+
 	{
 		float
 			pitch = 2 * fast_modf(deg(current_flight_dynamics->pitch.value) / 10, &pitch);
-		int 
+		int
 			pitch_i = deg(current_flight_dynamics->pitch.value) / 10;
-		 
+
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
-		
+
 		for (k = -6; k <= 6; k++ )
 		{
 			if (!(k % 2))
@@ -4238,7 +4208,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 				char buffer[10];
 				int pitch_mark = 5 * k + 10 * pitch_i;
 				set_2d_mono_font_position (-0.885, (k - pitch) * 0.0725);
-				sprintf (buffer, "%i", fabs(pitch_mark) <= 90 ? pitch_mark : (pitch_mark - 20 * sign(pitch)));
+				sprintf (buffer, "%i", abs(pitch_mark) <= 90 ? pitch_mark : (pitch_mark - 20 * sign(pitch)));
 				width = get_mono_font_string_width (buffer);
 				set_mono_font_rel_position (- width, - 2.0);
 				print_mono_font_string (buffer);
@@ -4247,19 +4217,19 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			}
 			else
 				draw_2d_line(-0.858, (k - pitch) * 0.0725, -0.84, (k - pitch) * 0.0725, MFD_COLOUR_GREEN);
-			
+
 		}
-		
+
 		draw_2d_box(-1.0, -0.33, -0.8, -0.66, TRUE, FALSE, MFD_COLOUR_DGREY);
 		draw_2d_box(-1.0, 0.38, -0.8, 0.66, TRUE, FALSE, MFD_COLOUR_DGREY);
-		
+
 		draw_2d_mono_sprite (pitch_marker, -0.85, 0.0, MFD_COLOUR_GREEN);
-		
-		
+
+
 	}
 
 	// g-force circle
-	
+
 	{
 		char string[10];
 
@@ -4269,8 +4239,8 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		draw_2d_line(-0.83, 0.67, -0.84, 0.67, MFD_COLOUR_LGREY);
 		draw_2d_line(-0.9, 0.74, -0.9, 0.73, MFD_COLOUR_LGREY);
 		draw_2d_line(-0.9, 0.59, -0.9, 0.61, MFD_COLOUR_LGREY);
-		
-		
+
+
 		set_mono_font_colour (MFD_COLOUR_LGREY);
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 		set_2d_mono_font_position (-0.9, 0.67);
@@ -4291,12 +4261,12 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	}
 
 	// view sector
-	
+
 	{
 		float angle[] = {rad(-135), rad(135), 0};
-		
+
 		angle[2] = eo_azimuth;
-		
+
 		for(k = 0; k < 3; k++)
 		{
 			if (k < 2)
@@ -4304,7 +4274,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			else
 				draw_2d_dash_line(-0.73, -0.64, -0.73 + 0.22 * sin(angle[k]), -0.64 + 0.22 * cos(angle[k]), MFD_COLOUR_BLUE, MFD_COLOUR_GREEN, 0.04, FALSE);
 		}
-		
+
 		draw_2d_circle (-0.73, -0.64, 0.24, MFD_COLOUR_GREEN);
 
 		if (last_target)
@@ -4312,21 +4282,21 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 			vec3d *target_position;
 			float source_heading, target_azimuth, pitch, target_range;
 			vec3d heading;
-			
+
 			target_position = get_local_entity_vec3d_ptr(last_target, VEC3D_TYPE_POSITION);
 			target_range = get_2d_range(target_position, source_position) / 1000;
 
 			if (target_range < 10)
 			{
 				float scale;
-				
+
 				if (target_range < 1)
 					scale = 10 * target_range;
 				else if (target_range < 5)
 					scale = 2 * target_range;
 				else
 					scale = target_range;
-				
+
 				source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
 				heading.x = target_position->x - source_position->x;
@@ -7361,7 +7331,7 @@ static void draw_pitch_ladder (void)
 	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * size, MFD_WINDOW_Y_MIN * size, MFD_WINDOW_X_MAX * size, MFD_WINDOW_Y_MAX * size);
 
 	vp_size = mfd_viewport_size * size * 0.5;
-	set_2d_viewport (mfd_env, u - (vp_size), v - vp_size, u + (vp_size) - 0.001, v + vp_size - 0.001);
+	set_2d_viewport (mfd_env, u - (vp_size), v - vp_size, u + (vp_size), v + vp_size);
 
 	upper_edge = 0.5 * size;
 	left_edge = -(size * 0.5);
@@ -7629,7 +7599,7 @@ static void draw_altitude_scale (void)
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
 
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
-	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5) - 0.001;
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
 
@@ -7760,7 +7730,7 @@ static void draw_airspeed_scale (void)
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
 
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
-	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5) - 0.001;
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 
 	debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
 
@@ -8675,7 +8645,7 @@ static void draw_mfd (screen *mfd_screen, hokum_mfd_modes* mode, hokum_mfd_locat
 
 	ASSERT (hokum_mfd_location_valid (location));
 
-	if ((get_undamaged_eo_display_mode (*mode) && d3d_can_render_to_texture))
+	if (get_undamaged_eo_display_mode (*mode))
 	{
 		return;
 	}
@@ -8686,7 +8656,7 @@ static void draw_mfd (screen *mfd_screen, hokum_mfd_modes* mode, hokum_mfd_locat
 	{
 		set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, MFD_BACKGROUND_COLOUR);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		if (*mode == HOKUM_MFD_MODE_AIR_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 			*mode = HOKUM_MFD_MODE_GROUND_RADAR;
@@ -8815,8 +8785,6 @@ static void draw_mfd (screen *mfd_screen, hokum_mfd_modes* mode, hokum_mfd_locat
 			}
 		}
 
-		flush_screen_texture_graphics (mfd_screen);
-
 		unlock_screen (mfd_screen);
 	}
 
@@ -8837,7 +8805,7 @@ static void draw_text_display (screen *text_screen)
 	{
 		set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, TEXT_BACKGROUND_COLOUR);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		set_mono_font_colour (TEXT_COLOUR1);
 
@@ -8885,8 +8853,6 @@ static void draw_text_display (screen *text_screen)
 
 			print_mono_font_string (text_display_line3);
 		}
-
-		flush_screen_texture_graphics (text_screen);
 
 		unlock_screen (text_screen);
 	}
@@ -8988,17 +8954,17 @@ void initialise_hokum_mfd (void)
 
 	////////////////////////////////////////
 
-	large_pilot_lhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_rhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_lhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_rhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_ekran_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	large_pilot_lhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_pilot_rhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_lhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_co_pilot_rhs_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	large_ekran_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
-	small_pilot_lhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_pilot_rhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_lhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_co_pilot_rhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	small_ekran_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	small_pilot_lhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_pilot_rhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_lhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_co_pilot_rhs_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
+	small_ekran_display_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 
 	full_mfd_texture_screen = create_system_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -9180,6 +9146,7 @@ void draw_hokum_mfd (void)
 		ekran_display_texture_screen = large_ekran_display_texture_screen;
 
 		eo_3d_texture_screen = large_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
 	}
 	else
 	{
@@ -9192,6 +9159,7 @@ void draw_hokum_mfd (void)
 		ekran_display_texture_screen = small_ekran_display_texture_screen;
 
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
+		eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
 	}
 
 	if (get_crew_role () == CREW_ROLE_PILOT)
@@ -9314,17 +9282,17 @@ void draw_hokum_mfd (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = mfd_viewport_size - 0.001;
+	mfd_viewport_x_max = mfd_viewport_size;
 
-	mfd_viewport_y_max = mfd_viewport_size - 0.001;
+	mfd_viewport_y_max = mfd_viewport_size;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
 	mfd_screen_x_min = 0.0;
 	mfd_screen_y_min = 0.0;
 
-	mfd_screen_x_max = mfd_viewport_size - 0.001;
-	mfd_screen_y_max = mfd_viewport_size - 0.001;
+	mfd_screen_x_max = mfd_viewport_size;
+	mfd_screen_y_max = mfd_viewport_size;
 
 	mfd_screen_width = mfd_viewport_size;
 	mfd_screen_height = mfd_viewport_size;
@@ -9342,9 +9310,9 @@ void draw_hokum_mfd (void)
 		int
 			draw_eo_display;
 
-		if (d3d_can_render_to_texture)
 		{
 			ASSERT (eo_3d_texture_screen);
+			ASSERT (eo_3d_texture_screen_over);
 
 			draw_eo_display = FALSE;
 
@@ -9408,11 +9376,11 @@ void draw_hokum_mfd (void)
 					}
 				}
 
-				set_active_screen (eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen_over);
 
-				if (lock_screen (eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen_over))
 				{
-					draw_layout_grid ();
+					draw_mfd_layout_grid ();
 
 					switch (get_mfd_mode_for_eo_sensor ())
 					{
@@ -9436,9 +9404,9 @@ void draw_hokum_mfd (void)
 						}
 					}
 
-					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen_over);
 
-					unlock_screen (eo_3d_texture_screen);
+					eo_3d_texture_merge (eo_3d_texture_screen, eo_3d_texture_screen_over);
 				}
 
 				set_active_screen (video_screen);
@@ -9509,6 +9477,7 @@ void set_hokum_text_display_text (char *s1, char *s2, char *s3)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void draw_hokum_full_screen_display (void)
 {
 	hokum_mfd_modes
@@ -9596,9 +9565,6 @@ void draw_hokum_full_screen_display (void)
 	mfd_screen_width = mfd_screen_x_max - mfd_screen_x_min;
 	mfd_screen_height = mfd_screen_y_max - mfd_screen_y_min;
 
-	mfd_screen_x_max -= 0.001;
-	mfd_screen_y_max -= 0.001;
-
 	mfd_screen_x_scale = 256.0 / mfd_screen_width;
 	mfd_screen_y_scale = 256.0 / mfd_screen_height;
 
@@ -9648,9 +9614,9 @@ void draw_hokum_full_screen_display (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE;
 
-	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
@@ -9671,7 +9637,7 @@ void draw_hokum_full_screen_display (void)
 
       set_block (0, 0, LARGE_MFD_VIEWPORT_SIZE - 1, LARGE_MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
 
-		draw_layout_grid ();
+		draw_mfd_layout_grid ();
 
 		switch (mode)
 		{
@@ -9696,8 +9662,6 @@ void draw_hokum_full_screen_display (void)
 		}
 
 		MFD_COLOUR1 = store_mfd_colour;
-
-		flush_screen_texture_graphics (full_mfd_texture_screen);
 
 		unlock_screen (full_mfd_texture_screen);
 	}
@@ -9788,6 +9752,7 @@ void draw_hokum_full_screen_display (void)
 		end_3d_scene ();
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9931,9 +9896,9 @@ void draw_hokum_virtual_cockpit_periscope_symbology (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_x_max = LARGE_MFD_VIEWPORT_SIZE;
 
-	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE - 0.001;
+	mfd_viewport_y_max = LARGE_MFD_VIEWPORT_SIZE;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
@@ -9957,8 +9922,8 @@ void draw_hokum_virtual_cockpit_periscope_symbology (void)
 		mfd_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		mfd_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-		mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		mfd_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width);
+		mfd_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 		mfd_screen_x_scale = 640.0 / full_screen_width;
 		mfd_screen_y_scale = 480.0 / full_screen_height;
@@ -10188,9 +10153,7 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
-
-				flush_screen_texture_graphics (mfd_screen);
+				draw_mfd_layout_grid ();
 
 				unlock_screen (mfd_screen);
 			}
@@ -10211,11 +10174,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_overlaid_damaged_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10236,11 +10197,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_ground_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10261,11 +10220,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_air_radar_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10293,11 +10250,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_flir_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10327,11 +10282,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_llltv_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10361,11 +10314,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_2d_periscope_mfd (TRUE);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10388,11 +10339,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_tactical_situation_display_mfd (location);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10413,11 +10362,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_aircraft_survivability_equipment_display_mfd (location);
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10438,11 +10385,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_weapon_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10463,11 +10408,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_system_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10488,11 +10431,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_engine_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10513,11 +10454,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_flight_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10538,11 +10477,9 @@ static void draw_overlaid_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_m
 			{
 				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
 
-				draw_layout_grid ();
+				draw_mfd_layout_grid ();
 
 				draw_mission_display_mfd ();
-
-				flush_screen_texture_graphics (mfd_screen);
 
 				unlock_screen (mfd_screen);
 			}
@@ -10791,9 +10728,9 @@ void draw_overlaid_hokum_mfd (void)
 
 	mfd_viewport_y_min = 0.0;
 
-	mfd_viewport_x_max = mfd_viewport_size - 0.001;
+	mfd_viewport_x_max = mfd_viewport_size;
 
-	mfd_viewport_y_max = mfd_viewport_size - 0.001;
+	mfd_viewport_y_max = mfd_viewport_size;
 
 	////////////////////////////////////////
 	//

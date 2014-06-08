@@ -368,7 +368,7 @@ static void update_suspension(void)
 					spring_compression += (get_local_entity_int_value (keysite, INT_TYPE_SIDE) == ENTITY_SIDE_BLUE_FORCE) ? 19.95 : 16.65;	// update it of you will change carrier model! TODO: eliminate gunship side divide /thealx/
 				else
 				{
-					water_immersion = min (2, spring_compression + point->position.y / 3);
+					water_immersion = min (2.0, spring_compression + point->position.y / 3);
 					spring_compression = 0;
 				}
 //					debug_log("spring %f, immersion %f, airborn %i", spring_compression, water_immersion, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT));			
@@ -417,7 +417,7 @@ static void update_suspension(void)
 				if (point->can_turn && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
 				{
 					float
-						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0f)) * 0.5,
+						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0)) * 0.5,
 						new_angle;
 
 
@@ -512,7 +512,7 @@ static void apply_suspension_forces(void)
 //			if (point->suspension_compression >= point->max_suspension_compression)
 //				wheel_load = G * (point->max_suspension_compression * suspension_stiffness + (point->suspension_compression - point->max_suspension_compression) * point->bump_stiffness);
 //			else
-			wheel_load = G * (point->suspension_compression ? min(point->suspension_compression, point->max_suspension_compression) * suspension_stiffness : point->water_immersion);
+			wheel_load = G * (point->suspension_compression ? min(point->suspension_compression, (double)point->max_suspension_compression) * suspension_stiffness : point->water_immersion);
 
 			wheel_load = (wheel_load + point->damping + point->last_wheel_load) / 2;
 
@@ -526,7 +526,7 @@ static void apply_suspension_forces(void)
 			// wheel sideways resistance
 			{
 				float
-					wheight_on_wheel = G * max(0, 1 - (point->max_suspension_compression - point->suspension_compression) / point->max_suspension_compression),  // depends on load on wheel
+					wheight_on_wheel = G * max(0.0, 1 - (point->max_suspension_compression - point->suspension_compression) / point->max_suspension_compression),  // depends on load on wheel
 					force_diff = (wheight_on_wheel * point->velocity.x + point->resistance_force) / 2,
 					max_force_change = get_model_delta_time() * 1000.0;
 
@@ -740,7 +740,8 @@ void animate_aircraft_suspension(entity* en)
 		tail_turn_angle = 0,
 		left_secondary_turn_angle = 0,
 		right_secondary_turn_angle = 0;
-	int i;
+	unsigned int
+		i;
 	landing_gear_point
 		*third,
 		*left,

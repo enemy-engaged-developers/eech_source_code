@@ -73,7 +73,7 @@
 object_3d_information
 	*object_3d_information_database = NULL;
 
-const char
+char
 	**object_3d_enumeration_names = NULL,
 	**object_3d_sub_object_names = NULL,
 	**object_3d_camoflage_set_names = NULL,
@@ -167,7 +167,7 @@ void initialise_3d_objects_info ( const char *directory )
 		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		object_3d_information_database = ( object_3d_information * ) safe_malloc ( OBJECT_3D_LAST * sizeof ( object_3d_information ) );
-		object_3d_enumeration_names = ( const char * * ) safe_malloc ( OBJECT_3D_LAST * sizeof ( char * ) );
+		object_3d_enumeration_names = ( char * * ) safe_malloc ( OBJECT_3D_LAST * sizeof ( char * ) );
 
 		object_3d_enumeration_names[0] = ptr;
 		object_3d_information_database[0].name = ptr;
@@ -195,8 +195,8 @@ void initialise_3d_objects_info ( const char *directory )
 
 		for ( ; count < OBJECT_3D_LAST; count++ )
 		{
-			object_3d_enumeration_names[count] = object_3d_scene_names[count];
-			object_3d_information_database[count].name = object_3d_scene_names[count];
+			object_3d_enumeration_names[count] = ( char * ) object_3d_scene_names[count];
+			object_3d_information_database[count].name = ( char * ) object_3d_scene_names[count];
 			object_3d_information_database[count].maximum_distance = 1000.0;
 		}
 
@@ -216,7 +216,7 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_sub_object_names )
 	{
 
-		object_3d_sub_object_names = ( const char * * ) safe_malloc ( OBJECT_3D_SUB_OBJECT_LAST * sizeof ( char * ) );
+		object_3d_sub_object_names = ( char * * ) safe_malloc ( OBJECT_3D_SUB_OBJECT_LAST * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -246,7 +246,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 		for ( ; count < OBJECT_3D_SUB_OBJECT_LAST; count++ )
 		{
-			object_3d_sub_object_names[count] = object_3d_subobject_names[count];
+			object_3d_sub_object_names[count] = ( char * ) object_3d_subobject_names[count];
 		}
 
 		object_3d_number_of_sub_object_names = OBJECT_3D_SUB_OBJECT_LAST;
@@ -263,7 +263,7 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_camera_names )
 	{
 
-		object_3d_camera_names = ( const char * * ) safe_malloc ( object_3d_number_of_camera_names * sizeof ( char * ) );
+		object_3d_camera_names = ( char * * ) safe_malloc ( object_3d_number_of_camera_names * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -301,7 +301,7 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_camoflage_set_names )
 	{
 
-		object_3d_camoflage_set_names = ( const char * * ) safe_malloc ( object_3d_number_of_camoflage_set_names * sizeof ( char * ) );
+		object_3d_camoflage_set_names = ( char * * ) safe_malloc ( object_3d_number_of_camoflage_set_names * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -335,7 +335,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 		texture_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * TEXTURE_ANIMATION_INDEX_LAST );
 
-		texture_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * TEXTURE_ANIMATION_INDEX_LAST );
+		texture_animation_names = ( char * * ) safe_malloc ( sizeof ( char * ) * TEXTURE_ANIMATION_INDEX_LAST );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -411,7 +411,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 		displacement_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * number_of_displacement_animations );
 
-		displacement_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * number_of_displacement_animations );
+		displacement_animation_names = ( char * * ) safe_malloc ( sizeof ( char * ) * number_of_displacement_animations );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
@@ -534,6 +534,106 @@ void initialise_3d_objects_info ( const char *directory )
 		_findclose ( handle );
 	}
 	// 12NOV10 Casm Loading custom textures animation END
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void deinitialise_3d_objects_info ( void )
+{
+	int
+		count;
+
+	if ( displacement_animation_names )
+	{
+		if ( displacement_animation_names[0] )
+		{
+			safe_free ( displacement_animation_names[0] );
+		}
+		safe_free ( displacement_animation_names );
+	}
+
+	if ( displacement_animations )
+	{
+		for ( count = 0; count < number_of_displacement_animations; count++ )
+		{
+			if ( displacement_animations[count].texture_indices )
+			{
+				safe_free ( displacement_animations[count].texture_indices );
+			}
+		}
+		safe_free ( displacement_animations );
+	}
+
+	if ( texture_animation_names )
+	{
+		if ( texture_animation_names[0] )
+		{
+			safe_free ( texture_animation_names[0] );
+		}
+		for ( count = TEXTURE_ANIMATION_INDEX_OLD_LAST; count < TEXTURE_ANIMATION_INDEX_LAST; count++ )
+		{
+			if ( texture_animation_names[count] )
+			{
+				safe_free ( texture_animation_names[count] );
+			}
+		}
+		safe_free ( texture_animation_names );
+	}
+
+	if ( texture_animations )
+	{
+		for ( count = 0; count < number_of_texture_animations; count++ )
+		{
+			if ( texture_animations[count].texture_indices )
+			{
+				safe_free ( texture_animations[count].texture_indices );
+			}
+		}
+		safe_free ( texture_animations );
+	}
+
+	if ( object_3d_camoflage_set_names )
+	{
+		if ( object_3d_camoflage_set_names[0] )
+		{
+			safe_free ( object_3d_camoflage_set_names[0] );
+		}
+		safe_free ( object_3d_camoflage_set_names );
+	}
+
+	if ( object_3d_camera_names )
+	{
+		if ( object_3d_camera_names[0] )
+		{
+			safe_free ( object_3d_camera_names[0] );
+		}
+		safe_free ( object_3d_camera_names );
+	}
+
+	if ( object_3d_sub_object_names )
+	{
+		if ( object_3d_sub_object_names[0] )
+		{
+			safe_free ( object_3d_sub_object_names[0] );
+		}
+		safe_free ( object_3d_sub_object_names );
+	}
+
+	if ( object_3d_enumeration_names )
+	{
+		if ( object_3d_enumeration_names[0] )
+		{
+			safe_free ( object_3d_enumeration_names[0] );
+		}
+		safe_free ( object_3d_enumeration_names );
+	}
+
+	if ( object_3d_information_database )
+	{
+		safe_free ( object_3d_information_database );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

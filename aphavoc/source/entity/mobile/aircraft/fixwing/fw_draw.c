@@ -152,7 +152,7 @@ static void draw_local_3d_object (entity *en, float range)
 		animate_and_draw_entity_muzzle_flash_effect (en);
 
 		raw->ac.inst3d->object_diffuse_value = get_local_entity_int_value (en, INT_TYPE_ALIVE) ? 255 : 127;
-		raw->ac.inst3d->object_diffuse_value *= 1 - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5 * ONE_MINUTE) / (2 * ONE_MINUTE);
+		raw->ac.inst3d->object_diffuse_value *= 1.0f - min(get_local_entity_float_value (en, FLOAT_TYPE_DEATH_TIMER), 1.5f * ONE_MINUTE) / (2 * ONE_MINUTE);
 		raw->ac.inst3d->object_internal_lighting = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 		raw->ac.inst3d->object_sprite_lights = (raw->ac.inst3d->object_internal_lighting && sprite_light_valid (en));
 	}

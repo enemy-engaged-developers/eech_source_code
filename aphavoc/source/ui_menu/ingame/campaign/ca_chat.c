@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -110,15 +110,15 @@ void show_chat_page (ui_object *obj)
 	//
 	// Build Target List
 	//
-	
+
 	build_chat_target_list ();
 
 	//
 	// Show Previous Messages
 	//
-	
+
 	build_chat_message_list ();
-	
+
 	display_campaign_page (CAMPAIGN_PAGE_CHAT, ENTITY_INDEX_DONT_CARE, TRUE);
 }
 
@@ -131,7 +131,7 @@ void initialise_campaign_screen_chat_page_objects (void)
 	//
 	// Set Window Mode
 	//
-	
+
 	set_ui_object_drawable (chat_target_list_area, TRUE);
 
 	set_ui_object_drawable (chat_message_list_area, FALSE);
@@ -141,13 +141,13 @@ void initialise_campaign_screen_chat_page_objects (void)
 	//
 	// Set Target to ALL
 	//
-	
+
 	set_ui_object_item_number (chat_send_button, get_local_entity_safe_index (get_session_entity ()));
 
 	//
 	// Clear Text Input Area
 	//
-	
+
 	set_ui_object_drawable (chat_input, FALSE);
 
 	set_ui_object_text (chat_input, "");
@@ -157,7 +157,7 @@ void initialise_campaign_screen_chat_page_objects (void)
 	//
 	// Clear Current Text Area
 	//
-	
+
 	set_ui_object_text (chat_current_text, "");
 
 	set_ui_object_drawable (chat_current_text, TRUE);
@@ -182,10 +182,10 @@ static void chat_input_function (ui_object *obj, void *arg)
 {
 	entity 	// Jabberwock 040213 Chat send after Enter
 		*target;
-		
+
 	const char
 		*text;
-		
+
 	text = get_ui_object_text (chat_input);
 
 	if (text)
@@ -196,7 +196,7 @@ static void chat_input_function (ui_object *obj, void *arg)
 
 			// Jabberwock 040213 Chat send after Enter
 			target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
-		
+
 			if (target)
 			{
 				send_text_message (get_pilot_entity (), target, MESSAGE_TEXT_PILOT_STRING, text);
@@ -218,10 +218,10 @@ static void notify_send_message (ui_object *obj, void *arg)
 {
 	entity
 		*target;
-		
+
 	const char
 		*text;
-		
+
 	target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
 
 	if (target)
@@ -248,7 +248,7 @@ void notify_target_list (ui_object *obj, void *arg)
 {
 	int
 		index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -279,7 +279,7 @@ static void notify_show_destinations (ui_object *obj, void *arg)
 static void notify_show_messages (ui_object *obj, void *arg)
 {
 	build_chat_message_list ();
-	
+
 	set_ui_object_drawable (chat_target_list_area, FALSE);
 
 	set_ui_object_drawable (chat_message_list_area, TRUE);
@@ -311,7 +311,7 @@ void build_chat_target_list (void)
 	new_item = add_to_pop_up_list (s, chat_target_list, NULL, ENTITY_INDEX_DONT_CARE, UI_FONT_ARIAL_16, ui_ingame_dead_text_colour);
 
 	//
-	// All 
+	// All
 	//
 
 	ASSERT (get_session_entity ());
@@ -368,17 +368,17 @@ void build_chat_target_list (void)
 			if (pilot != get_pilot_entity ())
 			{
 				sprintf (s, "%s", get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME));
-	
+
 				new_item = add_to_pop_up_list (s, chat_target_list, NULL, get_local_entity_safe_index (pilot), UI_FONT_ARIAL_16, ui_ingame_live_text_colour);
-	
+
 				set_ingame_ui_object_mouse_over_properties (new_item);
-	
+
 				if (pilot == current_target)
 				{
 					set_ui_object_state (new_item, UI_OBJECT_STATE_ON);
 				}
 			}
-			
+
 			pilot = get_local_entity_child_succ (pilot, LIST_TYPE_PILOT);
 		}
 
@@ -400,7 +400,7 @@ void build_chat_message_list (void)
 	//
 	// Show Previous Messages
 	//
-	
+
 	ui_object_destroy_list_items (chat_message_list);
 
 	start = get_message_log_number_of_messages () - 1;
@@ -443,7 +443,7 @@ static void draw_chat_send_button (ui_object *obj, void *arg)
 
 	rgb_colour
 		*col;
-		
+
 	static const char
 		*text;
 	static char
@@ -478,7 +478,7 @@ static void draw_chat_send_button (ui_object *obj, void *arg)
 			default:
 			{
 				current_target = NULL;
-			
+
 				build_chat_target_list ();
 
 				break;
@@ -541,19 +541,19 @@ int add_message_to_campaign_log (int index)
 	if (message->type == MESSAGE_TEXT_PILOT_STRING)
 	{
 		get_digital_clock_int_values (message->time_of_day, &hours, &minutes, &seconds);
-	
+
 		s = (char *) malloc_fast_mem (strlen (message->string) + 20);
-	
+
 		sprintf (s, "[%02d:%02d] %s", hours, minutes, message->string);
-	
+
 		col = &(message->colour);
-	
+
 		ASSERT (col);
-	
+
 		add_to_pop_up_list (s, chat_message_list, NULL, index, -1, *col);
-	
+
 		free_mem (s);
-	
+
 		return TRUE;
 	}
 	else
@@ -570,9 +570,9 @@ void campaign_screen_update_chat_page_pilot (entity *en)
 {
 	entity
 		*current_target;
-		
+
 	current_target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
-	
+
 	if (current_target == en)
 	{
 		set_ui_object_item_number (chat_send_button, get_local_entity_safe_index (get_session_entity ()));
@@ -638,7 +638,7 @@ void define_campaign_screen_chat_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\chattabs.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\chattabs.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -810,7 +810,7 @@ void define_campaign_screen_chat_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\msgbar.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\msgbar.psd", 0)),
 				UI_ATTR_FUNCTION (chat_enter_message_function),
 				UI_ATTR_END
 			);
@@ -877,7 +877,7 @@ void define_campaign_screen_chat_page_objects (void)
 				UI_ATTR_TEXT (get_trans ("UI_SEND")),
 				UI_ATTR_FUNCTION (notify_send_message),
 				UI_ATTR_DRAW_FUNCTION (draw_chat_send_button),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\sendbtn.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\sendbtn.psd", 0)),
 				UI_ATTR_END
 			);
 

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -219,7 +219,8 @@ void initialise_common_virtual_cockpit_wiper_and_rain_effect (void)
 
 	#endif
 
-	rain_texture_screen = create_screen_for_system_texture (TEXTURE_INDEX_RAIN);
+	rain_texture_screen = get_screen_of_system_texture (TEXTURE_INDEX_RAIN);
+	ASSERT ( rain_texture_screen->width == RAIN_TEXTURE_SIZE && rain_texture_screen->height == RAIN_TEXTURE_SIZE );
 
 	composite_rain_texture_screen = create_system_texture_screen (RAIN_TEXTURE_SIZE, RAIN_TEXTURE_SIZE, TEXTURE_INDEX_RAIN_EFFECT, TEXTURE_TYPE_MULTIPLEALPHA);
 
@@ -289,7 +290,7 @@ void initialise_common_virtual_cockpit_wiper_and_rain_effect (void)
 
 void deinitialise_common_virtual_cockpit_wiper_and_rain_effect (void)
 {
-	destroy_screen (rain_texture_screen);
+	rain_texture_screen = NULL;
 
 	destroy_screen (composite_rain_texture_screen);
 
@@ -682,7 +683,7 @@ rain_fall_types get_rain_fall_type (void)
 
 void clear_full_rain_effect (screen *composite_rain_texture_screen)
 {
-	unsigned char
+	unsigned
 		*composite_rain_texture_screen_data,
 		*dst;
 
@@ -694,25 +695,17 @@ void clear_full_rain_effect (screen *composite_rain_texture_screen)
 
 	if (lock_screen (composite_rain_texture_screen))
 	{
-
-		int
-			size;
-
 		composite_rain_texture_screen_data = get_screen_data (composite_rain_texture_screen);
 		composite_rain_texture_screen_pitch = get_screen_pitch (composite_rain_texture_screen);
-
-		size = get_screen_pixel_width (composite_rain_texture_screen);
 
 		dst = composite_rain_texture_screen_data;
 
 		for (y = 0; y < RAIN_TEXTURE_SIZE; y++)
 		{
-			memset (dst, 0, RAIN_TEXTURE_SIZE * size);
+			memset (dst, 0, RAIN_TEXTURE_SIZE * 4);
 
 			dst += composite_rain_texture_screen_pitch;
 		}
-
-		flush_screen_texture_graphics (composite_rain_texture_screen);
 
 		unlock_screen (composite_rain_texture_screen);
 	}
@@ -724,7 +717,7 @@ void clear_full_rain_effect (screen *composite_rain_texture_screen)
 
 void clear_rain_effect (screen *composite_rain_texture_screen)
 {
-	unsigned char
+	unsigned
 		*composite_rain_texture_screen_data,
 		*dst;
 
@@ -743,7 +736,6 @@ void clear_rain_effect (screen *composite_rain_texture_screen)
 
 		count = (int) (CLEAR_RAIN_RATE * get_delta_time ());
 
-		if (get_screen_pixel_width(composite_rain_texture_screen) == 2)
 		{
 
 			while (count--)
@@ -751,26 +743,11 @@ void clear_rain_effect (screen *composite_rain_texture_screen)
 				x = rand16 () & (RAIN_TEXTURE_SIZE - 1);
 				y = rand16 () & (RAIN_TEXTURE_SIZE - 1);
 
-				dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * sizeof (rgb_packed));
+				dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + x;
 
-				*(rgb_packed *)dst = 0;
+				*dst = 0;
 			}
 		}
-		else
-		{
-
-			while (count--)
-			{
-				x = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-				y = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-
-				dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * sizeof (unsigned int));
-
-				*(unsigned int *)dst = 0;
-			}
-		}
-
-		flush_screen_texture_graphics (composite_rain_texture_screen);
 
 		unlock_screen (composite_rain_texture_screen);
 	}
@@ -785,60 +762,15 @@ void apply_full_rain_effect (screen *composite_rain_texture_screen)
 
 	ASSERT (composite_rain_texture_screen);
 
-	if ( ( command_line_cpu_blit_textures ) || ( !d3d_modulate_alpha ) )
+	if ( lock_screen ( rain_texture_screen ) )
 	{
-
-		unsigned char
-			*rain_texture_screen_data,
-			*composite_rain_texture_screen_data,
-			*src,
-			*dst;
-
-		int
-			rain_texture_screen_pitch,
-			composite_rain_texture_screen_pitch,
-			y;
-
-		ASSERT (composite_rain_texture_screen);
-
-		if (lock_screen (rain_texture_screen))
+		if ( lock_screen ( composite_rain_texture_screen ) )
 		{
-			rain_texture_screen_data = get_screen_data (rain_texture_screen);
-			rain_texture_screen_pitch = get_screen_pitch (rain_texture_screen);
-
-			if (lock_screen (composite_rain_texture_screen))
-			{
-				composite_rain_texture_screen_data = get_screen_data (composite_rain_texture_screen);
-				composite_rain_texture_screen_pitch = get_screen_pitch (composite_rain_texture_screen);
-
-				src = rain_texture_screen_data;
-
-				dst = composite_rain_texture_screen_data;
-
-				for (y = 0; y < RAIN_TEXTURE_SIZE; y++)
-				{
-					memcpy (dst, src, RAIN_TEXTURE_SIZE * sizeof (rgb_packed));
-
-					src += rain_texture_screen_pitch;
-
-					dst += composite_rain_texture_screen_pitch;
-				}
-
-				unlock_screen (composite_rain_texture_screen);
-			}
-
-			unlock_screen (rain_texture_screen);
+			memcpy ( composite_rain_texture_screen->data, rain_texture_screen->data, RAIN_TEXTURE_SIZE * rain_texture_screen->pitch );
+			unlock_screen ( composite_rain_texture_screen );
 		}
+		unlock_screen ( rain_texture_screen );
 	}
-	else
-	{
-
-		blit_screens ( rain_texture_screen, composite_rain_texture_screen,
-								0, 0, RAIN_TEXTURE_SIZE, RAIN_TEXTURE_SIZE,
-								0, 0, RAIN_TEXTURE_SIZE, RAIN_TEXTURE_SIZE );
-	}
-
-	flush_screen_texture_graphics (composite_rain_texture_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -853,6 +785,7 @@ void apply_rain_effect (screen *composite_rain_texture_screen, int light_rate, i
 
 	int
 		count,
+		offset,
 		x1,
 		y1,
 		x2,
@@ -871,149 +804,39 @@ void apply_rain_effect (screen *composite_rain_texture_screen, int light_rate, i
 
 	count = (int) (rain_fall_rate * get_delta_time ());
 
-	if ( ( command_line_cpu_blit_textures ) || ( !d3d_modulate_alpha ) )
+	if ( lock_screen ( rain_texture_screen ) )
 	{
-
-		unsigned char
-			*rain_texture_screen_data,
-			*composite_rain_texture_screen_data,
-			*src,
-			*dst;
-
-		int
-			texture_pixel_width,
-			rain_texture_screen_pitch,
-			composite_rain_texture_screen_pitch,
-			x,
-			y;
-
-		rgb_packed
-			col;
-
-		unsigned int
-			col32;
-
-		texture_pixel_width = get_screen_pixel_width (rain_texture_screen);
-
-		if (lock_screen (rain_texture_screen))
+		if ( lock_screen ( composite_rain_texture_screen ) )
 		{
-			rain_texture_screen_data = get_screen_data (rain_texture_screen);
-			rain_texture_screen_pitch = get_screen_pitch (rain_texture_screen);
 
-			if (lock_screen (composite_rain_texture_screen))
+			while (count--)
 			{
-				composite_rain_texture_screen_data = get_screen_data (composite_rain_texture_screen);
-				composite_rain_texture_screen_pitch = get_screen_pitch (composite_rain_texture_screen);
+				//
+				// copy a random pixel from the rain texture to the composite texture
+				//
 
-				if (texture_pixel_width == 2)
-				{
-					while (count--)
-					{
-						//
-						// copy a random pixel from the rain texture to the composite texture
-						//
+				x1 = rand16 () & (RAIN_TEXTURE_SIZE - 1);
+				y1 = rand16 () & (RAIN_TEXTURE_SIZE - 1);
 
-						x = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-						y = rand16 () & (RAIN_TEXTURE_SIZE - 1);
+				offset = y1 * rain_texture_screen->pitch + x1;
+				composite_rain_texture_screen->data[offset] = rain_texture_screen->data[offset];
 
-						src = rain_texture_screen_data + (y * rain_texture_screen_pitch) + (x * sizeof (rgb_packed));
+				//
+				// copy this pixel to an offset value to create a changing effect
+				//
 
-						col = *(rgb_packed *)src;
+				x2 = x1 + 64;
+				y2 = y1 + 64;
 
-						dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * sizeof (rgb_packed));
+				x2 &= RAIN_TEXTURE_SIZE - 1;
+				y2 &= RAIN_TEXTURE_SIZE - 1;
 
-						*(rgb_packed *)dst = col;
-
-						//
-						// copy this pixel to an offset value to create a changing effect
-						//
-
-						x += 64;
-						y += 64;
-
-						x &= RAIN_TEXTURE_SIZE - 1;
-						y &= RAIN_TEXTURE_SIZE - 1;
-
-						dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * sizeof (rgb_packed));
-
-						*(rgb_packed *)dst = col;
-					}
-				}
-				else
-				{
-
-					//
-					// Texture pixel width == 4 ( 32bit texture )
-					//
-
-					while (count--)
-					{
-						//
-						// copy a random pixel from the rain texture to the composite texture
-						//
-
-						x = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-						y = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-
-						src = rain_texture_screen_data + (y * rain_texture_screen_pitch) + (x * texture_pixel_width);
-
-						col32 = *(unsigned int *)src;
-
-						dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * texture_pixel_width);
-
-						*(unsigned int *)dst = col32;
-
-						//
-						// copy this pixel to an offset value to create a changing effect
-						//
-
-						x += 64;
-						y += 64;
-
-						x &= RAIN_TEXTURE_SIZE - 1;
-						y &= RAIN_TEXTURE_SIZE - 1;
-
-						dst = composite_rain_texture_screen_data + (y * composite_rain_texture_screen_pitch) + (x * texture_pixel_width);
-
-						*(unsigned int *)dst = col32;
-					}
-				}
-
-				unlock_screen (composite_rain_texture_screen);
+				composite_rain_texture_screen->data[y2 * rain_texture_screen->pitch + x2] = rain_texture_screen->data[offset];
 			}
-
-			unlock_screen (rain_texture_screen);
+			unlock_screen ( composite_rain_texture_screen );
 		}
+		unlock_screen ( rain_texture_screen );
 	}
-	else
-	{
-
-		while (count--)
-		{
-			//
-			// copy a random pixel from the rain texture to the composite texture
-			//
-
-			x1 = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-			y1 = rand16 () & (RAIN_TEXTURE_SIZE - 1);
-
-			blit_screens ( rain_texture_screen, composite_rain_texture_screen, x1, y1, x1+1, y1+1, x1, y1, x1+1, y1+1 );
-
-			//
-			// copy this pixel to an offset value to create a changing effect
-			//
-
-			x2 = x1 + 64;
-			y2 = y1 + 64;
-
-			x2 &= RAIN_TEXTURE_SIZE - 1;
-			y2 &= RAIN_TEXTURE_SIZE - 1;
-
-			blit_screens ( rain_texture_screen, composite_rain_texture_screen, x1, y1, x1+1, y1+1, x2, y2, x2+1, y2+1 );
-		}
-	}
-
-	flush_screen_texture_graphics (composite_rain_texture_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1022,7 +845,7 @@ void apply_rain_effect (screen *composite_rain_texture_screen, int light_rate, i
 
 void wipe_rain_effect (screen *wiped_rain_texture_screen, screen *composite_wiped_rain_texture_screen, wipe_types wipe_type)
 {
-	unsigned char
+	unsigned
 		*wiped_rain_texture_screen_data,
 		*composite_wiped_rain_texture_screen_data,
 		*src,
@@ -1041,15 +864,8 @@ void wipe_rain_effect (screen *wiped_rain_texture_screen, screen *composite_wipe
 		x2,
 		y2,
 		dx,
-		texture_pixel_width,
 		src_add_on,
 		dst_add_on;
-
-	unsigned int
-		r_mask,
-		g_mask,
-		b_mask,
-		a_mask;
 
 	ASSERT (wiped_rain_texture_screen);
 
@@ -1059,10 +875,6 @@ void wipe_rain_effect (screen *wiped_rain_texture_screen, screen *composite_wipe
 
 	if (wiper_mode != WIPER_MODE_STOWED)
 	{
-		texture_pixel_width = get_screen_pixel_width (composite_wiped_rain_texture_screen);
-
-		get_screen_rgba_masks (composite_wiped_rain_texture_screen, &r_mask, &g_mask, &b_mask, &a_mask);
-
 		if (lock_screen (wiped_rain_texture_screen))
 		{
 			wiped_rain_texture_screen_data = get_screen_data (wiped_rain_texture_screen);
@@ -1173,56 +985,34 @@ void wipe_rain_effect (screen *wiped_rain_texture_screen, screen *composite_wipe
 					}
 				}
 
-				dx = (x2 - x1 + 1) * texture_pixel_width;
+				dx = (x2 - x1 + 1);
 
 				src_add_on = wiped_rain_texture_screen_pitch - dx;
 
 				dst_add_on = composite_wiped_rain_texture_screen_pitch - dx;
 
-				src = wiped_rain_texture_screen_data + (y1 * wiped_rain_texture_screen_pitch) + (x1 * texture_pixel_width);
+				src = wiped_rain_texture_screen_data + (y1 * wiped_rain_texture_screen_pitch) + x1;
 
-				dst = composite_wiped_rain_texture_screen_data + (y1 * composite_wiped_rain_texture_screen_pitch) + (x1 * texture_pixel_width);
+				dst = composite_wiped_rain_texture_screen_data + (y1 * composite_wiped_rain_texture_screen_pitch) + x1;
 
-				if (texture_pixel_width == 2)
 				{
 					for (y = y1; y <= y2; y++)
 					{
 						for (x = x1; x <= x2; x++)
 						{
-							if ((*(rgb_packed *)src & a_mask) == 0)
+							if ((*src & 0xFF000000) == 0)
 							{
-								*(rgb_packed *)dst = 0;
+								*dst = 0;
 							}
 
-							src += texture_pixel_width;
-							dst += texture_pixel_width;
+							src++;
+							dst++;
 						}
 
 						src += src_add_on;
 						dst += dst_add_on;
 					}
 				}
-				else
-				{
-					for (y = y1; y <= y2; y++)
-					{
-						for (x = x1; x <= x2; x++)
-						{
-							if ((*(unsigned int *)src & a_mask) == 0)
-							{
-								*(unsigned int *)dst = 0;
-							}
-
-							src += texture_pixel_width;
-							dst += texture_pixel_width;
-						}
-
-						src += src_add_on;
-						dst += dst_add_on;
-					}
-				}
-
-				flush_screen_texture_graphics (composite_wiped_rain_texture_screen);
 
 				unlock_screen (composite_wiped_rain_texture_screen);
 			}

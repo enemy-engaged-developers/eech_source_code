@@ -226,7 +226,11 @@ extern void draw_2d_map (ui_object *obj, void *arg);
 
 extern void load_map_textures (void);
 
+extern void unload_map_textures (void);
+
 extern void initialise_map_data (void);
+
+extern void deinitialise_map_data (void);
 
 extern void set_active_map_object (ui_object *obj);
 

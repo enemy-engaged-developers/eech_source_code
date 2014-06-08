@@ -2237,9 +2237,9 @@ void comms_process_data (void)
 
                         deinitialise_formation_database ();
 
-                        initialise_formation_database ();
-
                         deinitialise_formation_component_database ();
+
+                        initialise_formation_database ();
 
                         initialise_formation_component_database ();
 

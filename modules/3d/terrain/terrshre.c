@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 #if 0
@@ -104,9 +104,9 @@ void render_3d_terrain_short_word_fan ( int num_points, terrain_3d_point_word_re
 
 		int
 			colour;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
 
 		u = ( current_terrain_points_xz[this_point].x ) * texture_scale;
@@ -123,7 +123,7 @@ void render_3d_terrain_short_word_fan ( int num_points, terrain_3d_point_word_re
 		destination_vertices[count].sz = polygon_zdistance_bias - q;
 		destination_vertices[count].rhw = q;
 		destination_vertices[count].color = colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_fan_primitive ( num_points, destination_vertices );
@@ -157,9 +157,9 @@ void render_3d_terrain_short_byte_fan ( int num_points, terrain_3d_point_byte_re
 
 	for ( count = 0; count < num_points; count++ )
 	{
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
 
 		destination_vertices[count].tu = ( current_terrain_points_xz[this_point].x ) * texture_scale;
@@ -170,7 +170,7 @@ void render_3d_terrain_short_byte_fan ( int num_points, terrain_3d_point_byte_re
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_fan_primitive ( num_points, destination_vertices );
@@ -217,7 +217,7 @@ void render_3d_terrain_short_word_strip ( int num_points, terrain_3d_point_word_
 
 
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
 
 		u = current_terrain_points_xz[this_point].x * texture_scale;
@@ -234,7 +234,7 @@ void render_3d_terrain_short_word_strip ( int num_points, terrain_3d_point_word_
 		destination_vertices[count].sz = polygon_zdistance_bias - q;
 		destination_vertices[count].rhw = q;
 		destination_vertices[count].color = colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -268,11 +268,11 @@ void render_3d_terrain_short_byte_strip ( int num_points, terrain_3d_point_byte_
 
 	for ( count = 0; count < num_points; count++ )
 	{
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		destination_vertices[count].tu = ( current_terrain_points_xz[this_point].x ) * texture_scale;
 		destination_vertices[count].tv = ( current_terrain_points_xz[this_point].z ) * texture_scale;
 		destination_vertices[count].sx = vert->i;
@@ -280,7 +280,7 @@ void render_3d_terrain_short_byte_strip ( int num_points, terrain_3d_point_byte_
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -319,11 +319,11 @@ void render_3d_terrain_short_texture_xy_word_strip ( int num_points, terrain_3d_
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].x ) * xz_texture_scale;
@@ -333,7 +333,7 @@ void render_3d_terrain_short_texture_xy_word_strip ( int num_points, terrain_3d_
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -372,11 +372,11 @@ void render_3d_terrain_short_texture_xy_byte_strip ( int num_points, terrain_3d_
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].x ) * xz_texture_scale;
@@ -386,7 +386,7 @@ void render_3d_terrain_short_texture_xy_byte_strip ( int num_points, terrain_3d_
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -425,11 +425,11 @@ void render_3d_terrain_short_texture_zy_word_strip ( int num_points, terrain_3d_
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].z ) * xz_texture_scale;
@@ -439,7 +439,7 @@ void render_3d_terrain_short_texture_zy_word_strip ( int num_points, terrain_3d_
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -478,11 +478,11 @@ void render_3d_terrain_short_texture_zy_byte_strip ( int num_points, terrain_3d_
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = ( current_terrain_points_xz[this_point].z ) * xz_texture_scale;
@@ -492,7 +492,7 @@ void render_3d_terrain_short_texture_zy_byte_strip ( int num_points, terrain_3d_
 		destination_vertices[count].sz = polygon_zdistance_bias - vert->q;
 		destination_vertices[count].rhw = vert->q;
 		destination_vertices[count].color = vert->colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -537,11 +537,11 @@ void render_3d_terrain_short_texture_xy_word_colour_strip ( int num_points, terr
 			green,
 			blue,
 			normal_index;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = ( current_terrain_points_xz[this_point].x ) * xz_texture_scale;
@@ -557,8 +557,8 @@ void render_3d_terrain_short_texture_xy_word_colour_strip ( int num_points, terr
 		asm_convert_float_to_int ( ( current_terrain_type_class->green * terrain_3d_transformed_point_normals[normal_index].g ), &green );
 		asm_convert_float_to_int ( ( current_terrain_type_class->blue * terrain_3d_transformed_point_normals[normal_index].b ), &blue );
 
-		destination_vertices[count].color = RGB_MAKE ( red, green, blue );
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].color = D3DCOLOR_XRGB ( red, green, blue );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -603,11 +603,11 @@ void render_3d_terrain_short_texture_xy_byte_colour_strip ( int num_points, terr
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].x ) * xz_texture_scale;
@@ -623,8 +623,8 @@ void render_3d_terrain_short_texture_xy_byte_colour_strip ( int num_points, terr
 		asm_convert_float_to_int ( ( current_terrain_type_class->green * terrain_3d_transformed_point_normals[normal_index].g ), &green );
 		asm_convert_float_to_int ( ( current_terrain_type_class->blue * terrain_3d_transformed_point_normals[normal_index].b ), &blue );
 
-		destination_vertices[count].color = RGB_MAKE ( red, green, blue );
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].color = D3DCOLOR_XRGB ( red, green, blue );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -669,11 +669,11 @@ void render_3d_terrain_short_texture_zy_word_colour_strip ( int num_points, terr
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].z ) * xz_texture_scale;
@@ -689,8 +689,8 @@ void render_3d_terrain_short_texture_zy_word_colour_strip ( int num_points, terr
 		asm_convert_float_to_int ( ( current_terrain_type_class->green * terrain_3d_transformed_point_normals[normal_index].g ), &green );
 		asm_convert_float_to_int ( ( current_terrain_type_class->blue * terrain_3d_transformed_point_normals[normal_index].b ), &blue );
 
-		destination_vertices[count].color = RGB_MAKE ( red, green, blue );
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].color = D3DCOLOR_XRGB ( red, green, blue );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -735,11 +735,11 @@ void render_3d_terrain_short_texture_zy_byte_colour_strip ( int num_points, terr
 
 		float
 			y;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
-	
+
 		y = terrain_3d_current_sector_minimum_height + ( ( ( float ) current_terrain_points_y[this_point].y ) * TERRAIN_3D_Y_SCALE ) * terrain_3d_current_sector_height_difference;
 
 		destination_vertices[count].tu = (  current_terrain_points_xz[this_point].z ) * xz_texture_scale;
@@ -755,8 +755,8 @@ void render_3d_terrain_short_texture_zy_byte_colour_strip ( int num_points, terr
 		asm_convert_float_to_int ( ( current_terrain_type_class->green * terrain_3d_transformed_point_normals[normal_index].g ), &green );
 		asm_convert_float_to_int ( ( current_terrain_type_class->blue * terrain_3d_transformed_point_normals[normal_index].b ), &blue );
 
-		destination_vertices[count].color = RGB_MAKE ( red, green, blue );
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].color = D3DCOLOR_XRGB ( red, green, blue );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_strip_primitive ( num_points, destination_vertices );
@@ -800,9 +800,9 @@ void render_3d_terrain_water_short_word_fan ( int num_points, terrain_3d_point_w
 
 		real_colour
 			colour;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
 
 		u = ( current_terrain_points_xz[this_point].x ) * texture_scale;
@@ -820,7 +820,7 @@ void render_3d_terrain_water_short_word_fan ( int num_points, terrain_3d_point_w
 		destination_vertices[count].sz = polygon_zdistance_bias - q;
 		destination_vertices[count].rhw = q;
 		destination_vertices[count].color = colour.colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_fan_primitive ( num_points, destination_vertices );
@@ -857,9 +857,9 @@ void render_3d_terrain_water_short_byte_fan ( int num_points, terrain_3d_point_b
 
 		real_colour
 			colour;
-	
+
 		this_point = reference_points[count].point;
-	
+
 		vert = &( ( short_vertex * ) transformed_3d_points ) [ this_point ];
 
 		destination_vertices[count].tu = ( current_terrain_points_xz[this_point].x ) * texture_scale;
@@ -872,7 +872,7 @@ void render_3d_terrain_water_short_byte_fan ( int num_points, terrain_3d_point_b
 		colour.colour = vert->colour;
 		colour.alpha = 255;
 		destination_vertices[count].color = colour.colour;
-		destination_vertices[count].specular = RGBA_MAKE ( vert->specular, vert->specular, vert->specular, vert->fog );
+		destination_vertices[count].specular = D3DCOLOR_RGBA ( vert->specular, vert->specular, vert->specular, vert->fog );
 	}
 
 	draw_fan_primitive ( num_points, destination_vertices );

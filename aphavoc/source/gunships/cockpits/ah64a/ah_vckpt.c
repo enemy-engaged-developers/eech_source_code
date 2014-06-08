@@ -421,17 +421,6 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 	ASSERT (display_viewpoint);
 
-	if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
-	{
-		display_viewpoint->x = 0.0;
-		display_viewpoint->y = 0.0;
-		display_viewpoint->z = 0.0;
-
-		get_local_entity_attitude_matrix (get_gunship_entity (), display_viewpoint->attitude);
-
-		return;
-	}
-
 	if (mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
 	{
 		index = OBJECT_3D_SUB_OBJECT_APACHE_COCKPIT_LHS_MFD_CAMERA;
@@ -967,7 +956,6 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
 
 	if
 	(
-		(d3d_can_render_to_texture) &&
 		//always draw fillet not only with tads
 		//(get_ah64a_tads_display_visible ()) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
@@ -1292,6 +1280,7 @@ void draw_ah64a_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		}
 	}
 
+#if 0
 	////////////////////////////////////////
 	//
 	// rendered wiper
@@ -1312,6 +1301,7 @@ void draw_ah64a_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 			}
 		}
 	}
+#endif
 
 	////////////////////////////////////////
 	//

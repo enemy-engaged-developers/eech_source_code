@@ -377,7 +377,7 @@ void set_attack_guide_move_six_position (entity *en)
 
 	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
 	
-	weapon_effective_range = max(1500, weapon_database [selected_weapon].effective_range);
+	weapon_effective_range = max(1500.0f, weapon_database [selected_weapon].effective_range);
 
 	//
 	// calculate position of targets "six"
@@ -395,7 +395,7 @@ void set_attack_guide_move_six_position (entity *en)
 
 	bound_position_to_adjusted_map_volume (&position);
 
-	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y + 20.0, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
+	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y + 20.0f, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
 
@@ -464,7 +464,7 @@ void set_attack_guide_move_circle_position (entity *en)
 	else
 		rotate_2d_vector (&direction, frand1() * rad (90.0));
 
-	distance = max(frand1() * distance, 300);
+	distance = max(frand1() * distance, 300.0);
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);
@@ -570,7 +570,7 @@ void set_attack_guide_fire_intercept_position (entity *en)
 	if (weapon_database [selected_weapon].guidance_type)
 	{
 		time = target_range / (0.75 * weapon_database[selected_weapon].cruise_velocity);
-		lead_distance = min (time * get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY), 500);
+		lead_distance = min (time * get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY), 500.0f);
 
 		position.x = 0.0;
 		position.y = 0.0;

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -137,7 +137,7 @@ static void show_stats_objectives_page (void)
 	char
 		s [128];
 
-	side = get_global_gunship_side (); 
+	side = get_global_gunship_side ();
 
 	en = get_local_force_entity ((entity_sides) side);
 
@@ -155,7 +155,7 @@ static void show_stats_objectives_page (void)
 	while (objective)
 	{
 		ASSERT (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE);
-		
+
 		sub_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if (keysite_database [sub_type].troop_insertion_target)
@@ -220,7 +220,7 @@ static void show_stats_objectives_page (void)
 
 			set_ui_object_text_justify (new_item, TEXT_JUSTIFY_LEFT_CENTRE);
 		}
-		
+
 		objective = get_local_entity_child_succ (objective, LIST_TYPE_CAMPAIGN_OBJECTIVE);
 	}
 }
@@ -273,9 +273,9 @@ static void draw_stats_page_colour_bar (ui_object *obj, texture_graphic *graphic
 	//
 	// Always have to render to the video screen
 	//
-		
+
 	ASSERT ( active_screen == video_screen );
-	
+
 	if (w >= 0)
 	{
 		tx1 = x1;
@@ -297,7 +297,7 @@ static void draw_stats_page_colour_bar (ui_object *obj, texture_graphic *graphic
 	colour.green = 255;
 	colour.blue = 255;
 	colour.alpha = 255;
-	
+
 	ui_draw_texture_graphic (sx1, sy1, sx2, sy2, graphic, colour);
 }
 
@@ -329,9 +329,9 @@ static void draw_stats_page_solid_bar (ui_object *obj, texture_graphic *graphic,
 	//
 	// Always have to render to the video screen
 	//
-		
+
 	ASSERT ( active_screen == video_screen );
-	
+
 	colour.red = 255;
 	colour.green = 255;
 	colour.blue = 255;
@@ -339,7 +339,7 @@ static void draw_stats_page_solid_bar (ui_object *obj, texture_graphic *graphic,
 
 	sx1 = xmin + 1;
 	sx2 = xmax - 1;
-	
+
 	sy1 = (ymin + (y1 * (ymax - ymin))) + 1;
 	sy2 = (ymin + (y2 * (ymax - ymin))) - 1;
 
@@ -366,9 +366,9 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 
 	texture_graphic
 		*graphic;
-		
+
 	ASSERT (obj);
-	
+
 	x1 = BPOWER_MAIN_AREA_XMIN;
 	x2 = BPOWER_MAIN_AREA_XMAX;
 
@@ -385,24 +385,24 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 	if (total > 0)
 	{
 		w = c / t;
-	
+
 		if (side != this_side)
 		{
 			w = -w;
 		}
-	
+
 		switch (side)
 		{
 			case ENTITY_SIDE_BLUE_FORCE:
 			{
 				graphic = blue_bar_graphic;
-	
+
 				break;
 			}
 			case ENTITY_SIDE_RED_FORCE:
 			{
 				graphic = red_bar_graphic;
-	
+
 				break;
 			}
 			default:
@@ -410,7 +410,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 				debug_fatal ("CA_STAT: Invalid side %d for balance of power bar", side);
 			}
 		}
-	
+
 		draw_stats_page_colour_bar (obj, graphic, x1, y1, x2, y2, w);
 	}
 	else
@@ -424,7 +424,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 	ASSERT (index >= 0);
 
 	if (total > 0)
-	{	
+	{
 		sprintf (s, "%.0f%%", (100.0 * c / t));
 	}
 	else
@@ -461,9 +461,9 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 
 	texture_graphic
 		*graphic;
-		
+
 	ASSERT (obj);
-	
+
 	x1 = BPOWER_MAIN_AREA_XMIN;
 	x2 = BPOWER_MAIN_AREA_XMAX;
 
@@ -478,24 +478,24 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 	if (total > 0)
 	{
 		w = c / t;
-	
+
 		if (side != this_side)
 		{
 			w = -w;
 		}
-	
+
 		switch (side)
 		{
 			case ENTITY_SIDE_BLUE_FORCE:
 			{
 				graphic = blue_bar_graphic;
-	
+
 				break;
 			}
 			case ENTITY_SIDE_RED_FORCE:
 			{
 				graphic = red_bar_graphic;
-	
+
 				break;
 			}
 			default:
@@ -503,12 +503,12 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 				debug_fatal ("CA_STAT: Invalid side %d for balance of power bar", side);
 			}
 		}
-	
+
 		draw_stats_page_colour_bar (obj, graphic, x1, y1, x2, y2, w);
 	}
-	
+
 	if (total > 0)
-	{	
+	{
 		sprintf (s, "%.0f%%", (100.0 * c / t));
 	}
 	else
@@ -556,7 +556,7 @@ static void update_stats_page_balance_of_power_objects (ui_object *obj, void *ar
 
 	float
 		y1, y2, dy;
-		
+
 	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	this_force = get_local_force_entity (this_side);
@@ -744,19 +744,19 @@ void notify_page_objective_highlight_function (ui_object *obj, void *arg)
 
 	if ((int) arg == BUTTON_STATE_DOWN)
 	{
-	
+
 		objective = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
-	
+
 		if (objective)
 		{
 			ASSERT (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE);
-		
+
 			keysite_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
-		
+
 			if (get_objective_briefing_text (objective, keysite_type, text))
 			{
 				ui_object_destroy_list_items (page_objective_description_list);
-		
+
 				add_to_pop_up_list_with_word_wrap (text, page_objective_description_list, NULL, 0, UI_FONT_ARIAL_10, ui_ingame_dead_text_colour);
 			}
 			else
@@ -791,7 +791,7 @@ static void notify_page_objective_select_function (ui_object *obj, void *arg)
 		ASSERT (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE);
 
 		sub_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 		force_map_layer_control_object ((map_layer_control_types) keysite_database [sub_type].map_layer_type, TRUE);
 
 		set_campaign_map_origin (objective);
@@ -822,9 +822,9 @@ void define_campaign_screen_stats_page_objects (void)
 	int
 		loop;
 
-	solid_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd");
-	red_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\redbar.psd");
-	blue_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\bluebar.psd");
+	solid_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd", 1);
+	red_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\redbar.psd", 1);
+	blue_bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\bluebar.psd", 1);
 
 	/////////////////////////////////////////////////////////////////
 	// Main Page Area
@@ -860,12 +860,12 @@ void define_campaign_screen_stats_page_objects (void)
 			UI_ATTR_PARENT (page),
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\baltitle.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\baltitle.psd", 0)),
 			UI_ATTR_END
 		);
 
 	sprintf (string, " %s:", get_trans ("Balance of Power"));
-	
+
 	x1 = 0.000;
 	y1 = 0.172;
 	x2 = 0.442;
@@ -915,14 +915,14 @@ void define_campaign_screen_stats_page_objects (void)
 			UI_ATTR_PARENT (page_balance_area),
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\bpower.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\bpower.psd", 0)),
 			UI_ATTR_END
 		);
 
 	//
 	// Sector sides
 	//
-	
+
 	y1 = BPOWER_SIDE_AREA_YMIN;
 	y2 = BPOWER_SIDE_AREA_YMAX;
 
@@ -999,14 +999,14 @@ void define_campaign_screen_stats_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Objectives
-	
+
 	x1 = 0.040;
-	y1 = 0.340;
+	y1 = 0.334;
 	x2 = 0.49;
-	y2 = 0.334;
+	y2 = 0.380;
 
 	sprintf (string, "%s:", get_trans ("Objectives"));
-	
+
 	create_ui_object
 		(
 			UI_TYPE_AREA,
@@ -1052,7 +1052,7 @@ void define_campaign_screen_stats_page_objects (void)
 			UI_ATTR_HIGHLIGHTED_NOTIFY_ON (NOTIFY_TYPE_BUTTON_EITHER),
 			UI_ATTR_HIGHLIGHTED_FONT_TYPE (UI_FONT_ARIAL_14),
 			UI_ATTR_HIGHLIGHTED_FONT_COLOUR (ui_ingame_highlight_text_colour.r, ui_ingame_highlight_text_colour.g, ui_ingame_highlight_text_colour.b, ui_ingame_highlight_text_colour.a),
-			UI_ATTR_FUNCTION (notify_page_objective_select_function), 
+			UI_ATTR_FUNCTION (notify_page_objective_select_function),
 			UI_ATTR_CLEAR (TRUE),
 			UI_ATTR_END
 		);
@@ -1156,6 +1156,31 @@ void define_campaign_screen_stats_page_objects (void)
 	// BACK button
 
 	define_campaign_page_back_button (page, &page_back_button);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void undefine_campaign_screen_stats_page_objects (void)
+{
+	if ( solid_bar_graphic )
+	{
+		destroy_texture_graphic ( solid_bar_graphic );
+		solid_bar_graphic = NULL;
+	}
+
+	if ( red_bar_graphic )
+	{
+		destroy_texture_graphic ( red_bar_graphic );
+		red_bar_graphic = NULL;
+	}
+
+	if ( blue_bar_graphic )
+	{
+		destroy_texture_graphic ( blue_bar_graphic );
+		blue_bar_graphic = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

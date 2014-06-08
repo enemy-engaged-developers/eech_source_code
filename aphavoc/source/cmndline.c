@@ -155,12 +155,7 @@ int
 	command_line_3d_reset									= FALSE,
 	command_line_force_resolution							= FALSE,
 	command_line_3d_visual_clear_edges						= FALSE,
-	command_line_cpu_blit_textures							= FALSE,
-	command_line_d3d_use_texture_management				= FALSE, //VJ 030511 changed to FALSE, was TRUE,
 	command_line_no_hardware_tnl								= FALSE,
-	command_line_no_dx9zbuffer_fix							= FALSE,
-	command_line_no_render_to_texture						= FALSE,
-	command_line_display_bpp									= 32, // Casm 03MAR10 32 bits by default
 	command_line_max_smoke_time								= 30,
 	command_line_smoke_optimization							= 1,
 	command_line_cloud_puffs								= 1, // Casm 20MAY2012
@@ -277,7 +272,7 @@ int
 	command_line_export_mfd_right_pos[4]				={384,0,640,256},
 	command_line_export_mfd_single_pos[4]				={0,0,256,256},
 	command_line_ui_sounds_muted = FALSE, //ataribaby 29/12/2008 for muted UI sounds
-	command_line_radio_msgs_noise = TRUE;		
+	command_line_radio_msgs_noise = TRUE;
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -306,7 +301,7 @@ float
 	command_line_smoke_effectiveness							= 1.0,
 	command_line_g_force_head_movment_modifier					= 1.0,
 	command_line_cockpit_vibrations								= 1.1,
-	command_line_flyby_timer_multiplier							= 1.0,		
+	command_line_flyby_timer_multiplier							= 1.0,
 	global_night_light_level					= 0.75,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0,	// VJ 050126 hud mod: size
 	global_mfd_size								= 1.0;

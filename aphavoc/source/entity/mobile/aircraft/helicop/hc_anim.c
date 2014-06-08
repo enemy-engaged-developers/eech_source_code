@@ -139,10 +139,11 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		search_main_rotor_blade_section_static_depth,
 		search_main_rotor_blade_moving_depth,
 		ejected,
-		last_moving_blade_state,
 		blades_dissolve;
 	
-	unsigned int subtype;
+	unsigned int
+		last_moving_blade_state,
+		subtype;
 
 	float
 		main_rotor_direction,
@@ -207,7 +208,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
 	main_rotor_rpm = bound (main_rotor_rpm * (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) != OPERATIONAL_STATE_DEAD), 0.0, 100.0); // stop spinning if heli destroyed
-	main_rotor_blade_coning_angle = max (0.5 * main_rotor_blade_coning_angle, 0.0f);
+	main_rotor_blade_coning_angle = max (0.5f * main_rotor_blade_coning_angle, 0.0f);
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
 	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE) * 0.75;
@@ -275,9 +276,9 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 			real_rotor_rpm = 180;
 	}
 		
-	main_rotor_delta_heading = min(real_rotor_rpm * PI2 * main_rotor_rpm / 6000 * get_delta_time (), PI2 / quantity_of_roots[subtype] * quantity_of_shafts[subtype] / 3.75);
+	main_rotor_delta_heading = min(real_rotor_rpm * PI2 * main_rotor_rpm / 6000 * get_delta_time (), PI2 / quantity_of_roots[subtype] * quantity_of_shafts[subtype] / 3.75f);
 
-	main_rotor_blade_droop_angle *= max (1.0 - main_rotor_rpm / 60, - 0.1);
+	main_rotor_blade_droop_angle *= max (1.0f - main_rotor_rpm / 60, - 0.1f);
 
 	// stop rotors from spinning if paused ( but must still switch the correct objects on and off )
 
@@ -339,7 +340,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 								search_main_rotor_blade_moving.result_sub_object->visible_object = last_moving_blade_state = 0;
 							else
 								search_main_rotor_blade_moving.result_sub_object->visible_object = (main_rotor_rpm >= 50);
-							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50) / 100, 0);
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50) / 100, 0.0f);
 							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.1;
 							if (search_main_rotor_blade_moving.result_sub_object->visible_object < last_moving_blade_state)
 								start_wind_down_sound = TRUE;							
@@ -1139,7 +1140,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 
 														blade_direction.x = main_rotor_direction;
 														blade_direction.y = blade_direction.z = 0;
-														multiply_matrix3x3_vec3d(&blade_direction, &blade_vp.attitude, &blade_direction);
+														multiply_matrix3x3_vec3d(&blade_direction, blade_vp.attitude, &blade_direction);
 														add_dynamic_force ("Rotor blade damage", 0.000005 * current_flight_dynamics->main_rotor_rpm.value, 0, &blade_vp.position, &blade_direction, FALSE);
 														#if DEBUG_MODULE
 															create_vectored_debug_3d_object (&blade_vp.position, &blade_direction, OBJECT_3D_ARROW_FORCES, 10, 5.0);

@@ -85,8 +85,6 @@ ui_object
 	*gunship_screen_waiting_area,
 	*gunship_screen_waiting_area_text;
 
-texture_graphic
-	*gunships_screen_graphic = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,21 +508,7 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 
 		process_game_initialisation_phases ();
 
-		blit_front_buffer_to_render_buffer ();
-
-		if ( gunships_screen_graphic )
-		{
-
-			destroy_texture_graphic ( gunships_screen_graphic );
-
-			gunships_screen_graphic = NULL;
-		}
-
-		free_all_hardware_textures ();
-
-		gunships_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\gunship.psd" );
-
-		set_ui_object_texture_graphic ( gunships_screen, gunships_screen_graphic );
+		set_ui_object_texture_graphic ( gunships_screen, create_texture_graphic ( "graphics\\ui\\cohokum\\gunship.psd", 0 ) );
 
 		reset_time_values ( gunships_screen );
 
@@ -534,17 +518,6 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 		// 3d object is shown
 		// VJ 050116 custom texture mod
 		load_warzone_override_textures ();
-	}
-	else
-	{
-
-		if ( gunships_screen_graphic )
-		{
-
-			destroy_texture_graphic ( gunships_screen_graphic );
-
-			gunships_screen_graphic = NULL;
-		}
 	}
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
@@ -874,7 +847,9 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			obj_x2,
 			obj_y2,
 			obj_size_x,
-			obj_size_y;
+			obj_size_y,
+			width_view_angle,
+			height_view_angle;
 
 		obj_x1 = get_ui_object_x (obj);
 		obj_y1 = get_ui_object_y (obj);
@@ -890,11 +865,12 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 //		set_3d_viewcone ( main_3d_env, obj_size_x, obj_size_y, rad ( 59.99 ), rad ( 46.82 ) );
 
-		set_3d_viewport ( main_3d_env, 0, 0, ( float ) application_video_width - 0.001, ( float ) application_video_height - 0.001 );
+		set_3d_viewport ( main_3d_env, 0, 0, application_video_width, application_video_height );
 
 		set_3d_origin ( main_3d_env, application_video_width /2, application_video_height/2 );
 
-		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99 ), get_height_view_angle ( rad ( 59.99 ) ) );
+		calc_view_angles ( rad ( 59.99 ), &width_view_angle, &height_view_angle );
+		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, width_view_angle, height_view_angle );
 #if RECOGNITION_GUIDE
 		set_3d_view_distances ( main_3d_env, 10000.0, 100.0, 1.0, 0.0 );
 #else
@@ -1007,7 +983,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
 
 		// disable weapons
-		
+
 		while ( find_object_3d_sub_object ( &result_sub_obj ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 			object_3d_sub_instance
@@ -1032,12 +1008,12 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 			result_sub_obj.search_depth++;
 		}
-		
+
 		// disable moving and adjust static rotor blades
-		
+
 		result_sub_obj.search_depth = 0;
 		result_sub_obj.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_HEADING_NULL;
-				
+
 		while ( find_object_3d_sub_object ( &result_sub_obj ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 			object_3d_sub_object_search_data
@@ -1090,9 +1066,9 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_PILOT, FALSE);
 		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
 		set_sub_object_type_visible_status (apache, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_MOVING, FALSE);
-	
+
 		animate_entity_simple_keyframed_sub_objects( apache, OBJECT_3D_SUB_OBJECT_UNDERCARRIAGE, 1);
-		
+
 		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
 		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
 		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
@@ -1103,7 +1079,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
 		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
 	}
-		
+
 	apache->vp.x = 0;
 	apache->vp.y = 2.2;
 	apache->vp.z = 25;

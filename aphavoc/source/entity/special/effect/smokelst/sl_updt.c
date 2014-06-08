@@ -315,7 +315,7 @@ int update_smoke( entity *en )
 			matrix3x3
 				attitude;
 
-			get_local_entity_attitude_matrix(raw->eff.special_effect_link.parent, &attitude);
+			get_local_entity_attitude_matrix(raw->eff.special_effect_link.parent, attitude);
 
 			if (!raw->alive_count && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL && smoke_list_draw_mode( smoke_type ) == SMOKE_DRAW_TYPE_TRAILS) // move 1st trail point backward
 				motion_vector.z = - 20;
@@ -324,7 +324,7 @@ int update_smoke( entity *en )
 			else if (smoke_type == SMOKE_LIST_TYPE_REAR_SHIP_WAKE || smoke_type == SMOKE_LIST_TYPE_FRONT_SHIP_WAKE) // move ship wake backward
 				motion_vector.z = - 10;
 
-			multiply_matrix3x3_vec3d(&motion_vector, &attitude, &motion_vector);
+			multiply_matrix3x3_vec3d(&motion_vector, attitude, &motion_vector);
 
 			motion_vector.y /= 2.5; // can't find what is wrong..
 		}

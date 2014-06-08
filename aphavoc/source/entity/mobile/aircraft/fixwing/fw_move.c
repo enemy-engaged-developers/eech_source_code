@@ -1820,7 +1820,7 @@ void basic_fixed_wing_movement_absolute (entity *en)
 		new_pos,
 		*current_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing*) get_local_entity_data (en);
 
 	//
 	// abort if mobile is not moving (i.e. landed, or dead)
@@ -2289,7 +2289,7 @@ void basic_fixed_wing_death_movement (entity *en)
 						create_client_server_collision_effect (&temp_pos, DYNAMICS_COLLISION_SURFACE_GROUND, power);
 						
 						if (power > 1)
-							create_client_server_crater (CRATER_TYPE_SMALL_EXPLOSION + (power - 2), pos);
+							create_client_server_crater ((crater_types)(CRATER_TYPE_SMALL_EXPLOSION + (power - 2)), pos);
 
 						break;
 					}
@@ -2608,9 +2608,9 @@ void fixed_wing_crash_movement (entity *en)
 	{
 		normalise_3d_vector_given_magnitude (velocity, speed);
 
-		horizontal_speed -= (max (8 * horizontal_speed, 10.0) * get_entity_movement_delta_time());
+		horizontal_speed -= (max (8.0f * horizontal_speed, 10.0f) * get_entity_movement_delta_time());
 		
-		horizontal_speed = max(horizontal_speed, 0);
+		horizontal_speed = max(horizontal_speed, 0.0f);
 		
 		velocity->x *= horizontal_speed;
 		velocity->y = 0.0;

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -95,7 +95,7 @@ static ui_object
 	*page_back_button,
 	*page_member_area,
 	*page_member_list,
-	*page_default_payload_list, 
+	*page_default_payload_list,
 	*page_auw_text,
 	*page_fuel_text,
 	*page_fuel_gauge,
@@ -138,7 +138,7 @@ void show_weapon_loading_page (entity *group, int force_update)
 
 	ui_object
 		*new_item;
-		
+
 	ASSERT (group);
 
 	//
@@ -170,11 +170,11 @@ void show_weapon_loading_page (entity *group, int force_update)
 								get_local_entity_string (member, STRING_TYPE_SHORT_DISPLAY_NAME),
 								get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME));
 			}
-	
+
 			if (get_local_entity_int_value (member, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES)
-			{	
+			{
 				new_item = add_to_pop_up_list (buffer, page_member_list, NULL, get_local_entity_safe_index (member), UI_FONT_ARIAL_14, ui_ingame_live_text_colour);
-		
+
 				set_ui_mouse_over_entity_function (new_item);
 
 				set_ui_object_notify_on (new_item, NOTIFY_TYPE_BUTTON_DOWN);
@@ -185,7 +185,7 @@ void show_weapon_loading_page (entity *group, int force_update)
 
 				set_ui_object_notify_on (new_item, NOTIFY_TYPE_NONE);
 			}
-			
+
 			if (member == get_gunship_entity ())
 			{
 				set_ui_object_state (new_item, UI_OBJECT_STATE_ON);
@@ -249,7 +249,7 @@ void initialise_campaign_screen_weapon_loading_page_objects (void)
 static void update_weapon_loading_page_objects (ui_object *obj, void *arg)
 {
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
-	
+
 	update_common_gauges(get_local_entity_safe_ptr (get_ui_object_item_number (page_member_list)));
 }
 
@@ -279,14 +279,14 @@ static void draw_weapon_loading_gauge (ui_object *obj, float level)
 	//
 	// Always have to render to the video screen
 	//
-		
+
 	ASSERT ( active_screen == video_screen );
-	
+
 	colour.red = 255;
 	colour.green = 255;
 	colour.blue = 255;
 	colour.alpha = 255;
-	
+
 	sx1 = xmin;
 	sx2 = xmax;
 
@@ -316,7 +316,7 @@ static void notify_member_list (ui_object *obj, void *arg)
 	en = get_local_entity_safe_ptr (index);
 
 	ASSERT (en);
-	
+
 	set_ui_object_item_number (page_member_list, index);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
@@ -368,12 +368,12 @@ static void notify_weapon_loading_page_change_weapon (ui_object *obj, void *arg)
 static void toggle_fuel_weight_modifier (ui_object *obj, void *arg)
 {
 	ASSERT (get_gunship_entity());
-	
+
 	if (current_flight_dynamics->fuel_weight.modifier < 1.0)
 		current_flight_dynamics->fuel_weight.modifier += 0.25;
 	else
 		current_flight_dynamics->fuel_weight.modifier = 0.25;
-	
+
 	dynamics_takeoff(); // toggle takeoff-land to start refueling
 }
 
@@ -409,7 +409,7 @@ void update_common_gauges (entity *en)
 	//
 	// Fuel Page (player only)
 	//
-	
+
 	if (en == get_gunship_entity ())
 	{
 		sprintf (buffer, " %.0fkg", get_current_flight_dynamics_fuel_weight ());
@@ -419,7 +419,7 @@ void update_common_gauges (entity *en)
 		set_ui_object_drawable (page_fuel_text, TRUE);
 
 		set_ui_object_drawable (page_fuel_gauge, TRUE);
-		
+
 		draw_weapon_loading_gauge (page_fuel_gauge, get_dynamics_normalised_fuel_value ());
 	}
 	else
@@ -436,7 +436,7 @@ void update_common_gauges (entity *en)
 	set_ui_object_drawable (page_repairing_text, FALSE);
 
 	set_ui_object_drawable (page_repairing_gauge, FALSE);
-		
+
 	if (en == get_gunship_entity ())
 	{
 		int
@@ -453,7 +453,7 @@ void update_common_gauges (entity *en)
 			repair_time = dynamics_damage_database [repair_index].repair_time;
 
 			if (repair_time == 0.0)
-			{		
+			{
 				level = 1.0;
 			}
 			else
@@ -462,7 +462,7 @@ void update_common_gauges (entity *en)
 
 				level = bound (level, 0.0, 1.0);
 			}
-		
+
 			sprintf (buffer, " %s", get_trans (dynamics_damage_database [repair_index].name));
 
 			set_ui_object_text (page_repairing_gauge, buffer);
@@ -470,10 +470,10 @@ void update_common_gauges (entity *en)
 			set_ui_object_drawable (page_repairing_text, TRUE);
 
 			set_ui_object_drawable (page_repairing_gauge, TRUE);
-		
+
 			draw_weapon_loading_gauge (page_repairing_gauge, level);
 		}
-	}	
+	}
 }
 
 static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
@@ -519,7 +519,7 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 
 	//
 	// Set button text
-	//	
+	//
 
 	for (hardpoint_ = 0; hardpoint_ < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint_++)
 	{
@@ -537,7 +537,7 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 			//
 			// Set Text
 			//
-			
+
 			if (weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 			{
 				count = get_weapon_loading_hardpoint_weapon_count (en, hardpoint, weapon_type);
@@ -658,7 +658,7 @@ static void notify_default_payload_list (ui_object *obj, void *arg)
 		config_type;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (page_member_list));
-	
+
 	if (en)
 	{
 		if (get_helicopter_allowed_to_rearm (en))
@@ -666,15 +666,15 @@ static void notify_default_payload_list (ui_object *obj, void *arg)
 			config_type = get_ui_object_item_number (obj);
 
 			if (config_type != ENTITY_INDEX_DONT_CARE)
-			{	
+			{
 				ASSERT (
 							(config_type == INT_TYPE_AIR_TO_SURFACE_WEAPON_CONFIG_TYPE) ||
 							(config_type == INT_TYPE_AIR_TO_AIR_WEAPON_CONFIG_TYPE) ||
 							(config_type == INT_TYPE_SCOUT_WEAPON_CONFIG_TYPE)
 						);
-		
+
 				set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, get_local_entity_int_value (en, config_type));
-		
+
 				if (get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES) // no need to do it for default helicopters
 					weapon_loading_update_currently_selected_weapons (en);
 
@@ -748,7 +748,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 		*page,
 		*gunship_page;
 
-	bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\fuelrep.psd");
+	bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\fuelrep.psd", 1);
 
 	/////////////////////////////////////////////////////////////////
 	// Main Page Area
@@ -776,7 +776,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	//
 	// Clear buttons
 	//
-	
+
 	for (loop = 0; loop < NUM_GUNSHIP_TYPES; loop++)
 	{
 		for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint ++)
@@ -812,14 +812,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	}
 
 	/////////////////////////////////////////////////////////////////
-	// APACHE PAGE 
+	// APACHE PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_APACHE;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payapa.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payapa.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -830,14 +830,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
 
 	/////////////////////////////////////////////////////////////////
-	// HAVOC PAGE 
+	// HAVOC PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_HAVOC;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhav.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhav.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.664, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -848,14 +848,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.887, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
 
 	/////////////////////////////////////////////////////////////////
-	// COMANCHE PAGE 
+	// COMANCHE PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_COMANCHE;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paycom.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paycom.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.599, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -875,7 +875,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhok.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhok.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.650, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -887,14 +887,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	////Moje 030519 Start
 	/////////////////////////////////////////////////////////////////
-	// BLACKHAWK PAGE 
+	// BLACKHAWK PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_BLACKHAWK;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paybla.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paybla.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
 
@@ -902,14 +902,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	////Moje 030519 End
 	////Moje 030613 start
 	/////////////////////////////////////////////////////////////////
-	// HIND PAGE 
+	// HIND PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_HIND;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhin.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhin.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -922,14 +922,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	////Moje 030817 start
 	/////////////////////////////////////////////////////////////////
-	// AH64A PAGE 
+	// AH64A PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_AH64A;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payah6.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payah6.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -947,7 +947,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payka5.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payka5.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.650, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -958,16 +958,16 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
 
 	////Moje 030816 end
-	
+
 	/////////////////////////////////////////////////////////////////
-	// VIPER PAGE 
+	// VIPER PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_VIPER;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payvip.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payvip.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
 
@@ -978,14 +978,14 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
 
 	/////////////////////////////////////////////////////////////////
-	// KIOWA PAGE 
+	// KIOWA PAGE
 	/////////////////////////////////////////////////////////////////
 
 	gunship = GUNSHIP_TYPE_KIOWA;
 
 	gunship_page = weapon_loading_page [gunship];
 
-	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paykio.psd"));
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paykio.psd", 0));
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.902, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
@@ -1150,7 +1150,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
 				UI_ATTR_FUNCTION (toggle_fuel_weight_modifier),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\smallbar.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\smallbar.psd", 0)),
 				UI_ATTR_FONT_COLOUR (ui_ingame_dead_text_colour.r, ui_ingame_dead_text_colour.g, ui_ingame_dead_text_colour.b, ui_ingame_dead_text_colour.a),
 				UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_10),
 				UI_ATTR_ITEM_NUMBER (ENTITY_INDEX_DONT_CARE),
@@ -1168,7 +1168,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	y2 = 0.800;
 
 	sprintf (string, "%s:", get_trans ("Repairing"));
-	
+
 	page_repairing_text = create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1194,7 +1194,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\smallbar.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\smallbar.psd", 0)),
 				UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_10),
 				UI_ATTR_FONT_COLOUR (ui_ingame_dead_text_colour.r, ui_ingame_dead_text_colour.g, ui_ingame_dead_text_colour.b, ui_ingame_dead_text_colour.a),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -1257,6 +1257,19 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	// BACK button
 
 	define_campaign_page_back_button (page, &page_back_button);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void undefine_campaign_screen_weapon_loading_page_objects (void)
+{
+	if ( bar_graphic )
+	{
+		destroy_texture_graphic ( bar_graphic );
+		bar_graphic = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

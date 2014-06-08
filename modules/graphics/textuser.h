@@ -66,8 +66,6 @@
 
 #define MAX_TEXTURES 8192
 
-#define MAX_TEXTURES_PALETTES 128 // Jabberwock 040213 - Testing for texture related CTDs
-
 #define MAX_HARDWARE_TEXTURES 512
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,18 +73,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
-	number_of_system_textures,
-	number_of_system_texture_palettes;
-
-extern PALETTEENTRY
-	system_texture_colour_tables[MAX_TEXTURES_PALETTES][256];
+	number_of_system_textures;
 
 extern struct SCREEN
 	*system_textures[MAX_TEXTURES],
 	//VJ 050116 custom texture mod: backup textures to restore default
 	*backup_system_textures[MAX_TEXTURES];
-	// this does not seem to be used!
-	//*application_textures[MAX_TEXTURES];
 
 extern char
 	system_texture_names[MAX_TEXTURES][128];
@@ -182,23 +174,28 @@ extern void recreate_agp_memory_textures ( void );
 
 extern BOOL load_texturemap_data ( const char *texture_binary_filename );
 
+extern void unload_texturemap_data ( void );
+
 extern int get_system_texture_index ( const char *name );
 
-extern struct SCREEN *create_texture_map ( int width, int height, texture_map_types type, int number_of_mipmaps, LPDIRECTDRAWPALETTE texture_palette, PALETTEENTRY *texture_colour_table );
+extern struct SCREEN *create_texture_map ( int width, int height, texture_map_types type, int number_of_mipmaps );
 
 extern struct SCREEN *get_system_texture_ptr ( int index );
 
-extern int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, enum SCREEN_FORMAT_TYPES type );
+extern void create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, enum TEXTURE_MAP_TYPES type );
 
 extern const char *get_system_texture_name ( int index );
 
 extern void report_system_texture_stats ( void );
 
-extern struct TEXTURE_GRAPHIC *create_texture_graphic ( const char *filename );
+extern screen *load_bmp_file_screen (const char *full_override_texture_filename);
+
+extern struct TEXTURE_GRAPHIC *create_texture_graphic ( const char *filename, int ref_count );
+
+extern struct TEXTURE_GRAPHIC *texture_graphic_addref ( struct TEXTURE_GRAPHIC *graphic );
 
 extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 
-extern screen *load_bmp_file_screen (const char *full_override_texture_filename);
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
 
 //VJ 050116 custom texture mod: all functions are in textuser.c except for this one

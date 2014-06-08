@@ -264,16 +264,6 @@ void application_main (int argc, char **argv)
 		d3d_use_dx_pipeline = TRUE;
 	}
 
-	full_screen_colourdepth = command_line_display_bpp;
-
-	debug_log ("Set colour depth to %d", full_screen_colourdepth );
-
-	d3d_override_render_to_texture = command_line_no_render_to_texture;
-
-	//set_ddraw_use_double_buffering ( TRUE );
-	//set_ddraw_use_software_driver ( FALSE );
-	//set_ddraw_use_system_memory ( FALSE );
-	//set_ddraw_use_z_buffer ( TRUE );
 	set_ddraw_use_full_screen ( command_line_full_screen );
 
 	{
@@ -305,59 +295,7 @@ void application_main (int argc, char **argv)
 
 		if ( !graphics_initialised )
 		{
-
-			switch ( direct_draw_initialisation_error )
-			{
-
-				case DDRAW_INIT_UNABLE_TO_ENUMERATE:
-				{
-
-					debug_fatal ( "Unable to look for video card.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-
-				case DDRAW_INIT_UNABLE_TO_CREATE_DDRAW:
-				{
-
-					debug_fatal ( "Unable to access video card.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-
-				case DDRAW_INIT_UNABLE_TO_CREATE_DDRAW4:
-				{
-
-					debug_fatal ( "Unable to access DirectX6 drivers.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-
-				case DDRAW_INIT_UNABLE_TO_ENUMERATE_DISPLAY_MODES:
-				{
-
-					debug_fatal ( "Unable to access DirectX6 drivers.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-
-				case DDRAW_INIT_NO_3D_CARD:
-				{
-
-					debug_fatal ( "Unable to find a 3D graphics card.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-
-				case DDRAW_INIT_OK:
-				default:
-				{
-
-					debug_fatal ( "Unable to initialise a 3d video card.\n\nPlease ensure you have the latest drivers\nfor your 3d card and have installed\nDirectX 6" );
-
-					break;
-				}
-			}
+			debug_fatal ( "Graphics initialisation failure" );
 		}
 	}
 
@@ -446,55 +384,51 @@ void application_main (int argc, char **argv)
 		// These are the supported screen resolutions for windowed mode, where we can't query DirectX for supported screen dimensions
 		//
 
-		number_of_graphics_resolution_modes_available = 12;
+		number_of_graphics_resolution_modes_available = 11;
 
-		graphics_resolution_modes_available[0].width = 640;
-		graphics_resolution_modes_available[0].height = 480;
+		graphics_resolution_modes_available[0].width = 800;
+		graphics_resolution_modes_available[0].height = 600;
 		graphics_resolution_modes_available[0].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[1].width = 800;
-		graphics_resolution_modes_available[1].height = 600;
+		graphics_resolution_modes_available[1].width = 1024;
+		graphics_resolution_modes_available[1].height = 768;
 		graphics_resolution_modes_available[1].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[2].width = 1024;
-		graphics_resolution_modes_available[2].height = 768;
+		graphics_resolution_modes_available[2].width = 1280; //Werewolf
+		graphics_resolution_modes_available[2].height = 800;
 		graphics_resolution_modes_available[2].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[3].width = 1280; //Werewolf
-		graphics_resolution_modes_available[3].height = 800;
+		graphics_resolution_modes_available[3].width = 1280;
+		graphics_resolution_modes_available[3].height = 960;
 		graphics_resolution_modes_available[3].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[4].width = 1280;
-		graphics_resolution_modes_available[4].height = 960;
+		graphics_resolution_modes_available[4].width = 1280; //Werewolf
+		graphics_resolution_modes_available[4].height = 1024;
 		graphics_resolution_modes_available[4].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[5].width = 1280; //Werewolf
-		graphics_resolution_modes_available[5].height = 1024;
+		graphics_resolution_modes_available[5].width = 1680; //Werewolf
+		graphics_resolution_modes_available[5].height = 900;
 		graphics_resolution_modes_available[5].compressed_texture_mode = FALSE;
 
 		graphics_resolution_modes_available[6].width = 1680; //Werewolf
-		graphics_resolution_modes_available[6].height = 900;
+		graphics_resolution_modes_available[6].height = 1050;
 		graphics_resolution_modes_available[6].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[7].width = 1680; //Werewolf
-		graphics_resolution_modes_available[7].height = 1050;
+		graphics_resolution_modes_available[7].width = 1600;
+		graphics_resolution_modes_available[7].height = 1200;
 		graphics_resolution_modes_available[7].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[8].width = 1600;
-		graphics_resolution_modes_available[8].height = 1200;
+		graphics_resolution_modes_available[8].width = 1920;
+		graphics_resolution_modes_available[8].height = 1080;
 		graphics_resolution_modes_available[8].compressed_texture_mode = FALSE;
 
 		graphics_resolution_modes_available[9].width = 1920;
-		graphics_resolution_modes_available[9].height = 1080;
+		graphics_resolution_modes_available[9].height = 1200;
 		graphics_resolution_modes_available[9].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[10].width = 1920;
-		graphics_resolution_modes_available[10].height = 1200;
+		graphics_resolution_modes_available[10].width = 2048;
+		graphics_resolution_modes_available[10].height = 1536;
 		graphics_resolution_modes_available[10].compressed_texture_mode = FALSE;
-
-		graphics_resolution_modes_available[11].width = 2048;
-		graphics_resolution_modes_available[11].height = 1536;
-		graphics_resolution_modes_available[11].compressed_texture_mode = FALSE;
 	}
 
 	//
@@ -512,21 +446,21 @@ void application_main (int argc, char **argv)
 		if ( index != -1 )
 		{
 
-			ddraw_set_display_resolution (get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height (), full_screen_colourdepth, DISPLAY_FULLSCREEN );
+			ddraw_set_display_resolution (get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height () );
 		}
 		else
 		{
 
-			set_global_3d_visual_screen_width ( 640 );
+			set_global_3d_visual_screen_width ( 800 );
 
-			set_global_3d_visual_screen_height ( 480 );
+			set_global_3d_visual_screen_height ( 600 );
 
-			ddraw_set_display_resolution ( get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height (), full_screen_colourdepth, DISPLAY_FULLSCREEN );
+			ddraw_set_display_resolution ( get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height () );
 		}
 	}
 	else
 	{
-		ddraw_set_display_resolution ( get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height (), full_screen_colourdepth, DISPLAY_WINDOW );
+		ddraw_set_display_resolution ( get_global_3d_visual_screen_width (), get_global_3d_visual_screen_height () );
 	}
 
 	//

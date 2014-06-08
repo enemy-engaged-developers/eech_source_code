@@ -417,17 +417,6 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 	ASSERT (display_viewpoint);
 
-	if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
-	{
-		display_viewpoint->x = 0.0;
-		display_viewpoint->y = 0.0;
-		display_viewpoint->z = 0.0;
-
-		get_local_entity_attitude_matrix (get_gunship_entity (), display_viewpoint->attitude);
-
-		return;
-	}
-
 	if (mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV)
 	{
 		index = OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_CRT_CAMERA;
@@ -545,13 +534,6 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 	if (flags & VIRTUAL_COCKPIT_CRT_DISPLAY)
 	{
 		draw_hind_mfd_on_texture ();
-	}
-
-	// Casm 10SEP05 Havoc Instruments - temporary used for Hind
-	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
-	{
-		memcpy (&havoc_lamps, &hind_lamps, sizeof (havoc_lamps));
-		draw_havoc_virtual_cockpit_instruments_on_texture ();
 	}
 
 	////////////////////////////////////////
@@ -898,7 +880,6 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 
 	if
 	(
-		(d3d_can_render_to_texture) &&
 		(get_hind_eo_display_visible ()) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
 		(flags & (VIRTUAL_COCKPIT_CRT_DISPLAY))
@@ -1293,6 +1274,7 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 		}
 	}
 
+#if 0
 	////////////////////////////////////////
 	//
 	// rendered wiper
@@ -1313,6 +1295,7 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 			}
 		}
 	}
+#endif
 
 	////////////////////////////////////////
 	//

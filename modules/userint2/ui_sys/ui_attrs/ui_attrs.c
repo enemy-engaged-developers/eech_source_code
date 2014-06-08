@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -81,48 +81,48 @@
 void set_ui_object_attributes (ui_object *obj, va_list pargs)
 {
 
-   ui_object_attributes
-      attr;
+	ui_object_attributes
+		attr;
 
-   ASSERT (obj);
+	ASSERT (obj);
 
-   while (TRUE)
-   {
+	while (TRUE)
+	{
 
-      attr = va_arg (pargs, ui_object_attributes);
+		attr = va_arg (pargs, ui_object_attributes);
 
-      switch (attr)
-      {
+		switch (attr)
+		{
 
-         ////////////////////////////////////////
-         case ui_attr_active_screen:
-         ////////////////////////////////////////
-         {
+			////////////////////////////////////////
+			case ui_attr_active_screen:
+			////////////////////////////////////////
+			{
 
 				struct SCREEN
 					*active_screen;
 
-            active_screen = va_arg (pargs, struct SCREEN *);
+				active_screen = va_arg (pargs, struct SCREEN *);
 
-            set_ui_object_active_screen (obj, (struct SCREEN *) active_screen);
+				set_ui_object_active_screen (obj, (struct SCREEN *) active_screen);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_add_text:
-         ////////////////////////////////////////
-         {
+			case ui_attr_add_text:
+			////////////////////////////////////////
+			{
 
-            const char
-               *text;
+				const char
+					*text;
 
-            text = va_arg (pargs, const char *);
+				text = va_arg (pargs, const char *);
 
-            set_ui_object_add_text (obj, text);
+				set_ui_object_add_text (obj, text);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_add_list_item:
@@ -172,88 +172,91 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				break;
 			}
 
+#if 0
 			////////////////////////////////////////
-         case ui_attr_alpha_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_alpha_graphic:
+			////////////////////////////////////////
+			{
 
-				int 
+				rgb_data*
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, rgb_data*);
 
-            set_ui_object_graphic (obj, (unsigned short int *) graphic);
+				set_ui_object_graphic (obj, graphic);
 
 				set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
 
-            break;
-         }
-			////////////////////////////////////////
-         case ui_attr_association:
-         ////////////////////////////////////////
-         {
-
-	         ui_object
-               *association;
-
-            association = (ui_object *) va_arg (pargs, int);
-
-            set_ui_object_association (obj, association);
-
-            break;
-         }
+		  	    break;
+			}
+#endif
 
 			////////////////////////////////////////
-         case ui_attr_autosize:
-         ////////////////////////////////////////
-         {
+			case ui_attr_association:
+			////////////////////////////////////////
+			{
 
-            int
-               autosize;
+				ui_object
+					*association;
 
-            autosize = va_arg (pargs, int);
+				association = (ui_object *) va_arg (pargs, int);
 
-            set_ui_object_autosize (obj, autosize);
+				set_ui_object_association (obj, association);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_child:
-         ////////////////////////////////////////
-         {
+			case ui_attr_autosize:
+			////////////////////////////////////////
+			{
 
-		      ui_object
-               *child;
+				int
+					autosize;
 
-            child = (ui_object *) va_arg (pargs, int);
+				autosize = va_arg (pargs, int);
 
-            set_ui_object_child (obj, child);
+				set_ui_object_autosize (obj, autosize);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_clear:
-         ////////////////////////////////////////
-         {
+			case ui_attr_child:
+			////////////////////////////////////////
+			{
 
-            int
-               flag;
+				ui_object
+					*child;
 
-            flag = va_arg (pargs, int);
+				child = (ui_object *) va_arg (pargs, int);
 
-            set_ui_object_clear (obj, flag);
+				set_ui_object_child (obj, child);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_close_box:
-         ////////////////////////////////////////
-         {
+			case ui_attr_clear:
+			////////////////////////////////////////
+			{
 
-            create_ui_object
+				int
+					flag;
+
+				flag = va_arg (pargs, int);
+
+				set_ui_object_clear (obj, flag);
+
+				break;
+			}
+
+			////////////////////////////////////////
+			case ui_attr_close_box:
+			////////////////////////////////////////
+			{
+
+				create_ui_object
 					(
 						UI_TYPE_CLOSE_BOX,
 						UI_ATTR_PARENT (obj),
@@ -261,8 +264,8 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 						UI_ATTR_END
 					);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_colour:
@@ -300,7 +303,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				break;
 			}
-			
+
 			////////////////////////////////////////
 			case ui_attr_colour_start:
 			////////////////////////////////////////
@@ -375,42 +378,42 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_draw_function:
-         ////////////////////////////////////////
-         {
+			case ui_attr_draw_function:
+			////////////////////////////////////////
+			{
 
-            FUNCTION
-               function;
+				FUNCTION
+					function;
 
-            function = va_arg (pargs, FUNCTION);
+				function = va_arg (pargs, FUNCTION);
 
-            set_ui_object_draw_function (obj, function);
+				set_ui_object_draw_function (obj, function);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_drawable:
-         ////////////////////////////////////////
-         {
+			case ui_attr_drawable:
+			////////////////////////////////////////
+			{
 
-            int
-               flag;
+				int
+					flag;
 
-            flag = va_arg (pargs, int);
+				flag = va_arg (pargs, int);
 
-            set_ui_object_drawable (obj, flag);
+				set_ui_object_drawable (obj, flag);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_end:
-         ////////////////////////////////////////
-         {
+			case ui_attr_end:
+			////////////////////////////////////////
+			{
 
-            return;
-         }
+				return;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_font_type:
@@ -463,7 +466,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				break;
 			}
-			
+
 			////////////////////////////////////////
 			case ui_attr_font_colour_start:
 			////////////////////////////////////////
@@ -483,19 +486,19 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_function:
-         ////////////////////////////////////////
-         {
+			case ui_attr_function:
+			////////////////////////////////////////
+			{
 
-            FUNCTION
-               function;
+				FUNCTION
+					function;
 
-            function = va_arg (pargs, FUNCTION);
+				function = va_arg (pargs, FUNCTION);
 
-            set_ui_object_function (obj, function);
+				set_ui_object_function (obj, function);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_global:
@@ -512,90 +515,92 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				break;
 			}
 
+#if 0
 			////////////////////////////////////////
-         case ui_attr_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_graphic:
+			////////////////////////////////////////
+			{
 
-				int 
+				rgb_data*
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, rgb_data*);
 
-            set_ui_object_graphic (obj, (unsigned short int *) graphic);
+				set_ui_object_graphic (obj, graphic);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_graphic_cposition:
-         ////////////////////////////////////////
-         {
+			case ui_attr_graphic_cposition:
+			////////////////////////////////////////
+			{
 
 				double
 					cx,
 					cy;
 
-            cx = va_arg (pargs, double);
+				cx = va_arg (pargs, double);
 
-            cy = va_arg (pargs, double);
+				cy = va_arg (pargs, double);
 
-            set_ui_object_cx (obj, cx);
+				set_ui_object_cx (obj, cx);
 
-            set_ui_object_cy (obj, cy);
+				set_ui_object_cy (obj, cy);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_graphic_zoom:
-         ////////////////////////////////////////
-         {
+			case ui_attr_graphic_zoom:
+			////////////////////////////////////////
+			{
 
-				int 
+				int
 					zoom;
 
-            zoom = va_arg (pargs, int);
+				zoom = va_arg (pargs, int);
 
-            set_ui_object_graphic_zoom (obj, zoom);
+				set_ui_object_graphic_zoom (obj, zoom);
 
-            break;
-         }
-
-			////////////////////////////////////////
-         case ui_attr_highlightable:
-         ////////////////////////////////////////
-         {
-
-            int
-               highlightable;
-
-            highlightable = va_arg (pargs, int);
-
-            set_ui_object_highlightable (obj, highlightable);
-
-            break;
-         }
+				break;
+			}
+#endif
 
 			////////////////////////////////////////
-         case ui_attr_highlighted:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlightable:
+			////////////////////////////////////////
+			{
 
-            int
-               highlighted;
+				int
+					highlightable;
 
-            highlighted = va_arg (pargs, int);
+				highlightable = va_arg (pargs, int);
 
-            set_ui_object_highlighted (obj, highlighted);
+				set_ui_object_highlightable (obj, highlightable);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_colour:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted:
+			////////////////////////////////////////
+			{
+
+				int
+					highlighted;
+
+				highlighted = va_arg (pargs, int);
+
+				set_ui_object_highlighted (obj, highlighted);
+
+				break;
+			}
+
+			////////////////////////////////////////
+			case ui_attr_highlighted_colour:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -608,13 +613,13 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_colour_end:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted_colour_end:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -626,13 +631,13 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_colour_start:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted_colour_start:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -644,8 +649,8 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_highlighted_font_type:
@@ -718,53 +723,53 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_function:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted_function:
+			////////////////////////////////////////
+			{
 
-            FUNCTION
-               function;
+				FUNCTION
+					function;
 
-            function = va_arg (pargs, FUNCTION);
+				function = va_arg (pargs, FUNCTION);
 
-            set_ui_object_highlighted_function (obj, function);
+				set_ui_object_highlighted_function (obj, function);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_notify_on:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted_notify_on:
+			////////////////////////////////////////
+			{
 
-            int
-               event;
+				int
+					event;
 
-            event = va_arg (pargs, int);
+				event = va_arg (pargs, int);
 
-            set_ui_object_highlighted_notify_on (obj, (notify_types)event);
+				set_ui_object_highlighted_notify_on (obj, (notify_types)event);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_highlighted_texture_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_highlighted_texture_graphic:
+			////////////////////////////////////////
+			{
 
 				int
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, int);
 
-            set_ui_object_highlighted_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
+				set_ui_object_highlighted_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_list_box_y_space:
-         ////////////////////////////////////////
+			case ui_attr_list_box_y_space:
+			////////////////////////////////////////
 			{
 
 				double
@@ -778,14 +783,14 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_list_item:
-         ////////////////////////////////////////
-         {
+			case ui_attr_list_item:
+			////////////////////////////////////////
+			{
 
-            set_ui_object_list_item (obj, TRUE);
+				set_ui_object_list_item (obj, TRUE);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_item_number:
@@ -817,10 +822,11 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				break;
 			}
 
+#if 0
 			////////////////////////////////////////
-         case ui_attr_memory_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_memory_graphic:
+			////////////////////////////////////////
+			{
 
 				int
 					width,
@@ -844,32 +850,33 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				height = va_arg (pargs, int);
 
-				sc = create_screen (width, height, FALSE);
+				sc = create_screen (width, height);
 
 				set_ui_object_memory_graphic (obj, sc);
 
-            break;
-         }
+				break;
+			}
+#endif
 
 			////////////////////////////////////////
-         case ui_attr_moveable:
-         ////////////////////////////////////////
-         {
+			case ui_attr_moveable:
+			////////////////////////////////////////
+			{
 
-		      int
-               flag;
+				int
+					flag;
 
-            flag = va_arg (pargs, int);
+				flag = va_arg (pargs, int);
 
-            set_ui_object_moveable (obj, flag);
+				set_ui_object_moveable (obj, flag);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_mslider:
-         ////////////////////////////////////////
-         {
+			case ui_attr_mslider:
+			////////////////////////////////////////
+			{
 
 				float
 					x,
@@ -880,11 +887,11 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 					max,
 					inc;
 
-            min = va_arg (pargs, double);
+				min = va_arg (pargs, double);
 
-            max = va_arg (pargs, double);
+				max = va_arg (pargs, double);
 
-            inc = va_arg (pargs, double);
+				inc = va_arg (pargs, double);
 
 				x = get_ui_object_x (obj);
 
@@ -894,7 +901,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				y_size = get_ui_object_y_size (obj);
 
-            create_ui_object
+				create_ui_object
 					(
 						UI_TYPE_MSLIDER,
 						UI_ATTR_PARENT (obj),
@@ -906,42 +913,42 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 						UI_ATTR_END
 					);
 
-            break;
+				break;
 			}
 
 			////////////////////////////////////////
-         case ui_attr_next:
-         ////////////////////////////////////////
-         {
+			case ui_attr_next:
+			////////////////////////////////////////
+			{
 
-		      ui_object
-               *next;
+				ui_object
+					*next;
 
-            next = (ui_object *) va_arg (pargs, int);
+				next = (ui_object *) va_arg (pargs, int);
 
-            set_ui_object_next (obj, next);
+				set_ui_object_next (obj, next);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_notify_on:
-         ////////////////////////////////////////
-         {
+			case ui_attr_notify_on:
+			////////////////////////////////////////
+			{
 
-            int
-               event;
+				int
+					event;
 
-            event = va_arg (pargs, int);
+				event = va_arg (pargs, int);
 
-            set_ui_object_notify_on (obj, (notify_types)event);
+				set_ui_object_notify_on (obj, (notify_types)event);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_offset_time:
-         ////////////////////////////////////////
+			case ui_attr_offset_time:
+			////////////////////////////////////////
 			{
 
 				int
@@ -955,160 +962,160 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_origin:
-         ////////////////////////////////////////
-         {
+			case ui_attr_origin:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-		      pos.y = va_arg (pargs, double);
+				pos.y = va_arg (pargs, double);
 
-            set_ui_object_x_origin (obj, pos.x);
+				set_ui_object_x_origin (obj, pos.x);
 
-		      set_ui_object_y_origin (obj, pos.y);
+				set_ui_object_y_origin (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_parent:
-         ////////////////////////////////////////
-         {
+			case ui_attr_parent:
+			////////////////////////////////////////
+			{
 
-			   ui_object
-               *parent;
+				ui_object
+					*parent;
 
-            parent = (ui_object *) va_arg (pargs, int);
+				parent = (ui_object *) va_arg (pargs, int);
 
-            set_ui_object_parent (obj, parent);
+				set_ui_object_parent (obj, parent);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_prev:
-         ////////////////////////////////////////
-         {
+			case ui_attr_prev:
+			////////////////////////////////////////
+			{
 
-		      ui_object
-               *prev;
+				ui_object
+					*prev;
 
-            prev = (ui_object *) va_arg (pargs, int);
+				prev = (ui_object *) va_arg (pargs, int);
 
-            set_ui_object_prev (obj, prev);
+				set_ui_object_prev (obj, prev);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_position:
-         ////////////////////////////////////////
-         {
+			case ui_attr_position:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
-				
-            pos.y = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-            set_ui_object_x_end (obj, pos.x);
+				pos.y = va_arg (pargs, double);
+
+				set_ui_object_x_end (obj, pos.x);
 				set_ui_object_y_end (obj, pos.y);
 
-            set_ui_object_x_start (obj, pos.x);
+				set_ui_object_x_start (obj, pos.x);
 				set_ui_object_y_start (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_position_end:
-         ////////////////////////////////////////
-         {
+			case ui_attr_position_end:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
-				
-            pos.y = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-            set_ui_object_x_end (obj, pos.x);
+				pos.y = va_arg (pargs, double);
+
+				set_ui_object_x_end (obj, pos.x);
 				set_ui_object_y_end (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_position_start:
-         ////////////////////////////////////////
-         {
+			case ui_attr_position_start:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
-				
-            pos.y = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-            set_ui_object_x_start (obj, pos.x);
+				pos.y = va_arg (pargs, double);
+
+				set_ui_object_x_start (obj, pos.x);
 				set_ui_object_y_start (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_redraw:
-         ////////////////////////////////////////
-         {
+			case ui_attr_redraw:
+			////////////////////////////////////////
+			{
 
-            int
-               flag;
+				int
+					flag;
 
-            flag = va_arg (pargs, int);
+				flag = va_arg (pargs, int);
 
-            set_ui_object_redraw (obj, flag);
+				set_ui_object_redraw (obj, flag);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_resizeable:
-         ////////////////////////////////////////
-         {
+			case ui_attr_resizeable:
+			////////////////////////////////////////
+			{
 
-		      int
-               flag;
+				int
+					flag;
 
-            flag = va_arg (pargs, int);
+				flag = va_arg (pargs, int);
 
-            set_ui_object_resizeable (obj, flag);
+				set_ui_object_resizeable (obj, flag);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_right_function:
-         ////////////////////////////////////////
-         {
+			case ui_attr_right_function:
+			////////////////////////////////////////
+			{
 
-            FUNCTION
-               function;
+				FUNCTION
+					function;
 
-            function = va_arg (pargs, FUNCTION);
+				function = va_arg (pargs, FUNCTION);
 
-            set_ui_object_right_function (obj, function);
+				set_ui_object_right_function (obj, function);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_selected_colour:
-         ////////////////////////////////////////
-         {
+			case ui_attr_selected_colour:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -1121,13 +1128,13 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_selected_colour_end:
-         ////////////////////////////////////////
-         {
+			case ui_attr_selected_colour_end:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -1139,13 +1146,13 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_selected_colour_start:
-         ////////////////////////////////////////
-         {
+			case ui_attr_selected_colour_start:
+			////////////////////////////////////////
+			{
 
 				real_colour
 					rc;
@@ -1157,8 +1164,8 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
 			case ui_attr_selected_font_colour:
@@ -1231,86 +1238,86 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_selected_texture_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_selected_texture_graphic:
+			////////////////////////////////////////
+			{
 
 				int
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, int);
 
-            set_ui_object_selected_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
+				set_ui_object_selected_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
 
-            break;
-         }
-
-			////////////////////////////////////////
-         case ui_attr_size:
-         ////////////////////////////////////////
-         {
-
-            vec2d
-               pos;
-
-            pos.x = va_arg (pargs, double);
-
-			   pos.y = va_arg (pargs, double);
-
-            set_ui_object_x_size_end (obj, pos.x);
-		      set_ui_object_y_size_end (obj, pos.y);
-
-            set_ui_object_x_size_start (obj, pos.x);
-		      set_ui_object_y_size_start (obj, pos.y);
-
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_size_end:
-         ////////////////////////////////////////
-         {
+			case ui_attr_size:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-			   pos.y = va_arg (pargs, double);
+				pos.y = va_arg (pargs, double);
 
-            set_ui_object_x_size_end (obj, pos.x);
-		      set_ui_object_y_size_end (obj, pos.y);
+				set_ui_object_x_size_end (obj, pos.x);
+				set_ui_object_y_size_end (obj, pos.y);
 
-            break;
-         }
+				set_ui_object_x_size_start (obj, pos.x);
+				set_ui_object_y_size_start (obj, pos.y);
+
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_size_start:
-         ////////////////////////////////////////
-         {
+			case ui_attr_size_end:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-			   pos.y = va_arg (pargs, double);
+				pos.y = va_arg (pargs, double);
 
-            set_ui_object_x_size_start (obj, pos.x);
-		      set_ui_object_y_size_start (obj, pos.y);
+				set_ui_object_x_size_end (obj, pos.x);
+				set_ui_object_y_size_end (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_slider_min:
-         ////////////////////////////////////////
-         {
+			case ui_attr_size_start:
+			////////////////////////////////////////
+			{
+
+				vec2d
+					pos;
+
+				pos.x = va_arg (pargs, double);
+
+				pos.y = va_arg (pargs, double);
+
+				set_ui_object_x_size_start (obj, pos.x);
+				set_ui_object_y_size_start (obj, pos.y);
+
+				break;
+			}
+
+			////////////////////////////////////////
+			case ui_attr_slider_min:
+			////////////////////////////////////////
+			{
 
 				float
 					min;
 
-            min = va_arg (pargs, double);
+				min = va_arg (pargs, double);
 
 				set_ui_object_slider_min (obj, min);
 
@@ -1318,14 +1325,14 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_slider_max:
-         ////////////////////////////////////////
-         {
+			case ui_attr_slider_max:
+			////////////////////////////////////////
+			{
 
 				float
 					max;
 
-            max = va_arg (pargs, double);
+				max = va_arg (pargs, double);
 
 				set_ui_object_slider_max (obj, max);
 
@@ -1333,14 +1340,14 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_slider_inc:
-         ////////////////////////////////////////
-         {
+			case ui_attr_slider_inc:
+			////////////////////////////////////////
+			{
 
 				float
 					inc;
 
-            inc = va_arg (pargs, double);
+				inc = va_arg (pargs, double);
 
 				set_ui_object_slider_inc (obj, inc);
 
@@ -1348,8 +1355,8 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_start_time:
-         ////////////////////////////////////////
+			case ui_attr_start_time:
+			////////////////////////////////////////
 			{
 
 				int
@@ -1378,53 +1385,53 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_text:
-         ////////////////////////////////////////
-         {
+			case ui_attr_text:
+			////////////////////////////////////////
+			{
 
-            const char
-               *text;
+				const char
+					*text;
 
-            text = va_arg (pargs, const char *);
+				text = va_arg (pargs, const char *);
 
-            set_ui_object_text (obj, text);
+				set_ui_object_text (obj, text);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_text_justify:
-         ////////////////////////////////////////
-         {
+			case ui_attr_text_justify:
+			////////////////////////////////////////
+			{
 
-            text_justify_types
-               justify;
+				text_justify_types
+					justify;
 
-            justify = va_arg (pargs, text_justify_types);
+				justify = va_arg (pargs, text_justify_types);
 
-            set_ui_object_text_justify (obj, justify);
+				set_ui_object_text_justify (obj, justify);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_texture_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_texture_graphic:
+			////////////////////////////////////////
+			{
 
 				int
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, int);
 
-            set_ui_object_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
+				set_ui_object_texture_graphic (obj, (struct TEXTURE_GRAPHIC *) graphic);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_time_line:
-         ////////////////////////////////////////
+			case ui_attr_time_line:
+			////////////////////////////////////////
 			{
 
 				int
@@ -1439,9 +1446,9 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				break;
 			}
-         ////////////////////////////////////////
-         case ui_attr_time_length:
-         ////////////////////////////////////////
+			////////////////////////////////////////
+			case ui_attr_time_length:
+			////////////////////////////////////////
 			{
 
 				int
@@ -1455,38 +1462,38 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_tool_tips:
-         ////////////////////////////////////////
-         {
+			case ui_attr_tool_tips:
+			////////////////////////////////////////
+			{
 
-            const char
-               *tool_tips;
+				const char
+					*tool_tips;
 
-            tool_tips = va_arg (pargs, const char *);
+				tool_tips = va_arg (pargs, const char *);
 
-            set_ui_object_tool_tips (obj, tool_tips);
+				set_ui_object_tool_tips (obj, tool_tips);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_tool_tips_timer:
-         ////////////////////////////////////////
-         {
+			case ui_attr_tool_tips_timer:
+			////////////////////////////////////////
+			{
 
-            int
-               tool_tips_timer;
+				int
+					tool_tips_timer;
 
-            tool_tips_timer = va_arg (pargs, int);
+				tool_tips_timer = va_arg (pargs, int);
 
-            set_ui_object_tool_tips_timer (obj, tool_tips_timer);
+				set_ui_object_tool_tips_timer (obj, tool_tips_timer);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_t_value:
-         ////////////////////////////////////////
+			case ui_attr_t_value:
+			////////////////////////////////////////
 			{
 
 				float
@@ -1575,8 +1582,8 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_virtual_coords:
-         ////////////////////////////////////////
+			case ui_attr_virtual_coords:
+			////////////////////////////////////////
 			{
 
 				int
@@ -1590,47 +1597,47 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			}
 
 			////////////////////////////////////////
-         case ui_attr_virtual_position:
-         ////////////////////////////////////////
-         {
+			case ui_attr_virtual_position:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
-				
-            pos.y = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-            set_ui_object_virtual_x (obj, pos.x);
+				pos.y = va_arg (pargs, double);
+
+				set_ui_object_virtual_x (obj, pos.x);
 
 				set_ui_object_virtual_y (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_virtual_size:
-         ////////////////////////////////////////
-         {
+			case ui_attr_virtual_size:
+			////////////////////////////////////////
+			{
 
-            vec2d
-               pos;
+				vec2d
+					pos;
 
-            pos.x = va_arg (pargs, double);
+				pos.x = va_arg (pargs, double);
 
-			   pos.y = va_arg (pargs, double);
+				pos.y = va_arg (pargs, double);
 
-            set_ui_object_virtual_x_size (obj, pos.x);
+				set_ui_object_virtual_x_size (obj, pos.x);
 
-		      set_ui_object_virtual_y_size (obj, pos.y);
+				set_ui_object_virtual_y_size (obj, pos.y);
 
-            break;
-         }
+				break;
+			}
 
 			////////////////////////////////////////
-         case ui_attr_vslider:
-         ////////////////////////////////////////
-         {
+			case ui_attr_vslider:
+			////////////////////////////////////////
+			{
 
 				ui_object
 					*vslider;
@@ -1642,16 +1649,16 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 					px_size,
 					py_size;
 
-            min = va_arg (pargs, double);
+				min = va_arg (pargs, double);
 
-            max = va_arg (pargs, double);
+				max = va_arg (pargs, double);
 
-            inc = va_arg (pargs, double);
+				inc = va_arg (pargs, double);
 
 				px_size = get_screen_width (video_screen) / get_ui_object_x_size (obj);
 				py_size = get_screen_height (video_screen) / get_ui_object_y_size (obj);
 
-            vslider = create_ui_object
+				vslider = create_ui_object
 					(
 						UI_TYPE_VSLIDER,
 						UI_ATTR_PARENT (obj),
@@ -1666,37 +1673,39 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
 				set_ui_object_association (obj, vslider);
 
-            break;
+				break;
 			}
 
+#if 0
 			////////////////////////////////////////
-         case ui_attr_zoomable_palette_graphic:
-         ////////////////////////////////////////
-         {
+			case ui_attr_zoomable_palette_graphic:
+			////////////////////////////////////////
+			{
 
-				int 
+				int
 					graphic;
 
-            graphic = va_arg (pargs, int);
+				graphic = va_arg (pargs, int);
 
-            set_ui_object_zoomable_palette_graphic (obj, (struct ZOOMABLE_GRAPHIC *) graphic);
+				set_ui_object_zoomable_palette_graphic (obj, (struct ZOOMABLE_GRAPHIC *) graphic);
 
 				set_ui_object_graphic_type (obj, UI_OBJECT_ZOOMABLE_PALETTE_GRAPHIC);
 
-            break;
-         }
+				break;
+			}
+#endif
 
-         ////////////////////////////////////////
-         default:
-         ////////////////////////////////////////
-         {
+			////////////////////////////////////////
+			default:
+			////////////////////////////////////////
+			{
 
-            debug_fatal ("Invalid ui_object attribute = %d", attr);
+				debug_fatal ("Invalid ui_object attribute = %d", attr);
 
-            break;
-         }
-      }
-   }
+				break;
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

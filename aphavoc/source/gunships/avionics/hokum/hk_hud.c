@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -277,7 +277,7 @@ static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NU
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * unfinshed code, it doesn't quite work satisfactory yet 
+ * unfinshed code, it doesn't quite work satisfactory yet
 static void transform_position_to_hud_coordinate(vec3d* position, float* x, float* y)
 {
 	float one_over_range;
@@ -285,10 +285,10 @@ static void transform_position_to_hud_coordinate(vec3d* position, float* x, floa
 	char s[80];
 
 	float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].c.z : 0.0;
-			
+
 	if (command_line_TIR_6DOF && query_TIR_active())
 		head_offset_z = getViewpointOffsetZ(1);
-			
+
 	if (position->z > 0.0)
 		one_over_range = 1.0 / position->z;
 	else
@@ -296,11 +296,11 @@ static void transform_position_to_hud_coordinate(vec3d* position, float* x, floa
 
 	*x = position->x * one_over_range * x_factor;
 	*y = position->y * one_over_range * y_factor;
-	
+
 	// compensate for distance of head to HUD
 	*x *= (head_offset_z + 1.1);
 	*y *= (head_offset_z + 1.1);
-	
+
 	// compensate for straight ahead not being in the middle of the HUD
 	*y += 0.36;
 
@@ -439,27 +439,27 @@ static void draw_pitch_scale (void)
 			if (int_pitch_step_10 != 0)
 			{
 				int pnum;
-				
+
 				draw_line_func (-0.22, y, -0.07, y, hud_colour);
 				draw_line_func (0.07, y, 0.22, y, hud_colour);
-				
+
 				if (draw_large_hud)
 					set_mono_font_type (MONO_FONT_TYPE_6X10);
 				else
 					set_mono_font_type (MONO_FONT_TYPE_3X6);
 				set_2d_mono_font_position (0.0, y);
-		
+
 				pnum = abs(int_pitch_step_10);
 				if (pnum > 90)
 					pnum = 180 - pnum;
 				sprintf(s, "%2d", pnum);
 				width = get_mono_font_string_width(s);
-		
+
 				if (draw_large_hud)
 					set_mono_font_rel_position ((-width * 0.5), -4.0);
 				else
 					set_mono_font_rel_position ((-width * 0.5), -2.0);
-		
+
 				print_mono_font_string (s);
 			}
 			else
@@ -480,14 +480,14 @@ static void draw_pitch_scale (void)
 
 		int_pitch_step_10 += 10;
 		y += 0.4;
-		
+
 		if (y > 0.6)
 			break;
 	}
-	
+
 	// draw datum
 	set_2d_instance_rotation (hud_env, -roll);
-	
+
 	draw_line_func(-0.2, 0.0, -0.08, 0.0, hud_colour);
 	draw_line_func(-0.08, 0.0, -0.08, -0.04, hud_colour);
 	draw_line_func(-0.08, -0.04, -0.04, -0.08, hud_colour);
@@ -495,13 +495,13 @@ static void draw_pitch_scale (void)
 	draw_line_func(0.08, -0.04, 0.04, -0.08, hud_colour);
 	draw_line_func(0.08, 0.0, 0.08, -0.04, hud_colour);
 	draw_line_func(0.2, 0.0, 0.08, 0.0, hud_colour);
-	
+
 	reset_2d_instance (hud_env);
-	
+
 	// draw bank angle marks
 	draw_2d_line(0.35, 0.0, 0.45, 0.0, hud_colour);
 	draw_2d_line(-0.35, 0.0, -0.45, 0.0, hud_colour);
-	
+
 	draw_2d_line(0.303, -0.175, 0.390, -0.225, hud_colour);
 	draw_2d_line(-0.303, -0.175, -0.390, -0.225, hud_colour);
 	draw_2d_line(0.175, -0.303, 0.225, -0.390, hud_colour);
@@ -513,7 +513,7 @@ static void draw_pitch_scale (void)
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -712,7 +712,7 @@ static void draw_velocity_vector(void)
 {
 #define VV_CUTOFF_VELOCITY kilometres_per_hour_to_metres_per_second(50.0)
 	float scale, x, z;
-	
+
 	z = current_flight_dynamics->velocity_z.value;
 	x = current_flight_dynamics->velocity_x.value;
 
@@ -740,9 +740,9 @@ static void draw_velocity_vector(void)
 static void draw_velocity_scale(float airspeed)
 {
 	float y_offset = bound(airspeed, 0.0, 500.0) * 0.0014;
-	
+
 	draw_2d_line(-0.55, 0.1, -0.55, 0.8, hud_colour);
-	
+
 	draw_2d_line(-0.55, 0.1, -0.575, 0.1, hud_colour);
 	draw_2d_line(-0.55, 0.24, -0.575, 0.24, hud_colour);
 	draw_2d_line(-0.55, 0.38, -0.575, 0.38, hud_colour);
@@ -766,7 +766,7 @@ static void draw_velocity_scale(float airspeed)
 	set_2d_mono_font_position(-0.75, 0.8);
 
 	print_mono_font_string("500");
-	
+
 	if (draw_large_hud)
 		draw_2d_mono_sprite(large_left_carat, -0.55, 0.1 + y_offset, hud_colour);
 	else
@@ -794,12 +794,12 @@ static void display_true_airspeed (void)
 			set_mono_font_type (MONO_FONT_TYPE_8X14);
 			set_2d_mono_font_position (-0.9, 0.95);
 			set_mono_font_rel_position (5.0, -4.0);
-	
+
 			if (true_airspeed >= 0.0)
 				print_mono_font_string("+");
 			else
 				print_mono_font_string("-");
-	
+
 			set_mono_font_type (MONO_FONT_TYPE_10X16);
 			set_2d_mono_font_position (-0.8, 0.95);
 			set_mono_font_rel_position (0.0, -4.0);
@@ -810,12 +810,12 @@ static void display_true_airspeed (void)
 			set_mono_font_type (MONO_FONT_TYPE_5X7);
 			set_2d_mono_font_position (-0.9, 0.9);
 			set_mono_font_rel_position (3.0, -4.0);
-	
+
 			if (true_airspeed >= 0.0)
 				print_mono_font_string("+");
 			else
 				print_mono_font_string("-");
-	
+
 			set_mono_font_type (MONO_FONT_TYPE_6X10);
 			set_2d_mono_font_position (-0.75, 0.9);
 			set_mono_font_rel_position (0.0, -5.0);
@@ -836,13 +836,13 @@ static void display_true_airspeed (void)
 static void display_g_scale(void)
 	{
 		float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
-		
+
 		draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
-	
+
 		draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
 		draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
 		draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
-		
+
 		if (draw_large_hud)
 			set_mono_font_type(MONO_FONT_TYPE_6X10);
 		else
@@ -851,7 +851,7 @@ static void display_g_scale(void)
 		set_2d_mono_font_position(-0.78, -0.25);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("3");
-		
+
 		set_2d_mono_font_position(-0.78, -0.55);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("0");
@@ -874,7 +874,7 @@ static void display_vertical_velocity(void)
 {
 	char s[20];
 	float vv = kilometres_per_hour(current_flight_dynamics->world_velocity_y.value);
-	
+
 	sprintf (s, "%02d", abs((int)vv));;
 
 	set_2d_mono_font_position (0.6, -0.07);
@@ -905,14 +905,14 @@ static void display_vertical_velocity(void)
 		set_mono_font_type (MONO_FONT_TYPE_6X10);
 		set_mono_font_rel_position (0.0, -4.0);
 	}
-	
+
 	print_mono_font_string (s);
 
 	// draw the scale
 	if (hud_mode != HUD_MODE_WEAPON)
 	{
 		float y_offset = vv * 0.01;
-		
+
 		draw_2d_line(0.7, -0.2, 0.7, -0.8, hud_colour);
 
 		// the vertical tick marks
@@ -923,16 +923,16 @@ static void display_vertical_velocity(void)
 		draw_2d_line(0.7, -0.6, 0.725, -0.6, hud_colour);
 		draw_2d_line(0.7, -0.7, 0.725, -0.7, hud_colour);
 		draw_2d_line(0.7, -0.8, 0.725, -0.8, hud_colour);
-		
+
 		if (draw_large_hud)
 			set_mono_font_type(MONO_FONT_TYPE_6X10);
 		else
 			set_mono_font_type(MONO_FONT_TYPE_3X6);
-			
+
 		set_2d_mono_font_position(0.75, -0.2);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("30");
-		
+
 		set_2d_mono_font_position(0.75, -0.5);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("0");
@@ -955,9 +955,9 @@ static void display_vertical_velocity(void)
 static void draw_altitude_scale(float altitude)
 {
 	float y_offset = altitude * 0.016;
-	
+
 	draw_2d_line(0.55, 0.0, 0.55, 0.8, hud_colour);
-	
+
 	// the vertical tick marks
 	draw_2d_line(0.525, 0.0, 0.575, 0.0, hud_colour);
 	draw_2d_line(0.55, 0.16, 0.575, 0.16, hud_colour);
@@ -965,7 +965,7 @@ static void draw_altitude_scale(float altitude)
 	draw_2d_line(0.55, 0.48, 0.575, 0.48, hud_colour);
 	draw_2d_line(0.55, 0.64, 0.575, 0.64, hud_colour);
 	draw_2d_line(0.55, 0.80, 0.575, 0.80, hud_colour);
-	
+
 	if (draw_large_hud)
 		set_mono_font_type(MONO_FONT_TYPE_6X10);
 	else
@@ -975,7 +975,7 @@ static void draw_altitude_scale(float altitude)
 	set_mono_font_rel_position (0.0, -2.0);
 
 	print_mono_font_string("50");
-	
+
 	if (draw_large_hud)
 		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
 	else
@@ -992,13 +992,13 @@ static void display_altitude (void)
 	{
 		if (altitude <= 50.0)
 			draw_altitude_scale(altitude);
-		
+
 		sprintf (s, "%03d", (int) current_flight_dynamics->radar_altitude.value);
-		
+
 		if (draw_large_hud)
 		{
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
-			set_2d_mono_font_position (0.87, 0.95);			
+			set_2d_mono_font_position (0.87, 0.95);
 		}
 		else
 		{
@@ -1115,7 +1115,7 @@ void initialise_hokum_hud (void)
 
 	outside_hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
-	if (command_line_high_res_hud)	
+	if (command_line_high_res_hud)
 		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_HOKUM_COCKPIT_HUD, TEXTURE_TYPE_SINGLEALPHA);
 	else
 		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SMALL_SIZE, HUD_VIEWPORT_SMALL_SIZE, TEXTURE_INDEX_HOKUM_COCKPIT_HUD, TEXTURE_TYPE_SINGLEALPHA);
@@ -1212,7 +1212,7 @@ void draw_hokum_hud (void)
 	set_2d_active_environment (hud_env);
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 	draw_large_hud = FALSE;
-	
+
 	if (!draw_hud_on_glass)
 	{
 		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
@@ -1221,7 +1221,7 @@ void draw_hokum_hud (void)
 
 		head_offset_x = getViewpointOffsetX(head_offset_x);
 		head_offset_y = getViewpointOffsetY(head_offset_y);
-		
+
 		if (get_global_wide_cockpit())
 		{
 			head_offset_x += wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].c.x;
@@ -1258,9 +1258,9 @@ void draw_hokum_hud (void)
 
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = hud_viewport_size - 0.001;
+	hud_viewport_x_max = hud_viewport_size;
 
-	hud_viewport_y_max = hud_viewport_size - 0.001;
+	hud_viewport_y_max = hud_viewport_size;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1271,8 +1271,8 @@ void draw_hokum_hud (void)
 	hud_screen_x_min = 0.0;
 	hud_screen_y_min = 0.0;
 
-	hud_screen_x_max = hud_viewport_size - 0.001;
-	hud_screen_y_max = hud_viewport_size - 0.001;
+	hud_screen_x_max = hud_viewport_size;
+	hud_screen_y_max = hud_viewport_size;
 
 	hud_screen_x_scale = 1.0;
 	hud_screen_y_scale = 1.0;
@@ -1317,7 +1317,7 @@ void draw_hokum_hud (void)
 				{
 					display_weapon_information();
 					display_target_information();
-					
+
 //					draw_target_marker();
 //					draw_navigation_mode_hud ();
 //					draw_weapon_mode_hud ();
@@ -1326,8 +1326,6 @@ void draw_hokum_hud (void)
 				}
 			}
 		}
-
-		flush_screen_texture_graphics (hud_texture_screen);
 
 		unlock_screen (hud_texture_screen);
 	}
@@ -1397,9 +1395,9 @@ void draw_external_hokum_hud (void)
 
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE;
 
-	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1423,8 +1421,8 @@ void draw_external_hokum_hud (void)
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width);
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
@@ -1454,7 +1452,7 @@ void draw_external_hokum_hud (void)
 
 		switch (hud_mode)
 		{
-			case HUD_MODE_TRANSITION:				
+			case HUD_MODE_TRANSITION:
 			case HUD_MODE_NAVIGATION:
 			{
 				draw_heading_scale();
@@ -1473,8 +1471,6 @@ void draw_external_hokum_hud (void)
 		}
 
 		hud_colour = store_hud_colour;
-
-		flush_screen_texture_graphics (outside_hud_texture_screen);
 
 		unlock_screen (outside_hud_texture_screen);
 	}
@@ -1611,7 +1607,7 @@ static void draw_hms_centre_datum (void)
 		float dist = 1000.0;
 		float heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
 		rgb_colour c;
-		
+
 		if (angle == 0)
 			c = sys_col_red;
 		else
@@ -1621,11 +1617,11 @@ static void draw_hms_centre_datum (void)
 			c.b = 0;
 			c.a = 255;
 		}
-		
+
 		position.x = source_position->x + dist * sin(heading);
 		position.y = source_position->y + dist * atan(rad(angle) + pitch);
 		position.z = source_position->z + dist * cos(heading);
-	
+
 		visibility = get_position_3d_screen_coordinates (&position, &i, &j);
 		if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 		{
@@ -1641,15 +1637,15 @@ static void draw_hms_centre_datum (void)
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
 	{
 		draw_2d_circle(0.0, 0.0, 0.3, hud_colour);
-		
+
 		if (weapon_lock_type != WEAPON_LOCK_NO_TARGET)
 			draw_2d_circle(0.0, 0.0, 0.35, hud_colour);
 		if (weapon_lock_type == WEAPON_LOCK_VALID)
 		{
-			draw_2d_line(0.3, 0.0, 0.4, 0.0, hud_colour);	
-			draw_2d_line(0.0, 0.3, 0.0, 0.4, hud_colour);	
-			draw_2d_line(-0.3, 0.0, -0.4, 0.0, hud_colour);	
-			draw_2d_line(0.0, -0.3, 0.0, -0.4, hud_colour);	
+			draw_2d_line(0.3, 0.0, 0.4, 0.0, hud_colour);
+			draw_2d_line(0.0, 0.3, 0.0, 0.4, hud_colour);
+			draw_2d_line(-0.3, 0.0, -0.4, 0.0, hud_colour);
+			draw_2d_line(0.0, -0.3, 0.0, -0.4, hud_colour);
 		}
 	}
 }
@@ -1714,11 +1710,11 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 	{
 		int i, i_max;
 		float normalised_range = range / max_range;
-	
+
 		i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
-	
+
 		i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
-	
+
 		for (i = 0; i <= i_max; i++)
 		{
 			set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
@@ -1864,10 +1860,10 @@ static void display_weapon_information (void)
 		{
 			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].c.z : 0.0;
 			float left_limit, right_limit, upper_limit;
-			
+
 			if (command_line_TIR_6DOF && query_TIR_active())
 				head_offset_z = getViewpointOffsetZ(1);
-			
+
 			// adjust box for head position
 			left_limit = atan(rad(-1.0)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
 			right_limit = atan(rad(6.0)) * (head_offset_z + 1.1) * HUD_UNIT_RATIO;
@@ -1876,7 +1872,7 @@ static void display_weapon_information (void)
 			draw_2d_line(left_limit, -1.0, left_limit, upper_limit, hud_colour);
 			draw_2d_line(right_limit, -1.0, right_limit, upper_limit, hud_colour);
 			draw_2d_line(left_limit, upper_limit, right_limit, upper_limit, hud_colour);
-			
+
 			set_mono_font_type (MONO_FONT_TYPE_6X10);
 			set_2d_mono_font_position (-0.9, -0.7);
 			set_mono_font_rel_position (0.0, 0.0);
@@ -1931,7 +1927,7 @@ static void display_weapon_information (void)
 			x += sin(roll) * drop_hud_distance;
 
 			draw_2d_circle(x, y, 0.1, hud_colour);
-			set_2d_pixel(x, y, hud_colour); 
+			set_2d_pixel(x, y, hud_colour);
 		}
 
 		if (draw_large_hud)
@@ -2006,7 +2002,7 @@ static void display_target_information (void)
 
 		min_weapon_range = weapon_database[selected_weapon_type].min_range;
 		max_weapon_range = weapon_database[selected_weapon_type].max_range;
-		
+
 		// flashing X when within minimum range
 		if (has_range && target_range < min_weapon_range && (get_system_time() % 800) < 400)
 		{
@@ -2014,7 +2010,7 @@ static void display_target_information (void)
 			draw_line_func(-0.5, 0.5, 0.5, -0.5, hud_colour);
 		}
 	}
-	
+
 	//
 	// weapon lock
 	//
@@ -2158,7 +2154,6 @@ void draw_hokum_hms (void)
 	{
 		if (get_global_draw_cockpit_graphics ())
 		{
-			if (d3d_modulate_alpha)
 			{
 				heading_offset = HOKUM_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
 
@@ -2181,13 +2176,6 @@ void draw_hokum_hms (void)
 					alpha = (int) (max_offset * (200.0 / rad (25.0))) + 55;
 
 					alpha = bound (alpha, 0, 255);
-				}
-			}
-			else
-			{
-				if ((pilot_head_heading == HOKUM_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == HOKUM_INSTRUMENT_VIEW_PITCH))
-				{
-					return;
 				}
 			}
 		}
@@ -2221,9 +2209,9 @@ void draw_hokum_hms (void)
 
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE;
 
-	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -2247,8 +2235,8 @@ void draw_hokum_hms (void)
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width);
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
@@ -2285,8 +2273,6 @@ void draw_hokum_hms (void)
 //		display_target_information ();
 
 		hud_colour = store_hud_colour;
-
-		flush_screen_texture_graphics (outside_hud_texture_screen);
 
 		unlock_screen (outside_hud_texture_screen);
 	}

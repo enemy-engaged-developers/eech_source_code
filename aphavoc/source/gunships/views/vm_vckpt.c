@@ -706,11 +706,11 @@ void update_virtual_cockpit_view (void)
 
 		else if ( (query_TIR_active () == TRUE) && (command_line_mouse_look != MOUSELOOK_EXTERNAL) )	// Use mouse/TIR, all by Retro 030317, 030318
 		{
-		
+
 		float
 			temp_p,
 			temp_h;
-		
+
 			temp_p = TIR_GetPitch();
 			temp_h = TIR_GetYaw();
 
@@ -719,7 +719,7 @@ void update_virtual_cockpit_view (void)
 
 			pilot_head_pitch = rad(temp_p);
 			pilot_head_heading = rad(temp_h);
-		
+
 
 			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
 			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
@@ -727,10 +727,10 @@ void update_virtual_cockpit_view (void)
 			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		} // end Retro 030317
-	
+
 		else if ( command_line_mouse_look  == MOUSELOOK_ON )
 		{
-			
+
 			static int previous_mouse_update_flag = 1;
 			float dh, dp;
 
@@ -751,7 +751,7 @@ void update_virtual_cockpit_view (void)
 			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
-		
+
 		else if ( command_line_mouse_look  != MOUSELOOK_ON )
 		{
 		if (adjust_view_left_key || joystick_pov_left)
@@ -780,7 +780,7 @@ void update_virtual_cockpit_view (void)
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
 		}
-	
+
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1471,7 +1471,7 @@ void draw_virtual_cockpit_3d_view (void)
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
 	specular_rendering_enabled = FALSE;
-	
+
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
@@ -1650,17 +1650,21 @@ void draw_virtual_cockpit_3d_view (void)
 				if(command_line_export_mfd)
 				{
 					draw_havoc_mfd_on_texture();
+#if 0
 					if (get_global_draw_overlaid_instruments ())
 					{
 						draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
 					}
+#endif
 				}
 				else
 				{
 					if (get_global_draw_overlaid_instruments ())
 					{
 						draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
+#if 0
 						draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+#endif
 					}
 				}
 			}
@@ -1810,35 +1814,8 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				if (custom_3d_models.arneh_mi24v_cockpit)
-				{
-					draw_hind_external_3d_cockpit(0, NULL);
-					draw_hind_internal_3d_cockpit(0);
-				}
-				else
-				{
-					draw_hind_external_virtual_cockpit
-					(
-						VIRTUAL_COCKPIT_STOWED_WIPER |
-						VIRTUAL_COCKPIT_MOVING_WIPER |
-						VIRTUAL_COCKPIT_ADI |
-						VIRTUAL_COCKPIT_HSI |
-						VIRTUAL_COCKPIT_COMPASS |
-						VIRTUAL_COCKPIT_RAIN_EFFECT |
-						VIRTUAL_COCKPIT_MAIN_ROTOR,
-						NULL
-					);
-
-					draw_hind_internal_virtual_cockpit
-					(
-						VIRTUAL_COCKPIT_COCKPIT |
-						VIRTUAL_COCKPIT_HUD_GLASS |
-						VIRTUAL_COCKPIT_HUD_DISPLAY |
-						VIRTUAL_COCKPIT_CRT_DISPLAY |
-						VIRTUAL_COCKPIT_EKRAN_DISPLAY |
-						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-					);
-				}
+				draw_hind_external_3d_cockpit(0, NULL);
+				draw_hind_internal_3d_cockpit(0);
 			}
 			else
 			{
@@ -1847,17 +1824,21 @@ void draw_virtual_cockpit_3d_view (void)
 				if(command_line_export_mfd)
 				{
 					draw_hind_mfd_on_texture();
+#if 0
 					if (get_global_draw_overlaid_instruments ())
 					{
 						draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
 					}
+#endif
 				}
 				else
 				{
 					if (get_global_draw_overlaid_instruments ())
 					{
 						draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
+#if 0
 						draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+#endif
 					}
 				}
 			}
@@ -2125,7 +2106,7 @@ void draw_virtual_cockpit_3d_view (void)
 	//
 
 	specular_rendering_enabled = specular;
-	
+
 	get_pilot_head_viewpoint ();
 }
 
@@ -2299,7 +2280,7 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	//
 
 	specular_rendering_enabled = specular;
-	
+
 	get_pilot_head_viewpoint ();
 }
 
@@ -2350,7 +2331,9 @@ void draw_virtual_cockpit_3d_hud_view (void)
 				{
 					draw_overlaid_havoc_mfd (68.0, 412.0, 128.0);
 
+#if 0
 					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+#endif
 				}
 			}
 
@@ -2424,28 +2407,8 @@ void draw_virtual_cockpit_3d_hud_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				if (custom_3d_models.arneh_mi24v_cockpit)
-				{
-					draw_hind_external_3d_cockpit(0, NULL);
-					draw_hind_internal_3d_cockpit(0);
-				}
-				else
-				{
-					draw_hind_external_virtual_cockpit
-					(
-						VIRTUAL_COCKPIT_STOWED_WIPER |
-						VIRTUAL_COCKPIT_MOVING_WIPER |
-						VIRTUAL_COCKPIT_RAIN_EFFECT |
-						VIRTUAL_COCKPIT_MAIN_ROTOR,
-						NULL
-					);
-
-					draw_hind_internal_virtual_cockpit
-					(
-						VIRTUAL_COCKPIT_COCKPIT |
-						VIRTUAL_COCKPIT_HUD_GLASS
-					);
-				}
+				draw_hind_external_3d_cockpit(0, NULL);
+				draw_hind_internal_3d_cockpit(0);
 			}
 			else
 			{
@@ -2453,7 +2416,9 @@ void draw_virtual_cockpit_3d_hud_view (void)
 				{
 					draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
 
+#if 0
 					draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+#endif
 				}
 			}
 
@@ -2524,7 +2489,7 @@ void draw_virtual_cockpit_3d_hud_view (void)
 	//
 
 	specular_rendering_enabled = specular;
-	
+
 	get_pilot_head_viewpoint ();
 }
 
@@ -2545,11 +2510,11 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	specular_rendering_enabled = FALSE;
 
 	// clear lights and fog
-	
+
 	set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 	set_3d_fogmode ( main_3d_env, FOGMODE_ON_AUTOMATIC );
 	recalculate_3d_environment_settings (main_3d_env);
-	
+
 	switch (get_global_gunship_type())
 	{
 	case  GUNSHIP_TYPE_APACHE:
@@ -2575,7 +2540,7 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	//
 
 	specular_rendering_enabled = specular;
-	
+
 	get_pilot_head_viewpoint ();
 }
 
@@ -2658,7 +2623,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			draw_comanche_virtual_cockpit ();
 
+#if 0
 			draw_comanche_full_screen_display ();
+#endif
 
 			break;
 		}
@@ -2674,7 +2641,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			draw_hokum_virtual_cockpit ();
 
+#if 0
 			draw_hokum_full_screen_display ();
+#endif
 
 			break;
 		}
@@ -2702,15 +2671,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 		{
 			set_pilots_full_screen_params (FALSE);
 
-			if (custom_3d_models.arneh_mi24v_cockpit)
-				draw_hind_internal_3d_cockpit(0);
-			else
-				draw_hind_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_CRT_DISPLAY |
-					VIRTUAL_COCKPIT_EKRAN_DISPLAY
-				);
+			draw_hind_internal_3d_cockpit(0);
 
 			break;
 		}
@@ -2743,7 +2704,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			draw_ka50_virtual_cockpit ();
 
+#if 0
 			draw_ka50_full_screen_display ();
+#endif
 
 			break;
 		}
@@ -2760,7 +2723,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			draw_viper_virtual_cockpit ();
 
+#if 0
 			draw_viper_full_screen_display ();
+#endif
 
 			break;
 		}
@@ -2776,7 +2741,9 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			draw_kiowa_virtual_cockpit ();
 
+#if 0
 			draw_kiowa_full_screen_display ();
+#endif
 
 			break;
 		}
@@ -2807,7 +2774,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 	//
 
 	specular_rendering_enabled = specular;
-	
+
 	get_pilot_head_viewpoint ();
 }
 
@@ -3964,6 +3931,7 @@ void select_padlock_view_event (padlock_modes mode)
 				// padlock target is handled via VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET
 				//
 
+#if 0
 				if (get_apache_havoc_gunship_fixed_cockpit ())
 				{
 					target = get_local_entity_parent (source, LIST_TYPE_TARGET);
@@ -3976,6 +3944,7 @@ void select_padlock_view_event (padlock_modes mode)
 					set_view_mode (get_nearest_fixed_cockpit_view (pilot_head_heading, pilot_head_pitch));
 				}
 				else
+#endif
 				{
 					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
 				}
@@ -3986,6 +3955,7 @@ void select_padlock_view_event (padlock_modes mode)
 				// cancel padlock
 				//
 
+#if 0
 				if (get_apache_havoc_gunship_fixed_cockpit ())
 				{
 					//
@@ -3995,6 +3965,7 @@ void select_padlock_view_event (padlock_modes mode)
 					set_view_mode (get_nearest_fixed_cockpit_view (pilot_head_heading, pilot_head_pitch));
 				}
 				else
+#endif
 				{
 					//
 					// leave_padlock_view () tidies up padlock list and mode

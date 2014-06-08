@@ -852,256 +852,38 @@ static void enter_view_mode (view_modes mode)
 	{
 		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT60:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT90:
 		////////////////////////////////////////
 		{
 			pilot_head_heading = pilot_head_heading_values[mode];
 
 			pilot_head_pitch = pilot_head_pitch_values[mode];
 
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
+			mode = VIEW_MODE_VIRTUAL_COCKPIT;
 
 			break;
 		}
@@ -1113,7 +895,6 @@ static void enter_view_mode (view_modes mode)
 
 			pilot_head_pitch = pilot_head_pitch_values[mode];
 
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
 			{
 				gunship_types type = get_global_gunship_type();
 				//VJ 050211 needed for wideview pitch setting
@@ -1144,96 +925,6 @@ static void enter_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD:
 		////////////////////////////////////////
 		{
@@ -1242,15 +933,21 @@ static void enter_view_mode (view_modes mode)
 				// JB 030313 Fly any aircraft
 				default:
 				case GUNSHIP_TYPE_APACHE:
+				////Moje 030518 Start
+				case GUNSHIP_TYPE_BLACKHAWK:
+				////Moje 030518 End
+				////Moje 030612 Start
+				case GUNSHIP_TYPE_HIND:
+				////Moje 030612 End
+				////Moje 030816 Start
+				case GUNSHIP_TYPE_AH64A:
+				case GUNSHIP_TYPE_KA50:
 				{
 					pilot_head_heading = pilot_head_heading_values[mode];
 
 					pilot_head_pitch = pilot_head_pitch_values[mode];
 
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
+					mode = VIEW_MODE_VIRTUAL_COCKPIT;
 
 					break;
 				}
@@ -1260,10 +957,7 @@ static void enter_view_mode (view_modes mode)
 
 					pilot_head_pitch = pilot_head_pitch_values[mode];
 
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
+					mode = VIEW_MODE_VIRTUAL_COCKPIT;
 
 					break;
 				}
@@ -1282,60 +976,6 @@ static void enter_view_mode (view_modes mode)
 					pilot_head_heading = HOKUM_INSTRUMENT_VIEW_HEADING;
 
 					pilot_head_pitch = HOKUM_INSTRUMENT_VIEW_PITCH;
-
-					mode = VIEW_MODE_VIRTUAL_COCKPIT;
-
-					break;
-				}
-				////Moje 030518 Start
-				case GUNSHIP_TYPE_BLACKHAWK:
-				{
-					pilot_head_heading = pilot_head_heading_values[mode];
-
-					pilot_head_pitch = pilot_head_pitch_values[mode];
-
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
-
-					break;
-				}
-				////Moje 030518 End
-				////Moje 030612 Start
-				case GUNSHIP_TYPE_HIND:
-				{
-					pilot_head_heading = pilot_head_heading_values[mode];
-
-					pilot_head_pitch = pilot_head_pitch_values[mode];
-
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
-
-					break;
-				}
-				////Moje 030612 End
-				////Moje 030816 Start
-				case GUNSHIP_TYPE_AH64A:
-				{
-					pilot_head_heading = pilot_head_heading_values[mode];
-
-					pilot_head_pitch = pilot_head_pitch_values[mode];
-
-					if (!get_apache_havoc_gunship_fixed_cockpit ())
-					{
-						mode = VIEW_MODE_VIRTUAL_COCKPIT;
-					}
-
-					break;
-				}
-				case GUNSHIP_TYPE_KA50:
-				{
-					pilot_head_heading = pilot_head_heading_values[mode];
-
-					pilot_head_pitch = pilot_head_pitch_values[mode];
 
 					mode = VIEW_MODE_VIRTUAL_COCKPIT;
 
@@ -1367,81 +1007,9 @@ static void enter_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT60:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT90:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			if (!get_apache_havoc_gunship_fixed_cockpit ())
-			{
-				mode = VIEW_MODE_VIRTUAL_COCKPIT;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
-		////////////////////////////////////////
-		{
-			pilot_head_heading = pilot_head_heading_values[mode];
-
-			pilot_head_pitch = pilot_head_pitch_values[mode];
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
 		////////////////////////////////////////
 		{
@@ -1453,12 +1021,14 @@ static void enter_view_mode (view_modes mode)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK:
+		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+		case VIEW_MODE_EXTERNAL:
+		case VIEW_MODE_SAFE:
 		////////////////////////////////////////
 		{
 			break;
@@ -1486,12 +1056,6 @@ static void enter_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_HUD:
 		////////////////////////////////////////
 		{
@@ -1505,6 +1069,7 @@ static void enter_view_mode (view_modes mode)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
+			//FIXME
 			if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM
 				|| get_global_gunship_type () == GUNSHIP_TYPE_HIND
 				|| get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
@@ -1514,42 +1079,6 @@ static void enter_view_mode (view_modes mode)
 				pilot_head_pitch = HOKUM_INSTRUMENT_VIEW_PITCH;
 			}
 
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_EXTERNAL:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case VIEW_MODE_SAFE:
-		////////////////////////////////////////
-		{
 			break;
 		}
 		////////////////////////////////////////
@@ -1610,334 +1139,47 @@ entity *get_viewed_entity (void)
 	switch (get_view_mode ())
 	{
 		////////////////////////////////////////
-		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
+		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
 		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT60:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT90:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_HUD:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			en = get_gunship_entity ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
 		////////////////////////////////////////
 		{

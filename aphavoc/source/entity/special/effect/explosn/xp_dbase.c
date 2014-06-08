@@ -422,7 +422,7 @@ static void import_explosion_database(void)
 							continue;
 						}
 
-						co->particle_generator_lifetime = min(command_line_max_smoke_time * 60, co->particle_generator_lifetime);
+						co->particle_generator_lifetime = min(command_line_max_smoke_time * 60.0f, co->particle_generator_lifetime);
 
 						break;
 					}
@@ -444,7 +444,7 @@ static void import_explosion_database(void)
 							continue;
 						}
 
-						co->generator_lifetime = min(command_line_max_smoke_time * 60, co->generator_lifetime);
+						co->generator_lifetime = min(command_line_max_smoke_time * 60.0f, co->generator_lifetime);
 						
 						break;
 					}
@@ -2951,7 +2951,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 400.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 400.0f);
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 100.0;
 
@@ -2971,7 +2971,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 120.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 120.0f);
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -2991,7 +2991,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 200.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 200.0f);
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 
@@ -3197,7 +3197,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 1200.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 1200.0f);
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 200.0;
 
@@ -3217,7 +3217,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 120.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 120.0f);
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -3237,7 +3237,7 @@ void initialise_object_explosive_explosion_database(void)
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60, 200.0);
+	explosion_info->generator_lifetime = min(command_line_max_smoke_time * 60.0f, 200.0f);
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 

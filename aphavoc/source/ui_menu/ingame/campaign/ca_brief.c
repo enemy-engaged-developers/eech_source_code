@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -70,8 +70,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define RENDER_STILL_PREVIEW	(d3d_can_render_to_texture)
 
 #define PREVIEW_TEXTURE_SIZE 256
 
@@ -169,16 +167,16 @@ void show_briefing_page (entity *mission, int force_update)
 
 		if ((*text_ptr != '\0') && (*text_ptr != '\n'))
 		{
-	
+
 			while ((*text_ptr != '\0') && (*text_ptr != '\n'))
 			{
-	
+
 				*dest_text_ptr = *text_ptr;
-	
+
 				dest_text_ptr ++;
 				text_ptr ++;
 			}
-	
+
 			*dest_text_ptr = ' ';
 			dest_text_ptr ++;
 		}
@@ -189,16 +187,16 @@ void show_briefing_page (entity *mission, int force_update)
 
 		if ((*text_ptr != '\0') && (*text_ptr != '\n'))
 		{
-	
+
 			while ((*text_ptr != '\0') && (*text_ptr != '\n'))
 			{
-	
+
 				*dest_text_ptr = *text_ptr;
-	
+
 				dest_text_ptr ++;
 				text_ptr ++;
 			}
-	
+
 			*dest_text_ptr = ' ';
 			dest_text_ptr ++;
 		}
@@ -213,7 +211,7 @@ void show_briefing_page (entity *mission, int force_update)
 	resize_briefing_list_size (briefing_text_list);
 
 	//
-	// 
+	//
 	//
 
 	if (force_update)
@@ -253,7 +251,7 @@ void show_briefing_page (entity *mission, int force_update)
 	}
 
 	//
-	// LANDING BASE 
+	// LANDING BASE
 	//
 
 	base = (entity *) get_local_entity_ptr_value (mission, PTR_TYPE_RETURN_KEYSITE);
@@ -274,7 +272,7 @@ void show_briefing_page (entity *mission, int force_update)
 	//
 	// GROUP DOING MISSION
 	//
-	
+
 	guide = get_local_entity_first_child (mission, LIST_TYPE_GUIDE);
 
 	if (guide)
@@ -282,9 +280,9 @@ void show_briefing_page (entity *mission, int force_update)
 		group = get_local_entity_parent (guide, LIST_TYPE_GUIDE_STACK);
 
 		ASSERT (group);
-		
+
 		ASSERT (get_local_entity_type (group) == ENTITY_TYPE_GROUP);
-		
+
 		if (get_local_entity_int_value (group, INT_TYPE_AIRCRAFT_GROUP))
 		{
 			set_ui_object_text (briefing_page_group_box, get_local_entity_string (group, STRING_TYPE_DIVISION_NAME));
@@ -308,7 +306,7 @@ void show_briefing_page (entity *mission, int force_update)
 	//
 
 	if (mission != previous)
-	{	
+	{
 		objective_name = get_task_objective_string (mission);
 
 		if (objective_name)
@@ -332,13 +330,13 @@ void show_briefing_page (entity *mission, int force_update)
 					//
 					// No 3D preview available for this mission
 					//
-					
+
 					set_ui_object_drawable (page_3d_toggle, FALSE);
 
 					set_ui_object_drawable (page_3d_area, FALSE);
-				
+
 					set_ui_object_drawable (page_map_area, TRUE);
-				
+
 					set_ui_object_state (page_map_toggle, UI_OBJECT_STATE_ON);
 
 					break;
@@ -354,7 +352,7 @@ void show_briefing_page (entity *mission, int force_update)
 					//
 					// Render scene
 					//
-					
+
 					render_static_briefing_objective_preview (objective);
 
 					break;
@@ -364,7 +362,7 @@ void show_briefing_page (entity *mission, int force_update)
 					//
 					// Live 3D preview available for this mission
 					//
-					
+
 					set_ui_object_drawable (page_3d_toggle, TRUE);
 
 					break;
@@ -398,7 +396,7 @@ void show_briefing_page (entity *mission, int force_update)
 			*base_pos;
 
 		base = get_local_entity_parent (mission, get_local_task_list_type (mission));
-			
+
 		base_pos = get_local_entity_vec3d_ptr (base, VEC3D_TYPE_POSITION);
 
 		min_pos = *base_pos;
@@ -457,7 +455,7 @@ void show_briefing_page (entity *mission, int force_update)
 					max_pos.x = max (max_pos.x, pos->x);
 					max_pos.z = max (max_pos.z, pos->z);
 				}
-			}				
+			}
 		}
 
 		page_map_dimensions.x = (min_pos.x + max_pos.x) * 0.5;
@@ -471,14 +469,14 @@ void show_briefing_page (entity *mission, int force_update)
 
 		page_map_dimensions.subject_entity = mission;
 	}
-	
+
 	//
 	// Accept Button
 	//
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 	{
-		set_ui_object_drawable (mission_accept_button, FALSE); 
+		set_ui_object_drawable (mission_accept_button, FALSE);
 	}
 	else
 	{
@@ -534,7 +532,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 	ASSERT (get_local_entity_type (mission) == ENTITY_TYPE_TASK);
 
 	//
-	// STATUS 
+	// STATUS
 	//
 
 	if (get_local_task_list_type (mission) == LIST_TYPE_UNASSIGNED_TASK)
@@ -570,7 +568,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		if (get_local_task_list_type (mission) == LIST_TYPE_UNASSIGNED_TASK)
 		{
 			sprintf (output, "%s :  ", get_trans ("Expires"));
-			
+
 			set_ui_object_text (briefing_page_expire_elapsed_text_box, output);
 
 			expire_timer = get_local_entity_float_value (mission, FLOAT_TYPE_EXPIRE_TIMER);
@@ -578,7 +576,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		else
 		{
 			sprintf (output, "%s :  ", get_trans ("Elapsed Time"));
-			
+
 			set_ui_object_text (briefing_page_expire_elapsed_text_box, output);
 
 			expire_timer = get_local_entity_float_value (mission, FLOAT_TYPE_ELAPSED_MISSION_TIME);
@@ -587,7 +585,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		expire_timer = min (expire_timer, (float) ONE_DAY);
 
 		get_digital_countdown_values (expire_timer, NULL, &hours, &minutes, &seconds);
-	
+
 		sprintf (s, "%02d:%02d:%02d", hours, minutes, seconds);
 
 		set_ui_object_text (briefing_page_expire_time_box, s);
@@ -613,7 +611,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		get_digital_countdown_values (flight_time, NULL, &hours, &minutes, &seconds);
 
 		seconds = 0;
-	
+
 		sprintf (s, "%02d:%02d:%02d", hours, minutes, seconds);
 
 		set_ui_object_text (briefing_page_duration_time_box, s);
@@ -641,7 +639,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		vec3d
 			*pos,
 			wind_velocity;
-	
+
 		keysite = get_local_entity_parent (mission, get_local_task_list_type (mission));
 
 		ASSERT (keysite);
@@ -788,7 +786,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 	{
 		entity
 			*pilot;
-			
+
 		pilot = get_local_entity_parent (mission, LIST_TYPE_PILOT_LOCK);
 
 		if (pilot)
@@ -820,7 +818,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -829,7 +827,7 @@ static void notify_base_selected (ui_object *obj, void *arg)
 {
 	int
 		index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -846,7 +844,7 @@ static void notify_group_selected (ui_object *obj, void *arg)
 {
 	int
 		index;
-		
+
 	index = get_ui_object_item_number (obj);
 
 	if (index != ENTITY_INDEX_DONT_CARE)
@@ -889,7 +887,7 @@ static void draw_page_map (ui_object *obj, void *arg)
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]));
 
 	ASSERT (en);
-	
+
 	draw_2d_map (obj, arg);
 }
 
@@ -906,7 +904,7 @@ static void notify_mission_accept_button (ui_object *obj, void *arg)
 		*group,
 		*guide,
 		*mission;
-		
+
 	index = get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]);
 
 	ASSERT (index != ENTITY_INDEX_DONT_CARE);
@@ -922,23 +920,23 @@ static void notify_mission_accept_button (ui_object *obj, void *arg)
 			//
 			// Automatically change list mode to group
 			//
-			
+
 			show_group_list (NULL, NULL);
-	
+
 			if (get_local_entity_int_value (mission, INT_TYPE_TASK_STATE) == TASK_STATE_ASSIGNED)
 			{
 				//
 				// Automatically Show group page
 				//
-			
+
 				guide = get_local_entity_first_child (mission, LIST_TYPE_GUIDE);
-	
+
 				ASSERT (guide);
-	
+
 				group = get_local_entity_parent (guide, LIST_TYPE_GUIDE_STACK);
-	
+
 				ASSERT (group);
-		
+
 				show_group_page (group, FALSE);
 			}
 		}
@@ -968,61 +966,56 @@ static void draw_page_3d_scene (ui_object *obj, void *arg)
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
 
 	mission = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]));
-	
+
 	if (en && mission)
 	{
 		switch (get_local_entity_int_value (mission, INT_TYPE_TASK_OBJECTIVE_PREVIEW_TYPE))
 		{
 			case TASK_OBJECTIVE_PREVIEW_STILL:
 			{
-				if (RENDER_STILL_PREVIEW)
-				{
-					draw_campaign_screen_texture_to_object (preview_texture_screen, obj);
+				draw_campaign_screen_texture_to_object (preview_texture_screen, obj);
 
-					break;
-				}
-
-				// DELIBERATE FALL-THROUGH
+				break;
 			}
 			case TASK_OBJECTIVE_PREVIEW_LIVE:
 			{
 				vec3d
 					vec;
-			
+
 				float
 					heading,
 					pitch,
 					distance;
-			
+
 				pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-		
+
 				ASSERT (pos);
-				
+
 				distance = get_local_entity_float_value (en, FLOAT_TYPE_RECON_DISTANCE);
 
 				if (distance > 0.0)
 				{
 					heading = PI;
-	
+
 					pitch = rad (60.0);
-	
+
 					get_3d_unit_vector_from_heading_and_pitch (&vec, heading, pitch);
-	
+
 					vp.x = pos->x + (distance * vec.x);
 					vp.y = pos->y + (distance * vec.y);
 					vp.z = pos->z + (distance * vec.z);
-	
+
 					invert_3d_vector (&vec);
-	
+
 					get_matrix3x3_from_unit_vec3d (vp.attitude, &vec);
-	
+
 					draw_campaign_screen_3d_scene (obj, &vp);
 				}
 				else
 				{
 					debug_log ("CA_MISS: INVALID RECON DISTANCE FOR %s", get_local_entity_type_name (en));
 				}
-							
+
 				break;
 			}
 		}
@@ -1047,10 +1040,6 @@ void render_static_briefing_objective_preview (entity *en)
 		pitch,
 		distance;
 
-	if (!RENDER_STILL_PREVIEW)
-	{
-		return;
-	}
 
 	ASSERT (en);
 
@@ -1086,7 +1075,7 @@ void render_static_briefing_objective_preview (entity *en)
 	//
 	// Hack time of day to mid-day (i.e. light scene from above)
 	//
-	
+
 	set_3d_time_of_day (main_3d_env, 12.0 * ONE_HOUR);
 
 	recalculate_3d_environment_settings (main_3d_env);
@@ -1094,9 +1083,10 @@ void render_static_briefing_objective_preview (entity *en)
 	//
 	// Draw scene
 	//
-	
+
 	draw_campaign_screen_3d_scene_to_texture (preview_texture_screen, &vp, PREVIEW_TEXTURE_SIZE);
 
+#if 0
 	//
 	// Add greyscale effect (test)
 	//
@@ -1117,7 +1107,7 @@ void render_static_briefing_objective_preview (entity *en)
 		lock_screen (preview_texture_screen);
 
 		set_active_screen (preview_texture_screen);
-	
+
 		for (y = 0; y < PREVIEW_TEXTURE_SIZE; y ++)
 		{
 			for (x = 0; x < PREVIEW_TEXTURE_SIZE; x ++)
@@ -1125,7 +1115,7 @@ void render_static_briefing_objective_preview (entity *en)
 				get_pixel (x, y, &col);
 
 				greyscale = (col.r + col.g + col.b) / 3;
-	
+
 				col.r = greyscale;
 				col.g = greyscale;
 				col.b = greyscale;
@@ -1138,6 +1128,7 @@ void render_static_briefing_objective_preview (entity *en)
 
 		set_active_screen (old_screen);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1146,14 +1137,7 @@ void render_static_briefing_objective_preview (entity *en)
 
 void initialise_campaign_screen_3d_textures (void)
 {
-	if (RENDER_STILL_PREVIEW)
-	{
-		preview_texture_screen = create_user_3dvisual_texture_screen (PREVIEW_TEXTURE_SIZE, PREVIEW_TEXTURE_SIZE, TEXTURE_TYPE_SCREEN);
-	}
-	else
-	{
-		preview_texture_screen = NULL;
-	}
+	preview_texture_screen = create_user_3dvisual_texture_screen (PREVIEW_TEXTURE_SIZE, PREVIEW_TEXTURE_SIZE, TEXTURE_TYPE_SCREEN);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1162,10 +1146,7 @@ void initialise_campaign_screen_3d_textures (void)
 
 void deinitialise_campaign_screen_3d_textures (void)
 {
-	if (RENDER_STILL_PREVIEW)
-	{
-		destroy_screen (preview_texture_screen);
-	}
+	destroy_screen (preview_texture_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1217,7 +1198,7 @@ void define_campaign_screen_briefing_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Title
-			
+
 	x1 = 0.045;
 	y1 = 0.045;
 	x2 = 0.45;
@@ -1261,13 +1242,13 @@ void define_campaign_screen_briefing_page_objects (void)
 	x_mid = 0.224;
 
 	x_end = 0.464;
-	
+
 	ysize = 0.04;
 
 	yinc = 0.045;
 
 	/////////////////////////////////////////////////////////////////
-	// Task Status Box 
+	// Task Status Box
 
 	x1 = x_start;
 	y1 = 0.178;
@@ -1275,7 +1256,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Status"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1317,7 +1298,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Expires"));
-			
+
 	briefing_page_expire_elapsed_text_box = create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1350,7 +1331,7 @@ void define_campaign_screen_briefing_page_objects (void)
 			);
 
 	/////////////////////////////////////////////////////////////////
-	// Duration Time 
+	// Duration Time
 
 	x1 = x_start;
 	x2 = x_mid;
@@ -1359,7 +1340,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Est. Duration"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1403,7 +1384,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Priority"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1447,7 +1428,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Start Base"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1491,7 +1472,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Landing Base"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1535,7 +1516,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Group"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1579,7 +1560,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Objective"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1621,7 +1602,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Weather"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1663,7 +1644,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Wind"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1705,7 +1686,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	y2 = y1 + ysize;
 
 	sprintf (output, "%s :  ", get_trans ("Locked By"));
-			
+
 	create_ui_object
 			(
 				UI_TYPE_AREA,
@@ -1751,7 +1732,7 @@ void define_campaign_screen_briefing_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\blockprp.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -1769,7 +1750,7 @@ void define_campaign_screen_briefing_page_objects (void)
 				UI_ATTR_PARENT (page),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
-				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd")),
+				UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\maptabs.psd", 0)),
 				UI_ATTR_END
 			);
 
@@ -1823,7 +1804,7 @@ void define_campaign_screen_briefing_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// 3d Preview Area
-		
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -1842,7 +1823,7 @@ void define_campaign_screen_briefing_page_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	// Map Area
-			
+
 	x1 = 0.01;
 	y1 = 0.0;
 	x2 = 1.0;
@@ -1904,7 +1885,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	///////////////////////////////////////////////////
 	// Accept Button
 	///////////////////////////////////////////////////
-		
+
 	x1 = 0.283;
 	y1 = 0.949;
 	x2 = 0.699;
@@ -1923,7 +1904,7 @@ void define_campaign_screen_briefing_page_objects (void)
 			UI_ATTR_SELECTED_FONT_COLOUR (ui_ingame_selected_text_colour.r, ui_ingame_selected_text_colour.g, ui_ingame_selected_text_colour.b, ui_ingame_selected_text_colour.a),
 			UI_ATTR_HIGHLIGHTABLE (TRUE),
 			UI_ATTR_FUNCTION (notify_mission_accept_button),
-			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\acptbtn.psd")),
+			UI_ATTR_TEXTURE_GRAPHIC (create_texture_graphic ("graphics\\ui\\cohokum\\map\\acptbtn.psd", 0)),
 			UI_ATTR_END
 		);
 

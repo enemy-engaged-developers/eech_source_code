@@ -70,16 +70,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define FULL_SCREEN_WIDTH	(640)
-#define FULL_SCREEN_HEIGHT	(480)
-
-int
-	ix_640_480										= (FULL_SCREEN_WIDTH - 640) / 2,
-	iy_640_480										= (FULL_SCREEN_HEIGHT - 480) / 2;
-
-float
-	fx_640_480										= (FULL_SCREEN_WIDTH - 640.0) / 2.0,
-	fy_640_480										= (FULL_SCREEN_HEIGHT - 480.0) / 2.0;
+#define FULL_SCREEN_WIDTH	(800)
+#define FULL_SCREEN_HEIGHT	(600)
 
 float
 	full_screen_width								= FULL_SCREEN_WIDTH,
@@ -88,8 +80,9 @@ float
 	full_screen_y_min								= 0.0,
 	full_screen_x_mid								= FULL_SCREEN_WIDTH / 2.0,
 	full_screen_y_mid								= FULL_SCREEN_HEIGHT / 2.0,
-	full_screen_x_max								= FULL_SCREEN_WIDTH - 0.001,
-	full_screen_y_max								= FULL_SCREEN_HEIGHT - 0.001,
+	full_screen_x_max								= FULL_SCREEN_WIDTH,
+	full_screen_y_max								= FULL_SCREEN_HEIGHT,
+	full_screen_virtual_fov							= rad (59.99),
 	full_screen_aspect_ratio                        = 59.99 / 46.82,
 	full_screen_width_view_angle				= rad (59.99),
 	full_screen_height_view_angle				= rad (46.82);
@@ -99,16 +92,7 @@ int
 	int_full_screen_height						= FULL_SCREEN_HEIGHT;
 
 int
-	full_screen_hi_res							= FALSE,
-	full_screen_colourdepth						= 16,
 	full_screen_3d_information	 				= FALSE;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int
-	original_d3d_can_render_to_texture;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,9 +147,9 @@ void set_3d_resolutions (float width, float height)
 		// Default resolution
 		//
 
-		width = 640.0;
+		width = 800.0;
 
-		height = 480.0;
+		height = 600.0;
 	}
 
 
@@ -187,9 +171,7 @@ void set_3d_resolutions (float width, float height)
 
 	// arneh - calulate aspect from width and height, and use aspect to set view angle
 	full_screen_aspect_ratio = width / height;
-	set_view_angles ( full_screen_width_view_angle );
-
-	full_screen_hi_res		= width > 640.0;
+	set_view_angles ( full_screen_virtual_fov );
 
 	full_screen_width			= width;
 	full_screen_height		= height;
@@ -201,14 +183,8 @@ void set_3d_resolutions (float width, float height)
 	full_screen_y_min			= 0.0;
 	full_screen_x_mid	  		= width / 2.0;
 	full_screen_y_mid	  		= height / 2.0;
-	full_screen_x_max	  		= width - 0.001;
-	full_screen_y_max	  		= height - 0.001;
-
-	ix_640_480			  		= ((int) width - 640) / 2;
-	iy_640_480			  		= ((int) height - 480) / 2;
-
-	fx_640_480			 		= (width - 640.0) / 2.0;
-	fy_640_480			  		= (height - 480.0) / 2.0;
+	full_screen_x_max	  		= width;
+	full_screen_y_max	  		= height;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,25 +226,6 @@ void decrease_3d_resolutions ( event *ev )
 	{
 
 		set_3d_resolutions ( ( float ) graphics_resolution_modes_available[index].width, ( float ) graphics_resolution_modes_available[index].height );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void cycle_3d_colourdepth ( event *ev )
-{
-
-	if ( full_screen_colourdepth == 16 )
-	{
-
-		full_screen_colourdepth = 32;
-	}
-	else
-	{
-
-		full_screen_colourdepth = 16;
 	}
 }
 
@@ -427,20 +384,33 @@ int get_integer_screen_y_max (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 13JUL2011 Casm corrected vertical view angle calculations
-
-float get_height_view_angle ( float width_view_angle )
+// 28MAY2014 Casm virtual FOV
+void calc_view_angles ( float virtual_width_view_angle, float *width_view_angle, float *height_view_angle )
 {
-	return 2 * atan ( tan ( width_view_angle / 2 ) / full_screen_aspect_ratio );
+	if ( full_screen_aspect_ratio < 1.34f )
+	{
+		*width_view_angle = virtual_width_view_angle;
+		*height_view_angle = 2 * atan ( tan ( virtual_width_view_angle / 2 ) / full_screen_aspect_ratio );
+	}
+	else
+	{
+		float
+			virtual_height_tan_half_view_angle;
+
+		virtual_height_tan_half_view_angle = tan ( virtual_width_view_angle / 2 ) * 1.333333f;
+		*height_view_angle = 2 * atan ( virtual_height_tan_half_view_angle );
+		*width_view_angle = 2 * atan ( virtual_height_tan_half_view_angle * full_screen_aspect_ratio );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void set_view_angles ( float width_view_angle )
+void set_view_angles ( float virtual_width_view_angle )
 {
-	full_screen_width_view_angle = width_view_angle;
-	full_screen_height_view_angle = get_height_view_angle ( width_view_angle );
+	full_screen_virtual_fov = virtual_width_view_angle;
+	calc_view_angles ( virtual_width_view_angle, &full_screen_width_view_angle, &full_screen_height_view_angle );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

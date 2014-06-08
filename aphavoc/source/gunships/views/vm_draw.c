@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -81,7 +81,7 @@ static status_message_types
 
 static int
 	in_tir_periscope = FALSE;
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,8 +91,8 @@ static int
 #define STATUS_MESSAGE_FLASH_PERIOD		(STATUS_MESSAGE_FLASH_ON_TIME + STATUS_MESSAGE_FLASH_OFF_TIME)
 
 #define DEFAULT_FOV  rad(60.0)
-#define FOV_CHANGE_RATE  rad(30.0)
-	
+#define FOV_CHANGE_RATE  rad(300.0)
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ static void display_status_message (void)
 
 	if (command_line_disable_message_text)
 		return;
-	
+
 	if (status_message_timer > 0.0)
 	{
 		set_ui_font_type (UI_FONT_ARIAL_16);
@@ -245,7 +245,7 @@ static void display_eject_message (void)
 
 	if (command_line_disable_message_text)
 		return;
-	
+
 	display_message = FALSE;
 
 	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_EJECT)
@@ -334,7 +334,7 @@ static void display_time_acceleration (void)
 
 static void update_field_of_view(void)
 {
-	int
+	float
 		max_fov = get_max_fov ();
 	camera
 		*raw;
@@ -342,26 +342,27 @@ static void update_field_of_view(void)
 	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	ASSERT(raw);
-	
-	if (query_TIR_active() && command_line_external_trackir && 
+
+	if (query_TIR_active() && command_line_external_trackir &&
 			raw->camera_mode == CAMERA_MODE_FREE && get_view_mode () == VIEW_MODE_EXTERNAL) // external free camera only
 	{
 		float
 			fov,
-			dz = bound(0.5 + (float) TIR_GetZ() / 32767, 0.0, 1.0);
-		
+			dz = bound(0.5f + TIR_GetZ() / 32767.0f, 0.0f, 1.0f);
+
 		fov = rad(command_line_min_fov) + dz * (rad(max_fov) - rad(command_line_min_fov));
 		set_view_angles(fov);
 	}
 	else if (command_line_field_of_view_joystick_index != -1)
 	{
-		int joyval = get_joystick_axis(command_line_field_of_view_joystick_index, command_line_field_of_view_joystick_axis);
-		float fov;
+		float
+			joyval = get_joystick_axis(command_line_field_of_view_joystick_index, command_line_field_of_view_joystick_axis),
+			fov;
 
 		if (joyval <= 0)
-			fov = DEFAULT_FOV - (((float)joyval / JOYSTICK_AXIS_MINIMUM) * (DEFAULT_FOV - rad(command_line_min_fov)));
+			fov = DEFAULT_FOV - ((joyval / JOYSTICK_AXIS_MINIMUM) * (DEFAULT_FOV - rad(command_line_min_fov)));
 		else
-			fov = DEFAULT_FOV + (((float)joyval / JOYSTICK_AXIS_MAXIMUM) * (rad(max_fov) - DEFAULT_FOV));
+			fov = DEFAULT_FOV + ((joyval / JOYSTICK_AXIS_MAXIMUM) * (rad(max_fov) - DEFAULT_FOV));
 
 		set_view_angles(fov);
 	}
@@ -371,15 +372,15 @@ static void update_field_of_view(void)
 	// fov control by mouse wheel thealx 130212
 
 	else if ((command_line_mouse_look == MOUSELOOK_ON) || (command_line_eo_zoom_joystick_index != -1) )
-	{		
+	{
 		if (mouse_wheel_up)
 		{
-				set_view_angles(bound((full_screen_width_view_angle - 10 * FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
+				set_view_angles(bound((full_screen_virtual_fov - FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
 				mouse_wheel_up--;
 		}
 		else if (mouse_wheel_down)
 		{
-				set_view_angles(bound((full_screen_width_view_angle + 10 * FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
+				set_view_angles(bound((full_screen_virtual_fov + FOV_CHANGE_RATE * get_delta_time()), rad(command_line_min_fov), rad(max_fov)));
 				mouse_wheel_down--;
 		}
 	}
@@ -393,7 +394,7 @@ void draw_view (void)
 {
 	TIR_Poll (); // Retro 6Feb2005
 
-	update_field_of_view();	
+	update_field_of_view();
 
 	// Retro 6Feb2005 (whole block)
 	if ((command_line_TIR_6DOF)&&(query_TIR_active() == TRUE)&&
@@ -404,369 +405,70 @@ void draw_view (void)
 		current_custom_cockpit_viewpoint.z = getViewpointOffsetZ(current_custom_cockpit_viewpoint.z);
 	}
 
-   switch (view_mode)
-   {
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
-	////////////////////////////////////////
+	switch (view_mode)
 	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_LEFT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_AHEAD);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP40_RIGHT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_LEFT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_AHEAD);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_UP20_RIGHT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_LEFT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_AHEAD);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT30);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_LEVEL_RIGHT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT90);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-		 draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT60);
-
-		 break;
-	}
-	////////////////////////////////////////
-	case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
-	////////////////////////////////////////
-	{
-		 draw_fixed_cockpit_3d_view ();
-
-			draw_cockpit (COCKPIT_PANEL_DOWN20_LEFT30);
-
-			break;
-		}
 		////////////////////////////////////////
+		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT90:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT60:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_LEFT30:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_AHEAD:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT30:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT60:
+		case VIEW_MODE_COCKPIT_PANEL_UP40_RIGHT90:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT90:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT60:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_LEFT30:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_AHEAD:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT30:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT60:
+		case VIEW_MODE_COCKPIT_PANEL_UP20_RIGHT90:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT90:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT60:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_LEFT30:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT30:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT60:
+		case VIEW_MODE_COCKPIT_PANEL_LEVEL_RIGHT90:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT90:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT60:
+		case VIEW_MODE_COCKPIT_PANEL_DOWN20_LEFT30:
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD:
-		////////////////////////////////////////
-		{
-			draw_fixed_cockpit_3d_view ();
-
-			draw_cockpit (COCKPIT_PANEL_DOWN20_AHEAD);
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30:
-		////////////////////////////////////////
-		{
-			draw_fixed_cockpit_3d_view ();
-
-			draw_cockpit (COCKPIT_PANEL_DOWN20_RIGHT30);
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT60:
-		////////////////////////////////////////
-		{
-			draw_fixed_cockpit_3d_view ();
-
-			draw_cockpit (COCKPIT_PANEL_DOWN20_RIGHT60);
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT90:
 		////////////////////////////////////////
 		{
+#if 0
 			draw_fixed_cockpit_3d_view ();
 
-			draw_cockpit (COCKPIT_PANEL_DOWN20_RIGHT90);
+			draw_cockpit (view_mode);
+#else
+			ASSERT(FALSE);
+#endif
 
 			break;
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
-		////////////////////////////////////////
-		{
-			if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
-			{
-				draw_cockpit (COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD);
-			}
-			else
-			{
-				float old_angle = full_screen_width_view_angle;
-
-				set_view_angles(rad(59.99));
-
-				draw_virtual_cockpit_3d_display_view ();
-
-				set_view_angles(old_angle);
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
-		////////////////////////////////////////
-		{
-			if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
-			{
-				draw_cockpit (COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD);
-			}
-			else
-			{
-				float old_angle = full_screen_width_view_angle;
-
-				set_view_angles(rad(59.99));
-				
-				draw_virtual_cockpit_3d_display_view ();
-
-				set_view_angles(old_angle);
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
-		////////////////////////////////////////
-		{
-			if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
-			{
-				draw_cockpit (COCKPIT_PANEL_SPECIAL_HAVOC_TV);
-			}
-			else
-			{
-				float old_angle = full_screen_width_view_angle;
-
-				set_view_angles(rad(59.99));
-				
-				draw_virtual_cockpit_3d_display_view ();
-
-				set_view_angles(old_angle);
-			}
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
 		////////////////////////////////////////
 		{
+#if 0
 			if ((!full_screen_hi_res) && (application_video_colourdepth == 16))
 			{
-				draw_fixed_cockpit_3d_view ();
-
-				draw_cockpit (COCKPIT_PANEL_SPECIAL_HAVOC_HUD);
+				draw_cockpit (view_mode);
 			}
 			else
+#endif
 			{
-				float old_angle = full_screen_width_view_angle;
+				float old_angle = full_screen_virtual_fov;
 
-				set_view_angles(rad(40.0));
+				set_view_angles(view_mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD ? rad(40.00) : rad(59.99));
 
-				draw_virtual_cockpit_3d_hud_view ();
-				
+				draw_virtual_cockpit_3d_display_view ();
+
 				set_view_angles(old_angle);
 			}
 
@@ -789,13 +491,6 @@ void draw_view (void)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK:
-		////////////////////////////////////////
-		{
-			draw_virtual_cockpit_3d_view ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET:
 		////////////////////////////////////////
 		{
@@ -836,29 +531,8 @@ void draw_view (void)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			draw_virtual_cockpit_3d_display_view ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			draw_virtual_cockpit_3d_display_view ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		////////////////////////////////////////
-		{
-			draw_virtual_cockpit_3d_display_view ();
-
-			break;
-		}
-		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
 		////////////////////////////////////////
 		{
@@ -928,7 +602,7 @@ void ShowFramerate(void)
 	char buf[25];
 
 	timeframes += get_delta_time ();
-	frames++; 
+	frames++;
 
 	if (timeframes >= 1.0)
 	{

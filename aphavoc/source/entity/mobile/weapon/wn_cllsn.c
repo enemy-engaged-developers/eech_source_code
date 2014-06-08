@@ -397,7 +397,7 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 		impact_vector.y = weapon_position->y - target_position->y;
 		impact_vector.z = weapon_position->z - target_position->z;
 		
-		multiply_matrix3x3_vec3d(&impact_vector, target_attitude, &impact_vector);
+		multiply_matrix3x3_vec3d(&impact_vector, *target_attitude, &impact_vector);
 		
 		norm = fabs(impact_vector.x) + fabs(impact_vector.y) + fabs(impact_vector.z);
 		

@@ -66,8 +66,6 @@
 
 #include "project.h"
 
-#define INTERNAL_MODULES 1
-
 #include "version.h"
 
 #include "ai/ai_misc/ai_dbase.h"
@@ -749,10 +747,10 @@ void process_game_initialisation_phases (void)
 /*			    else
 			    {
 //VJ 050110 check for origwut.txt or gwut146x.csv
-//VJ 051225 reversed this, I think it is assumed by now that CSV files are used by everyone			    	
+//VJ 051225 reversed this, I think it is assumed by now that CSV files are used by everyone
               	if (file_exist("gwut146x.csv"))
               		parse_WUT_file("gwut146x.csv");
-              	else	
+              	else
               	if (file_exist("origwut.txt"))
               		parse_WUT_file("origwut.txt");
 			    }*/
@@ -760,10 +758,10 @@ void process_game_initialisation_phases (void)
 /*			    else  // generate a WUT file from default value
 			    {
 			    	char dump_file[256];
-			    	
-			    	snprintf(dump_file, sizeof(dump_file)-1, "gwut-default-%d%d%d.csv", 
+
+			    	snprintf(dump_file, sizeof(dump_file)-1, "gwut-default-%d%d%d.csv",
 			    		MAJOR_VERSION, DATA_VERSION, MINOR_VERSION);
-			    	
+
 			    	DumpGWutInfo(dump_file);
 			    }
 */
@@ -996,6 +994,8 @@ void process_game_initialisation_phases (void)
 			minimize_all_map_objects ();
 
 			initialise_game_initialisation_phases ();
+
+			restore_default_textures ();
 
 			break;
 		}

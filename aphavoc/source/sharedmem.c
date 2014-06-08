@@ -2,14 +2,13 @@
 
 #include "project.h"
 
-#define INTERNAL_MODULES 1
-
 // fixing watcom 1.7 critical error
 
 #include <stdio.h>
 #include <sys/types.h>
 #include <string.h>
 
+#ifndef _MSC_VER
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz == 0).
@@ -38,12 +37,13 @@ size_t strlcpy(char *dst, const char *src, size_t size)
 
    return (s - src - 1);        /* count does not include NUL */
 }
+#endif
 
 static HANDLE gHandleSharedMemory;
 
 shared_memory_t* gPtrSharedMemory = NULL;
 
-int Initialise_Shared_Memory()
+int Initialise_Shared_Memory(void)
 {
 	gPtrSharedMemory = 0;
 
@@ -95,16 +95,16 @@ extern kiowa_lamp_flags kiowa_lamps;
 // GCsDriver  08-12-2007
 extern default_lamp_flags default_lamps;
 
-void update_ah64a_avionics_shared_mem ()
+void update_ah64a_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
 
-  gPtrSharedMemory->current_gunship = GUNSHIP_TYPE_AH64A;
+	gPtrSharedMemory->current_gunship = GUNSHIP_TYPE_AH64A;
 	gPtrSharedMemory->cockpit_lamps.ah64a_lamps = ah64a_lamps;
 }
 
-void update_apache_avionics_shared_mem ()
+void update_apache_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -113,7 +113,7 @@ void update_apache_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.apache_lamps = apache_lamps;
 }
 
-void update_blackhawk_avionics_shared_mem ()
+void update_blackhawk_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -122,7 +122,7 @@ void update_blackhawk_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.blackhawk_lamps = blackhawk_lamps;
 }
 
-void update_comanche_avionics_shared_mem ()
+void update_comanche_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -131,7 +131,7 @@ void update_comanche_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.comanche_lamps = comanche_lamps;
 }
 
-void update_havoc_avionics_shared_mem ()
+void update_havoc_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -140,7 +140,7 @@ void update_havoc_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.havoc_lamps = havoc_lamps;
 }
 
-void update_hind_avionics_shared_mem ()
+void update_hind_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -149,7 +149,7 @@ void update_hind_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.hind_lamps = hind_lamps;
 }
 
-void update_hokum_avionics_shared_mem ()
+void update_hokum_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -158,7 +158,7 @@ void update_hokum_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.hokum_lamps = hokum_lamps;
 }
 
-void update_ka50_avionics_shared_mem ()
+void update_ka50_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -167,7 +167,7 @@ void update_ka50_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.ka50_lamps = ka50_lamps;
 }
 
-void update_viper_avionics_shared_mem ()
+void update_viper_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -176,7 +176,7 @@ void update_viper_avionics_shared_mem ()
 	gPtrSharedMemory->cockpit_lamps.viper_lamps = viper_lamps;
 }
 
-void update_kiowa_avionics_shared_mem ()
+void update_kiowa_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -186,7 +186,7 @@ void update_kiowa_avionics_shared_mem ()
 }
 
 // GCsDriver  08-12-2007
-void update_default_avionics_shared_mem ()
+void update_default_avionics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -247,7 +247,7 @@ void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	}
 }
 
-void update_dynamics_shared_mem ()
+void update_dynamics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -283,7 +283,7 @@ void update_dynamics_shared_mem ()
 	gPtrSharedMemory->fuel_weight = current_flight_dynamics->fuel_weight.value;
 }
 
-void update_waypoint_shared_mem()
+void update_waypoint_shared_mem(void)
 {
 	entity* wp;
 
@@ -322,7 +322,7 @@ void update_waypoint_shared_mem()
 		memset(&gPtrSharedMemory->waypoint_data, 0, sizeof(waypoint_data_t));
 }
 
-void update_weapon_load_shared_mem ()
+void update_weapon_load_shared_mem (void)
 {
 	weapon_package_status
 		*package_status;

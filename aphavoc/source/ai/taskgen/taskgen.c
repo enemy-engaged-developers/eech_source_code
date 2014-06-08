@@ -1842,141 +1842,143 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 // only way to do it  - Guess I won't be going to heaven :(
 //
 
-//entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos, entity *insert_task, entity *keysite, entity *helicopter)
-//{
-//
-//	int
-//		helicopter_count,
-//		keysite_count,
-//		loop,
-//		count;
-//
-//	entity_sub_types
-//		new_route_wp_type [MAX_TROOP_ROUTE_COUNT];
-//
-//	vec3d
-//		*keysite_pos,
-//		*helicopter_pos,
-//		new_route [MAX_TROOP_ROUTE_COUNT],
-//		*helicopter_route,
-//		*keysite_route;
-//
-//	entity
-//		*new_task;
-//
-//	// troops out of helicopter
-//
-//	helicopter_count = get_object_3d_troop_takeoff_route (get_local_entity_int_value (helicopter, INT_TYPE_OBJECT_3D_SHAPE), &helicopter_route);
-//
-//	if (helicopter_count)
-//	{
-//
-//		helicopter_pos = get_local_entity_vec3d_ptr (helicopter, VEC3D_TYPE_POSITION);
-//
-//		// copy route across and assign positions in world coords and waypoint types
-//		for (loop = 0; loop < helicopter_count; loop ++)
-//		{
-//	
-//			//new_route [loop].x = helicopter_pos->x + helicopter_route [loop].x;
-//			//new_route [loop].y = helicopter_pos->y + helicopter_route [loop].y;
-//			//new_route [loop].z = helicopter_pos->z + helicopter_route [loop].z;
-//			new_route [loop].x = helicopter_pos->x + (helicopter_route [(helicopter_count - 1) - loop].x * 2);
-//			new_route [loop].y = helicopter_pos->y + (helicopter_route [(helicopter_count - 1) - loop].y * 1);
-//			new_route [loop].z = helicopter_pos->z + (helicopter_route [(helicopter_count - 1) - loop].z * 2);
-//	
-//			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-//		}
-//	}
-//
-//	// troops from helicopter -> keysite
-//
-//	keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-//
-//	keysite_count = get_object_3d_troop_landing_route (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX), &keysite_route);
-//
-//	if ((keysite_count) && (keysite_count < MAX_TROOP_ROUTE_COUNT))
-//	{
-//
-//		for (loop = 0; loop < keysite_count; loop ++)
-//		{
-//	
-//			new_route [helicopter_count + loop].x = keysite_pos->x + keysite_route [loop].x;
-//			new_route [helicopter_count + loop].y = keysite_pos->y + keysite_route [loop].y;
-//			new_route [helicopter_count + loop].z = keysite_pos->z + keysite_route [loop].z;
-//	
-//			new_route_wp_type [helicopter_count + loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-//		}
-//	}
-//	else
-//	{
-//
-//		keysite_count = 0;
-//	
-//		new_route [keysite_count + helicopter_count].x = keysite_pos->x;
-//		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-//		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
-//	
-//		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-//
-//		keysite_count ++;
-//	
-//		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
-//		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-//		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
-//	
-//		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-//
-//		keysite_count ++;
-//	
-//		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
-//		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-//		new_route [keysite_count + helicopter_count].z = keysite_pos->z + 10.0;
-//	
-//		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-//
-//		keysite_count ++;
-//	}
-//
-//	count = helicopter_count + keysite_count;
-//
-//	ASSERT ((count > 0) && (count < MAX_TROOP_ROUTE_COUNT));
-//
-//	new_route_wp_type [helicopter_count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT;
-//	new_route_wp_type [count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_CAPTURE;
-//
-//	new_route [count] = terminator_point;
-//
-//	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE,
-//										side,
-//										MOVEMENT_TYPE_GROUND,
-//										keysite,
-//										NULL,
-//										insert_task,
-//										TRUE,
-//										0.0,
-//										0.0,
-//										insert_task,
-//										task_database [ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE].task_priority,
-//										&new_route [0], NULL, new_route_wp_type [0], FORMATION_1,
-//										&new_route [1], NULL, new_route_wp_type [1], FORMATION_INFANTRY_COLUMN,
-//										&new_route [2], NULL, new_route_wp_type [2], FORMATION_INFANTRY_COLUMN,
-//										&new_route [3], NULL, new_route_wp_type [3], FORMATION_INFANTRY_COLUMN,
-//										&new_route [4], NULL, new_route_wp_type [4], FORMATION_INFANTRY_COLUMN,
-//										&new_route [5], NULL, new_route_wp_type [5], FORMATION_INFANTRY_COLUMN,
-//										&new_route [6], NULL, new_route_wp_type [6], FORMATION_INFANTRY_COLUMN,
-//										&new_route [7], NULL, new_route_wp_type [7], FORMATION_INFANTRY_COLUMN,
-//										&new_route [8], NULL, new_route_wp_type [8], FORMATION_INFANTRY_COLUMN,
-//										&new_route [9], NULL, new_route_wp_type [9], FORMATION_INFANTRY_COLUMN,
-//										&new_route [10], NULL, new_route_wp_type [10], FORMATION_INFANTRY_COLUMN,
-//										&new_route [11], NULL, new_route_wp_type [11], FORMATION_INFANTRY_COLUMN,
-//										&new_route [12], NULL, new_route_wp_type [12], FORMATION_INFANTRY_COLUMN,
-//										&new_route [13], NULL, new_route_wp_type [13], FORMATION_INFANTRY_COLUMN,
-//										&new_route [14], NULL, new_route_wp_type [14], FORMATION_INFANTRY_COLUMN,
-//										&new_route [15], NULL, new_route_wp_type [15], FORMATION_INFANTRY_COLUMN,
-//										&terminator_point, NULL, NUM_ENTITY_SUB_TYPE_WAYPOINTS, FORMATION_NONE);
-//
-//	return new_task;
-//}
+#if 0
+entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos, entity *insert_task, entity *keysite, entity *helicopter)
+{
+
+	int
+		helicopter_count,
+		keysite_count,
+		loop,
+		count;
+
+	entity_sub_types
+		new_route_wp_type [MAX_TROOP_ROUTE_COUNT];
+
+	vec3d
+		*keysite_pos,
+		*helicopter_pos,
+		new_route [MAX_TROOP_ROUTE_COUNT],
+		*helicopter_route,
+		*keysite_route;
+
+	entity
+		*new_task;
+
+	// troops out of helicopter
+
+	helicopter_count = get_object_3d_troop_takeoff_route (get_local_entity_int_value (helicopter, INT_TYPE_OBJECT_3D_SHAPE), &helicopter_route);
+
+	if (helicopter_count)
+	{
+
+		helicopter_pos = get_local_entity_vec3d_ptr (helicopter, VEC3D_TYPE_POSITION);
+
+		// copy route across and assign positions in world coords and waypoint types
+		for (loop = 0; loop < helicopter_count; loop ++)
+		{
+	
+			//new_route [loop].x = helicopter_pos->x + helicopter_route [loop].x;
+			//new_route [loop].y = helicopter_pos->y + helicopter_route [loop].y;
+			//new_route [loop].z = helicopter_pos->z + helicopter_route [loop].z;
+			new_route [loop].x = helicopter_pos->x + (helicopter_route [(helicopter_count - 1) - loop].x * 2);
+			new_route [loop].y = helicopter_pos->y + (helicopter_route [(helicopter_count - 1) - loop].y * 1);
+			new_route [loop].z = helicopter_pos->z + (helicopter_route [(helicopter_count - 1) - loop].z * 2);
+	
+			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+		}
+	}
+
+	// troops from helicopter -> keysite
+
+	keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
+
+	keysite_count = get_object_3d_troop_landing_route (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX), &keysite_route);
+
+	if ((keysite_count) && (keysite_count < MAX_TROOP_ROUTE_COUNT))
+	{
+
+		for (loop = 0; loop < keysite_count; loop ++)
+		{
+	
+			new_route [helicopter_count + loop].x = keysite_pos->x + keysite_route [loop].x;
+			new_route [helicopter_count + loop].y = keysite_pos->y + keysite_route [loop].y;
+			new_route [helicopter_count + loop].z = keysite_pos->z + keysite_route [loop].z;
+	
+			new_route_wp_type [helicopter_count + loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+		}
+	}
+	else
+	{
+
+		keysite_count = 0;
+	
+		new_route [keysite_count + helicopter_count].x = keysite_pos->x;
+		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
+		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
+	
+		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+
+		keysite_count ++;
+	
+		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
+		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
+		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
+	
+		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+
+		keysite_count ++;
+	
+		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
+		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
+		new_route [keysite_count + helicopter_count].z = keysite_pos->z + 10.0;
+	
+		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+
+		keysite_count ++;
+	}
+
+	count = helicopter_count + keysite_count;
+
+	ASSERT ((count > 0) && (count < MAX_TROOP_ROUTE_COUNT));
+
+	new_route_wp_type [helicopter_count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT;
+	new_route_wp_type [count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_CAPTURE;
+
+	new_route [count] = terminator_point;
+
+	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE,
+										side,
+										MOVEMENT_TYPE_GROUND,
+										keysite,
+										NULL,
+										insert_task,
+										TRUE,
+										0.0,
+										0.0,
+										insert_task,
+										task_database [ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE].task_priority,
+										&new_route [0], NULL, new_route_wp_type [0], FORMATION_1,
+										&new_route [1], NULL, new_route_wp_type [1], FORMATION_INFANTRY_COLUMN,
+										&new_route [2], NULL, new_route_wp_type [2], FORMATION_INFANTRY_COLUMN,
+										&new_route [3], NULL, new_route_wp_type [3], FORMATION_INFANTRY_COLUMN,
+										&new_route [4], NULL, new_route_wp_type [4], FORMATION_INFANTRY_COLUMN,
+										&new_route [5], NULL, new_route_wp_type [5], FORMATION_INFANTRY_COLUMN,
+										&new_route [6], NULL, new_route_wp_type [6], FORMATION_INFANTRY_COLUMN,
+										&new_route [7], NULL, new_route_wp_type [7], FORMATION_INFANTRY_COLUMN,
+										&new_route [8], NULL, new_route_wp_type [8], FORMATION_INFANTRY_COLUMN,
+										&new_route [9], NULL, new_route_wp_type [9], FORMATION_INFANTRY_COLUMN,
+										&new_route [10], NULL, new_route_wp_type [10], FORMATION_INFANTRY_COLUMN,
+										&new_route [11], NULL, new_route_wp_type [11], FORMATION_INFANTRY_COLUMN,
+										&new_route [12], NULL, new_route_wp_type [12], FORMATION_INFANTRY_COLUMN,
+										&new_route [13], NULL, new_route_wp_type [13], FORMATION_INFANTRY_COLUMN,
+										&new_route [14], NULL, new_route_wp_type [14], FORMATION_INFANTRY_COLUMN,
+										&new_route [15], NULL, new_route_wp_type [15], FORMATION_INFANTRY_COLUMN,
+										&terminator_point, NULL, NUM_ENTITY_SUB_TYPE_WAYPOINTS, FORMATION_NONE);
+
+	return new_task;
+}
+#endif
 
 // I think it will be better to make random movement - FARPs has too small routes, so capture happens right after troops insertion. 
 // Troops moving around several minutes, there is will be a chance that they will be killed. Only after that capture calculation will be made.

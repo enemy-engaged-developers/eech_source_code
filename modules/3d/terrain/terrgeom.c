@@ -836,7 +836,7 @@ void scan_3d_terrain ( void )
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
 								get_3d_fog_distances (active_3d_environment, &temp, &view_range);
-								view_range = min (view_range * 0.8, 4000);
+								view_range = min (view_range * 0.8f, 4000.0f);
 
 								if ( trees->type )
 								{
@@ -968,7 +968,7 @@ void scan_3d_terrain ( void )
 								range = ( ( dx * dx ) + ( dy * dy ) + ( dz * dz ) );
 
 								get_3d_fog_distances (active_3d_environment, &temp, &view_range);
-								view_range = min (view_range, 6000.0) - 40.0 * min ( cloud_puffs->scale, 10.0f );
+								view_range = min (view_range, 6000.0f) - 40.0f * min ( cloud_puffs->scale, 10.0f );
 
 								if ( range < view_range * view_range )
 								{
@@ -1497,21 +1497,21 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
@@ -1985,21 +1985,21 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 #else
@@ -2379,21 +2379,21 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 #else
@@ -2853,21 +2853,21 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
@@ -3340,21 +3340,21 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 #else
@@ -3744,21 +3744,21 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 	// Set the cullmode ( terrain isn't culled in software )
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
+	set_d3d_int_state ( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	//
 	// Set the rendering states for the terrain polygons
 	//
 
-	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
-	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
+	set_d3d_int_state ( D3DRS_SPECULARENABLE, FALSE );
+	set_d3d_int_state ( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, terrain_texture_mag_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, terrain_texture_min_filter );
-	set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, terrain_texture_mip_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+	set_d3d_sampler_state ( 0, D3DSAMP_MAGFILTER, terrain_texture_mag_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MINFILTER, terrain_texture_min_filter );
+	set_d3d_sampler_state ( 0, D3DSAMP_MIPFILTER, terrain_texture_mip_filter );
 #if ALLOW_TERRAIN_TEXTURES
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 #else
@@ -4147,9 +4147,9 @@ void draw_3d_terrain_sector_point_normals ( scene_slot_drawing_list *slot )
 
 	set_fpu_precision_mode_double ();
 
-//	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, FALSE );
+//	set_d3d_int_state ( D3DRS_ZENABLE, FALSE );
 
-//	set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, D3DCMP_ALWAYS );
+//	set_d3d_int_state ( D3DRS_ZFUNC, D3DCMP_ALWAYS );
 
 	suspend_d3d_fog ();
 
