@@ -692,7 +692,7 @@ void render_infrared_interference ( int alpha )
 	{
 		fog_colour = get_3d_fog_colour ( main_3d_env );
 
-		fog_colour.alpha = 96;
+		fog_colour.alpha = 64;
 
 		noise = 0;
 	}
