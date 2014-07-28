@@ -397,26 +397,12 @@ void update_kiowa_virtual_cockpit (void)
 	//
 	////////////////////////////////////////
 
-	if (!draw_crew)
-	{
-		search.search_depth = 0;
-		search.search_object = virtual_cockpit_inst3d;
-		search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_PILOT_HAND_STATIC;
+	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_PILOT);
+	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_PILOT_HAND_STATIC, draw_crew);
 
-		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		{
-			search.result_sub_object->visible_object = FALSE;
-		}
-
-		search.search_depth = 0;
-		search.search_object = virtual_cockpit_inst3d;
-		search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC;
-
-		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		{
-			search.result_sub_object->visible_object = FALSE;
-		}
-	}
+//	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_COPILOT);
+	draw_crew = FALSE;
+	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC, draw_crew);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
