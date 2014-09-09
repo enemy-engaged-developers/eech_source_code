@@ -2558,6 +2558,12 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 	specular_rendering_enabled = FALSE;
 
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+
+	set_pilots_full_screen_params (night_vision_active());
+
+	draw_main_3d_scene (&main_vp);
+
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
