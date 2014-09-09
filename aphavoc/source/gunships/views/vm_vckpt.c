@@ -2518,7 +2518,8 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	switch (get_global_gunship_type())
 	{
 	case  GUNSHIP_TYPE_APACHE:
-		draw_apache_virtual_cockpit_ort_view(x_min, x_max - x_excess);
+		draw_apache_virtual_cockpit_ort_view(full_screen_x_min, full_screen_x_max);
+		draw_virtual_cockpit_periscope_filler(x_min, x_max);
 		draw_virtual_cockpit_periscope_mask (x_min, x_max, TRUE);
 		draw_apache_virtual_cockpit_ort_symbology();
 		break;
@@ -2528,7 +2529,8 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 		draw_hokum_virtual_cockpit_periscope_symbology ();
 		break;
 	case GUNSHIP_TYPE_HIND:
-		draw_hind_virtual_cockpit_ort_view(x_min, x_max - x_excess);
+		draw_hind_virtual_cockpit_ort_view(full_screen_x_min, full_screen_x_max);
+		draw_virtual_cockpit_periscope_filler(x_min, x_max);
 		draw_virtual_cockpit_periscope_mask (x_min, x_max, TRUE);
 		draw_hind_virtual_cockpit_ort_symbology();
 		break;

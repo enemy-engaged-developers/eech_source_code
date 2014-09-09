@@ -409,6 +409,105 @@ void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void draw_virtual_cockpit_periscope_filler (int x_min, int x_max)
+{
+	vertex
+		quad[4];
+
+	real_colour
+		colour,
+		specular;
+
+	set_3d_active_environment (main_3d_env);
+
+	if (begin_3d_scene ())
+	{
+		colour.red		= 0;
+		colour.green	= 0;
+		colour.blue		= 0;
+		colour.alpha	= 255;
+
+		specular.red	= 0;
+		specular.green	= 0;
+		specular.blue	= 0;
+		specular.alpha	= 255;
+
+		set_d3d_transparency_on ();
+
+		set_d3d_zbuffer_comparison (FALSE);
+
+		set_d3d_plain_renderstate ();
+
+		set_d3d_culling (FALSE);
+
+		quad[0].i 				= full_screen_x_min;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+
+		quad[1].i  				= full_screen_x_min;
+		quad[1].j  				= full_screen_y_max;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+
+		quad[2].i				= x_min;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+
+		quad[3].i  				= x_min;
+		quad[3].j  				= full_screen_y_min;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_plain_polygon (quad, colour, specular);
+
+		quad[0].i 				= x_max;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+
+		quad[1].i  				= x_max;
+		quad[1].j  				= full_screen_y_max;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+
+		quad[2].i				= full_screen_x_max;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+
+		quad[3].i  				= full_screen_x_max;
+		quad[3].j  				= full_screen_y_min;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_plain_polygon (quad, colour, specular);
+		
+		////////////////////////////////////////
+
+		set_d3d_transparency_off ();
+
+		set_d3d_zbuffer_comparison (TRUE);
+
+		end_3d_scene ();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_switch(cockpit_switch* swch, float* position, float depress_length, float depress_time, float delay)
 {
 	swch->position = position;

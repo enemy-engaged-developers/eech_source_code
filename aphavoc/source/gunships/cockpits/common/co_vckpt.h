@@ -136,7 +136,7 @@ extern void deinitialise_common_virtual_cockpit (void);
 extern void update_common_virtual_cockpit (void);
 
 extern void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular);
-
+extern void draw_virtual_cockpit_periscope_filler (int x_min, int x_max);
 extern int TIR_looking_in_periscope(void);
 
 extern void initialise_switch(cockpit_switch*, float* position, float depress_length, float depress_time, float delay);
