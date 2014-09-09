@@ -2200,7 +2200,6 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 		vp;
 
 	vec3d
-		weapon_to_target_vector,
 		*weapon_vector_ptr,
 		*weapon_to_target_vector_ptr;
 
@@ -2297,7 +2296,10 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 						if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
 							vec3d* tracking_point = NULL;
+							int tracking_point_valid = FALSE;
+							
 							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
+							*weapon_vector_ptr = vp.zv;
 
 							if (get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 								tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
@@ -2306,26 +2308,21 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 							{
 								ASSERT(get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);  // only player aircraft have tracking point
 
-								if (!eo_tracking_point_valid(tracking_point))
-									return;
+								if (eo_tracking_point_valid(tracking_point))
+								{
+									weapon_to_target_vector_ptr->x = tracking_point->x - vp.position.x;
+									weapon_to_target_vector_ptr->y = tracking_point->y - vp.position.y;
+									weapon_to_target_vector_ptr->z = tracking_point->z - vp.position.z;
 
-								weapon_to_target_vector.x = tracking_point->x - vp.position.x;
-								weapon_to_target_vector.y = tracking_point->y - vp.position.y;
-								weapon_to_target_vector.z = tracking_point->z - vp.position.z;
+									tracking_point_valid = TRUE;
+									set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, TRUE);
+								}
 							}
-							else
-							{
-								ASSERT(target);
-								if (!get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector))
-									return;
-							}
+							
+							if (target && !tracking_point_valid)
+								set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, weapon_to_target_vector_ptr));
 
-							normalise_3d_vector (&weapon_to_target_vector);
-
-							*weapon_vector_ptr = vp.zv;
-							*weapon_to_target_vector_ptr = weapon_to_target_vector;
-
-							set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, TRUE);
+							normalise_3d_vector (weapon_to_target_vector_ptr);
 						}
 					}
 				}
