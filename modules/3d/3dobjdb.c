@@ -1060,6 +1060,7 @@ static void read_scene ( FILE *fp, int version )
 					name[1024];
 
 				get_nul_string ( name, sizeof ( name ), fp, TRUE );
+				sprintf(name, "%s.LWS", name);
 				objects_3d_scene_link_ptr->scene_index = get_scene ( name );
 			}
 			else

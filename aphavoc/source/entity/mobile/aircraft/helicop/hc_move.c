@@ -1295,7 +1295,9 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 {
 	entity
 		*guide,
-		*leader;
+		*leader,
+		*wp,
+		*prev_wp;
 
 	vec3d
 		*mv;
@@ -1310,6 +1312,24 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
 	ASSERT (guide);
+
+	wp = get_local_entity_current_waypoint(en);
+	prev_wp = get_local_entity_prev_waypoint(en);
+
+	if(wp && prev_wp) // give proper heading angle for landing helicopter; TODO: make it work for group members!
+	{
+		if (get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED)
+		{
+			vec3d
+				wp_pos_current,
+				wp_pos_prev;
+
+			get_local_entity_vec3d (wp, VEC3D_TYPE_POSITION, &wp_pos_current);
+			get_local_entity_vec3d (prev_wp, VEC3D_TYPE_POSITION, &wp_pos_prev);
+
+			return atan2 (wp_pos_current.x - wp_pos_prev.x, wp_pos_current.z - wp_pos_prev.z);
+		}
+	}
 
 	if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_RADIUS))
 	{
@@ -1839,11 +1859,8 @@ void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3
 
 	min_height = get_3d_terrain_point_data_elevation (&raw->ac.terrain_info) + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
 
-	if (get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE != GUIDE_TERRAIN_FOLLOW_NONE ? TRUE : FALSE))
-	{
-
+	if (get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE) != GUIDE_TERRAIN_FOLLOW_NONE)
 		min_height += 2.0;
-	}
 
 	// bound to floor. Allow for pitch of aircraft... assume 5m to nose. Stop motion vector.
 

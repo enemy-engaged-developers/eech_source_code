@@ -524,6 +524,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 
    entity
       *wp,
+      *prev_wp,
       *group,
       *member,
 		*parent,
@@ -574,7 +575,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 
       while (get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT))
       {
-
+		prev_wp = wp;
          wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
       }
 
@@ -709,7 +710,17 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 			//
 			////////////////////////////////////////
 
-			heading = get_local_entity_float_value (keysite, FLOAT_TYPE_HEADING);
+			if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_KEYSITE_FARP)
+				heading = get_local_entity_float_value (keysite, FLOAT_TYPE_HEADING);
+			else // place helis on the landing pads with proper angle
+			{
+				vec3d prev_pos;
+
+				ASSERT(prev_wp);
+				
+				get_local_waypoint_formation_position (index, prev_wp, &prev_pos);
+				heading = atan2 (prev_pos.x - pos.x, prev_pos.z - pos.z);
+			}
 
 			get_3d_terrain_face_normal (&face_normal, pos.x, pos.z);
 
