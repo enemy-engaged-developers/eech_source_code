@@ -349,7 +349,7 @@ void data_exchange (void)
 
         #if DEBUG_MODULE >= 2
 
-        debug_log ("COMMS MAN: Data exchange");
+        debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: Data exchange");
 
         #endif
 
@@ -658,7 +658,7 @@ void comms_process_data (void)
                             if (this_connection->packet_rerequested > command_line_comms_packet_rerequest_limit)
                             {
 
-                                debug_log ("COMM_MAN: REJECTING CONNECTION. CONNECTION TOO BAD (re-request limit %d reached)", command_line_comms_packet_rerequest_limit);
+                                debug_colour_log (DEBUG_COLOUR_RED, "COMM_MAN: REJECTING CONNECTION. CONNECTION TOO BAD (re-request limit %d reached)", command_line_comms_packet_rerequest_limit);
 
                                 send_packet (this_connection->connection_id, PACKET_TYPE_SERVER_REJECTED, NULL, 0, SEND_TYPE_PERSONAL);
                             }
@@ -684,7 +684,7 @@ void comms_process_data (void)
                         if (this_connection->pilot_entity)
                         {
 
-                            debug_log ("COMMS MAN: received RESEND PACKET for frame %d packet %d from %s (dpid %d)",
+                            debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received RESEND PACKET for frame %d packet %d from %s (dpid %d)",
                                             frame_id, packet_id,
                                             get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                             received_id);
@@ -692,7 +692,7 @@ void comms_process_data (void)
                         else
                         {
 
-                            debug_log ("COMMS MAN: received RESEND PACKET by unknown (pdid %d)",
+                            debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received RESEND PACKET by unknown (pdid %d)",
                                             received_id);
                         }
 
@@ -731,14 +731,14 @@ void comms_process_data (void)
                             if (this_connection->pilot_entity)
                             {
 
-                                debug_log ("COMMS MAN: RECEIVED SESSION QUERY from %s (dpid %d)",
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED SESSION QUERY from %s (dpid %d)",
                                                 get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                                 received_id);
                             }
                             else
                             {
 
-                                debug_log ("COMMS MAN: RECEIVED SESSION QUERY from %d", received_id);
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED SESSION QUERY from %d", received_id);
                             }
 
                             #endif
@@ -886,7 +886,7 @@ void comms_process_data (void)
 
                                     #if DEBUG_MODULE
 
-                                    debug_log ("COMM_MAN: sending data path %s, population placement %s, side data %s, campaign_pop file %s",
+                                    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMM_MAN: sending data path %s, population placement %s, side data %s, campaign_pop file %s",
                                                     current_session->data_path, population_placement_filename, side_data_filename, campaign_population_filename);
 
                                     #endif
@@ -903,7 +903,7 @@ void comms_process_data (void)
 
                                     #if DEBUG_MODULE
 
-                                    debug_log ("COMMS MAN: Browse: connection_receive_buffer too small, mallocing to %d", new_connection->connection_receive_buffer_size);
+                                    debug_colour_log (DEBUG_COLOUR_RED, "COMMS MAN: Browse: connection_receive_buffer too small, mallocing to %d", new_connection->connection_receive_buffer_size);
 
                                     #endif
 
@@ -935,7 +935,7 @@ void comms_process_data (void)
                             else
                             {
 
-                                debug_log ("COMM_MAN: not resending query data");
+                                debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMM_MAN: not resending query data");
                             }
                         }
 
@@ -1427,7 +1427,7 @@ void comms_process_data (void)
                     case PACKET_TYPE_CONNECTION_VALIDATION:
                     {
 
-                        debug_log ("COMM_MAN: received CONNECTION_VALIDATION, sending RESPONSE");
+                        debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMM_MAN: received CONNECTION_VALIDATION, sending RESPONSE");
 
                         send_packet (received_id, PACKET_TYPE_CONNECTION_RESPONSE, NULL, 0, SEND_TYPE_PERSONAL);
 
@@ -1446,7 +1446,7 @@ void comms_process_data (void)
 
                         connection->connection_validation_time = get_system_time (); // Jabberwock - Validation reset
 
-                        debug_log ("COMM_MAN: received CONNECTION_RESPONSE, connection still alive");
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMM_MAN: received CONNECTION_RESPONSE, connection still alive");
 
                         break;
                     }
@@ -1508,7 +1508,7 @@ void comms_process_data (void)
                         if (client_version_number != server_version_number)
                         {
 							//schorpp
-                            debug_log ("COMM_MAN: Incorrect version. Server Version No. %d, Client Version No. %d", server_version_number, client_version_number);
+                            debug_colour_log (DEBUG_COLOUR_RED, "COMM_MAN: Incorrect version. Server Version No. %d, Client Version No. %d", server_version_number, client_version_number);
 							// Jabberwock 031118 Tell version is wrong
 							ui_object_destroy_list_items (session_info_list);
 							add_to_pop_up_list_with_word_wrap (get_trans ("Incompatible game version"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
@@ -1675,7 +1675,7 @@ void comms_process_data (void)
                         if (unpack_session ((unsigned char *) ptr, received_size, PACK_MODE_BROWSE_SESSION))
                         {
 
-                            debug_log ("COMMS MAN: browse: received size overflow"); // schorpp
+                            debug_colour_log (DEBUG_COLOUR_RED, "COMMS MAN: browse: received size overflow"); // schorpp
  							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
                        }
@@ -1685,14 +1685,14 @@ void comms_process_data (void)
                         if (this_connection->pilot_entity)
                         {
 
-                            debug_log ("COMMS MAN: received SESSION INFO from %s (dpid %d) (setting server id)",
+                            debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received SESSION INFO from %s (dpid %d) (setting server id)",
                                             get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                             received_id);
                         }
                         else
                         {
 
-                            debug_log ("COMMS MAN: RECEIVED SESSION INFO from %d", received_id);
+                            debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED SESSION INFO from %d", received_id);
                         }
 
                         debug_log ("COMMS MAN: session info: time of day = %f",
@@ -1826,7 +1826,7 @@ void comms_process_data (void)
 
 //                      #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: RECEIVED PILOT REQUEST from %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED PILOT REQUEST from %d", received_id);
 
 //                      #endif
 
@@ -1880,14 +1880,14 @@ void comms_process_data (void)
                             if (this_connection->pilot_entity)
                             {
 
-                                debug_log ("COMMS MAN: RECEIVED GUNSHIP REQUEST from %s (dpid %d)",
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED GUNSHIP REQUEST from %s (dpid %d)",
                                                 get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                                 received_id);
                             }
                             else
                             {
 
-                                debug_log ("COMMS MAN: RECEIVED GUNSHIP REQUEST from %d", received_id);
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED GUNSHIP REQUEST from %d", received_id);
                             }
 
 //                          #endif
@@ -1907,14 +1907,14 @@ void comms_process_data (void)
                                 if (this_connection->pilot_entity)
                                 {
 
-                                    debug_log ("COMMS MAN: REFUSING GUNSHIP FOR PLAYER %s (dpid %d) for helicopter %d",
+                                    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: REFUSING GUNSHIP FOR PLAYER %s (dpid %d) for helicopter %d",
                                                     get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                                     received_id, pilot_data.gunship_index);
                                 }
                                 else
                                 {
 
-                                    debug_log ("COMMS MAN: Refusing gunship for player %d to helicopter %d", received_id, pilot_data.gunship_index);
+                                    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: Refusing gunship for player %d to helicopter %d", received_id, pilot_data.gunship_index);
                                 }
 
 //                              #endif
@@ -1934,7 +1934,7 @@ void comms_process_data (void)
 
 //                          #if DEBUG_MODULE
 
-                            debug_log ("COMMS MAN: sending gunship request accepted for gunship %d pilot id %d", index_number, received_id);
+                            debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: sending gunship request accepted for gunship %d pilot id %d", index_number, received_id);
 
 //                          #endif
 
@@ -1965,14 +1965,14 @@ void comms_process_data (void)
                             if (this_connection->pilot_entity)
                             {
 
-                                debug_log ("COMMS MAN: RECEIVED JOIN REQUEST by %s (dpid %d)",
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: RECEIVED JOIN REQUEST by %s (dpid %d)",
                                                 get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME),
                                                 received_id);
                             }
                             else
                             {
 
-                                debug_log ("COMMS MAN: received JOIN REQUEST by %d", received_id);
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received JOIN REQUEST by %d", received_id);
                             }
 
                             #endif
@@ -2011,7 +2011,7 @@ void comms_process_data (void)
 
                                 #if DEBUG_MODULE
 
-                                debug_log ("COMMS MAN: Mission data: connection_receive_buffer too small, mallocing to %d", new_connection->connection_receive_buffer_size);
+                                debug_colour_log (DEBUG_COLOUR_RED, "COMMS MAN: Mission data: connection_receive_buffer too small, mallocing to %d", new_connection->connection_receive_buffer_size);
 
                                 #endif
 
@@ -2070,7 +2070,7 @@ void comms_process_data (void)
                         if (new_connection)
                         {
 
-                            debug_log ("COMMS MAN: received CLIENT FRAME ID (%d) by %d %s", index_number, received_id, direct_play_get_player_name (received_id));
+                            debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received CLIENT FRAME ID (%d) by %d %s", index_number, received_id, direct_play_get_player_name (received_id));
                         }
 
                         //#endif
@@ -2084,7 +2084,7 @@ void comms_process_data (void)
 
                             //#if DEBUG_MODULE
 
-                            debug_log ("COMMS MAN: sending packet %d frame %d to recently joined client", 1, loop1);
+                            debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: sending packet %d frame %d to recently joined client", 1, loop1);
 
                             //#endif
 
@@ -2097,7 +2097,7 @@ void comms_process_data (void)
 
                                 //#if DEBUG_MODULE
 
-                                debug_log ("COMMS MAN: sending packet %d frame %d to recently joined client", loop1, loop2);
+                                debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: sending packet %d frame %d to recently joined client", loop1, loop2);
 
                                 //#endif
 
@@ -2113,7 +2113,7 @@ void comms_process_data (void)
 
 //                      #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: Gunship refused");
+                        debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "COMMS MAN: Gunship refused");
 
 //                      #endif
 
@@ -2133,7 +2133,7 @@ void comms_process_data (void)
 
 //                      #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: received GUNSHIP ACCEPTED by %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received GUNSHIP ACCEPTED by %d", received_id);
 
 //                      #endif
 
@@ -2184,7 +2184,7 @@ void comms_process_data (void)
 
 //                      #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: received PILOT ACCEPTED by %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received PILOT ACCEPTED by %d", received_id);
 
 //                      #endif
 
@@ -2200,7 +2200,7 @@ void comms_process_data (void)
 
                         #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: received MISSION DATA by %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received MISSION DATA by %d", received_id);
 
                         #endif
 
@@ -2246,7 +2246,7 @@ void comms_process_data (void)
                         if (unpack_session (received_data, received_size - 4, PACK_MODE_CLIENT_SESSION))
                         {
 
-                            debug_log ("COMMS MAN: received size overflow");
+                            debug_colour_log (DEBUG_COLOUR_RED, "COMMS MAN: received size overflow");
 							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
                         }
@@ -2305,7 +2305,7 @@ void comms_process_data (void)
 
                         #if DEBUG_MODULE
 
-                        debug_log ("COMMS MAN: received FRAME ID (%d) by %d", index_number, received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received FRAME ID (%d) by %d", index_number, received_id);
 
                         #endif
 
@@ -2333,7 +2333,7 @@ void comms_process_data (void)
 
                         #if DEBUG_MODULE >= 2
 
-                        debug_log ("COMMS MAN: received AI DATA by %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received AI DATA by %d", received_id);
 
                         #endif
 
@@ -2369,7 +2369,7 @@ void comms_process_data (void)
                     case PACKET_TYPE_END_GAME:
                     {
 
-                        debug_log ("COMMS MAN: received END GAME from %d", received_id);
+                        debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "COMMS MAN: received END GAME from %d", received_id);
 
                         if (get_comms_model () == COMMS_MODEL_SERVER)
                         {
@@ -2382,7 +2382,7 @@ void comms_process_data (void)
                             if (this_connection->pilot_entity)
                             {
 
-                                debug_log ("    from %s ", get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
+                                debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "    from %s ", get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
                             }
 
                             unregister_connection (received_id);
@@ -2407,7 +2407,7 @@ void comms_process_data (void)
                     case PACKET_TYPE_SERVER_REJECTED:
                     {
 
-                        debug_log ("COMMS MAN: received SERVER REJECTED (server id %d)", received_id);
+                        debug_colour_log (DEBUG_COLOUR_RED, "COMMS MAN: received SERVER REJECTED (server id %d)", received_id);
 
                         //setup_campaign_over_screen (get_local_force_entity (get_global_gunship_side ()), CAMPAIGN_RESULT_SERVER_REJECTED);
 
@@ -2419,7 +2419,7 @@ void comms_process_data (void)
                     default:
                     {
 
-                        debug_log ("ERROR: Data Exchange, unknown packet type %d", type); //schorpp "trying ignore, kickout would open door for dos-attacks"
+                        debug_colour_log (DEBUG_COLOUR_RED, "ERROR: Data Exchange, unknown packet type %d", type); //schorpp "trying ignore, kickout would open door for dos-attacks"
 
                         break;
                     }
@@ -2551,12 +2551,12 @@ void net_sendDataToMaster (char *data, int servernum)
 
     if (servernum == 1)
     {
-          debug_log ("HEARTBEAT: sending heartbeat to primary server");
+          debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: sending heartbeat to primary server");
           sendto (mastersocket, data, strlen (data), 0, (SOCKADDR *)&Master, sizeof (SOCKADDR));
         }
         else
         {
-          debug_log ("HEARTBEAT: sending heartbeat to secondary server");
+          debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: sending heartbeat to secondary server");
           sendto (mastersocket2, data, strlen (data), 0, (SOCKADDR *)&Master2, sizeof (SOCKADDR));
         }
 }
@@ -2587,11 +2587,11 @@ int net_connectToMaster (char *serverName, short port, int servernum)
 
         if (servernum==1)
         {
-            debug_log ("HEARTBEAT: Connecting to primary master");
+            debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: Connecting to primary master");
         }
         else
         {
-            debug_log ("HEARTBEAT: Connecting to secondary master");
+            debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: Connecting to secondary master");
         }
 
         ulServerAddr = LookUpIPAddress(serverName);
@@ -2602,11 +2602,11 @@ int net_connectToMaster (char *serverName, short port, int servernum)
 
             if (servernum==1)
             {
-                debug_log ("HEARTBEAT: ERROR connecting to primary master!");
+                debug_colour_log (DEBUG_COLOUR_RED, "HEARTBEAT: ERROR connecting to primary master!");
             }
             else
             {
-                debug_log ("HEARTBEAT: ERROR connecting to secondary master!");
+                debug_colour_log (DEBUG_COLOUR_RED, "HEARTBEAT: ERROR connecting to secondary master!");
             }
             return -1;
         }
@@ -2626,9 +2626,16 @@ int net_connectToMaster (char *serverName, short port, int servernum)
         }
 
         #if DEBUG_MODULE
-        debug_log ("HEARTBEAT: connect successfull");
-        #endif
+        {
+			struct in_addr addr;
+			char *dot_ip;
 
+			addr.s_addr = ulServerAddr;
+			dot_ip = inet_ntoa(addr);
+
+			debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "HEARTBEAT: connect successfull, masterserver address %s, current server address %s", dot_ip, global_options.ip_address);
+		}
+		#endif
         return sock;
 }
 
@@ -2644,7 +2651,7 @@ void net_heartbeat(void)
 
 
 #if DEBUG_MODULE
-debug_log ("HEARTBEAT: net_heartbeat called");
+debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: net_heartbeat called");
 #endif
 
     direct_play_session_capabilities ();
@@ -2655,7 +2662,7 @@ debug_log ("HEARTBEAT: net_heartbeat called");
                                                  direct_play_get_number_of_players(),
                                                  versionBuffer);
 
-debug_log ("HEARTBEAT: sending: %s", TempStuff);
+debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: sending: %s", TempStuff);
 
     if (mastersocket > 0 )
       net_sendDataToMaster (TempStuff, 1);
@@ -2675,7 +2682,7 @@ void net_getServerList(void)
     if (command_line_report_to_masterserver == FALSE)
     	return;
 
-    debug_log ("GETSERVERLIST: Init");
+    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "GETSERVERLIST: Init");
 
     if ((mastersocket <=0) && (mastersocket2 <=0))
     {
@@ -2693,7 +2700,7 @@ void net_getServerList(void)
       if (mastersocket2 > 0 )
         net_sendDataToMaster (SendBuffer, 2);
 
-      debug_log ("GETSERVERLIST: Request sent");
+      debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "GETSERVERLIST: Request sent");
     }
     else if (num_multiplayer_refreshes > 2)
     {
@@ -2711,7 +2718,7 @@ void net_getServerList(void)
 			do
 			{
 				net_receiveData (respondingServer); //The received data is in ReceiveBuffer!!
-				debug_log ("GETSERVERLIST: Received: %s", ReceiveBuffer);
+				debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "GETSERVERLIST: Received: %s", ReceiveBuffer);
 
 				if (ReceiveBuffer[0] == 'W')
 				{
@@ -2746,7 +2753,15 @@ void net_init_heartbeat(void)
         mastersocket = net_connectToMaster (command_line_primary_server_setting, MasterPort, 1);
         if (mastersocket <= 0)
           mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
-    debug_log ("HEARTBEAT: after heartbeat initialisation");
+
+	if (mastersocket != -1 || mastersocket2 != -1)
+	{
+		debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "HEARTBEAT: after heartbeat initialisation");
+	}
+	else
+	{
+		debug_colour_log (DEBUG_COLOUR_RED, "HEARTBEAT: master servers are not available");
+	}
 
 }
 
@@ -2766,7 +2781,7 @@ void net_handle_heartbeat(void)
         // Time for another heartbeat?
     if (last_heartbeat_time < get_system_time ())
     {
-      debug_log ("HEARTBEAT: Time for another heartbeat!");
+      debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: Time for another heartbeat!");
       //Check whether we're a server AND whether the mission is running
       if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_game_status () == GAME_STATUS_INITIALISED))
       {
