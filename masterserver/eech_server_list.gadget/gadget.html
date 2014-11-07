@@ -1,0 +1,192 @@
+<html>
+<style type="text/css">
+.styDefault {
+	color: #999999;
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.styTextBox {
+	color: #000000;
+	font-size: 11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin:1px;
+	border:1px;
+	vertical-align:top;
+}
+
+.styButton {
+	color: #000000;
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin:0px;
+	margin-left:2px;
+	border:1px;
+	vertical-align:top;
+}
+
+.styImage {
+	color: #000000;
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin:0px;
+	margin-top:0px;
+	margin-left:0px;
+	border:0px;
+	vertical-align:top;
+	cursor:pointer;
+}
+
+.styTable {
+	color: #999999;
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: white;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: outset;
+	border-color: white;
+	border-collapse: separate;
+	table-layout:fixed;
+}
+.styBody {
+	background-image: url(images\\bckgrnd.png);
+	background-repeat: no-repeat;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+</style>
+
+<script type="text/javascript">
+function DoInit()
+{
+    document.body.style.width = 160;
+    document.body.style.height= 160;
+    document.body.style.margin=0;
+//	System.Gadget.settingsUI = "settings.html";
+}
+
+function createXMLHttpRequest() 
+{
+	if (window.ActiveXObject)
+	{
+		return(new ActiveXObject("Microsoft.XMLHTTP"));
+	}
+	else if (window.XMLHttpRequest) 
+	{
+		return(new XMLHttpRequest());
+	}
+}
+
+function process_ajax_sync(phpPage, getOrPost, async)
+{
+    try
+    {
+	    var xmlHttp = createXMLHttpRequest();
+        var strRetVal="";
+        		
+	    if(getOrPost == "get")
+	    {
+		    xmlHttp.open("GET",phpPage,async);
+		    xmlHttp.onreadystatechange = function()
+		    {
+			    if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+			    {
+				    strRetVal = xmlHttp.responseText;
+			    }
+		    }
+    		
+		    xmlHttp.send(null);
+	    }
+	}
+	catch(err)
+	{
+	    //do nothing
+	}
+	
+	return(strRetVal);
+}
+
+
+function playSound(soundfile)
+{
+        var a = new Audio();
+        a.src = soundfile;
+        a.autoplay = true;
+}
+
+function last_length(){};
+
+function getipdetails()
+{
+	var queryString = "http://eech.dsl-komi.ru/gadget.txt";
+	var strResult = process_ajax_sync(queryString,"get",false);
+	var temp = new Array();
+	temp = strResult.split('%');
+	
+	if ( typeof last_length.counter == 'undefined' )
+        last_length.counter = 0;
+	
+	if (last_length.counter < temp.length)
+		System.Sound.playSound('in.wav');
+	else if (last_length.counter > temp.length)
+		System.Sound.playSound('out.wav');
+	
+	last_length.counter = temp.length;
+	
+    var myTableDiv = document.getElementById("myDynamicTable");
+    myTableDiv.innerHTML = "";  
+    var table = document.createElement('TABLE');
+    table.border='0';
+    table.cellspacing='0';
+    table.cellpadding='1';
+	table.vAlign = 'top';
+	table.className = 'styTable';
+	
+	var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+      
+	for(var i = 0; i < temp.length; i++)
+	{
+       if (!(i % 4))
+	   {
+	   	var tr = document.createElement('TR');
+       	tableBody.appendChild(tr);
+	   }
+       
+       var td = document.createElement('TD');
+		if (!(i % 4))
+		   td.width = '54';
+		else if (!((i - 1) % 4))
+		   td.width = '22';
+		else if (!((i - 2) % 4))
+		   td.width = '36';
+		else if (!((i - 3) % 4))
+		   td.width = '29';
+		  
+	   td.appendChild(document.createTextNode(temp[i]));
+       tr.appendChild(td);
+    }
+    myTableDiv.appendChild(table);
+}
+
+</script>
+
+<head></head>
+<body onLoad="DoInit();" class="styBody">
+<table width="158" border="0" height="158" class="styTable" cellpadding="5" cellspacing="1">
+<tr style="border:none; vertical-align:top">
+<td>
+<script>
+setInterval(getipdetails, 60000);
+setTimeout(getipdetails, 200);
+</script>
+<div id="myDynamicTable">
+</div>
+</td></tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gadget>
+  <name>EECH Server list</name>
+  <version>1.0.0.0</version>
+  <author name="WorkMoment">
+    <info url="http://eech.dsl-komi.ru" text="eech.dsl-komi.ru"/>
+    <logo src="images/logo.ico" />
+  </author>
+  <copyright></copyright>
+  <description>EECH server list</description>
+  <icons>
+    <icon height="130" width="130" src="images/icon.png" />
+  </icons>
+  <hosts>
+    <host name="sidebar">
+      <autoscaleDPI>true</autoscaleDPI>
+      <base type="html" apiVersion="1.0.0" src="gadget.html" />
+      <permissions>Full</permissions>
+      <platform minPlatformVersion="1.0" />	
+    </host>
+  </hosts>
+</gadget>

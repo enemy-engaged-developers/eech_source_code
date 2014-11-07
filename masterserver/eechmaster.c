@@ -46,6 +46,8 @@ int MaxServerAge = 240; //Servers are removed after 240 seconds of inactivity
 #define FALSE 0
 #define TRUE 1
 #define LOG 1
+#define WEB_PAGE 1
+#define GADGET_PAGE 1
 
 const char header1[3000] = {"<HTML><HEAD><TITLE>Enemy Engaged Server List</TITLE><ALKALINE skip> \
 <META content=\"A list of all active EECH multiplayer servers\" \
@@ -195,6 +197,7 @@ void WriteServerList(void)
     int totalplayers = 0;
     FILE *f;
 
+#if WEB_PAGE
 	if (f=fopen("//var//www//index.html", "w"))
 	{
 		for(i=0; i<=(maxservers+5); i++)
@@ -235,6 +238,25 @@ void WriteServerList(void)
 		fprintf(f, "%s", trailer);
 		fclose(f);
 	}
+#endif
+	
+#if GADGET_PAGE	
+	if (f=fopen("//var//www//gadget.txt", "w"))
+	{
+		for(i=0; i<=(maxservers+5); i++)
+			if (Servers[i].isUsed != -1)
+			{
+				fprintf(f, "%s%%", Servers[i].Name);
+				fprintf(f, "%i/%i%%", Servers[i].CurClients, Servers[i].MaxClients);
+				fprintf(f, "%s%%", Servers[i].Version);
+				if (Servers[i].TotalAge >= 3600)
+					fprintf(f, "%ih%im%%", abs(Servers[i].TotalAge / 3600), abs((Servers[i].TotalAge%3600) / 60));
+				else
+					fprintf(f, "%im%%", abs(Servers[i].TotalAge / 60));
+			}
+		fclose(f);
+	}
+#endif
 }
 
 
