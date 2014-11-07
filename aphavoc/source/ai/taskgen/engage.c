@@ -930,6 +930,20 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 
 				priority [loop] += max(0.0f, 0.1f - 0.1f * get_sqr_2d_range(get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION), get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION)) / MAX_ENGAGE_RANGE); // close targets a more important
 				
+				if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI) // adjust players priority value for different difficulty levels
+				{
+					entity *pilot;
+					
+					pilot = get_local_entity_first_child (target, LIST_TYPE_AIRCREW);
+
+					ASSERT (pilot);
+
+					if (get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_HARD)
+						priority [loop] += 0.1;
+					else if (get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_EASY)
+						priority [loop] = max(0.0, priority [loop] - 0.1);
+				}
+				
 				#if DEBUG_MODULE
 
 				debug_log ("ENGAGE: (%d) Target : %s, Priority %f", loop, get_local_entity_string (target, STRING_TYPE_FULL_NAME), priority [loop]);
