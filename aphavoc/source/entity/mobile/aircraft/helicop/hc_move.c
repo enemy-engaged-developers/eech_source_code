@@ -285,6 +285,9 @@ void helicopter_movement (entity *en)
 	wp_vec.x += wp_vel.x;
 	wp_vec.z += wp_vel.z;
 
+	if (get_3d_vector_magnitude(&wp_vec) > 1.1 * max_vel) // limit absolute velocity value
+		normalise_3d_vector_given_magnitude(&wp_vec, get_3d_vector_magnitude(&wp_vec) / (1.1 * max_vel));
+
 	#if DEBUG_MODULE
 
 	wp_pos.y = height;

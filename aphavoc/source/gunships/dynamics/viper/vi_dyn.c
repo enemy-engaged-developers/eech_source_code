@@ -1794,12 +1794,12 @@ void update_attitude_dynamics (void)
 		force = sfrand1 () * exp (0.2 * (velocity_z_value - current_flight_dynamics->velocity_z.max));
 
 		// scale on blade pitch.
-		force *= ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) / (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
+		force *= 0.5 + 0.5 * ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) / (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
 
 		if (fabs (force) > 2.0)
 		{
-
-			dynamics_damage_model (DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
+			if (frand1() < (fabs (force) - 2.0) * get_delta_time())
+				dynamics_damage_model (DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
 
 			force = bound (force, -2.0, 2.0);
 		}
