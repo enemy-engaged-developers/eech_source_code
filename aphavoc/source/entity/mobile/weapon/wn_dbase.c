@@ -3932,8 +3932,8 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"AGM-114L Longbow Hellfire", 									// full_name
-			"AGM(R)",			 												// hud_name
-			"AGM(R)",															// mfd_name
+			"AGM(RDR)",			 												// hud_name
+			"AGM(RDR)",															// mfd_name
 			"AGM-114L",								  							// weapon_loading_list_name
 			"AGM-114L Longbow Hellfire",		  							// weapon_loading_name_text
 
@@ -4005,8 +4005,8 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"AGM-114K Hellfire II",											// full_name
-			"AGM(L)",	 				 										// hud_name
-			"AGM(L)",															// mfd_name
+			"AGM(LSR)",	 				 										// hud_name
+			"AGM(LSR)",															// mfd_name
 			"AGM-114K",								  							// weapon_loading_list_name
 			"AGM-114K Hellfire II",				  							// weapon_loading_name_text
 
@@ -4078,8 +4078,8 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"AGM-114R Hellfire II",											// full_name
-			"AGM(L)",	 				 										// hud_name
-			"AGM(L)",															// mfd_name
+			"AGM(LSR)",	 				 										// hud_name
+			"AGM(LSR)",															// mfd_name
 			"AGM-114R",								  							// weapon_loading_list_name
 			"AGM-114R Hellfire II",				  							// weapon_loading_name_text
 
