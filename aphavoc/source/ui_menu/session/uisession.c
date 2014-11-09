@@ -532,6 +532,9 @@ void compile_multi_session_list (session_list_data_type **list)
 	char
 		text [128];
 
+	if (masterserver_rx_flag)
+		set_ui_object_drawable (session_screen_connection_indicator, TRUE);
+
 	this_connection = direct_play_get_connection_data ();
 
 	if ( ( this_connection ) && ( this_connection->is_initialised ) )

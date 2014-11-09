@@ -105,7 +105,8 @@ static unsigned char
     *data_record;
 
 int
-    data_record_size;
+    data_record_size,
+	masterserver_rx_flag = FALSE;
 
 server_response_types
     server_response;
@@ -2633,7 +2634,7 @@ int net_connectToMaster (char *serverName, short port, int servernum)
 			addr.s_addr = ulServerAddr;
 			dot_ip = inet_ntoa(addr);
 
-			debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "HEARTBEAT: connect successfull, masterserver address %s, current server address %s", dot_ip, global_options.ip_address);
+			debug_colour_log (DEBUG_COLOUR_FOREST_GREEN, "HEARTBEAT: connect successfull, masterserver %s, server %s", dot_ip, global_options.ip_address);
 		}
 		#endif
         return sock;
@@ -2715,6 +2716,8 @@ void net_getServerList(void)
 		respondingServer = net_CheckForDataOnSocket (mastersocket, mastersocket2);
 		if (respondingServer > 0)
 		{
+			masterserver_rx_flag = TRUE;
+
 			do
 			{
 				net_receiveData (respondingServer); //The received data is in ReceiveBuffer!!

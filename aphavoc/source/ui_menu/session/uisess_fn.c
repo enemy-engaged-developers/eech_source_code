@@ -618,6 +618,9 @@ void session_update_session_list (void)
 	static unsigned int
 		update_ticks = 0;
 
+	if (masterserver_rx_flag)
+		set_ui_object_drawable (session_screen_connection_indicator, FALSE);
+
 	if (!get_pack_buffer ())
 	{
 

@@ -81,7 +81,8 @@ extern ui_object
 	*session_game_delete_button,
    *session_name_entry_area,
    *session_name_input,
-	*session_screen;
+	*session_screen,
+	*session_screen_connection_indicator;
 
 extern texture_graphic
 	*session_screen_graphic;

@@ -86,7 +86,8 @@ ui_object
    *session_briefing_area,
    *session_name_entry_area,
    *session_name_input,
-   *session_screen;
+   *session_screen,
+   *session_screen_connection_indicator;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -472,6 +473,27 @@ void initialise_session_screen (void)
 
 	set_text_option_backdrop_object (option_bdrop, session_screen_back_button);
 
+	
+	// connection indicator
+	
+	session_screen_connection_indicator = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (session_list_bdrop),
+		UI_ATTR_TIME_LENGTH (0),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_VIRTUAL_POSITION (0.01, 0.005),
+		UI_ATTR_VIRTUAL_SIZE (0.2, 0.2),
+		UI_ATTR_TEXT ("*"),
+		UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_22),
+		UI_ATTR_FONT_COLOUR (50, 255, 50, 255),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_BOTTOM),
+		UI_ATTR_HIGHLIGHTABLE (FALSE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_DRAWABLE (FALSE),			
+		UI_ATTR_END
+	);	
+	
 	//
 	// Create the briefing
 	//

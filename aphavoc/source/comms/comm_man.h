@@ -142,7 +142,8 @@ typedef struct CLIENT_GUNSHIP_REQUEST_DATA client_gunship_request_data;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
-	data_record_size;
+	data_record_size,
+	masterserver_rx_flag;
 
 extern void comms_clear_data_record (void);
 
