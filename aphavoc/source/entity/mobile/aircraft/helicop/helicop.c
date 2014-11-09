@@ -448,6 +448,8 @@ void assign_entity_to_user (entity *en)
 
 		restore_helicopter_entity (en);
 
+		current_flight_dynamics->main_rotor_rpm.value = en->helicopter_data->main_rotor_rpm;
+
 		//
 		// set view mode
 		//

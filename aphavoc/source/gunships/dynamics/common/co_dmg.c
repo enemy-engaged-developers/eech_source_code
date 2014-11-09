@@ -2068,6 +2068,8 @@ void damage_entity_to_flight_model (entity *en)
 	damage_level *= get_local_entity_int_value (en, INT_TYPE_INITIAL_DAMAGE_LEVEL);
 
 	set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+	
+	restore_helicopter_entity (en); // restore rotors
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
