@@ -225,6 +225,8 @@ extern void normalise_3d_vector_given_magnitude ( vec3d *vector, float length );
 
 extern void normalise_2d_vector_given_magnitude ( vec2d *vector, float length );
 
+extern float get_point_to_point_distance(const vec3d *point_a, const vec3d *point_b);
+
 extern float get_3d_perp_dist_of_point_from_line (const vec3d *point_a, const vec3d *point_b, const vec3d *point_c, vec3d *point_d);
 
 extern void get_3d_perp_vector_of_point_from_line (const vec3d *line_point_a, const vec3d *line_point_b, const vec3d *point_c, vec3d *result);

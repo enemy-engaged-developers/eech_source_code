@@ -1791,12 +1791,16 @@ void dynamics_service_moving_collision_violations (void)
 		for (loop = 0; loop < current_flight_dynamics->number_of_moving_collision_points; loop ++)
 			if (current_flight_dynamics->moving_collision_points [loop].violated)
 			{
+				float point_velocity;
+				
 				moving_collision_points_counter (loop);	
 				dynamics_damage_model (dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [loop].collision_point_type].damage_type, FALSE);
 			
 				// effects 
 
-				if (get_comms_model () == COMMS_MODEL_SERVER && !current_flight_dynamics->last_frame_moving_collision_points [loop].violated)
+				point_velocity = get_point_to_point_distance(&current_flight_dynamics->moving_collision_points [loop].world_point, &current_flight_dynamics->last_frame_moving_collision_points [loop].world_point) / get_delta_time();
+
+				if (get_comms_model () == COMMS_MODEL_SERVER && !current_flight_dynamics->last_frame_moving_collision_points [loop].violated && point_velocity > 150.0)
 					create_client_server_collision_effect (&current_flight_dynamics->moving_collision_points [loop].world_point, current_flight_dynamics->moving_collision_points [loop].surface_type, 1);
 			}
 }
