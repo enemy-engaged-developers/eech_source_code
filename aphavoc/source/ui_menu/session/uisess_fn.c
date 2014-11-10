@@ -619,7 +619,10 @@ void session_update_session_list (void)
 		update_ticks = 0;
 
 	if (masterserver_rx_flag)
+	{
 		set_ui_object_drawable (session_screen_connection_indicator, FALSE);
+		masterserver_rx_flag = FALSE;
+	}
 
 	if (!get_pack_buffer ())
 	{
