@@ -92,11 +92,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int
-	comms_weapon_lag_timing;
-
 float
-	comms_weapon_lag_time,
+	comms_weapon_lag_timing[3], // delay value - first - last
    delta_time = 0.0,
    last_time = 0.0,
    network_frame_time = 0.0,
@@ -238,7 +235,8 @@ void set_comms_model (comms_model_types model)
 
 void initialise_comms (void)
 {
-
+	int i;
+	
 	#if DEBUG_MODULE >= 1
 
 	debug_log ("COMMS : Initialise comms");
@@ -261,6 +259,9 @@ void initialise_comms (void)
 		// big number to stop my resend system kicking in
 		command_line_comms_packet_resend_timer = 1000;
 	}
+	
+	for (i = 0; i < 3; i++)
+		comms_weapon_lag_timing[i] = 0.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,9 +270,11 @@ void initialise_comms (void)
 
 void reset_comms_data (void)
 {
-
+	
 	stub_packet_type
 		*packet;
+	
+	int i;
 
 	#if DEBUG_MODULE >= 1
 
@@ -279,9 +282,8 @@ void reset_comms_data (void)
 
 	#endif
 
-	comms_weapon_lag_timing = FALSE;
-
-	comms_weapon_lag_time = 0.0;
+	for (i = 0; i < 3; i++)
+		comms_weapon_lag_timing[i] = 0.0;
 
 	set_group_frame_id (0);
 
@@ -2384,21 +2386,9 @@ void display_comms_stats (void)
 
 	if (get_gunship_entity ())
 	{
-
-		if (comms_weapon_lag_timing)
-		{
-
-			sprintf (s, "Weapon lag time = Timing...");
-			ui_display_text (s, 0, y);
-			y += ui_get_font_height () + 1;
-		}
-		else
-		{
-
-			sprintf (s, "Weapon lag time = %0.2f", comms_weapon_lag_time);
-			ui_display_text (s, 0, y);
-			y += ui_get_font_height () + 1;
-		}
+		sprintf (s, "Weapon lag time = %0.2f", comms_weapon_lag_timing[0]);
+		ui_display_text (s, 0, y);
+		y += ui_get_font_height () + 1;
 	}
 
 	end_3d_scene ();

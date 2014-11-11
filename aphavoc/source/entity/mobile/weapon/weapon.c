@@ -1018,7 +1018,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 			while (number_of_iterations > 0)
 			{
-				target_move_distance = *time_of_flight * target_true_velocity / pow(number_of_iterations, 0.5);
+				target_move_distance = (*time_of_flight + 0.5 * comms_weapon_lag_timing[0]) * target_true_velocity / pow(number_of_iterations, 0.5); // include comms_weapon_lag_time to compensate client's delay
 
 				new_intercept_point.x = current_target_position.x + (target_motion_vector.x * target_move_distance);
 				new_intercept_point.y = current_target_position.y + (target_motion_vector.y * target_move_distance);

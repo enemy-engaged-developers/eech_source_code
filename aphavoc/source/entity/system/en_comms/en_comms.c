@@ -1200,22 +1200,25 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			ASSERT (launcher);
 
 			////////////////////////////////////////
-			// DEBUG COMMS WEAPON LAG TIMING
+			// COMMS WEAPON LAG TIMING
 			////////////////////////////////////////
 			if (get_comms_model () == COMMS_MODEL_CLIENT)
 			{
-
 				if (launcher == get_gunship_entity ())
 				{
-
-					comms_weapon_lag_timing = TRUE;
-
-					comms_weapon_lag_time = ((float) get_system_time () / (float) TIME_1_SECOND);
+					float system_time;
+					
+					system_time = (float) get_system_time () / (float) TIME_1_SECOND;
+						
+					if (system_time - comms_weapon_lag_timing[2] > 2.0) // outdated - make new calculations
+					{
+						comms_weapon_lag_timing[0] = 0.0;
+						comms_weapon_lag_timing[1] = system_time; // remember first shot
+					}
+						
+					comms_weapon_lag_timing[2] = system_time; // last shot
 				}
 			}
-			////////////////////////////////////////
-			// DEBUG COMMS WEAPON LAG TIMING
-			////////////////////////////////////////
 
 			pack_entity_safe_ptr (launcher);
 
@@ -3534,23 +3537,21 @@ void process_received_entity_comms_messages (void)
 				launcher = unpack_entity_safe_ptr ();
 	
 				////////////////////////////////////////
-				// DEBUG COMMS WEAPON LAG TIMING
+				// COMMS WEAPON LAG TIMING
 				////////////////////////////////////////
 				if (get_comms_model () == COMMS_MODEL_CLIENT)
 				{
-	
 					if (launcher == get_gunship_entity ())
 					{
+						float system_time;
 
-						comms_weapon_lag_timing = FALSE;
-	
-						comms_weapon_lag_time = ((float) get_system_time () / (float) TIME_1_SECOND) - comms_weapon_lag_time;
+						system_time = (float) get_system_time () / (float) TIME_1_SECOND;
+
+						if (!comms_weapon_lag_timing[0]) // find out how much time passed since first shot
+							comms_weapon_lag_timing[0] = system_time - comms_weapon_lag_timing[1];
 					}
 				}
-				////////////////////////////////////////
-				// DEBUG COMMS WEAPON LAG TIMING
-				////////////////////////////////////////
-	
+
 				////////////////////////////////////////
 
 				weapon_sub_type = unpack_int_value (NULL, INT_TYPE_ENTITY_SUB_TYPE);

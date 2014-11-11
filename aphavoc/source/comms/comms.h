@@ -222,11 +222,8 @@ extern stub_packet_type
 	*received_group_packets,
 	*received_personal_packets;
 
-extern int
-	comms_weapon_lag_timing;
-
 extern float
-	comms_weapon_lag_time;
+	comms_weapon_lag_timing[3];
 
 #if COMMS_STATS
 
