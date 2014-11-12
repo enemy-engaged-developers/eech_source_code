@@ -98,6 +98,7 @@ float
    last_time = 0.0,
    network_frame_time = 0.0,
    network_frame_rate = 0.0;
+int comms_weapon_damage_multiplier[64][3]; // player ID - burst size - time stamp
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,6 +263,9 @@ void initialise_comms (void)
 	
 	for (i = 0; i < 3; i++)
 		comms_weapon_lag_timing[i] = 0.0;
+
+	for (i = 0; i < 64; i++)
+		comms_weapon_damage_multiplier[i][0] = comms_weapon_damage_multiplier[i][1] = comms_weapon_damage_multiplier[i][2] = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,6 +288,8 @@ void reset_comms_data (void)
 
 	for (i = 0; i < 3; i++)
 		comms_weapon_lag_timing[i] = 0.0;
+	for (i = 0; i < 64; i++)
+		comms_weapon_damage_multiplier[i][0] = comms_weapon_damage_multiplier[i][1] = comms_weapon_damage_multiplier[i][2] = 0;
 
 	set_group_frame_id (0);
 
@@ -2394,6 +2400,53 @@ void display_comms_stats (void)
 	end_3d_scene ();
 }
 
+
+int comms_weapon_damage_multiplier_value (entity *launcher, int burst_size, int weapon_sub_type)
+{
+	ASSERT(get_comms_model () == COMMS_MODEL_SERVER);
+	ASSERT(launcher);
+	ASSERT(weapon_sub_type);
+	
+	if (weapon_database[weapon_sub_type].rate_of_fire != FIRE_SINGLE_WEAPON && get_local_entity_int_value (launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+	{
+		int i, player_id;
+		entity *pilot;
+
+		pilot = get_local_entity_first_child (launcher, LIST_TYPE_AIRCREW);
+
+		ASSERT (pilot);
+
+		player_id = get_local_entity_int_value (pilot, INT_TYPE_UNIQUE_ID);
+
+		if (player_id <= 0) // it's host player, skip
+			return 1;
+
+		for (i = 0; i < 64; i++)
+			if (comms_weapon_damage_multiplier[i][0] == player_id)
+				break;
+
+		if (burst_size) // set
+		{
+			if (i == 64) // not found, make new
+				for (i = 0; i < 64; i++)
+					if (!comms_weapon_damage_multiplier[i][0])
+					{
+						comms_weapon_damage_multiplier[i][0] = player_id;
+						break;
+					}
+
+			ASSERT (i != 64);
+
+			comms_weapon_damage_multiplier[i][1] = burst_size;
+			comms_weapon_damage_multiplier[i][2] = get_system_time();
+		}
+		else if (i < 64) // get
+			if (get_system_time() - comms_weapon_damage_multiplier[i][2] < 10000) // just in case do not use old data
+				return min(max(1, comms_weapon_damage_multiplier[i][1]), 5);
+	}
+	
+	return 1;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

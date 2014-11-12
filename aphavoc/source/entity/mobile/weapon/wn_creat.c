@@ -581,6 +581,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 			{
 				set_force_local_entity_create_stack_attributes (TRUE);
+				comms_weapon_damage_multiplier_value(launcher, burst_size, weapon_sub_type);
 			}
 
 			weapon = create_local_entity

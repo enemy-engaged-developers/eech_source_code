@@ -413,6 +413,10 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 	
 	if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 		result *= get_player_damage_modifier (target);
+	
+	if (wpn) // damage multiplier for clients
+		if (wpn->weapon_data->launched_weapon_link.parent)
+			result *= comms_weapon_damage_multiplier_value(wpn->weapon_data->launched_weapon_link.parent, FALSE, weapon_type);
 
 	if (wpn && command_line_debug_show_damage) // draw damage value
 	{

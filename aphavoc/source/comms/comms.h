@@ -224,6 +224,8 @@ extern stub_packet_type
 
 extern float
 	comms_weapon_lag_timing[3];
+extern int
+	comms_weapon_damage_multiplier[64][3];
 
 #if COMMS_STATS
 
@@ -347,6 +349,8 @@ extern void reset_comms_stats (void);
 extern void reset_receive_packet_list_time_stamps (void);
 
 extern void display_comms_stats (void);
+
+extern int comms_weapon_damage_multiplier_value (entity *launcher, int burst_size, int weapon_sub_type);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
