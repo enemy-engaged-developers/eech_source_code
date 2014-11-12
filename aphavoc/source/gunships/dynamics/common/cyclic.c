@@ -582,7 +582,7 @@ void update_cyclic_pressure_inputs (void)
 
 				/*
 				debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),
-					((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH)) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
+					((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH)) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM))));
 				*/
 
 				{

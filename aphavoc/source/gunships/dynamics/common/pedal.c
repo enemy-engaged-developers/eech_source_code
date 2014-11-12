@@ -276,7 +276,7 @@ void update_pedal_pressure_inputs (void)
 				}
 				// Retro 17Jul2004 end
 
-				if (command_line_nonlinear_cyclic)
+				if (command_line_nonlinear_pedals)
 				{
 					// in non-linear mode it uses a curve described by f(x) = x*x + x
 					// gives a not so sensitive control around centre
