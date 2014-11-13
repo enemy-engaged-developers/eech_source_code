@@ -284,7 +284,7 @@ void update_cyclic_pressure_inputs (void)
 					if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
 						(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 					{
-
+						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 						set_current_flight_dynamics_auto_pilot (FALSE);
 					}
@@ -301,7 +301,7 @@ void update_cyclic_pressure_inputs (void)
 					if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
 						(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 					{
-
+						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 						set_current_flight_dynamics_auto_pilot (FALSE);
 					}
@@ -335,7 +335,7 @@ void update_cyclic_pressure_inputs (void)
 					if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
 						(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 					{
-
+						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 						set_current_flight_dynamics_auto_pilot (FALSE);
 					}
@@ -352,7 +352,7 @@ void update_cyclic_pressure_inputs (void)
 					if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
 						(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 					{
-
+						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 						set_current_flight_dynamics_auto_pilot (FALSE);
 					}
@@ -611,7 +611,7 @@ void update_cyclic_pressure_inputs (void)
 						if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
 							(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 						{
-
+							play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 							set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 							set_current_flight_dynamics_auto_pilot (FALSE);
 						}
