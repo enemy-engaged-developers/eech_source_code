@@ -79,7 +79,7 @@ void initialise_blackhawk_hms (void)
 	}
 	else
 	{
-		hms_max_visual_range		= 2500.0;
+		hms_max_visual_range		= 3000.0;
 		hms_max_field_of_view	= rad (45.0);
 	}
 };

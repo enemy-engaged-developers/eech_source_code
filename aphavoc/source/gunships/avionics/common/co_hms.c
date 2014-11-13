@@ -687,7 +687,7 @@ static entity *get_hms_boresight_target (void)
 
 										target_sqr_range = (uvec_target.x * uvec_target.x) + (uvec_target.y * uvec_target.y) + (uvec_target.z * uvec_target.z);
 
-										if (target_sqr_range < hms_max_visual_sqr_range)
+										if (target_sqr_range < hms_max_visual_sqr_range * ((float) get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) + 1.0)) // multiply on 1.4 if it's aircraft
 										{
 											if (target_sqr_range > 1.0)
 											{
