@@ -391,15 +391,13 @@ void normalise_2d_vector_given_magnitude ( vec2d *vector, float length )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float get_point_to_point_distance(const vec3d *point_a, const vec3d *point_b)
+float get_point_to_point_distance(vec3d *uv_ab, const vec3d *point_a, const vec3d *point_b)
 {
-	vec3d uv_ab;
-	
-	uv_ab.x = point_b->x - point_a->x;
-	uv_ab.y = point_b->y - point_a->y;
-	uv_ab.z = point_b->z - point_a->z;
+	uv_ab->x = point_b->x - point_a->x;
+	uv_ab->y = point_b->y - point_a->y;
+	uv_ab->z = point_b->z - point_a->z;
 
-	return sqrt ((uv_ab.x * uv_ab.x) + (uv_ab.y * uv_ab.y) + (uv_ab.z * uv_ab.z));
+	return sqrt ((uv_ab->x * uv_ab->x) + (uv_ab->y * uv_ab->y) + (uv_ab->z * uv_ab->z));
 }
 
 // calc perpendicular distance of point c from point d along line ab
@@ -430,7 +428,7 @@ float get_3d_perp_dist_of_point_from_line (const vec3d *point_a, const vec3d *po
 	// calc vector from point a to point b
 	//
 
-	mag_ab = get_point_to_point_distance(point_a, point_b);
+	mag_ab = get_point_to_point_distance(&uv_ab, point_a, point_b);
 
 	if (mag_ab == 0.0)
 	{

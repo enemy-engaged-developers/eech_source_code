@@ -225,7 +225,7 @@ extern void normalise_3d_vector_given_magnitude ( vec3d *vector, float length );
 
 extern void normalise_2d_vector_given_magnitude ( vec2d *vector, float length );
 
-extern float get_point_to_point_distance(const vec3d *point_a, const vec3d *point_b);
+extern float get_point_to_point_distance(vec3d *uv_ab, const vec3d *point_a, const vec3d *point_b);
 
 extern float get_3d_perp_dist_of_point_from_line (const vec3d *point_a, const vec3d *point_b, const vec3d *point_c, vec3d *point_d);
 
@@ -274,6 +274,10 @@ extern void rotate_3d_vector (vec3d *vector, float theta);
 #define check_zero_2d_vector(VECTOR) (get_2d_vector_magnitude (VECTOR) == 0.0)
 
 #define check_zero_3d_vector(VECTOR) (get_3d_vector_magnitude (VECTOR) == 0.0)
+
+#define get_heading_from_3d_unit_vector(VECTOR) (atan2 (VECTOR.x, VECTOR.z))
+
+#define get_pitch_from_3d_unit_vector(VECTOR) (asin (VECTOR.y))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
