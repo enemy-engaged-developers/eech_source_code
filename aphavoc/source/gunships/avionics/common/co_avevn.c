@@ -764,6 +764,174 @@ static void mouselook_toggle (event *ev)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void steer_left_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_left_key = TRUE;
+
+		single_target_acquisition_system_steer_left_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_left_key = FALSE;
+	}
+}
+
+static void steer_left_fast_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_left_fast_key = TRUE;
+
+		single_target_acquisition_system_steer_left_fast_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_left_fast_key = FALSE;
+	}
+}
+
+static void steer_left_fine_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_left_fine_key = TRUE;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_left_fine_key = FALSE;
+	}
+}
+
+static void steer_right_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_right_key = TRUE;
+
+		single_target_acquisition_system_steer_right_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_right_key = FALSE;
+	}
+}
+
+static void steer_right_fast_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_right_fast_key = TRUE;
+
+		single_target_acquisition_system_steer_right_fast_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_right_fast_key = FALSE;
+	}
+}
+
+static void steer_right_fine_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_right_fine_key = TRUE;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_right_fine_key = FALSE;
+	}
+}
+
+static void steer_up_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_up_key = TRUE;
+
+		single_target_acquisition_system_steer_up_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_up_key = FALSE;
+	}
+}
+
+static void steer_up_fast_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_up_fast_key = TRUE;
+
+		single_target_acquisition_system_steer_up_fast_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_up_fast_key = FALSE;
+	}
+}
+
+static void steer_up_fine_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_up_fine_key = TRUE;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_up_fine_key = FALSE;
+	}
+}
+
+static void steer_down_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_down_key = TRUE;
+
+		single_target_acquisition_system_steer_down_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_down_key = FALSE;
+	}
+}
+
+static void steer_down_fast_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_down_fast_key = TRUE;
+
+		single_target_acquisition_system_steer_down_fast_key++;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_down_fast_key = FALSE;
+	}
+}
+
+static void steer_down_fine_event (event *ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+	{
+		continuous_target_acquisition_system_steer_down_fine_key = TRUE;
+	}
+	else
+	{
+		continuous_target_acquisition_system_steer_down_fine_key = FALSE;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Jabberwock 031107 Designated target
 
 static void designate_toggle_event (event *ev)
@@ -1030,6 +1198,24 @@ void set_common_avionics_events (void)
 	set_event (DIK_DELETE, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, mouselook_toggle);
 	
 	// Jabberwock 031016 ends
+	
+	// target acquisition system control
+
+	set_event (DIK_NUMPAD4, MODIFIER_NONE, KEY_STATE_EITHER, steer_left_event);
+	set_event (DIK_NUMPAD4, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, steer_left_fast_event);
+	set_event (DIK_NUMPAD4, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, steer_left_fine_event);
+
+	set_event (DIK_NUMPAD6, MODIFIER_NONE, KEY_STATE_EITHER, steer_right_event);
+	set_event (DIK_NUMPAD6, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, steer_right_fast_event);
+	set_event (DIK_NUMPAD6, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, steer_right_fine_event);
+
+	set_event (DIK_NUMPAD8, MODIFIER_NONE, KEY_STATE_EITHER, steer_up_event);
+	set_event (DIK_NUMPAD8, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, steer_up_fast_event);
+	set_event (DIK_NUMPAD8, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, steer_up_fine_event);
+
+	set_event (DIK_NUMPAD2, MODIFIER_NONE, KEY_STATE_EITHER, steer_down_event);
+	set_event (DIK_NUMPAD2, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, steer_down_fast_event);
+	set_event (DIK_NUMPAD2, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, steer_down_fine_event);
 	
 	// Jabberwock 031107 Designated targets
 	

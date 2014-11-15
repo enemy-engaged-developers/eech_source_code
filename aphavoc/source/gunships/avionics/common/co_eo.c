@@ -2125,13 +2125,24 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			movement,
 			eo_heading = get_heading_from_attitude_matrix (eo_vp.attitude),
 			sin_heading = sin(eo_heading),
-			cos_heading = cos(eo_heading);
+			cos_heading = cos(eo_heading),
+			dx = 0.0, dy = 0.0;
 
 		int
 			has_moved;
 
+		static int previous_mouse_update_flag = 1;
+
+		if (command_line_mouse_look != MOUSELOOK_ON && command_line_eo_pan_joystick_index == -1 && previous_mouse_update_flag != get_mouse_update_flag())
+		{
+			dx = get_mouse_move_delta_x() / get_delta_time();
+			dy = get_mouse_move_delta_y() / get_delta_time();
+
+			previous_mouse_update_flag = get_mouse_update_flag();
+		}
+		
 		// move tracking point perpendicular
-		if (continuous_target_acquisition_system_steer_left_fast_key)
+		if (continuous_target_acquisition_system_steer_left_fast_key || dx < - 2500.0)
 			movement_rate -= COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_left_fine_key)
 			movement_rate -= FINE_TRACKING_RATE;
@@ -2140,7 +2151,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 		////////////////////////////////////////
 
-		if (continuous_target_acquisition_system_steer_right_fast_key)
+		if (continuous_target_acquisition_system_steer_right_fast_key || (dx > 2500.0))
 			movement_rate += COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_right_fine_key)
 			movement_rate += FINE_TRACKING_RATE;
@@ -2163,7 +2174,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		}
 
 		// move closer farther
-		if (continuous_target_acquisition_system_steer_up_fast_key)
+		if (continuous_target_acquisition_system_steer_up_fast_key || dy < - 2500.0)
 			movement_rate += COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_up_fine_key)
 			movement_rate += FINE_TRACKING_RATE;
@@ -2172,7 +2183,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 		////////////////////////////////////////
 
-		if (continuous_target_acquisition_system_steer_down_fast_key)
+		if (continuous_target_acquisition_system_steer_down_fast_key || dy > 2500.0)
 			movement_rate -= COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_down_fine_key)
 			movement_rate -= FINE_TRACKING_RATE;
@@ -2364,82 +2375,90 @@ float get_eo_azimuth (float rotate_rate, float coarse_slew_rate, float eo_azimut
 {
 	 // POV flir control thealx 130215
 
-			if (command_line_mouse_look == MOUSELOOK_ON)
+	if (!eo_target_locked)
+	{
+		if (command_line_mouse_look == MOUSELOOK_ON)
+		{
+			if (joystick_pov_left)
 			{
-				if (joystick_pov_left)
-				{
-					eo_azimuth -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+				eo_azimuth -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-					eo_azimuth = max (eo_azimuth, eo_min_azimuth);
-				}
-				else if (joystick_pov_right)
-				{
-					eo_azimuth += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
-
-					eo_azimuth = min (eo_azimuth, eo_max_azimuth);
-				}
+				eo_azimuth = max (eo_azimuth, eo_min_azimuth);
 			}
+			else if (joystick_pov_right)
+			{
+				eo_azimuth += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+				eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			}
+		}
 
 	// Jabberwock 030930 - Mouse FLIR control functions
 	// Improved mouse control thealx 130215
 
-			else if (command_line_mouse_look != MOUSELOOK_ON)
+		else
+		{
+			static int previous_mouse_update_flag = 1;
+			float dh;
+
+			if (previous_mouse_update_flag != get_mouse_update_flag())
 			{
-				static int previous_mouse_update_flag = 1;
-				float dh;
+				dh = get_mouse_move_delta_x() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
 
-				if (previous_mouse_update_flag != get_mouse_update_flag())
-				{
-					dh = get_mouse_move_delta_x() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+				previous_mouse_update_flag = get_mouse_update_flag();
 
-					previous_mouse_update_flag = get_mouse_update_flag();
-
-					eo_azimuth += dh;
-					eo_azimuth = bound (eo_azimuth, eo_min_azimuth, eo_max_azimuth);
-				}
+				eo_azimuth += dh;
+				eo_azimuth = bound (eo_azimuth, eo_min_azimuth, eo_max_azimuth);
 			}
-				return eo_azimuth;
+		}
+	}
+	
+	return eo_azimuth;
 }
 
 float get_eo_elevation (float rotate_rate, float coarse_slew_rate, float eo_elevation, float eo_min_elevation, float eo_max_elevation, float mouse_slew_rate)
 {
 	 // POV flir control thealx 130215
 
-			if (command_line_mouse_look == MOUSELOOK_ON)
+	if (!eo_target_locked)
+	{
+		if (command_line_mouse_look == MOUSELOOK_ON)
+		{
+			if (joystick_pov_up)
 			{
-				if (joystick_pov_up)
-				{
-					eo_elevation += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+				eo_elevation += rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
 
-					eo_elevation = min (eo_elevation, eo_max_elevation);
-				}
-				else if (joystick_pov_down)
-				{
-					eo_elevation -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
-
-					eo_elevation = max (eo_elevation, eo_min_elevation);
-				}
+				eo_elevation = min (eo_elevation, eo_max_elevation);
 			}
+			else if (joystick_pov_down)
+			{
+				eo_elevation -= rotate_rate * get_delta_time () * coarse_slew_rate * command_line_mouse_look_speed;
+
+				eo_elevation = max (eo_elevation, eo_min_elevation);
+			}
+		}
 
 	// Jabberwock 030930 - Mouse FLIR control functions
 	// Improved mouse control thealx 130215
 
-			else if (command_line_mouse_look != MOUSELOOK_ON)
+		else
+		{
+			static int previous_mouse_update_flag = 1;
+			float dp;
+
+			if (previous_mouse_update_flag != get_mouse_update_flag())
 			{
-				static int previous_mouse_update_flag = 1;
-				float dp;
+				dp = get_mouse_move_delta_y() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
 
-				if (previous_mouse_update_flag != get_mouse_update_flag())
-				{
-					dp = get_mouse_move_delta_y() / 5000.0 * mouse_slew_rate * command_line_mouse_look_speed;
+				previous_mouse_update_flag = get_mouse_update_flag();
 
-					previous_mouse_update_flag = get_mouse_update_flag();
-
-					eo_elevation -= dp;
-					eo_elevation = bound (eo_elevation, eo_min_elevation, eo_max_elevation);
-				}
+				eo_elevation -= dp;
+				eo_elevation = bound (eo_elevation, eo_min_elevation, eo_max_elevation);
 			}
-				return eo_elevation;
+		}
+	}
+
+	return eo_elevation;
 }
 
 float get_new_eo_zoom (float zoom)
