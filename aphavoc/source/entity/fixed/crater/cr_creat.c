@@ -297,8 +297,19 @@ void create_client_server_weapon_hit_ground_crater (entity *weapon, vec3d *posit
 	crater_types
 		type;
 
-	warhead_type = (weapon_warhead_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
-	damage_capability = get_local_entity_int_value (weapon, INT_TYPE_DAMAGE_CAPABILITY);
+	entity_sub_types
+			weapon_type = get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE);
+
+	switch (weapon_database[weapon_type].warhead_type)
+	{
+		case WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS:
+			warhead_type = weapon_database[weapon_type + 1].warhead_type;
+			damage_capability = weapon_database[weapon_type + 1].damage_capability * weapon_database[weapon_type + 1].burst_duration / 3;
+			break;
+		default:
+			warhead_type = weapon_database[weapon_type].warhead_type;
+			damage_capability = weapon_database[weapon_type].damage_capability;
+	}
 
 	switch (warhead_type)
 	{

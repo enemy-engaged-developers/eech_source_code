@@ -70,7 +70,7 @@ extern void create_client_server_entity_weapon (entity *launcher, entity_sub_typ
 
 extern void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_type, int salvo_count);
 
-extern void create_client_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, int weapon_index, viewpoint *vp, float velocity);
+extern void create_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, viewpoint *vp, float velocity);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

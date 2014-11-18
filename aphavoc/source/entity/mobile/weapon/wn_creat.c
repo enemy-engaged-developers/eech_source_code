@@ -932,135 +932,66 @@ void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_client_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, int weapon_index, viewpoint *vp, float velocity)
+void create_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, viewpoint *vp, float velocity)
 {
 	entity
 		*force,
 		*weapon;
 
+	ASSERT(get_comms_model () == COMMS_MODEL_SERVER);
 	ASSERT (launcher);
 	ASSERT (entity_sub_type_weapon_valid (weapon_sub_type));
+	ASSERT(weapon_database[weapon_sub_type - 1].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS);
 
 	weapon_viewpoint = vp;
 	weapon_velocity = velocity;
 	
-	if (get_comms_model () == COMMS_MODEL_SERVER)
+	////////////////////////////////////////
+	//
+	// SERVER/TX and SERVER/RX
+	//
+	////////////////////////////////////////
+
+	if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 	{
-		////////////////////////////////////////
-		//
-		// SERVER/TX and SERVER/RX
-		//
-		////////////////////////////////////////
-
-		ASSERT (weapon_index == ENTITY_INDEX_DONT_CARE);
-
-		if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
-		{
-			set_force_local_entity_create_stack_attributes (TRUE);
-		}
-		//
-		// create weapon
-		//
-
-		weapon = create_local_entity
-		(
-			ENTITY_TYPE_WEAPON,
-			ENTITY_INDEX_DONT_CARE,
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, 1),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_MISSILE_PHASE, MISSILE_PHASE1),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_LOCK_ON_AFTER_LAUNCH, FALSE),
-			ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
-			ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
-			ENTITY_ATTR_END
-		);
-
-		if (weapon)
-		{
-			//
-			// send FIRE message to force (unless it's a decoy/cargo/debris being launched)
-			//
-
-			if ((target) && (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS))))
-			{
-				force = get_local_force_entity ((entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE));
-
-				if (force)
-				{
-					notify_local_entity (ENTITY_MESSAGE_ENTITY_FIRED_AT, force, launcher, target);
-				}
-			}
-
-			transmit_entity_comms_message
-			(
-				ENTITY_COMMS_CREATE_WEAPON,
-				NULL,
-				launcher,
-				weapon_sub_type,
-				get_local_entity_safe_index (weapon),
-				1,
-				0
-			);
-		}
-
-		set_force_local_entity_create_stack_attributes (FALSE);
+		set_force_local_entity_create_stack_attributes (TRUE);
 	}
-/*	else // TODO: make it work for client
+	//
+	// create weapon
+	//
+
+	weapon = create_local_entity
+	(
+		ENTITY_TYPE_WEAPON,
+		ENTITY_INDEX_DONT_CARE,
+		ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
+		ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, 1),
+		ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_MISSILE_PHASE, MISSILE_PHASE1),
+		ENTITY_ATTR_INT_VALUE (INT_TYPE_LOCK_ON_AFTER_LAUNCH, FALSE),
+		ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
+		ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
+		ENTITY_ATTR_END
+	);
+
+	if (weapon)
 	{
-		if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
+		//
+		// send FIRE message to force (unless it's a decoy/cargo/debris being launched)
+		//
+
+		if ((target) && (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS))))
 		{
-			////////////////////////////////////////
-			//
-			// CLIENT/TX
-			//
-			////////////////////////////////////////
+			force = get_local_force_entity ((entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE));
 
-			ASSERT (weapon_index == ENTITY_INDEX_DONT_CARE);
-
-			// NOTE: The clients' weapon counters lag the servers' so it is possible that the
-			//       client may unknowingly attempt to create more weapons than are available.
-			//       This is prone to happen during rapid firing.
-
-			transmit_entity_comms_message
-			(
-				ENTITY_COMMS_CREATE_WEAPON,
-				NULL,
-				launcher,
-				weapon_sub_type,
-				ENTITY_INDEX_DONT_CARE,
-				1,
-				NULL
-			);
+			if (force)
+			{
+				notify_local_entity (ENTITY_MESSAGE_ENTITY_FIRED_AT, force, launcher, target);
+			}
 		}
-		else
-		{
-			////////////////////////////////////////
-			//
-			// CLIENT/RX
-			//
-			////////////////////////////////////////
+	}
 
-			ASSERT (weapon_index != ENTITY_INDEX_DONT_CARE);
+	set_force_local_entity_create_stack_attributes (FALSE);
 
-			set_force_local_entity_create_stack_attributes (TRUE);
-
-			weapon = create_local_entity
-			(
-				ENTITY_TYPE_WEAPON,
-				weapon_index,
-				ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
-				ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, 1),
-				ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
-				ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
-				ENTITY_ATTR_END
-			);
-
-			ASSERT (weapon);
-
-			set_force_local_entity_create_stack_attributes (FALSE);
-		}
-	}*/
-	
 	weapon_viewpoint = NULL;
 	weapon_velocity = 0;
 }

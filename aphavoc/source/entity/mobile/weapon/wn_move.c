@@ -979,32 +979,24 @@ void weapon_movement (entity *en)
 
 	cruise_time_error = 0.5 * frand1x (&seed) * weapon_database[raw->mob.sub_type].cruise_time_max_error;
 
-	if (raw->weapon_lifetime <= - weapon_database[raw->mob.sub_type].cruise_time - cruise_time_error) // this is the end of the journey..
-	{
-		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
-			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
-		else
-			raw->kill_code = WEAPON_KILL_CODE_EXHAUSTED;
-		
-		#if DEBUG_MODULE
-			debug_log("Weapon destroyed due to time exceeded");
-		#endif
-
-		return;
-	}
-
 	if (raw->decoy_timer && !weapon_database[raw->mob.sub_type].decoy_type && raw->weapon_lifetime <= - raw->decoy_timer) // time for fireworks!
 	{
 		if (weapon_database[raw->mob.sub_type].warhead_type == WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS) // create submunitions if it's needed
 		{
-			viewpoint vp;
-			int count = (int) weapon_database[raw->mob.sub_type + 1].burst_duration;
-		
-			memcpy ( vp.attitude, raw->mob.attitude, sizeof ( matrix3x3 ) );
-			vp.position = raw->mob.position;
+			if (get_comms_model () == COMMS_MODEL_SERVER)
+			{
+				viewpoint vp;
+				int count = (int) weapon_database[raw->mob.sub_type + 1].burst_duration;
 
-			while (count--)
-				create_client_server_entity_submunition_weapon(raw->launched_weapon_link.parent, raw->mob.target_link.parent, raw->mob.sub_type + 1, ENTITY_INDEX_DONT_CARE, &vp, raw->mob.velocity * weapon_database[raw->mob.sub_type + 1].acquire_parent_forward_velocity);
+				memcpy ( vp.attitude, raw->mob.attitude, sizeof ( matrix3x3 ) );
+				vp.position = raw->mob.position;
+
+				if (get_comms_model () == COMMS_MODEL_SERVER)
+					while (count--)
+						create_server_entity_submunition_weapon(raw->launched_weapon_link.parent, raw->mob.target_link.parent, raw->mob.sub_type + 1, &vp, raw->mob.velocity * weapon_database[raw->mob.sub_type + 1].acquire_parent_forward_velocity);
+			}
+			
+			raw->weapon_lifetime = - weapon_database[raw->mob.sub_type].cruise_time - weapon_database[raw->mob.sub_type].cruise_time_max_error;
 		}
 
 		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
@@ -1014,6 +1006,20 @@ void weapon_movement (entity *en)
 	
 		#if DEBUG_MODULE > 1
 			debug_log("Weapon timer is reached");
+		#endif
+
+		return;
+	}
+
+	if (raw->weapon_lifetime <= - weapon_database[raw->mob.sub_type].cruise_time - cruise_time_error) // this is the end of the journey..
+	{
+		if (weapon_database[raw->mob.sub_type].flight_profile_or_self_destr == 3)
+			raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
+		else
+			raw->kill_code = WEAPON_KILL_CODE_EXHAUSTED;
+		
+		#if DEBUG_MODULE
+			debug_log("Weapon destroyed due to time exceeded");
 		#endif
 
 		return;

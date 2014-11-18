@@ -132,7 +132,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 					warhead_type = (weapon_warhead_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_WARHEAD_TYPE);
 	
 					if ((warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK) &&
-							(warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT))
+							(warhead_type <= WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS))
 					{
 						vec3d
 							rel_pos,

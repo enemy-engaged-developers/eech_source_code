@@ -152,6 +152,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_DUAL_PURPOSE:
 			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
 			case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT:
+			case WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS:
 			{
 				if (get_local_entity_index (weapon) & 1)
 				{
@@ -218,7 +219,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL);
 
-	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, FALSE, FALSE);
+	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE), FALSE);
 
 	if (damage_capability > 0 && !command_line_debug_damage_invulnerable)
 	{
@@ -338,28 +339,43 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 		result = 0,
 		i,
 		temp,
-		high_explosive = FALSE;
+		high_explosive = FALSE,
+		warhead_type;
 
 	float
 		weapon_armor_penetration_capability,
 		random_modifier = 1,
 		target_armor_thickness,
-		armor_modifier;
+		armor_modifier,
+		damage_capability,
+		armor_penetration_capability;
 	weapon
 		*raw;
 
 	ASSERT (target);
 
+	switch (weapon_database[weapon_type].warhead_type)
+	{
+		case WEAPON_WARHEAD_TYPE_CONVENTIONAL_MUNITIONS:
+			warhead_type = weapon_database[weapon_type + 1].warhead_type;
+			damage_capability = weapon_database[weapon_type + 1].damage_capability * weapon_database[weapon_type + 1].burst_duration / 3;
+			armor_penetration_capability = weapon_database[weapon_type + 1].armor_penetration_capability;
+			break;
+		default:
+			warhead_type = weapon_database[weapon_type].warhead_type;
+			damage_capability = weapon_database[weapon_type].damage_capability;
+			armor_penetration_capability = weapon_database[weapon_type].armor_penetration_capability;
+	}
+	
 	if (wpn) // only for real weapon!
 	{
 		raw = (weapon *) get_local_entity_data (wpn);
 
-		weapon_type = raw->mob.sub_type;
 		target_armor_thickness = get_local_entity_armour_thickness (target, wpn);
 		random_modifier = frand1();
 
-		if (weapon_database[weapon_type].warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
-				weapon_database[weapon_type].warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
+		if (warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
+				warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
 		{
 			velocity = 1;	
 			high_explosive = TRUE;
@@ -375,19 +391,19 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 	else
 	{
 		target_armor_thickness = (float) get_local_entity_int_value (target, INT_TYPE_ARMOR_LEVEL);
-		if (weapon_database[weapon_type].warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
-				weapon_database[weapon_type].warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
+		if (warhead_type >= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK && 
+				warhead_type <= WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT)
 		{
 			velocity = 1;	
 			high_explosive = TRUE;
 		}
 	}
 	
-	weapon_armor_penetration_capability = weapon_database[weapon_type].armor_penetration_capability * random_modifier * velocity;
+	weapon_armor_penetration_capability = armor_penetration_capability * random_modifier * velocity;
 	
 	if (weapon_armor_penetration_capability >= target_armor_thickness && damage_modifier < 0.01) // weapon pierces through the armor
 	{
-		result = (int) (weapon_database[weapon_type].damage_capability * random_modifier * velocity);
+		result = (int) (damage_capability * random_modifier * velocity);
 
 		#if DEBUG_MODULE
 			debug_log("DAMAGE: DIRECT HIT - weapon penetration %.1f, target armor %.1f, damage_modifier %.4f, random modifier %.4f, damage %d", 
@@ -399,10 +415,10 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 	{
 		float he_warheads = WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK; // subtract 1
 		
-		damage_modifier = 1 - pow(damage_modifier, pow((float)(weapon_database[weapon_type].warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5f));
-		armor_modifier =  min(1.0f, weapon_database[weapon_type].damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5f));
+		damage_modifier = 1 - pow(damage_modifier, pow((float)(warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5f));
+		armor_modifier =  min(1.0f, damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5f));
 		
-		result = (int) (weapon_database[weapon_type].damage_capability * damage_modifier * armor_modifier * random_modifier);
+		result = (int) (damage_capability * damage_modifier * armor_modifier * random_modifier);
 
 		#if DEBUG_MODULE
 			debug_log("DAMAGE: SPLASH DAMAGE - weapon penetration %.1f, target armor %.1f, damage_modifier %.4f, armor modifier %.4f, random modifier %.4f, damage %d", 
