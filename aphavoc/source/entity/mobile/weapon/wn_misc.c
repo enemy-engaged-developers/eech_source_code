@@ -568,10 +568,8 @@ int get_comanche_stub_wings_attached (entity *en)
 
 	ASSERT (en);
 
-	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE)
-	{
-		return (FALSE);
-	}
+	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE && get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR)
+		return (TRUE);
 
 	//
 	// search packages for stub wings (include empty and damaged weapons)
@@ -597,7 +595,7 @@ int get_comanche_stub_wings_attached (entity *en)
 		}
 	}
 
-	return (FALSE);
+	return (TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

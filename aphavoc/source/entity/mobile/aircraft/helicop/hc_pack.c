@@ -471,6 +471,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
 			set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_LANDING_ROUTE, FALSE);
+			
+			set_comanche_stub_wing_visibility (en);
 
 			//
 			// link into system
@@ -640,6 +642,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
 			set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_LANDING_ROUTE, FALSE);
+			
+			set_comanche_stub_wing_visibility (en);
 
 			//
 			// link into system

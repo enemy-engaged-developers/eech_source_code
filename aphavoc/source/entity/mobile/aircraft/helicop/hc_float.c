@@ -315,23 +315,14 @@ static float get_local_float_value (entity *en, float_types type)
 			value = NO_RADAR_STEALTH_FACTOR;
 
 			if (raw->ac.mob.sub_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE)
-			{
-				if (!get_comanche_stub_wings_attached (en))
-				{
-					if (get_local_entity_weapon_system_ready_state (en) == WEAPON_SYSTEM_READY_CLOSED)
-					{
-						value -= NO_RADAR_STEALTH_FACTOR * 0.5;
-					}
+				if (get_local_entity_weapon_system_ready_state (en) == WEAPON_SYSTEM_READY_CLOSED)
+					value -= NO_RADAR_STEALTH_FACTOR * 0.4;
 
-					if (get_local_entity_undercarriage_state (en) == AIRCRAFT_UNDERCARRIAGE_UP)
-					{
-						value -= NO_RADAR_STEALTH_FACTOR * 0.35;
-					}
-				}
-			}
-			else
-				if (get_local_entity_undercarriage_state (en) == AIRCRAFT_UNDERCARRIAGE_UP)
-					value -= NO_RADAR_STEALTH_FACTOR * 0.1;
+			if (!get_comanche_stub_wings_attached (en))
+				value -= NO_RADAR_STEALTH_FACTOR * 0.35;
+				
+			if (get_local_entity_undercarriage_state (en) == AIRCRAFT_UNDERCARRIAGE_UP)
+				value -= NO_RADAR_STEALTH_FACTOR * 0.1;
 
 			ASSERT (value > 0.0);
 
