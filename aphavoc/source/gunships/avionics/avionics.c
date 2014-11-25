@@ -593,7 +593,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -637,7 +637,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -686,7 +686,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -728,7 +728,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -771,7 +771,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -817,7 +817,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -862,7 +862,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -905,7 +905,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -949,7 +949,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -991,7 +991,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 
@@ -1034,7 +1034,7 @@ void deinitialise_avionics (void)
 
 			pop_event (set_common_avionics_events);
 
-			save_gunship_avionics_damage ();
+			save_gunship_avionics_damage (gunship_type);
 
 			deinitialise_common_hud ();
 

@@ -1112,9 +1112,9 @@ void load_gunship_avionics_damage (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void save_gunship_avionics_damage (void)
+void save_gunship_avionics_damage (unsigned gunship_type)
 {
-	switch (get_global_gunship_type ())
+	switch (gunship_type)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
@@ -1124,7 +1124,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, apache_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Apache damage: %x", apache_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Apache damage: %x", apache_damage.flags);
 
 			break;
 		}
@@ -1134,7 +1134,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, havoc_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Havoc damage: %x", havoc_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Havoc damage: %x", havoc_damage.flags);
 
 			break;
 		}
@@ -1144,7 +1144,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, comanche_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Comanche damage: %x", comanche_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Comanche damage: %x", comanche_damage.flags);
 
 			break;
 		}
@@ -1154,7 +1154,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hokum_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hokum damage: %x", hokum_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hokum damage: %x", hokum_damage.flags);
 
 			break;
 		}
@@ -1164,7 +1164,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, blackhawk_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Blackhawk damage: %x", blackhawk_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Blackhawk damage: %x", blackhawk_damage.flags);
 
 			break;
 		}
@@ -1173,7 +1173,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hind damage: %x", hind_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hind damage: %x", hind_damage.flags);
 
 			break;
 		}
@@ -1181,7 +1181,7 @@ void save_gunship_avionics_damage (void)
 		////////////////////////////////////////
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ah64a_damage.flags);
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ah64a damage: %x", ah64a_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ah64a damage: %x", ah64a_damage.flags);
 			break;
 		}
 		////////////////////////////////////////
@@ -1190,7 +1190,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ka50_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ka50 damage: %x", ka50_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ka50 damage: %x", ka50_damage.flags);
 
 			break;
 		}
@@ -1201,7 +1201,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, viper_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save viper damage: %x", viper_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save viper damage: %x", viper_damage.flags);
 
 			break;
 		}
@@ -1211,7 +1211,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, kiowa_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Kiowa damage: %x", kiowa_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Kiowa damage: %x", kiowa_damage.flags);
 
 			break;
 		}
@@ -1224,7 +1224,7 @@ void save_gunship_avionics_damage (void)
 		{
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, default_damage.flags);
 
-			debug_colour_log (DEBUG_COLOUR_AMBER, "Save default damage: %x", default_damage);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save default damage: %x", default_damage.flags);
 
 			break;
 		}
