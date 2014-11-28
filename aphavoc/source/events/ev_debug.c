@@ -472,6 +472,22 @@ static void select_invalid_weapon_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void increase_drag_z_event(event *ev)
+{
+	if (current_flight_dynamics)
+		current_flight_dynamics->drag_z.modifier += 0.05;
+	
+	debug_log("drag_z %f", current_flight_dynamics->drag_z.modifier);
+}
+
+static void decrease_drag_z_event(event *ev)
+{
+	if (current_flight_dynamics)
+		current_flight_dynamics->drag_z.modifier -= 0.05;
+
+	debug_log("drag_z %f", current_flight_dynamics->drag_z.modifier);
+}
+
 static void select_next_weapon_config_event (event *ev)
 {
 	entity
@@ -2547,11 +2563,15 @@ void set_flight_debug_events (void)
 
 	set_event (DIK_EQUALS, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, select_next_weapon_config_event);
 
+	set_event (DIK_EQUALS, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, increase_drag_z_event);
+
 	////////////////////////////////////////
 
 	set_event (DIK_MINUS, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, unarm_weapon_config_event);
 
 	set_event (DIK_MINUS, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, select_previous_weapon_config_event);
+
+	set_event (DIK_MINUS, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, decrease_drag_z_event);
 
 }
 
