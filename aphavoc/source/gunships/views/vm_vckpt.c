@@ -734,7 +734,7 @@ void update_virtual_cockpit_view (void)
 			static int previous_mouse_update_flag = 1;
 			float dh, dp;
 
-			if (previous_mouse_update_flag != get_mouse_update_flag())
+			if (previous_mouse_update_flag != get_mouse_update_flag() && get_in_flight_game_mode () != IN_FLIGHT_GAME_MODE_PLANNER)
 			{
 				dh = get_mouse_move_delta_x() * -MAX_LOOK_ANGLE_LEFT_RIGHT1 / 8000.0;
 				dp = get_mouse_move_delta_y() * -45 / 8000.0;
