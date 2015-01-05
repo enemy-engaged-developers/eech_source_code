@@ -404,7 +404,7 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 	{
 		set_rgb_colour (clear_hud_colour, 255,255,255,255);
 
-		set_block (hd->hud_viewport_x_min, hd->hud_viewport_y_min, hd->hud_viewport_x_max, hd->hud_viewport_y_max, clear_hud_colour);
+		set_block (hd->hud_viewport_x_min, hd->hud_viewport_y_min, hd->hud_viewport_x_max - 1, hd->hud_viewport_y_max - 1, clear_hud_colour);
 
 		unlock_screen (hd->hud_texture_screen);
 	}

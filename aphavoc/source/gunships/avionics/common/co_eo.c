@@ -2545,7 +2545,7 @@ void update_eo_max_visual_range(void)
 		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		{
 			if (eo_sensor == TARGET_ACQUISITION_SYSTEM_LLLTV || eo_sensor == TARGET_ACQUISITION_SYSTEM_DTV)
-				fog_end = min(1.25 * fog_end, 10000); // synch it with LLLTV fog value in 3d_init.c!!
+				fog_end = min(1.25f * fog_end, 10000.0f); // synch it with LLLTV fog value in 3d_init.c!!
 			fog_range = fog_end - 500; // how far will be possible to lock ground point
 			visible_range = fog_range * sqrt(bound((amb_red + amb_green + amb_blue + sun_red + sun_green + sun_blue) / 3, 0.0, 1.0)); // target recognition tange
 			visible_range /= 1 + eo_low_light; // decrease recognition tange

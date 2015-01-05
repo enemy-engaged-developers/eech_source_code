@@ -3091,7 +3091,7 @@ void draw_apache_virtual_cockpit_ort_view (int x_min, int x_max)
 	black.a = 255;
 
 	// clear background, since we won't be drawing the 3D view over the entire screen
-	set_block(0, 0, full_screen_x_max, full_screen_y_max, black);
+	set_block(0, 0, full_screen_x_max - 1, full_screen_y_max - 1, black);
 
 	if (!damaged)
 	{

@@ -590,10 +590,10 @@ void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, int
 	get_2d_float_screen_coordinates (x1_c, y1_c, &x1, &y1);
 	get_2d_float_screen_coordinates (x2_c, y2_c, &x2, &y2);
 
-	x1 = bound(x1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
-	x2 = bound(x2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
-	y1 = bound(y1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
-	y2 = bound(y2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
+	x1 = bound(x1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max - 1);
+	x2 = bound(x2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max - 1);
+	y1 = bound(y1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max - 1);
+	y2 = bound(y2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max - 1);
 
 	x_min = min(x1, x2); x_max = max(x1, x2);
 	y_min = min(y1, y2); y_max = max(y1, y2);

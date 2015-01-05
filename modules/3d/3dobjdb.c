@@ -544,16 +544,10 @@ const char* object_3d_scene_names[] = {
 #undef OBJECT_3D_LIGHT
 #undef OBJECT_3D_LIGHT_
 
-static int get_scene ( const char *filename )
+static int get_scene ( const char *name )
 {
-	char
-		name[1024];
 	int
 		i;
-
-	strcpy ( name, filename );
-	name[strlen ( name ) - 4] = '\0';
-	strupr ( name );
 
 	for ( i = 1; object_3d_scene_names[i]; i++ )
 		if ( !strcmp ( name, object_3d_scene_names[i] ) )
@@ -1423,12 +1417,14 @@ static void initialise_custom_scenes(const char* directory)
 			if ( fi.attrib & _A_SUBDIR )
 				continue;
 
+			fi.name[strlen ( fi.name ) - 4] = '\0';
+			strupr ( fi.name );
 			sceneid = get_scene ( fi.name );
 			if ( !sceneid )
 				continue;
 
-			snprintf ( prefix, ARRAY_LENGTH(prefix), "%s\\OBJECTS\\%s", directory, di.name );
-			snprintf ( filename, ARRAY_LENGTH(filename), "%s\\%s", prefix, fi.name );
+			snprintf ( prefix, ARRAY_LENGTH ( prefix ), "%s\\OBJECTS\\%s", directory, di.name );
+			snprintf ( filename, ARRAY_LENGTH ( filename ), "%s\\%s.EES", prefix, fi.name );
 
 			read_custom_scene ( filename );
 		}

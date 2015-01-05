@@ -279,8 +279,8 @@ void clear_viewport ( const rgb_colour colour )
 
 	set_block ( active_int_viewport.x_min,
 					active_int_viewport.y_min,
-					active_int_viewport.x_max,
-					active_int_viewport.y_max,
+					active_int_viewport.x_max - 1,
+					active_int_viewport.y_max - 1,
 					colour );
 }
 

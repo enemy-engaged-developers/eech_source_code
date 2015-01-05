@@ -1538,7 +1538,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 			set_3d_fog_colour ( main_3d_env, fog_colour );
-			main_3d_env->fog_end = min(1.5 * main_3d_env->fog_end, 12500);
+			main_3d_env->fog_end = min(1.5f * main_3d_env->fog_end, 12500.0f);
 			
 			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 3;
 			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 3;
