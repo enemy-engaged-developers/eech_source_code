@@ -280,6 +280,8 @@ void pack_aircraft_data (entity *en, aircraft *raw, pack_modes mode)
 
 			pack_int_value (en, INT_TYPE_EJECTED, raw->ejected);
 
+			pack_int_value (en, INT_TYPE_TROOPS_ONBOARD, raw->troops_onboard);
+
 			pack_int_value (en, INT_TYPE_DAMAGE_LEVEL, raw->damage_level);
 
 			// id_number
@@ -498,6 +500,12 @@ void unpack_aircraft_data (entity *en, aircraft *raw, pack_modes mode)
 
 			raw->ejected = unpack_int_value (en, INT_TYPE_EJECTED);
 
+			raw->troops_onboard = unpack_int_value (en, INT_TYPE_TROOPS_ONBOARD);
+
+			ASSERT (raw->inst3d);
+
+			set_sub_object_type_visible_status(raw->inst3d, OBJECT_3D_SUB_OBJECT_TROOPS_ONBOARD, !!raw->troops_onboard);
+
 			raw->damage_level = unpack_int_value (en, INT_TYPE_DAMAGE_LEVEL);
 
 			// id_number
@@ -509,6 +517,12 @@ void unpack_aircraft_data (entity *en, aircraft *raw, pack_modes mode)
 			raw->weapon_to_target_vector.x = 0.0;
 			raw->weapon_to_target_vector.y = 0.0;
 			raw->weapon_to_target_vector.z = -1.0;
+
+			raw->weapon_to_intercept_point_vector.x = 0.0;
+			raw->weapon_to_intercept_point_vector.y = 0.0;
+			raw->weapon_to_intercept_point_vector.z = -1.0;
+
+			raw->weapon_to_intercept_point_range = 0.0;
 
 			// terrain_info
 

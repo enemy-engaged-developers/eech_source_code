@@ -1762,7 +1762,8 @@ int get_line_of_sight_collision_tree
 		x_sector,
 		z_sector,
 		hit_tree,
-		num_trees;
+		num_trees,
+		depth;
 
 	float
 		source_old_position_rad_alt,
@@ -1795,10 +1796,13 @@ int get_line_of_sight_collision_tree
 		p1,
 		p2,
 		p3,
-		p4;
+		p4,
+		p[8];
 
 	terrain_3d_tree_data
 		*tree;
+
+	matrix3x3 attitude;
 
 	ASSERT (source_old_position);
 
@@ -1954,7 +1958,7 @@ int get_line_of_sight_collision_tree
 							// scale down height to make the tree top soft
 							//
 
-							height = get_terrain_3d_tree_scale (tree) * 0.75;
+							height = get_terrain_3d_tree_scale (tree);// * 0.75;
 
 							tree_top = tree_position.y + height;
 
@@ -1962,11 +1966,49 @@ int get_line_of_sight_collision_tree
 							{
 								tree_position.x = x_sector_mid_point + (tree->x * TERRAIN_3D_XZ_SCALE * 0.5);
 
-								if ((tree_position.x >= source_min_position.x) && (tree_position.x <= source_max_position.x))
-								{
-									tree_position.z = z_sector_mid_point + (tree->z * TERRAIN_3D_XZ_SCALE * 0.5);
+								tree_position.z = z_sector_mid_point + (tree->z * TERRAIN_3D_XZ_SCALE * 0.5);
 
-									if ((tree_position.z >= source_min_position.z) && (tree_position.z <= source_max_position.z))
+								depth = 0;
+
+								if ((tree_position.x + 25.0 >= source_min_position.x) && (tree_position.x - 25.0 <= source_max_position.x) &&
+									(tree_position.z + 25.0 >= source_min_position.z) && (tree_position.z - 25.0 <= source_max_position.z))
+								{
+									if (tree->type == 1 && get_object_3d_collision_object_geometry_triangle (OBJECT_3D_FOREST_TREE_OBJECT, p, depth++))
+									{
+										get_identity_matrix3x3(&attitude);
+
+										////////////////////////////////////////
+										//
+										// COLLISION TEST WITH GEOMETRY TRIANGLES
+										//
+										////////////////////////////////////////
+
+										do
+										{
+											multiply_matrix3x3_vec3d (&p[0], attitude, &p[0]);
+											multiply_matrix3x3_vec3d (&p[1], attitude, &p[1]);
+											multiply_matrix3x3_vec3d (&p[2], attitude, &p[2]);
+
+											p[0].x = p[0].x * height + tree_position.x;
+											p[0].y = p[0].y * height + tree_position.y;
+											p[0].z = p[0].z * height + tree_position.z;
+
+											p[1].x = p[1].x * height + tree_position.x;
+											p[1].y = p[1].y * height + tree_position.y;
+											p[1].z = p[1].z * height + tree_position.z;
+
+											p[2].x = p[2].x * height + tree_position.x;
+											p[2].y = p[2].y * height + tree_position.y;
+											p[2].z = p[2].z * height + tree_position.z;
+
+											if (get_3d_line_triangle_face_intersection (source_old_position, source_new_position, &p[0], &p[1], &p[2], source_intercept_point, face_normal))
+											{
+												return TRUE;
+											}
+										}
+										while (get_object_3d_collision_object_geometry_triangle (OBJECT_3D_FOREST_TREE_OBJECT, p, depth++));
+									}
+									else
 									{
 										//
 										// use similar triangles (xz plane) to determine 2D distance from the line

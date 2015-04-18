@@ -76,6 +76,7 @@
 
 #define DEBUG_MODULE 			0
 
+#define DEBUG_WAYPOINT_VECTOR 0
 #define PERSON_WALK_VELOCITY	(5 * METRE)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,6 +215,15 @@ static void person_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 
 	distance = get_2d_range (pos, wp_pos);
 
+	#if DEBUG_WAYPOINT_VECTOR
+
+	if (distance > 0.0)
+	{
+		create_debug_3d_line (pos, wp_pos, sys_col_black, 0.0);
+	}
+
+	#endif
+
 	set_local_entity_float_value (en, FLOAT_TYPE_DISTANCE, distance);
 }
 
@@ -235,7 +245,8 @@ void person_movement (entity *en)
 
 	entity
 		*task,
-		*guide;
+		*guide,
+		*group;
 
 	float
 		ps_vel,
@@ -299,22 +310,34 @@ void person_movement (entity *en)
 
 	distance = normalise_any_3d_vector (&normalised_wp_vec);
 
-	task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
+	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+	
+	ASSERT(group);
+	
+	guide = get_local_entity_first_child (group, LIST_TYPE_GUIDE_STACK);
+	
+	if (distance > 0.5)
+		while (guide)
+		{
+			task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
-	ASSERT (task);
+			ASSERT (task);
 
-	if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE)
-	{
+			if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE ||
+					get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND ||
+					get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_ENGAGE)
+			{
+				state = PERSON_ANIM_RUN;
+				break;
+			}
+			else
+				state = PERSON_ANIM_WALK;
 
-		// if capturing airbase "run"
-		state = PERSON_ANIM_RUN;
-	}
-	else
-	{
-
-		state = PERSON_ANIM_WALK;
-	}
-
+			guide = get_local_entity_child_succ (guide, LIST_TYPE_GUIDE_STACK);
+		}
+	else // person actually stopped
+		state = PERSON_ANIM_NONE;
+	
 	ps_vel = get_person_database_velocity ((person_animations) state);
 
 	raw->person_animation_state = state + remainder;
@@ -329,11 +352,23 @@ void person_movement (entity *en)
 	new_pos.y = raw->vh.mob.position.y + y_inc;
 	new_pos.z = raw->vh.mob.position.z + z_inc;
 
+	if (state == PERSON_ANIM_WALK || state == PERSON_ANIM_RUN)
+	{
+		ASSERT(point_inside_map_area(&new_pos));
+		new_pos.y = get_3d_terrain_elevation (new_pos.x, new_pos.z) + 0.01;
+	}
+
 	heading = atan2 (normalised_wp_vec.x, normalised_wp_vec.z);
 
 	get_3d_transformation_heading_matrix (raw->vh.mob.attitude, heading);
 
 	set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &new_pos);
+	
+	raw->vh.mob.velocity = ps_vel;
+
+	raw->vh.mob.motion_vector.x = x_inc / get_entity_movement_delta_time ();
+	raw->vh.mob.motion_vector.y = y_inc / get_entity_movement_delta_time ();
+	raw->vh.mob.motion_vector.z = z_inc / get_entity_movement_delta_time ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

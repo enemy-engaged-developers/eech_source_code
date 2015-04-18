@@ -988,6 +988,8 @@ void damage_helicopter_3d_object (entity *en)
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AH64D_PILOT, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_MOVING, FALSE);
+	
+	set_local_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

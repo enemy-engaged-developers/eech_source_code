@@ -920,6 +920,28 @@ void full_initialise_game (void)
 	else
 		initialise_entity_system (125000);
 
+//VJ WUT mod 26-mar-03
+
+	////////////////////////////////////////
+	//
+	// Parse the WUT text file
+	//
+	////////////////////////////////////////
+
+    if (command_line_wut)
+    {
+		debug_log ( "reading WUT file %s",WUT_filename );
+/*
+//VJ 030807 moved to beginning of this function as separate ui_object
+	sprintf (buffer, "%s...%s: %s", get_trans ("Loading"), get_trans ("WUT file"), WUT_filename);
+
+	set_ui_object_text (initialising_text, buffer);
+
+	ui_force_update ();
+*/
+    	parse_WUT_file(WUT_filename);
+    }
+
 	////////////////////////////////////////
 	//
 	// INITIALISE AI SYSTEM
@@ -971,28 +993,6 @@ void full_initialise_game (void)
 	initialise_medal_and_promotion_names ();
 
 	initialise_game_initialisation_phases ();
-
-//VJ WUT mod 26-mar-03
-
-	////////////////////////////////////////
-	//
-	// Parse the WUT text file
-	//
-	////////////////////////////////////////
-
-    if (command_line_wut)
-    {
-		debug_log ( "reading WUT file %s",WUT_filename );
-/*
-//VJ 030807 moved to beginning of this function as separate ui_object
-	sprintf (buffer, "%s...%s: %s", get_trans ("Loading"), get_trans ("WUT file"), WUT_filename);
-
-	set_ui_object_text (initialising_text, buffer);
-
-	ui_force_update ();
-*/
-    	parse_WUT_file(WUT_filename);
-    }
 
     //Werewolf
     net_init_heartbeat();

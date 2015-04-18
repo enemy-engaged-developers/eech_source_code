@@ -85,7 +85,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *pos, float min_range, float *actual_range, entity *exclude_keysite)
+entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *pos, float min_range, float *actual_range, int outside_of_range, entity *exclude_keysite)
 {
 
 	float
@@ -100,6 +100,8 @@ entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *po
 		*closest_keysite = NULL,
 		*current_keysite;
 
+	ASSERT(min_range > 0.0 || outside_of_range);
+	
 	best_range = FLT_MAX;
 
 	force = get_local_force_entity (side);
@@ -140,7 +142,7 @@ entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *po
 						return current_keysite;
 					}
 		
-					if (range < best_range)
+					if (range < best_range && outside_of_range)
 					{
 		
 						best_range = range;
@@ -1319,6 +1321,7 @@ void capture_keysite (entity *en, entity_sides new_side)
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 	ai_log ("(KEYSITE) %s CAPTURED BY %s", get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME), entity_side_short_names [new_side]);
+	debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "KEYSITE: %s CAPTURED BY %s", get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME), entity_side_short_names [new_side]);
 
 	//
 	// update imaps (old side)
@@ -1353,42 +1356,63 @@ void capture_keysite (entity *en, entity_sides new_side)
 
 	update_keysite_distance_to_friendly_base (en, new_side);
 
-	if (command_line_capture_aircraft)
 	{
-		//
-		// change side of all idle aircraft landed at the keysite
-		//
-	
 		entity
 			*group,
+			*current_group,
 			*member;
 
 		group = get_local_entity_first_child (en, LIST_TYPE_KEYSITE_GROUP);
 	
 		while (group)
 		{
-			if (get_local_entity_int_value (group, INT_TYPE_AIRCRAFT_GROUP))
-			{
-				if (get_local_entity_int_value (group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
-				{
-					member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+			current_group = group;
 			
+			group = get_local_entity_child_succ (group, LIST_TYPE_KEYSITE_GROUP);
+
+			if (get_local_entity_int_value (current_group, INT_TYPE_AIRCRAFT_GROUP))
+			{
+				if (command_line_capture_aircraft && get_local_entity_int_value (current_group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
+				{
+					debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "KEYSITE: trying to change side of landed aircrafts at keysite %s", get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME));
+
+					member = get_local_entity_first_child (current_group, LIST_TYPE_MEMBER);
+
 					while (member)
 					{
 						set_client_server_entity_int_value (member, INT_TYPE_SIDE, new_side);
-	
+
 						member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 					}
-	
-					free_group_callsign (group);
-	
-					set_client_server_entity_int_value (group, INT_TYPE_SIDE, new_side);
 
-					set_client_server_entity_int_value (group, INT_TYPE_GROUP_CALLSIGN, assign_group_callsign (group));
+					free_group_callsign (current_group);
+
+					set_client_server_entity_int_value (current_group, INT_TYPE_SIDE, new_side);
+
+					set_client_server_entity_int_value (current_group, INT_TYPE_GROUP_CALLSIGN, assign_group_callsign (current_group));
 				}
 			}
-			
-			group = get_local_entity_child_succ (group, LIST_TYPE_KEYSITE_GROUP);
+			else
+			{
+				if (get_local_entity_int_value (current_group, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_KEYSITE_GROUP)
+				{
+					debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "KEYSITE: trying to unlink ground units from keysite %s", get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME));
+
+					force = get_local_force_entity (side);
+
+					ASSERT (force);
+
+					delete_local_entity_from_parents_child_list (current_group, LIST_TYPE_KEYSITE_GROUP);
+
+					set_client_server_entity_int_value (current_group, INT_TYPE_GROUP_LIST_TYPE, LIST_TYPE_INDEPENDENT_GROUP);
+
+					set_client_server_entity_parent (current_group, LIST_TYPE_INDEPENDENT_GROUP, force);
+				}
+				else
+				{
+					debug_colour_log (DEBUG_COLOUR_RED, "KEYSITE: independed ground units linked with keysite %s", get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME));
+				}
+			}
 		}
 	}
 

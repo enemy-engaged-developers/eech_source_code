@@ -173,6 +173,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->vh.weapon_to_target_vector.y = 0.0;
 		raw->vh.weapon_to_target_vector.z = -1.0;
 
+		raw->vh.weapon_to_intercept_point_vector.x = 0.0;
+		raw->vh.weapon_to_intercept_point_vector.y = 0.0;
+		raw->vh.weapon_to_intercept_point_vector.z = -1.0;
+
+		raw->vh.weapon_to_intercept_point_range = 0.0;
+		
 		//
 		// anti_aircraft
 		//

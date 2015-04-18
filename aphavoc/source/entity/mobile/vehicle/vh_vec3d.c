@@ -237,7 +237,15 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 
          break;
       }
-      ////////////////////////////////////////
+		////////////////////////////////////////
+		case VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR:
+		////////////////////////////////////////
+		{
+			raw->weapon_to_intercept_point_vector = *v;
+
+			break;
+		}
+		////////////////////////////////////////
       case VEC3D_TYPE_WEAPON_VECTOR:
       ////////////////////////////////////////
       {
@@ -352,6 +360,14 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			break;
 		}
 		////////////////////////////////////////
+		case VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR:
+		////////////////////////////////////////
+		{
+			*v = raw->weapon_to_intercept_point_vector;
+
+			break;
+		}
+		////////////////////////////////////////
 		case VEC3D_TYPE_WEAPON_VECTOR:
 		////////////////////////////////////////
 		{
@@ -411,6 +427,14 @@ static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR:
+		////////////////////////////////////////
+		{
+			v = &raw->weapon_to_intercept_point_vector;
+
+			break;
+		}
+		////////////////////////////////////////
 		case VEC3D_TYPE_WEAPON_VECTOR:
 		////////////////////////////////////////
 		{
@@ -455,6 +479,11 @@ void overload_vehicle_vec3d_functions (entity_types type)
 	fn_set_local_entity_vec3d				[type][VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR]	 			= set_local_vec3d;
 	fn_get_local_entity_vec3d				[type][VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR]	 			= get_local_vec3d;
 	fn_get_local_entity_vec3d_ptr			[type][VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR]	 			= get_local_vec3d_ptr;
+
+	fn_set_local_entity_raw_vec3d			[type][VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR]	 			= set_local_vec3d;
+	fn_set_local_entity_vec3d				[type][VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR]	 			= set_local_vec3d;
+	fn_get_local_entity_vec3d				[type][VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR]	 			= get_local_vec3d;
+	fn_get_local_entity_vec3d_ptr			[type][VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR]	 			= get_local_vec3d_ptr;
 
 	fn_set_local_entity_raw_vec3d			[type][VEC3D_TYPE_WEAPON_VECTOR]								= set_local_vec3d;
 	fn_set_local_entity_vec3d				[type][VEC3D_TYPE_WEAPON_VECTOR]								= set_local_vec3d;

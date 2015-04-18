@@ -194,6 +194,7 @@ char get_waypoint_sub_type_tag (entity_sub_types sub_type)
 		case ENTITY_SUB_TYPE_WAYPOINT_TROOP_PICKUP_POINT_START:
 		case ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT:
 		case ENTITY_SUB_TYPE_WAYPOINT_WAIT:
+		case ENTITY_SUB_TYPE_WAYPOINT_PREPARE_FOR_INSERTION:
 		{
 
 			target_tag = (target_tag <= 'Z') ? (target_tag) : ('X');

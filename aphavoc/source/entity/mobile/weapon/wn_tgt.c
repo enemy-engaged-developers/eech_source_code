@@ -162,8 +162,8 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 			// check warhead is capable of damage
 
 			if (!weapon_database[weapon_type].rate_of_fire ?
-				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size) :
-				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
+				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0) * weapon_config_database[config_type][package].salvo_size) :
+				(weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0)
 										* weapon_database[weapon_type].rate_of_fire
 										* weapon_database[weapon_type].burst_duration / 60))
 			{
@@ -242,6 +242,19 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					suitable_weapon_count --;
 				}
 
+				// exclude guided missiles against troops
+				
+				if (weapon_database [weapon_type].guidance_type && 
+						(get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY ||
+						get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY ||
+						get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_VEHICLE_US_MACHINEGUNNER ||
+						get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_VEHICLE_RS_MACHINEGUNNER))
+				{
+					suitability[package] = FALSE;
+
+					suitable_weapon_count --;
+				}
+				
 				if (criteria & BEST_WEAPON_ALTITUDE_CHECK && get_local_entity_int_value (launcher, INT_TYPE_AIRBORNE_AIRCRAFT))
 				{
 					// if target is airborne, and launcher is a vehicle - check launchers floor and ceiling scanning ability
@@ -417,11 +430,11 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 				if (weapon_database[weapon_type].rate_of_fire == FIRE_SINGLE_WEAPON)
 				{
-					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size;
+					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0) * weapon_config_database[config_type][package].salvo_size;
 				}
 				else
 				{
-					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
+					damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0)
 									* weapon_database[weapon_type].rate_of_fire
 									* weapon_database[weapon_type].burst_duration / 60;
 				}
@@ -482,11 +495,11 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				{
 					if (weapon_database[weapon_type].rate_of_fire == FIRE_SINGLE_WEAPON)
 					{
-						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75) * weapon_config_database[config_type][package].salvo_size;
+						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0) * weapon_config_database[config_type][package].salvo_size;
 					}
 					else
 					{
-						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 0.75)
+						damage_capability = weapon_damage_capability (NULL, target, 0.0, weapon_type, 1.0)
 										* weapon_database[weapon_type].rate_of_fire
 										* weapon_database[weapon_type].burst_duration / 60;
 					}

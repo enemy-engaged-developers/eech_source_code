@@ -304,7 +304,7 @@ static void initialise_armoured_divisions (entity *force)
 
 		pos1 = get_local_entity_vec3d_ptr (first_group, VEC3D_TYPE_POSITION);
 
-		keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, (entity_sides) side, pos1, 0.0, NULL, NULL);
+		keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, (entity_sides) side, pos1, 0.0, NULL, TRUE, NULL);
 
 		//
 		// Sort Frontline groups
@@ -552,7 +552,9 @@ static void initialise_infantry_divisions (entity *force)
 
 	while (keysite)
 	{
-		if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_AIRBASE)
+		if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_FARP ||
+				get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_MILITARY_BASE ||
+				get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_AIRBASE)
 		{
 			//
 			// Assign one company of each type per airbase

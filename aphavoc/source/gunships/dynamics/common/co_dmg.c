@@ -1122,10 +1122,15 @@ void update_dynamics_at_keysite (void)
 				{
 					if (!get_keysite_currently_landed_at ()) // check for cheaters
 						current_flight_dynamics->repairing = FALSE;
-					debug_log ("DYNAMICS: model fully repaired");
+
 					restore_helicopter_entity (get_gunship_entity ());
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL));
+					
+					ASSERT (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL) > 0);
+					
 					transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, get_gunship_entity (), get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION), get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
+
+					debug_log ("DYNAMICS: model fully repaired");
 				}
 			}
 
@@ -2067,7 +2072,7 @@ void damage_entity_to_flight_model (entity *en)
 
 	damage_level *= get_local_entity_int_value (en, INT_TYPE_INITIAL_DAMAGE_LEVEL);
 
-	set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+	set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, max(0, (int) damage_level));
 	
 	restore_helicopter_entity (en); // restore rotors
 }

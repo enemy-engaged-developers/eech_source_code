@@ -210,7 +210,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 
 			if (!keysite)
 			{
-				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, group_pos, 1.0 * KILOMETRE, NULL, NULL);
+				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, group_pos, 1.0 * KILOMETRE, NULL, TRUE, NULL);
 			}
 	
 			ASSERT (keysite);
@@ -240,7 +240,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 				// Find nearest carrier
 				//
 			
-				keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE, side, group_pos, 0.0, NULL, NULL);
+				keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE, side, group_pos, 0.0, NULL, TRUE, NULL);
 			}
 		}
 
@@ -250,7 +250,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 			// Find nearest airbase
 			//
 			
-			keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, group_pos, 0.0, NULL, NULL);
+			keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, group_pos, 0.0, NULL, TRUE, NULL);
 
 			if (!keysite)
 			{
@@ -258,7 +258,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 				// Find nearest military base
 				//
 				
-				keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_MILITARY_BASE, side, group_pos, 0.0, NULL, NULL);
+				keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_MILITARY_BASE, side, group_pos, 0.0, NULL, TRUE, NULL);
 
 				if (!keysite)
 				{
@@ -266,7 +266,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 					// Find nearest FARP  
 					//
 				
-					keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FARP, side, group_pos, 0.0, NULL, NULL);
+					keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FARP, side, group_pos, 0.0, NULL, TRUE, NULL);
 				}
 			}
 		}

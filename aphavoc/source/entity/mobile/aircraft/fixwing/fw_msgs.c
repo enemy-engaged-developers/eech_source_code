@@ -481,7 +481,7 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 
 		vec3d
 			*weapon_vector,
-			*weapon_to_target_vector;
+			*weapon_to_intercept_point_vector;
 
 		float
 			launch_angle_error;
@@ -496,13 +496,13 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 
 			ASSERT (weapon_vector);
 
-			weapon_to_target_vector = get_local_entity_vec3d_ptr (receiver, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+			weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (receiver, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-			ASSERT (weapon_to_target_vector);
+			ASSERT (weapon_to_intercept_point_vector);
 
-			launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+			launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector));
 
-			if (fabs (launch_angle_error) > weapon_database[selected_weapon].max_launch_angle_error)
+			if (fabs (launch_angle_error) > pow(frand1(), 4) * weapon_database[selected_weapon].max_launch_angle_error)
 			{
 				return FALSE;
 			}

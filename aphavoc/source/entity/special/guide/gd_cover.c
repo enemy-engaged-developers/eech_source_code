@@ -506,7 +506,8 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 
 	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
 
-	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
+	if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		return result;
 	
 	weapon_max_range = weapon_database [selected_weapon].max_range * 0.9;
 
@@ -1580,7 +1581,8 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 
 	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
 
-	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
+	if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		return FALSE;
 	
 	min_range = weapon_database [selected_weapon].min_range;
 

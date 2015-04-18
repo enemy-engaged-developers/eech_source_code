@@ -70,6 +70,7 @@
 
 #include "../ai_misc/ai_route.h"
 #include "../faction/popread.h"
+#include "../highlevl/highlevl.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,12 +466,6 @@ entity *create_anti_ship_strike_task (entity_sides side, entity *target, entity 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE, side, pos, &start_ks))
-	{
-
-		return NULL;
-	}
-
 	//
 	// Create strike task
 	//
@@ -480,6 +475,12 @@ entity *create_anti_ship_strike_task (entity_sides side, entity *target, entity 
 	debug_log ("TASKGEN: creating side %d anti-ship strike task to keysite %s ", side, get_local_entity_string (target, STRING_TYPE_KEYSITE_NAME));
 
 	#endif
+
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE, side, pos, &start_ks))
+	{
+
+		return NULL;
+	}
 
 	expire_time = 30 * ONE_MINUTE;
 
@@ -998,6 +999,12 @@ entity *create_coastal_patrol_task (entity_sides side, vec3d *source_position, v
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d Coastal patrol task", side);
+
+	#endif
+
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_COASTAL_PATROL, side, source_position, &start_ks))
 	{
 
@@ -1063,6 +1070,12 @@ entity *create_escort_task (entity *group, int critical, float priority, entity 
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d Escort task", side);
+
+	#endif
 
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_ESCORT, side, start, &start_ks))
 	{
@@ -1156,6 +1169,12 @@ entity *create_ground_force_task (entity_sub_types type, entity *group, int from
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d Ground force task", side);
+
+	#endif
+
 	if (!get_task_start_keysite (type, side, start, &start_ks))
 	{
 
@@ -1226,6 +1245,12 @@ entity *create_ground_strike_task (entity_sides side, entity *target, entity *or
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d Ground strike task", side);
+
+	#endif
 
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, side, pos, &start_ks))
 	{
@@ -1303,12 +1328,6 @@ entity *create_oca_strike_task (entity_sides side, entity *target, entity *origi
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_OCA_STRIKE, side, pos, &start_ks))
-	{
-
-		return NULL;
-	}
-
 	//
 	// Create strike task
 	//
@@ -1318,6 +1337,12 @@ entity *create_oca_strike_task (entity_sides side, entity *target, entity *origi
 	debug_log ("TASKGEN: creating side %d oca strike task to keysite %s ", side, get_local_entity_string (target, STRING_TYPE_KEYSITE_NAME));
 
 	#endif
+
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_OCA_STRIKE, side, pos, &start_ks))
+	{
+
+		return NULL;
+	}
 
 	expire_time = 30 * ONE_MINUTE;
 
@@ -1367,12 +1392,6 @@ entity *create_oca_sweep_task (entity_sides side, entity *target, entity *origin
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_OCA_SWEEP, side, pos, &start_ks))
-	{
-
-		return NULL;
-	}
-
 	//
 	// Create sweep task
 	//
@@ -1382,6 +1401,12 @@ entity *create_oca_sweep_task (entity_sides side, entity *target, entity *origin
 	debug_log ("TASKGEN: creating side %d oca sweep task to keysite %s ", side, get_local_entity_string (target, STRING_TYPE_KEYSITE_NAME));
 
 	#endif
+
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_OCA_SWEEP, side, pos, &start_ks))
+	{
+
+		return NULL;
+	}
 
 	expire_time = 30 * ONE_MINUTE;
 
@@ -1427,12 +1452,6 @@ entity *create_recon_task (entity_sides side, entity *objective, entity *origina
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_RECON, side, pos, &start_ks))
-	{
-
-		return NULL;
-	}
-
 	new_task = NULL;
 
 	debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
@@ -1442,6 +1461,12 @@ entity *create_recon_task (entity_sides side, entity *objective, entity *origina
 	debug_log ("TASKGEN: creating side %d recon task to %s (%d)", side, get_local_entity_string (objective, STRING_TYPE_FULL_NAME), get_local_entity_index (objective));
 
 	#endif
+
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_RECON, side, pos, &start_ks))
+	{
+
+		return NULL;
+	}
 
 	ASSERT (pos);
 
@@ -1487,6 +1512,12 @@ entity *create_repair_task (entity_sides side, vec3d *pos, entity *objective, fl
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d repair task to keysite %s ", side, get_local_entity_string (objective, STRING_TYPE_KEYSITE_NAME));
+
+	#endif
 
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_REPAIR, side, pos, &start_ks))
 	{
@@ -1547,6 +1578,12 @@ entity *create_sead_task (entity_sides side, entity *target, entity *originator,
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d SEAD task to keysite %s ", side, get_local_entity_string (target, STRING_TYPE_KEYSITE_NAME));
+
+	#endif
+
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_SEAD, side, start_pos, &start_ks))
 	{
 
@@ -1556,12 +1593,6 @@ entity *create_sead_task (entity_sides side, entity *target, entity *originator,
 	//
 	// Create SEAD task
 	//
-
-	#if DEBUG_MODULE >= 2
-
-	debug_log ("TASKGEN: creating side %d SEAD task", side);
-
-	#endif
 
 	expire_time = 30 * ONE_MINUTE;
 
@@ -1635,6 +1666,12 @@ entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, 
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d Supply task to keysite %s ", side, get_local_entity_string (requester, STRING_TYPE_KEYSITE_NAME));
+
+	#endif
 
 	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_SUPPLY, side, start, &start_ks))
 	{
@@ -1720,12 +1757,6 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 
 	keysite_position = get_local_entity_vec3d_ptr (end_keysite, VEC3D_TYPE_POSITION);
 
-	if (!get_task_start_keysite (task_type, side, keysite_position, &start_ks))
-	{
-
-		return NULL;
-	}
-
 	//
 	// create task
 	//
@@ -1735,6 +1766,12 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 	debug_log ("TASKGEN: creating side %d Transfer task to keysite %s", side, get_local_entity_string (end_keysite, STRING_TYPE_KEYSITE_NAME));
 
 	#endif
+
+	if (!get_task_start_keysite (task_type, side, keysite_position, &start_ks))
+	{
+
+		return NULL;
+	}
 
 	expire_time = 10 * ONE_MINUTE;
 
@@ -1759,15 +1796,18 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// this function used both for capture and defend tasks
+
 entity *create_troop_insertion_task (entity_sides side, entity *destination_keysite, entity *originator, int critical, float priority, entity *start_keysite, entity *end_keysite)
 {
 
 	vec3d
 		destination_position,
-		destination_position_in_air;
+		destination_position_in_air,
+		destination_position_touch_down;
 
 	float
-		heading,
+		heading = 0.0,
 		expire_time;
 
 	entity
@@ -1784,22 +1824,6 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 	start_ks = start_keysite;
 	end_ks = end_keysite;
 
-	get_keysite_troop_dropoff_position (destination_keysite, &destination_position, &heading);
-
-	bound_position_to_adjusted_map_area (&destination_position);
-
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, side, &destination_position, &start_ks))
-	{
-
-		return NULL;
-	}
-
-	destination_position_in_air = destination_position;
-	destination_position_in_air.x += 1.0;
-	destination_position_in_air.y += 50.0;
-
-	bound_position_to_adjusted_map_area (&destination_position_in_air);
-
 	//
 	// Create troop insertion task
 	//
@@ -1810,6 +1834,53 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 					destination_position.x, destination_position.y, destination_position.z);
 
 	#endif
+
+	get_keysite_troop_dropoff_position (destination_keysite, &destination_position, &heading);
+
+	bound_position_to_adjusted_map_area (&destination_position);
+
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, side, &destination_position, &start_ks) || // no nearby aircrafts available
+			start_ks == destination_keysite) // attempt to create defent task for same keysite
+		return NULL;
+	else
+	{
+		vec3d start_pos, end_pos, offset;
+		float range = get_local_entity_int_value (destination_keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_AIRBASE ? 1500.0 : 750.0;
+		
+		ASSERT(range > 0.0);
+
+		if (get_local_entity_int_value (start_ks, INT_TYPE_SIDE) == get_local_entity_int_value (destination_keysite, INT_TYPE_SIDE)) // decrease range for defend task
+			range *= 0.5;
+		
+		get_local_entity_vec3d(start_ks, VEC3D_TYPE_POSITION, &start_pos);
+		get_local_entity_vec3d(destination_keysite, VEC3D_TYPE_POSITION, &end_pos);
+		
+		offset.x = end_pos.x - start_pos.x;
+		offset.z = end_pos.z - start_pos.z;
+		offset.y = 0.0;
+		
+		normalise_3d_vector_given_magnitude(&offset, get_3d_vector_magnitude(&offset) / range);
+
+		destination_position.x -= offset.x;
+		destination_position.z -= offset.z;
+		
+		ASSERT(point_inside_map_area(&destination_position));
+	
+		destination_position.y = get_3d_terrain_elevation (destination_position.x, destination_position.z);
+		
+#if DEBUG_MODULE
+		create_vectored_debug_3d_object (&destination_position, &destination_position, OBJECT_3D_SPHERICAL_TEST, 120.0, 5.0);
+#endif
+	}
+
+	destination_position_in_air = destination_position;
+	destination_position_in_air.x += 1.0;
+	destination_position_in_air.y += 50.0;
+
+	bound_position_to_adjusted_map_area (&destination_position_in_air);
+	
+	destination_position_touch_down = destination_position;
+	destination_position_touch_down.y += 5.0;
 
 	expire_time = 45 * ONE_MINUTE;
 
@@ -1825,6 +1896,7 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 									destination_keysite,
 									priority,
 									&destination_position_in_air, destination_keysite, ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION, FORMATION_ROW_LEFT,
+									&destination_position_touch_down, destination_keysite, ENTITY_SUB_TYPE_WAYPOINT_PREPARE_FOR_INSERTION, FORMATION_ROW_LEFT,
 									&destination_position, destination_keysite, ENTITY_SUB_TYPE_WAYPOINT_TROOP_INSERT, FORMATION_ROW_LEFT,
 									&destination_position, NULL, ENTITY_SUB_TYPE_WAYPOINT_WAIT, FORMATION_ROW_LEFT,
 									&destination_position_in_air, destination_keysite, ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION, FORMATION_ROW_LEFT,
@@ -1838,151 +1910,8 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //
-// Troop landing routes can be any length up to 16 points... the task generator deals with routes via the variable parameter list....
-// only way to do it  - Guess I won't be going to heaven :(
+// Troop landing routes can be any length up to 16 points
 //
-
-#if 0
-entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos, entity *insert_task, entity *keysite, entity *helicopter)
-{
-
-	int
-		helicopter_count,
-		keysite_count,
-		loop,
-		count;
-
-	entity_sub_types
-		new_route_wp_type [MAX_TROOP_ROUTE_COUNT];
-
-	vec3d
-		*keysite_pos,
-		*helicopter_pos,
-		new_route [MAX_TROOP_ROUTE_COUNT],
-		*helicopter_route,
-		*keysite_route;
-
-	entity
-		*new_task;
-
-	// troops out of helicopter
-
-	helicopter_count = get_object_3d_troop_takeoff_route (get_local_entity_int_value (helicopter, INT_TYPE_OBJECT_3D_SHAPE), &helicopter_route);
-
-	if (helicopter_count)
-	{
-
-		helicopter_pos = get_local_entity_vec3d_ptr (helicopter, VEC3D_TYPE_POSITION);
-
-		// copy route across and assign positions in world coords and waypoint types
-		for (loop = 0; loop < helicopter_count; loop ++)
-		{
-	
-			//new_route [loop].x = helicopter_pos->x + helicopter_route [loop].x;
-			//new_route [loop].y = helicopter_pos->y + helicopter_route [loop].y;
-			//new_route [loop].z = helicopter_pos->z + helicopter_route [loop].z;
-			new_route [loop].x = helicopter_pos->x + (helicopter_route [(helicopter_count - 1) - loop].x * 2);
-			new_route [loop].y = helicopter_pos->y + (helicopter_route [(helicopter_count - 1) - loop].y * 1);
-			new_route [loop].z = helicopter_pos->z + (helicopter_route [(helicopter_count - 1) - loop].z * 2);
-	
-			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-		}
-	}
-
-	// troops from helicopter -> keysite
-
-	keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-
-	keysite_count = get_object_3d_troop_landing_route (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX), &keysite_route);
-
-	if ((keysite_count) && (keysite_count < MAX_TROOP_ROUTE_COUNT))
-	{
-
-		for (loop = 0; loop < keysite_count; loop ++)
-		{
-	
-			new_route [helicopter_count + loop].x = keysite_pos->x + keysite_route [loop].x;
-			new_route [helicopter_count + loop].y = keysite_pos->y + keysite_route [loop].y;
-			new_route [helicopter_count + loop].z = keysite_pos->z + keysite_route [loop].z;
-	
-			new_route_wp_type [helicopter_count + loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-		}
-	}
-	else
-	{
-
-		keysite_count = 0;
-	
-		new_route [keysite_count + helicopter_count].x = keysite_pos->x;
-		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
-	
-		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-
-		keysite_count ++;
-	
-		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
-		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-		new_route [keysite_count + helicopter_count].z = keysite_pos->z;
-	
-		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-
-		keysite_count ++;
-	
-		new_route [keysite_count + helicopter_count].x = keysite_pos->x + 10.0;
-		new_route [keysite_count + helicopter_count].y = keysite_pos->y;
-		new_route [keysite_count + helicopter_count].z = keysite_pos->z + 10.0;
-	
-		new_route_wp_type [keysite_count + helicopter_count] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
-
-		keysite_count ++;
-	}
-
-	count = helicopter_count + keysite_count;
-
-	ASSERT ((count > 0) && (count < MAX_TROOP_ROUTE_COUNT));
-
-	new_route_wp_type [helicopter_count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT;
-	new_route_wp_type [count - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_CAPTURE;
-
-	new_route [count] = terminator_point;
-
-	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE,
-										side,
-										MOVEMENT_TYPE_GROUND,
-										keysite,
-										NULL,
-										insert_task,
-										TRUE,
-										0.0,
-										0.0,
-										insert_task,
-										task_database [ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE].task_priority,
-										&new_route [0], NULL, new_route_wp_type [0], FORMATION_1,
-										&new_route [1], NULL, new_route_wp_type [1], FORMATION_INFANTRY_COLUMN,
-										&new_route [2], NULL, new_route_wp_type [2], FORMATION_INFANTRY_COLUMN,
-										&new_route [3], NULL, new_route_wp_type [3], FORMATION_INFANTRY_COLUMN,
-										&new_route [4], NULL, new_route_wp_type [4], FORMATION_INFANTRY_COLUMN,
-										&new_route [5], NULL, new_route_wp_type [5], FORMATION_INFANTRY_COLUMN,
-										&new_route [6], NULL, new_route_wp_type [6], FORMATION_INFANTRY_COLUMN,
-										&new_route [7], NULL, new_route_wp_type [7], FORMATION_INFANTRY_COLUMN,
-										&new_route [8], NULL, new_route_wp_type [8], FORMATION_INFANTRY_COLUMN,
-										&new_route [9], NULL, new_route_wp_type [9], FORMATION_INFANTRY_COLUMN,
-										&new_route [10], NULL, new_route_wp_type [10], FORMATION_INFANTRY_COLUMN,
-										&new_route [11], NULL, new_route_wp_type [11], FORMATION_INFANTRY_COLUMN,
-										&new_route [12], NULL, new_route_wp_type [12], FORMATION_INFANTRY_COLUMN,
-										&new_route [13], NULL, new_route_wp_type [13], FORMATION_INFANTRY_COLUMN,
-										&new_route [14], NULL, new_route_wp_type [14], FORMATION_INFANTRY_COLUMN,
-										&new_route [15], NULL, new_route_wp_type [15], FORMATION_INFANTRY_COLUMN,
-										&terminator_point, NULL, NUM_ENTITY_SUB_TYPE_WAYPOINTS, FORMATION_NONE);
-
-	return new_task;
-}
-#endif
-
-// I think it will be better to make random movement - FARPs has too small routes, so capture happens right after troops insertion. 
-// Troops moving around several minutes, there is will be a chance that they will be killed. Only after that capture calculation will be made.
-// Looks like we all will burn in hell. Sincerely, thealx.
 
 entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos, entity *insert_task, entity *keysite, entity *helicopter)
 {
@@ -1999,7 +1928,7 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 		new_route [MAX_TROOP_ROUTE_COUNT],
 		*helicopter_route;
 
-	float heading_offset = 0;
+	float heading_offset = 0.0;
 	
 	matrix3x3
 		helicopter_att;
@@ -2049,7 +1978,12 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 			ASSERT(point_inside_map_area(&new_route [loop]));
 	
 			new_route [loop].y = get_3d_terrain_elevation(new_route [loop].x, new_route [loop].z);
-			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+			new_route_wp_type [loop] = loop < count ? ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION : ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT;
+
+#if DEBUG_MODULE
+			if(new_route_wp_type [loop] == ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT)
+				create_vectored_debug_3d_object (&new_route [loop], &new_route [loop], OBJECT_3D_SPHERICAL_TEST, 20.0, 1.0);
+#endif
 		}
 	}
 	else
@@ -2059,22 +1993,26 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 
 	// troops from helicopter -> keysite
 	
+	new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_CAPTURE;
+	get_local_entity_vec3d (keysite, VEC3D_TYPE_POSITION, &new_route[loop]);
+	new_route [loop].x += 5.0 * sfrand1();
+	new_route [loop].z += 5.0 * sfrand1();
+	ASSERT(point_inside_map_area(&new_route [loop]));
+	new_route [loop].y = get_3d_terrain_elevation(new_route [loop].x, new_route [loop].z);
+
+#if DEBUG_MODULE
+	create_vectored_debug_3d_object (&new_route [loop], &new_route [loop], OBJECT_3D_SPHERICAL_TEST, 120.0, 10.0);
+#endif
+
+	loop++;
+	
 	for (; loop < MAX_TROOP_ROUTE_COUNT; loop ++)
 	{
-		new_route [loop].x = new_route [loop - 1].x + 50 * sfrand1();
-		new_route [loop].z = new_route [loop - 1].z + 50 * sfrand1();
-
-		ASSERT(point_inside_map_area(&new_route [loop]));
-	
-		new_route [loop].y = get_3d_terrain_elevation(new_route [loop].x, new_route [loop].z);
-
-		new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION;
+		new_route [loop] = new_route [loop - 1];
+		new_route_wp_type [loop] = new_route_wp_type [loop - 1];
 	}
 
 	ASSERT (loop - 1 < MAX_TROOP_ROUTE_COUNT);
-
-	new_route_wp_type [count] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT;
-	new_route_wp_type [loop - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_CAPTURE;
 
 	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE,
 										side,
@@ -2148,16 +2086,93 @@ entity *create_troop_movement_defend_task (entity_sides side, vec3d *start_pos, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *create_troop_movement_patrol_task (entity_sides side, entity *keysite)
+entity *create_troop_movement_patrol_task (entity_sides side, vec3d *start_pos, float radius, entity *keysite)
 {
+	int loop = 0;
+	entity_sub_types new_route_wp_type [MAX_TROOP_ROUTE_COUNT];
+	vec3d new_route [MAX_TROOP_ROUTE_COUNT];
+	entity *new_task;
+	int offset;
+	object_3d_instance *object;
+	object_3d_sub_object_search_data
+		parent,
+		child;
 
-	vec3d
-		pos;
+	ASSERT(keysite);
+	
+	if (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX) != OBJECT_3D_INVALID_OBJECT_INDEX) // manual route
+	{
+		object = construct_3d_object ( get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX) );
 
-	entity
-		*new_task;
+		parent.search_object = object;
+		parent.search_depth = 0;
+		parent.sub_object_index = OBJECT_3D_SUB_OBJECT_WAYPOINT_ROUTES;
 
-	get_keysite_takenoff_position (keysite, &pos, ENTITY_SUB_TYPE_LANDING_PEOPLE);
+		if ( find_object_3d_sub_object (&parent) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+		{
+			child.sub_object_index = OBJECT_3D_SUB_OBJECT_PATROL_ROUTE;
+			child.search_depth = 0;
+
+			while (find_object_3d_sub_object_from_sub_object (&parent, &child) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND && loop < MAX_TROOP_ROUTE_COUNT)
+			{
+				viewpoint wp_viewpoint;
+
+				get_local_entity_attitude_matrix(keysite, &wp_viewpoint.attitude);
+				get_local_entity_vec3d (keysite, VEC3D_TYPE_POSITION, &wp_viewpoint.position);
+
+				get_3d_sub_object_viewpoint(child.result_sub_object, &wp_viewpoint, TRUE);
+
+				new_route [loop].x = wp_viewpoint.position.x + 5.0 * sfrand1();
+				new_route [loop].z = wp_viewpoint.position.z + 5.0 * sfrand1();
+
+				ASSERT(point_inside_map_area(&new_route [loop]));
+
+				new_route [loop].y = get_3d_terrain_elevation (new_route [loop].x, new_route [loop].z);
+
+#if DEBUG_MODULE
+				create_vectored_debug_3d_object (&new_route [loop], &new_route [loop], OBJECT_3D_SPHERICAL_TEST, 120.0, 10.0);
+#endif
+
+				new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_TAXI;
+
+				child.search_depth++;
+				loop++;
+			}
+		}
+
+		destruct_3d_object ( object );
+	}
+	
+	if (!loop) // auto route
+	{
+		offset = get_local_entity_index (keysite) % 6;
+
+		for (; loop < 6; loop ++)
+		{	
+			float angle = (float)(loop + offset) * PI2 / 6.0;
+
+			new_route [loop].x = start_pos->x + cos(angle) * (0.8 + 0.2 * frand1()) * radius;
+			new_route [loop].z = start_pos->z + sin(angle) * (0.8 + 0.2 * frand1()) * radius;
+
+			ASSERT(point_inside_map_area(&new_route [loop]));
+
+			new_route [loop].y = get_3d_terrain_elevation (new_route [loop].x, new_route [loop].z);
+
+#if DEBUG_MODULE
+			create_vectored_debug_3d_object (&new_route [loop], &new_route [loop], OBJECT_3D_SPHERICAL_TEST, 120.0, 10.0);
+#endif
+
+			new_route_wp_type [loop] = ENTITY_SUB_TYPE_WAYPOINT_TAXI;
+		}			
+	}
+
+	new_route_wp_type [loop - 1] = ENTITY_SUB_TYPE_WAYPOINT_TROOP_DEFEND;
+
+	for(; loop < MAX_TROOP_ROUTE_COUNT; loop++)
+	{
+		new_route [loop] = new_route [loop - 1];
+		new_route_wp_type [loop] = new_route_wp_type [loop - 1];
+	}
 
 	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL,
 										side,
@@ -2165,12 +2180,27 @@ entity *create_troop_movement_patrol_task (entity_sides side, entity *keysite)
 										keysite,
 										keysite,
 										NULL,
-										TRUE,
+										FALSE,
 										0.0,
 										0.0,
 										keysite,
 										task_database [ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL].task_priority,
-										&pos, keysite, ENTITY_SUB_TYPE_WAYPOINT_LAND, FORMATION_1,
+										&new_route [0], NULL, new_route_wp_type [0], FORMATION_WEDGE,
+										&new_route [1], NULL, new_route_wp_type [1], FORMATION_WEDGE,
+										&new_route [2], NULL, new_route_wp_type [2], FORMATION_WEDGE,
+										&new_route [3], NULL, new_route_wp_type [3], FORMATION_WEDGE,
+										&new_route [4], NULL, new_route_wp_type [4], FORMATION_WEDGE,
+										&new_route [5], NULL, new_route_wp_type [5], FORMATION_WEDGE,
+										&new_route [6], NULL, new_route_wp_type [6], FORMATION_WEDGE,
+										&new_route [7], NULL, new_route_wp_type [7], FORMATION_WEDGE,
+										&new_route [8], NULL, new_route_wp_type [8], FORMATION_WEDGE,
+										&new_route [9], NULL, new_route_wp_type [9], FORMATION_WEDGE,
+										&new_route [10], NULL, new_route_wp_type [10], FORMATION_WEDGE,
+										&new_route [11], NULL, new_route_wp_type [11], FORMATION_WEDGE,
+										&new_route [12], NULL, new_route_wp_type [12], FORMATION_WEDGE,
+										&new_route [13], NULL, new_route_wp_type [13], FORMATION_WEDGE,
+										&new_route [14], NULL, new_route_wp_type [14], FORMATION_WEDGE,
+										&new_route [15], NULL, new_route_wp_type [15], FORMATION_WEDGE,
 										&terminator_point, NULL, NUM_ENTITY_SUB_TYPE_WAYPOINTS, FORMATION_NONE);
 
 	return new_task;
@@ -2209,6 +2239,12 @@ entity *create_user_task (entity *en, entity_sub_types task_type, vec3d *start_p
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log ("TASKGEN: creating side %d User task", side);
+
+	#endif
 
 	if (!get_task_start_keysite (task_type, side, start_pos, &start_ks))
 	{
@@ -2567,9 +2603,11 @@ int get_task_start_keysite (entity_sub_types sub_type, entity_sides side, vec3d 
 
 			if (!*start_keysite)
 			{
-				//
-				// No suitable keysite found - abort task creation
-				//
+				#if DEBUG_MODULE >= 2
+
+				debug_log ("TASKGEN: No suitable keysite found - abort task creation");
+
+				#endif
 
 				return FALSE;
 			}

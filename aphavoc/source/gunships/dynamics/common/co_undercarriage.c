@@ -358,7 +358,7 @@ static void update_suspension(void)
 
 			if (terrain_class != TERRAIN_CLASS_LAND)
 			{
-				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &raw->ac.mob.position, 0.2 * KILOMETRE, NULL, NULL);
+				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &raw->ac.mob.position, 0.2 * KILOMETRE, NULL, FALSE, NULL);
 
 				if (keysite)
 					if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE && helicopter_within_keysite_area (get_gunship_entity ()))

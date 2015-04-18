@@ -2657,7 +2657,7 @@ void dynamics_land (void)
 	model_position.y = current_flight_dynamics->position.y;
 	model_position.z = current_flight_dynamics->position.z;
 
-	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &model_position, 5 * KILOMETRE, &actual_range, NULL);
+	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &model_position, 5 * KILOMETRE, &actual_range, TRUE, NULL);
 
 	if (keysite)
 	{

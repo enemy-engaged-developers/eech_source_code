@@ -163,6 +163,7 @@ enum ENTITY_MESSAGES
    ENTITY_MESSAGE_WAYPOINT_TROOP_PICKUP_POINT_START_REACHED,   // (entity *receiver, entity *sender)
    ENTITY_MESSAGE_WAYPOINT_TROOP_PUTDOWN_POINT_REACHED,    		// (entity *receiver, entity *sender)
    ENTITY_MESSAGE_WAYPOINT_WAIT_REACHED,			          		// (entity *receiver, entity *sender)
+   ENTITY_MESSAGE_WAYPOINT_PREPARE_FOR_INSERTION_REACHED,
    NUM_ENTITY_MESSAGES
 };
 

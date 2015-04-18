@@ -1789,7 +1789,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			fake_y = wpn->mob.position.y + cos(pitch) * (expected_height - wpn->mob.position.y);
 			fake_z = wpn->mob.position.z - sin(pitch) * (expected_height - wpn->mob.position.y);
 			
-			if (fake_z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
+			if (fake_z >= ((float)(range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
 			{
 				int
 					stop_index = min((int)((fake_z + 1) / RANGE_STEP), num_range_values);

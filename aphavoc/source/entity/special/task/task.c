@@ -461,6 +461,8 @@ task_completed_types assess_task_completeness (entity *en, task_terminated_types
 		case ENTITY_SUB_TYPE_TASK_OCA_STRIKE:
 		case ENTITY_SUB_TYPE_TASK_OCA_SWEEP:
 		case ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL:
+		case ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE:
+		case ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND:
 		{
 			if ((task_terminated == TASK_TERMINATED_WAYPOINT_ROUTE_COMPLETE) || (task_terminated == TASK_TERMINATED_OBJECTIVE_MESSAGE))
 			{
@@ -763,11 +765,13 @@ int assess_task_difficulty (entity *task_en, int *route_air_threat, int *route_e
 
 	start_keysite = raw->task_link.parent; 
 
-	if ((start_keysite) && (get_local_entity_type (start_keysite) == ENTITY_TYPE_KEYSITE))
+	if ((start_keysite))
 	{
 		//
 		// start at the assigned keysite
 		//
+		
+		ASSERT(get_local_entity_type (start_keysite) == ENTITY_TYPE_KEYSITE);
 		
 		node = 0;
 

@@ -145,7 +145,7 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 		// Max time for ENGAGE - stops attackers hanging around target area for too long (especially if they can NEVER get to their target)
 		//
 		
-		expire_time = (15.0 * ONE_MINUTE) + (frand1 () * 5.0 * ONE_MINUTE);
+		expire_time = (10.0 * ONE_MINUTE) + (frand1 () * 2.5 * ONE_MINUTE);
 	}
 
 	new_task = NULL;
@@ -553,7 +553,14 @@ int engage_targets_in_group (entity *group, entity *target_group, int expire)
 			{
 				if (member == objective)
 				{
-					return FALSE;
+					#if DEBUG_MODULE
+
+					debug_log ("ENGAGE.C: engage task already exists");
+
+					#endif
+
+					if (!get_local_entity_int_value (member, INT_TYPE_IDENTIFY_VEHICLE))
+						return FALSE;
 				}
 
 				member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
@@ -579,6 +586,12 @@ int engage_targets_in_group (entity *group, entity *target_group, int expire)
 			if (new_task)
 			{
 				assign_task_to_group (group, new_task, TASK_ASSIGN_NO_MEMBERS);
+
+				#if DEBUG_MODULE
+
+				debug_log ("ENGAGE.C: engage task assigned to member");
+
+				#endif
 			}
 		}
 
@@ -591,10 +604,22 @@ int engage_targets_in_group (entity *group, entity *target_group, int expire)
 
 	if (assign_engage_tasks_to_group (group, TASK_ASSIGN_ALL_MEMBERS) != TASK_ASSIGN_ALL_MEMBERS)
 	{
+		#if DEBUG_MODULE
+
+		debug_log ("ENGAGE.C: engage task created");
+
+		#endif
+
 		return TRUE;
 	}
 	else
 	{
+		#if DEBUG_MODULE
+
+		debug_log ("ENGAGE.C: engage task create fail");
+
+		#endif
+
 		return FALSE;
 	}
 }

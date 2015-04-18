@@ -163,7 +163,8 @@ void vehicle_target_scan (entity *en)
 		*current_target;
 
 	int
-		target_count;
+		target_count,
+		debug = FALSE;
 
 	task_target_source_types
 		target_source;
@@ -171,6 +172,28 @@ void vehicle_target_scan (entity *en)
 	vec3d
 		*pos;
 
+#ifdef DEBUG
+	debug = DEBUG_MODULE && en == get_external_view_entity ();
+#endif
+
+	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
+
+	if (guide)
+	{
+		entity *wp = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
+		
+		if (wp)
+			if (get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_TROOP_PUTDOWN_POINT)
+			{
+				if (debug)
+				{
+					debug_log("VH_TGT: TROOP_PUTDOWN_POINT");
+				}
+
+				return;
+			}
+	}
+	
 	raw = (vehicle *) get_local_entity_data (en);
 
 	raw->target_scan_timer -= get_delta_time (); 
@@ -180,6 +203,11 @@ void vehicle_target_scan (entity *en)
 		return;
 	}
 
+	if (debug)
+	{
+		debug_log("VH_TGT: targets scan");
+	}
+	
 	//
 	// reset target_scan_timer (okay to use a random number as this is a server only variable)
 	//
@@ -195,8 +223,6 @@ void vehicle_target_scan (entity *en)
 	//
 
 	target_source = TASK_TARGET_SOURCE_SCAN_ALL;
-
-	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
 	if (guide)
 	{
@@ -215,6 +241,11 @@ void vehicle_target_scan (entity *en)
 	{
 		case TASK_TARGET_SOURCE_TASK_OBJECTIVE:
 		{
+			if (debug)
+			{
+				debug_log("VH_TGT: TASK_TARGET_SOURCE_TASK_OBJECTIVE");
+			}
+
 			return;
 		}
 
@@ -228,6 +259,11 @@ void vehicle_target_scan (entity *en)
 
 			if (get_local_entity_child_pred (en, LIST_TYPE_MEMBER))
 			{
+				if (debug)
+				{
+					debug_log("VH_TGT: Only first member in a group to do targetting");
+				}
+
 				return;
 			}
 
@@ -239,12 +275,10 @@ void vehicle_target_scan (entity *en)
 
 			if ((target_group) && (target_count > 0))
 			{
-
-				#if TEXT_DEBUG_MODULE
-
-				debug_log ("VH_TGT: %s(%d) Scanned %d air group targets", get_local_entity_string (en, STRING_TYPE_SHORT_DISPLAY_NAME), get_local_entity_index (en), target_count);
-
-				#endif
+				if (debug)
+				{
+					debug_log ("VH_TGT: %s(%d) Scanned %d air group targets", get_local_entity_string (en, STRING_TYPE_SHORT_DISPLAY_NAME), get_local_entity_index (en), target_count);
+				}
 
 				/////////////////////////////////////////////////////////////////
 				//
@@ -289,7 +323,11 @@ void vehicle_target_scan (entity *en)
 						-1
 					);
 				}
-				
+				else if (debug)
+				{
+					debug_log("VH_TGT: already has target");
+				}
+
 				/////////////////////////////////////////////////////////////////
 				//
 				//
@@ -313,6 +351,10 @@ void vehicle_target_scan (entity *en)
 
 			if (get_local_entity_child_pred (en, LIST_TYPE_MEMBER))
 			{
+				if (debug)
+				{
+					debug_log("VH_TGT: Only first member in a group to do targeting");
+				}
 
 				return;
 			}
@@ -325,12 +367,10 @@ void vehicle_target_scan (entity *en)
 
 			if ((target_group) && (target_count > 0))
 			{
-	
-				#if TEXT_DEBUG_MODULE
-	
-				debug_log ("VH_TGT: %s(%d) Scanned %d ground group targets", get_local_entity_string (en, STRING_TYPE_SHORT_DISPLAY_NAME), get_local_entity_index (en), target_count);
-	
-				#endif
+				if (debug)
+				{
+					debug_log ("VH_TGT: %s(%d) Scanned %d ground group targets", get_local_entity_string (en, STRING_TYPE_SHORT_DISPLAY_NAME), get_local_entity_index (en), target_count);
+				}
 
 				/////////////////////////////////////////////////////////////////
 				//
@@ -375,6 +415,10 @@ void vehicle_target_scan (entity *en)
 						-1
 					);
 				}
+				else if (debug)
+				{
+					debug_log("VH_TGT: already has target");
+				}
 
 				/////////////////////////////////////////////////////////////////
 				//
@@ -408,12 +452,8 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 		z_sec,
 		seed;
 
-	#if TEXT_DEBUG_MODULE
-
 	int
-		debug;
-
-	#endif
+		debug = FALSE;
 
 	entity
 		*group,
@@ -444,12 +484,6 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 	(*target_count) = 0;
 
-	#if TEXT_DEBUG_MODULE
-
-	debug = get_local_entity_parent (source, LIST_TYPE_MEMBER) == get_local_entity_parent (get_external_view_entity (), LIST_TYPE_MEMBER);
-
-	#endif
-
 	//
 	// find best scan range
 	//
@@ -474,6 +508,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 		source_air_scan_floor = max (source_air_scan_floor, get_local_entity_float_value (member, FLOAT_TYPE_AIR_SCAN_FLOOR));
 
 		member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
+
+#ifdef DEBUG
+		debug = DEBUG_MODULE && member == get_external_view_entity ();
+#endif
 	}
 
 	group = NULL;
@@ -484,14 +522,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 	if ((source_air_scan_range > 0.0) && ((source_air_scan_ceiling - source_air_scan_floor) > 0.0))
 	{
-		#if TEXT_DEBUG_MODULE
-
 		if (debug)
 		{
 			debug_log ("SURFACE TO AIR SCAN ->SOURCE: %s (index = %d) RANGE %.1f", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source), source_air_scan_range);
 		}
-
-		#endif
 
 		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
@@ -654,13 +688,6 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 							}
 						}
 
-						//DEBUG// use weapon lock (min/max range etc.)
-
-						if (target_range < 100.0)
-						{
-							continue;
-						}
-
 						(*target_count) ++;
 
 						////////////////////////////////////////////////////////////////
@@ -688,14 +715,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 						//
 						////////////////////////////////////////
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("--->TARGET: %s (index = %d)", get_local_entity_type_name (target), get_local_entity_index (target));
 						}
-
-						#endif
 
 						////////////////////////////////////////
 
@@ -705,14 +728,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 						weighting = ((source_air_scan_range - target_range) / source_air_scan_range) * TARGET_RANGE_WEIGHTING;
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target range weighting = %.2f", weighting);
 						}
-
-						#endif
 
 						target_select_criteria += weighting;
 
@@ -720,14 +739,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 						weighting = get_local_entity_float_value (target, FLOAT_TYPE_POTENTIAL_AIR_TO_SURFACE_THREAT) * TARGET_POTENTIAL_THREAT_WEIGHTING;
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target potential threat weighting = %.2f", weighting);
 						}
-
-						#endif
 
 						target_select_criteria += weighting;
 
@@ -747,14 +762,10 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 						////////////////////////////////////////
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target select criteria = %.2f", target_select_criteria);
 						}
-
-						#endif
 
 						////////////////////////////////////////
 
@@ -772,16 +783,9 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 			}
 		}
 	}
-	else
+	else if (debug)
 	{
-		#if TEXT_DEBUG_MODULE
-
-		if (debug)
-		{
-			debug_log (" NO SCAN - SURFACE TO AIR ->SOURCE: %s (index = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source));
-		}
-
-		#endif
+		debug_log (" NO SCAN - SURFACE TO AIR ->SOURCE: %s (index = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source));
 	}
 
 	return (best_group);
@@ -803,12 +807,8 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 		x_sec,
 		z_sec;
 
-	#if TEXT_DEBUG_MODULE
-
 	int
-		debug;
-
-	#endif
+		debug = FALSE;
 
 	entity
 		*group,
@@ -836,11 +836,9 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 	*target_count = 0;
 
-	#if TEXT_DEBUG_MODULE
-
-	debug = source == get_external_view_entity ();
-
-	#endif
+#ifdef DEBUG
+	debug = DEBUG_MODULE && source == get_external_view_entity ();
+#endif
 
 	//
 	// find best scan range
@@ -872,14 +870,10 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 	if (source_surface_scan_range > 0.0)
 	{
-		#if TEXT_DEBUG_MODULE
-
 		if (debug)
 		{
 			debug_log ("SURFACE TO SURFACE ->SOURCE: %s (index = %d), RANGE %.1f", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source), source_surface_scan_range);
 		}
-
-		#endif
 
 		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
@@ -1006,27 +1000,16 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 							continue;
 						}
 
-						//DEBUG// use weapon lock (min/max range etc.)
-
-						if (target_range < 100.0)
-						{
-							continue;
-						}
-
 						////////////////////////////////////////
 						//
 						// weighted target select criteria
 						//
 						////////////////////////////////////////
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("--->TARGET: %s (index = %d)", get_local_entity_type_name (target), get_local_entity_index (target));
 						}
-
-						#endif
 
 						////////////////////////////////////////
 
@@ -1036,14 +1019,10 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 						weighting = ((source_surface_scan_range - target_range) / source_surface_scan_range) * TARGET_RANGE_WEIGHTING;
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target range weighting = %.2f", weighting);
 						}
-
-						#endif
 
 						target_select_criteria += weighting;
 
@@ -1051,14 +1030,10 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 						weighting = get_local_entity_float_value (target, FLOAT_TYPE_POTENTIAL_SURFACE_TO_SURFACE_THREAT) * TARGET_POTENTIAL_THREAT_WEIGHTING;
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target potential threat weighting = %.2f", weighting);
 						}
-
-						#endif
 
 						target_select_criteria += weighting;
 
@@ -1078,14 +1053,10 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 						////////////////////////////////////////
 
-						#if TEXT_DEBUG_MODULE
-
 						if (debug)
 						{
 							debug_log ("----->target select criteria = %.2f", target_select_criteria);
 						}
-
-						#endif
 
 						////////////////////////////////////////
 
@@ -1103,16 +1074,9 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 			}
 		}
 	}
-	else
+	else if (debug)
 	{
-		#if TEXT_DEBUG_MODULE
-
-		if (debug)
-		{
-			debug_log (" NO SCAN - SURFACE TO SURFACE ->SOURCE: %s (index = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source));
-		}
-
-		#endif
+		debug_log (" NO SCAN - SURFACE TO SURFACE ->SOURCE: %s (index = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), get_local_entity_index (source));
 	}
 
 	return (best_group);

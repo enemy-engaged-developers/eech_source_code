@@ -205,7 +205,8 @@ void reset_entity_weapon_config_animation (entity *en)
 							search_weapon_system_pitch.result_sub_object->relative_pitch = -package_status[package].weapon_system_pitch;
 						}
 
-						search_weapon_system_pitch.result_sub_object->visible_object = TRUE;
+						if (!(get_local_entity_type (en) == ENTITY_TYPE_PERSON && weapon_config_database[config_type][package].heading_depth != 0)) // hide troops secondary weapons
+							search_weapon_system_pitch.result_sub_object->visible_object = TRUE;
 
 						search_weapon_system_weapon_depth = weapon_config_database[config_type][package].number - package_status[package].number;
 
@@ -268,3 +269,52 @@ void update_weapon_animation (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_infantry_weapons (entity *en, entity_sub_types weapon_sub_type)
+{
+	weapon_package_status
+		*package_status;
+
+	weapon_config_types
+		config_type;
+
+	object_3d_instance
+		*inst3d;
+
+	object_3d_sub_object_search_data
+		search_weapon_system_heading,
+		search_weapon_system_pitch;
+
+	int
+		package;
+
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+
+	if (package_status)
+	{
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+
+		ASSERT (weapon_config_type_valid (config_type));
+
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+
+		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+			if (weapon_config_database[config_type][package].sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				search_weapon_system_heading.search_depth = weapon_config_database[config_type][package].heading_depth;
+				search_weapon_system_heading.search_object = inst3d;
+				search_weapon_system_heading.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
+
+				if (find_object_3d_sub_object (&search_weapon_system_heading) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					search_weapon_system_heading.result_sub_object->visible_object = weapon_config_database[config_type][package].sub_type == weapon_sub_type;
+					
+					search_weapon_system_pitch.search_depth = weapon_config_database[config_type][package].pitch_depth;
+					search_weapon_system_pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
+
+					if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+						search_weapon_system_pitch.result_sub_object->visible_object = weapon_config_database[config_type][package].sub_type == weapon_sub_type;
+				}
+			}
+	}
+}

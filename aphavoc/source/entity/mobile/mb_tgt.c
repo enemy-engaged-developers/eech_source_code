@@ -106,21 +106,29 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// raise vehicle's base to avoid targeting problems
+
 int check_entity_line_of_sight (entity *source, entity *target, mobile_los_check_criteria criteria)
 {
 	vec3d
-		*source_position,
-		*target_position;
+		source_position,
+		target_position;
 
 	ASSERT (source);
 
 	ASSERT (target);
 
-	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+	get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, &source_position);
+	
+	if (get_local_entity_int_value (source, INT_TYPE_IDENTIFY_VEHICLE))
+		source_position.y += 1.5;
 
-	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	get_local_entity_vec3d (target, VEC3D_TYPE_POSITION, &target_position);
 
-	return check_position_line_of_sight (source, target, source_position, target_position, criteria);
+	if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE))
+		target_position.y += 1.5;
+
+	return check_position_line_of_sight (source, target, &source_position, &target_position, criteria);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

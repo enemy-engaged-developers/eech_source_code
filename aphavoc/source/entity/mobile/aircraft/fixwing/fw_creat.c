@@ -169,6 +169,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->ac.weapon_to_target_vector.y = 0.0;
 		raw->ac.weapon_to_target_vector.z = -1.0;
 
+		raw->ac.weapon_to_intercept_point_vector.x = 0.0;
+		raw->ac.weapon_to_intercept_point_vector.y = 0.0;
+		raw->ac.weapon_to_intercept_point_vector.z = -1.0;
+
+		raw->ac.weapon_to_intercept_point_range = 0.0;
+		
 		raw->ac.loading_door_state = AIRCRAFT_LOADING_DOORS_OPEN_FLOAT_VALUE;
 		raw->ac.undercarriage_state = AIRCRAFT_UNDERCARRIAGE_DOWN_FLOAT_VALUE;
 

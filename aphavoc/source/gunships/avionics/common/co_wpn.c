@@ -269,7 +269,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		*source_position,
 		*target_position,
 		*weapon_vector,
-		*weapon_to_target_vector;
+		*weapon_to_intercept_point_vector;
 
 	////////////////////////////////////////
 	//
@@ -377,9 +377,9 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		{
 			weapon_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_VECTOR);
 
-			weapon_to_target_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+			weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-			theta = get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector);
+			theta = get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector);
 
 			theta = fabs (acos (theta));
 
@@ -440,9 +440,9 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		{
 			weapon_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_VECTOR);
 
-			weapon_to_target_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+			weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-			theta = get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector);
+			theta = get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector);
 
 			theta = fabs (acos (theta));
 

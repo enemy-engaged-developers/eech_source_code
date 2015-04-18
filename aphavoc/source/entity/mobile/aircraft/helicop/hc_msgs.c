@@ -83,7 +83,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 
 	list_type = va_arg (pargs, list_types);
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
 	debug_log_entity_message (message, receiver, sender, pargs);
 
@@ -117,7 +117,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if DEBUG_MODULE
+#if DEBUG_MODULE > 1
 
 static int response_to_unlink_child (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
@@ -132,7 +132,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if DEBUG_MODULE
+#if DEBUG_MODULE > 1
 
 // WARNING: THIS IS OVERLOADED AT AIRCRAFT LEVEL //
 
@@ -149,7 +149,7 @@ static int response_to_link_parent (entity_messages message, entity *receiver, e
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if DEBUG_MODULE
+#if DEBUG_MODULE > 1
 
 // WARNING: THIS IS OVERLOADED AT AIRCRAFT LEVEL //
 
@@ -191,7 +191,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	
 	ASSERT(damage_modifier >= 0 && damage_modifier <= 1.0);
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
 	// IMPORTANT: this muct come after we read va_arg, or it will clobber it!
 	debug_log_entity_message (message, receiver, sender, pargs);
@@ -435,7 +435,7 @@ static int response_to_articulate_loading_doors (entity_messages message, entity
 	sound_sample_indices
 		sound_sample_index;
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
 	debug_log_entity_message (message, receiver, sender, pargs);
 
@@ -603,7 +603,12 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 	
 			if (range > get_guide_criteria_value (sender, GUIDE_CRITERIA_RADIUS))
 			{
-
+#if DEBUG_MODULE
+				if (receiver == get_external_view_entity ())
+				{
+					debug_log("HC_MSGS: GUIDE_CRITERIA_RADIUS CHECK FAILED");
+				}
+#endif
 				return FALSE;
 			}
 		}
@@ -615,13 +620,14 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		if (get_guide_criteria_valid (sender, GUIDE_CRITERIA_ALTITUDE))
 		{
 			if ((get_local_entity_int_value (receiver, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI) &&
-				(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED) &&
+				(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED || 
+				get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_TROOP_INSERT) &&
 				(!get_local_entity_int_value (receiver, INT_TYPE_AUTO_PILOT)))
 			{
 				if (get_local_entity_int_value (receiver, INT_TYPE_AIRBORNE_AIRCRAFT))
 				{
 
-					// if player, not autopilot, land wp and not airborne
+					// if player, not autopilot, land/insert wp and not airborne
 
 					return FALSE;
 				}
@@ -639,7 +645,12 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		
 				if (fabs (range) > get_guide_criteria_value (sender, GUIDE_CRITERIA_ALTITUDE))
 				{
-	
+#if DEBUG_MODULE
+					if (receiver == get_external_view_entity ())
+					{
+						debug_log("HC_MSGS: GUIDE_CRITERIA_ALTITUDE CHECK FAILED");
+					}
+#endif
 					return FALSE;
 				}
 			}
@@ -675,6 +686,12 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		
 				if (fabs (delta_heading) > get_guide_criteria_value (sender, GUIDE_CRITERIA_HEADING))
 				{
+#if DEBUG_MODULE
+					if (receiver == get_external_view_entity ())
+					{
+						debug_log("HC_MSGS: GUIDE_CRITERIA_HEADING CHECK FAILED");
+					}
+#endif
 					return FALSE;
 				}
 			}
@@ -693,15 +710,20 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		
 				vec3d
 					*weapon_vector,
-					*weapon_to_target_vector;
+					*weapon_to_intercept_point_vector;
 		
 				float
 					launch_angle_error;
 					
 				selected_weapon = get_local_entity_int_value (receiver, INT_TYPE_SELECTED_WEAPON);
 		
-				ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
-		
+				if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				{
+					debug_log ("GUIDE: no selectedweapon");
+					
+					return FALSE;
+				}
+				
 				if (get_local_entity_int_value (receiver, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 				{
 					entity *target;
@@ -710,40 +732,23 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 			
 					ASSERT (weapon_vector);
 			
-					weapon_to_target_vector = get_local_entity_vec3d_ptr (receiver, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+					weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (receiver, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 			
-					ASSERT (weapon_to_target_vector);
+					ASSERT (weapon_to_intercept_point_vector);
 			
 					target = get_local_entity_parent (receiver, LIST_TYPE_TARGET);
 					
-					if (target && !weapon_database [selected_weapon].guidance_type && weapon_database [selected_weapon].aiming_type)
+					launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector));
+
+					if (fabs (launch_angle_error) > pow(frand1(), 6) * weapon_database[selected_weapon].max_launch_angle_error)
 					{
-						vec3d
-							*en_pos = get_local_entity_vec3d_ptr(receiver, VEC3D_TYPE_POSITION),
-							intercept_point;
-						float
-							angle,
-							time,
-							pitch,
-							heading;
-
-						get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &heading, &pitch);
-
-						if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(en_pos, selected_weapon, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (receiver, FLOAT_TYPE_VELOCITY), 
-								receiver, target, &intercept_point, &angle, &time ))
-							get_3d_unit_vector_from_heading_and_pitch(weapon_to_target_vector, heading, angle);
-
-						launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
-
-						if (fabs (launch_angle_error) > 4 * pow(frand1(), 6) * atan(weapon_database[selected_weapon].circular_error_probable)) // give some time to set proper pitch angle
-							return FALSE;
-					}
-					else
-					{
-						launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
-
-						if (fabs (launch_angle_error) > weapon_database[selected_weapon].max_launch_angle_error)
-							return FALSE;
+#if DEBUG_MODULE
+						if (receiver == get_external_view_entity ())
+						{
+							debug_log("HC_MSGS: GUIDE_CRITERIA_WEAPON_VECTOR CHECK FAILED");
+						}
+#endif
+						return FALSE;
 					}
 				}
 			}
@@ -797,7 +802,7 @@ void overload_helicopter_message_responses (void)
 
 	message_responses[ENTITY_TYPE_HELICOPTER][ENTITY_MESSAGE_LINK_CHILD]							= response_to_link_child;
 
-	#if DEBUG_MODULE
+	#if DEBUG_MODULE > 1
 
 	message_responses[ENTITY_TYPE_HELICOPTER][ENTITY_MESSAGE_UNLINK_CHILD]						= response_to_unlink_child;
 

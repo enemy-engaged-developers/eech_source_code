@@ -407,16 +407,42 @@ void create_reaction_to_recon_task_completed (entity *task)
 	
 					if (efficiency < keysite_database [sub_type].minimum_efficiency)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side))
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side) &&
+							!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, task_side))
 						{
 							new_task = create_troop_insertion_task (task_side, objective, task, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
 	
-							ai_log ("(TASK) Side %s : Created TROOP INSERTION (%d) at %s (eff. %.3f) in reaction to %s",
-										entity_side_short_names [task_side],
-										get_local_entity_safe_index (new_task),
-										get_local_entity_string (objective, STRING_TYPE_KEYSITE_NAME),
-										efficiency,
-										get_local_entity_string (task, STRING_TYPE_FULL_NAME));
+							if (new_task)
+							{
+								ai_log ("(TASK) Side %s : Created TROOP INSERTION (%d) at %s (eff. %.3f) in reaction to %s",
+											entity_side_short_names [task_side],
+											get_local_entity_safe_index (new_task),
+											get_local_entity_string (objective, STRING_TYPE_KEYSITE_NAME),
+											efficiency,
+											get_local_entity_string (task, STRING_TYPE_FULL_NAME));
+
+								if (
+										get_local_entity_int_value (objective, INT_TYPE_SIDE) != task_side &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, get_local_entity_int_value (objective, INT_TYPE_SIDE)) < 2
+									)
+								{
+									new_task = create_troop_insertion_task (get_local_entity_int_value (objective, INT_TYPE_SIDE), objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
+
+									if (new_task)
+									{
+										ai_log ("(TASK) Side %s : Created BACKUP TROOP INSERTION (%d) at %s (eff. %.3f) in reaction to %s, patrols count %i",
+													entity_side_short_names [get_local_entity_int_value (objective, INT_TYPE_SIDE)],
+													get_local_entity_safe_index (new_task),
+													get_local_entity_string (objective, STRING_TYPE_KEYSITE_NAME),
+													efficiency,
+													get_local_entity_string (task, STRING_TYPE_FULL_NAME),
+													entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, get_local_entity_int_value (objective, INT_TYPE_SIDE)));
+									}
+								}
+							}
 						}
 					}
 				}
@@ -824,10 +850,24 @@ void create_reaction_to_map_click (entity *objective)
 	
 					if (efficiency < keysite_database [sub_type].minimum_efficiency)
 					{
-						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side) || session_camcom == 2)
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side) &&
+							!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, task_side) || session_camcom == 2)
 						{
 							new_task = create_troop_insertion_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
 	
+							if (new_task)
+							{
+								if (
+										get_local_entity_int_value (objective, INT_TYPE_SIDE) != task_side &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND, get_local_entity_int_value (objective, INT_TYPE_SIDE)) &&
+										!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, get_local_entity_int_value (objective, INT_TYPE_SIDE)) < 2
+									)
+								{
+									new_task = create_troop_insertion_task (get_local_entity_int_value (objective, INT_TYPE_SIDE), objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
+								}
+							}
 						}
 					}
 				}

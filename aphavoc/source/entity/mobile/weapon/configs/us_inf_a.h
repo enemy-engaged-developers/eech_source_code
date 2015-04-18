@@ -73,11 +73,11 @@
 		#define NUM_M16_AMMO		(30)
 
 		#define TURRET_HEADING_RATE 		(rad (60.0))
-		#define TURRET_MIN_HEADING_LIMIT	(rad (-40.0))
-		#define TURRET_MAX_HEADING_LIMIT	(rad (40.0))
+		#define TURRET_MIN_HEADING_LIMIT	(rad (-10.0))
+		#define TURRET_MAX_HEADING_LIMIT	(rad (10.0))
 		#define LAUNCHER_PITCH_RATE		(rad (60.0))
-		#define LAUNCHER_MIN_PITCH_LIMIT	(rad (-40.0))
-		#define LAUNCHER_MAX_PITCH_LIMIT	(rad (80.0))
+		#define LAUNCHER_MIN_PITCH_LIMIT	(rad (-10.0))
+		#define LAUNCHER_MAX_PITCH_LIMIT	(rad (30.0))
 
 		////////////////////////////////////////
 		//

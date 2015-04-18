@@ -154,6 +154,11 @@ vec3d_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
 		},
 		{
+			"VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR",		// name
+			VEC3D_PACK_TYPE_UNIT_VECTOR,					// pack_type
+			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
+		},
+		{
 			"VEC3D_TYPE_WEAPON_VECTOR",					// name
 			VEC3D_PACK_TYPE_UNIT_VECTOR,					// pack_type
 			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
@@ -268,6 +273,16 @@ static void default_get_entity_vec3d (entity *en, vec3d_types type, vec3d *v)
 		}
 		////////////////////////////////////////
 		case VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR:
+		////////////////////////////////////////
+		{
+			v->x = 0.0;
+			v->y = 0.0;
+			v->z = -1.0;
+
+			break;
+		}
+		////////////////////////////////////////
+		case VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR:
 		////////////////////////////////////////
 		{
 			v->x = 0.0;

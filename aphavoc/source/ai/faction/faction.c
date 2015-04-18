@@ -1104,6 +1104,8 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 
    debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
+   ASSERT(number <= group_database[group_type].maximum_member_count && number <= 12); // FORMCOMP limit
+   
 	if (keysite)
 	{
 		ASSERT (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE);
@@ -1542,7 +1544,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 					formation_component = FORMATION_COMPONENT_PRIMARY_FRONTLINE_GROUP;
 
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, TRUE, NULL);
 
 					ASSERT (keysite);
 
@@ -1581,7 +1583,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 					formation_component = FORMATION_COMPONENT_SECONDARY_FRONTLINE_GROUP;
 
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, TRUE, NULL);
 
 					ASSERT (keysite);
 
@@ -1642,7 +1644,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 					number = bound (number, 1, size);
 
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, pos, 1.0 * KILOMETRE, NULL, TRUE, NULL);
 
 					ASSERT (keysite);
 

@@ -189,6 +189,15 @@ static void update_server (entity *en)
 	}
 	else
 	{
+		static float task_timer = 0.0;
+		
+		task_timer += get_delta_time();
+		
+		if (task_timer < 1.0 * ONE_MINUTE)
+			return;
+		else
+			task_timer = 0.0;
+		
 		//
 		// Check if keysite needs repairing.
 		//

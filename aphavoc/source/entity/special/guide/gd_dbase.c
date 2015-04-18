@@ -154,8 +154,8 @@ guide_data
 
 			{
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_RADIUS
-				{ TRUE,		rad (1.0) },							// GUIDE_CRITERIA_HEADING
-				{ TRUE,		0.5 },									// GUIDE_CRITERIA_ALTITUDE
+				{ FALSE,		0.0 },							// GUIDE_CRITERIA_HEADING
+				{ TRUE,			0.5 },									// GUIDE_CRITERIA_ALTITUDE
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_TRANSMIT_DATA
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_LAST_TO_REACH
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_WEAPON_VECTOR

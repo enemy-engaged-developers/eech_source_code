@@ -440,6 +440,13 @@ int_type_data
 			TRUE,																// fast_track
 		},
 		{
+			"INT_TYPE_TROOPS_ONBOARD",			               			// name
+			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
+			NUM_TROOPS_ONBOARD_BITS,												// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			TRUE,																// fast_track
+		},
+		{
 			"INT_TYPE_END_NODE",			               			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			32,		 						                			// num_pack_bits (including sign bit)

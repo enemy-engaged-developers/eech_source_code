@@ -1352,7 +1352,7 @@ void read_population_city_placements ( FILE *fp )
 								else
 								{
 
-									if ( ( count % 4 ) == 1 )
+//									if ( ( count % 4 ) == 1 )
 									{
 
 
@@ -1372,17 +1372,35 @@ void read_population_city_placements ( FILE *fp )
 											*group,
 											*member;
 
-										if (sam_placement_count & 1)
+										switch (objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].scene_index)
 										{
-
-											formation_type = FORMATION_COMPONENT_INFANTRY_SAM_KNEELING;
+											case OBJECT_3D_US_LIGHT_FIRING_POINT:
+											case OBJECT_3D_RS_LIGHT_FIRING_POINT:
+												formation_type = FORMATION_COMPONENT_LIGHT_FIRING_POINT;
+												break;
+											case OBJECT_3D_US_MEDIUM_FIRING_POINT:
+											case OBJECT_3D_RS_MEDIUM_FIRING_POINT:
+												formation_type = FORMATION_COMPONENT_MEDIUM_FIRING_POINT;
+												break;
+											case OBJECT_3D_US_HEAVY_FIRING_POINT:
+											case OBJECT_3D_RS_HEAVY_FIRING_POINT:
+												formation_type = FORMATION_COMPONENT_HEAVY_FIRING_POINT;
+												break;
+											case OBJECT_3D_US_MARINE_STANDING:
+											case OBJECT_3D_RUSSIAN_MARINE_STANDING:
+												formation_type = FORMATION_COMPONENT_INFANTRY_SAM_STANDING;
+												break;
+											case OBJECT_3D_US_MARINE_KNEELING:
+											case OBJECT_3D_RUSSIAN_MARINE_KNEELING:
+												formation_type = FORMATION_COMPONENT_INFANTRY_SAM_KNEELING;
+												break;
+											default:
+												formation_type = NUM_FORMATION_COMPONENT_TYPES;
 										}
-										else
-										{
 
-											formation_type = FORMATION_COMPONENT_INFANTRY_SAM_STANDING;
-										}
-
+										if (formation_type >= NUM_FORMATION_COMPONENT_TYPES)
+											break;
+											
 										relative_position.x = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].x;
 										relative_position.y = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].y;
 										relative_position.z = objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].z;

@@ -756,15 +756,15 @@ static int response_to_force_low_on_supplies (entity_messages message, entity *r
 		case ENTITY_SUB_TYPE_CARGO_AMMO:
 		{
 
-			factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FACTORY, side, pos, 10 * KILOMETRE, &factory_actual_range, NULL);
+			factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FACTORY, side, pos, 10 * KILOMETRE, &factory_actual_range, TRUE, NULL);
 
 			if (!factory)
 			{
 
-				factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_OIL_REFINERY, side, pos, 10 * KILOMETRE, &factory_actual_range, NULL);
+				factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_OIL_REFINERY, side, pos, 10 * KILOMETRE, &factory_actual_range, TRUE, NULL);
 			}
 
-			airbase = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, pos, 10 * KILOMETRE, &airbase_actual_range, NULL);
+			airbase = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, pos, 10 * KILOMETRE, &airbase_actual_range, TRUE, NULL);
 
 			if (airbase_actual_range < factory_actual_range)
 			{
@@ -780,15 +780,15 @@ static int response_to_force_low_on_supplies (entity_messages message, entity *r
 		case ENTITY_SUB_TYPE_CARGO_FUEL:
 		{
 
-			factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_OIL_REFINERY, side, pos, 10 * KILOMETRE, &factory_actual_range, NULL);
+			factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_OIL_REFINERY, side, pos, 10 * KILOMETRE, &factory_actual_range, TRUE, NULL);
 
 			if (!factory)
 			{
 
-				factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FACTORY, side, pos, 10 * KILOMETRE, &factory_actual_range, NULL);
+				factory = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_FACTORY, side, pos, 10 * KILOMETRE, &factory_actual_range, TRUE, NULL);
 			}
 
-			airbase = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, pos, 10 * KILOMETRE, &airbase_actual_range, NULL);
+			airbase = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, pos, 10 * KILOMETRE, &airbase_actual_range, TRUE, NULL);
 
 			if (airbase_actual_range < factory_actual_range)
 			{

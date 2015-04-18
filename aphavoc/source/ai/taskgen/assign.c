@@ -383,13 +383,9 @@ static int suitable_group_task_specific_checks (entity *task, entity *group)
 	
 			objective_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
 	
-			if (objective_type == ENTITY_SUB_TYPE_KEYSITE_AIRBASE)
-			{
-				if (get_local_entity_int_value (group, INT_TYPE_MEMBER_COUNT) < 2)
-				{
-					return FALSE;
-				}
-			}
+			if (objective_type == ENTITY_SUB_TYPE_KEYSITE_AIRBASE && get_local_entity_int_value (group, INT_TYPE_MEMBER_COUNT) < 2 &&
+					get_local_entity_int_value (objective, INT_TYPE_SIDE) != get_local_entity_int_value (group, INT_TYPE_SIDE))
+				return FALSE;
 
 			break;
 		}
@@ -577,6 +573,8 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 
 			if (keysite)
 			{
+				ASSERT(get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE);
+
 				set_client_server_entity_parent (group_en, LIST_TYPE_KEYSITE_GROUP, keysite);
 			}	
 		}
@@ -847,7 +845,6 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 	}
 	else
 	{
-//		start_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, task_raw->side, get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL);
 		start_keysite = NULL;
 	}
 
@@ -863,8 +860,6 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 
 	if (get_local_entity_int_value (task_en, INT_TYPE_ASSESS_LANDING))
 	{
-		ASSERT (start_keysite);
-
 		end_keysite = ( entity * ) get_local_entity_ptr_value (task_en, PTR_TYPE_RETURN_KEYSITE);
 
 		if (end_keysite)
@@ -893,6 +888,28 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 		}
 		else
 		{
+			if (!start_keysite)
+			{
+				entity *leader = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+				
+				ASSERT(leader);
+				
+				debug_log ("ASSIGN: start keysite not present, looking for new one");
+
+				start_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, task_raw->side, get_local_entity_vec3d_ptr (leader, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, TRUE, NULL);
+				
+				if (!start_keysite)
+					return FALSE;
+
+				sites_required = get_local_group_member_count (group);
+				
+				if (get_keysite_landing_sites_available (start_keysite, sub_type) < sites_required)
+					return FALSE;
+
+				debug_log ("ASSIGN: new start keysite is %s", get_local_entity_string (start_keysite, STRING_TYPE_KEYSITE_NAME));
+			}
+			
+
 			//
 			// No END keysite specified so return to start keysite
 			//
@@ -960,6 +977,15 @@ int assign_task_to_group_members (entity *group, entity *guide, unsigned int val
 			attach_group_member_to_guide_entity (member, guide);
 
 			notify_local_entity (ENTITY_MESSAGE_TASK_ASSIGNED, member, task);
+
+			if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_INSERTION)
+			{
+				int troops = group_database[get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].ai_stats.troop_space;
+				
+				ASSERT (troops > 0 && troops <= 12);
+				
+				set_client_server_entity_int_value (member, INT_TYPE_TROOPS_ONBOARD, troops);
+			}
 		}
 		
 		member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);

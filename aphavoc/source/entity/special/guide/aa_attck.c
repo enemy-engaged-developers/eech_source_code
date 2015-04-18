@@ -211,8 +211,7 @@ void attack_guide_fire_intercept_reached (entity *en)
 	entity
 		*task,
 		*aggressor,
-		*target,
-		*weapon;
+		*target;
 
 	vec3d
 		*target_pos,
@@ -259,39 +258,27 @@ void attack_guide_fire_intercept_reached (entity *en)
 		}
 	#endif
 
-	weapon = get_local_entity_first_child (aggressor, LIST_TYPE_LAUNCHED_WEAPON);
-
-	if (weapon)
+	if (check_guided_missile_type_alive(aggressor))
 	{
-		weapon = get_local_entity_child_pred_circular(weapon, LIST_TYPE_LAUNCHED_WEAPON);
-
-		while (weapon)
-		{
-			if(weapon_database[get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE)].guidance_type)
+		#if DEBUG_MODULE
+			if (aggressor == get_external_view_entity ())
 			{
-				#if DEBUG_MODULE
-					if (aggressor == get_external_view_entity ())
-					{
-						debug_log("AA_ATTCK: abort attack_guide_fire_intercept, another missile is still alive");
+				debug_log("AA_ATTCK: abort attack_guide_fire_intercept, another missile is still alive");
 
-					}
-				#endif
-
-				if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
-					set_attack_guide_move_six_position (en);
-				else
-					set_attack_guide_move_circle_position (en);
-				return;
 			}
+		#endif
 
-			weapon = get_local_entity_child_pred (weapon, LIST_TYPE_LAUNCHED_WEAPON);
-		}
+		if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
+			set_attack_guide_move_six_position (en);
+		else
+			set_attack_guide_move_circle_position (en);
+		return;
 	}
 
 	aggressor_pos = get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_POSITION);
 	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-	if (get_3d_range (aggressor_pos, target_pos) < frand1() * (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING ? 300 : 100)) // too close, move back
+	if (get_2d_range (aggressor_pos, target_pos) < (0.5 + 0.5 * frand1()) * (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING ? 300 : 200)) // too close, move back
 	{
 		#if DEBUG_MODULE
 			if (aggressor == get_external_view_entity ())
@@ -313,12 +300,12 @@ void attack_guide_fire_intercept_reached (entity *en)
 
 	if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER))
 	{
-		set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5);
-
 		if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, TRUE) == AIRCRAFT_FIRE_OK)
 		{
 			if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) && attack_guide_find_best_weapon (en))
 			{
+				set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+
 				if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
 					set_attack_guide_move_six_position (en);
 				else
@@ -337,7 +324,8 @@ void attack_guide_fire_intercept_reached (entity *en)
 void set_attack_guide_move_six_position (entity *en)
 {
 	float
-		weapon_effective_range;
+		weapon_effective_range,
+		rand_value;
 
 	vec3d
 		*target_pos,
@@ -375,9 +363,14 @@ void set_attack_guide_move_six_position (entity *en)
 	
 	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
 
-	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
+	if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+	{
+		delete_group_member_from_engage_guide (aggressor, en, FALSE);
+
+		return;
+	}
 	
-	weapon_effective_range = max(1500.0f, weapon_database [selected_weapon].effective_range);
+	weapon_effective_range = bound(weapon_database [selected_weapon].effective_range, 1000.0, 2000.0);
 
 	//
 	// calculate position of targets "six"
@@ -390,12 +383,20 @@ void set_attack_guide_move_six_position (entity *en)
 
 	ASSERT (target_zv);
 
-	position.x = target_pos->x - frand1() * (target_zv->x * weapon_effective_range);
-	position.z = target_pos->z - frand1() * (target_zv->z * weapon_effective_range);
+	position = *target_pos;
+	
+	do
+	{
+		rand_value = 0.5 + 0.5 * frand1();
+			
+		position.x -= rand_value * (target_zv->x * weapon_effective_range);
+		position.z -= rand_value * (target_zv->z * weapon_effective_range);
+	}
+	while(get_2d_range(&position, aggressor_position) < weapon_effective_range);
 
 	bound_position_to_adjusted_map_volume (&position);
 
-	position.y = get_3d_terrain_elevation (position.x, position.z) + min(aggressor_position->y + 20.0f, get_local_entity_float_value (aggressor, FLOAT_TYPE_CRUISE_ALTITUDE));
+	position.y = max(aggressor_position->y + 20.0 * sfrand1(), get_3d_terrain_elevation (position.x, position.z) + 0.25 * get_local_entity_float_value (aggressor, FLOAT_TYPE_ATTACK_ALTITUDE));
 
 	set_client_server_guide_entity_new_position (en, &position, NULL);
 
@@ -459,12 +460,12 @@ void set_attack_guide_move_circle_position (entity *en)
 	// calculate guide position 
 	//
 
-	if (distance >= 300)
+	if (distance >= 500)
 		rotate_2d_vector (&direction, rad (10.0));
 	else
 		rotate_2d_vector (&direction, frand1() * rad (90.0));
 
-	distance = max(frand1() * distance, 300.0);
+	distance = max((0.5 + 0.4 * frand1()) * distance, 500.0);
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);
@@ -511,11 +512,7 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	float
 		weapon_effective_range,
-		target_range,
-		lead_distance,
-		time,
-		radius,
-		aiming_pitch;
+		radius;
 
 	vec3d
 		position,
@@ -526,9 +523,6 @@ void set_attack_guide_fire_intercept_position (entity *en)
 		*task,
 		*aggressor,
 		*target;
-
-	matrix3x3
-		attitude;
 
 	ASSERT(en);
 	
@@ -547,7 +541,12 @@ void set_attack_guide_fire_intercept_position (entity *en)
 	
 	selected_weapon = get_local_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON);
 
-	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
+	if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+	{
+		delete_group_member_from_engage_guide (aggressor, en, FALSE);
+
+		return;
+	}
 	
 	weapon_effective_range = weapon_database [selected_weapon].effective_range;
 
@@ -561,35 +560,19 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-	target_range = get_3d_range (aggressor_pos, target_pos);
+	// calculate guide position (absolute)
 
-	//
-	// calculate guide position (relative to target)
-	//
+	position = *target_pos;
 
-	if (weapon_database [selected_weapon].guidance_type)
-	{
-		time = target_range / (0.75 * weapon_database[selected_weapon].cruise_velocity);
-		lead_distance = min (time * get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY), 500.0f);
+	if (get_local_entity_int_value (aggressor, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
+		position = get_global_position_from_unit_vector(get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_POSITION),
+				get_local_entity_vec3d_ptr (aggressor, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR),
+				get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE));
 
-		position.x = 0.0;
-		position.y = 0.0;
-		position.z = lead_distance;
-	}
-	else
-	{
-//		get_ballistic_pitch_deflection(selected_weapon, target_range, - asin((aggressor_pos->y - target_pos->y) / target_range), &aiming_pitch, &time, FALSE, TRUE, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY));
-		get_lead_and_ballistic_intercept_point_and_angle_of_projection (target_pos, selected_weapon, weapon_database[selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY), aggressor, target, &position, &aiming_pitch, &time);
+	if (weapon_database[selected_weapon].burst_duration)
+		position.y -= 0.5 * (position.y - target_pos->y); // compensate aircraft inertness and velocity
 
-		position.x -= target_pos->x;
-		position.y -= target_pos->y;
-		position.z -= target_pos->z;
-		
-		get_local_entity_attitude_matrix (target, attitude);
-		multiply_matrix3x3_vec3d (&position, attitude, &position);
-	}
-
-	set_client_server_guide_entity_new_position (en, &position, target);
+	set_client_server_guide_entity_new_position (en, &position, NULL);
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_RADIUS, TRUE, radius);
 

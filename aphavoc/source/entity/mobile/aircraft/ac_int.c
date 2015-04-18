@@ -166,6 +166,18 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_TROOPS_ONBOARD:
+		////////////////////////////////////////
+		{
+			raw->troops_onboard = value;
+
+			ASSERT (raw->inst3d);
+
+			set_sub_object_type_visible_status(raw->inst3d, OBJECT_3D_SUB_OBJECT_TROOPS_ONBOARD, !!value);
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_FORMATION_POSITION:
 		////////////////////////////////////////
 		{
@@ -524,6 +536,14 @@ static int get_local_int_value (entity *en, int_types type)
 		////////////////////////////////////////
 		{
 			value = raw->ejected;
+
+			break;
+		}
+		////////////////////////////////////////
+		case INT_TYPE_TROOPS_ONBOARD:
+		////////////////////////////////////////
+		{
+			value = raw->troops_onboard;
 
 			break;
 		}
@@ -1140,6 +1160,12 @@ void overload_aircraft_int_value_functions (entity_types type)
 	fn_set_client_server_entity_int_value	[type][INT_TYPE_EJECTED][COMMS_MODEL_SERVER]					= set_server_int_value;
 	fn_set_client_server_entity_int_value	[type][INT_TYPE_EJECTED][COMMS_MODEL_CLIENT]					= set_client_int_value;
 	fn_get_local_entity_int_value				[type][INT_TYPE_EJECTED]											= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value		[type][INT_TYPE_TROOPS_ONBOARD]											= set_local_int_value;
+	fn_set_local_entity_int_value				[type][INT_TYPE_TROOPS_ONBOARD]											= set_local_int_value;
+	fn_set_client_server_entity_int_value	[type][INT_TYPE_TROOPS_ONBOARD][COMMS_MODEL_SERVER]					= set_server_int_value;
+	fn_set_client_server_entity_int_value	[type][INT_TYPE_TROOPS_ONBOARD][COMMS_MODEL_CLIENT]					= set_client_int_value;
+	fn_get_local_entity_int_value				[type][INT_TYPE_TROOPS_ONBOARD]											= get_local_int_value;
 
 	fn_get_local_entity_int_value				[type][INT_TYPE_ENGAGE_ENEMY]										= get_local_int_value;
 

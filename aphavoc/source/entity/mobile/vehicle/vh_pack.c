@@ -487,6 +487,12 @@ void unpack_vehicle_data (entity *en, vehicle *raw, pack_modes mode)
 			raw->weapon_to_target_vector.y = 0.0;
 			raw->weapon_to_target_vector.z = -1.0;
 
+			raw->weapon_to_intercept_point_vector.x = 0.0;
+			raw->weapon_to_intercept_point_vector.y = 0.0;
+			raw->weapon_to_intercept_point_vector.z = -1.0;
+
+			raw->weapon_to_intercept_point_range = 0.0;
+
 			// terrain_info
 
 			break;

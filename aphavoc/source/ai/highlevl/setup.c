@@ -222,7 +222,7 @@ void create_force_campaign_objectives (entity *force)
 	
 						pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
 	
-						get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) target_side, pos, 1.0 * KILOMETRE, &actual_range, keysite);
+						get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) target_side, pos, 1.0 * KILOMETRE, &actual_range, TRUE, keysite);
 	
 						rating [count] = actual_range;
 	

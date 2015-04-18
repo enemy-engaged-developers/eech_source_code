@@ -118,6 +118,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE:
+		////////////////////////////////////////
+		{
+			raw->weapon_to_intercept_point_range = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_LOADING_DOOR_STATE:
 		////////////////////////////////////////
 		{
@@ -371,6 +379,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE:
+		////////////////////////////////////////
+		{
+			value = raw->weapon_to_intercept_point_range;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_FUEL_ECONOMY:
 		////////////////////////////////////////
 		{
@@ -606,6 +622,12 @@ void overload_vehicle_float_value_functions (entity_types type)
 	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_DISTANCE][COMMS_MODEL_SERVER]							= set_server_float_value;
 	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_DISTANCE][COMMS_MODEL_CLIENT]							= set_client_float_value;
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_DISTANCE]													= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value			[type][FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE]													= set_local_float_value;
+	fn_set_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE]													= set_local_float_value;
+	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE][COMMS_MODEL_SERVER]							= set_server_float_value;
+	fn_set_client_server_entity_float_value	[type][FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE][COMMS_MODEL_CLIENT]							= set_client_float_value;
+	fn_get_local_entity_float_value				[type][FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE]													= get_local_float_value;
 
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_FUEL_ECONOMY]												= get_local_float_value;
 

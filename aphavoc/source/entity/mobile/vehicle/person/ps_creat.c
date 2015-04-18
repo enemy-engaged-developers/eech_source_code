@@ -171,6 +171,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->vh.weapon_to_target_vector.y = 0.0;
 		raw->vh.weapon_to_target_vector.z = -1.0;
 
+		raw->vh.weapon_to_intercept_point_vector.x = 0.0;
+		raw->vh.weapon_to_intercept_point_vector.y = 0.0;
+		raw->vh.weapon_to_intercept_point_vector.z = -1.0;
+
+		raw->vh.weapon_to_intercept_point_range = 0.0;
+		
 		//
 		// person
 		//
@@ -250,6 +256,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		ASSERT (weapon_config_type_valid (raw->vh.weapon_config_type));
 
+		raw->vh.target_scan_timer = vehicle_database[raw->vh.mob.sub_type].target_scan_delay * (1.0 + 0.5 * frand1());
+		
 		//
 		// damage levels
 		//

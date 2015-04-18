@@ -504,20 +504,21 @@ int get_group_player_suitability_status (entity *group)
 
 	ASSERT (base);
 
-	ASSERT (get_local_entity_type (base) == ENTITY_TYPE_KEYSITE);
-
-	mission = get_local_entity_first_child (base, LIST_TYPE_UNASSIGNED_TASK);
-
-	while (mission)
+	if (get_local_entity_type (base) == ENTITY_TYPE_KEYSITE)
 	{
-		mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
+		mission = get_local_entity_first_child (base, LIST_TYPE_UNASSIGNED_TASK);
 
-		if (get_group_to_task_suitability (group_type, mission_type) > 0.0)
+		while (mission)
 		{
-			return TRUE;
-		}
+			mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 
-		mission = get_local_entity_child_succ (mission, LIST_TYPE_UNASSIGNED_TASK);
+			if (get_group_to_task_suitability (group_type, mission_type) > 0.0)
+			{
+				return TRUE;
+			}
+
+			mission = get_local_entity_child_succ (mission, LIST_TYPE_UNASSIGNED_TASK);
+		}
 	}
 
 	return FALSE;

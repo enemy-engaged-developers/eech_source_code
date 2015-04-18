@@ -399,6 +399,9 @@ int vehicle_critically_damaged (entity *en)
 	int
 		percent_damaged;
 
+	if (get_local_entity_type (en) == ENTITY_TYPE_PERSON)
+		return FALSE;
+	
 	raw = (vehicle *) get_local_entity_data (en);
 
 	percent_damaged = 100 * raw->damage_level / vehicle_database[raw->mob.sub_type].initial_damage_level;

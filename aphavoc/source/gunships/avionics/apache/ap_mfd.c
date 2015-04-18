@@ -3420,8 +3420,8 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 		set_rgb_colour (bg_colour, 0, 40, 0, 255);
 
-		draw_bordered_box(-0.98, -1.0, -0.35, -0.8, bg_colour, MFD_COLOUR1);
-		draw_bordered_box(0.98, -1.0, 0.35, -0.8, bg_colour, MFD_COLOUR1);
+//		draw_bordered_box(-0.98, -1.0, -0.35, -0.8, bg_colour, MFD_COLOUR1);
+//		draw_bordered_box(0.98, -1.0, 0.35, -0.8, bg_colour, MFD_COLOUR1);
 	}
 	else if (fill_boxes == 1)
 	{
@@ -10965,11 +10965,11 @@ void draw_apache_virtual_cockpit_ort_symbology(void)
 	}
 	set_rgb_colour(background_colour, 255, 255, 255, 0);
 
-	set_system_texture_screen (rhs_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+	set_system_texture_screen (rhs_overlaid_mfd_texture_screen, RHS_OVERLAID_MFD_TEXTURE_INDEX);
 
 	draw_symbology_to_texture(
-		rhs_mfd_texture_screen,
-		TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD,
+		rhs_overlaid_mfd_texture_screen,
+		RHS_OVERLAID_MFD_TEXTURE_INDEX,
 		mfd_viewport_size,
 		mfd_viewport_size,
 		mfd_screen_x_min,

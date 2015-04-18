@@ -175,6 +175,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->ac.weapon_to_target_vector.y = 0.0;
 		raw->ac.weapon_to_target_vector.z = -1.0;
 
+		raw->ac.weapon_to_intercept_point_vector.x = 0.0;
+		raw->ac.weapon_to_intercept_point_vector.y = 0.0;
+		raw->ac.weapon_to_intercept_point_vector.z = -1.0;
+
+		raw->ac.weapon_to_intercept_point_range = 0.0;
+		
 		raw->ac.loading_door_state = AIRCRAFT_LOADING_DOORS_OPEN_FLOAT_VALUE;
 		raw->ac.undercarriage_state = AIRCRAFT_UNDERCARRIAGE_DOWN_FLOAT_VALUE;
 
@@ -302,6 +308,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE, FALSE);
 		set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TROOP_LANDING_ROUTE, FALSE);
+
+		set_local_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD, 0);
 
 		//
 		// vary main rotor start position (ok to use a random number as this is for visual effect only)

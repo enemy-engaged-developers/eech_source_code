@@ -69,6 +69,7 @@
 #include "ai/taskgen/taskgen.h"
 #include "ai/ai_misc/ai_route.h"
 #include "ai/faction/faction.h"
+#include "ai/highlevl/highlevl.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,13 @@
 
 #define INITIAL_SLEEP_TIME 				5
 #define OFFSET_SLEEP_TIME 					2
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int attach_divison_to_keysite (int side, entity *destination_keysite, entity *group);
+static entity* get_destination_keysite (entity *group, entity_sides side, entity *task);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1163,6 +1171,8 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 
 	ASSERT (keysite);
 
+	ASSERT(get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE);
+
 	landing = get_local_entity_landing_entity (keysite, group_database [get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].default_landing_type);
 
 	ASSERT (landing);
@@ -1194,6 +1204,15 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 
 		set_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY, FALSE);
 
+		// check group list before landing
+		
+		if (get_local_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE) != LIST_TYPE_KEYSITE_GROUP)
+		{
+			set_client_server_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE, LIST_TYPE_KEYSITE_GROUP);
+			set_client_server_entity_parent (group, LIST_TYPE_INDEPENDENT_GROUP, NULL);
+			set_client_server_entity_parent (group, LIST_TYPE_KEYSITE_GROUP, keysite);
+		}
+			
 		/////////////////////////////////////////////////////////////////
 		//
 		// SPECIAL_EFFECT_HOOK FOR REQUESTING TO LAND
@@ -1234,7 +1253,11 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 			new_task = get_local_group_primary_task (group);
 	
 			new_keysite = (entity *) get_local_entity_ptr_value (new_task, PTR_TYPE_RETURN_KEYSITE);
-	
+			
+			ASSERT(new_keysite);
+			
+			ASSERT(get_local_entity_type (new_keysite) == ENTITY_TYPE_KEYSITE);
+
 			new_landing = get_local_entity_landing_entity (new_keysite, group_database [get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].default_landing_type);
 	
 			// unreserver landing site and reserver new ones
@@ -1431,6 +1454,8 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 	/////////////////////////////////////////////////////////////////
 
 	set_client_server_entity_int_value (receiver, INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (receiver, INT_TYPE_INITIAL_DAMAGE_LEVEL));
+
+	ASSERT (get_local_entity_int_value (receiver, INT_TYPE_DAMAGE_LEVEL) > 0);
 
 	/////////////////////////////////////////////////////////////////
 	//
@@ -2185,12 +2210,13 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 	entity
 		*task,
 		*group,
-		*troop_insertion_task,
 		*destination_keysite;
 
 	int
-		side,
 		keysite_type;
+
+	entity_sides
+			side;
 
 	float
 		d,
@@ -2207,34 +2233,34 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
+	
+	ASSERT(group);
+
+	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	task = get_local_entity_parent (sender, LIST_TYPE_WAYPOINT);
 
 	ASSERT (task);
-
-	troop_insertion_task = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
-
-	ASSERT (troop_insertion_task);
-
-	if (!troop_insertion_task)
+	
+	if (!task)
 	{
 		return FALSE;
 	}
 
-	ASSERT (get_local_entity_int_value (troop_insertion_task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_INSERTION);
+	ASSERT (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE);
 
-	destination_keysite = get_local_entity_parent (troop_insertion_task, LIST_TYPE_TASK_DEPENDENT);
-
+	destination_keysite = get_destination_keysite (group, side, task);
+		
 	ASSERT (destination_keysite);
 
 	if (!destination_keysite)
 	{
+		notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, receiver, TASK_TERMINATED_ABORTED);
+
 		return FALSE;
 	}
 
 	keysite_type = get_local_entity_int_value (destination_keysite, INT_TYPE_ENTITY_SUB_TYPE);
-
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	if (side != get_local_entity_int_value (destination_keysite, INT_TYPE_SIDE))
 	{
@@ -2262,9 +2288,9 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 	
 			r = frand1 ();
 	
-			debug_log ("MB_MSGS: Trying to capture %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
-			debug_log ("MB_MSGS: Efficiency %f - Minimum %f", efficiency, minimum);
-			debug_log ("MB_MSGS: Probability %f : %f", d, r);
+			debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "MB_MSGS: Trying to capture %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+			debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "MB_MSGS: Efficiency %f - Minimum %f", efficiency, minimum);
+			debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "MB_MSGS: Probability %f : %f", d, r);
 	
 			if (d < r) 
 			{
@@ -2283,7 +2309,7 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 
 	notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, receiver, TASK_TERMINATED_WAYPOINT_ROUTE_COMPLETE);
 
-	group_destroy_all_members (group);
+	attach_divison_to_keysite(side, destination_keysite, group);
 
 	return (TRUE);
 }
@@ -2292,11 +2318,14 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// last patrol waypoint, update task for this group
+
 static int response_to_waypoint_troop_defend_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
 		*task,
-		*group;
+		*group,
+		*keysite;
 
 	ASSERT (sender);
 
@@ -2309,6 +2338,17 @@ static int response_to_waypoint_troop_defend_reached (entity_messages message, e
 	task = get_local_entity_parent (sender, LIST_TYPE_WAYPOINT);
 
 	notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, receiver, TASK_TERMINATED_WAYPOINT_ROUTE_COMPLETE);
+	
+	if (get_local_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_KEYSITE_GROUP)
+	{
+		keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
+		ASSERT(keysite);
+		create_patrol_task(group, keysite, get_local_entity_int_value (group, INT_TYPE_SIDE));
+	}
+	else
+	{
+		debug_colour_log (DEBUG_COLOUR_RED, "MB_MSGS: infantry group lost their keysite, can't update patrol route");
+	}
 
 	return (TRUE);
 }
@@ -2326,10 +2366,16 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 		*group,
 		*keysite,
 		*new_task,
-		*insert_task;
+		*insert_task,
+		*home_keysite,
+		*member,
+		*infantry_group,
+		*division;
 
 	entity_sides
 		side;
+	
+	int troops;
 
 	ASSERT (sender);
 
@@ -2345,105 +2391,117 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
 
+	ASSERT(group);
+
+	member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+
 	insert_task = get_local_group_primary_task (group);
 
+	ASSERT(insert_task);
+
+	// set stop timer, just in case troops will be killed before putdown waypoint reached
+	
+	set_client_server_entity_float_value (insert_task, FLOAT_TYPE_STOP_TIMER, 20.0);
+			
 	keysite = get_local_entity_parent (insert_task, LIST_TYPE_TASK_DEPENDENT);
+	
+	ASSERT(keysite);
 
 	side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
-	//
-	// Open Leader's Doors
-	//
+	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_SPECIAL_FORCES_COMPANY, (entity_sides) side, get_local_force_entity (side), NULL, TRUE);
 	
-	open_client_server_entity_cargo_doors (receiver);
-  
-//  //ataribaby 31/12/2008 fix for player heli
-//  if (receiver != get_gunship_entity ()) // unfixed /thealx/
-	lower_client_server_entity_undercarriage (receiver);
+	if (get_local_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_KEYSITE_GROUP) // if possible, attach to helicopter's home
+		home_keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
+	else
+		home_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, &start_pos, 25.0 * KILOMETRE, NULL, TRUE, NULL);
 
-	//
-	// Create a troop group for leader only
-	//
-
-	// work out troop task positions
-
-	get_local_entity_vec3d (receiver, VEC3D_TYPE_POSITION, &start_pos);
-
-	start_pos.y -= get_local_entity_float_value (receiver, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
-
-	//
-	// create person
-	//
-
-	group = create_faction_members (keysite,
-												ENTITY_SUB_TYPE_GROUP_INFANTRY,
-												FORMATION_COMPONENT_INFANTRY,
-												8,
-												side,
-												&start_pos,
-												TRUE,
-												FALSE);
-
-	if (group)
+	if (!home_keysite)
 	{
-		add_group_to_division (group, NULL);
+		debug_colour_log (DEBUG_COLOUR_RED, "MB_MSGS: home keysite wasn't found for Special forces group");
+	}
 
-		new_task = create_troop_movement_capture_task (side, &start_pos, insert_task, keysite, receiver);
+	while (member)
+	{
+		open_client_server_entity_cargo_doors (member);
+		lower_client_server_entity_undercarriage (member);
 
-		// assign task
-	
-		if (new_task)
+		// work out troop task positions
+
+		get_local_entity_vec3d (member, VEC3D_TYPE_POSITION, &start_pos);
+		ASSERT(point_inside_map_area(&start_pos));
+		start_pos.y = get_3d_terrain_elevation(start_pos.x, start_pos.z) - 2.0; // hide untis under the ground
+
+		// create troops
+
+		troops = get_local_entity_int_value (member, INT_TYPE_TROOPS_ONBOARD);
+
+		if (troops > 0 && troops <= 12)
 		{
-			if (!assign_task_to_group (group, new_task, TASK_ASSIGN_ALL_MEMBERS))
+			infantry_group = create_faction_members (home_keysite,
+														ENTITY_SUB_TYPE_GROUP_INFANTRY,
+														FORMATION_COMPONENT_INFANTRY,
+														troops,
+														side,
+														&start_pos,
+														TRUE,
+														FALSE);
+
+			if (infantry_group)
 			{
-				#ifdef DEBUG
+				set_client_server_entity_int_value (member, INT_TYPE_TROOPS_ONBOARD, 0); // reset troops number in the helicopter
 
-				breakout (NULL);
+				add_group_to_division (infantry_group, division); // add troops groups from all helicopters into same division
 
-				assign_task_to_group (group, new_task, TASK_ASSIGN_ALL_MEMBERS);
+				new_task = create_troop_movement_capture_task (side, &start_pos, insert_task, keysite, member);
 
-				debug_fatal ("MB_MSGS: can't assign person to its task");
+				// assign task
 
-				#endif
-			}
-			else
-			{
-				entity
-					*mb;
-
-				float
-					sleep;
-
-				mb = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
-
-				sleep = 0.0;
-		
-				while (mb)
+				if (new_task)
 				{
-					sleep += 0.5 + frand1();
-					// delay members to stagger their decend out of the helicopter
-					set_client_server_entity_float_value (mb, FLOAT_TYPE_SLEEP, sleep);
+					if (!assign_task_to_group (infantry_group, new_task, TASK_ASSIGN_ALL_MEMBERS))
+					{
+						#ifdef DEBUG
 
-					// get them inside the helicopter
-					set_client_server_entity_vec3d (mb, VEC3D_TYPE_POSITION, &start_pos);
-		
-					if (mb == get_local_entity_first_child (group, LIST_TYPE_MEMBER))
-						sleep = sleep + 3; // there is some formation problems, let's wait until leader reach TROOP_PUTDOWN_POINT
-					mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
+						breakout (NULL);
+
+						assign_task_to_group (infantry_group, new_task, TASK_ASSIGN_ALL_MEMBERS);
+
+						debug_fatal ("MB_MSGS: can't assign person to its task");
+
+						#endif
+					}
+					else
+					{
+						entity
+							*mb;
+
+						float
+							sleep;
+
+						mb = get_local_entity_first_child (infantry_group, LIST_TYPE_MEMBER);
+
+						sleep = 0.0;
+
+						while (mb)
+						{
+							sleep += 0.5 + frand1();
+							// delay members to stagger their decend out of the helicopter
+							set_client_server_entity_float_value (mb, FLOAT_TYPE_SLEEP, sleep);
+
+							// get them inside the helicopter
+							set_client_server_entity_vec3d (mb, VEC3D_TYPE_POSITION, &start_pos);
+
+							if (mb == get_local_entity_first_child (infantry_group, LIST_TYPE_MEMBER))
+								sleep = sleep + 3.0; // there is some formation problems, let's wait until leader will reach TROOP_PUTDOWN_POINT
+							mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
+						}
+					}
 				}
 			}
 		}
 	
-		/////////////////////////////////////////////////////////////////
-		//
-		// SPECIAL_EFFECT_HOOK FOR TROOP INSERT REACHED
-		//
-		/////////////////////////////////////////////////////////////////
-	
-		/////////////////////////////////////////////////////////////////
-		//
-		//
-		/////////////////////////////////////////////////////////////////
+		member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 	}
 
 	return (TRUE);
@@ -2458,7 +2516,11 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 	entity
 		*group,
 		*task,
-		*insert_task;
+		*insert_task,
+		*destination_keysite;
+
+	entity_sides
+		side;
 
 	ASSERT (sender);
 
@@ -2472,40 +2534,64 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
 
+	side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+	
 	task = get_local_entity_parent (sender, LIST_TYPE_WAYPOINT);
 
+	ASSERT(task);
+	
 	insert_task = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
-	ASSERT (insert_task);
+	destination_keysite = get_destination_keysite (group, side, insert_task);
+	
+	ASSERT (destination_keysite);
 
-	notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, insert_task, group, TASK_TERMINATED_OBJECTIVE_MESSAGE);
+	if (!destination_keysite)
+	{
+		notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, receiver, TASK_TERMINATED_ABORTED);
 
-	//
-	// Close Flight Leader's Doors
-	//
+		return FALSE;
+	}
+
+	// Close helicopters Doors
+
+	if (insert_task)
 	{
 		entity
 			*guide,
-			*leader;
+			*member;
 
 		guide = get_local_entity_first_child (insert_task, LIST_TYPE_GUIDE);
 
 		if (guide)
 		{
-			leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			member = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
-			if (leader)
+			while (member)
 			{
-				close_client_server_entity_loading_doors (leader);
-				close_client_server_entity_cargo_doors (leader);
+				close_client_server_entity_cargo_doors (member);
         
-        //ataribaby 31/12/2008 fix for player heli
-        if (get_local_entity_int_value (leader, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
-				  raise_client_server_entity_undercarriage (leader);
+				//ataribaby 31/12/2008 fix for player heli
+				if (get_local_entity_int_value (member, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+						raise_client_server_entity_undercarriage (member);
+			
+				member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 			}
 		}
-	}
 
+		notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, insert_task, group, TASK_TERMINATED_OBJECTIVE_MESSAGE);
+	}
+	else
+	{
+		debug_colour_log (DEBUG_COLOUR_RED, "MB_MSGS: insertion task does not exist anymore");
+	}
+	
+	// set destination keysite as task objective for troops
+	
+	unlink_local_entity_children (task, LIST_TYPE_TASK_DEPENDENT);
+	delete_local_entity_from_parents_child_list (task, LIST_TYPE_TASK_DEPENDENT);
+	insert_local_entity_into_parents_child_list (task, LIST_TYPE_TASK_DEPENDENT, destination_keysite, NULL);
+	
 	return (TRUE);
 }
 
@@ -2636,6 +2722,154 @@ static int response_to_waypoint_troop_pickup_point_start_reached (entity_message
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int response_to_waypoint_prepare_for_insertion_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
+{
+	entity
+		*mb,
+		*group;
+
+	ASSERT (sender);
+
+	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_WAYPOINT);
+
+	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
+
+	#if DEBUG_MODULE >= 2
+
+	debug_log_entity_message (message, receiver, sender, pargs);
+
+	#endif
+
+	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
+	
+	ASSERT(group);
+
+	mb = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+
+	while (mb)
+	{
+		lower_client_server_entity_undercarriage (receiver);
+
+		#if DEBUG_MODULE
+
+		debug_log ("MB_MSGS: %s (%d) reached prepare_for_insertion", get_local_entity_string (mb, STRING_TYPE_FULL_NAME), get_local_entity_index (mb));
+
+		#endif
+	
+		mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
+	}
+
+	/////////////////////////////////////////////////////////////////
+	//
+	//
+	/////////////////////////////////////////////////////////////////
+
+	return (TRUE);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int attach_divison_to_keysite (int side, entity *destination_keysite, entity *group)
+{
+	entity *division;
+	int result = FALSE;
+	
+	ASSERT(get_local_entity_type (destination_keysite) == ENTITY_TYPE_KEYSITE);
+
+	if (side == get_local_entity_int_value (destination_keysite, INT_TYPE_SIDE))
+	{
+		debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "MB_MSGS: trying to link division with friendly keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+		
+		division = get_local_entity_parent (group, LIST_TYPE_DIVISION);
+
+		ASSERT(division);
+		
+		group = get_local_entity_first_child (division, LIST_TYPE_DIVISION);
+
+		while (group)
+		{
+			if (get_local_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_INDEPENDENT_GROUP)
+			{
+				set_client_server_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE, LIST_TYPE_KEYSITE_GROUP);
+				set_client_server_entity_parent (group, LIST_TYPE_INDEPENDENT_GROUP, NULL);
+			}
+			
+			if (get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP) != destination_keysite)
+			{
+				debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "MB_MSGS: trying to link group with friendly keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+				
+				set_client_server_entity_parent (group, LIST_TYPE_KEYSITE_GROUP, destination_keysite); // link troops with captured keysite
+			}
+
+			set_client_server_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL); // convert spec-ops to patrol. may be not safe!
+			create_patrol_task(group, destination_keysite, get_local_entity_int_value (group, INT_TYPE_SIDE)); // try to make patrol task
+					
+			result = TRUE;
+
+			group = get_local_entity_child_succ (group, LIST_TYPE_DIVISION);
+		}
+	}
+	else
+	{
+		debug_colour_log (DEBUG_COLOUR_RED, "MB_MSGS: can't link division with enemy keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));		
+	}
+	
+	return result;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+entity* get_destination_keysite (entity *group, entity_sides side, entity *task)
+{
+	vec3d *position;
+	entity *destination_keysite = NULL;
+
+	if (task)
+	{
+		destination_keysite = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+
+		if (destination_keysite)
+			if (get_local_entity_type (destination_keysite) != ENTITY_TYPE_KEYSITE)
+				destination_keysite = NULL;
+	}
+
+	// happens when helicopter was destroyed before insertion is finished and troops task wasn't linked with keysite. make it manually.
+	if (!destination_keysite)
+	{
+		position = get_local_entity_vec3d_ptr(get_local_entity_first_child (group, LIST_TYPE_MEMBER), VEC3D_TYPE_POSITION);
+
+		destination_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) side == ENTITY_SIDE_BLUE_FORCE ? ENTITY_SIDE_RED_FORCE : ENTITY_SIDE_BLUE_FORCE, position, 2500.0, NULL, FALSE, NULL);
+
+		if (!destination_keysite)
+		{
+			destination_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, side, position, 2500.0, NULL, FALSE, NULL);
+
+			if (destination_keysite)
+			{
+				debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "MB_MSGS: defend task was linked with closest friendly keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+			}
+		}
+		else
+		{
+			debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "MB_MSGS: capture task was linked with closest enemy keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+		}
+	}
+	else
+	{
+		debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "MB_MSGS: capture/defend already linked with target keysite %s", get_local_entity_string (destination_keysite, STRING_TYPE_KEYSITE_NAME));
+	}	
+	
+	return destination_keysite;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void overload_mobile_message_responses (entity_types type)
 {
 	#if DEBUG_MODULE >= 2
@@ -2699,6 +2933,8 @@ void overload_mobile_message_responses (entity_types type)
 	message_responses[type][ENTITY_MESSAGE_WAYPOINT_TROOP_PICKUP_POINT_START_REACHED]= response_to_waypoint_troop_pickup_point_start_reached;
 
 	message_responses[type][ENTITY_MESSAGE_WAYPOINT_TROOP_PUTDOWN_POINT_REACHED]		= response_to_waypoint_troop_putdown_point_reached;
+	
+	message_responses[type][ENTITY_MESSAGE_WAYPOINT_PREPARE_FOR_INSERTION_REACHED]		= response_to_waypoint_prepare_for_insertion_reached;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

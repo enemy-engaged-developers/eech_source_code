@@ -219,8 +219,8 @@ void helicopter_movement (entity *en)
 
 	height = helicopter_movement_altitude_follow (en, guide, &wp_pos);
 
-	// ramp vel from 0 to cruise_vel between 0m -> HELICOPTER_VELOCITY_RAMP_DISTANCE
-	range_scaler = min ((range / HELICOPTER_VELOCITY_RAMP_DISTANCE), 1.0f);
+	// ramp vel from 0.01 to cruise_vel between 0m -> HELICOPTER_VELOCITY_RAMP_DISTANCE
+	range_scaler = max(0.01, min ((range / HELICOPTER_VELOCITY_RAMP_DISTANCE), 1.0f));
 
 	wp_vec.x = wp_pos.x - hc_pos->x;
 	wp_vec.y = wp_pos.y - hc_pos->y;
@@ -1299,8 +1299,7 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 	entity
 		*guide,
 		*leader,
-		*wp,
-		*prev_wp;
+		*wp;
 
 	vec3d
 		*mv;
@@ -1317,23 +1316,19 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 	ASSERT (guide);
 
 	wp = get_local_entity_current_waypoint(en);
-	prev_wp = get_local_entity_prev_waypoint(en);
 
-	if(wp && prev_wp) // give proper heading angle for landing helicopter; TODO: make it work for group members!
-	{
-		if (get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED)
+	if (wp)
+		switch (get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE))
 		{
-			vec3d
-				wp_pos_current,
-				wp_pos_prev;
-
-			get_local_entity_vec3d (wp, VEC3D_TYPE_POSITION, &wp_pos_current);
-			get_local_entity_vec3d (prev_wp, VEC3D_TYPE_POSITION, &wp_pos_prev);
-
-			return atan2 (wp_pos_current.x - wp_pos_prev.x, wp_pos_current.z - wp_pos_prev.z);
+			case ENTITY_SUB_TYPE_WAYPOINT_LANDED: // save heading angle so helicopter will land properly
+				if (get_local_entity_float_value(en, FLOAT_TYPE_VELOCITY) < 10.0)
+					return current_heading;
+			case ENTITY_SUB_TYPE_WAYPOINT_PREPARE_FOR_INSERTION:
+			case ENTITY_SUB_TYPE_WAYPOINT_TROOP_INSERT: // do not change leader's heading value before troops insertion
+				if (en == get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER) && get_local_entity_float_value(en, FLOAT_TYPE_VELOCITY) < 5.0)
+					return current_heading;
 		}
-	}
-
+	
 	if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_RADIUS))
 	{
 		if (get_local_entity_float_value (en, FLOAT_TYPE_DISTANCE) < (get_guide_criteria_value (guide, GUIDE_CRITERIA_RADIUS)))
@@ -1390,15 +1385,7 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 
 	float
 		pitch,
-#if 0
-		range,
-#endif
-		targeting_pitch = 0;
-
-#if 0
-	vec3d
-		guide_pos;
-#endif
+		targeting_pitch = 0.0;
 
 	ASSERT (en);
 
@@ -1407,59 +1394,6 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
 	ASSERT (guide);
-
-#if 0
-	if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_WEAPON_VECTOR))
-	{
-		//
-		// check radius
-		//
-
-		if ((!get_guide_criteria_valid (guide, GUIDE_CRITERIA_RADIUS)) || (get_local_entity_float_value (en, FLOAT_TYPE_DISTANCE) < get_guide_criteria_value (guide, GUIDE_CRITERIA_RADIUS)))
-		{
-			//
-			// check velocity
-			//
-
-			if (get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY) < 5.0)
-			{
-				//
-				// check altitude
-				//
-
-				if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_ALTITUDE))
-				{
-					get_local_entity_vec3d (guide, VEC3D_TYPE_POSITION, &guide_pos);
-
-					range = get_local_entity_float_value (en, FLOAT_TYPE_ALTITUDE);
-
-					range -= get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
-
-					range -= guide_pos.y;
-
-					if (fabs (range) < get_guide_criteria_value (guide, GUIDE_CRITERIA_ALTITUDE))
-					{
-						if (get_guide_required_pitch (guide, en, &pitch))
-						{
-							if (return_flag) *return_flag = TRUE;
-
-							return pitch;
-						}
-					}
-				}
-				else
-				{
-					if (get_guide_required_pitch (guide, en, &pitch))
-					{
-						if (return_flag) *return_flag = TRUE;
-
-						return pitch;
-					}
-				}
-			}
-		}
-	}
-#endif
 	
 	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
 
@@ -1469,43 +1403,22 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 	{
 		vec3d
 			*weapon_vector,
-			*weapon_to_target_vector,
-			*en_pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
-		int
-			selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+			*weapon_to_intercept_point_vector;
 		float
 			dummie,
 			weapon_to_target_pitch,
 			weapon_pitch;
 		
 		weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
-		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+		weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
 		ASSERT (weapon_vector);
-		ASSERT (weapon_to_target_vector);
+		ASSERT (weapon_to_intercept_point_vector);
 
-		get_heading_and_pitch_from_3d_unit_vector(weapon_to_target_vector, &dummie, &weapon_to_target_pitch);
+		get_heading_and_pitch_from_3d_unit_vector(weapon_to_intercept_point_vector, &dummie, &weapon_to_target_pitch);
 		get_heading_and_pitch_from_3d_unit_vector(weapon_vector, &dummie, &weapon_pitch);
 
-		if (!weapon_database [selected_weapon].guidance_type && weapon_database [selected_weapon].aiming_type)
-		{
-			float
-				angle,
-				time;
-			vec3d
-				intercept_point;
-
-			if (get_lead_and_ballistic_intercept_point_and_angle_of_projection(en_pos, selected_weapon, weapon_database [selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY), 
-					en, target, &intercept_point, &angle, &time ))
-				weapon_to_target_pitch = angle;
-		}
-
 		targeting_pitch = weapon_to_target_pitch - weapon_pitch;
-		
-		if(targeting_pitch >= 0)
-			targeting_pitch -= rad(2.0);
-		else
-			targeting_pitch += rad(2.0);
 	}
 	
 	//
@@ -1542,12 +1455,12 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 	{
 		float aircraft_pitch = get_local_entity_float_value(en, FLOAT_TYPE_PITCH);
 
-		debug_log ("HC_MOVE movement pitch %f, targeting_pitch %f, desired pitch %f, AC pitch %f", deg(pitch), deg(targeting_pitch), deg(aircraft_pitch));
+		debug_log ("HC_MOVE: movement pitch %f, targeting_pitch %f, AC pitch %f", deg(pitch), deg(targeting_pitch), deg(aircraft_pitch));
 	}
 
 	#endif
 
-	return bound(targeting_pitch ? targeting_pitch : pitch, - HELICOPTER_MAX_PITCH, HELICOPTER_MAX_PITCH);
+	return bound(targeting_pitch ? get_local_entity_float_value(en, FLOAT_TYPE_PITCH) + targeting_pitch : pitch, - HELICOPTER_MAX_PITCH, HELICOPTER_MAX_PITCH);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1822,7 +1735,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 		// was here to make helicopters avoid buildings when doing troop insertion, but it messed up the carrier landing.
 		//terrain_elevation = get_3d_terrain_point_data (pos->x, pos->z, &raw->ac.terrain_info);
 		//required_height = max (wp_pos->y, terrain_elevation + helicopter_movement_structure_avoidance (en));
-		required_height = wp_pos->y + min(2.0f, raw->ac.mob.velocity);
+		required_height = wp_pos->y + bound(pow(raw->ac.mob.velocity, 4.0) - 0.1, 0.0, 2.0);
 	}
 
 	return required_height;

@@ -148,7 +148,7 @@ extern entity *create_troop_movement_capture_task (entity_sides side, vec3d *sta
 
 extern entity *create_troop_movement_defend_task (entity_sides side, vec3d *start_pos, vec3d *mid_pos, vec3d *end_pos, entity *insert_task, entity *keysite);
 
-extern entity *create_troop_movement_patrol_task (entity_sides side, entity *keysite);
+extern entity *create_troop_movement_patrol_task (entity_sides side, vec3d *start_pos, float radius, entity *keysite);
 
 extern entity *create_user_task (entity *en, entity_sub_types type, vec3d *start_pos, entity *start_keysite, entity *end_keysite);
 

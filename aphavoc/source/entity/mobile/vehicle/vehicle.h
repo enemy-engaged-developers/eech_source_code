@@ -102,7 +102,8 @@ struct VEHICLE
 		weapon_burst_timer,
 		weapon_system_ready_state,
 		decoy_release_timer,
-		death_timer;
+		death_timer,
+		weapon_to_intercept_point_range;
 
 	weapon_config_types
 		weapon_config_type;
@@ -137,7 +138,8 @@ struct VEHICLE
 
 	vec3d
 		weapon_vector,
-		weapon_to_target_vector;
+		weapon_to_target_vector,
+		weapon_to_intercept_point_vector;
 
 	terrain_3d_point_data
 		terrain_info;

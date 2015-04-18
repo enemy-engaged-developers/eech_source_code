@@ -103,7 +103,8 @@ struct AIRCRAFT
 		death_timer,
 		air_radar_contact_timeout,
 		rudder_state,
-		weapon_launch_delay;
+		weapon_launch_delay,
+		weapon_to_intercept_point_range;
 
 	weapon_config_types
 		weapon_config_type;
@@ -128,7 +129,8 @@ struct AIRCRAFT
 		cpg_identified							:NUM_CPG_IDENTIFIED_BITS,
 		group_member_number					:NUM_GROUP_MEMBER_NUMBER_BITS,
 		id_number_significant_digits		:NUM_ID_NUMBER_SIGNIFICANT_DIGIT_BITS,
-		ejected									:NUM_EJECTED_BITS;
+		ejected									:NUM_EJECTED_BITS,
+		troops_onboard						:NUM_TROOPS_ONBOARD_BITS;
 
 	unsigned int
 		weapon_salvo_timer;
@@ -139,7 +141,8 @@ struct AIRCRAFT
 
 	vec3d
 		weapon_vector,
-		weapon_to_target_vector;
+		weapon_to_target_vector,
+		weapon_to_intercept_point_vector;
 
 	terrain_3d_point_data
 		terrain_info;

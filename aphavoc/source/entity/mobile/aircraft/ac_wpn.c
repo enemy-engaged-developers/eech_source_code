@@ -173,7 +173,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags,
 		*target_pos,
 		en_pos,
 		*weapon_vector,
-		weapon_to_target_vector;
+		weapon_to_intercept_point_vector;
 	float
 		launch_angle_error,
 		range;
@@ -196,6 +196,16 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags,
 				debug_flag = TRUE;
 	#endif
 
+	if (raw->weapon_launch_delay)
+	{
+		if (debug_flag)
+		{
+			debug_log ("AC_WPN: weapon launch delay %.1f seconds", raw->weapon_launch_delay);
+		}
+
+		return AIRCRAFT_FIRE_SUPPRESSED;
+	}
+	
 	// find target
 
 	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
@@ -282,26 +292,9 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags,
 
 		ASSERT (weapon_vector);
 
-		get_local_entity_vec3d (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR, &weapon_to_target_vector);
+		get_local_entity_vec3d (en, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR, &weapon_to_intercept_point_vector);
 
-		if (!weapon_database [raw->selected_weapon].guidance_type && weapon_database [raw->selected_weapon].aiming_type)
-		{
-				float
-					angle,
-					time,
-					pitch = - asin((en_pos.y - target_pos->y) / range);
-				
-				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [raw->selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
-				{
-					weapon_to_target_vector.x = target_pos->x - en_pos.x;
-					weapon_to_target_vector.y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
-					weapon_to_target_vector.z = target_pos->z - en_pos.z;
-
-					normalise_3d_vector(&weapon_to_target_vector);
-				}
-		}
-
-		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, &weapon_to_target_vector));
+		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, &weapon_to_intercept_point_vector));
 
 		if (increase_accuracy && weapon_database[raw->selected_weapon].guidance_type) // make them not launch misiles into ground
 			launch_angle_modifier = 0.25;
@@ -408,7 +401,7 @@ void update_aircraft_weapon_fire (entity *en)
 		en_pos,
 		*target_pos,
 		*weapon_vector,
-		*weapon_to_target_vector;
+		*weapon_to_intercept_point_vector;
 	float
 		launch_angle_error;
 
@@ -428,27 +421,32 @@ void update_aircraft_weapon_fire (entity *en)
 				debug_flag = TRUE;
 	#endif
 
-	if (raw->weapon_burst_timer <= 0)
+	if (raw->weapon_launch_delay)
 	{
-		int old_value = (int)raw->weapon_launch_delay;
-		
 		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, max(0.0f, raw->weapon_launch_delay - get_delta_time ()));
-		if (old_value == (int)raw->weapon_launch_delay) // update once per second
-			return;
-		
-		if (raw->weapon_launch_delay <= 0)
+
+		if (raw->weapon_launch_delay > 0.0)
 		{
 			if (debug_flag)
 			{
-				debug_log ("AC_WPN: weapon launch delay expired");
-				
-				return;
+				debug_log ("AC_WPN: weapon launch delay %.1f seconds", raw->weapon_launch_delay);
 			}
+
+			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+			raw->weapon_salvo_timer = 0.0;
+
+			return;
+		}
+		else if (debug_flag)
+		{
+			debug_log ("AC_WPN: weapon launch delay expired");
+
 		}
 	}
-	else
+	
+	if (raw->weapon_burst_timer)
 	{
-		raw->weapon_burst_timer = max(0.0f, raw->weapon_burst_timer - get_delta_time ());
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_BURST_TIMER, max(0.0f, raw->weapon_burst_timer - get_delta_time ()));
 
 		if (raw->weapon_burst_timer > 0.0)
 		{
@@ -519,6 +517,18 @@ void update_aircraft_weapon_fire (entity *en)
 		return;
 	}
 
+	if (check_guided_missile_type_alive(en))
+	{
+		set_client_server_entity_float_value(en, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+		
+		if (debug_flag)
+		{
+			debug_log("AC_WPN: Not Firing - another missile is still alive");
+		}
+
+		return;
+	}
+
 	// Check range
 
 	{
@@ -564,28 +574,11 @@ void update_aircraft_weapon_fire (entity *en)
 
 		ASSERT (weapon_vector);
 
-		weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+		weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-		if (!weapon_database [raw->selected_weapon].guidance_type && weapon_database [raw->selected_weapon].aiming_type)
-		{
-				float
-					angle,
-					time,
-					pitch = - asin((en_pos.y - target_pos->y) / range);
-				
-				if (get_ballistic_pitch_deflection(raw->selected_weapon, range, pitch, &angle, &time, FALSE, TRUE, weapon_database [raw->selected_weapon].acquire_parent_forward_velocity * get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY)))
-				{
-					weapon_to_target_vector->x = target_pos->x - en_pos.x;
-					weapon_to_target_vector->y = target_pos->y - en_pos.y + cos(pitch) * range * sin(angle);
-					weapon_to_target_vector->z = target_pos->z - en_pos.z;
+		ASSERT (weapon_to_intercept_point_vector);
 
-					normalise_3d_vector(weapon_to_target_vector);
-				}
-		}
-
-		ASSERT (weapon_to_target_vector);
-
-		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+		launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector));
 
 		if (fabs (launch_angle_error) > weapon_database[raw->selected_weapon].max_launch_angle_error)
 		{

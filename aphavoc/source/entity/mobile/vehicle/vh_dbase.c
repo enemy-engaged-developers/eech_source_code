@@ -2436,6 +2436,626 @@ vehicle_data
 			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
 		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_US_MANPAD
+		//
+		////////////////////////////////////////
+		{
+			"MANPAD",     		                            	// full_name
+			"MANPAD", 	  	  											// long_display_name
+			"MANPAD",  	 	  											// short_display_name
+			"MANPAD", 													// easy_display_name
+
+			OBJECT_3D_US_MANPAD,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_US_MANPAD_1,		// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MANPAD_1,		// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MANPAD_1,		// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_FIM92A_STINGER,		 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
+			TARGET_PRIORITY_HIGH,		 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY_WITH_SAM,								// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			knots_to_metres_per_second (5.0),     	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			1000.0,															// recon_radius
+			15.0,																// target_scan_delay
+			5.0,																// air_scan_floor
+			3000.0,															// air_scan_ceiling
+			5000.0,															// air_scan_range
+			0.0,																// surface_scan_range
+			1.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			TRUE,																// offensive_capability
+			150,																// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_US_MACHINEGUNNER
+		//
+		////////////////////////////////////////
+		{
+			"Machinegunner",     		                            	// full_name
+			"MACHNGNR", 	  	  											// long_display_name
+			"MACHNGNR",  	 	  											// short_display_name
+			"MACHNGNR", 													// easy_display_name
+
+			OBJECT_3D_US_MACHINEGUNNER,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_US_MACHINEGUNNER_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MACHINEGUNNER_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MACHINEGUNNER_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M60E4_7P62MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
+			TARGET_PRIORITY_LOW,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_RS_MANPAD
+		//
+		////////////////////////////////////////
+		{
+			"MANPAD",     		                            	// full_name
+			"MANPAD", 	  	  											// long_display_name
+			"MANPAD",  	 	  											// short_display_name
+			"MANPAD", 													// easy_display_name
+
+			OBJECT_3D_RS_MANPAD,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_RS_MANPAD_1,		// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MANPAD_1,		// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MANPAD_1,		// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3,		 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,							// target_symbol_type
+			TARGET_PRIORITY_HIGH,		 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY_WITH_SAM,								// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			knots_to_metres_per_second (5.0),     	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			1000.0,															// recon_radius
+			15.0,																// target_scan_delay
+			5.0,																// air_scan_floor
+			3000.0,															// air_scan_ceiling
+			5000.0,															// air_scan_range
+			0.0,																// surface_scan_range
+			1.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_FLAMMABLE,								// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			TRUE,																// offensive_capability
+			150,																// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_RS_MACHINEGUNNER
+		//
+		////////////////////////////////////////
+		{
+			"Machinegunner",     		                            	// full_name
+			"MACHNGNR", 	  	  											// long_display_name
+			"MACHNGNR",  	 	  											// short_display_name
+			"MACHNGNR", 													// easy_display_name
+
+			OBJECT_3D_RS_MACHINEGUNNER,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_RS_MACHINEGUNNER_1,		// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MACHINEGUNNER_1,		// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MACHINEGUNNER_1,		// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_PKM_7P62MM_ROUND,		 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
+			TARGET_PRIORITY_LOW,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_US_LIGHT_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_US_LIGHT_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_US_LIGHT_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_LIGHT_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_LIGHT_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M60E4_7P62MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
+			TARGET_PRIORITY_LOW,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_US_MEDIUM_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_US_MEDIUM_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_US_MEDIUM_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MEDIUM_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_MEDIUM_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,										// target_symbol_type
+			TARGET_PRIORITY_MEDIUM,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_AIR_DEFENCE_UNITS,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_AAA,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_US_HEAVY_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_US_HEAVY_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_US_HEAVY_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_HEAVY_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_US_HEAVY_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_M61A1_20MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,										// target_symbol_type
+			TARGET_PRIORITY_HIGH,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_AIR_DEFENCE_UNITS,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_AAA,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_RS_LIGHT_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_RS_LIGHT_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_RS_LIGHT_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_LIGHT_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_LIGHT_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_PKM_7P62MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_UNKNOWN,										// target_symbol_type
+			TARGET_PRIORITY_LOW,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_INFANTRY,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_NONE,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_RS_MEDIUM_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_RS_MEDIUM_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_RS_MEDIUM_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MEDIUM_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_MEDIUM_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,										// target_symbol_type
+			TARGET_PRIORITY_MEDIUM,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_AIR_DEFENCE_UNITS,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_AAA,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_VEHICLE_RS_HEAVY_FIRING_POINT
+		//
+		////////////////////////////////////////
+		{
+			"Firing point",     		                            	// full_name
+			"FIRING POINT", 	  	  											// long_display_name
+			"FIRING POINT",  	 	  											// short_display_name
+			"FIRING POINT", 													// easy_display_name
+
+			OBJECT_3D_RS_HEAVY_FIRING_POINT,									// default_3d_shape
+			ENTITY_FORCE_GROUND,                            	// force
+			WEAPON_CONFIG_TYPE_RS_HEAVY_FIRING_POINT_1,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_HEAVY_FIRING_POINT_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_RS_HEAVY_FIRING_POINT_1,								// max_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_2A72_30MM_ROUND,			 			// default_weapon_type
+			TARGET_TYPE_GROUND,											// target_type
+			TARGET_SYMBOL_AIR_DEFENCE_UNIT,										// target_symbol_type
+			TARGET_PRIORITY_HIGH,			 								// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_ROUTED_VEHICLE,				// force_info_catagory
+			THREAT_TYPE_INVALID,											// threat_type
+			VIEW_CATEGORY_AIR_DEFENCE_UNITS,										// view_category
+			VIEW_TYPE_INFANTRY,											// view_type
+			MAP_ICON_AAA,													// map icon
+			FALSE,															// carries_smoke_grenades
+
+			2.5,																// chase_view_min_distance
+			10.0,	  		 													// chase_view_max_distance
+			0.5,																// chase_view_min_distance_test
+			100.0,	  														// chase_view_max_distance_test
+			0.8,   										  	         	// cruise_velocity
+			0.0,						 										// axle_length
+			0.0,																// max_acceleration
+			rad (0.0),														// max_turn_rate (rad / second)
+			1.0 * G, 														// g_max
+			0.0,																// power_output
+			500.0,															// recon_radius
+			0.0,																// target_scan_delay
+			0.0,																// air_scan_floor
+			0.0,																// air_scan_ceiling
+			0.0,																// air_scan_range
+			0.0,																// surface_scan_range
+			0.0,																// potential_surface_to_air_threat
+			0.0,																// potential_surface_to_surface_threat
+			10.0,																// Ammo_economy
+			10.0,																// Fuel_economy
+			0.0,																// armour_front
+			0.0,																// armour_side
+			0.0,																// armour_rear
+
+			20,																// initial_damage_level
+			WARHEAD_EFFECTIVE_LIGHT_VEHICLE,							// armor_level
+
+			EXPLOSIVE_QUALITY_NONE,										// explosive_quality
+			EXPLOSIVE_POWER_LOW,											// explosive_power
+			FALSE,															// offensive_capability
+			0,																	// points value
+
+			SOUND_SAMPLE_INDEX_NONE,									// idle_sound_effect
+			SOUND_SAMPLE_INDEX_NONE,									// moving_sound_effect
+		},
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

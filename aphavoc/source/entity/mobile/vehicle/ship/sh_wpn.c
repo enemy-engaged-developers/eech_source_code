@@ -89,7 +89,7 @@ void update_ship_vehicle_weapon_fire (entity *en)
 
 	vec3d
 		*weapon_vector,
-		*weapon_to_target_vector;
+		*weapon_to_intercept_point_vector;
 
 	ASSERT (en);
 
@@ -154,11 +154,11 @@ void update_ship_vehicle_weapon_fire (entity *en)
 
 	ASSERT (weapon_vector);
 
-	weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+	weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-	ASSERT (weapon_to_target_vector);
+	ASSERT (weapon_to_intercept_point_vector);
 
-	launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+	launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector));
 
 	if (fabs (launch_angle_error) > weapon_database[raw->vh.selected_weapon].max_launch_angle_error)
 	{

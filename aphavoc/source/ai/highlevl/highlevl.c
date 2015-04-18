@@ -72,6 +72,8 @@
 #include "../parser/parsgen.h"
 #include "../taskgen/taskgen.h"
 //#include "../faction/parser.h"
+#include "../ai_misc/ai_misc.h"
+#include "../faction/faction.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,11 +227,11 @@ void start_high_level_ai ()
 	
 			add_high_level_ai_function (create_keysite_strike_tasks, 10.0 * ONE_MINUTE, 15.0);
 	
-			add_high_level_ai_function (create_troop_patrol_tasks, 5.0 * ONE_MINUTE, 30.0);
+			add_high_level_ai_function (create_troop_patrol_tasks, 10.0 * ONE_MINUTE, 5.0);
 	
 			add_high_level_ai_function (create_fixed_wing_transfer_tasks, 15.0 * ONE_MINUTE, 34.0);
 	
-			add_high_level_ai_function (create_troop_insertion_tasks, 6.0 * ONE_MINUTE, 60.0);
+			add_high_level_ai_function (create_troop_insertion_tasks, 2.0 * ONE_MINUTE, 60.0);
 	
 			add_high_level_ai_function (create_bai_tasks, 10.0 * ONE_MINUTE, 90.0);
 
@@ -243,7 +245,7 @@ void start_high_level_ai ()
 		{
 			add_high_level_ai_function (create_cas_tasks, 15.0 * ONE_MINUTE, 0.0);
 	
-			add_high_level_ai_function (create_troop_patrol_tasks, 5.0 * ONE_MINUTE, 10.0);
+			add_high_level_ai_function (create_troop_patrol_tasks, 5.0 * ONE_MINUTE, 5.0);
 	
 			add_high_level_ai_function (create_advance_and_retreat_tasks, 12.0 * ONE_MINUTE, 12.0);
 	
@@ -251,7 +253,7 @@ void start_high_level_ai ()
 	
 			add_high_level_ai_function (create_artillery_strike_tasks, 15.0 * ONE_MINUTE, 45.0);
 	
-			add_high_level_ai_function (create_troop_insertion_tasks, 20.0 * ONE_MINUTE, 1.0 * ONE_MINUTE);
+			add_high_level_ai_function (create_troop_insertion_tasks, 2.0 * ONE_MINUTE, 1.0 * ONE_MINUTE);
 
 			add_high_level_ai_function (create_oca_sweep_tasks, 30.0 * ONE_MINUTE, 1.5 * ONE_MINUTE);
 	
@@ -1185,7 +1187,8 @@ void create_keysite_strike_tasks (void)
 								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_BDA, this_side)) &&
 								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, this_side)) &&
 								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE, this_side)) &&
-								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
 							)
 						{
 							if (keysite_database [keysite_type].ground_strike_target)
@@ -1223,7 +1226,8 @@ void create_keysite_strike_tasks (void)
 							if (
 									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, this_side)) &&
 									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE, this_side)) &&
-									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
 								)
 							{
 								if (keysite_database [keysite_type].ground_strike_target)
@@ -1431,7 +1435,8 @@ void create_oca_strike_tasks (void)
                   if (
                         (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_OCA_STRIKE, this_side)) &&
                         (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_BDA, this_side)) &&
-                        (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+                        (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+						(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
                      )
 						{
 							priority = (target_rating [loop] / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_OCA_STRIKE].task_priority;
@@ -1617,7 +1622,8 @@ void create_oca_sweep_tasks (void)
                   if (
                         (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_OCA_SWEEP, this_side)) &&
                         (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_BDA, this_side)) &&
-                        (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+                        (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+						(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
                      )
                   {
 							priority = (target_rating [loop] / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_OCA_SWEEP].task_priority;
@@ -1819,7 +1825,8 @@ void create_troop_insertion_tasks (void)
 						if (
 								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_RECON, this_side)) &&
 								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_BDA, this_side)) &&
-								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+								(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
 							)
 						{
 							priority = (target_rating [loop] / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority;
@@ -1846,7 +1853,8 @@ void create_troop_insertion_tasks (void)
 						if (get_local_entity_int_value (keysite, INT_TYPE_KEYSITE_USABLE_STATE) != KEYSITE_STATE_USABLE)
 						{
 							if (
-									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side))
+									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, this_side)) &&
+									(!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, this_side))
 								)
 							{
 								priority = (target_rating [loop] / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority;
@@ -1861,6 +1869,27 @@ void create_troop_insertion_tasks (void)
 												get_local_entity_safe_index (new_task),
 												get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
 												target_rating [loop], priority);
+
+									if (
+											get_local_entity_int_value (keysite, INT_TYPE_SIDE) != this_side &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
+											entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, get_local_entity_int_value (keysite, INT_TYPE_SIDE) < 2)
+										)
+									{
+										new_task = create_troop_insertion_task (get_local_entity_int_value (keysite, INT_TYPE_SIDE), keysite, NULL, TRUE, priority, NULL, NULL);
+
+										if (new_task)
+										{
+											ai_log ("(TASK) %s BACKUP TROOP INSERTION #%d (%d) - Target %s : Rating %f - CREATED (Priority %f)",
+														entity_side_short_names [get_local_entity_int_value (keysite, INT_TYPE_SIDE)],
+														get_local_entity_int_value (new_task, INT_TYPE_TASK_ID),
+														get_local_entity_safe_index (new_task),
+														get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
+														target_rating [loop], priority);
+										}
+									}
 								}
 							}
 						}
@@ -2656,16 +2685,61 @@ int create_sead_tasks_around_keysite (entity *original_task, entity *keysite, en
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void create_patrol_task(entity *group, entity *keysite, entity_sides side)
+{
+	entity
+		*task;
+		
+	vec3d
+		*start_pos;
+
+	ASSERT(group);
+	ASSERT(keysite);
+	
+	if (get_local_entity_int_value (group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE && get_local_entity_int_value (group, INT_TYPE_ALIVE))
+	{
+		ai_log("group went to patrol");
+
+		start_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
+		ASSERT(point_inside_map_area(start_pos));
+		task = create_troop_movement_patrol_task(side, start_pos, 300.0 + sfrand1() * 100.0, keysite);
+
+		if (task)
+		{
+			if (!assign_task_to_group (group, task, TASK_ASSIGN_ALL_MEMBERS))
+			{
+				ai_log("failed to assign task, destroy patrol task");
+				destroy_client_server_entity (task);
+			}
+			else
+			{
+				ai_log("completed patrol order");
+			}
+		}
+		else
+		{
+			ai_log("failed to create task");
+		}
+	}
+	else
+	{
+		ai_log("group not ready for task");
+	}
+}
+
 void create_troop_patrol_tasks (void)
 {
 	entity
-		*task,
 		*group,
 		*keysite,
 		*force;
 
 	entity_sides
 		side;
+	
+	ai_log ("==================");
+	ai_log ("===INFANTRY TASKER===");
+	ai_log ("--------------------------------");
 		
 	force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 
@@ -2677,47 +2751,66 @@ void create_troop_patrol_tasks (void)
 	
 		while (keysite)
 		{
-			#if DEBUG_MODULE
-
-			debug_log ("HIGHLEVL: Trying to create patrol task");
-
-			#endif
-			
-			if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_AIRBASE)
+			if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_FARP ||
+					get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_MILITARY_BASE ||
+					get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_AIRBASE)
 			{
-				if (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, side))
+				int 
+					groups_counter = 0,
+					groups_limit = 1;
+
+				ai_log ("trying to create patrol");
+
+				group = get_local_entity_first_child (keysite, LIST_TYPE_KEYSITE_GROUP);
+
+				while (group)
 				{
-					group = get_local_entity_first_child (keysite, LIST_TYPE_KEYSITE_GROUP);
-					
-					while (group)
+					if (get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL /*||
+							get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_GROUP_INFANTRY*/)
 					{
-						if (get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL)
+						groups_counter++;
+
+						if (get_local_entity_int_value (group, INT_TYPE_ALIVE) && get_local_entity_int_value (group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE &&
+								check_group_members_awake (group))
 						{
-							if (get_local_entity_int_value (group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
 							{
-								if (get_local_entity_int_value (group, INT_TYPE_ALIVE))
-								{
-									task = create_troop_movement_patrol_task (side, keysite);
+								ai_log("free patrol available, making task for it");
 
-									#if DEBUG_MODULE
-
-									debug_log ("HIGHLEVL: created patrol task");
-
-									#endif
-									
-									if (!assign_task_to_group (group, task, TASK_ASSIGN_ALL_MEMBERS))
-									{
-										destroy_client_server_entity (task);
-									}
-									else
-									{
-										break;
-									}
-								}
+								create_patrol_task(group, keysite, side);
 							}
 						}
-	
-						group = get_local_entity_child_succ (group, LIST_TYPE_KEYSITE_GROUP);
+					}
+
+					group = get_local_entity_child_succ (group, LIST_TYPE_KEYSITE_GROUP);
+				}
+
+				if (groups_counter < groups_limit)
+				{
+					vec3d *keysite_position = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
+					vec3d pos;
+					float angle = (float)(get_local_entity_index (keysite) % 6) * PI2 / 6.0;
+
+					ai_log("create patrol group");
+
+					pos.x = keysite_position->x + cos(angle) * (300.0 + frand1() * 50.0);
+					pos.z = keysite_position->z + sin(angle) * (300.0 + frand1() * 50.0);
+
+					ASSERT(point_inside_map_area(&pos));
+
+					pos.y = get_3d_terrain_elevation (pos.x, pos.z);
+					group = create_faction_members (keysite,
+											ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL,
+											FORMATION_COMPONENT_INFANTRY,
+											4,
+											side,
+											&pos,
+											TRUE,
+											FALSE);
+
+					if (group)
+					{
+						add_group_to_division (group, NULL);
+						create_patrol_task(group, keysite, side);
 					}
 				}
 			}
@@ -2727,6 +2820,8 @@ void create_troop_patrol_tasks (void)
 	
 		force = get_local_entity_child_succ (force, LIST_TYPE_FORCE);
 	}
+
+	ai_log ("--------------------------------");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2911,7 +3006,8 @@ void create_artillery_strike_tasks (void)
 								{
 									if (
 											(!entity_is_object_of_task (target, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, side)) &&
-											(!entity_is_object_of_task (target, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, side))
+											(!entity_is_object_of_task (target, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, side)) &&
+											(!entity_is_object_of_task (target, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, side))
 										)
 									{
 										target_list [target_count] = target;

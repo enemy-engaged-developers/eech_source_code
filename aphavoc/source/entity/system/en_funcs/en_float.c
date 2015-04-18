@@ -1360,6 +1360,14 @@ float_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"FLOAT_TYPE_WEAPON_TO_INTERCEPT_POINT_RANGE",			// name
+			FLOAT_PACK_TYPE_UNSIGNED_VALUE,							// pack_type
+			20,																// pack_num_whole_bits (excluding sign bit)
+			4,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
 			"FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_PERIOD",     // name
 			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
 			0,																	// pack_num_whole_bits (excluding sign bit)

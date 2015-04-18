@@ -104,7 +104,7 @@ void update_vehicle_weapon_fire (entity *en)
 		*pos,
 		*target_pos,
 		*weapon_vector,
-		*weapon_to_target_vector;
+		*weapon_to_intercept_point_vector;
 
 	ASSERT (en);
 
@@ -128,7 +128,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (raw->sleep > 0.0)
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - Sleeping (%.1f seconds left", raw->sleep);
 		}
@@ -144,7 +144,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (!target)
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - No Target");
 		}
@@ -160,7 +160,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SUPPRESS_AI_FIRE))
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - AI fire suppressed");
 		}
@@ -192,7 +192,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (!raw->selected_weapon_system_ready)
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - Weapon system not ready");
 		}
@@ -216,7 +216,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 		if ((range < weapon_database [raw->selected_weapon].min_range) || (range > weapon_database [raw->selected_weapon].max_range))
 		{
-			if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+			if (debug_flag)
 			{
 				debug_log ("VH_WPN: Not Firing - out of range");
 			}
@@ -254,7 +254,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 		if ((altitude < min_alt) || (altitude > max_alt))
 		{
-			if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+			if (debug_flag)
 			{
 				debug_log ("VH_WPN: Not Firing - altitude");
 			}
@@ -271,7 +271,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (!get_local_entity_int_value (en, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - outside launch angle (1)");
 		}
@@ -280,11 +280,6 @@ void update_vehicle_weapon_fire (entity *en)
 		raw->weapon_salvo_timer = 0.0;
 		raw->target_fire_timer = 0.01;		
 
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
-		{
-			debug_log ("VH_WPN: Not Firing - outside launch angle (1)");
-		}
-
 		return;
 	}
 
@@ -292,15 +287,15 @@ void update_vehicle_weapon_fire (entity *en)
 
 	ASSERT (weapon_vector);
 
-	weapon_to_target_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+	weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 
-	ASSERT (weapon_to_target_vector);
+	ASSERT (weapon_to_intercept_point_vector);
 
-	launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_target_vector));
+	launch_angle_error = acos (get_3d_unit_vector_dot_product (weapon_vector, weapon_to_intercept_point_vector));
 
 	if (fabs (launch_angle_error) > weapon_database[raw->selected_weapon].max_launch_angle_error)
 	{
-		if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+		if (debug_flag)
 		{
 			debug_log ("VH_WPN: Not Firing - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
 		}
@@ -320,7 +315,7 @@ void update_vehicle_weapon_fire (entity *en)
 		{
 			if (!check_entity_line_of_sight (en, target, (mobile_los_check_criteria) MOBILE_LOS_CHECK_ALL))
 			{
-				if (debug_flag && (raw->target_fire_timer > 0.02 || raw->weapon_burst_timer))
+				if (debug_flag)
 				{
 					debug_log ("VH_WPN: Not Firing - No Line Of Sight");
 				}

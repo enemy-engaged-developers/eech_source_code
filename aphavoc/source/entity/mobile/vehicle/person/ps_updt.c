@@ -98,7 +98,8 @@ static void update_server (entity *en)
 	if (damage_level &&  vehicle_critically_damaged(en) && frand1() < 2 * get_delta_time())
 	{
 		damage_level--;
-		set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+
+		set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, max(0, damage_level));
 
 		if (damage_level <= 0)
 			kill_client_server_entity (en);
@@ -136,6 +137,9 @@ static void update_server (entity *en)
 		update_vehicle_weapon_fire (en);
 
 		update_vehicle_decoy_release (en);
+
+		if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			update_infantry_weapons(en, get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON));
 
 		rearm_vehicle_weapons(en);
 		
@@ -208,6 +212,9 @@ static void update_client (entity *en)
 		update_entity_weapon_systems (en);
 
 		update_entity_weapon_system_weapon_and_target_vectors (en);
+
+		if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			update_infantry_weapons(en, get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON));
 
 		rearm_vehicle_weapons(en);
 		

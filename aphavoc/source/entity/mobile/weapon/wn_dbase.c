@@ -6557,6 +6557,16 @@ weapon_package
 		#include "configs/rs_inf_a.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY
 		#include "configs/rs_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_STANDING
 		#include "configs/rs_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_KNEELING
+		#include "configs/us_manpad.h"			// ENTITY_SUB_TYPE_VEHICLE_US_MANPAD
+		#include "configs/us_machinegunner.h"			// ENTITY_SUB_TYPE_VEHICLE_US_MACHINEGUNNER
+		#include "configs/rs_manpad.h"			// ENTITY_SUB_TYPE_VEHICLE_RS_MANPAD
+		#include "configs/rs_machinegunner.h"			// ENTITY_SUB_TYPE_VEHICLE_RS_MACHINEGUNNER
+		#include "configs/us_light_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_US_LIGHT_FIRING_POINT
+		#include "configs/us_medium_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_US_MEDIUM_FIRING_POINT
+		#include "configs/us_heavy_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_US_HEAVY_FIRING_POINT
+		#include "configs/rs_light_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_RS_LIGHT_FIRING_POINT
+		#include "configs/rs_medium_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_RS_MEDIUM_FIRING_POINT
+		#include "configs/rs_heavy_firing_point.h"			// ENTITY_SUB_TYPE_VEHICLE_RS_HEAVY_FIRING_POINT
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2080,6 +2080,60 @@ waypoint_data
 			POSITION_TYPE_ABSOLUTE,									// Position type
 			MOVEMENT_TYPE_AIR,										// Movement type
       },
+      {
+         "Prepare for Insertion",  			  							// Name
+			VERBOSE_OPERATIONAL_STATE_PERFORMING_TASK,		// En-route verbose_operational_state
+			FALSE,														// mobile follow waypoint offset
+			NUM_ENTITY_MESSAGES,										// waypoint action message
+			ENTITY_MESSAGE_WAYPOINT_PREPARE_FOR_INSERTION_REACHED,	// waypoint reached message
+			WAYPOINT_REACHED_TRUE,									// waypoint reached return value
+			FALSE,														// Planner moveable
+			TRUE,															// Objective Waypoint
+			FALSE,														// Player Skip Waypoint
+			FALSE,														// Check Waypoint Action
+			ENTITY_SUB_TYPE_GUIDE_NAVIGATION_ALTITUDE,		// guide sub type
+			MAP_ICON_WAYPOINT_TARGET,								// map icon type
+
+			// FIXED WING
+			0 * KILOMETRE, 											// Minimum previous waypoint distance
+         0,                                    				// Action Radius
+         0,                                    				// Reached Radius
+         0,                                    				// Velocity
+			FALSE,														// Criteria Last To Reach
+			FALSE,														// Criteria Transmit Recon
+			POSITION_TYPE_ABSOLUTE,									// Position type
+			MOVEMENT_TYPE_AIR,										// Movement type
+
+			// HELICOPTER
+			0 * KILOMETRE, 											// Minimum previous waypoint distance
+         5,	                                    			// Action Radius
+         5,	                                    			// Reached Radius
+         0.2,  									       			// Velocity
+			TRUE,															// Criteria Last To Reach
+			FALSE,														// Criteria Transmit Recon
+			POSITION_TYPE_ABSOLUTE,									// Position type
+			MOVEMENT_TYPE_AIR,										// Movement type
+
+			// GROUND
+			0 * KILOMETRE, 											// Minimum previous waypoint distance
+         0,                                    				// Action Radius
+         0,                                    				// Reached Radius
+         0,                                    				// Velocity
+			FALSE,														// Criteria Last To Reach
+			FALSE,														// Criteria Transmit Recon
+			POSITION_TYPE_ABSOLUTE,									// Position type
+			MOVEMENT_TYPE_AIR,										// Movement type
+
+			// SEA
+			0 * KILOMETRE, 											// Minimum previous waypoint distance
+         0, 	                                   			// Action Radius
+         0, 	                                   			// Reached Radius
+         0,    	                                			// Velocity
+			FALSE,														// Criteria Last To Reach
+			FALSE,														// Criteria Transmit Recon
+			POSITION_TYPE_ABSOLUTE,									// Position type
+			MOVEMENT_TYPE_AIR,										// Movement type
+      },
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

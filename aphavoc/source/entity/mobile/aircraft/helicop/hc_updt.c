@@ -210,11 +210,11 @@ static void update_server (entity *en)
 						{
 							int damage_level = max(0, get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) - 1);
 
+							set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
+							
 							if (damage_level <= 0)
 								kill_client_server_entity (en);
-							else
-								set_client_server_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL, damage_level);
-
+							
 							return;
 						}
 				}

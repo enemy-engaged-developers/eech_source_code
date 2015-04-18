@@ -301,6 +301,12 @@ int check_guide_reached_waypoint (entity *en)
 			{
 				if (!notify_local_entity (ENTITY_MESSAGE_CHECK_MOBILE_REACHED_GUIDE, member, en))
 				{
+#if DEBUG_MODULE
+					if (member == get_external_view_entity ())
+					{
+						debug_log("GUIDE: check member reached");
+					}
+#endif
 					return FALSE;
 				}
 			}
@@ -316,6 +322,12 @@ int check_guide_reached_waypoint (entity *en)
 
 		if (!notify_local_entity (ENTITY_MESSAGE_CHECK_MOBILE_REACHED_GUIDE, leader, en))
 		{
+#if DEBUG_MODULE
+			if (leader == get_external_view_entity ())
+			{
+				debug_log("GUIDE: check leader reached");
+			}
+#endif
 			return FALSE;
 		}
 	}
@@ -370,6 +382,12 @@ int check_guide_waypoint_action_reached (entity *en)
 	
 	if (range > get_local_entity_waypoint_database_action_radius_value (wp, leader))
 	{
+#if DEBUG_MODULE
+		if (leader == get_external_view_entity ())
+		{
+			debug_log("GUIDE: check task leader reached action radius");
+		}
+#endif
 		return FALSE;
 	}
 		
@@ -1192,6 +1210,13 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 			
 			return TRUE;
 		}
+		else if (get_local_entity_int_value (current_waypoint, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_PREPARE_FOR_INSERTION ||
+				get_local_entity_int_value (current_waypoint, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_TROOP_INSERT) // do not change heading value before troops insertion
+		{
+			*heading = 0.0;
+			
+			return TRUE;
+		}
 		else
 		{
 			//
@@ -1215,7 +1240,7 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 
 		vec3d
 			weapon_vector,
-			weapon_to_target_vector,
+			weapon_to_intercept_point_vector,
 			perpendicular;
 
 		float
@@ -1223,7 +1248,12 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 			
 		selected_weapon = get_local_entity_int_value (mobile, INT_TYPE_SELECTED_WEAPON);
 
-		ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
+		if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			debug_log ("GUIDE: no selectedweapon");
+			
+			return FALSE;
+		}
 
 		if (get_local_entity_int_value (mobile, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 		{
@@ -1235,11 +1265,11 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 	
 			weapon_vector.y = 0.0;
 	
-			get_local_entity_vec3d (mobile, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR, &weapon_to_target_vector);
+			get_local_entity_vec3d (mobile, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR, &weapon_to_intercept_point_vector);
 	
-			weapon_to_target_vector.y = 0.0;
+			weapon_to_intercept_point_vector.y = 0.0;
 	
-			launch_angle_error = fabs (acos (get_3d_vector_dot_product (&weapon_vector, &weapon_to_target_vector)));
+			launch_angle_error = fabs (acos (get_3d_vector_dot_product (&weapon_vector, &weapon_to_intercept_point_vector)));
 	
 			//
 			// find the sign of the angle by dot product with the perpendicular
@@ -1249,7 +1279,7 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 			perpendicular.y = 0.0;
 			perpendicular.z = -weapon_vector.x;
 	
-			if (get_3d_vector_dot_product (&perpendicular, &weapon_to_target_vector) < 0.0)
+			if (get_3d_vector_dot_product (&perpendicular, &weapon_to_intercept_point_vector) < 0.0)
 			{
 				launch_angle_error = -launch_angle_error;
 			}
@@ -1292,7 +1322,7 @@ int get_guide_required_pitch (entity *en, entity *mobile, float *pitch)
 
 		vec3d
 			*weapon_vector,
-			*weapon_to_target_vector;
+			*weapon_to_intercept_point_vector;
 
 		float
 			angle1,
@@ -1311,11 +1341,11 @@ int get_guide_required_pitch (entity *en, entity *mobile, float *pitch)
 	
 			weapon_vector = get_local_entity_vec3d_ptr (mobile, VEC3D_TYPE_WEAPON_VECTOR);
 	
-			weapon_to_target_vector = get_local_entity_vec3d_ptr (mobile, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
+			weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (mobile, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
 	
 			angle1 = asin (weapon_vector->y);
 	
-			angle2 = asin (weapon_to_target_vector->y);
+			angle2 = asin (weapon_to_intercept_point_vector->y);
 	
 			launch_angle_error = angle2 - angle1; 
 	

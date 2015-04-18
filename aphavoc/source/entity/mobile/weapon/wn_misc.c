@@ -179,6 +179,8 @@ float get_local_entity_weapon_load_weight (entity *en)
 			*task;
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+		
+		ASSERT(group);
 
 		if (group->group_data->sub_type == ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER || group->group_data->sub_type == ENTITY_SUB_TYPE_GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER)
 		{
@@ -198,6 +200,10 @@ float get_local_entity_weapon_load_weight (entity *en)
 			}
 		}
 	}
+	
+	// troops weight
+	
+	weapon_load_weight += 100.0 * (float) get_local_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD);
 
 	return (weapon_load_weight);
 }

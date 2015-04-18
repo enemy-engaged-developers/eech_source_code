@@ -686,7 +686,7 @@ void assess_group_supplies (entity *en)
 
 				if ((!keysite) || (get_local_entity_type (keysite) != ENTITY_TYPE_KEYSITE))
 				{
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, TRUE, NULL);
 				}
 
 				ASSERT (keysite);
@@ -728,7 +728,7 @@ void assess_group_supplies (entity *en)
 
 				if ((!keysite) || (get_local_entity_type (keysite) != ENTITY_TYPE_KEYSITE))
 				{
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, TRUE, NULL);
 				}
 
 				ASSERT (keysite);
