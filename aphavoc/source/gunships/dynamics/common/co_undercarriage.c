@@ -358,11 +358,10 @@ static void update_suspension(void)
 
 			if (terrain_class != TERRAIN_CLASS_LAND)
 			{
-				keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &raw->ac.mob.position, 0.2 * KILOMETRE, NULL, FALSE, NULL);
+				keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE, get_global_gunship_side (), &raw->ac.mob.position, 0.2 * KILOMETRE, NULL, FALSE, NULL);
 
 				if (keysite)
-					if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE && helicopter_within_keysite_area (get_gunship_entity ()))
-						keysite_area = TRUE;
+					keysite_area = helicopter_within_keysite_area(get_gunship_entity());
 
 				if (keysite_area && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0))
 					spring_compression += (get_local_entity_int_value (keysite, INT_TYPE_SIDE) == ENTITY_SIDE_BLUE_FORCE) ? 19.95 : 16.65;	// update it of you will change carrier model! TODO: eliminate gunship side divide /thealx/

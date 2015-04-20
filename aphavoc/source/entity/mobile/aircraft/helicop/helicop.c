@@ -2169,7 +2169,7 @@ int helicopter_within_keysite_area (entity *en)
 
 	hc_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
-	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE), hc_position, 5 * KILOMETRE, &actual_range, FALSE, NULL);
+	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE), hc_position, 0.0, &actual_range, TRUE, NULL);
 
 	if (keysite)
 	{
