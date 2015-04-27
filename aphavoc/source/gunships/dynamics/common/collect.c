@@ -219,45 +219,8 @@ void update_collective_pressure_inputs (void)
 				joyval = get_joystick_axis (command_line_collective_joystick_index, command_line_collective_joystick_axis);
 			}
 
-
-			if (non_linear_collective)
-			{
-				input = 0.5 + ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
-
-				if (input < command_line_collective_zone_1_limit)
-				{
-					// start variable percentage at zone1 by GCsDriver 08-12-2007
-					input *= command_line_collective_percentage_at_zone1 * zone_1_scale;
-					input -= command_line_collective_percentage_at_zone1;  // 0% -> -60
-					// original
-					//input *= 60.0 * zone_1_scale;
-					//input -= 60.0;  // 0% -> -60
-				}
-				else if (input < command_line_collective_zone_2_limit)
-				{
-					// find amount over limit
-					input -= command_line_collective_zone_1_limit;
-					input *= (100.0-command_line_collective_percentage_at_zone1) * zone_2_scale;
-					// original
-					//input -= command_line_collective_zone_1_limit;
-					//input *= 40.0 * zone_2_scale;
-				}
-				else
-				{
-					// find amount over limit
-					input -= command_line_collective_zone_2_limit;
-					input *= 20.0 * zone_3_scale;
-					input += (100.0-command_line_collective_percentage_at_zone1);   // 100% -> +40
-					// original
-					//input -= command_line_collective_zone_2_limit;
-					//input *= 20.0 * zone_3_scale;
-					//input += 40.0;   // 100% -> +40
-					// end variable percentage at zone1 by GCsDriver 08-12-2007
-				}
-			}
-			else
-				input = (float) (120.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
-
+			input = get_collective_value(joyval);
+			
 			if ((current_flight_dynamics->auto_hover != HOVER_HOLD_STABLE) && (current_flight_dynamics->auto_hover != HOVER_HOLD_ALTITUDE_LOCK))
 			{
 		
@@ -301,6 +264,55 @@ void update_collective_pressure_inputs (void)
 		
 	current_flight_dynamics->input_data.collective.delta -= current_flight_dynamics->input_data.collective.value;
 	current_flight_dynamics->input_data.collective.delta *= -1.0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_collective_value (float joyval)
+{
+	float input;
+	
+	if (non_linear_collective)
+	{
+		input = 0.5 + ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+
+		if (input < command_line_collective_zone_1_limit)
+		{
+			// start variable percentage at zone1 by GCsDriver 08-12-2007
+			input *= command_line_collective_percentage_at_zone1 * zone_1_scale;
+			input -= command_line_collective_percentage_at_zone1;  // 0% -> -60
+			// original
+			//input *= 60.0 * zone_1_scale;
+			//input -= 60.0;  // 0% -> -60
+		}
+		else if (input < command_line_collective_zone_2_limit)
+		{
+			// find amount over limit
+			input -= command_line_collective_zone_1_limit;
+			input *= (100.0-command_line_collective_percentage_at_zone1) * zone_2_scale;
+			// original
+			//input -= command_line_collective_zone_1_limit;
+			//input *= 40.0 * zone_2_scale;
+		}
+		else
+		{
+			// find amount over limit
+			input -= command_line_collective_zone_2_limit;
+			input *= 20.0 * zone_3_scale;
+			input += (100.0-command_line_collective_percentage_at_zone1);   // 100% -> +40
+			// original
+			//input -= command_line_collective_zone_2_limit;
+			//input *= 20.0 * zone_3_scale;
+			//input += 40.0;   // 100% -> +40
+			// end variable percentage at zone1 by GCsDriver 08-12-2007
+		}
+	}
+	else
+		input = (float) (120.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+	
+	return input;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -480,20 +480,7 @@ void update_cyclic_pressure_inputs (void)
 				if (command_line_reverse_cyclic_x == 1)
 					joyval *= -1;
 
-				if (command_line_nonlinear_cyclic)
-				{
-					// in non-linear mode it uses a curve described by f(x) = x*x + x
-					// gives a not so sensitive control around centre
-					input = (2.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
-					if (input >= 0)
-					    input *= input;
-					else
-					    input *= -input;
-					input += input;
-					input *= 50;
-				}
-				else
-					input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+				input = get_cyclic_value(joyval);
 				
 				if (command_line_nonlinear_cyclic == 1 && command_line_forcefeedback && feedback_device)
 				{
@@ -509,12 +496,6 @@ void update_cyclic_pressure_inputs (void)
 				else if (command_line_forcefeedback && feedback_device)
 					trim = - current_flight_dynamics->input_data.cyclic_x_trim.value;
 					
-				if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
-				{
-
-					input = 0.0;
-				}
-
 				current_flight_dynamics->input_data.cyclic_x.value = input;
         
         //ataribaby 1/1/2009 allow trim with ALT HOLD
@@ -757,3 +738,31 @@ void initialise_cyclic(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_cyclic_value (float joyval)
+{
+	float input;
+	
+	if (command_line_nonlinear_cyclic)
+	{
+		// in non-linear mode it uses a curve described by f(x) = x*x + x
+		// gives a not so sensitive control around centre
+		input = (2.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+		if (input >= 0)
+			input *= input;
+		else
+			input *= -input;
+		input += input;
+		input *= 50;
+	}
+	else
+		input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+
+	if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
+	{
+
+		input = 0.0;
+	}
+	
+	return input;
+}

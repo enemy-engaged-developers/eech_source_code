@@ -132,7 +132,7 @@
 
 // gaps between buttons
 
-#define OPTION_BOX_GAP_HEIGHT 				0.004f
+#define OPTION_BOX_GAP_HEIGHT 				0.0012f
 
 #define OPTION_BOX_GAP_WIDTH 					0.0026f
 
@@ -255,6 +255,7 @@ extern texture_graphic
 	*options_box_medium,
 	*options_box_large,
 	*options_box_extra_large,
+	*options_axis_bar,
 	*text_box_graphic,
 	*text_option_bdrop,
 	*list_box_graphic;

@@ -177,6 +177,10 @@ static BOOL axis_has_deadzone ( const int deviceIndex, const int deviceAxis )
 	{
 		retval = FALSE;
 	}
+	else if ((deviceIndex == command_line_throttle_joystick_index) && (deviceAxis == command_line_throttle_joystick_axis))
+	{
+		retval = FALSE;
+	}
 	else if ((deviceIndex == command_line_field_of_view_joystick_index) && (deviceAxis == command_line_field_of_view_joystick_axis))
 	{
 		retval = FALSE;
@@ -344,7 +348,7 @@ void deinitialise_joysticks (void)
 	//
 	
 	
-	if (device_capabilities.dwFlags & DIDC_FORCEFEEDBACK && command_line_forcefeedback)
+	if (device_capabilities.dwFlags & DIDC_FORCEFEEDBACK)
 	{
 
 		debug_log ("Got a force feedback joystick");

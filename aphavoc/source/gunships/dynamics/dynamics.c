@@ -170,6 +170,7 @@ static int valid_dynamics_autos_on (dynamics_hover_hold_types type);
 static void flight_dynamics_start_engine (int engine_number);
 static void flight_dynamics_throttle_engine (int engine_number, int rpm_delta);
 static void flight_dynamics_start_apu (void);
+static void update_throttle_dynamics_inputs ();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1148,6 +1149,8 @@ void update_flight_dynamics (void)
 		update_collective_pressure_inputs ();
 
 		update_pedal_pressure_inputs ();
+
+		update_throttle_dynamics_inputs ();
 
 		if (session_vector_flight_model) // Jabberwock - session settings
 		{
@@ -3406,6 +3409,41 @@ void flight_dynamics_decrease_governor_rpm(event* ev)
 		current_flight_dynamics->main_rotor_governor_rpm = max(70.0, current_flight_dynamics->main_rotor_governor_rpm - 10.0);
 	else
 		current_flight_dynamics->main_rotor_governor_rpm -= 2.5;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_throttle_dynamics_inputs ()
+{
+	int joyval;
+	float input;
+	
+	if (command_line_throttle_joystick_index != -1)
+		joyval = get_joystick_axis (command_line_throttle_joystick_index, command_line_throttle_joystick_axis);
+	else
+		return;
+
+	if (command_line_reverse_throttle)
+		joyval *= -1;
+	
+	input = 0.5 + (float) joyval / (float) (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+	{
+		current_flight_dynamics->main_rotor_governor_rpm = bound(70.0 + 27.5 * input, 70.0, 97.5);
+	}
+	else
+	{
+		if (current_flight_dynamics->left_engine_n1_rpm.value >= (current_flight_dynamics->engine_idle_rpm - 5.0) && 
+				current_flight_dynamics->left_engine_n1_rpm.max >= current_flight_dynamics->engine_idle_rpm)
+			current_flight_dynamics->left_engine_n1_rpm.max = bound(current_flight_dynamics->engine_idle_rpm + input * (110.0 - current_flight_dynamics->engine_idle_rpm), current_flight_dynamics->engine_idle_rpm, 110.0);
+
+		if (get_global_gunship_type() != GUNSHIP_TYPE_KIOWA && current_flight_dynamics->right_engine_n1_rpm.value >= (current_flight_dynamics->engine_idle_rpm - 5.0) && 
+				current_flight_dynamics->right_engine_n1_rpm.max >= current_flight_dynamics->engine_idle_rpm)
+			current_flight_dynamics->right_engine_n1_rpm.max = bound(current_flight_dynamics->engine_idle_rpm + input * (110.0 - current_flight_dynamics->engine_idle_rpm), current_flight_dynamics->engine_idle_rpm, 110.0);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

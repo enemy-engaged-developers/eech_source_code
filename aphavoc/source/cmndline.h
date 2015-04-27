@@ -170,6 +170,9 @@ extern int
 	command_line_nonlinear_cyclic,							// arneh 2007-01-14
 	command_line_collective_joystick_index,					// loke 030418
 	command_line_collective_joystick_axis,					// loke 030418
+	command_line_throttle_joystick_index,
+	command_line_throttle_joystick_axis,
+	command_line_reverse_throttle,
 	command_line_rudder_joystick_index,						// loke 030418
 	command_line_rudder_joystick_axis,						// loke 030418
 	command_line_nonlinear_pedals,							// arneh 2007-01-14

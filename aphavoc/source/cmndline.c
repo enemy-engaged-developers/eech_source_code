@@ -194,6 +194,9 @@ int
 	command_line_nonlinear_cyclic							= TRUE,		// arneh 2007-01-14
 	command_line_collective_joystick_index					= -1,		// loke 030418
 	command_line_collective_joystick_axis					= 3,		// loke 030418
+	command_line_throttle_joystick_index					= -1,
+	command_line_throttle_joystick_axis					= 3,
+	command_line_reverse_throttle					= 0,
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
 	command_line_nonlinear_pedals							= TRUE,		// arneh 2007-01-14

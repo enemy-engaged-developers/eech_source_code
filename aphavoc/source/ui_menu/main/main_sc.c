@@ -84,6 +84,7 @@ texture_graphic
 	*options_box_medium = NULL,
 	*options_box_large = NULL,
 	*options_box_extra_large = NULL,
+	*options_axis_bar = NULL,
 	*text_box_graphic = NULL,
 	*text_option_bdrop = NULL,
 	*list_box_graphic = NULL;
@@ -155,6 +156,8 @@ void initialise_main_screen (void)
 	options_box_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxlarge.psd", 1 );
 
 	options_box_extra_large = create_texture_graphic ( "graphics\\ui\\cohokum\\boxexlrg.psd", 1 );
+
+	options_axis_bar = create_texture_graphic ( "graphics\\ui\\cohokum\\Map\\RedBar.psd", 1 );
 
 	text_box_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\Boxtext.psd", 1 );
 
@@ -598,6 +601,13 @@ void deinitialise_main_screen (void)
 		options_box_extra_large = NULL;
 	}
 
+	if (options_axis_bar)
+	{
+		destroy_texture_graphic (options_axis_bar);
+
+		options_axis_bar = NULL;
+	}
+	
 	if (text_box_graphic)
 	{
 		destroy_texture_graphic (text_box_graphic);

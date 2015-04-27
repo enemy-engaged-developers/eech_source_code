@@ -276,23 +276,8 @@ void update_pedal_pressure_inputs (void)
 				}
 				// Retro 17Jul2004 end
 
-				if (command_line_nonlinear_pedals)
-				{
-					// in non-linear mode it uses a curve described by f(x) = x*x + x
-					// gives a not so sensitive control around centre
-					float input = 2.0 * ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
-					if (input >= 0)
-						input *= input;
-					else
-						input *= -input;
-					input += input;
-					input *= 50.0;
-
-					current_flight_dynamics->input_data.pedal.delta = input;
-				}
-				else
-					current_flight_dynamics->input_data.pedal.delta = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
-
+				current_flight_dynamics->input_data.pedal.delta = get_pedal_value(joyval);
+				
 				if (current_flight_dynamics->input_data.pedal.delta < -0.5)
 				{
 
@@ -339,3 +324,25 @@ void update_pedal_pressure_inputs (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_pedal_value (float joyval)
+{
+	float input;
+	
+	if (command_line_nonlinear_pedals)
+	{
+		// in non-linear mode it uses a curve described by f(x) = x*x + x
+		// gives a not so sensitive control around centre
+		input = 2.0 * ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+		if (input >= 0)
+			input *= input;
+		else
+			input *= -input;
+		input += input;
+		input *= 50.0;
+	}
+	else
+		input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+	
+	return input;
+}
