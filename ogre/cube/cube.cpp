@@ -151,36 +151,55 @@ struct EE
 #endif
 };
 
-// Declare a subclass of the ExampleFrameListener class
-class MyListener : public ExampleFrameListener
+class TutorialApplication : public BaseApplication
 {
 public:
-    MyListener(RenderWindow* win, Camera* cam, SceneManager* sman
-#ifdef USE_OBJECTS_ONLY
-	, const Scenes& scenes
+	TutorialApplication(void)
+		: time(0.0f)
+	{
+	}
+	virtual ~TutorialApplication(void)
+	{
+#ifdef USE_TERRAIN
+		ogre_terrain_clear();
+		unload_3d_terrain();
 #endif
-	)
-		: ExampleFrameListener(win, cam), mSceneMgr(sman),
+
 #ifdef USE_OBJECTS_ONLY
-		scenes(scenes),
+		ogre_scenes_clear();
 #endif
-			time(0.0f)
-    {
+#ifdef USE_TERRAIN
+		deinitialise_file_system();
+#endif
+	}
+
+protected:
+	virtual void createFrameListener(void)
+	{
+		BaseApplication::createFrameListener();
+
+		ee.reset(new EE);
 #ifdef USE_OBJECTS_ONLY
-		mMoveSpeed /= 10.0f;
+		scenes = ee->scenes.get();
+#endif
+
+		float speed = mCameraMan->getTopSpeed();
+#ifdef USE_OBJECTS_ONLY
+		speed /= 10.0f;
 #else
-		mMoveSpeed *= 10.0f;
+		speed *= 10.0f;
 #endif
+		mCameraMan->setTopSpeed(speed);
 
 #ifdef USE_OBJECTS_ONLY
 		// Create a pair of objects, 10 meters between their centers
 
 		objects[0] = objects[1] = 0x0001;
 
-		nodes[0] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3(-5.0f, 0, 0));
-		nodes[1] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3(5.0f, 0, 0));
+		nodes[0] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(-5.0f, 0, 0));
+		nodes[1] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(5.0f, 0, 0));
 
-		ogre_scenes_init(scenes.GetNumberOfScenes(), &scenes.GetScene(0), mSceneMgr);
+		ogre_scenes_init(scenes->GetNumberOfScenes(), &scenes->GetScene(0), mSceneMgr);
 
 		set_scene(0, 0);
 		set_scene(1, 0);
@@ -192,24 +211,51 @@ public:
 		terrain = 1;
 		set_terrain(0);
 #endif
-
-		mCamera->getViewport()->setBackgroundColour(ColourValue(0.3f, 0.3f, 0.3f));
-		//mCamera->getViewport()->setBackgroundColour(ColourValue(1.0f, 1.0f, 1.0f));
-    }
-
-	~MyListener()
-	{
 #ifdef USE_TERRAIN
-		ogre_terrain_clear();
-		unload_3d_terrain();
+		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
+#else
+		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
+		//mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
 #endif
 #ifdef USE_OBJECTS_ONLY
-		ogre_scenes_clear();
+		obj_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Objects", "", 100);
+#endif
+#ifdef USE_TERRAIN
+		terr_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Map", "", 100);
 #endif
 	}
+	virtual void createScene(void)
+	{
+#ifdef USE_OBJECTS_ONLY
+		Ogre::Light* light = mSceneMgr->createLight("light");
+		light->setType(Ogre::Light::LT_POINT);
+		light->setDiffuseColour(Ogre::ColourValue::White);
+		light->setSpecularColour(Ogre::ColourValue::White);
+		light->setPosition(Ogre::Vector3(0,4,0));
+		light->setAttenuation(10.0f, 0.5f, 0.2f, 0.0f);
 
-    bool frameStarted(const FrameEvent& evt)
-    {
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+#else
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+#endif
+	}
+	virtual void createCamera(void)
+	{
+		BaseApplication::createCamera();
+#ifdef USE_TERRAIN
+		mCamera->setPosition(Ogre::Vector3(0, 2000, 0));
+		mCamera->setDirection(Ogre::Vector3(1, 0, 1));
+#else
+		mCamera->setPosition(Ogre::Vector3(0, 0, 30));
+#endif
+		mCamera->setNearClipDistance(0.5f);
+		mCamera->setFarClipDistance(20000.0f);
+	}
+	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt)
+	{
+		if (!BaseApplication::frameRenderingQueued(evt))
+			return false;
+
 		time += evt.timeSinceLastFrame;
 		if (time > 10000.0f)
 			time = 0.0f;
@@ -232,7 +278,7 @@ public:
 				pos = pos >= last1 ? pos >= last3 ? 0.0f : (last3 - pos) : pos >= last ? last : pos;
 				assert(pos >= 0.0f && pos <= last);
 
-				SceneNode* node = gos[index].nodes[i];
+				Ogre::SceneNode* node = gos[index].nodes[i];
 				node->resetToInitialState();
 				el.track->applyToNode(node, pos);
 			}
@@ -242,64 +288,54 @@ public:
 		// Mark terrain sectors as visible and invisible
 		ogre_terrain_update();
 #endif
-        return ExampleFrameListener::frameStarted(evt);
-    }
 
-    bool frameEnded(const FrameEvent& evt)
-    {
-		if (!ExampleFrameListener::frameEnded(evt))
-		{
-			return false;
-		}
 #ifdef USE_OBJECTS_ONLY
 		// Display objects numbers
 		{
-			OverlayElement* guiBatches = OverlayManager::getSingleton().getOverlayElement("Core/NumBatches");
 			char buf[128];
 			sprintf(buf, " Scns:%04X %04X", objects[0], objects[1]);
-			guiBatches->setCaption(guiBatches->getCaption() + buf);
+			obj_label->setCaption(buf);
 		}
 #endif
 #ifdef USE_TERRAIN
 		// Display map number
 		{
-			OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
 			char buf[128];
 			sprintf(buf, " MAP:%i", terrain);
-			guiBest->setCaption(guiBest->getCaption() + buf);
+			terr_label->setCaption(buf);
 		}
 #endif
-        return true;
-    }
-
-	virtual bool processUnbufferedKeyInput(const FrameEvent& evt)
+		return true;
+	}
+	virtual bool keyPressed(const OIS::KeyEvent &evt)
 	{
-		if (mTimeUntilNextToggle <= 0)
+		BaseApplication::keyPressed(evt);
+
 		{
 			int sign = mKeyboard->isKeyDown(OIS::KC_LSHIFT) || mKeyboard->isKeyDown(OIS::KC_RSHIFT) ? -1 : 1;
 #ifdef USE_OBJECTS_ONLY
 			// Change the objects displayed
-			if (mKeyboard->isKeyDown(OIS::KC_PERIOD))
+			if (evt.key == OIS::KC_PERIOD)
 				set_scene(0, 0x0001 * sign);
-			if (mKeyboard->isKeyDown(OIS::KC_SLASH))
+			if (evt.key == OIS::KC_SLASH)
 				set_scene(1, 0x0001 * sign);
-			if (mKeyboard->isKeyDown(OIS::KC_SEMICOLON))
+			if (evt.key == OIS::KC_SEMICOLON)
 				set_scene(0, 0x0010 * sign);
-			if (mKeyboard->isKeyDown(OIS::KC_APOSTROPHE))
+			if (evt.key == OIS::KC_APOSTROPHE)
 				set_scene(1, 0x0010 * sign);
-			if (mKeyboard->isKeyDown(OIS::KC_LBRACKET))
+			if (evt.key == OIS::KC_LBRACKET)
 				set_scene(0, 0x0100 * sign);
-			if (mKeyboard->isKeyDown(OIS::KC_RBRACKET))
+			if (evt.key == OIS::KC_RBRACKET)
 				set_scene(1, 0x0100 * sign);
 #endif
 #ifdef USE_TERRAIN
 			// Change the map displayed
-			if (mKeyboard->isKeyDown(OIS::KC_M))
+			if (evt.key == OIS::KC_M)
 				set_terrain(sign);
 #endif
 		}
 
-		return ExampleFrameListener::processUnbufferedKeyInput(evt);
+		return true;
 	}
 
 #ifdef USE_OBJECTS_ONLY
@@ -308,14 +344,13 @@ public:
 	{
 		objects[index] += change;
 		if (objects[index] < 1)
-			objects[index] += scenes.GetNumberOfScenes();
-		if (objects[index] > scenes.GetNumberOfScenes())
-			objects[index] -= scenes.GetNumberOfScenes();
+			objects[index] += scenes->GetNumberOfScenes();
+		if (objects[index] > scenes->GetNumberOfScenes())
+			objects[index] -= scenes->GetNumberOfScenes();
 
 		nodes[index]->removeAllChildren();
-		SceneNode* node = nodes[index]->createChildSceneNode();
+		Ogre::SceneNode* node = nodes[index]->createChildSceneNode();
 		ogre_scene_create(objects[index], gos[index], node, mSceneMgr);
-		mTimeUntilNextToggle = 0.3f;
 	}
 #endif
 
@@ -334,11 +369,11 @@ public:
 		ogre_terrain_init(mCamera, mSceneMgr);
 	}
 #endif
-
-	SceneManager* mSceneMgr;
+private:
+	std::auto_ptr<EE> ee;
 #ifdef USE_OBJECTS_ONLY
-	const Scenes& scenes;
-	SceneNode* nodes[2];
+	const Scenes* scenes;
+	Ogre::SceneNode* nodes[2];
 	int objects[2];
 	GameObjectScene gos[2];
 #endif
@@ -346,99 +381,47 @@ public:
 	int terrain;
 #endif
 	float time;
-};
-
-// Declare a subclass of the ExampleApplication class
-class SampleApp : public ExampleApplication
-{
-public:
-   SampleApp()
-   {
-   }
-   virtual ~SampleApp()
-   {
-   }
-
-protected:
-   // Define what is in the scene
-   void createScene(void)
-   {
 #ifdef USE_OBJECTS_ONLY
-		Light* light = mSceneMgr->createLight("light");
-		light->setType(Light::LT_POINT);
-		light->setDiffuseColour(ColourValue::White);
-		light->setSpecularColour(ColourValue::White);
-		light->setPosition(Vector3(0,4,0));
-		light->setAttenuation(10.0f, 0.5f, 0.2f, 0.0f);
-
-		mSceneMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
-#else
-		mSceneMgr->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
+	OgreBites::Label* obj_label;
 #endif
-   }
-    virtual void createCamera(void)
-    {
-	    ExampleApplication::createCamera();
 #ifdef USE_TERRAIN
-        mCamera->setPosition(Vector3(0, 2000, 0));
-		mCamera->setDirection(Vector3(1, 0, 1));
-#else
-        mCamera->setPosition(Vector3(0, 0, 30));
+	OgreBites::Label* terr_label;
 #endif
-        mCamera->setNearClipDistance(0.5f);
-        mCamera->setFarClipDistance(20000.0f);
-    }
-
-   // Create new frame listener
-   void createFrameListener(void)
-   {
-		ee.reset(new EE);
-       mFrameListener = new MyListener(mWindow, mCamera, mSceneMgr
-#ifdef USE_OBJECTS_ONLY
-	   , *ee->scenes
-#endif
-	   );
-       mRoot->addFrameListener(mFrameListener);
-   }
-
-	std::auto_ptr<EE> ee;
 };
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include "windows.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 #else
 int main(int argc, char **argv)
 #endif
 {
 //_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-    try {
-    	// Instantiate our subclass
-    	SampleApp myApp;
+    {
+        // Create application object
+        TutorialApplication app;
 
-        // ExampleApplication provides a go method, which starts the rendering.
-        myApp.go();
-    }
-    catch (Ogre::Exception& e) {
+        try {
+            app.go();
+        } catch(Ogre::Exception& e)  {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        MessageBoxA(NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+            MessageBox(NULL, e.getFullDescription().c_str(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else
-        std::cerr << "Exception:\n";
-        std::cerr << e.getFullDescription().c_str() << "\n";
+            std::cerr << "An exception has occurred: " <<
+                e.getFullDescription().c_str() << std::endl;
 #endif
-        return 1;
+        }
+
+        return 0;
     }
-
-#ifdef USE_TERRAIN
-deinitialise_file_system();
-#endif
-
-return 0;
 }
 
 #ifdef __cplusplus

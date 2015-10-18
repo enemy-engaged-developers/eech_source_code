@@ -172,4 +172,7 @@ extern int
         terrain_3d_map_width,
         terrain_3d_map_height;
 
+extern vec3d
+	terrain_3d_point_normals[256];
+
 #endif

@@ -62,6 +62,7 @@ static void debug_fatal(...)
 #define command_line_cloud_puffs 0
 #define cloud_puffs_colours ((real_colour*)NULL)
 #define number_of_cloud_puffs_colours 1
+#define command_line_render_shadows 2
 #define command_line_render_tree_shadows 1
 #define command_line_trees_fog 1
 #define global_anisotropic 0
@@ -91,6 +92,7 @@ int infrared_mode;
 float screen_i_scale, screen_j_scale, x_origin, y_origin;
 struct LIGHT_COLOUR ambient_light;
 } a3denv = { 0, 0 }, *active_3d_environment = &a3denv;
+#define INFRARED_ON 1
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 #define construct_3d_object_by_name(x) NULL
 #define destruct_3d_object(x)
@@ -100,6 +102,8 @@ struct LIGHT_COLOUR ambient_light;
 #define D3DTFN_LINEAR 0
 #define D3DTFP_LINEAR 0
 #define D3DTFP_POINT 0
+#define D3DTEXF_LINEAR 0
+#define D3DTEXF_POINT 0
 #define iff_int_write(x, y)
 #define iff_float_write(x, y)
 #define iff_short_int_write(x, y)
@@ -604,11 +608,16 @@ unsigned char
 
 int get_int_fog_distance_value ( float z )
 {
-	return 0;
+	return 10000;
+}
+void get_3d_fog_distances ( ENV_3D *, float *, float *dist)
+{
+	*dist = 10000;
 }
 
 #define set_d3d_int_state(x, y)
 #define set_d3d_texture_stage_state(x, y, z)
+#define set_d3d_sampler_state(x, y, z)
 #define set_deferred_d3d_texture(x, y)
 #define commit_deferred_state_changes()
 #define set_d3d_texture(x, y)

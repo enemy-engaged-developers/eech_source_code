@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm256"
 				Optimization="0"
-				AdditionalIncludeDirectories="\OGRE\SDK\include;\OGRE\SDK\include\OGRE;&quot;\OGRE\Additional\ogre-paged-1.1.4\include&quot;;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
+				AdditionalIncludeDirectories="\WORK\OGRE\SDK\include;\WORK\OGRE\SDK\include\OGRE;\WORK\OGRE\SDK\include\OIS;\WORK\ogre\Components\Overlay\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib PagedGeometry.lib"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;\OGRE\SDK\lib\$(ConfigurationName)&quot;;&quot;\OGRE\Additional\ogre-paged-1.1.4\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;\WORK\OGRE\SDK\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 				Profile="false"
@@ -118,7 +118,7 @@
 				AdditionalOptions="-Zm256"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="\OGRE\SDK\include;\OGRE\SDK\include\OGRE;&quot;\OGRE\Additional\ogre-paged-1.1.4\include&quot;;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
+				AdditionalIncludeDirectories="\WORK\OGRE\SDK\include;\WORK\OGRE\SDK\include\OGRE;\WORK\OGRE\SDK\include\OIS;\WORK\ogre\Components\Overlay\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib PagedGeometry.lib"
+				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;\OGRE\SDK\lib\$(ConfigurationName)&quot;;&quot;\OGRE\Additional\ogre-paged-1.1.4\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;\WORK\OGRE\SDK\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -175,6 +175,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\BaseApplication.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\cube.cpp"
 				>
@@ -303,6 +307,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\BaseApplication.h"
+				>
+			</File>
 			<File
 				RelativePath=".\ogre.hpp"
 				>

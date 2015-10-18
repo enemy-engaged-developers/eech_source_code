@@ -28,19 +28,19 @@
 #ifdef USE_NORMALS
 // Use per-vertex normals for terrain or not
 // TODO: Produces strange results with colours
-//#define USE_TERRAIN_NORMALS
+#define USE_TERRAIN_NORMALS
 #endif
 #ifdef USE_TEXTURES
 // Use any textures (and UV mapping) for terrain or not
 #define USE_TERRAIN_TEXTURES
 #endif
-// Use per-vertex terrain colours or per-surface ones
-#define USE_TERRAIN_VERTEX_COLOURS
+// Use per-vertex terrain colours or per-surface ones (TODO: Looks like it's not used in the game)
+//#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
 #define USE_TERRAIN_VISIBILITY 10
 
 // Use PageGeometry for terrain drawing or internal Ogre methods
-#define USE_TERRAIN_PAGING
+//#define USE_TERRAIN_PAGING
 
 #ifndef USE_TERRAIN_PAGING
 // Draw terrain itself or not
@@ -57,7 +57,7 @@
 
 #ifdef USE_TERRAIN_TREES
 // Use PageGeometry for trees drawing or internal Ogre methods
-#define USE_TERRAIN_TREES_PAGING
+//#define USE_TERRAIN_TREES_PAGING
 #ifdef USE_TERRAIN_TREES_PAGING
 #define USE_TERRAIN_TREES_VISIBILITY 3
 #else
@@ -128,7 +128,6 @@ DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
 
 
 using namespace Ogre;
-using namespace Forests;
 
 #include "ogre_geometry.hpp"
 

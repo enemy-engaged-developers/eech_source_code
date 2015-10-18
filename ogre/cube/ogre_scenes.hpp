@@ -21,11 +21,11 @@ struct SceneDatabaseElement
 	// Corresponding geometry object or empty
 	Ogre::String object;
 	// Linked animation
-	NodeAnimationTrack* track;
+	Ogre::NodeAnimationTrack* track;
 	// Initial position
-	Quaternion orientation;
-	Vector3 position;
-	Vector3 scale;
+	Ogre::Quaternion orientation;
+	Ogre::Vector3 position;
+	Ogre::Vector3 scale;
 };
 typedef std::vector<SceneDatabaseElement> SceneDatabaseElements;
 
@@ -37,7 +37,7 @@ struct SceneDatabase
 };
 
 
-typedef std::vector<SceneNode*> SceneNodes;
+typedef std::vector<Ogre::SceneNode*> SceneNodes;
 
 // Dynamic scene - a representation of a game object
 struct GameObjectScene

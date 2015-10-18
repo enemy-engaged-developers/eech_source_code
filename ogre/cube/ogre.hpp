@@ -6,11 +6,11 @@ void ogre_objects_clear(void);
 
 #include "ogre_scenes.hpp"
 
-void ogre_scenes_init(int number_of_scenes, const OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database, SceneManager* sman);
+void ogre_scenes_init(int number_of_scenes, const OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database, Ogre::SceneManager* sman);
 void ogre_scenes_clear(void);
-void ogre_scene_create(int scene_number, GameObjectScene& scene, SceneNode* root, SceneManager* mgr);
+void ogre_scene_create(int scene_number, GameObjectScene& scene, Ogre::SceneNode* root, Ogre::SceneManager* mgr);
 
-void ogre_terrain_init(Camera* camera, SceneManager* mgr);
+void ogre_terrain_init(Ogre::Camera* camera, Ogre::SceneManager* mgr);
 void ogre_terrain_clear(void);
 void ogre_terrain_update(void);
 void ogre_terrain_tree(const OBJECT_3D& o);

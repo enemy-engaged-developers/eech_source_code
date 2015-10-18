@@ -8,11 +8,6 @@
 #include <crtdbg.h>
 #endif
 
-#include "ExampleApplication.h"
-#include "OgreTextAreaOverlayElement.h"
-
-#include "PagedGeometryConfig.h"
-#include "PagedGeometry.h"
-#include "BatchPage.h"
+#include "BaseApplication.h"
 
 #include <direct.h>
