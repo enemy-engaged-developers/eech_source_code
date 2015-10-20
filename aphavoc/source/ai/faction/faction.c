@@ -1102,9 +1102,9 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 	terrain_3d_point_data
 		point_data;
 
-   debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
+	debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
-   ASSERT(number <= group_database[group_type].maximum_member_count && number <= 12); // FORMCOMP limit
+	ASSERT((unsigned)number <= group_database[group_type].maximum_member_count && number <= 12); // FORMCOMP limit
    
 	if (keysite)
 	{

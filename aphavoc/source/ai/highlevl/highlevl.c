@@ -1863,6 +1863,9 @@ void create_troop_insertion_tasks (void)
 		
 								if (new_task)
 								{
+									entity_sides
+										keysite_side;
+
 									ai_log ("(TASK) %s TROOP INSERTION #%d (%d) - Target %s : Rating %f - CREATED (Priority %f)",
 												entity_side_short_names [this_side],
 												get_local_entity_int_value (new_task, INT_TYPE_TASK_ID),
@@ -1870,15 +1873,17 @@ void create_troop_insertion_tasks (void)
 												get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME),
 												target_rating [loop], priority);
 
+									keysite_side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
+
 									if (
-											get_local_entity_int_value (keysite, INT_TYPE_SIDE) != this_side &&
-											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
-											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
-											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND, get_local_entity_int_value (keysite, INT_TYPE_SIDE)) &&
-											entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, get_local_entity_int_value (keysite, INT_TYPE_SIDE) < 2)
+											keysite_side != this_side &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, keysite_side) &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_CAPTURE, keysite_side) &&
+											!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND, keysite_side) &&
+											entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_PATROL, keysite_side) < 2
 										)
 									{
-										new_task = create_troop_insertion_task (get_local_entity_int_value (keysite, INT_TYPE_SIDE), keysite, NULL, TRUE, priority, NULL, NULL);
+										new_task = create_troop_insertion_task (keysite_side, keysite, NULL, TRUE, priority, NULL, NULL);
 
 										if (new_task)
 										{

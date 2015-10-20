@@ -425,8 +425,8 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 	ASSERT ( x2 >= x1 );
 	ASSERT ( y2 >= y1 );
 	ASSERT ( x1 >= 0 && y1 >= 0 );
-	ASSERT ( x2 < active_screen->width );
-	ASSERT ( y2 < active_screen->height );
+	ASSERT ( ( unsigned ) x2 < active_screen->width );
+	ASSERT ( ( unsigned ) y2 < active_screen->height );
 
 	{
 		//

@@ -896,7 +896,7 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 				
 				debug_log ("ASSIGN: start keysite not present, looking for new one");
 
-				start_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, task_raw->side, get_local_entity_vec3d_ptr (leader, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, TRUE, NULL);
+				start_keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) task_raw->side, get_local_entity_vec3d_ptr (leader, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, TRUE, NULL);
 				
 				if (!start_keysite)
 					return FALSE;

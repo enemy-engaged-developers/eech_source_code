@@ -220,7 +220,8 @@ void helicopter_movement (entity *en)
 	height = helicopter_movement_altitude_follow (en, guide, &wp_pos);
 
 	// ramp vel from 0.01 to cruise_vel between 0m -> HELICOPTER_VELOCITY_RAMP_DISTANCE
-	range_scaler = max(0.01, min ((range / HELICOPTER_VELOCITY_RAMP_DISTANCE), 1.0f));
+	range_scaler = range / HELICOPTER_VELOCITY_RAMP_DISTANCE;
+	range_scaler = bound (range_scaler, 0.01f, 1.0f);
 
 	wp_vec.x = wp_pos.x - hc_pos->x;
 	wp_vec.y = wp_pos.y - hc_pos->y;
@@ -1735,7 +1736,10 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 		// was here to make helicopters avoid buildings when doing troop insertion, but it messed up the carrier landing.
 		//terrain_elevation = get_3d_terrain_point_data (pos->x, pos->z, &raw->ac.terrain_info);
 		//required_height = max (wp_pos->y, terrain_elevation + helicopter_movement_structure_avoidance (en));
-		required_height = wp_pos->y + bound(pow(raw->ac.mob.velocity, 4.0) - 0.1, 0.0, 2.0);
+		float
+			tmp;
+		tmp = pow(raw->ac.mob.velocity, 4.0f) - 0.1f;
+		required_height = wp_pos->y + bound(tmp, 0.0f, 2.0f);
 	}
 
 	return required_height;

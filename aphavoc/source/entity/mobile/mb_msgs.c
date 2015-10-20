@@ -2236,7 +2236,7 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 	
 	ASSERT(group);
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	task = get_local_entity_parent (sender, LIST_TYPE_WAYPOINT);
 
@@ -2343,7 +2343,7 @@ static int response_to_waypoint_troop_defend_reached (entity_messages message, e
 	{
 		keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
 		ASSERT(keysite);
-		create_patrol_task(group, keysite, get_local_entity_int_value (group, INT_TYPE_SIDE));
+		create_patrol_task(group, keysite, (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE));
 	}
 	else
 	{
@@ -2565,7 +2565,7 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 
 		if (guide)
 		{
-			member = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			member = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 			while (member)
 			{
@@ -2804,7 +2804,7 @@ int attach_divison_to_keysite (int side, entity *destination_keysite, entity *gr
 			}
 
 			set_client_server_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GROUP_INFANTRY_PATROL); // convert spec-ops to patrol. may be not safe!
-			create_patrol_task(group, destination_keysite, get_local_entity_int_value (group, INT_TYPE_SIDE)); // try to make patrol task
+			create_patrol_task(group, destination_keysite, (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE)); // try to make patrol task
 					
 			result = TRUE;
 

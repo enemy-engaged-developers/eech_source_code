@@ -2891,6 +2891,10 @@
 								>
 							</File>
 							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\cis_inf.h"
+								>
+							</File>
+							<File
 								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\comanche.h"
 								>
 							</File>
@@ -3007,11 +3011,35 @@
 								>
 							</File>
 							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_heavy_firing_point.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_inf_a.h"
+								>
+							</File>
+							<File
 								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_inf_k.h"
 								>
 							</File>
 							<File
 								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_inf_s.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_light_firing_point.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_machinegunner.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_manpad.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\rs_medium_firing_point.h"
 								>
 							</File>
 							<File
@@ -3047,11 +3075,43 @@
 								>
 							</File>
 							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_heavy_firing_point.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_inf.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_inf_a.h"
+								>
+							</File>
+							<File
 								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_inf_k.h"
 								>
 							</File>
 							<File
 								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_inf_s.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_light_firing_point.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_machinegunner.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_manpad.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\us_medium_firing_point.h"
+								>
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\entity\mobile\weapon\configs\viper.h"
 								>
 							</File>
 							<File

@@ -1975,7 +1975,7 @@ int get_line_of_sight_collision_tree
 								{
 									if (tree->type == 1 && get_object_3d_collision_object_geometry_triangle (OBJECT_3D_FOREST_TREE_OBJECT, p, depth++))
 									{
-										get_identity_matrix3x3(&attitude);
+										get_identity_matrix3x3(attitude);
 
 										////////////////////////////////////////
 										//

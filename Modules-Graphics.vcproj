@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="ddraw.lib AMSTRMID.LIB"
+				AdditionalDependencies="dxguid.lib AMSTRMID.LIB"
 				AdditionalLibraryDirectories=".\modules\linklib"
 				IgnoreDefaultLibraryNames="libcmt.lib libc.lib"
 			/>
@@ -331,6 +331,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modules\graphics\f3d.c"
+				>
+			</File>
+			<File
+				RelativePath=".\modules\graphics\f3d.h"
+				>
+			</File>
+			<File
 				RelativePath=".\modules\graphics\fillasm.asm"
 				>
 			</File>
@@ -552,14 +560,6 @@
 			</File>
 			<File
 				RelativePath=".\modules\graphics\zbuffer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\f3d.c"
-				>
-			</File>
-			<File
-				RelativePath=".\modules\graphics\f3d.h"
 				>
 			</File>
 		</Filter>
