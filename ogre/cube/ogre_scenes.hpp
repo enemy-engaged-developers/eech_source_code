@@ -2,6 +2,8 @@
 typedef std::vector<unsigned> SubObjects;
 // All sub_object_id listed
 typedef std::map<unsigned, SubObjects> AllSubObjects;
+// All sub_object_id and parent listed
+typedef std::map<std::pair<unsigned, unsigned>, SubObjects> ParentSubObjects;
 
 // Object as a part of the scene (SceneDatabase)
 struct SceneDatabaseElement
@@ -34,6 +36,8 @@ struct SceneDatabase
 {
 	SceneDatabaseElements elements;
 	AllSubObjects sub_objects;
+	ParentSubObjects parent_sub_objects;
+	AnimationScene animation;
 };
 
 

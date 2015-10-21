@@ -203,14 +203,14 @@ public:
 			// TODO: Improve materials support
 
 			MaterialPtr mat = MaterialManager::getSingleton().create(MaterialName(MaterialHolder::get_index()), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+			mat->setCullingMode(CULL_ANTICLOCKWISE);
 
 			Pass* pass = mat->getTechnique(0)->getPass(0);
-			//pass->setCullingMode(CULL_NONE);
 
 			sd.colour = ColourValue(terrain_type_information[i].red / 255.0f, terrain_type_information[i].green / 255.0f, terrain_type_information[i].blue / 255.0f, terrain_type_information[i].transparent / 255.0f);
 			TextureUnitState* tus = pass->createTextureUnitState();
 #ifdef USE_TERRAIN_TEXTURES
-			tus->setTextureName(TextureName((int)terrain_type_information[i].texture, false));
+			tus->setTextureName(TextureName((int)terrain_type_information[i].texture));
 			tus->setTextureAddressingMode(TextureUnitState::TAM_WRAP, TextureUnitState::TAM_WRAP, TextureUnitState::TAM_CLAMP);
 			if (sd.caps->texture2)
 			{
@@ -219,7 +219,7 @@ public:
 
 				tus = pass->createTextureUnitState();
 				//tus->setColourOperation(LBO_MODULATE);
-				tus->setTextureName(TextureName((int)terrain_type_information[i].texture2, false));
+				tus->setTextureName(TextureName((int)terrain_type_information[i].texture2));
 				tus->setTextureAddressingMode(TextureUnitState::TAM_WRAP, TextureUnitState::TAM_WRAP, TextureUnitState::TAM_CLAMP);
 			}
 			else
@@ -276,6 +276,7 @@ public:
 				p.x = s.points_xz[i].x * terrain_3d_xz_scale;
 				p.y = s.points_y[i].y * terrain_3d_map_scaled_height_difference + terrain_3d_map_minimum_height;
 				p.z = s.points_xz[i].z * terrain_3d_xz_scale;
+				p.z = -p.z;
 #ifdef USE_TERRAIN_NORMALS
 				if (s.points_y[i].normal_change)
 					normal_indices++;
@@ -283,6 +284,7 @@ public:
 				p.normal_x = n.x;
 				p.normal_y = n.y;
 				p.normal_z = n.z;
+				p.normal_z = -p.normal_z;
 #endif
 			}
 		}
@@ -473,6 +475,7 @@ public:
 	{
 		clear();
 		int x = page.xIndex, z = page.zIndex;
+		z = -z - 1;
 		if (x < 0 || x >= terrain_3d_map_width || z < 0 || z >= terrain_3d_map_height)
 		{
 			page.userData = 0;
@@ -537,6 +540,7 @@ public:
 	void loadPage(PageInfo& page)
 	{
 		int x = page.xIndex, z = page.zIndex;
+		z = -z - 1;
 		if (x < 0 || x >= terrain_3d_map_width || z < 0 || z >= terrain_3d_map_height)
 			return;
 
@@ -544,7 +548,8 @@ public:
 		{
 			const terrain_3d_tree_data& tree = terrain_tree_sectors[z][x].trees[i];
 			Vector3 tree_position(tree.x * TERRAIN_3D_XZ_SCALE / 2, tree.y * terrain_3d_map_scaled_height_difference / 2 + terrain_3d_map_minimum_height, tree.z * TERRAIN_3D_XZ_SCALE / 2);
-			float scale = get_terrain_3d_tree_scale((terrain_3d_tree_data*)&tree);
+			tree_position.z = -tree_position.z;
+			float scale = get_terrain_3d_tree_scale(const_cast<terrain_3d_tree_data*>(&tree));
 			addEntity(tree_ent, page.centerPoint + tree_position, Quaternion::IDENTITY, Vector3(scale, scale, scale));
 		}
 	}
@@ -643,8 +648,11 @@ public:
 #endif
 #endif
 
-#ifndef USE_TERRAIN_PAGING
+#if !defined(USE_TERRAIN_PAGING) || defined(USE_TERRAIN_TREES_OGRE)
 		Vector3 position((float)(x * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2), 0.0f, (float)(z * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2));
+		position.z = -position.z;
+#endif
+#ifndef USE_TERRAIN_PAGING
 		{
 #ifdef USE_TERRAIN_DRAW
 #ifdef USE_TERRAIN_CONVERT_ON_FLY
@@ -684,7 +692,8 @@ public:
 			{
 				const terrain_3d_tree_data& tree = terrain_tree_sectors[z][x].trees[i];
 				Vector3 tree_position(tree.x * TERRAIN_3D_XZ_SCALE / 2, tree.y * terrain_3d_map_scaled_height_difference / 2 + terrain_3d_map_minimum_height, tree.z * TERRAIN_3D_XZ_SCALE / 2);
-				float scale = get_terrain_3d_tree_scale((terrain_3d_tree_data*)&tree);
+				tree_position.z = -tree_position.z;
+				float scale = get_terrain_3d_tree_scale(const_cast<terrain_3d_tree_data*>(&tree));
 				geom->addEntity(tree_ent, position + tree_position, Quaternion::IDENTITY, Vector3(scale, scale, scale));
 			}
 			geom->build();
@@ -711,7 +720,8 @@ public:
 
 #ifdef USE_TERRAIN_CACHE
 #ifdef USE_TERRAIN_VISIBILITY
-		const Vector3& pos = camera->getPosition();
+		Vector3 pos = camera->getPosition();
+		pos.z = -pos.z;
 		int x_sector = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 		int z_sector = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
@@ -1004,7 +1014,8 @@ void ogre_terrain_tree(const OBJECT_3D& o)
 	assert(!tree_geometry.get() && !tree_materials.get());
 	tree_geometry.reset(new Geometry(0, 0));
 	unsigned material = MaterialHolder::get_index();
-	ogre_objects_convert(o, MeshManager::getSingleton().createManual(TerrainTreeObject(), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), tree_geometry.get());
+	AnimationMesh am;
+	ogre_objects_convert(o, MeshManager::getSingleton().createManual(TerrainTreeObject(), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), am, tree_geometry.get());
 	tree_geometry->flush();
 	tree_materials.reset(new MaterialHolder(material));
 }

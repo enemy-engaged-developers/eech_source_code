@@ -10,4 +10,8 @@
 
 #include "BaseApplication.h"
 
+#include "PagedGeometryConfig.h"
+#include "PagedGeometry.h"
+#include "BatchPage.h"
+
 #include <direct.h>

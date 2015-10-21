@@ -42,6 +42,7 @@ public:
 		scene.elements.push_back(SceneDatabaseElement(!number ? String() : ObjectName(number)));
 		if (sub_object_index > 0)
 			scene.sub_objects[sub_object_index].push_back(offset);
+		ogre_objects_add_animation(number, scene.animation, offset);
 	}
 
 	void Parent(int index)
@@ -58,11 +59,12 @@ public:
 		{
 			static Quaternion Orientation(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 			{
-				return Quaternion(Radian(frame->heading), Vector3::UNIT_Y) * Quaternion(Radian(frame->pitch), Vector3::UNIT_X) * Quaternion(Radian(frame->roll), Vector3::UNIT_Z);
+				//return Quaternion(Radian(frame->heading), Vector3::UNIT_Y) * Quaternion(Radian(frame->pitch), Vector3::UNIT_X) * Quaternion(Radian(frame->roll), Vector3::UNIT_Z);
+				Matrix3 m; m.FromEulerAnglesYXZ(Radian(-frame->heading), Radian(-frame->pitch), Radian(frame->roll)); return m;
 			}
 			static Vector3 Position(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 			{
-				return Vector3(frame->x, frame->y, frame->z);
+				return Vector3(frame->x, frame->y, -frame->z);
 			}
 			static Vector3 Scale(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 			{
@@ -175,5 +177,54 @@ void ogre_scene_create(int scene_number, GameObjectScene& scene, SceneNode* root
 			node->attachObject(mgr->createEntity(itor->object));
 
 		scene.nodes.push_back(node);
+	}
+}
+
+static const SubObjects empty;
+
+const SubObjects& ogre_scene_find(GameObjectScene& scene, unsigned sub_object_id)
+{
+	AllSubObjects::const_iterator i = scene.database->sub_objects.find(sub_object_id);
+	return i == scene.database->sub_objects.end() ? empty : i->second;
+}
+
+const SubObjects& ogre_scene_find2(GameObjectScene& scene, unsigned sub_object_id, unsigned parent)
+{
+	ParentSubObjects::const_iterator i = scene.database->parent_sub_objects.find(std::make_pair(sub_object_id, parent));
+	if (i != scene.database->parent_sub_objects.end())
+		return i->second;
+	SubObjects& pso = const_cast<ParentSubObjects&>(scene.database->parent_sub_objects)[std::make_pair(sub_object_id, parent)];
+	AllSubObjects::const_iterator j = scene.database->sub_objects.find(sub_object_id);
+	if (j != scene.database->sub_objects.end())
+	{
+		const SubObjects& so = j->second;
+		for (SubObjects::const_iterator k(so.begin()); k != so.end(); ++k)
+		{
+			for (unsigned index = *k; index != SceneDatabaseElement::no_parent; index = scene.database->elements[index].parent)
+			{
+				if (index == parent)
+				{
+					pso.push_back(*k);
+					break;
+				}
+			}
+		}
+	}
+	return pso;
+}
+
+void ogre_scene_animation(GameObjectScene& scene, unsigned animation, unsigned frame)
+{
+	AnimationScene::const_iterator itor = scene.database->animation.find(animation);
+	if (itor == scene.database->animation.end())
+		return;
+	const SceneAnimationRefs& sars = itor->second;
+	for (SceneAnimationRefs::const_iterator sar(sars.begin()); sar != sars.end(); ++sar)
+	{
+		Entity* entity = dynamic_cast<Entity*>(scene.nodes[sar->subobject]->getAttachedObject(0));
+		assert(entity);
+		SubEntity* subentity = entity->getSubEntity(sar->submesh);
+		assert(subentity);
+		subentity->setMaterialName(MaterialAnimationName(sar->material_index, frame));
 	}
 }

@@ -13,7 +13,7 @@
 static GeometryPtr objects_geometry;
 static MaterialHolderPtr objects_materials;
 static unsigned objects_number_of_objects;
-
+static std::vector<AnimationMesh> objects_anim;
 
 // Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
 static bool
@@ -49,7 +49,7 @@ compare_surfaces(const face_surface_description& left, const face_surface_descri
 }
 
 // Converts EE's OBJECT_3D into Ogre::Mesh
-void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
+void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& animation, Geometry* geometry)
 {
 	if (!o.number_of_points)
 	{
@@ -76,11 +76,15 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 			p3.x = p.x * xmax;
 			p3.y = p.y * ymax;
 			p3.z = p.z * zmax;
+			p3.z = -p3.z;
 		}
 
 #ifdef USE_OBJECTS_NORMALS
 		for (int j = 0; j < o.number_of_point_normals; j++)
+		{
 			generate_object_3d_point_normal(&o.point_normals[j], &normals[j]);
+			normals[j].z = -normals[j].z;
+		}
 #endif
 	}
 
@@ -162,13 +166,11 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 			if (s.textured)
 			{
 				*(object_3d_short_textured_point*)f = *cstp++;
-				*f = 1.0f - *f;
 				f += 2;
 			}
 			if (s.has_luminosity_texture)
 			{
 				*(object_3d_short_textured_point*)f = *cstp++;
-				*f = 1.0f - *f;
 				f += 2;
 			}
 #endif
@@ -210,15 +212,16 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 		std::copy(info.idata.begin(), info.idata.end(), buf.idata);
 
 		// Material
-		MaterialName material_name(MaterialHolder::get_index());
+		unsigned material_index = MaterialHolder::get_index();
+		MaterialName material_name(material_index);
 		MaterialPtr mat = MaterialManager::getSingleton().create(material_name, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		mat->setCullingMode(CULL_ANTICLOCKWISE);
 
 		// TODO: Materials don't use original surface information completely
 
 		ColourValue colour(s.red / 255.0f, s.green / 255.0f, s.blue / 255.0f, s.alpha / 255.0f);
 
 		Pass* pass = mat->getTechnique(0)->getPass(0);
-		//pass->setCullingMode(CULL_NONE);
 
 		if (s.detail)
 			pass->setDepthBias(2.0f);
@@ -227,7 +230,8 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 
 		if (s.textured)
 		{
-			tus->setTextureName(TextureName(s.texture_index, s.texture_animation));
+			if (!s.texture_animation)
+				tus->setTextureName(TextureName(s.texture_index));
 			tus->setTextureAddressingMode(s.texture_wrapped_u ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, s.texture_wrapped_v ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, TextureUnitState::TAM_CLAMP);
 
 #if 1
@@ -236,7 +240,8 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 				Pass* pass = mat->getTechnique(0)->createPass();
 				TextureUnitState* tus = pass->createTextureUnitState();
 
-				tus->setTextureName(TextureName(s.luminosity_texture_index, s.luminosity_texture_animation));
+				if (!s.luminosity_texture_animation)
+					tus->setTextureName(TextureName(s.luminosity_texture_index));
 				tus->setTextureAddressingMode(s.luminosity_texture_wrapped_u ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, s.luminosity_texture_wrapped_v ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, TextureUnitState::TAM_CLAMP);
 				pass->setSceneBlending(SBT_MODULATE);
 			}
@@ -251,7 +256,7 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 
 		if (/*s.textured && !s.texture_animation && get_textures_info(s.texture_index).contains_alpha ||*/ s.additive || s.translucent)
 		{
-			pass->setSceneBlending(SBT_TRANSPARENT_ALPHA);
+			pass->setSceneBlending(s.additive ? SBT_ADD : SBT_TRANSPARENT_ALPHA);
 			pass->setDepthWriteEnabled(false);
 		}
 
@@ -273,11 +278,59 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, Geometry* geometry)
 		sm->indexData->indexStart = buf.ibuf.offset;
 		sm->indexData->indexCount = info.idata.size();
 		sm->setMaterialName(material_name);
+
+		do
+		{
+			if (!s.textured)
+				break;
+
+			assert(!s.texture_animation || !s.luminosity_texture_animation);
+			unsigned animation_index;
+			unsigned pass;
+			if (s.texture_animation)
+			{
+				animation_index = s.texture_index;
+				pass = 0;
+			}
+			else
+			{
+				if (s.luminosity_texture_animation)
+				{
+					animation_index = s.luminosity_texture_index;
+					pass = 1;
+				}
+				else
+					break;
+			}
+			unsigned smi = mesh->getNumSubMeshes() - 1;
+			animation[animation_index].push_back(AnimationRef(smi, material_index));
+			unsigned size = get_animation_size(animation_index);
+			for (unsigned frame = 0; frame < size; frame++)
+			{
+				MaterialAnimationName material_animation_name(material_index, frame);
+				MaterialPtr mata = MaterialManager::getSingleton().create(material_animation_name, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+				*mata = *mat;
+				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(get_animation_texture(animation_index, frame)));
+			}
+		}
+		while (false);
 	}
 
 	mesh->_setBounds(AxisAlignedBox(Vector3(-o.radius, -o.radius, -o.radius), Vector3(o.radius, o.radius, o.radius)), false);
 	mesh->_setBoundingSphereRadius(o.radius);
 	mesh->load();
+}
+
+void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned subobject)
+{
+	assert(object < objects_anim.size());
+	const AnimationMesh& am = objects_anim[object];
+	for (AnimationMesh::const_iterator i(am.begin()); i != am.end(); ++i)
+	{
+		SceneAnimationRefs& sar = as[i->first];
+		for (AnimationRefs::const_iterator j(i->second.begin()); j != i->second.end(); j++)
+			sar.push_back(SceneAnimationRef(subobject, *j));
+	}
 }
 
 
@@ -291,8 +344,9 @@ void ogre_objects_init(unsigned number_of_objects, const OBJECT_3D* objects)
 
 	unsigned material = MaterialHolder::get_index();
 
+	objects_anim.resize(objects_number_of_objects + 1);
 	for (unsigned i = 0; i <= objects_number_of_objects; i++)
-		ogre_objects_convert(objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), objects_geometry.get());
+		ogre_objects_convert(objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
 
 	objects_materials.reset(new MaterialHolder(material));
@@ -303,6 +357,8 @@ void ogre_objects_init(unsigned number_of_objects, const OBJECT_3D* objects)
 // Clears objects information
 void ogre_objects_clear(void)
 {
+	objects_anim.clear();
+
 	for (unsigned i = 0; i <= objects_number_of_objects; i++)
 	{
 			ObjectName object(i);

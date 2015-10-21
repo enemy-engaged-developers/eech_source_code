@@ -62,16 +62,21 @@ char* get_terrain_type_name(terrain_types type);
 
 EET eet;
 
-const char* get_texture_name(int index, bool animation)
+unsigned get_animation_size(unsigned index)
 {
-	return eet.GetTexture(index, animation, (float)rand() / RAND_MAX);
+	return eet.GetAnimationSize(index);
+}
+
+unsigned get_animation_texture(unsigned index, unsigned frame)
+{
+	return eet.GetAnimationTexture(index, frame);
 }
 
 int get_system_texture_index ( const char *name )
 {
 	for (unsigned i = 0; ; i++)
 	{
-		const char* texture = eet.GetTexture(i, false, 0.0f);
+		const char* texture = eet.GetTexture(i);
 		if (!texture)
 			break;
 		if (!stricmp(name, texture))
@@ -196,8 +201,8 @@ protected:
 
 		objects[0] = objects[1] = 0x0001;
 
-		nodes[0] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(-5.0f, 0, 0));
-		nodes[1] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(5.0f, 0, 0));
+		nodes[0] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(10.0f, 0, 0));
+		nodes[1] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(-10.0f, 0, 0));
 
 		ogre_scenes_init(scenes->GetNumberOfScenes(), &scenes->GetScene(0), mSceneMgr);
 
@@ -211,14 +216,9 @@ protected:
 		terrain = 1;
 		set_terrain(0);
 #endif
-#ifdef USE_TERRAIN
 		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
-#else
-		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
-		//mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
-#endif
 #ifdef USE_OBJECTS_ONLY
-		obj_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Objects", "", 100);
+		obj_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Objects", "", 200);
 #endif
 #ifdef USE_TERRAIN
 		terr_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Map", "", 100);
@@ -234,9 +234,11 @@ protected:
 		light->setPosition(Ogre::Vector3(0,4,0));
 		light->setAttenuation(10.0f, 0.5f, 0.2f, 0.0f);
 
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
 #else
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+
+		mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 #endif
 	}
 	virtual void createCamera(void)
@@ -244,9 +246,10 @@ protected:
 		BaseApplication::createCamera();
 #ifdef USE_TERRAIN
 		mCamera->setPosition(Ogre::Vector3(0, 2000, 0));
-		mCamera->setDirection(Ogre::Vector3(1, 0, 1));
+		mCamera->setDirection(Ogre::Vector3(1, 0, -1));
 #else
-		mCamera->setPosition(Ogre::Vector3(0, 0, 30));
+		mCamera->setPosition(Ogre::Vector3(0, 0, -30));
+		mCamera->setDirection(Ogre::Vector3(0, 0, 1));
 #endif
 		mCamera->setNearClipDistance(0.5f);
 		mCamera->setFarClipDistance(20000.0f);
@@ -263,9 +266,10 @@ protected:
 		// Animate current objects if required
 		for (int index = 0; index < 2; index++)
 		{
-			for (unsigned i = 0; i < gos[index].database->elements.size(); i++)
+			GameObjectScene& g = gos[index];
+			for (unsigned i = 0; i < g.database->elements.size(); i++)
 			{
-				const SceneDatabaseElement& el = gos[index].database->elements[i];
+				const SceneDatabaseElement& el = g.database->elements[i];
 
 				if (!el.track)
 					continue;
@@ -278,9 +282,46 @@ protected:
 				pos = pos >= last1 ? pos >= last3 ? 0.0f : (last3 - pos) : pos >= last ? last : pos;
 				assert(pos >= 0.0f && pos <= last);
 
-				Ogre::SceneNode* node = gos[index].nodes[i];
+				Ogre::SceneNode* node = g.nodes[i];
 				node->resetToInitialState();
 				el.track->applyToNode(node, pos);
+			}
+
+			struct RI
+			{
+				unsigned subobject;
+				const Ogre::Vector3& axis;
+			};
+			const RI so[] =
+			{
+				{ 19, Ogre::Vector3::UNIT_X },
+				{ 20, Ogre::Vector3::UNIT_X },
+				{ 24, Ogre::Vector3::UNIT_Y }
+			};
+			for (unsigned o = 0; o < ARRAYSIZE(so); o++)
+			{
+				const SubObjects& s = ogre_scene_find(g, so[o].subobject);
+				for (SubObjects::const_iterator j = s.begin(); j != s.end(); ++j)
+					g.nodes[*j]->setOrientation(g.nodes[*j]->getOrientation() * Ogre::Quaternion(Ogre::Radian(fmod(time, 10.0f) * 0.01f), so[o].axis));
+			}
+			{
+				const SubObjects& h = ogre_scene_find(g, 3);
+				for (SubObjects::const_iterator hi = h.begin(); hi != h.end(); ++hi)
+				{
+					const SubObjects& p = ogre_scene_find2(g, 28, *hi);
+					if (!p.empty())
+					{
+						unsigned sp = p[((unsigned)time) % p.size()];
+						for (SubObjects::const_iterator pi = p.begin(); pi != p.end(); ++pi)
+							g.nodes[*pi]->setVisible(false, true);
+						g.nodes[sp]->setVisible(true, true);
+						const SubObjects& w = ogre_scene_find2(g, 29, sp);
+						double df = exp(((unsigned)time) / p.size() / double(*hi));
+						unsigned flags = reinterpret_cast<const unsigned&>(df);
+						for (size_t wi = 0; wi != w.size(); wi++)
+							g.nodes[w[wi]]->setVisible(flags & (1 << wi) ? true : false, true);
+					}
+				}
 			}
 		}
 #endif
@@ -293,7 +334,7 @@ protected:
 		// Display objects numbers
 		{
 			char buf[128];
-			sprintf(buf, " Scns:%04X %04X", objects[0], objects[1]);
+			sprintf(buf, "Scns: %04X %04X", objects[0], objects[1]);
 			obj_label->setCaption(buf);
 		}
 #endif
@@ -301,7 +342,7 @@ protected:
 		// Display map number
 		{
 			char buf[128];
-			sprintf(buf, " MAP:%i", terrain);
+			sprintf(buf, "MAP: %i", terrain);
 			terr_label->setCaption(buf);
 		}
 #endif
@@ -351,6 +392,9 @@ protected:
 		nodes[index]->removeAllChildren();
 		Ogre::SceneNode* node = nodes[index]->createChildSceneNode();
 		ogre_scene_create(objects[index], gos[index], node, mSceneMgr);
+
+		for (unsigned animation_index = 0, size; size = get_animation_size(animation_index); animation_index++)
+			ogre_scene_animation(gos[index], animation_index, rand() % size);
 	}
 #endif
 

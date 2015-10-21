@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm256"
 				Optimization="0"
-				AdditionalIncludeDirectories="\WORK\OGRE\SDK\include;\WORK\OGRE\SDK\include\OGRE;\WORK\OGRE\SDK\include\OIS;\WORK\ogre\Components\Overlay\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_HOME)\Components\Overlay\include;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;\WORK\OGRE\SDK\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 				Profile="false"
@@ -118,7 +118,7 @@
 				AdditionalOptions="-Zm256"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="\WORK\OGRE\SDK\include;\WORK\OGRE\SDK\include\OGRE;\WORK\OGRE\SDK\include\OIS;\WORK\ogre\Components\Overlay\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_HOME)\Components\Overlay\include;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib"
+				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib PagedGeometry.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;\WORK\OGRE\SDK\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -313,6 +313,10 @@
 			</File>
 			<File
 				RelativePath=".\ogre.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ogre_animation.hpp"
 				>
 			</File>
 			<File

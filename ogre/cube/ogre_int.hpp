@@ -3,6 +3,8 @@
 
 #include "options.hpp"
 
+#include "ogre.hpp"
+
 // Options for convertions
 
 // Global geometry options
@@ -40,14 +42,14 @@
 #define USE_TERRAIN_VISIBILITY 10
 
 // Use PageGeometry for terrain drawing or internal Ogre methods
-//#define USE_TERRAIN_PAGING
+#define USE_TERRAIN_PAGING
 
 #ifndef USE_TERRAIN_PAGING
 // Draw terrain itself or not
 #define USE_TERRAIN_DRAW
 
 // Use Ogre::StaticGeometry for terrain or not
-//#define USE_TERRAIN_STATIC_GEOMETRY
+#define USE_TERRAIN_STATIC_GEOMETRY
 
 #ifdef USE_TERRAIN_VISIBILITY
 // Number of invisible entries in cache. Less than USE_TERRAIN_VISIBILITY * 4 is useless
@@ -57,7 +59,7 @@
 
 #ifdef USE_TERRAIN_TREES
 // Use PageGeometry for trees drawing or internal Ogre methods
-//#define USE_TERRAIN_TREES_PAGING
+#define USE_TERRAIN_TREES_PAGING
 #ifdef USE_TERRAIN_TREES_PAGING
 #define USE_TERRAIN_TREES_VISIBILITY 3
 #else
@@ -111,9 +113,9 @@ struct name : private fmt \
 
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
+DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u", index _ frame);
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
-// TODO: All compositions of TextureName are bad
-DEFINE_NAME(TextureName, int index _ bool animation, "TEXTURE_%s", get_texture_name(index _ animation));
+DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 // TODO: Invalid parameters for KeyframeAnimationName
 DEFINE_NAME(KeyframeAnimationName, const void* scene _ unsigned number, "ANIMATION_%p_%u", scene _ number);
 #ifdef USE_TERRAIN
@@ -128,11 +130,10 @@ DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
 
 
 using namespace Ogre;
+using namespace Forests;
 
 #include "ogre_geometry.hpp"
 
 #include "ogre_objects.hpp"
-
-#include "ogre.hpp"
 
 #endif

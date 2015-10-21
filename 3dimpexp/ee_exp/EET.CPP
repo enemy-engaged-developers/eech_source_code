@@ -138,7 +138,9 @@ class EET
  unsigned GetAnimation(const char* name) const;
  void ExportAnimations(void) const;
 #else
- const char* GetTexture(unsigned index, bool animation, float frame) const;
+ const char* GetTexture(unsigned index) const;
+ unsigned GetAnimationSize(unsigned index) const;
+ unsigned GetAnimationTexture(unsigned index, unsigned frame) const;
 #endif
 private:
  void LoadAnimations(FILE* file, Array<Animation>& animations);
@@ -313,8 +315,16 @@ void EET::ExportAnimations(void) const
  ExportAnimations(displacement_animations, "_DISPLACEMENT");
 }
 #else
-const char* EET::GetTexture(unsigned index, bool animation, float frame) const
+const char* EET::GetTexture(unsigned index) const
 {
- return animation ? index < !animations ? textures[animations[index].animation[(unsigned)(frame * !animations[index].animation)]].name : NULL : index < !textures ? textures[index].name : NULL;
+ return index < !textures ? textures[index].name : NULL;
+}
+unsigned EET::GetAnimationSize(unsigned index) const
+{
+	return index < !animations ? !animations[index].animation : 0;
+}
+unsigned EET::GetAnimationTexture(unsigned index, unsigned frame) const
+{
+	return index < !animations ? animations[index].animation[frame] : -1;
 }
 #endif

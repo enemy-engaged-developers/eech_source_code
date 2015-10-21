@@ -21,7 +21,8 @@
 #include "ee_3.h"
 
 // FIXME
-const char* get_texture_name(int index, bool animation);
+unsigned get_animation_size(unsigned index);
+unsigned get_animation_texture(unsigned index, unsigned frame);
 
 
 #define NATIVE_TYPES

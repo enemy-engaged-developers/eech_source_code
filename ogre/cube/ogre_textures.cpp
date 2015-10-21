@@ -2,10 +2,15 @@
 
 #include "ogre_int.hpp"
 
+static unsigned max_texture;
+
 // Creates texture resource and uploads texture into Ogre
-void ogre_textures_define(int index, int number_of_mipmaps, int mip, int width, int height, int bpp, void* texture_image_data)
+void ogre_textures_define(unsigned index, int number_of_mipmaps, int mip, int width, int height, int bpp, void* texture_image_data)
 {
-	TextureName texture_name(index, false);
+	if (index > max_texture)
+		max_texture = index;
+
+	TextureName texture_name(index);
 
 	TexturePtr tex;
 	PixelFormat format = bpp == 4 ? PF_BYTE_BGRA : PF_BYTE_BGR;
@@ -23,11 +28,9 @@ void ogre_textures_define(int index, int number_of_mipmaps, int mip, int width, 
 // Unloads and removes all textures
 void ogre_textures_clear(void)
 {
-	for (unsigned i = 0; ; i++)
+	for (unsigned i = 0; i <= max_texture; i++)
 	{
-		if (!get_texture_name(i, false))
-			break;
-		TextureName texture_name(i, false);
+		TextureName texture_name(i);
 		TextureManager::getSingleton().unload(texture_name);
 		TextureManager::getSingleton().remove(texture_name);
 	}
