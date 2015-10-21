@@ -191,33 +191,3 @@ private:
 	void flush_ibuf(void);
 };
 typedef std::auto_ptr<Geometry> GeometryPtr;
-
-
-class MaterialHolder
-{
-public:
-	MaterialHolder(unsigned begin)
-		: begin(begin), end(index)
-	{
-	}
-
-	~MaterialHolder()
-	{
-		for (unsigned i = begin; i != end; i++)
-		{
-			MaterialName material_name(i);
-			MaterialManager::getSingleton().unload(material_name);
-			MaterialManager::getSingleton().remove(material_name);
-		}
-	}
-
-	static unsigned get_index(void)
-	{
-		return index++;
-	}
-
-private:
-	unsigned begin, end;
-	static unsigned index;
-};
-typedef std::auto_ptr<MaterialHolder> MaterialHolderPtr;

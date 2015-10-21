@@ -111,13 +111,14 @@ struct name : private fmt \
 	using fmt::operator Ogre::String; \
 }
 
+unsigned ogre_index(void);
+
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
 DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u", index _ frame);
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
-// TODO: Invalid parameters for KeyframeAnimationName
-DEFINE_NAME(KeyframeAnimationName, const void* scene _ unsigned number, "ANIMATION_%p_%u", scene _ number);
+DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
 #ifdef USE_TERRAIN
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainStaticGeometry, unsigned z _ unsigned x, "TERRAIN_STATIC_%u_%u", z _ x);
@@ -132,8 +133,14 @@ DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
 using namespace Ogre;
 using namespace Forests;
 
+#include "ogre_set.hpp"
+
 #include "ogre_geometry.hpp"
 
+#include "ogre_animation.hpp"
+
 #include "ogre_objects.hpp"
+
+#include "ogre_scenes.hpp"
 
 #endif

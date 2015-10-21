@@ -146,6 +146,3 @@ void Geometry::flush_ibuf(void)
 	ibuf.hib->writeData(0, ibuf.offset * sizeof(IndexType), &ibufs.shadow[0], true);
 	ibufs.shadow.clear();
 }
-
-
-unsigned MaterialHolder::index = 0;

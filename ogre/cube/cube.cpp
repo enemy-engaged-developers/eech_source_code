@@ -136,7 +136,7 @@ struct EE
 #endif
 
 #ifdef USE_TERRAIN_TREES
-		ogre_terrain_tree((*objects)[0x2167]);
+		ogre_terrain_tree(&(*objects)[0x2167]);
 #endif
 	}
 	~EE()
@@ -165,23 +165,16 @@ public:
 	}
 	virtual ~TutorialApplication(void)
 	{
-#ifdef USE_TERRAIN
-		ogre_terrain_clear();
-		unload_3d_terrain();
-#endif
-
-#ifdef USE_OBJECTS_ONLY
-		ogre_scenes_clear();
-#endif
-#ifdef USE_TERRAIN
-		deinitialise_file_system();
-#endif
 	}
 
 protected:
 	virtual void createFrameListener(void)
 	{
 		BaseApplication::createFrameListener();
+
+		Ogre::ResourceGroupManager::getSingleton().createResourceGroup("EE");
+
+		ogre_set("EE", mSceneMgr, mCamera);
 
 		ee.reset(new EE);
 #ifdef USE_OBJECTS_ONLY
@@ -197,14 +190,17 @@ protected:
 		mCameraMan->setTopSpeed(speed);
 
 #ifdef USE_OBJECTS_ONLY
-		// Create a pair of objects, 10 meters between their centers
+		ogre_scenes_init(scenes->GetNumberOfScenes(), &scenes->GetScene(0));
+
+		// Create a pair of objects
 
 		objects[0] = objects[1] = 0x0001;
 
 		nodes[0] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(10.0f, 0, 0));
 		nodes[1] = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(-10.0f, 0, 0));
 
-		ogre_scenes_init(scenes->GetNumberOfScenes(), &scenes->GetScene(0), mSceneMgr);
+		ogre_scene_init(&ogos[0]);
+		ogre_scene_init(&ogos[1]);
 
 		set_scene(0, 0);
 		set_scene(1, 0);
@@ -241,6 +237,32 @@ protected:
 		mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 #endif
 	}
+	virtual void destroyScene(void)
+	{
+#ifdef USE_OBJECTS_ONLY
+		nodes[0]->removeAllChildren();
+		nodes[1]->removeAllChildren();
+
+		ogre_scene_destroy(&ogos[0]);
+		ogre_scene_destroy(&ogos[1]);
+#endif
+
+#ifdef USE_TERRAIN
+		ogre_terrain_clear();
+		unload_3d_terrain();
+#endif
+
+#ifdef USE_OBJECTS_ONLY
+		ogre_scenes_clear();
+#endif
+#ifdef USE_TERRAIN
+		deinitialise_file_system();
+#endif
+
+		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("EE");
+
+		BaseApplication::destroyScene();
+	}
 	virtual void createCamera(void)
 	{
 		BaseApplication::createCamera();
@@ -266,25 +288,21 @@ protected:
 		// Animate current objects if required
 		for (int index = 0; index < 2; index++)
 		{
-			GameObjectScene& g = gos[index];
-			for (unsigned i = 0; i < g.database->elements.size(); i++)
+			OgreGameObjectScene* g = &ogos[index];
+			for (unsigned i = 0; i < g->number_of_nodes; i++)
 			{
-				const SceneDatabaseElement& el = g.database->elements[i];
+				float last = ogre_scene_subobject_keyframe_length(g, i);
 
-				if (!el.track)
+				if (last == 0.0)
 					continue;
 
-				float last = el.track->getParent()->getLength();
 				float last1 = last + 0.5f;
-				float last2 = last1 + last1;
 				float last3 = last1 + last;
-				float pos = fmod(time, last2);
+				float pos = fmod(time, last1 + last1);
 				pos = pos >= last1 ? pos >= last3 ? 0.0f : (last3 - pos) : pos >= last ? last : pos;
 				assert(pos >= 0.0f && pos <= last);
 
-				Ogre::SceneNode* node = g.nodes[i];
-				node->resetToInitialState();
-				el.track->applyToNode(node, pos);
+				ogre_scene_subobject_keyframe(g, i, pos);
 			}
 
 			struct RI
@@ -300,26 +318,35 @@ protected:
 			};
 			for (unsigned o = 0; o < ARRAYSIZE(so); o++)
 			{
-				const SubObjects& s = ogre_scene_find(g, so[o].subobject);
-				for (SubObjects::const_iterator j = s.begin(); j != s.end(); ++j)
-					g.nodes[*j]->setOrientation(g.nodes[*j]->getOrientation() * Ogre::Quaternion(Ogre::Radian(fmod(time, 10.0f) * 0.01f), so[o].axis));
+				OgreSubObjectsSearch s = ogre_scene_find(g, so[o].subobject);
+				for (unsigned j = 0; j != s.number_of_subobjects; j++)
+				{
+					OgreNode* n = g->nodes[s.subobjects[j]];
+					matrix3x3 m33;
+					ogre_node_get_orientation(n, m33);
+					Ogre::Matrix3 m(m33), r;
+					Ogre::Quaternion(Ogre::Radian(fmod(time, 10.0f) * 0.01f), so[o].axis).ToRotationMatrix(r);
+					m = m * r;
+					memcpy(m33, m[0], sizeof(m33));
+					ogre_node_set_orientation(n, m33);
+				}
 			}
 			{
-				const SubObjects& h = ogre_scene_find(g, 3);
-				for (SubObjects::const_iterator hi = h.begin(); hi != h.end(); ++hi)
+				OgreSubObjectsSearch h = ogre_scene_find(g, 3);
+				for (unsigned hi = 0; hi != h.number_of_subobjects; hi++)
 				{
-					const SubObjects& p = ogre_scene_find2(g, 28, *hi);
-					if (!p.empty())
+					OgreSubObjectsSearch p = ogre_scene_find2(g, 28, h.subobjects[hi]);
+					if (p.number_of_subobjects)
 					{
-						unsigned sp = p[((unsigned)time) % p.size()];
-						for (SubObjects::const_iterator pi = p.begin(); pi != p.end(); ++pi)
-							g.nodes[*pi]->setVisible(false, true);
-						g.nodes[sp]->setVisible(true, true);
-						const SubObjects& w = ogre_scene_find2(g, 29, sp);
-						double df = exp(((unsigned)time) / p.size() / double(*hi));
+						unsigned sp = p.subobjects[((unsigned)time) % p.number_of_subobjects];
+						for (unsigned pi = 0; pi != p.number_of_subobjects; pi++)
+							ogre_node_set_visible(g->nodes[p.subobjects[pi]], false);
+						ogre_node_set_visible(g->nodes[sp], true);
+						OgreSubObjectsSearch w = ogre_scene_find2(g, 29, sp);
+						double df = exp(((unsigned)time) / p.number_of_subobjects / double(h.subobjects[hi]) + index);
 						unsigned flags = reinterpret_cast<const unsigned&>(df);
-						for (size_t wi = 0; wi != w.size(); wi++)
-							g.nodes[w[wi]]->setVisible(flags & (1 << wi) ? true : false, true);
+						for (unsigned wi = 0; wi != w.number_of_subobjects; wi++)
+							ogre_node_set_visible(g->nodes[w.subobjects[wi]], flags & (1 << wi));
 					}
 				}
 			}
@@ -390,11 +417,12 @@ protected:
 			objects[index] -= scenes->GetNumberOfScenes();
 
 		nodes[index]->removeAllChildren();
+		ogre_scene_destroy(&ogos[index]);
 		Ogre::SceneNode* node = nodes[index]->createChildSceneNode();
-		ogre_scene_create(objects[index], gos[index], node, mSceneMgr);
+		ogre_scene_create(objects[index], &ogos[index], node);
 
 		for (unsigned animation_index = 0, size; size = get_animation_size(animation_index); animation_index++)
-			ogre_scene_animation(gos[index], animation_index, rand() % size);
+			ogre_scene_animation(&ogos[index], animation_index, rand() % size);
 	}
 #endif
 
@@ -410,7 +438,7 @@ protected:
 		sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 		load_3d_terrain(path);
-		ogre_terrain_init(mCamera, mSceneMgr);
+		ogre_terrain_init();
 	}
 #endif
 private:
@@ -419,7 +447,7 @@ private:
 	const Scenes* scenes;
 	Ogre::SceneNode* nodes[2];
 	int objects[2];
-	GameObjectScene gos[2];
+	OgreGameObjectScene ogos[2];
 #endif
 #ifdef USE_TERRAIN
 	int terrain;
@@ -448,7 +476,9 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 int main(int argc, char **argv)
 #endif
 {
-//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#ifdef _CRTDBG_MAP_ALLOC
+_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
     {
         // Create application object
         TutorialApplication app;

@@ -222,6 +222,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ogre_node.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ogre_objects.cpp"
 				>
 				<FileConfiguration
@@ -260,6 +264,10 @@
 						UsePrecompiledHeader="2"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ogre_set.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\ogre_terrain.cpp"
@@ -329,6 +337,10 @@
 			</File>
 			<File
 				RelativePath=".\ogre_scenes.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ogre_set.hpp"
 				>
 			</File>
 			<File

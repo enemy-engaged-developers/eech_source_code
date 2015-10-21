@@ -11,7 +11,6 @@
 #endif
 
 static GeometryPtr objects_geometry;
-static MaterialHolderPtr objects_materials;
 static unsigned objects_number_of_objects;
 static std::vector<AnimationMesh> objects_anim;
 
@@ -212,9 +211,9 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 		std::copy(info.idata.begin(), info.idata.end(), buf.idata);
 
 		// Material
-		unsigned material_index = MaterialHolder::get_index();
+		unsigned material_index = ogre_index();
 		MaterialName material_name(material_index);
-		MaterialPtr mat = MaterialManager::getSingleton().create(material_name, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		MaterialPtr mat = MaterialManager::getSingleton().create(material_name, ogre_resource_group);
 		mat->setCullingMode(CULL_ANTICLOCKWISE);
 
 		// TODO: Materials don't use original surface information completely
@@ -308,7 +307,7 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
-				MaterialPtr mata = MaterialManager::getSingleton().create(material_animation_name, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+				MaterialPtr mata = MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
 				*mata = *mat;
 				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(get_animation_texture(animation_index, frame)));
 			}
@@ -337,19 +336,15 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 // Converts objects
 void ogre_objects_init(unsigned number_of_objects, const OBJECT_3D* objects)
 {
-	assert(!objects_geometry.get() && !objects_materials.get());
+	assert(!objects_geometry.get());
 	objects_geometry.reset(new Geometry(OBJECTS_POINTS_PER_VERTEX_BUFFER, OBJECTS_POINTS_PER_INDEX_BUFFER));
 
 	objects_number_of_objects = number_of_objects;
 
-	unsigned material = MaterialHolder::get_index();
-
 	objects_anim.resize(objects_number_of_objects + 1);
 	for (unsigned i = 0; i <= objects_number_of_objects; i++)
-		ogre_objects_convert(objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), objects_anim[i], objects_geometry.get());
+		ogre_objects_convert(objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
-
-	objects_materials.reset(new MaterialHolder(material));
 
 	//objects_geometry->statistics("OG_STAT.TXT");
 }
@@ -358,14 +353,5 @@ void ogre_objects_init(unsigned number_of_objects, const OBJECT_3D* objects)
 void ogre_objects_clear(void)
 {
 	objects_anim.clear();
-
-	for (unsigned i = 0; i <= objects_number_of_objects; i++)
-	{
-			ObjectName object(i);
-			MeshManager::getSingleton().unload(object);
-			MeshManager::getSingleton().remove(object);
-	}
-
 	objects_geometry.reset(0);
-	objects_materials.reset(0);
 }

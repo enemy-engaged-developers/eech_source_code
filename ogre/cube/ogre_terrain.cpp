@@ -134,7 +134,7 @@ public:
 	// Convert materials
 	void convert_types(void)
 	{
-		unsigned material = MaterialHolder::get_index();
+		unsigned material = ogre_index();
 		for (terrain_types i = TERRAIN_TYPE_INVALID + 1; i != TERRAIN_TYPE_LAST; i++)
 		{
 			SurfDesc& sd = sda[i];
@@ -202,7 +202,7 @@ public:
 
 			// TODO: Improve materials support
 
-			MaterialPtr mat = MaterialManager::getSingleton().create(MaterialName(MaterialHolder::get_index()), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+			MaterialPtr mat = MaterialManager::getSingleton().create(MaterialName(ogre_index()), ogre_resource_group);
 			mat->setCullingMode(CULL_ANTICLOCKWISE);
 
 			Pass* pass = mat->getTechnique(0)->getPass(0);
@@ -241,8 +241,6 @@ public:
 
 			sd.material = mat;
 		}
-
-		terrain_materials.reset(new MaterialHolder(material));
 	}
 
 	// Convert geometry
@@ -290,7 +288,7 @@ public:
 		}
 
 		TerrainObject terrain_object(z, x);
-		MeshPtr mesh = MeshManager::getSingleton().createManual(terrain_object, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		MeshPtr mesh = MeshManager::getSingleton().createManual(terrain_object, ogre_resource_group);
 
 		const TERRAIN_3D_SURFACE* surface = s.surface_changes;
 
@@ -449,8 +447,6 @@ private:
 	};
 
 	SurfDesc sda[TERRAIN_TYPE_LAST];
-
-	MaterialHolderPtr terrain_materials;
 };
 typedef std::auto_ptr<TerrainConverter> TerrainConverterPtr;
 
@@ -461,11 +457,6 @@ static TerrainConverterPtr terrain_converter;
 class TerrainLoader : public PageLoader
 {
 public:
-	TerrainLoader(SceneManager* sman)
-		: SceneMgr(sman)
-	{
-	}
-
 	~TerrainLoader(void)
 	{
 		clear();
@@ -485,7 +476,7 @@ public:
 		SectorInfo* si = new SectorInfo(x, z);
 		terrain_converter->convert_sector(x, z, &si->terrain_geometry);
 		si->terrain_geometry.flush();
-		si->ent = SceneMgr->createEntity(TerrainObject(z, x));
+		si->ent = ogre_scene_manager->createEntity(TerrainObject(z, x));
 		addEntity(si->ent, page.centerPoint, Quaternion::IDENTITY);
 		page.userData = si;
 	}
@@ -516,13 +507,12 @@ private:
 		{
 			SectorInfo* si = sis.front();
 			sis.pop_front();
-			SceneMgr->destroyEntity(si->ent);
+			ogre_scene_manager->destroyEntity(si->ent);
 			terrain_converter->destroy_sector(si->x, si->z);
 			delete si;
 		}
 	}
 
-	SceneManager* SceneMgr;
 	std::list<SectorInfo*> sis;
 };
 #endif
@@ -565,10 +555,9 @@ private:
 class TerrainCache
 {
 public:
-	TerrainCache(Camera* camera, SceneManager* sman)
+	TerrainCache()
 		:
 #ifdef USE_TERRAIN_CACHE
-		camera(camera),
 		cur_x(-1000), cur_z(-1000),
 #ifdef USE_TERRAIN_CACHE_SIZE
 		lru_size(0),
@@ -576,27 +565,27 @@ public:
 #endif
 
 #ifdef USE_TERRAIN_PAGING
-		terrain(new PagedGeometry(camera, TERRAIN_3D_SECTOR_SIDE_LENGTH)), terrain_loader(new TerrainLoader(sman)),
+		terrain(new PagedGeometry(ogre_camera, TERRAIN_3D_SECTOR_SIDE_LENGTH)), terrain_loader(new TerrainLoader),
 #else
 #ifndef USE_TERRAIN_STATIC_GEOMETRY
-		terrain_node(sman->getRootSceneNode()->createChildSceneNode()),
+		terrain_node(ogre_scene_manager->getRootSceneNode()->createChildSceneNode()),
 #endif
 #endif
 
 #ifdef USE_TERRAIN_TREES
-		tree_ent(sman->createEntity(TerrainTreeObject())),
+		tree_ent(ogre_scene_manager->createEntity(TerrainTreeObject())),
 #ifdef USE_TERRAIN_TREES_PAGING
-		trees(new PagedGeometry(camera, TERRAIN_3D_SECTOR_SIDE_LENGTH)), trees_loader(new TreesLoader(tree_ent)),
+		trees(new PagedGeometry(ogre_camera, TERRAIN_3D_SECTOR_SIDE_LENGTH)), trees_loader(new TreesLoader(tree_ent)),
 #endif
 #endif
 
-		SceneMgr(sman)
+		unused(0)
 	{
 #ifdef USE_TERRAIN_PAGING
 #ifdef USE_TERRAIN_VISIBILITY
 		terrain->addDetailLevel<BatchPage>(USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 #else
-		terrain->addDetailLevel<BatchPage>(camera->getFarClipDistance());
+		terrain->addDetailLevel<BatchPage>(ogre_camera->getFarClipDistance());
 #endif
 		terrain->setPageLoader(terrain_loader.get());
 #endif
@@ -609,7 +598,7 @@ public:
 #ifdef USE_TERRAIN_VISIBILITY
 		trees->addDetailLevel<BatchPage>(USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 #else
-		trees->addDetailLevel<BatchPage>(camera->getFarClipDistance());
+		trees->addDetailLevel<BatchPage>(ogre_camera->getFarClipDistance());
 #endif
 #endif
 		trees->setPageLoader(trees_loader.get());
@@ -630,7 +619,7 @@ public:
 #endif
 #endif
 #ifdef USE_TERRAIN_TREES
-		SceneMgr->destroyEntity(tree_ent);
+		ogre_scene_manager->destroyEntity(tree_ent);
 #endif
 	}
 
@@ -660,12 +649,12 @@ public:
 			terrain_converter->convert_sector(x, z, &terrain_geometry);
 			terrain_geometry.flush();
 #endif
-			Entity* ent = SceneMgr->createEntity(TerrainObject(z, x));
+			Entity* ent = ogre_scene_manager->createEntity(TerrainObject(z, x));
 #ifdef USE_TERRAIN_STATIC_GEOMETRY
-			StaticGeometry* geom = SceneMgr->createStaticGeometry(TerrainStaticGeometry(z, x));
+			StaticGeometry* geom = ogre_scene_manager->createStaticGeometry(TerrainStaticGeometry(z, x));
 			geom->addEntity(ent, position);
 			geom->build();
-			SceneMgr->destroyEntity(ent);
+			ogre_scene_manager->destroyEntity(ent);
 			sector.sector = geom;
 #ifdef USE_TERRAIN_CONVERT_ON_FLY
 			terrain_converter->destroy_sector(x, z);
@@ -682,9 +671,9 @@ public:
 #ifdef USE_TERRAIN_TREES_OGRE
 		{
 #ifdef USE_TERRAIN_TREES_INSTANCED
-			InstancedGeometry* geom = SceneMgr->createInstancedGeometry(TerrainTree(z, x));
+			InstancedGeometry* geom = ogre_scene_manager->createInstancedGeometry(TerrainTree(z, x));
 #else
-			StaticGeometry* geom = SceneMgr->createStaticGeometry(TerrainTree(z, x));
+			StaticGeometry* geom = ogre_scene_manager->createStaticGeometry(TerrainTree(z, x));
 #endif
 			geom->setRegionDimensions(Vector3(2 * TERRAIN_3D_SECTOR_SIDE_LENGTH, 8192, 2 * TERRAIN_3D_SECTOR_SIDE_LENGTH));
 			geom->setOrigin(position);
@@ -720,7 +709,7 @@ public:
 
 #ifdef USE_TERRAIN_CACHE
 #ifdef USE_TERRAIN_VISIBILITY
-		Vector3 pos = camera->getPosition();
+		Vector3 pos = ogre_camera->getPosition();
 		pos.z = -pos.z;
 		int x_sector = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 		int z_sector = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
@@ -797,9 +786,7 @@ public:
 			{
 				Cache::iterator itor = cache.find(Coord(z, x));
 				if (itor == cache.end())
-				{
 					convert_sector(x, z);
-				}
 				else
 				{
 					Sector& sector = itor->second;
@@ -873,7 +860,7 @@ private:
 #ifndef USE_TERRAIN_PAGING
 #ifdef USE_TERRAIN_DRAW
 #ifdef USE_TERRAIN_STATIC_GEOMETRY
-		SceneMgr->destroyStaticGeometry(sector.sector);
+		ogre_scene_manager->destroyStaticGeometry(sector.sector);
 #else
 		terrain_node->removeChild(sector.sector);
 #endif
@@ -882,9 +869,9 @@ private:
 
 #ifdef USE_TERRAIN_TREES_OGRE
 #ifdef USE_TERRAIN_TREES_INSTANCED
-		SceneMgr->destroyInstancedGeometry(sector.trees);
+		ogre_scene_manager->destroyInstancedGeometry(sector.trees);
 #else
-		SceneMgr->destroyStaticGeometry(sector.trees);
+		ogre_scene_manager->destroyStaticGeometry(sector.trees);
 #endif
 #endif
 
@@ -895,7 +882,6 @@ private:
 
 #ifdef USE_TERRAIN_CACHE
 	Cache cache;
-	Camera* camera;
 	int cur_x, cur_z;
 #ifdef USE_TERRAIN_CACHE_SIZE
 	LRU lru;
@@ -920,7 +906,7 @@ private:
 #endif
 #endif
 
-	SceneManager* SceneMgr;
+	int unused;
 };
 typedef std::auto_ptr<TerrainCache> TerrainCachePtr;
 
@@ -932,7 +918,6 @@ static GeometryPtr terrain_geometry;
 
 #ifdef USE_TERRAIN_TREES
 static GeometryPtr tree_geometry;
-static MaterialHolderPtr tree_materials;
 #endif
 
 static TerrainCachePtr terrain_cache;
@@ -943,7 +928,7 @@ static int old_terrain_3d_map_height, old_terrain_3d_map_width;
 #endif
 
 // Place terrain into the scene
-void ogre_terrain_init(Camera* camera, SceneManager* mgr)
+void ogre_terrain_init(void)
 {
 #ifdef USE_TERRAIN_LIMIT_SIZE
 	old_terrain_3d_map_height = terrain_3d_map_height;
@@ -959,7 +944,8 @@ void ogre_terrain_init(Camera* camera, SceneManager* mgr)
 	assert(!terrain_cache.get());
 
 #ifdef USE_TERRAIN_VISIBILITY
-	mgr->setFog(FOG_LINEAR, ColourValue(0.18f, 0.77f, 0.87f), 0, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH / 2, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
+	//TODO: Wrong place
+	ogre_scene_manager->setFog(FOG_LINEAR, ColourValue(0.18f, 0.77f, 0.87f), 0, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH / 2, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 #endif
 
 	terrain_converter.reset(new TerrainConverter);
@@ -975,7 +961,7 @@ void ogre_terrain_init(Camera* camera, SceneManager* mgr)
 	//terrain_geometry->statistics("TG_STAT.TXT");
 #endif
 
-	terrain_cache.reset(new TerrainCache(camera, mgr));
+	terrain_cache.reset(new TerrainCache);
 
 #if !defined(USE_TERRAIN_VISIBILITY) && defined(USE_TERRAIN_CACHE)
 	for (int z = 0; z < terrain_3d_map_height; z++)
@@ -1009,26 +995,19 @@ void ogre_terrain_update(void)
 
 #ifdef USE_TERRAIN_TREES
 // Use specified object as a tree
-void ogre_terrain_tree(const OBJECT_3D& o)
+void ogre_terrain_tree(const struct OBJECT_3D* o)
 {
-	assert(!tree_geometry.get() && !tree_materials.get());
+	assert(!tree_geometry.get());
 	tree_geometry.reset(new Geometry(0, 0));
-	unsigned material = MaterialHolder::get_index();
 	AnimationMesh am;
-	ogre_objects_convert(o, MeshManager::getSingleton().createManual(TerrainTreeObject(), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), am, tree_geometry.get());
+	ogre_objects_convert(*o, MeshManager::getSingleton().createManual(TerrainTreeObject(), ogre_resource_group), am, tree_geometry.get());
 	tree_geometry->flush();
-	tree_materials.reset(new MaterialHolder(material));
 }
 
 // Clear tree object
 void ogre_terrain_tree_clear(void)
 {
-	TerrainTreeObject terrain_tree_object;
-	MeshManager::getSingleton().unload(terrain_tree_object);
-	MeshManager::getSingleton().remove(terrain_tree_object);
-
 	tree_geometry.reset(0);
-	tree_materials.reset(0);
 }
 #endif
 #endif
