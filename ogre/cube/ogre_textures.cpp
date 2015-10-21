@@ -2,14 +2,9 @@
 
 #include "ogre_int.hpp"
 
-static unsigned max_texture;
-
 // Creates texture resource and uploads texture into Ogre
 void ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data)
 {
-	if (index > max_texture)
-		max_texture = index;
-
 	TextureName texture_name(index);
 
 	TexturePtr tex;

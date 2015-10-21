@@ -20,11 +20,6 @@
 
 #include "ee_3.h"
 
-// FIXME
-unsigned get_animation_size(unsigned index);
-unsigned get_animation_texture(unsigned index, unsigned frame);
-
-
 #define NATIVE_TYPES
 #define LOAD_NORMALS
 #define LOAD_RADIUS

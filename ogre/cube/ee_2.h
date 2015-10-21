@@ -2,15 +2,6 @@
 
 #define ASSERT assert
 
-typedef struct REAL_COLOUR real_colour;
-typedef struct REAL_COLOUR rgb_colour;
-#define ENV_3D ENV_3D_
-#define active_3d_environment active_3d_environment_
-#include "../3denv.h"
-#undef ENV_3D
-#undef active_3d_environment
-
-
 using std::min;
 #define bound(VALUE,LOWER,UPPER) ( ( VALUE ) < ( LOWER ) ? ( LOWER ) : ( ( VALUE ) > ( UPPER ) ? ( UPPER ) : ( VALUE ) ) )
 enum SESSION_SEASON_SETTINGS
@@ -85,13 +76,10 @@ static struct
 		int delay, scale_bottom, scale_top, placenr, number;
 	} water_info[3];
 } current_map_info;
-static struct ENV_3D
-{
-int render_filter;
-int infrared_mode;
-float screen_i_scale, screen_j_scale, x_origin, y_origin;
-struct LIGHT_COLOUR ambient_light;
-} a3denv = { 0, 0 }, *active_3d_environment = &a3denv;
+env_3d act_env, *active_3d_environment = ((act_env.render_filter = RENDER_CLEAR), &act_env);
+#ifndef USE_TERRAIN_CURRENT
+#define infrared_mode render_filter + 1
+#endif
 #define INFRARED_ON 1
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 #define construct_3d_object_by_name(x) NULL
@@ -460,60 +448,7 @@ void deinitialise_file_system ( void )
 
 
 
-void get_3d_transformation_matrix ( matrix3x3 m, float heading, float pitch, float roll )
-{
-
-	float
-		sinh,
-		cosh,
-		sinp,
-		cosp,
-		sinr,
-		cosr,
-		sinrsinh,
-		sinrcosh,
-		cosrsinh,
-		cosrcosh;
-
-	sinh = sin ( heading );
-	cosh = cos ( heading );
-
-	sinp = sin ( pitch );
-	cosp = cos ( pitch );
-
-	sinr = sin ( roll );
-	cosr = cos ( roll );
-
-	sinrsinh = sinr * sinh;
-
-	sinrcosh = sinr * cosh;
-
-	cosrsinh = cosr * sinh;
-
-	cosrcosh = cosr * cosh;
-
-	m [ 0 ] [ 0 ] = cosrcosh + ( sinrsinh * sinp );
-
-	m [ 0 ] [ 1 ] = -sinr * cosp;
-
-	m [ 0 ] [ 2 ] = ( sinrcosh * sinp ) - cosrsinh;
-
-	m [ 1 ] [ 0 ] = sinrcosh - ( cosrsinh * sinp );
-
-	m [ 1 ] [ 1 ] = cosr * cosp;
-
-	m [ 1 ] [ 2 ] = -sinrsinh - ( cosrcosh * sinp );
-
-	m [ 2 ] [ 0 ] = cosp * sinh;
-
-	m [ 2 ] [ 1 ] = sinp;
-
-	m [ 2 ] [ 2 ] = cosp * cosh;
-}
-
-extern void initialise_3d_terrain_normals ( void );
-
-int b = (initialise_3d_terrain_normals(), 1);
+#define get_3d_transformation_matrix(m, heading, pitch, roll)
 
 int get_system_texture_index(const char* name);
 
@@ -522,12 +457,12 @@ void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 }
 float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 )
 {
-	return ( -1 );
+	return 0;
 }
 
 light_3d_source
-        ambient_3d_light,
-			  *current_3d_lights;
+	ambient_3d_light,
+	*current_3d_lights;
 
 const float
 	float_value_zero = 0.0,
@@ -543,11 +478,7 @@ float
 	clip_yonder_reciprocal,
 	clip_yonder;
 
-unsigned int get_3d_point_outcodes ( float x, float y, float z )
-{
-	return 0;
-}
-
+#define get_3d_point_outcodes(x, y, z) 0
 
 
 typedef int object_3d_index_numbers;
@@ -558,58 +489,23 @@ typedef int object_3d_index_numbers;
 
 #include "../3dobjvis.h"
 
-void set_object_3d_instance_relative_position ( object_3d_instance *obj )
-{
-}
-enum OBJECT_3D_VISIBILITY get_object_3d_instance_visibility ( object_3d_instance *obj )
-{
-	return 	OBJECT_3D_VISIBITY_ILLEGAL;
-}
-void insert_low_nonzbuffered_scene_slot_into_3d_scene(struct SCENE_SLOT_DRAWING_LIST *)
-{
-}
-void insert_low_zbuffered_scene_slot_into_3d_scene(struct SCENE_SLOT_DRAWING_LIST *)
-{
-}
+#define set_object_3d_instance_relative_position(obj)
+#define get_object_3d_instance_visibility(obj) OBJECT_3D_VISIBITY_ILLEGAL
+#define insert_low_nonzbuffered_scene_slot_into_3d_scene(x)
+#define insert_low_zbuffered_scene_slot_into_3d_scene(x)
 
 #define shadows_enabled 0
 
-void draw_3d_object_shadow ( object_3d_instance *obj )
-{
-}
+#define draw_3d_object_shadow(obj)
+#define copy_and_recolour_current_3d_lights(colour)
+#define restore_uncoloured_current_3d_lights()
 
-void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
-{
-}
-
-void restore_uncoloured_current_3d_lights ( void )
-{
-}
-
-struct SCENE_SLOT_DRAWING_LIST * get_3d_scene_slot(void)
-{
-	return 0;
-}
+#define get_3d_scene_slot() 0
 
 #define set_fpu_precision_mode_single()
 #define set_fpu_precision_mode_double()
 
-#include "../3dtrans.h"
-
-object_transformed_3d_point
-	transformed_3d_3d_points[1];
-
-object_transformed_2d_point
-	transformed_3d_2d_points[1];
-
-unsigned char
-	transformed_3d_point_outcodes[1],
-	transformed_3d_points_needed[1];
-
-int get_int_fog_distance_value ( float z )
-{
-	return 10000;
-}
+#define get_int_fog_distance_value(z) 255
 void get_3d_fog_distances ( ENV_3D *, float *, float *dist)
 {
 	*dist = 10000;
@@ -627,14 +523,8 @@ void get_3d_fog_distances ( ENV_3D *, float *, float *dist)
 #define draw_terrain_3d_buffered_polygons()
 #define draw_wbuffered_3d_object(obj, object_is_flat, infrared_override)
 
-int outcode_3d_terrain_byte_polygon ( int num_points, terrain_3d_point_byte_reference *reference_points, int *polygon_outcode )
-{
-	return 0;
-}
-int outcode_3d_terrain_word_polygon ( int num_points, terrain_3d_point_word_reference *reference_points, int *polygon_outcode )
-{
-	return 0;
-}
+#define outcode_3d_terrain_byte_polygon(num_points, reference_points, polygon_outcode) 0
+#define outcode_3d_terrain_word_polygon(num_points, reference_points, polygon_outcode) 0
 
 double
 	zbuffer_factor,
@@ -649,27 +539,123 @@ double
 viewport
 	active_viewport;
 
-void terrain_unclipped ( int number_of_points ) { puts ( "terrain_unclipped" ); }
-void terrain_texture_x_unclipped ( int number_of_points ) { puts ( "terrain_texture_x_unclipped" ); }
-void terrain_texture_z_unclipped ( int number_of_points ) { puts ( "terrain_texture_z_unclipped" ); }
-void terrain_colour_unclipped ( int number_of_points ) { puts ( "terrain_colour_unclipped" ); }
-void terrain_texture_x_colour_unclipped ( int number_of_points ) { puts ( "terrain_texture_x_colour_unclipped" ); }
-void terrain_texture_z_colour_unclipped ( int number_of_points ) { puts ( "terrain_texture_z_colour_unclipped" ); }
-void terrain_twopass_unclipped ( int number_of_points ) { puts ( "terrain_twopass_unclipped" ); }
-void terrain_twopass_texture_x_unclipped ( int number_of_points ) { puts ( "terrain_twopass_texture_x_unclipped" ); }
-void terrain_twopass_texture_z_unclipped ( int number_of_points ) { puts ( "terrain_twopass_texture_z_unclipped" ); }
-void terrain_twopass_colour_unclipped ( int number_of_points ) { puts ( "terrain_twopass_colour_unclipped" ); }
-void terrain_twopass_texture_x_colour_unclipped ( int number_of_points ) { puts ( "terrain_twopass_texture_x_colour_unclipped" ); }
-void terrain_twopass_texture_z_colour_unclipped ( int number_of_points ) { puts ( "terrain_twopass_texture_z_colour_unclipped" ); }
-void terrain_clipped ( int number_of_points ) { puts ( "terrain_clipped" ); }
-void terrain_texture_x_clipped ( int number_of_points ) { puts ( "terrain_texture_x_clipped" ); }
-void terrain_texture_z_clipped ( int number_of_points ) { puts ( "terrain_texture_z_clipped" ); }
-void terrain_colour_clipped ( int number_of_points ) { puts ( "terrain_colour_clipped" ); }
-void terrain_texture_x_colour_clipped ( int number_of_points ) { puts ( "terrain_texture_x_colour_clipped" ); }
-void terrain_texture_z_colour_clipped ( int number_of_points ) { puts ( "terrain_texture_z_colour_clipped" ); }
-void terrain_twopass_clipped ( int number_of_points ) { puts ( "terrain_twopass_clipped" ); }
-void terrain_twopass_texture_x_clipped ( int number_of_points ) { puts ( "terrain_twopass_texture_x_clipped" ); }
-void terrain_twopass_texture_z_clipped ( int number_of_points ) { puts ( "terrain_twopass_texture_z_clipped" ); }
-void terrain_twopass_colour_clipped ( int number_of_points ) { puts ( "terrain_twopass_colour_clipped" ); }
-void terrain_twopass_texture_x_colour_clipped ( int number_of_points ) { puts ( "terrain_twopass_texture_x_colour_clipped" ); }
-void terrain_twopass_texture_z_colour_clipped ( int number_of_points ) { puts ( "terrain_twopass_texture_z_colour_clipped" ); }
+typedef	struct SCENE_SLOT_DRAWING_LIST scene_slot_drawing_list;
+
+struct VERTEX
+{
+
+	//
+	// 3D world coordinates ( q = 1/z )
+	//
+
+	float
+		x,
+		y,
+		z,
+		q;
+
+	//
+	// 2D screen coordinates
+	//
+
+	float
+		i,
+		j;
+
+	//
+	// Texture coordinates
+	//
+
+	float
+		u,
+		v,
+		u2,
+		v2;
+
+	//
+	// Linked list management ( next pointer )
+	//
+
+	struct VERTEX
+		*next_vertex;
+
+	unsigned char
+		outcode,
+		specular,
+		fog;
+
+	union
+	{
+
+		unsigned char
+			userdata,
+			userdata1,
+			userdata2,
+			normal_index;
+	};
+
+	//
+	// The following union makes copying between a D3DCOLOR structure a simple memory move.
+	//
+
+	union
+	{
+	
+		struct
+		{
+		
+			unsigned char
+				blue,
+				green,
+				red,
+				alpha;
+		};
+
+		unsigned int
+			colour;
+	};
+
+	union
+	{
+	
+		struct
+		{
+		
+			unsigned char
+				blue2,
+				green2,
+				red2,
+				alpha2;
+		};
+
+		unsigned int
+			colour2;
+	};
+
+	//
+	// Finally, 2 DWORDS to pad the structure to 64 bytes.
+	//
+
+	int
+		padding_dword_1,
+		padding_dword_2;
+};
+
+typedef	struct VERTEX vertex;
+
+#include "terrelev.h"
+#include "terrobjs.h"
+#include "terrsel.h"
+#include "terrgeom.h"
+#include "../3dtrans.h"
+#include "terrmap.h"
+
+object_transformed_3d_point
+	transformed_3d_3d_points[1];
+
+object_transformed_2d_point
+	transformed_3d_2d_points[1];
+
+unsigned char
+	transformed_3d_point_outcodes[1],
+	transformed_3d_points_needed[1];

@@ -79,7 +79,8 @@ void Geometry::flush(void)
 
 void Geometry::statistics(const char* filename) const
 {
-	FILE* f = safe_fopen(filename, "w");
+	FILE* f = fopen(filename, "w");
+	assert(f);
 
 	size_t grand = 0;
 

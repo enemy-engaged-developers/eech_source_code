@@ -10,9 +10,48 @@
 #define OBJECTS_POINTS_PER_INDEX_BUFFER (1u << 22)
 #endif
 
-static GeometryPtr objects_geometry;
-static unsigned objects_number_of_objects;
-static std::vector<AnimationMesh> objects_anim;
+namespace
+{
+	GeometryPtr objects_geometry;
+	std::vector<AnimationMesh> objects_anim;
+	OgreObjectsInit* objects_init;
+}
+
+class Normal
+{
+public:
+	Normal(void)
+	{
+		for (int count = 0; count < 256; count++)
+		{
+			float heading, pitch;
+			pitch = heading = (float)count;
+			heading /= 256.0;
+			pitch /= 256.0;
+			heading *= 2 * M_PI;
+			pitch *= M_PI;
+			heading -= M_PI;
+			pitch -= M_PI / 2;
+			sin_heading[count] = sin(heading);
+			cos_heading[count] = cos(heading);
+			sin_pitch[count] = sin(pitch);
+			cos_pitch[count] = cos(pitch);
+		}
+	}
+
+	void normal(const object_3d_heading_pitch_normal& normal, vec3d& result)
+	{
+		float cp = cos_pitch[normal.pitch];
+		result.x = cp * sin_heading[normal.heading];
+		result.y = sin_pitch[normal.pitch];
+		result.z = cp * cos_heading[normal.heading];
+		result.z = -result.z;
+	}
+private:
+	float sin_heading[256], cos_heading[256], sin_pitch[256], cos_pitch[256];
+};
+
+static Normal normal;
 
 // Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
 static bool
@@ -80,10 +119,7 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 
 #ifdef USE_OBJECTS_NORMALS
 		for (int j = 0; j < o.number_of_point_normals; j++)
-		{
-			generate_object_3d_point_normal(&o.point_normals[j], &normals[j]);
-			normals[j].z = -normals[j].z;
-		}
+			normal.normal(o.point_normals[j], normals[j]);
 #endif
 	}
 
@@ -303,13 +339,13 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 			}
 			unsigned smi = mesh->getNumSubMeshes() - 1;
 			animation[animation_index].push_back(AnimationRef(smi, material_index));
-			unsigned size = get_animation_size(animation_index);
+			unsigned size = objects_init->get_animation_size(animation_index);
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
 				MaterialPtr mata = MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
 				*mata = *mat;
-				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(get_animation_texture(animation_index, frame)));
+				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(objects_init->get_animation_texture(animation_index, frame)));
 			}
 		}
 		while (false);
@@ -334,19 +370,21 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 
 
 // Converts objects
-void ogre_objects_init(unsigned number_of_objects, const OBJECT_3D* objects)
+void ogre_objects_init(struct OgreObjectsInit* init)
 {
+	objects_init = init;
+
 	assert(!objects_geometry.get());
 	objects_geometry.reset(new Geometry(OBJECTS_POINTS_PER_VERTEX_BUFFER, OBJECTS_POINTS_PER_INDEX_BUFFER));
 
-	objects_number_of_objects = number_of_objects;
-
-	objects_anim.resize(objects_number_of_objects + 1);
-	for (unsigned i = 0; i <= objects_number_of_objects; i++)
-		ogre_objects_convert(objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
+	objects_anim.resize(objects_init->number_of_objects + 1);
+	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
+		ogre_objects_convert(objects_init->objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
 
 	//objects_geometry->statistics("OG_STAT.TXT");
+
+	objects_init = 0;
 }
 
 // Clears objects information

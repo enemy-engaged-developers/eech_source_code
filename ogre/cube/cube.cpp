@@ -4,6 +4,8 @@
 
 #include "options.hpp"
 
+#include "OGRE.HPP"
+
 FILE* safe_fopen(const char* filename, const char* mode)
 {
 	FILE* file = fopen(filename, mode);
@@ -23,9 +25,6 @@ void error(const char* msg, ...)
 
 #define PI (3.14159265359f)
 #define PI2 (PI*2)
-#define PI4 (PI*4)
-#define PI_OVER_TWO (PI/2)
-#define PI_OVER_FOUR (PI/4)
 
 
 #include <../COMMON/ARRAY.H>
@@ -36,8 +35,6 @@ void error(const char* msg, ...)
 #include <SCENES.CPP>
 #include <TRANS.CPP>
 #include <LWS_EXP.CPP>
-
-#include "ee_1.h"
 
 #ifdef USE_TERRAIN
 #include "ee_2.h"
@@ -55,8 +52,6 @@ char* get_terrain_type_name(terrain_types type);
 #include "terrsel.c"
 #include "terrgeom.c"
 #endif
-
-#include "OGRE.HPP"
 
 // INCLUDES finish
 
@@ -132,7 +127,8 @@ struct EE
 #endif
 
 #ifdef USE_OBJECTS_ONLY
-		ogre_objects_init(objects->GetNumberOfObjects(), &(*objects)[0]);
+		OgreObjectsInit objects_init = { objects->GetNumberOfObjects(), &(*objects)[0], get_animation_size, get_animation_texture };
+		ogre_objects_init(&objects_init);
 #endif
 
 #ifdef USE_TERRAIN_TREES
@@ -438,7 +434,8 @@ protected:
 		sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 		load_3d_terrain(path);
-		ogre_terrain_init();
+		OgreTerrainInit terrain_init = { terrain_3d_map_height, terrain_3d_map_width, terrain_3d_xz_scale, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale, terrain_type_information, terrain_sectors, terrain_tree_sectors };
+		ogre_terrain_init(&terrain_init);
 	}
 #endif
 private:
