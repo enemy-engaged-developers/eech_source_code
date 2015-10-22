@@ -132,6 +132,7 @@ extern int
 	command_line_force_resolution,
 	command_line_3d_visual_clear_edges,
 	command_line_no_hardware_tnl,
+	command_line_eads,
 	command_line_max_smoke_time,								// arneh 2007-07-10 // updated /thealx/
 	command_line_smoke_optimization,
 	command_line_cloud_puffs,								// Casm 20MAY2012

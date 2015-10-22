@@ -289,7 +289,7 @@ BOOL initialise_direct_3d_driver ( void )
 	d3d_data.d3dpp[D3D_MAIN].SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3d_data.d3dpp[D3D_MAIN].hDeviceWindow = application_window;
 	d3d_data.d3dpp[D3D_MAIN].Windowed = application_video_windowed;
-	d3d_data.d3dpp[D3D_MAIN].EnableAutoDepthStencil = TRUE;
+	d3d_data.d3dpp[D3D_MAIN].EnableAutoDepthStencil = command_line_eads;
 	d3d_data.d3dpp[D3D_MAIN].AutoDepthStencilFormat = D3DFMT_D24S8;
 
 	if ( d3d_common.mfd != MFD_NONE )

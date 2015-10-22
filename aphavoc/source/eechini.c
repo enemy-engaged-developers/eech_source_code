@@ -727,6 +727,8 @@ static const struct config_option options[] =
 		INT(command_line_max_frame_rate) },
 	{ "notnl", "", "GeForce \"TnL\" support (0 = enabled, 1 = disabled) (def = 0)",
 		INT(command_line_no_hardware_tnl) },
+	{ "eads", "", "if XP full screen problems - set to 0",
+		INT(command_line_eads) },
 	{ "3dreset", "", "reset screen resolution to 800x600 (0 = off, 1 = on) (def = 0)",
 		SPEC(set_3dreset, get_zero) },
 	{ "cg", "clean_graphics", "(clean graphics) re-installs graphics files (0 = off, 1 = on) (def = 0)",
