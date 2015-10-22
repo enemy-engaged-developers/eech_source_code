@@ -229,7 +229,11 @@ static int direct_3d_device_release ( void *params )
 		}
 		IDirect3DDevice9_Release ( d3d_data.device[D3D_MFD] );
 	}
-	return IDirect3DDevice9_Release ( d3d_data.device[D3D_MAIN] );
+	if ( d3d_data.device[D3D_MAIN] )
+	{
+		return IDirect3DDevice9_Release ( d3d_data.device[D3D_MAIN] );
+	}
+	return 0;
 }
 
 static int direct_3d_device_reset ( int d3d )
