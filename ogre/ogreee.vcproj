@@ -63,6 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib"
+				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

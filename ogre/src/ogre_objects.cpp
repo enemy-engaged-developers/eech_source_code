@@ -85,7 +85,7 @@ compare_surfaces(const face_surface_description& left, const face_surface_descri
 }
 
 // Converts EE's OBJECT_3D into Ogre::Mesh
-void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& animation, Geometry* geometry)
+void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh& animation, Geometry* geometry)
 {
 	if (!o.number_of_points)
 	{
@@ -247,49 +247,49 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 		// Material
 		unsigned material_index = ogre_index();
 		MaterialName material_name(material_index);
-		MaterialPtr mat = MaterialManager::getSingleton().create(material_name, ogre_resource_group);
-		mat->setCullingMode(CULL_ANTICLOCKWISE);
+		Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(material_name, ogre_resource_group);
+		mat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 		// TODO: Materials don't use original surface information completely
 
-		ColourValue colour(s.red / 255.0f, s.green / 255.0f, s.blue / 255.0f, s.alpha / 255.0f);
+		Ogre::ColourValue colour(s.red / 255.0f, s.green / 255.0f, s.blue / 255.0f, s.alpha / 255.0f);
 
-		Pass* pass = mat->getTechnique(0)->getPass(0);
+		Ogre::Pass* pass = mat->getTechnique(0)->getPass(0);
 
 		if (s.detail)
 			pass->setDepthBias(2.0f);
 
-		TextureUnitState* tus = pass->createTextureUnitState();
+		Ogre::TextureUnitState* tus = pass->createTextureUnitState();
 
 		if (s.textured)
 		{
 			if (!s.texture_animation)
 				tus->setTextureName(TextureName(s.texture_index));
-			tus->setTextureAddressingMode(s.texture_wrapped_u ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, s.texture_wrapped_v ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, TextureUnitState::TAM_CLAMP);
+			tus->setTextureAddressingMode(s.texture_wrapped_u ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, s.texture_wrapped_v ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, Ogre::TextureUnitState::TAM_CLAMP);
 
 #if 1
 			if (s.has_luminosity_texture)
 			{
-				Pass* pass = mat->getTechnique(0)->createPass();
-				TextureUnitState* tus = pass->createTextureUnitState();
+				Ogre::Pass* pass = mat->getTechnique(0)->createPass();
+				Ogre::TextureUnitState* tus = pass->createTextureUnitState();
 
 				if (!s.luminosity_texture_animation)
 					tus->setTextureName(TextureName(s.luminosity_texture_index));
-				tus->setTextureAddressingMode(s.luminosity_texture_wrapped_u ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, s.luminosity_texture_wrapped_v ? TextureUnitState::TAM_WRAP : TextureUnitState::TAM_CLAMP, TextureUnitState::TAM_CLAMP);
-				pass->setSceneBlending(SBT_MODULATE);
+				tus->setTextureAddressingMode(s.luminosity_texture_wrapped_u ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, s.luminosity_texture_wrapped_v ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, Ogre::TextureUnitState::TAM_CLAMP);
+				pass->setSceneBlending(Ogre::SBT_MODULATE);
 			}
 #endif
 		}
 		else
 		{
-			tus->setColourOperationEx(LBX_SOURCE1, LBS_MANUAL, LBS_CURRENT, colour);
+			tus->setColourOperationEx(Ogre::LBX_SOURCE1, Ogre::LBS_MANUAL, Ogre::LBS_CURRENT, colour);
 			if (s.additive || s.translucent)
-				tus->setAlphaOperation(LBX_SOURCE1, LBS_MANUAL, LBS_CURRENT, colour.a);
+				tus->setAlphaOperation(Ogre::LBX_SOURCE1, Ogre::LBS_MANUAL, Ogre::LBS_CURRENT, colour.a);
 		}
 
 		if (/*s.textured && !s.texture_animation && get_textures_info(s.texture_index).contains_alpha ||*/ s.additive || s.translucent)
 		{
-			pass->setSceneBlending(s.additive ? SBT_ADD : SBT_TRANSPARENT_ALPHA);
+			pass->setSceneBlending(s.additive ? Ogre::SBT_ADD : Ogre::SBT_TRANSPARENT_ALPHA);
 			pass->setDepthWriteEnabled(false);
 		}
 
@@ -301,10 +301,10 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 
 		// SubMesh
 
-		SubMesh* sm = mesh->createSubMesh();
+		Ogre::SubMesh* sm = mesh->createSubMesh();
 		sm->useSharedVertices = false;
-		sm->operationType = s.polygons ? RenderOperation::OT_TRIANGLE_LIST : RenderOperation::OT_LINE_LIST;
-		sm->vertexData = OGRE_NEW VertexData(buf.vbuf.vd, buf.vbuf.vbb);
+		sm->operationType = s.polygons ? Ogre::RenderOperation::OT_TRIANGLE_LIST : Ogre::RenderOperation::OT_LINE_LIST;
+		sm->vertexData = OGRE_NEW Ogre::VertexData(buf.vbuf.vd, buf.vbuf.vbb);
 		sm->vertexData->vertexStart = buf.vbuf.offset;
 		sm->vertexData->vertexCount = info.fdata.size() / info.vd.vertex_size;
 		sm->indexData->indexBuffer = buf.ibuf.hib;
@@ -341,7 +341,7 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
-				MaterialPtr mata = MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
+				Ogre::MaterialPtr mata = Ogre::MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
 				*mata = *mat;
 				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(objects_init->get_animation_texture(animation_index, frame)));
 			}
@@ -349,7 +349,7 @@ void ogre_objects_convert(const OBJECT_3D& o, MeshPtr mesh, AnimationMesh& anima
 		while (false);
 	}
 
-	mesh->_setBounds(AxisAlignedBox(Vector3(-o.radius, -o.radius, -o.radius), Vector3(o.radius, o.radius, o.radius)), false);
+	mesh->_setBounds(Ogre::AxisAlignedBox(Ogre::Vector3(-o.radius, -o.radius, -o.radius), Ogre::Vector3(o.radius, o.radius, o.radius)), false);
 	mesh->_setBoundingSphereRadius(o.radius);
 	mesh->load();
 }
@@ -377,7 +377,7 @@ void ogre_objects_init(struct OgreObjectsInit* init)
 
 	objects_anim.resize(objects_init->number_of_objects + 1);
 	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
-		ogre_objects_convert(objects_init->objects[i], MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
+		ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
 
 	//objects_geometry->statistics("OG_STAT.TXT");

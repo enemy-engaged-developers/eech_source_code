@@ -6,8 +6,8 @@ Geometry::~Geometry()
 	{
 		for (LIST_VBUF::iterator vbuf(vbufl->second.list.begin()); vbuf != vbufl->second.list.end(); ++vbuf)
 		{
-			HardwareBufferManager::getSingleton().destroyVertexBufferBinding(vbuf->vbb);
-			HardwareBufferManager::getSingleton().destroyVertexDeclaration(vbuf->vd);
+			Ogre::HardwareBufferManager::getSingleton().destroyVertexBufferBinding(vbuf->vbb);
+			Ogre::HardwareBufferManager::getSingleton().destroyVertexDeclaration(vbuf->vd);
 		}
 	}
 }
@@ -29,11 +29,11 @@ void Geometry::get_buf(const VertexDescription& s, size_t number_of_points, size
 		size_t elements = std::max(number_of_points, POINTS_PER_VERTEX_BUFFER);
 
 		VBUF vbuf;
-		vbuf.vbb = HardwareBufferManager::getSingleton().createVertexBufferBinding();
+		vbuf.vbb = Ogre::HardwareBufferManager::getSingleton().createVertexBufferBinding();
 
 		vbuf.index = vbuf.vbb->getNextIndex();
 
-		vbuf.vd = HardwareBufferManager::getSingleton().createVertexDeclaration();
+		vbuf.vd = Ogre::HardwareBufferManager::getSingleton().createVertexDeclaration();
 		s.translate(vbuf.vd, vbuf.index);
 
 		vbuf.offset = 0;
@@ -57,7 +57,7 @@ void Geometry::get_buf(const VertexDescription& s, size_t number_of_points, size
 
 		IBUF ibuf;
 		size_t elements = std::max(number_of_indices, POINTS_PER_INDEX_BUFFER);
-		ibuf.hib = HardwareBufferManager::getSingleton().createIndexBuffer(INDEX_BUFFER_TYPE, elements, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
+		ibuf.hib = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(INDEX_BUFFER_TYPE, elements, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 		ibuf.offset = 0;
 		ibufs.list.push_back(ibuf);
 		ibufs.shadow.resize(elements);
@@ -127,9 +127,9 @@ void Geometry::flush_vbuf(VBUF_LIST& vbl, size_t vertex_size)
 	VBUF& vbuf = vbl.list.back();
 	assert(vbuf.hvb.isNull());
 
-	vbuf.hvb = HardwareBufferManager::getSingleton().createVertexBuffer(vertex_size * sizeof(Real), vbuf.offset, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
+	vbuf.hvb = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(vertex_size * sizeof(Ogre::Real), vbuf.offset, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 	vbuf.vbb->setBinding(vbuf.index, vbuf.hvb);
-	vbuf.hvb->writeData(0, vbuf.offset * vertex_size * sizeof(Real), &vbl.shadow[0], true);
+	vbuf.hvb->writeData(0, vbuf.offset * vertex_size * sizeof(Ogre::Real), &vbl.shadow[0], true);
 	vbl.shadow.clear();
 }
 

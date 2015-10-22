@@ -49,7 +49,7 @@ namespace
 
 			unsigned offset = scene.elements.size();
 			ito[index] = offset;
-			scene.elements.push_back(SceneDatabaseElement(!number ? String() : ObjectName(number)));
+			scene.elements.push_back(SceneDatabaseElement(!number ? Ogre::String() : ObjectName(number)));
 			if (sub_object_index > 0)
 				scene.sub_objects[sub_object_index].push_back(offset);
 			ogre_objects_add_animation(number, scene.animation, offset);
@@ -67,18 +67,18 @@ namespace
 		{
 			struct T
 			{
-				static Quaternion Orientation(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
+				static Ogre::Quaternion Orientation(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
-					//return Quaternion(Radian(frame->heading), Vector3::UNIT_Y) * Quaternion(Radian(frame->pitch), Vector3::UNIT_X) * Quaternion(Radian(frame->roll), Vector3::UNIT_Z);
-					Matrix3 m; m.FromEulerAnglesYXZ(Radian(-frame->heading), Radian(-frame->pitch), Radian(frame->roll)); return m;
+					//return Ogre::Quaternion(Radian(frame->heading), Ogre::Vector3::UNIT_Y) * Ogre::Quaternion(Ogre::Radian(frame->pitch), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Radian(frame->roll), Ogre::Vector3::UNIT_Z);
+					Ogre::Matrix3 m; m.FromEulerAnglesYXZ(Ogre::Radian(-frame->heading), Ogre::Radian(-frame->pitch), Ogre::Radian(frame->roll)); return m;
 				}
-				static Vector3 Position(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
+				static Ogre::Vector3 Position(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
-					return Vector3(frame->x, frame->y, -frame->z);
+					return Ogre::Vector3(frame->x, frame->y, -frame->z);
 				}
-				static Vector3 Scale(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
+				static Ogre::Vector3 Scale(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
-					return Vector3(frame->scale_x, frame->scale_y, frame->scale_z);
+					return Ogre::Vector3(frame->scale_x, frame->scale_y, frame->scale_z);
 				}
 			};
 
@@ -90,13 +90,13 @@ namespace
 				SceneDatabaseElement& el = scene.elements.back();
 				if (number_of_keyframes > 1)
 				{
-					MeshPtr mesh = MeshManager::getSingleton().getByName(animation_mesh, ogre_resource_group);
-					Animation* anim = mesh->createAnimation(KeyframeAnimationName(ogre_index()), keyframes[number_of_keyframes - 1].index / 30.0f);
-					NodeAnimationTrack* track = anim->createNodeTrack(0);
+					Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(animation_mesh, ogre_resource_group);
+					Ogre::Animation* anim = mesh->createAnimation(KeyframeAnimationName(ogre_index()), keyframes[number_of_keyframes - 1].index / 30.0f);
+					Ogre::NodeAnimationTrack* track = anim->createNodeTrack(0);
 					for (int i = 0; i < number_of_keyframes; i++)
 					{
 						const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame = &keyframes[i];
-						TransformKeyFrame* key = track->createNodeKeyFrame(keyframes[i].index / 30.0f);
+						Ogre::TransformKeyFrame* key = track->createNodeKeyFrame(keyframes[i].index / 30.0f);
 						key->setTranslate(T::Position(frame));
 						key->setRotation(T::Orientation(frame));
 						key->setScale(T::Scale(frame));
@@ -168,7 +168,7 @@ void ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABAS
 	LwsExport lwsexport;
 
 	animation_mesh = ObjectName(-1);
-	MeshManager::getSingleton().createManual(animation_mesh, ogre_resource_group);
+	Ogre::MeshManager::getSingleton().createManual(animation_mesh, ogre_resource_group);
 
 	scenes.resize(number_of_scenes + 1);
 
@@ -197,14 +197,14 @@ void ogre_scene_init(struct OgreGameObjectScene* scene)
 void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
 {
 	std::auto_ptr<GameObjectScene> gos(new GameObjectScene);
-	SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
+	Ogre::SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
 	SceneDatabase& sd = scenes[scene_number];
 	gos->database = &sd;
 	gos->nodes.clear();
 	gos->nodes.reserve(sd.elements.size());
 	for (SceneDatabaseElements::const_iterator itor(sd.elements.begin()); itor != sd.elements.end(); ++itor)
 	{
-		SceneNode* node = (itor->parent == SceneDatabaseElement::no_parent ? root : gos->nodes[itor->parent])->createChildSceneNode();
+		Ogre::SceneNode* node = (itor->parent == SceneDatabaseElement::no_parent ? root : gos->nodes[itor->parent])->createChildSceneNode();
 		node->setPosition(itor->position);
 		node->setOrientation(itor->orientation);
 		node->setScale(itor->scale);
@@ -223,7 +223,7 @@ void ogre_scene_destroy(struct OgreGameObjectScene* scene)
 {
 	if (scene->internal)
 	{
-		struct SceneNode* sn = reinterpret_cast<SceneNode*>(scene->root);
+		Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(scene->root);
 		delete static_cast<GameObjectScene*>(scene->internal);
 		//FIXME
 		sn->removeAndDestroyAllChildren();
@@ -287,9 +287,9 @@ void ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation,
 	const SceneAnimationRefs& sars = itor->second;
 	for (SceneAnimationRefs::const_iterator sar(sars.begin()); sar != sars.end(); ++sar)
 	{
-		Entity* entity = dynamic_cast<Entity*>(gos->nodes[sar->subobject]->getAttachedObject(0));
+		Ogre::Entity* entity = dynamic_cast<Ogre::Entity*>(gos->nodes[sar->subobject]->getAttachedObject(0));
 		assert(entity);
-		SubEntity* subentity = entity->getSubEntity(sar->submesh);
+		Ogre::SubEntity* subentity = entity->getSubEntity(sar->submesh);
 		assert(subentity);
 		subentity->setMaterialName(MaterialAnimationName(sar->material_index, frame));
 	}

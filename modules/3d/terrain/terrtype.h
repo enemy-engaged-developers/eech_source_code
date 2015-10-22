@@ -279,6 +279,12 @@ struct TERRAIN_TYPE_INFO
 		*texture,
 		*texture2;
 
+#ifdef OGRE_EE
+	int
+		texture_index,
+		texture2_index;
+#endif
+
 	unsigned char
 		red,
 		green,

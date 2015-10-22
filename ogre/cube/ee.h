@@ -99,12 +99,6 @@ env_3d act_env, *active_3d_environment = ((act_env.render_filter = RENDER_CLEAR)
 #define convert_float_to_int(x, y) *(y) = (int)(x)
 #define asm_convert_float_to_int convert_float_to_int
 static struct SCREEN* system_textures[4096];
-static void fill_system_textures(void)
-{
-	for (int i = 0; i < sizeof(system_textures) / sizeof(*system_textures); i++)
-		system_textures[i] = (struct SCREEN*)i;
-}
-static int init_system_textures = (fill_system_textures(), 1);
 
 float normalise_3d_vector ( vec3d *vector )
 {

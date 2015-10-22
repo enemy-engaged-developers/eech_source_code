@@ -1,9 +1,9 @@
 #ifdef USE_INDICES32
-#define INDEX_BUFFER_TYPE HardwareIndexBuffer::IT_32BIT
+#define INDEX_BUFFER_TYPE Ogre::HardwareIndexBuffer::IT_32BIT
 #define VERTICES_HARD_LIMIT (~0u)
 typedef unsigned int IndexType;
 #else
-#define INDEX_BUFFER_TYPE HardwareIndexBuffer::IT_16BIT
+#define INDEX_BUFFER_TYPE Ogre::HardwareIndexBuffer::IT_16BIT
 #define VERTICES_HARD_LIMIT (1u << 16)
 typedef unsigned short IndexType;
 #endif
@@ -67,41 +67,41 @@ struct VertexDescription
 		init(normal, diffuse, specular, texture1, texture2);
 	}
 
-	void translate(VertexDeclaration* vd, unsigned short index) const
+	void translate(Ogre::VertexDeclaration* vd, unsigned short index) const
 	{
 		size_t offset = 0;
-		vd->addElement(index, offset, VET_FLOAT3, VES_POSITION);
-		offset += VertexElement::getTypeSize(VET_FLOAT3);
+		vd->addElement(index, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION);
+		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 		if (diffuse)
 		{
-			vd->addElement(index, offset, VET_COLOUR, VES_DIFFUSE);
-			offset += VertexElement::getTypeSize(VET_COLOUR);
+			vd->addElement(index, offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE);
+			offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
 		}
 		if (specular)
 		{
-			vd->addElement(index, offset, VET_COLOUR, VES_SPECULAR);
-			offset += VertexElement::getTypeSize(VET_COLOUR);
+			vd->addElement(index, offset, Ogre::VET_COLOUR, Ogre::VES_SPECULAR);
+			offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
 		}
 #ifdef USE_NORMALS
 		if (normal)
 		{
-			vd->addElement(index, offset, VET_FLOAT3, VES_NORMAL);
-			offset += VertexElement::getTypeSize(VET_FLOAT3);
+			vd->addElement(index, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL);
+			offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 		}
 #endif
 #ifdef USE_TEXTURES
 		if (texture1)
 		{
-			vd->addElement(index, offset, VET_FLOAT2, VES_TEXTURE_COORDINATES);
-			offset += VertexElement::getTypeSize(VET_FLOAT2);
+			vd->addElement(index, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
+			offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT2);
 		}
 		if (texture2)
 		{
-			vd->addElement(index, offset, VET_FLOAT2, VES_TEXTURE_COORDINATES, texture1);
-			offset += VertexElement::getTypeSize(VET_FLOAT2);
+			vd->addElement(index, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES, texture1);
+			offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT2);
 		}
 #endif
-		assert(offset == vertex_size * sizeof(Real));
+		assert(offset == vertex_size * sizeof(Ogre::Real));
 	}
 
 	size_t vertex_size;
@@ -125,17 +125,17 @@ public:
 	// Vertex buffer descriptor
 	struct VBUF
 	{
-		VertexBufferBinding* vbb;
-		HardwareVertexBufferSharedPtr hvb;
+		Ogre::VertexBufferBinding* vbb;
+		Ogre::HardwareVertexBufferSharedPtr hvb;
 		unsigned short index;
-		VertexDeclaration* vd;
+		Ogre::VertexDeclaration* vd;
 		size_t offset;
 	};
 
 	// Index buffer descriptor
 	struct IBUF
 	{
-		HardwareIndexBufferSharedPtr hib;
+		Ogre::HardwareIndexBufferSharedPtr hib;
 		size_t offset;
 	};
 

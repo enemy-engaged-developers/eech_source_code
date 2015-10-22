@@ -2237,10 +2237,16 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 	if ( xz_texture_size2 == 0.0 )	xz_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( y_texture_size2 == 0.0 )		y_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
 
+#ifdef OGRE_EE
+	terrain_type_information[type].texture_index = texture;
+#endif
 	terrain_type_information[type].texture = system_textures[texture];
 	terrain_type_information[type].xz_texture_scale = ( TERRAIN_3D_XZ_SCALE / xz_texture_size );
 	terrain_type_information[type].y_texture_scale =  1.0 / y_texture_size;
 
+#ifdef OGRE_EE
+	terrain_type_information[type].texture2_index = texture2;
+#endif
 	terrain_type_information[type].texture2 = system_textures[texture2];
 	terrain_type_information[type].xz_texture_scale2 = ( noisemap_scale_adjustment * TERRAIN_3D_XZ_SCALE / (xz_texture_size2));
 	terrain_type_information[type].y_texture_scale2 = 1.0 / y_texture_size2;
@@ -2260,7 +2266,13 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 void set_terrain_textures ( terrain_types type,  int texture, int texture2 )
 {
 
+#ifdef OGRE_EE
+	terrain_type_information[type].texture_index = texture;
+#endif
 	terrain_type_information[type].texture = system_textures[texture];
+#ifdef OGRE_EE
+	terrain_type_information[type].texture2_index = texture2;
+#endif
 	terrain_type_information[type].texture2 = system_textures[texture2];
 }
 

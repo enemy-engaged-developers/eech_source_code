@@ -84,9 +84,9 @@
 #include "OgreSubEntity.h"
 #include "OgreMeshManager.h"
 #include "OgreHardwarePixelBuffer.h"
+#include "OgreStaticGeometry.h"
 
-using namespace Ogre;
-using namespace Forests;
+#define OGRE_EE
 
 #include "ee.h"
 

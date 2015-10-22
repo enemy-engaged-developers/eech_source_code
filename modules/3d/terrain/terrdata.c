@@ -1559,6 +1559,9 @@ void set_all_types ( int index )
 	for ( count = ( TERRAIN_TYPE_INVALID + 1 ); count < TERRAIN_TYPE_LAST; count++ )
 	{
 
+#ifdef OGRE_EE
+		terrain_type_information[count].texture_index = index;
+#endif
 		terrain_type_information[count].texture = system_textures[index];
 	}
 }
