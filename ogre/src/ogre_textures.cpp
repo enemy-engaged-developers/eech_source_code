@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "ogre_int.hpp"
 
 // Creates texture resource and uploads texture into Ogre

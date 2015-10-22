@@ -14,6 +14,7 @@ Tutorial Framework (for Ogre 1.9)
 http://www.ogre3d.org/wiki/
 -----------------------------------------------------------------------------
 */
+#include "ogre_int.hpp"
 
 #include "BaseApplication.h"
 

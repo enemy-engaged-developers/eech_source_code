@@ -1,9 +1,7 @@
 #ifndef OGRE_INT_HPP
 #define OGRE_INT_HPP
 
-#include "options.hpp"
-
-#include "ogre.hpp"
+#include "ogreee.h"
 
 // Options for convertions
 
@@ -14,6 +12,7 @@
 #define USE_TEXTURES
 // Use 32-bit or 16-bit indices
 //#define USE_INDICES32
+#define USE_TERRAIN_TREES
 
 // Objects options
 #ifdef USE_NORMALS
@@ -26,7 +25,6 @@
 #endif
 
 // Terrain options
-#ifdef USE_TERRAIN
 #ifdef USE_NORMALS
 // Use per-vertex normals for terrain or not
 // TODO: Produces strange results with colours
@@ -71,16 +69,26 @@
 
 #ifdef _DEBUG
 // Decreases terrain processing time decreasing number of sectors in terrain
-#define USE_TERRAIN_LIMIT_SIZE 20
-#endif
-
+#define USE_TERRAIN_LIMIT_SIZE 20u
 #endif
 
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846f
 #endif
 
+#include "PagedGeometryConfig.h"
+#include "PagedGeometry.h"
+#include "BatchPage.h"
+#include "OgreSubMesh.h"
+#include "OgreSubEntity.h"
+#include "OgreMeshManager.h"
+#include "OgreHardwarePixelBuffer.h"
+
+using namespace Ogre;
+using namespace Forests;
+
+#include "ee.h"
 
 // Helper for Ogre resource names creation
 class fmt
@@ -105,7 +113,7 @@ private:
 	void operator =(fmt&);
 };
 
-#define DEFINE_NAME(name,args,format,params) \
+#define DEFINE_NAME(name, args, format, params) \
 struct name : private fmt \
 { \
 	explicit name(args) \
@@ -123,28 +131,19 @@ DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
-#ifdef USE_TERRAIN
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainStaticGeometry, unsigned z _ unsigned x, "TERRAIN_STATIC_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
 DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
-#endif
 #undef _
 
 #undef DEFINE_NAME
 
 
-using namespace Ogre;
-using namespace Forests;
-
 #include "ogre_set.hpp"
-
 #include "ogre_geometry.hpp"
-
 #include "ogre_animation.hpp"
-
 #include "ogre_objects.hpp"
-
 #include "ogre_scenes.hpp"
 
 #endif

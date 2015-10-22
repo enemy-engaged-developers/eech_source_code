@@ -64,6 +64,136 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OGRE_EE
+
+//void terrain_clipped ( int number_of_points );
+
+#define draw_3d_terrain_clipped_fan_word_face terrain_clipped
+
+#define draw_3d_terrain_clipped_fan_byte_face terrain_clipped
+
+#define draw_3d_terrain_clipped_strip_word_face terrain_clipped
+
+#define draw_3d_terrain_clipped_strip_byte_face terrain_clipped
+
+//void terrain_texture_x_clipped ( int number_of_points );
+
+#define draw_3d_terrain_texture_x_clipped_strip_word_face terrain_texture_x_clipped
+
+#define draw_3d_terrain_texture_x_clipped_strip_byte_face terrain_texture_x_clipped
+
+#define draw_3d_terrain_texture_x_clipped_fan_word_face terrain_texture_x_clipped
+
+#define draw_3d_terrain_texture_x_clipped_fan_byte_face terrain_texture_x_clipped
+
+//void terrain_texture_z_clipped ( int number_of_points );
+
+#define draw_3d_terrain_texture_z_clipped_strip_word_face terrain_texture_z_clipped
+
+#define draw_3d_terrain_texture_z_clipped_strip_byte_face terrain_texture_z_clipped
+
+#define draw_3d_terrain_texture_z_clipped_fan_word_face terrain_texture_z_clipped
+
+#define draw_3d_terrain_texture_z_clipped_fan_byte_face terrain_texture_z_clipped
+
+
+
+//void terrain_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_colour_clipped_fan_word_face terrain_colour_clipped
+
+#define draw_3d_terrain_colour_clipped_fan_byte_face terrain_colour_clipped
+
+#define draw_3d_terrain_colour_clipped_strip_word_face terrain_colour_clipped
+
+#define draw_3d_terrain_colour_clipped_strip_byte_face terrain_colour_clipped
+
+//void terrain_texture_x_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_texture_x_colour_clipped_fan_word_face terrain_texture_x_colour_clipped
+
+#define draw_3d_terrain_texture_x_colour_clipped_fan_byte_face terrain_texture_x_colour_clipped
+
+#define draw_3d_terrain_texture_x_colour_clipped_strip_word_face terrain_texture_x_colour_clipped
+
+#define draw_3d_terrain_texture_x_colour_clipped_strip_byte_face terrain_texture_x_colour_clipped
+
+//void terrain_texture_z_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_texture_z_colour_clipped_fan_word_face terrain_texture_z_colour_clipped
+
+#define draw_3d_terrain_texture_z_colour_clipped_fan_byte_face terrain_texture_z_colour_clipped
+
+#define draw_3d_terrain_texture_z_colour_clipped_strip_word_face terrain_texture_z_colour_clipped
+
+#define draw_3d_terrain_texture_z_colour_clipped_strip_byte_face terrain_texture_z_colour_clipped
+
+
+
+//void terrain_twopass_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_clipped_fan_word_face terrain_twopass_clipped
+
+#define draw_3d_terrain_twopass_clipped_fan_byte_face terrain_twopass_clipped
+
+#define draw_3d_terrain_twopass_clipped_strip_word_face terrain_twopass_clipped
+
+#define draw_3d_terrain_twopass_clipped_strip_byte_face terrain_twopass_clipped
+
+//void terrain_twopass_texture_x_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_texture_x_clipped_strip_word_face terrain_twopass_texture_x_clipped
+
+#define draw_3d_terrain_twopass_texture_x_clipped_strip_byte_face terrain_twopass_texture_x_clipped
+
+#define draw_3d_terrain_twopass_texture_x_clipped_fan_word_face terrain_twopass_texture_x_clipped
+
+#define draw_3d_terrain_twopass_texture_x_clipped_fan_byte_face terrain_twopass_texture_x_clipped
+
+//void terrain_twopass_texture_z_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_texture_z_clipped_strip_word_face terrain_twopass_texture_z_clipped
+
+#define draw_3d_terrain_twopass_texture_z_clipped_strip_byte_face terrain_twopass_texture_z_clipped
+
+#define draw_3d_terrain_twopass_texture_z_clipped_fan_word_face terrain_twopass_texture_z_clipped
+
+#define draw_3d_terrain_twopass_texture_z_clipped_fan_byte_face terrain_twopass_texture_z_clipped
+
+
+
+//void terrain_twopass_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_colour_clipped_fan_word_face terrain_twopass_colour_clipped
+
+#define draw_3d_terrain_twopass_colour_clipped_fan_byte_face terrain_twopass_colour_clipped
+
+#define draw_3d_terrain_twopass_colour_clipped_strip_word_face terrain_twopass_colour_clipped
+
+#define draw_3d_terrain_twopass_colour_clipped_strip_byte_face terrain_twopass_colour_clipped
+
+//void terrain_twopass_texture_x_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_texture_x_colour_clipped_fan_word_face terrain_twopass_texture_x_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_x_colour_clipped_fan_byte_face terrain_twopass_texture_x_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_x_colour_clipped_strip_word_face terrain_twopass_texture_x_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_x_colour_clipped_strip_byte_face terrain_twopass_texture_x_colour_clipped
+
+//void terrain_twopass_texture_z_colour_clipped ( int number_of_points );
+
+#define draw_3d_terrain_twopass_texture_z_colour_clipped_fan_word_face terrain_twopass_texture_z_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_z_colour_clipped_fan_byte_face terrain_twopass_texture_z_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_z_colour_clipped_strip_word_face terrain_twopass_texture_z_colour_clipped
+
+#define draw_3d_terrain_twopass_texture_z_colour_clipped_strip_byte_face terrain_twopass_texture_z_colour_clipped
+
+#else
+
 extern void draw_3d_terrain_clipped_fan_word_face ( int number_of_points );
 
 extern void draw_3d_terrain_clipped_fan_byte_face ( int number_of_points );
@@ -165,6 +295,8 @@ extern void draw_3d_terrain_twopass_texture_x_colour_clipped_strip_byte_face ( i
 extern void draw_3d_terrain_twopass_texture_z_colour_clipped_strip_word_face ( int number_of_points );
 
 extern void draw_3d_terrain_twopass_texture_z_colour_clipped_strip_byte_face ( int number_of_points );
+
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

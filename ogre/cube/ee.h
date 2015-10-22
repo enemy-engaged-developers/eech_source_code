@@ -448,7 +448,7 @@ void deinitialise_file_system ( void )
 
 
 
-#define get_3d_transformation_matrix(m, heading, pitch, roll)
+#define get_3d_transformation_matrix(m, heading, pitch, roll) memset(m, 0, sizeof(m))
 
 int get_system_texture_index(const char* name);
 

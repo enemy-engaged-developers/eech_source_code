@@ -1,8 +1,15 @@
-#include "stdafx.h"
-
 #include "ogre_int.hpp"
 
-#include "lws_exp.hpp"
+#define NATIVE_TYPES
+#define NO_LWSFILEEXPORTER
+#define NO_LWSCAMERAEXPORT
+#define MAX_NUMBER_OF_SUB_OBJECT_INDICES 512
+static void error(...)
+{
+	abort();
+}
+
+#include "lws_exp.cpp"
 
 namespace
 {
@@ -181,14 +188,16 @@ void ogre_scenes_clear(void)
 void ogre_scene_init(struct OgreGameObjectScene* scene)
 {
 	scene->internal = 0;
+	scene->root = 0;
 	scene->number_of_nodes = 0;
 	scene->nodes = 0;
 }
 
 // Place the scene as a child of the supplied SceneNode
-void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene, SceneNode* root)
+void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
 {
 	std::auto_ptr<GameObjectScene> gos(new GameObjectScene);
+	SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
 	SceneDatabase& sd = scenes[scene_number];
 	gos->database = &sd;
 	gos->nodes.clear();
@@ -204,6 +213,7 @@ void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene, Scen
 
 		gos->nodes.push_back(node);
 	}
+	scene->root = reinterpret_cast<OgreNode*>(root);
 	scene->number_of_nodes = gos->nodes.size();
 	scene->nodes = !gos->nodes.empty() ? reinterpret_cast<struct OgreNode**>(&gos->nodes[0]) : 0;
 	scene->internal = gos.release();
@@ -211,7 +221,14 @@ void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene, Scen
 
 void ogre_scene_destroy(struct OgreGameObjectScene* scene)
 {
-	delete static_cast<GameObjectScene*>(scene->internal);
+	if (scene->internal)
+	{
+		struct SceneNode* sn = reinterpret_cast<SceneNode*>(scene->root);
+		delete static_cast<GameObjectScene*>(scene->internal);
+		//FIXME
+		sn->removeAndDestroyAllChildren();
+		ogre_scene_manager->getRootSceneNode()->removeChild(sn);
+	}
 	ogre_scene_init(scene);
 }
 

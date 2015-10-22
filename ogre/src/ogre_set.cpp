@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "ogre_int.hpp"
 
 Ogre::SceneManager* ogre_scene_manager;

@@ -1,6 +1,12 @@
 #ifndef OGRE_EE_H
 #define OGRE_EE_H
 
+#ifdef OGREEE_EXPORTS
+#define OGREEE_API __declspec(dllexport)
+#else
+#define OGREEE_API __declspec(dllimport)
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -9,11 +15,12 @@ extern "C"
 struct OBJECT_3D;
 struct OBJECT_3D_SCENE_DATABASE_ENTRY;
 typedef float matrix3x3[3][3];
+struct VEC3D;
 
-void ogre_set(const char* resource_group, void* scene_manager, void* camera);
+OGREEE_API void ogre_set(const char* resource_group, void* scene_manager, void* camera);
 
-void ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data);
-void ogre_textures_clear(void);
+OGREEE_API void ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data);
+OGREEE_API void ogre_textures_clear(void);
 
 struct OgreObjectsInit
 {
@@ -23,18 +30,21 @@ struct OgreObjectsInit
 	unsigned (*get_animation_texture)(unsigned index, unsigned frame);
 };
 
-void ogre_objects_init(struct OgreObjectsInit* init);
-void ogre_objects_clear(void);
+OGREEE_API void ogre_objects_init(struct OgreObjectsInit* init);
+OGREEE_API void ogre_objects_clear(void);
 
 struct OgreNode;
 
-void ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation);
-void ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orientation);
-void ogre_node_set_visible(struct OgreNode* node, int visible);
+OGREEE_API void ogre_node_get_position(struct OgreNode* node, struct VEC3D* position);
+OGREEE_API void ogre_node_set_position(struct OgreNode* node, struct VEC3D* position);
+OGREEE_API void ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation);
+OGREEE_API void ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orientation);
+OGREEE_API void ogre_node_set_visible(struct OgreNode* node, int visible);
 
 struct OgreGameObjectScene
 {
 	void* internal;
+	struct OgreNode* root;
 	unsigned number_of_nodes;
 	struct OgreNode** nodes;
 };
@@ -45,16 +55,16 @@ struct OgreSubObjectsSearch
 	const unsigned* subobjects;
 };
 
-void ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database);
-void ogre_scenes_clear(void);
-void ogre_scene_init(struct OgreGameObjectScene* scene);
-void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene, Ogre::SceneNode* root);
-void ogre_scene_destroy(struct OgreGameObjectScene* scene);
-struct OgreSubObjectsSearch ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id);
-struct OgreSubObjectsSearch ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent);
-float ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject);
-void ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time);
-void ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame);
+OGREEE_API void ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database);
+OGREEE_API void ogre_scenes_clear(void);
+OGREEE_API void ogre_scene_init(struct OgreGameObjectScene* scene);
+OGREEE_API void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene);
+OGREEE_API void ogre_scene_destroy(struct OgreGameObjectScene* scene);
+OGREEE_API struct OgreSubObjectsSearch ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id);
+OGREEE_API struct OgreSubObjectsSearch ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent);
+OGREEE_API float ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject);
+OGREEE_API void ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time);
+OGREEE_API void ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame);
 
 typedef void (*OgreTerrainFunction)(int);
 
@@ -93,11 +103,20 @@ struct OgreTerrainInit
 	struct TERRAIN_3D_TREE_SECTOR** tree_sectors;
 };
 
-void ogre_terrain_init(struct OgreTerrainInit* init);
-void ogre_terrain_clear(void);
-void ogre_terrain_update(void);
-void ogre_terrain_tree(const struct OBJECT_3D* o);
-void ogre_terrain_tree_clear(void);
+OGREEE_API void ogre_terrain_init(struct OgreTerrainInit* init);
+OGREEE_API void ogre_terrain_clear(void);
+OGREEE_API void ogre_terrain_update(void);
+OGREEE_API void ogre_terrain_tree(const struct OBJECT_3D* o);
+OGREEE_API void ogre_terrain_tree_clear(void);
+
+struct OgreRun
+{
+	void (*init)(void);
+	void (*deinit)(void);
+	void (*frame)(float dtime);
+};
+
+OGREEE_API void ogre_run(struct OgreRun* run);
 
 #ifdef __cplusplus
 }

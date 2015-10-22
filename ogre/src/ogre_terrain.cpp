@@ -1,8 +1,5 @@
-#include "stdafx.h"
-
 #include "ogre_int.hpp"
 
-#ifdef USE_TERRAIN
 #if defined(USE_TERRAIN_STATIC_GEOMETRY) || defined(USE_TERRAIN_PAGING)
 #define USE_TERRAIN_CONVERT_ON_FLY
 #endif
@@ -1041,5 +1038,4 @@ void ogre_terrain_tree_clear(void)
 {
 	tree_geometry.reset(0);
 }
-#endif
 #endif

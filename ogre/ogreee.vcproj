@@ -2,9 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="cube"
-	ProjectGUID="{0468C674-0837-43C2-8E56-7AEBC18A7871}"
-	RootNamespace="cube"
+	Name="ogreee"
+	ProjectGUID="{1100EB9C-0437-4A61-8843-516762D6739F}"
+	RootNamespace="ogreee"
+	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -17,10 +18,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="2"
+			OutputDirectory="$(SolutionDir)\lib\$(ConfigurationName)"
+			IntermediateDirectory="build\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -39,16 +40,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="-Zm256"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
-				PreprocessorDefinitions="OGRE_EE;_DEBUG"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OGREEE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile=""
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="ogre_int.hpp"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -63,12 +62,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib ogreee.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
+				SubSystem="2"
+				ImportLibrary="$(TargetDir)$(TargetName).lib"
 				TargetMachine="1"
-				Profile="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -94,10 +94,10 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="2"
+			OutputDirectory="$(SolutionDir)\lib\$(ConfigurationName)"
+			IntermediateDirectory="build\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -117,16 +117,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="-Zm256"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
-				PreprocessorDefinitions="OGRE_EE"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OGREEE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile=""
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="ogre_int.hpp"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -141,12 +139,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib PagedGeometry.lib ogreee.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
+				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib PagedGeometry.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="$(TargetDir)$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -181,18 +181,17 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BaseApplication.cpp"
+				RelativePath=".\src\BaseApplication.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cube.cpp"
+				RelativePath=".\src\dllmain.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="-Zm256"
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
@@ -201,10 +200,41 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="-Zm256"
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\ogre_geometry.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_objects.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_run.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_scenes.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_set.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_terrain.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_textures.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -213,49 +243,41 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BaseApplication.h"
+				RelativePath=".\src\BaseApplication.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ee.h"
+				RelativePath=".\src\ee.h"
 				>
 			</File>
 			<File
-				RelativePath=".\options.hpp"
+				RelativePath=".\src\ogre_animation.hpp"
 				>
 			</File>
-			<Filter
-				Name="empty"
+			<File
+				RelativePath=".\src\ogre_geometry.hpp"
 				>
-				<File
-					RelativePath=".\cmndline.h"
-					>
-				</File>
-				<File
-					RelativePath=".\global.h"
-					>
-				</File>
-				<File
-					RelativePath=".\graphics.h"
-					>
-				</File>
-				<File
-					RelativePath=".\misc.h"
-					>
-				</File>
-				<File
-					RelativePath=".\project.h"
-					>
-				</File>
-				<File
-					RelativePath=".\terrain.h"
-					>
-				</File>
-				<File
-					RelativePath=".\userint.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath=".\src\ogre_int.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_objects.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_scenes.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_set.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\ogreee.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

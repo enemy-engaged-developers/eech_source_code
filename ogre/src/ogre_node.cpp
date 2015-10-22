@@ -1,6 +1,22 @@
-#include "stdafx.h"
-
 #include "ogre_int.hpp"
+
+void ogre_node_get_position(struct OgreNode* node, struct VEC3D* position)
+{
+	Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(node);
+	const Vector3& v = sn->getPosition();
+	position->x = v.x;
+	position->y = v.y;
+	position->z = v.z;
+	position->z = -position->z;
+}
+
+void ogre_node_set_position(struct OgreNode* node, struct VEC3D* position)
+{
+	Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(node);
+	Vector3 v(position->x, position->y, position->z);
+	v.z = -v.z;
+	sn->setPosition(v);
+}
 
 void ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation)
 {
