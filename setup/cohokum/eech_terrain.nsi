@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.15.2"
+	!define VERSION "1.16.0"
 
 	;Name and file
 	Name "EECH Dev terrain textures release ${VERSION}"
@@ -54,7 +54,7 @@ SetCompressor /SOLID lzma
 ;--------------------------------
 ;Installer Sections
 
-	!define SRCDIR "G:\EE_INST"
+	!define SRCDIR "G:\eech"
 	!define EE_BASE_DIR "${SRCDIR}"
 	!define EE_TEXT_DIR "${EE_BASE_DIR}"
 
