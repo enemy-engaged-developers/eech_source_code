@@ -162,6 +162,11 @@ OgreGameObjectScene ogos[2];
 #endif
 #ifdef USE_TERRAIN
 int terrain;
+
+float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( terrain_3d_tree_data *tree )
+{
+	return get_terrain_3d_tree_scale(tree);
+}
 #endif
 
 #ifdef USE_OBJECTS_ONLY
@@ -196,12 +201,12 @@ void set_terrain(int diff)
 	sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 	load_3d_terrain(path);
-	OgreTerrainInit terrain_init = { terrain_3d_map_height, terrain_3d_map_width, terrain_3d_xz_scale, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale, terrain_type_information, terrain_sectors, terrain_tree_sectors };
+	OgreTerrainInit terrain_init = { terrain_3d_sector_z_max, terrain_3d_sector_x_max, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale_wrap, terrain_type_information, terrain_sectors, terrain_tree_sectors };
 	ogre_terrain_init(&terrain_init);
 }
 #endif
 
-void init(void)
+void OGREEE_CALL init(void)
 {
 	cur_time = 0.0f;
 
@@ -232,7 +237,7 @@ void init(void)
 #endif
 }
 
-void deinit(void)
+void OGREEE_CALL deinit(void)
 {
 #ifdef USE_OBJECTS_ONLY
 	ogre_scene_destroy(&ogos[0]);
@@ -258,7 +263,7 @@ void deinit(void)
 #endif
 }
 
-void frame(float dtime)
+void OGREEE_CALL frame(float dtime)
 {
 	cur_time += dtime;
 	if (cur_time > 10000.0f)

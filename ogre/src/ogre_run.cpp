@@ -32,7 +32,7 @@ namespace
 	};
 }
 
-void ogre_run(struct OgreRun* run)
+void OGREEE_CALL ogre_run(struct OgreRun* run)
 {
 	run_info = run;
 

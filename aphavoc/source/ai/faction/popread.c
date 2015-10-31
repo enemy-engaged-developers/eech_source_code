@@ -216,8 +216,6 @@ static void read_population_sam_placements ( FILE *fp );
 
 static unsigned int get_waypoint_inhangar_bits ( route_waypoint_position *waypoint, object_3d_instance *inst3d );
 
-static int get_object_index_from_name ( char *name );
-
 static object_3d_database_entry * get_airfield_waypoint_route_object ( object_3d_instance *instance, object_3d_sub_object_index_numbers index );
 
 static void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, object_3d_database_entry *landing, object_3d_database_entry *takeoff );
@@ -790,7 +788,7 @@ void read_population_templates ( FILE *fp )
 
 			fread ( object_name, string_length, 1, fp );
 
-			temporary_templates[count].approximation_object = get_object_index_from_name ( object_name );
+			temporary_templates[count].approximation_object = get_object_3d_index_from_name ( object_name );
 
 			if ( temporary_templates[count].approximation_object == OBJECT_3D_INVALID_OBJECT_INDEX )
 			{
@@ -810,7 +808,7 @@ void read_population_templates ( FILE *fp )
 
 			fread ( object_name, string_length, 1, fp );
 
-			temporary_templates[count].base_object = get_object_index_from_name ( object_name );
+			temporary_templates[count].base_object = get_object_3d_index_from_name ( object_name );
 
 			if ( temporary_templates[count].base_object == OBJECT_3D_INVALID_OBJECT_INDEX )
 			{
@@ -833,7 +831,7 @@ void read_population_templates ( FILE *fp )
 
 				fread ( object_name, string_length, 1, fp );
 
-				temporary_templates[count].routes_object = get_object_index_from_name ( object_name );
+				temporary_templates[count].routes_object = get_object_3d_index_from_name ( object_name );
 
 				if ( temporary_templates[count].routes_object == OBJECT_3D_INVALID_OBJECT_INDEX )
 				{
@@ -864,7 +862,7 @@ void read_population_templates ( FILE *fp )
 
 				fread ( object_name, string_length, 1, fp );
 
-				objects[object_count].object_index = get_object_index_from_name ( object_name );
+				objects[object_count].object_index = get_object_3d_index_from_name ( object_name );
 
 				if ( objects[object_count].object_index != OBJECT_3D_INVALID_OBJECT_INDEX )
 				{
@@ -1483,6 +1481,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 	fread ( &number_of_instances, sizeof ( int ), 1, fp );
 
+#ifndef OGRE_EE
 	//
 	// Initialise the terrain object system
 	//
@@ -1494,6 +1493,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 		set_number_of_terrain_objects ( number_of_instances );
 	}
+#endif
 
 	//
 	// Read in the airfields themselves
@@ -1546,7 +1546,7 @@ void read_population_airfield_placements ( FILE *fp )
 		fread ( &string_length, sizeof ( int ), 1, fp );
 		fread ( object_name, string_length, 1, fp );
 
-		object_index = get_object_index_from_name ( object_name );
+		object_index = get_object_3d_index_from_name ( object_name );
 
 
 		if ( object_index == OBJECT_3D_AIRFIELD_FR_CUBA_TREEBLOCK )
@@ -2637,29 +2637,6 @@ unsigned int get_waypoint_inhangar_bits ( route_waypoint_position *waypoint, obj
 	}
 
 	return ( inhangar_bits );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int get_object_index_from_name ( char *name )
-{
-
-	int
-		count;
-
-	for ( count = OBJECT_3D_INVALID_OBJECT_INDEX + 1; count < OBJECT_3D_LAST; count++ )
-	{
-
-		if ( stricmp ( name, object_3d_enumeration_names[count] ) == 0 )
-		{
-
-			return ( count );
-		}
-	}
-
-	return ( OBJECT_3D_INVALID_OBJECT_INDEX );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

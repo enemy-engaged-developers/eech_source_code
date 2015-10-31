@@ -163,7 +163,7 @@ namespace
 }
 
 // Convert the scenes into internal database
-void ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database)
+void OGREEE_CALL ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database)
 {
 	LwsExport lwsexport;
 
@@ -180,12 +180,12 @@ void ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABAS
 }
 
 // Clear scenes information
-void ogre_scenes_clear(void)
+void OGREEE_CALL ogre_scenes_clear(void)
 {
 	scenes.clear();
 }
 
-void ogre_scene_init(struct OgreGameObjectScene* scene)
+void OGREEE_CALL ogre_scene_init(struct OgreGameObjectScene* scene)
 {
 	scene->internal = 0;
 	scene->root = 0;
@@ -194,7 +194,7 @@ void ogre_scene_init(struct OgreGameObjectScene* scene)
 }
 
 // Place the scene as a child of the supplied SceneNode
-void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
+void OGREEE_CALL ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
 {
 	std::auto_ptr<GameObjectScene> gos(new GameObjectScene);
 	Ogre::SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
@@ -219,7 +219,7 @@ void ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
 	scene->internal = gos.release();
 }
 
-void ogre_scene_destroy(struct OgreGameObjectScene* scene)
+void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene)
 {
 	if (scene->internal)
 	{
@@ -227,19 +227,19 @@ void ogre_scene_destroy(struct OgreGameObjectScene* scene)
 		delete static_cast<GameObjectScene*>(scene->internal);
 		//FIXME
 		sn->removeAndDestroyAllChildren();
-		ogre_scene_manager->getRootSceneNode()->removeChild(sn);
+		sn->getParentSceneNode()->removeChild(sn);
 	}
 	ogre_scene_init(scene);
 }
 
-struct OgreSubObjectsSearch ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id)
+struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id)
 {
 	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
 	AllSubObjects::const_iterator i = database->sub_objects.find(sub_object_id);
 	return search_convert(i != database->sub_objects.end() ? &i->second : 0);
 }
 
-struct OgreSubObjectsSearch ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent)
+struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent)
 {
 	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
 	ParentSubObjects::const_iterator i = database->parent_sub_objects.find(std::make_pair(sub_object_id, parent));
@@ -261,14 +261,14 @@ struct OgreSubObjectsSearch ogre_scene_find2(struct OgreGameObjectScene* scene, 
 	return search_convert(&pso);
 }
 
-float ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject)
+float OGREEE_CALL ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject)
 {
 	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
 	Ogre::NodeAnimationTrack* track = gos->database->elements[subobject].track;
 	return track ? track->getParent()->getLength() : 0.0f;
 }
 
-void ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time)
+void OGREEE_CALL ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time)
 {
 	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
 	Ogre::NodeAnimationTrack* track = gos->database->elements[subobject].track;
@@ -278,7 +278,7 @@ void ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned s
 	track->applyToNode(sn, time);
 }
 
-void ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame)
+void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame)
 {
 	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
 	AnimationScene::const_iterator itor = gos->database->animation.find(animation);

@@ -13,6 +13,7 @@
 // Use 32-bit or 16-bit indices
 //#define USE_INDICES32
 #define USE_TERRAIN_TREES
+#define USE_TERRAIN_OBJECTS
 
 // Objects options
 #ifdef USE_NORMALS
@@ -38,39 +39,6 @@
 //#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
 #define USE_TERRAIN_VISIBILITY 10
-
-// Use PageGeometry for terrain drawing or internal Ogre methods
-#define USE_TERRAIN_PAGING
-
-#ifndef USE_TERRAIN_PAGING
-// Draw terrain itself or not
-#define USE_TERRAIN_DRAW
-
-// Use Ogre::StaticGeometry for terrain or not
-#define USE_TERRAIN_STATIC_GEOMETRY
-
-#ifdef USE_TERRAIN_VISIBILITY
-// Number of invisible entries in cache. Less than USE_TERRAIN_VISIBILITY * 4 is useless
-#define USE_TERRAIN_CACHE_SIZE 100
-#endif
-#endif
-
-#ifdef USE_TERRAIN_TREES
-// Use PageGeometry for trees drawing or internal Ogre methods
-#define USE_TERRAIN_TREES_PAGING
-#ifdef USE_TERRAIN_TREES_PAGING
-#define USE_TERRAIN_TREES_VISIBILITY 3
-#else
-// Use InstancedGeometry or StaticGeometry
-// TODO: Seems to be a problem in Ogre with InstancedGeometry
-//#define USE_TERRAIN_TREES_INSTANCED
-#endif
-#endif
-
-#ifdef _DEBUG
-// Decreases terrain processing time decreasing number of sectors in terrain
-#define USE_TERRAIN_LIMIT_SIZE 20u
-#endif
 
 
 #ifndef M_PI

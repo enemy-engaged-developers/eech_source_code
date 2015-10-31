@@ -1,7 +1,19 @@
 #include "ogre_int.hpp"
 
+namespace
+{
+	struct Override
+	{
+		unsigned index;
+		Ogre::TexturePtr texture;
+	};
+	typedef std::deque<Override> Overrides;
+
+	Overrides overrides;
+}
+
 // Creates texture resource and uploads texture into Ogre
-void ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data)
+void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data)
 {
 	TextureName texture_name(index);
 
@@ -17,6 +29,28 @@ void ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, u
 }
 
 // Unloads and removes all textures
-void ogre_textures_clear(void)
+void OGREEE_CALL ogre_textures_clear(void)
 {
+}
+
+void OGREEE_CALL ogre_textures_override(unsigned index, const char* file)
+{
+	TextureName texture_name(index);
+	Override o = { index, Ogre::TextureManager::getSingleton().getByName(texture_name, ogre_resource_group) };
+	Ogre::TextureManager::getSingleton().remove(texture_name);
+	Ogre::TextureManager::getSingleton().loadImage(texture_name, ogre_resource_group, Ogre::Image().load(file, ogre_resource_group));
+}
+
+void OGREEE_CALL ogre_textures_restore(void)
+{
+	while (!overrides.empty())
+	{
+		Override& o = overrides.front();
+		TextureName texture_name(o.index);
+		if (o.texture.isNull())
+			Ogre::TextureManager::getSingleton().remove(texture_name);
+		else
+			*Ogre::TextureManager::getSingleton().getByName(texture_name, ogre_resource_group) = *o.texture;
+		overrides.pop_front();
+	}
 }

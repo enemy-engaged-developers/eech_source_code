@@ -76,7 +76,7 @@ static struct
 		int delay, scale_bottom, scale_top, placenr, number;
 	} water_info[3];
 } current_map_info;
-env_3d act_env, *active_3d_environment = ((act_env.render_filter = RENDER_CLEAR), &act_env);
+//env_3d act_env, *active_3d_environment = ((act_env.render_filter = RENDER_CLEAR), &act_env);
 #ifndef USE_TERRAIN_CURRENT
 #define infrared_mode render_filter + 1
 #endif
@@ -454,9 +454,9 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 	return 0;
 }
 
-light_3d_source
+/*light_3d_source
 	ambient_3d_light,
-	*current_3d_lights;
+	*current_3d_lights;*/
 
 const float
 	float_value_zero = 0.0,
@@ -500,10 +500,10 @@ typedef int object_3d_index_numbers;
 #define set_fpu_precision_mode_double()
 
 #define get_int_fog_distance_value(z) 255
-void get_3d_fog_distances ( ENV_3D *, float *, float *dist)
+/*void get_3d_fog_distances ( ENV_3D *, float *, float *dist)
 {
 	*dist = 10000;
-}
+}*/
 
 #define set_d3d_int_state(x, y)
 #define set_d3d_texture_stage_state(x, y, z)
@@ -530,8 +530,8 @@ double
 	zbuffer_constant_shadow_bias,
 	zbuffer_constant_shadow_bias_decrement;
 
-viewport
-	active_viewport;
+/*viewport
+	active_viewport;*/
 
 typedef	struct SCENE_SLOT_DRAWING_LIST scene_slot_drawing_list;
 

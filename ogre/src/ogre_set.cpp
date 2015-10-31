@@ -4,7 +4,7 @@ Ogre::SceneManager* ogre_scene_manager;
 Ogre::Camera* ogre_camera;
 std::string ogre_resource_group;
 
-void ogre_set(const char* resource_group, void* scene_manager, void* camera)
+void OGREEE_CALL ogre_set(const char* resource_group, void* scene_manager, void* camera)
 {
 	ogre_resource_group = resource_group;
 	ogre_scene_manager = static_cast<Ogre::SceneManager*>(scene_manager);

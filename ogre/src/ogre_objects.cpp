@@ -13,75 +13,75 @@ namespace
 	GeometryPtr objects_geometry;
 	std::vector<AnimationMesh> objects_anim;
 	OgreObjectsInit* objects_init;
-}
 
-class Normal
-{
-public:
-	Normal(void)
+	class Normal
 	{
-		for (int count = 0; count < 256; count++)
+	public:
+		Normal(void)
 		{
-			float heading, pitch;
-			pitch = heading = (float)count;
-			heading /= 256.0;
-			pitch /= 256.0;
-			heading *= 2 * M_PI;
-			pitch *= M_PI;
-			heading -= M_PI;
-			pitch -= M_PI / 2;
-			sin_heading[count] = sin(heading);
-			cos_heading[count] = cos(heading);
-			sin_pitch[count] = sin(pitch);
-			cos_pitch[count] = cos(pitch);
+			for (int count = 0; count < 256; count++)
+			{
+				float heading, pitch;
+				pitch = heading = (float)count;
+				heading /= 256.0;
+				pitch /= 256.0;
+				heading *= 2 * M_PI;
+				pitch *= M_PI;
+				heading -= M_PI;
+				pitch -= M_PI / 2;
+				sin_heading[count] = sin(heading);
+				cos_heading[count] = cos(heading);
+				sin_pitch[count] = sin(pitch);
+				cos_pitch[count] = cos(pitch);
+			}
 		}
-	}
 
-	void normal(const object_3d_heading_pitch_normal& normal, vec3d& result)
+		void normal(const object_3d_heading_pitch_normal& normal, vec3d& result)
+		{
+			float cp = cos_pitch[normal.pitch];
+			result.x = cp * sin_heading[normal.heading];
+			result.y = sin_pitch[normal.pitch];
+			result.z = cp * cos_heading[normal.heading];
+			result.z = -result.z;
+		}
+	private:
+		float sin_heading[256], cos_heading[256], sin_pitch[256], cos_pitch[256];
+	};
+
+	Normal normal;
+
+	// Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
+	static bool
+	compare_surfaces(const face_surface_description& left, const face_surface_description& right)
 	{
-		float cp = cos_pitch[normal.pitch];
-		result.x = cp * sin_heading[normal.heading];
-		result.y = sin_pitch[normal.pitch];
-		result.z = cp * cos_heading[normal.heading];
-		result.z = -result.z;
-	}
-private:
-	float sin_heading[256], cos_heading[256], sin_pitch[256], cos_pitch[256];
-};
-
-static Normal normal;
-
-// Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
-static bool
-compare_surfaces(const face_surface_description& left, const face_surface_description& right)
-{
 #if 0
-	return false;
+		return false;
 #else
 
 #define CMP(x) if ((left.x) != (right.x)) return false;
 #define ANY(x) if ((left.x) || (right.x)) return false;
 
-	ANY(texture_animation);
-	ANY(luminosity_texture_animation);
-	CMP(surface_flags & 0xFFFFFF);
+		ANY(texture_animation);
+		ANY(luminosity_texture_animation);
+		CMP(surface_flags & 0xFFFFFF);
 #if 1
-	CMP(texture_index);
-	CMP(luminosity_texture_index);
+		CMP(texture_index);
+		CMP(luminosity_texture_index);
 #endif
-	if (left.has_specularity)
-	CMP(specularity);
+		if (left.has_specularity)
+			CMP(specularity);
 #if 0
-	CMP(reflectivity);
+		CMP(reflectivity);
 #endif
-	if (!left.textured || left.luminous)
-	CMP(colour);
+		if (!left.textured || left.luminous)
+			CMP(colour);
 
 #undef CMP
 #undef ANY
 
-	return true;
+		return true;
 #endif
+	}
 }
 
 // Converts EE's OBJECT_3D into Ogre::Mesh
@@ -368,7 +368,7 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 
 
 // Converts objects
-void ogre_objects_init(struct OgreObjectsInit* init)
+void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
 {
 	objects_init = init;
 
@@ -386,7 +386,7 @@ void ogre_objects_init(struct OgreObjectsInit* init)
 }
 
 // Clears objects information
-void ogre_objects_clear(void)
+void OGREEE_CALL ogre_objects_clear(void)
 {
 	objects_anim.clear();
 	objects_geometry.reset(0);
