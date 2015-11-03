@@ -190,6 +190,9 @@ void destroy_routegen_waypoint_routes ( void )
 void parse_waypoint_routes_from_object ( int object_index, int number_of_matching_slots, vec3d *slots )
 {
 
+	struct OBJECT_3D
+		*object;
+
 	int
 		surface,
 		count,
@@ -212,7 +215,9 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	// Copy the point data into each node.
 	//
 
-	number_of_waypoint_nodes = objects_3d_data[object_index].number_of_points;
+	object = &objects_3d_data[object_index];
+
+	number_of_waypoint_nodes = object->number_of_points;
 
 	ASSERT ( number_of_waypoint_nodes < MAX_WAYPOINT_NODES );
 
@@ -222,10 +227,10 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 			xmax,
 			ymax,
 			zmax;
-	
-		xmax = max ( fabs ( objects_3d_data[object_index].bounding_box.xmin ), fabs ( objects_3d_data[object_index].bounding_box.xmax ) );
-		ymax = max ( fabs ( objects_3d_data[object_index].bounding_box.ymin ), fabs ( objects_3d_data[object_index].bounding_box.ymax ) );
-		zmax = max ( fabs ( objects_3d_data[object_index].bounding_box.zmin ), fabs ( objects_3d_data[object_index].bounding_box.zmax ) );
+
+		xmax = max ( fabs ( object->bounding_box.xmin ), fabs ( object->bounding_box.xmax ) );
+		ymax = max ( fabs ( object->bounding_box.ymin ), fabs ( object->bounding_box.ymax ) );
+		zmax = max ( fabs ( object->bounding_box.zmin ), fabs ( object->bounding_box.zmax ) );
 
 		for ( count = 0; count < number_of_waypoint_nodes; count++ )
 		{
@@ -244,9 +249,9 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 			waypoint_nodes[count].references = 0;
 			waypoint_nodes[count].in_route = FALSE;
 			waypoint_nodes[count].processed = FALSE;
-			waypoint_nodes[count].position.x = objects_3d_data[object_index].points[count].x;
-			waypoint_nodes[count].position.y = objects_3d_data[object_index].points[count].y;
-			waypoint_nodes[count].position.z = objects_3d_data[object_index].points[count].z;
+			waypoint_nodes[count].position.x = object->points[count].x;
+			waypoint_nodes[count].position.y = object->points[count].y;
+			waypoint_nodes[count].position.z = object->points[count].z;
 
 			waypoint_nodes[count].position.x *= xmax / 32767;
 			waypoint_nodes[count].position.y *= ymax / 32767;
@@ -270,23 +275,23 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	// Set the attributes on each node
 	//
 
-	surface_point_refs = objects_3d_data[object_index].surface_points;
+	surface_point_refs = object->surface_points;
 
-	point_refs = objects_3d_data[object_index].object_faces_point_plain_list;
+	point_refs = object->object_faces_point_plain_list;
 
-	faces = objects_3d_data[object_index].faces;
+	faces = object->faces;
 
 	number_of_primary_nodes = 0;
 
-	for ( surface = 0; surface < objects_3d_data[object_index].number_of_surfaces; surface++ )
+	for ( surface = 0; surface < object->number_of_surfaces; surface++ )
 	{
 
 		int
 			number_of_surface_points;
 
-		ASSERT ( !objects_3d_data[object_index].surfaces[surface].polygons );
+		ASSERT ( !object->surfaces[surface].polygons );
 
-		number_of_surface_points = objects_3d_data[object_index].surfaces[surface].number_of_points;
+		number_of_surface_points = object->surfaces[surface].number_of_points;
 
 		if ( number_of_surface_points == 0 )
 		{
@@ -294,7 +299,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 			number_of_surface_points = 256;
 		}
 
-		for ( count = 0; count < objects_3d_data[object_index].surfaces[surface].number_of_faces; count++ )
+		for ( count = 0; count < object->surfaces[surface].number_of_faces; count++ )
 		{
 
 			int
@@ -315,17 +320,17 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 			// Set attributes on the nodes
 			//
 
-			if (	( objects_3d_data[object_index].surfaces[surface].green == 0 ) &&
-					( objects_3d_data[object_index].surfaces[surface].blue == 0 ) &&
-					( objects_3d_data[object_index].surfaces[surface].red == 0 ) )
+			if (	( object->surfaces[surface].green == 0 ) &&
+					( object->surfaces[surface].blue == 0 ) &&
+					( object->surfaces[surface].red == 0 ) )
 			{
 
 				waypoint_nodes[point0].possible_start = TRUE;
 				waypoint_nodes[point1].possible_start = TRUE;
 			}
-			else if (	( objects_3d_data[object_index].surfaces[surface].green == 255 ) &&
-							( objects_3d_data[object_index].surfaces[surface].blue == 0 ) &&
-							( objects_3d_data[object_index].surfaces[surface].red == 0 ) )
+			else if (	( object->surfaces[surface].green == 255 ) &&
+							( object->surfaces[surface].blue == 0 ) &&
+							( object->surfaces[surface].red == 0 ) )
 			{
 
 				number_of_primary_nodes++;
@@ -392,17 +397,17 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	while ( number_of_primary_nodes_left )
 	{
 
-		surface_point_refs = objects_3d_data[object_index].surface_points;
+		surface_point_refs = object->surface_points;
 	
-		point_refs = objects_3d_data[object_index].object_faces_point_plain_list;
+		point_refs = object->object_faces_point_plain_list;
 	
-		for ( surface = 0; surface < objects_3d_data[object_index].number_of_surfaces; surface++ )
+		for ( surface = 0; surface < object->number_of_surfaces; surface++ )
 		{
 	
 			int
 				number_of_surface_points;
 	
-			number_of_surface_points = objects_3d_data[object_index].surfaces[surface].number_of_points;
+			number_of_surface_points = object->surfaces[surface].number_of_points;
 	
 			if ( number_of_surface_points == 0 )
 			{
@@ -410,7 +415,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 				number_of_surface_points = 256;
 			}
 	
-			for ( count = 0; count < objects_3d_data[object_index].surfaces[surface].number_of_faces; count++ )
+			for ( count = 0; count < object->surfaces[surface].number_of_faces; count++ )
 			{
 	
 				int
@@ -498,17 +503,17 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	while ( number_of_nodes_left )
 	{
 
-		surface_point_refs = objects_3d_data[object_index].surface_points;
+		surface_point_refs = object->surface_points;
 	
-		point_refs = objects_3d_data[object_index].object_faces_point_plain_list;
+		point_refs = object->object_faces_point_plain_list;
 	
-		for ( surface = 0; surface < objects_3d_data[object_index].number_of_surfaces; surface++ )
+		for ( surface = 0; surface < object->number_of_surfaces; surface++ )
 		{
 	
 			int
 				number_of_surface_points;
 	
-			number_of_surface_points = objects_3d_data[object_index].surfaces[surface].number_of_points;
+			number_of_surface_points = object->surfaces[surface].number_of_points;
 	
 			if ( number_of_surface_points == 0 )
 			{
@@ -516,7 +521,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 				number_of_surface_points = 256;
 			}
 	
-			for ( count = 0; count < objects_3d_data[object_index].surfaces[surface].number_of_faces; count++ )
+			for ( count = 0; count < object->surfaces[surface].number_of_faces; count++ )
 			{
 	
 				int

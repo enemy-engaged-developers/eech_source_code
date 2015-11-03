@@ -1157,6 +1157,9 @@ void LoadAll(void)
 
   LoadScene(fp, &objects_3d_scene_database[scene_index]);
   QuickSearch quick(objects_3d_scene_database[scene_index]);
+#ifdef NATIVE_TYPES
+  objects_3d_scene_database[scene_index].succeeded = 1;
+#endif
  }
 
  {

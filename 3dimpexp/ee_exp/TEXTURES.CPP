@@ -120,6 +120,9 @@ class BaseTexturesExporter
 
     if (flags.reserved_texture)
      {
+      width = height = number_of_mipmaps = 1;
+      bpp = 3;
+      memset(texture_image_data, 0xFF, 3);
       use_texture(count, name, -1);
       if (log)
        print_flags();

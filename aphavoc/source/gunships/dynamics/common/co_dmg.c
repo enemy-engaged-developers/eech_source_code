@@ -1501,9 +1501,9 @@ void repair_damage_model (unsigned int damage)
 
 					current_flight_dynamics->cross_coupling_effect.damaged = FALSE;
 
-					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_TAIL_ROTOR_DAMAGED, FALSE);
-
 					restore_helicopter_tail_rotors (get_gunship_entity ());
+
+					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_TAIL_ROTOR_DAMAGED, FALSE);
 
 					break;
 				}

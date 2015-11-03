@@ -11,8 +11,10 @@ namespace
 	protected:
 		virtual void createScene(void)
 		{
-			Ogre::ResourceGroupManager::getSingleton().createResourceGroup("EE");
-			ogre_set("EE", mSceneMgr, mCamera);
+			const char* resource_group_name = "EE";
+			Ogre::ResourceGroupManager::getSingleton().createResourceGroup(resource_group_name);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", resource_group_name, false, true);
+			ogre_set(resource_group_name, mSceneMgr, mCamera);
 			run_info->init();
 		}
 		virtual void destroyScene(void)

@@ -69,8 +69,10 @@ namespace
 			{
 				static Ogre::Quaternion Orientation(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
-					//return Ogre::Quaternion(Radian(frame->heading), Ogre::Vector3::UNIT_Y) * Ogre::Quaternion(Ogre::Radian(frame->pitch), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Radian(frame->roll), Ogre::Vector3::UNIT_Z);
-					Ogre::Matrix3 m; m.FromEulerAnglesYXZ(Ogre::Radian(-frame->heading), Ogre::Radian(-frame->pitch), Ogre::Radian(frame->roll)); return m;
+					float heading = frame->heading, pitch = frame->pitch, roll = frame->roll;
+					heading = -heading;
+					pitch = -pitch;
+					return Ogre::Quaternion(Ogre::Radian(heading), Ogre::Vector3::UNIT_Y) * Ogre::Quaternion(Ogre::Radian(pitch), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Radian(roll), Ogre::Vector3::UNIT_Z);
 				}
 				static Ogre::Vector3 Position(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
@@ -150,15 +152,15 @@ namespace
 		bool skip_object;
 	};
 
-	struct OgreSubObjectsSearch search_convert(const SubObjects* so)
+	int search_convert(const SubObjects* so, struct OgreSubObjectsSearch* search)
 	{
-		struct OgreSubObjectsSearch osos = { 0, 0 };
 		if (so && !so->empty())
 		{
-			osos.number_of_subobjects = so->size();
-			osos.subobjects = &(*so)[0];
+			search->number_of_subobjects = so->size();
+			search->subobjects = &(*so)[0];
+			return true;
 		}
-		return osos;
+		return false;
 	}
 }
 
@@ -174,8 +176,11 @@ void OGREEE_CALL ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_S
 
 	for (int i = 1; i <= number_of_scenes; i++)
 	{
-		SceneComposer composer(scenes[i]);
-		lwsexport.ExportScene(&composer, &objects_3d_scene_database[i], false);
+		if (objects_3d_scene_database[i].succeeded)
+		{
+			SceneComposer composer(scenes[i]);
+			lwsexport.ExportScene(&composer, &objects_3d_scene_database[i], false);
+		}
 	}
 }
 
@@ -194,7 +199,7 @@ void OGREEE_CALL ogre_scene_init(struct OgreGameObjectScene* scene)
 }
 
 // Place the scene as a child of the supplied SceneNode
-void OGREEE_CALL ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene)
+void OGREEE_CALL ogre_scene_create(struct OgreGameObjectScene* scene, int scene_number)
 {
 	std::auto_ptr<GameObjectScene> gos(new GameObjectScene);
 	Ogre::SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
@@ -232,19 +237,35 @@ void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene)
 	ogre_scene_init(scene);
 }
 
-struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id)
+unsigned OGREEE_CALL ogre_scene_get_object(struct OgreGameObjectScene* scene, unsigned subobject)
+{
+	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
+	const Ogre::String& name = database->elements[subobject].object;
+	//FIXME
+	if (!name.empty())
+		return strtol(name.c_str() + 7, 0, 16);
+	return -1;
+}
+
+unsigned OGREEE_CALL ogre_scene_get_parent(struct OgreGameObjectScene* scene, unsigned subobject)
+{
+	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
+	return database->elements[subobject].parent;
+}
+
+int OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id, struct OgreSubObjectsSearch* search)
 {
 	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
 	AllSubObjects::const_iterator i = database->sub_objects.find(sub_object_id);
-	return search_convert(i != database->sub_objects.end() ? &i->second : 0);
+	return search_convert(i != database->sub_objects.end() ? &i->second : 0, search);
 }
 
-struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent)
+int OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent, struct OgreSubObjectsSearch* search)
 {
 	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
 	ParentSubObjects::const_iterator i = database->parent_sub_objects.find(std::make_pair(sub_object_id, parent));
 	if (i != database->parent_sub_objects.end())
-		return search_convert(&i->second);
+		return search_convert(&i->second, search);
 	SubObjects& pso = const_cast<ParentSubObjects&>(database->parent_sub_objects)[std::make_pair(sub_object_id, parent)];
 	AllSubObjects::const_iterator j = database->sub_objects.find(sub_object_id);
 	if (j != database->sub_objects.end())
@@ -258,7 +279,7 @@ struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find2(struct OgreGameObjectSc
 					break;
 				}
 	}
-	return search_convert(&pso);
+	return search_convert(&pso, search);
 }
 
 float OGREEE_CALL ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject)

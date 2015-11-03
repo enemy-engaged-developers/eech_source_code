@@ -58,12 +58,12 @@ char* get_terrain_type_name(terrain_types type);
 
 EET eet;
 
-unsigned get_animation_size(unsigned index)
+unsigned OGREEE_CALL get_animation_size(unsigned index)
 {
 	return eet.GetAnimationSize(index);
 }
 
-unsigned get_animation_texture(unsigned index, unsigned frame)
+unsigned OGREEE_CALL get_animation_texture(unsigned index, unsigned frame)
 {
 	return eet.GetAnimationTexture(index, frame);
 }
@@ -180,7 +180,7 @@ void set_scene(int index, int change)
 		objects[index] -= scenes->GetNumberOfScenes();
 
 	ogre_scene_destroy(&ogos[index]);
-	ogre_scene_create(objects[index], &ogos[index]);
+	ogre_scene_create(&ogos[index], objects[index]);
 	vec3d v = { index ? -10 : 10, 0, 0 };
 	ogre_node_set_position(ogos[index].root, &v);
 
@@ -201,7 +201,7 @@ void set_terrain(int diff)
 	sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 	load_3d_terrain(path);
-	OgreTerrainInit terrain_init = { terrain_3d_sector_z_max, terrain_3d_sector_x_max, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale_wrap, terrain_type_information, terrain_sectors, terrain_tree_sectors };
+	struct OgreTerrainInit terrain_init = { terrain_3d_sector_z_max, terrain_3d_sector_x_max, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale_wrap, terrain_type_information, terrain_sectors, terrain_tree_sectors };
 	ogre_terrain_init(&terrain_init);
 }
 #endif
@@ -302,35 +302,44 @@ void OGREEE_CALL frame(float dtime)
 		};
 		for (unsigned o = 0; o < ARRAYSIZE(so); o++)
 		{
-			OgreSubObjectsSearch s = ogre_scene_find(g, so[o].subobject);
-			for (unsigned j = 0; j != s.number_of_subobjects; j++)
+			OgreSubObjectsSearch s;
+			if (ogre_scene_find(g, so[o].subobject, &s))
 			{
-				OgreNode* n = g->nodes[s.subobjects[j]];
-				matrix3x3 m33;
-				ogre_node_get_orientation(n, m33);
-				Ogre::Matrix3 m(m33), r;
-				Ogre::Quaternion(Ogre::Radian(fmod(cur_time, 10.0f) * 0.01f), so[o].axis).ToRotationMatrix(r);
-				m = m * r;
-				memcpy(m33, m[0], sizeof(m33));
-				ogre_node_set_orientation(n, m33);
+				for (unsigned j = 0; j != s.number_of_subobjects; j++)
+				{
+					OgreNode* n = g->nodes[s.subobjects[j]];
+					matrix3x3 m33;
+					ogre_node_get_orientation(n, m33);
+					Ogre::Matrix3 m(m33), r;
+					Ogre::Quaternion(Ogre::Radian(fmod(cur_time, 10.0f) * 0.01f), so[o].axis).ToRotationMatrix(r);
+					m = m * r;
+					memcpy(m33, m[0], sizeof(m33));
+					ogre_node_set_orientation(n, m33);
+				}
 			}
 		}
 		{
-			OgreSubObjectsSearch h = ogre_scene_find(g, 3);
-			for (unsigned hi = 0; hi != h.number_of_subobjects; hi++)
+			OgreSubObjectsSearch h;
+			if (ogre_scene_find(g, 3, &h))
 			{
-				OgreSubObjectsSearch p = ogre_scene_find2(g, 28, h.subobjects[hi]);
-				if (p.number_of_subobjects)
+				for (unsigned hi = 0; hi != h.number_of_subobjects; hi++)
 				{
-					unsigned sp = p.subobjects[((unsigned)cur_time) % p.number_of_subobjects];
-					for (unsigned pi = 0; pi != p.number_of_subobjects; pi++)
-						ogre_node_set_visible(g->nodes[p.subobjects[pi]], false);
-					ogre_node_set_visible(g->nodes[sp], true);
-					OgreSubObjectsSearch w = ogre_scene_find2(g, 29, sp);
-					double df = exp(((unsigned)cur_time) / p.number_of_subobjects / double(h.subobjects[hi]) + index);
-					unsigned flags = reinterpret_cast<const unsigned&>(df);
-					for (unsigned wi = 0; wi != w.number_of_subobjects; wi++)
-						ogre_node_set_visible(g->nodes[w.subobjects[wi]], flags & (1 << wi));
+					OgreSubObjectsSearch p;
+					if (ogre_scene_find2(g, 28, h.subobjects[hi], &p) && p.number_of_subobjects)
+					{
+						unsigned sp = p.subobjects[((unsigned)cur_time) % p.number_of_subobjects];
+						for (unsigned pi = 0; pi != p.number_of_subobjects; pi++)
+							ogre_node_set_visible(g->nodes[p.subobjects[pi]], false);
+						ogre_node_set_visible(g->nodes[sp], true);
+						OgreSubObjectsSearch w;
+						if (ogre_scene_find2(g, 29, sp, &w))
+						{
+							double df = exp(((unsigned)cur_time) / p.number_of_subobjects / double(h.subobjects[hi]) + index);
+							unsigned flags = reinterpret_cast<const unsigned&>(df);
+							for (unsigned wi = 0; wi != w.number_of_subobjects; wi++)
+								ogre_node_set_visible(g->nodes[w.subobjects[wi]], flags & (1 << wi));
+						}
+					}
 				}
 			}
 		}

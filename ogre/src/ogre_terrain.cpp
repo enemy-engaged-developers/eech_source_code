@@ -524,11 +524,11 @@ namespace
 				addEntity(tree_ent, page.centerPoint + tree_position, Ogre::Quaternion::IDENTITY, Ogre::Vector3(scale, scale, scale));
 			}
 #endif
-#ifndef USE_TERRAIN_OBJECTS
+#ifdef USE_TERRAIN_OBJECTS
 			TerrainObjects::const_iterator to = terrain_objects.find(Sector(z, x));
 			if (to != terrain_objects.end())
 			{
-				SectorObjects& sos = to->second;
+				const SectorObjects& sos = to->second;
 				for (SectorObjects::const_iterator so(sos.begin()); so != sos.end(); ++so)
 					addEntity(ogre_scene_manager->createEntity(so->object), page.centerPoint + so->position, so->orientation, so->scale);
 			}
@@ -684,20 +684,21 @@ void OGREEE_CALL ogre_terrain_tree_clear(void)
 }
 #endif
 
-#ifndef USE_TERRAIN_OBJECTS
+#ifdef USE_TERRAIN_OBJECTS
 void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 {
+	const Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
+	const Ogre::Vector3& pos = node->getPosition();
 	int x = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	int z = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	z = -z - 1;
-	const Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
-	const SceneDatabaseElement& sde = static_cast<GameObjectScene*>(scene->internal)->database.elements.front()
+	const SceneDatabaseElement& sde = static_cast<GameObjectScene*>(scene->internal)->database->elements.front();
 	SectorObject so;
 	so.object = sde.object;
 	//FIXME Probably there's something wrong with position
 	so.position = node->getPosition() - Ogre::Vector3(x * TERRAIN_3D_SECTOR_SIDE_LENGTH, 0, -z * TERRAIN_3D_SECTOR_SIDE_LENGTH) + sde.position;
-	so.orientation = node ->getOrientaion() * sde.orientation;
+	so.orientation = node->getOrientation() * sde.orientation;
 	so.scale = node->getScale() * sde.scale;
-	terrain_objects[Sector<z, x>].push_back(so);
+	terrain_objects[Sector(z, x)].push_back(so);
 }
 #endif

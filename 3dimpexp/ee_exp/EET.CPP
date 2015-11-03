@@ -60,7 +60,7 @@ class FileTexturesFinder : public TexturesFinder
 
   //warning("Looking for '%s' in '%s'", texture, dir);
   sprintf(buf, "%s\\%s.*", dir, texture);
-	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
+  for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
    if (!(fd.attrib & _A_SUBDIR))
     {
      const char* ext = fd.name + strlen(fd.name) - 4;
@@ -74,7 +74,7 @@ class FileTexturesFinder : public TexturesFinder
   _findclose(handle);
 
   sprintf(buf, "%s\\*.*", dir);
-	for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
+  for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
    if ((fd.attrib & _A_SUBDIR) && fd.name[0] != '.')
     {
      sprintf(buf, "%s\\%s", dir, fd.name);
@@ -321,10 +321,10 @@ const char* EET::GetTexture(unsigned index) const
 }
 unsigned EET::GetAnimationSize(unsigned index) const
 {
-	return index < !animations ? !animations[index].animation : 0;
+ return index < !animations ? !animations[index].animation : 0;
 }
 unsigned EET::GetAnimationTexture(unsigned index, unsigned frame) const
 {
-	return index < !animations ? animations[index].animation[frame] : -1;
+ return index < !animations ? animations[index].animation[frame] : -1;
 }
 #endif

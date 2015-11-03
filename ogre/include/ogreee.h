@@ -19,6 +19,7 @@ typedef float matrix3x3[3][3];
 struct VEC3D;
 
 OGREEE_API void OGREEE_CALL ogre_set(const char* resource_group, void* scene_manager, void* camera);
+OGREEE_API void OGREEE_CALL ogre_set_viewpoint(struct VEC3D* position, matrix3x3 orientation);
 
 OGREEE_API void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data);
 OGREEE_API void OGREEE_CALL ogre_textures_clear(void);
@@ -42,6 +43,8 @@ OGREEE_API void OGREEE_CALL ogre_node_get_position(struct OgreNode* node, struct
 OGREEE_API void OGREEE_CALL ogre_node_set_position(struct OgreNode* node, struct VEC3D* position);
 OGREEE_API void OGREEE_CALL ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation);
 OGREEE_API void OGREEE_CALL ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orientation);
+OGREEE_API void OGREEE_CALL ogre_node_get_scale(struct OgreNode* node, struct VEC3D* scale);
+OGREEE_API void OGREEE_CALL ogre_node_set_scale(struct OgreNode* node, struct VEC3D* scale);
 OGREEE_API void OGREEE_CALL ogre_node_set_visible(struct OgreNode* node, int visible);
 
 struct OgreGameObjectScene
@@ -61,10 +64,12 @@ struct OgreSubObjectsSearch
 OGREEE_API void OGREEE_CALL ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database);
 OGREEE_API void OGREEE_CALL ogre_scenes_clear(void);
 OGREEE_API void OGREEE_CALL ogre_scene_init(struct OgreGameObjectScene* scene);
-OGREEE_API void OGREEE_CALL ogre_scene_create(int scene_number, struct OgreGameObjectScene* scene);
+OGREEE_API void OGREEE_CALL ogre_scene_create(struct OgreGameObjectScene* scene, int scene_number);
 OGREEE_API void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene);
-OGREEE_API struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id);
-OGREEE_API struct OgreSubObjectsSearch OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent);
+OGREEE_API unsigned OGREEE_CALL ogre_scene_get_object(struct OgreGameObjectScene* scene, unsigned subobject);
+OGREEE_API unsigned OGREEE_CALL ogre_scene_get_parent(struct OgreGameObjectScene* scene, unsigned subobject);
+OGREEE_API int OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id, struct OgreSubObjectsSearch* search);
+OGREEE_API int OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent, struct OgreSubObjectsSearch* search);
 OGREEE_API float OGREEE_CALL ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject);
 OGREEE_API void OGREEE_CALL ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time);
 OGREEE_API void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame);

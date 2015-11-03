@@ -91,7 +91,11 @@ struct name : private fmt \
 	using fmt::operator Ogre::String; \
 }
 
-unsigned ogre_index(void);
+#include "ogre_set.hpp"
+#include "ogre_geometry.hpp"
+#include "ogre_animation.hpp"
+#include "ogre_objects.hpp"
+#include "ogre_scenes.hpp"
 
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
@@ -106,12 +110,5 @@ DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
 #undef _
 
 #undef DEFINE_NAME
-
-
-#include "ogre_set.hpp"
-#include "ogre_geometry.hpp"
-#include "ogre_animation.hpp"
-#include "ogre_objects.hpp"
-#include "ogre_scenes.hpp"
 
 #endif

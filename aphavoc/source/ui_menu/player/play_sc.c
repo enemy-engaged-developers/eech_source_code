@@ -2289,7 +2289,8 @@ void test_player_scoring (player_log_type *log, int side)
 			campaign = (campaign + 1) % 3;
 		}
 
-		if (result = award_aviator_wings (side))
+		result = award_aviator_wings (side);
+		if (result)
 		{
 			debug_filtered_log ("Awarded Aviator Wings  %2d score:%8d time:%8f", result, get_player_log_experience (side, log), get_player_log_flying_seconds (side, log));
 		}
