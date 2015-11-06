@@ -269,6 +269,8 @@ namespace
 		// Convert geometry
 		void convert_sector(unsigned x, unsigned z, Geometry* terrain_geometry)
 		{
+			ogre_log(__FUNCTION__, "%u %u", x, z);
+
 			TERRAIN_3D_SECTOR& s = ogre_terrain.sectors[z][x];
 
 			size_t total_number_of_indices = 0;
@@ -439,6 +441,8 @@ namespace
 
 		void destroy_sector(unsigned x, unsigned z)
 		{
+			ogre_log(__FUNCTION__, "%u %u", x, z);
+
 			TerrainObject terrain_object(z, x);
 			Ogre::MeshManager::getSingleton().unload(terrain_object);
 			Ogre::MeshManager::getSingleton().remove(terrain_object);
@@ -493,23 +497,18 @@ namespace
 		}
 #endif
 
-		~TerrainLoader(void)
-		{
-			clear();
-		}
-
 		void loadPage(Forests::PageInfo& page)
 		{
-			clear();
+			ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
+
 			int x = page.xIndex, z = page.zIndex;
 			z = -z - 1;
 			if (x < 0 || (unsigned)x >= ogre_terrain.sector_x_max || z < 0 || (unsigned)z >= ogre_terrain.sector_z_max)
 			{
-				page.userData = 0;
 				return;
 			}
 
-			SectorInfo* si = new SectorInfo(x, z);
+			si.reset(new SectorInfo(x, z));
 			terrain_converter->convert_sector(x, z, &si->terrain_geometry);
 			si->terrain_geometry.flush();
 			si->ent = ogre_scene_manager->createEntity(TerrainObject(z, x));
@@ -533,14 +532,12 @@ namespace
 					addEntity(ogre_scene_manager->createEntity(so->object), page.centerPoint + so->position, so->orientation, so->scale);
 			}
 #endif
-			page.userData = si;
 		}
 
 		void unloadPage(Forests::PageInfo& page)
 		{
-			SectorInfo* si = static_cast<SectorInfo*>(page.userData);
-			if (si)
-				sis.push_back(si);
+			ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
+			si.reset(0);
 		}
 
 	private:
@@ -550,25 +547,17 @@ namespace
 				: x(x), z(z), terrain_geometry(0, 0)
 			{
 			}
+			~SectorInfo()
+			{
+				ogre_scene_manager->destroyEntity(ent);
+				terrain_converter->destroy_sector(x, z);
+			}
 
 			unsigned x, z;
 			Geometry terrain_geometry;
 			Ogre::Entity* ent;
 		};
-
-		void clear(void)
-		{
-			while (!sis.empty())
-			{
-				SectorInfo* si = sis.front();
-				sis.pop_front();
-				ogre_scene_manager->destroyEntity(si->ent);
-				terrain_converter->destroy_sector(si->x, si->z);
-				delete si;
-			}
-		}
-
-		std::deque<SectorInfo*> sis;
+		std::auto_ptr<SectorInfo> si;
 #ifdef USE_TERRAIN_TREES
 		Ogre::Entity* tree_ent;
 #endif
@@ -608,6 +597,8 @@ namespace
 		// Make some sectors to be visible, some - to be invisible
 		void update(void)
 		{
+			ogre_log(__FUNCTION__, "");
+
 			terrain->update();
 		}
 
@@ -631,6 +622,8 @@ private:
 // Place terrain into the scene
 void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init)
 {
+	ogre_log(__FUNCTION__, "%u %u", init->sector_z_max, init->sector_x_max);
+
 	ogre_terrain = *init;
 
 	assert(!terrain_converter.get());
@@ -638,7 +631,10 @@ void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init)
 
 #ifdef USE_TERRAIN_VISIBILITY
 	//TODO: Wrong place
+	ogre_camera->setNearClipDistance(1.0f);
 	ogre_scene_manager->setFog(Ogre::FOG_LINEAR, Ogre::ColourValue(0.18f, 0.77f, 0.87f), 0, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH / 2, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
+	ogre_scene_manager->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
+	ogre_scene_manager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 #endif
 
 	terrain_converter.reset(new TerrainConverter);
@@ -651,6 +647,8 @@ void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init)
 // Clear terrain data
 void OGREEE_CALL ogre_terrain_clear(void)
 {
+	ogre_log(__FUNCTION__, "");
+
 #ifdef USE_TERRAIN_OBJECTS
 	terrain_objects.clear();
 #endif
@@ -663,6 +661,8 @@ void OGREEE_CALL ogre_terrain_clear(void)
 // Periodic update to reflect visibility changes
 void OGREEE_CALL ogre_terrain_update(void)
 {
+	ogre_log(__FUNCTION__, "");
+
 	terrain_cache->update();
 }
 
@@ -670,6 +670,8 @@ void OGREEE_CALL ogre_terrain_update(void)
 // Use specified object as a tree
 void OGREEE_CALL ogre_terrain_tree(const struct OBJECT_3D* o)
 {
+	ogre_log(__FUNCTION__, "");
+
 	assert(!tree_geometry.get());
 	tree_geometry.reset(new Geometry(0, 0));
 	AnimationMesh am;
@@ -680,6 +682,8 @@ void OGREEE_CALL ogre_terrain_tree(const struct OBJECT_3D* o)
 // Clear tree object
 void OGREEE_CALL ogre_terrain_tree_clear(void)
 {
+	ogre_log(__FUNCTION__, "");
+
 	tree_geometry.reset(0);
 }
 #endif
@@ -687,18 +691,31 @@ void OGREEE_CALL ogre_terrain_tree_clear(void)
 #ifdef USE_TERRAIN_OBJECTS
 void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 {
+	ogre_log(__FUNCTION__, "%p", scene);
+
 	const Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
 	const Ogre::Vector3& pos = node->getPosition();
 	int x = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	int z = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	z = -z - 1;
-	const SceneDatabaseElement& sde = static_cast<GameObjectScene*>(scene->internal)->database->elements.front();
-	SectorObject so;
-	so.object = sde.object;
-	//FIXME Probably there's something wrong with position
-	so.position = node->getPosition() - Ogre::Vector3(x * TERRAIN_3D_SECTOR_SIDE_LENGTH, 0, -z * TERRAIN_3D_SECTOR_SIDE_LENGTH) + sde.position;
-	so.orientation = node->getOrientation() * sde.orientation;
-	so.scale = node->getScale() * sde.scale;
-	terrain_objects[Sector(z, x)].push_back(so);
+	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
+	if (database->elements.empty())
+		ogre_log(__FUNCTION__, "empty scene");
+	else
+		if (database->elements.front().object.empty())
+			ogre_log(__FUNCTION__, "NULL main object");
+	for (SceneDatabaseElements::const_iterator itor(database->elements.begin()); itor != database->elements.end(); ++itor)
+		if (!itor->object.empty())
+			{
+				SectorObject so;
+				so.object = itor->object;
+				//FIXME Probably there's something wrong with position
+				so.position = node->getPosition() - Ogre::Vector3(x * TERRAIN_3D_SECTOR_SIDE_LENGTH, 0, (-z - 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH) + itor->position;
+				ogre_log(__FUNCTION__, "%s %f %f %f", itor->object.c_str(), so.position.x, so.position.y, so.position.z);
+				so.orientation = node->getOrientation() * itor->orientation;
+				so.scale = node->getScale() * itor->scale;
+				terrain_objects[Sector(z, x)].push_back(so);
+				break;
+			}
 }
 #endif

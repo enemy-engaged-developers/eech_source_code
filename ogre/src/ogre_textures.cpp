@@ -15,6 +15,8 @@ namespace
 // Creates texture resource and uploads texture into Ogre
 void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data)
 {
+	ogre_log(__FUNCTION__, "%u %i/%u", index, mip, number_of_mipmaps);
+
 	TextureName texture_name(index);
 
 	Ogre::TexturePtr tex;
@@ -31,10 +33,13 @@ void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps
 // Unloads and removes all textures
 void OGREEE_CALL ogre_textures_clear(void)
 {
+	ogre_log(__FUNCTION__, "");
 }
 
 void OGREEE_CALL ogre_textures_override(unsigned index, const char* file)
 {
+	ogre_log(__FUNCTION__, "%u %s", index, file);
+
 	TextureName texture_name(index);
 	Override o = { index, Ogre::TextureManager::getSingleton().getByName(texture_name, ogre_resource_group) };
 	Ogre::TextureManager::getSingleton().remove(texture_name);
@@ -43,6 +48,8 @@ void OGREEE_CALL ogre_textures_override(unsigned index, const char* file)
 
 void OGREEE_CALL ogre_textures_restore(void)
 {
+	ogre_log(__FUNCTION__, "");
+
 	while (!overrides.empty())
 	{
 		Override& o = overrides.front();

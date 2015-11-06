@@ -64,7 +64,7 @@ struct OgreSubObjectsSearch
 OGREEE_API void OGREEE_CALL ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_SCENE_DATABASE_ENTRY* objects_3d_scene_database);
 OGREEE_API void OGREEE_CALL ogre_scenes_clear(void);
 OGREEE_API void OGREEE_CALL ogre_scene_init(struct OgreGameObjectScene* scene);
-OGREEE_API void OGREEE_CALL ogre_scene_create(struct OgreGameObjectScene* scene, int scene_number);
+OGREEE_API void OGREEE_CALL ogre_scene_create(struct OgreGameObjectScene* scene, unsigned scene_number);
 OGREEE_API void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene);
 OGREEE_API unsigned OGREEE_CALL ogre_scene_get_object(struct OgreGameObjectScene* scene, unsigned subobject);
 OGREEE_API unsigned OGREEE_CALL ogre_scene_get_parent(struct OgreGameObjectScene* scene, unsigned subobject);

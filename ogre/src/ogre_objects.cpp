@@ -370,6 +370,8 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 // Converts objects
 void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
 {
+	ogre_log(__FUNCTION__, "");
+
 	objects_init = init;
 
 	assert(!objects_geometry.get());
@@ -388,6 +390,8 @@ void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
 // Clears objects information
 void OGREEE_CALL ogre_objects_clear(void)
 {
+	ogre_log(__FUNCTION__, "");
+
 	objects_anim.clear();
 	objects_geometry.reset(0);
 }
