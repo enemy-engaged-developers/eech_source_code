@@ -28,7 +28,15 @@ class AggTranslator : public Translator
 {
  public:
 
- int Add(const char* name)
+ virtual const char* operator ()(int number) = 0;
+ virtual int operator ()(const char* name) = 0;
+};
+
+class SimpleAggTranslator : public AggTranslator
+{
+ public:
+
+ int operator()(const char* name)
  {
   return names += name;
  }

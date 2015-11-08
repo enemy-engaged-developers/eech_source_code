@@ -47,6 +47,9 @@ struct OBJECT_3D
 #ifdef LOAD_NORMALS
  struct POINT_3D_PLAIN_REFERENCE /*{ unsigned short int point; }*/ *surface_point_normals;
 #endif
+#ifdef LOAD_CUSTOM
+ char file[256];
+#endif
 };
 typedef OBJECT_3D::OBJECT_SHORT_3D_POINT OBJECT_SHORT_3D_POINT;
 typedef OBJECT_3D::OBJECT_3D_FACE OBJECT_3D_FACE;
@@ -57,6 +60,10 @@ typedef OBJECT_3D::POINT_3D_PLAIN_REFERENCE POINT_3D_PLAIN_REFERENCE;
 #ifdef LOAD_NORMALS
 typedef OBJECT_3D::OBJECT_3D_HEADING_PITCH_NORMAL OBJECT_3D_HEADING_PITCH_NORMAL;
 #endif
+#endif
+
+#ifdef LOAD_CUSTOM
+#include "../eeo2lwo/eeo2lwo.h"
 #endif
 
 class Objects
@@ -89,11 +96,15 @@ class Objects
 #endif
  FACE_SURFACE_DESCRIPTION* object_database_surfaces;
  POINT_3D_SHORT_REFERENCE* object_database_faces_point_list;
+#ifdef LOAD_CUSTOM
+ Array<Object*> custom_objs;
+#endif
 
  public:
 
- Objects(void)
+ Objects(const char* dir = ".", unsigned reserve = 0)
  {
+  char filename[1024];
   int number_of_real_polygons;
   int number_of_surface_points, number_of_point_normals, number_of_surface_texture_points, number_of_point_reference, number_of_normal_reference;
 #ifdef LOAD_NORMALS
@@ -115,16 +126,21 @@ class Objects
   OBJECT_3D_SHORT_TEXTURED_POINT * current_object_surface_point_texture_references;
   FILE* fp;
 
-  fp = safe_fopen("3dobjs.bin", "rb");
-  object_database_points = (OBJECT_SHORT_3D_POINT*)loadfile("3dobjs.pts");
-  object_database_surface_point_list = (POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.sp");
+  sprintf(filename, "%s\\3dobjs.bin", dir);
+  fp = safe_fopen(filename, "rb");
+  sprintf(filename, "%s\\3dobjs.pts", dir);
+  object_database_points = (OBJECT_SHORT_3D_POINT*)loadfile(filename);
+  sprintf(filename, "%s\\3dobjs.sp", dir);
+  object_database_surface_point_list = (POINT_3D_PLAIN_REFERENCE*)loadfile(filename);
 #ifdef LOAD_NORMALS
-  object_database_surface_point_normal_list = (POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.spn");
+  sprintf(filename, "%s\\3dobjs.spn", dir);
+  object_database_surface_point_normal_list = (POINT_3D_PLAIN_REFERENCE*)loadfile(filename);
 #endif
-  object_database_surface_point_texture_list = (OBJECT_3D_SHORT_TEXTURED_POINT*)loadfile("3dobjs.spt");
+  sprintf(filename, "%s\\3dobjs.spt", dir);
+  object_database_surface_point_texture_list = (OBJECT_3D_SHORT_TEXTURED_POINT*)loadfile(filename);
 
   fread(&total_number_of_objects, sizeof(int), 1, fp);
-  objs = (OBJECT_3D*)calloc(total_number_of_objects + 1, sizeof(OBJECT_3D));
+  objs = (OBJECT_3D*)calloc(total_number_of_objects + 1 + reserve, sizeof(OBJECT_3D));
 
   {
    int total_number_of_surfaces, total_number_of_plain_points, total_number_of_polygons;
@@ -246,6 +262,10 @@ class Objects
     objs[i].object_faces_point_plain_list = current_faces_point_list;
     current_faces_point_list += number_of_point_reference;
     fseek(fp, number_of_normal_reference * 2, 1);
+
+#ifdef LOAD_CUSTOM
+    sprintf(objs[i].file, "%04X", i);
+#endif
    }
 
   fclose(fp);
@@ -253,6 +273,10 @@ class Objects
 
  ~Objects(void)
  {
+#ifdef LOAD_CUSTOM
+  for (unsigned i = 0; i < !custom_objs; i++)
+   delete custom_objs[i];
+#endif
   free(objs);
   free(object_database_points);
   free(object_database_surface_point_list);
@@ -267,6 +291,45 @@ class Objects
   free(object_database_surfaces);
   free(object_database_faces_point_list);
  }
+
+#ifdef LOAD_CUSTOM
+ unsigned LoadCustomObject(const char* filename, EET& eet)
+ {
+  custom_objs.Append(new Object(filename, eet));
+  objs[total_number_of_objects] = **custom_objs.Last();
+  char* p = strrchr(filename, '\\');
+  strcpy(objs[total_number_of_objects].file, p ? p + 1 : filename);
+  p = strrchr(objs[total_number_of_objects].file, '.');
+  if (p)
+   *p = '\0';
+  return total_number_of_objects++;
+ }
+ void LoadCustomObjects(const char* dir, EET& eet)
+ {
+  char filename[1024];
+  int rc;
+  long handle;
+  struct _finddata_t fi;
+
+  sprintf(filename, "%s\\????.EEO", dir);
+  for (rc = handle = _findfirst(filename, &fi); rc != -1; rc = _findnext(handle, &fi))
+   {
+    int objid;
+    if (fi.attrib & _A_SUBDIR)
+     continue;
+    if (!isxdigit(fi.name[0]) || !isxdigit(fi.name[1]) || !isxdigit(fi.name[2]) || !isxdigit(fi.name[3]))
+     continue;
+    objid = strtol(fi.name, NULL, 16);
+    if (objid <= 0 || objid > total_number_of_objects)
+     continue;
+    sprintf(filename, "%s\\%s", dir, fi.name);
+    custom_objs.Append(new Object(filename, eet));
+    objs[objid] = **custom_objs.Last();
+    sprintf(objs[objid].file, "%04X", objid);
+   }
+  _findclose(handle);
+ }
+#endif
 
  int GetNumberOfObjects(void) const { return total_number_of_objects; }
  const OBJECT_3D& GetObject(int index) const { return objs[index]; }

@@ -372,6 +372,7 @@ void initialise_scene_quick_sub_object_search(void)
 
  assert(total_sub_object_indices == scene.total_number_of_sub_object_indices);
 
+ scene.number_of_sub_object_table_entries = 0;
  if (number_of_unique_indices)
   {
    struct OBJECT_3D_DATABASE_ENTRY **sub_object_table_entries, **sub_object_entry_ptr;

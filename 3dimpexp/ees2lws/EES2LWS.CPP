@@ -14,29 +14,7 @@
 #include "../ee_exp/trans.cpp"
 #include "../ee_exp/scenes.cpp"
 #include "../ee_exp/lws_exp.cpp"
-
-class Scene : public OBJECT_3D_SCENE_DATABASE_ENTRY
-{
- public:
- 
- Scene(const char* filename, AllNames& names, Cameras& cameras, AggTranslator& translator)
-  : names(names), cameras_(cameras), translator(translator)
- {
-  FILE* fp = safe_fopen(filename, "rb");
-  int version;
-  fread(&version, 1, sizeof(int), fp);
-  read_scene(fp, version);
-  fclose(fp);
- }
-
- private:
-
- AllNames& names;
- Cameras& cameras_;
- AggTranslator& translator;
-
-#include "scene.cpp"
-};
+#include "ees2lws.h"
 
 int main(int argc, char* argv[])
 {
@@ -54,8 +32,8 @@ int main(int argc, char* argv[])
  EET eet(textures_finder);
  AllNames names(eet);
  Cameras cameras;
- AggTranslator translator;
- translator.Add("");
+ SimpleAggTranslator translator;
+ translator("");
  const Scene scene(argv[1], names, cameras, translator);
  LwsExport exporter(cameras);
  exporter.ExportScene(names, translator, argv[2], scene);

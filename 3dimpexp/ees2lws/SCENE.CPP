@@ -23,7 +23,7 @@ int get_object(FILE* fp)
  if (ext)
   *ext = '\0';
 
- return translator.Add(ptr);
+ return translator(ptr);
 }
 
 unsigned get_name(FILE* fp, Names& names)

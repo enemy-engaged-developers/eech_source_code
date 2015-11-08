@@ -129,6 +129,11 @@ class EET
  EET(TexturesFinder& textures_finder);
 #endif
  void LoadAnimations(FILE* file);
+#ifdef LOAD_CUSTOM
+ void LoadCustomAnimations(const char* dir);
+ const char* GetTexture(unsigned index) const;
+ void ExportAnimationTextures(std::set<unsigned>& s) const;
+#endif
  unsigned Append(const char* name);
 #ifndef EET_NO_EXPORT
  void Clear(void);
@@ -191,6 +196,56 @@ void EET::LoadAnimations(FILE* file)
  LoadAnimations(file, animations);
  LoadAnimations(file, displacement_animations);
 }
+
+#ifdef LOAD_CUSTOM
+void EET::LoadCustomAnimations(const char* dir)
+{
+  char buf[260], file[260];
+  int rc;
+  long handle;
+  struct _finddata_t fd;
+
+  sprintf(buf, "%s\\*.TXT", dir);
+  for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
+   if (!(fd.attrib & _A_SUBDIR))
+    {
+     sprintf(file, "%s\\%s", dir, fd.name);
+     FILE* f = safe_fopen(file, "r");
+     *strrchr(fd.name, '.') = '\0';
+     strupr(fd.name);
+     Animation* animation = 0;
+     for (unsigned i = 0; i < !animations; i++)
+      if (!strcmp(fd.name, animations[i].name))
+       {
+        animation = &animations[i];
+        break;
+       }
+     if (!animation)
+      animation = &animations.Append();
+     {
+      Animation anim;
+      strcpy(anim.name, fd.name);
+      *animation = anim;
+     }
+     while (fgets(buf, sizeof(buf), f))
+      {
+       buf[strlen(buf) - 1] = '\0';
+       animation->animation.Append(Append(buf));
+      }
+    }
+  _findclose(handle);
+}
+const char* EET::GetTexture(unsigned index) const
+{
+ return index < !textures ? textures[index].name : NULL;
+}
+void EET::ExportAnimationTextures(std::set<unsigned>& s) const
+{
+ for (unsigned i = 0; i < !animations; i++)
+  for (unsigned j = 0; j < !animations[i].animation; j++)
+   s.insert(animations[i].animation[j]);
+}
+#endif
 
 #ifndef EET_NO_EXPORT
 void EET::Clear(void)
@@ -278,6 +333,7 @@ unsigned EET::Append(const char* name)
 {
  Texture texture;
  strcpy(texture.name, name);
+ strupr(texture.name);
 #ifndef EET_NO_EXPORT
  texture.camo = false;
  unsigned len = strlen(texture.name);
