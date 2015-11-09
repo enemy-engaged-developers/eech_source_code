@@ -56,6 +56,15 @@ struct DDS_HEADER
  DWORD dwReserved2;
 };
 
+enum CamoType
+{
+ CT_DEFAULT,
+ CT_DESERT,
+ CT_WINTER,
+ CT_LAST
+};
+const char* suf[CT_LAST] = { "", "-D", "-W" };
+const char* SUF[CT_LAST] = { "", "-DESERT", "-WINTER" };
 unsigned log_2(unsigned x)
 {
  int l = 0;
@@ -64,12 +73,89 @@ unsigned log_2(unsigned x)
  return l;
 }
 
+typedef std::set<std::string> Ignore;
+typedef std::vector<std::string> Textures;
+struct Config
+{
+ Config(const char* file, const char* scene_file)
+ {
+  const char* p = strrchr(scene_file, '\\');
+  if (p)
+   {
+    scene_objects.assign(scene_file, p - scene_file);
+    p++;
+   }
+  else
+   {
+    scene_objects = ".";
+    p = scene_file;
+   }
+  char* e = strrchr(scene_file, '.');
+  if (e && e > p)
+   scene.assign(p, e - p);
+  else
+   scene = p;
+  strupr(const_cast<char*>(scene.c_str()));
+  char buf[256];
+  std::string category;
+  FILE* f = safe_fopen(file, "r");
+  while (fgets(buf, sizeof(buf), f))
+   {
+    size_t l = strlen(buf);
+    while (l > 0 && isspace(buf[l - 1]))
+     l--;
+    if (!l)
+     continue;
+    buf[l] = '\0';
+    strupr(buf);
+    if (*buf == '[')
+     {
+      category = buf;
+      continue;
+     }
+    if (category == "[TEXTURES]")
+     textures.push_back(buf);
+    else
+     {
+      if (category == "[IGNORE_TEXTURES]")
+       ignore.insert(buf);
+      else
+       {
+        char* p = strchr(buf, '=');
+        if (p)
+         {
+          *p++ = '\0';
+          if (!strcmp(buf, "EE_OBJECTS"))
+           ee_objects = p;
+          else
+           {
+            if (!strcmp(buf, "COMMON_OBJECTS"))
+             common_objects = p;
+            else
+             {
+              if (!strcmp(buf, "ANIMATIONS"))
+               animations = p;
+             }
+           }
+         }
+       }
+     }
+   }
+  fclose(f);
+ }
+
+ std::string ee_objects, common_objects, scene_objects, animations;
+ std::string scene;
+ Ignore ignore;
+ Textures textures;
+};
+
 class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExporter
 {
  public:
 
- Skin(const char* dir, Objects& objects, EET& eet, const char* scene, const char* ignore, const char* const* text_dirs)
-  : dir(dir), objects(objects), eet(eet), scene(scene), ignore(ignore), text_dirs(text_dirs)
+ Skin(const char* dir, Objects& objects, EET& eet, const char* scene, const Ignore& ignore, const Textures& textures)
+  : dir(dir), objects(objects), eet(eet), scene(scene), ignore(ignore), textures(textures)
  {
  }
 
@@ -179,7 +265,6 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
   printf("Total %u textures\n", texts.size());
   if (texts.empty())
    error("No textures found");
-  mkdir(scene);
   sort_textures();
   make_decisions();
   convert_objects();
@@ -189,19 +274,30 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
  {
   if (mip)
    return;
+  CamoType ct = CT_DEFAULT;
+  size_t l = strlen(name);
+  char n[256];
+  if (l > 2 && name[-2] == '-' && name[-1] == 'D')
+   {
+    ct = CT_DESERT;
+    count--;
+    memcpy(n, name, l - 2);
+    n[l - 2] = '\0';
+    name = n;
+   }
   Texts::iterator itor = texts.find(count);
   if (itor == texts.end())
    return;
   Text& t = itor->second;
-  if (!try_load(t, name))
+  if (!try_load(t, name, ct))
    {
-    printf("Loading from textures.bin %s\n", name);
-    t.width = width;
-    t.height = height;
-    t.alpha = bpp == 4;
+    printf("Loading from textures.bin %s%s\n", name, suf[ct]);
+    t.images[ct].width = width;
+    t.images[ct].height = height;
+    t.images[ct].alpha = bpp == 4;
     unsigned size = width * height * bpp;
-    t.data.resize(size);
-    memcpy(&t.data[0], texture_image_data, size);
+    t.images[ct].data.resize(size);
+    memcpy(&t.images[ct].data[0], texture_image_data, size);
    }
  }
 
@@ -210,23 +306,28 @@ private:
  Objects& objects;
  EET& eet;
  const char* scene;
- const char* ignore;
- const char* const* text_dirs;
+ const Ignore& ignore;
+ const Textures& textures;
  typedef std::map<std::string, int> Loaded;
  Loaded loaded;
  typedef std::set<int> Objs;
  Objs spec, objs;
  char file[256];
  std::set<unsigned> ign;
- struct Text
+ bool has_desert, has_winter;
+ struct Image
  {
-  Text()
-   : width(0), height(0), alpha(false), ui(FLT_MAX), ua(-FLT_MAX), vi(FLT_MAX), va(-FLT_MAX)
-  {
-  }
   unsigned width, height;
   bool alpha;
   std::vector<unsigned char> data;
+ };
+ struct Text
+ {
+  Text()
+   : ui(FLT_MAX), ua(-FLT_MAX), vi(FLT_MAX), va(-FLT_MAX)
+  {
+  }
+  Image images[CT_LAST];
   float ui, ua, vi, va;
   int iu, au, iv, av;
   int ru, rv;
@@ -255,52 +356,52 @@ private:
  };
  std::auto_ptr<Decision> bd;
 
- bool try_load(Text& t, const char* name)
+ bool try_load(Text& t, const char* name, CamoType ct)
  {
   bool loaded = false;
-  for (const char* const* text_dir = text_dirs; *text_dir; text_dir++)
+  for (Textures::const_iterator itor(textures.begin()); itor != textures.end(); ++itor)
    {
     char file[1024];
     FILE* f;
-    sprintf(file, "%s\\%s.BMP", *text_dir, name);
+    sprintf(file, "%s\\%s%s.BMP", itor->c_str(), name, suf[ct]);
     f = fopen(file, "rb");
     if (f)
      {
       printf("Loading %s\n", file);
-      load_bmp(f, t);
+      load_bmp(f, t, ct);
       loaded = true;
       fclose(f);
      }
-    sprintf(file, "%s\\%s.TGA", *text_dir, name);
+    sprintf(file, "%s\\%s%s.TGA", itor->c_str(), name, suf[ct]);
     f = fopen(file, "rb");
     if (f)
      {
       printf("Loading %s\n", file);
-      load_tga(f, t);
+      load_tga(f, t, ct);
       loaded = true;
       fclose(f);
      }
-    sprintf(file, "%s\\%s.DDS", *text_dir, name);
+    sprintf(file, "%s\\%s%s.DDS", itor->c_str(), name, suf[ct]);
     f = fopen(file, "rb");
     if (f)
      {
       printf("Loading %s\n", file);
-      load_dds(f, t);
+      load_dds(f, t, ct);
       loaded = true;
       fclose(f);
      }
    }
   if (loaded)
    {
-    if (t.width & (t.width - 1))
-     warning("Invalid width %u", t.width);
-    if (t.height & (t.height - 1))
-     warning("Invalid height %u", t.height);
+    if (t.images[ct].width & (t.images[ct].width - 1))
+     warning("Invalid width %u", t.images[ct].width);
+    if (t.images[ct].height & (t.images[ct].height - 1))
+     warning("Invalid height %u", t.images[ct].height);
    }
   return loaded;
  }
 
- void load_bmp(FILE* f, Text& t)
+ void load_bmp(FILE* f, Text& t, CamoType ct)
  {
   BITMAPFILEHEADER bmfh;
   BITMAPINFOHEADER bmih;
@@ -308,53 +409,53 @@ private:
   fread(&bmih, sizeof(bmih), 1, f);
   if (bmih.biSize != sizeof(bmih) || bmih.biCompression != BI_RGB || (bmih.biBitCount != 24 && bmih.biBitCount != 32))
    error("Invalid BMP");
-  t.width = bmih.biWidth;
-  t.height = bmih.biHeight;
-  t.alpha = false;
-  unsigned s = t.width * 3 % 4;
+  t.images[ct].width = bmih.biWidth;
+  t.images[ct].height = bmih.biHeight;
+  t.images[ct].alpha = false;
+  unsigned s = t.images[ct].width * 3 % 4;
   if (s)
    s = 4 - s;
-  unsigned size = t.width * t.height * 3;
-  t.data.resize(size);
+  unsigned size = t.images[ct].width * t.images[ct].height * 3;
+  t.images[ct].data.resize(size);
   if (bmih.biBitCount == 24)
    if (!s)
-    fread(&t.data[0], size, 1, f);
+    fread(&t.images[ct].data[0], size, 1, f);
    else
-   for (unsigned i = 0; i < size; i += t.width * 3)
+   for (unsigned i = 0; i < size; i += t.images[ct].width * 3)
     {
-     fread(&t.data[i], t.width * 3, 1, f);
+     fread(&t.images[ct].data[i], t.images[ct].width * 3, 1, f);
      fseek(f, s, SEEK_CUR);
     }
   else
    for (unsigned i = 0; i < size; i += 3)
     {
-     fread(&t.data[i], 3, 1, f);
+     fread(&t.images[ct].data[i], 3, 1, f);
      fseek(f, 1, SEEK_CUR);
     }
-  for (unsigned i = 0; i < t.height / 2; i++)
-   for (unsigned j = 0; j < t.width * 3; j++)
+  for (unsigned i = 0; i < t.images[ct].height / 2; i++)
+   for (unsigned j = 0; j < t.images[ct].width * 3; j++)
     {
-      unsigned char& a = t.data[i * t.width * 3 + j];
-      unsigned char& b = t.data[(t.height - i - 1) * t.width * 3 + j];
+      unsigned char& a = t.images[ct].data[i * t.images[ct].width * 3 + j];
+      unsigned char& b = t.images[ct].data[(t.images[ct].height - i - 1) * t.images[ct].width * 3 + j];
       unsigned char c = a;
       a = b;
       b = c;
     }
  }
 
- void load_tga(FILE* f, Text& t)
+ void load_tga(FILE* f, Text& t, CamoType ct)
  {
   unsigned char header[18];
   fread(header, sizeof(header), 1, f);
   if (header[1] || (header[2] != 2 && header[2] != 10) || (header[16] != 24 && header[16] != 32) || (header[17] & 0xD0))
    error("Invalid TGA");
-  t.width = ((unsigned) header[13] << 8) | header[12];
-  t.height = ((unsigned) header[15] << 8) | header[14];
-  t.alpha = header[16] == 32;
-  unsigned bpp = (t.alpha ? 4 : 3), size = t.width * t.height * bpp;
-  t.data.resize(size);
+  t.images[ct].width = ((unsigned) header[13] << 8) | header[12];
+  t.images[ct].height = ((unsigned) header[15] << 8) | header[14];
+  t.images[ct].alpha = header[16] == 32;
+  unsigned bpp = (t.images[ct].alpha ? 4 : 3), size = t.images[ct].width * t.images[ct].height * bpp;
+  t.images[ct].data.resize(size);
   if (header[2] == 2)
-   fread(&t.data[0], size, 1, f);
+   fread(&t.images[ct].data[0], size, 1, f);
   else
    {
     unsigned char count;
@@ -369,7 +470,7 @@ private:
         fread(buf, bpp, 1, f);
         while (count--)
          {
-          memcpy(&t.data[offset], buf, bpp);
+          memcpy(&t.images[ct].data[offset], buf, bpp);
           offset += bpp;
          }
        }
@@ -377,47 +478,47 @@ private:
        {
         unsigned size;
         size = count * bpp;
-        fread(&t.data[offset], size, 1, f);
+        fread(&t.images[ct].data[offset], size, 1, f);
         offset += size;
        }
      }
     while (offset < size);
    }
    if (!(header[17] & 0x20))
-    for (unsigned i = 0; i < t.height / 2; i++)
-     for (unsigned j = 0; j < t.width * bpp; j++)
+    for (unsigned i = 0; i < t.images[ct].height / 2; i++)
+     for (unsigned j = 0; j < t.images[ct].width * bpp; j++)
       {
-        unsigned char& a = t.data[i * t.width * bpp + j];
-        unsigned char& b = t.data[(t.height - i - 1) * t.width * bpp + j];
+        unsigned char& a = t.images[ct].data[i * t.images[ct].width * bpp + j];
+        unsigned char& b = t.images[ct].data[(t.images[ct].height - i - 1) * t.images[ct].width * bpp + j];
         unsigned char c = a;
         a = b;
         b = c;
       }
  }
 
- void load_dds(FILE* f, Text& t)
+ void load_dds(FILE* f, Text& t, CamoType ct)
  {
   DWORD dwmagic;
   DDS_HEADER ddsh;
 
   fread(&dwmagic, sizeof(dwmagic), 1, f);
   fread(&ddsh, sizeof(ddsh), 1, f);
-  t.alpha = ddsh.ddspf.dwFlags & 1 ? true : false;
-  t.width = ddsh.dwWidth;
-  t.height = ddsh.dwHeight;
+  t.images[ct].alpha = ddsh.ddspf.dwFlags & 1 ? true : false;
+  t.images[ct].width = ddsh.dwWidth;
+  t.images[ct].height = ddsh.dwHeight;
   unsigned size = ddsh.ddspf.dwRGBBitCount >> 3;
-  if (size != (t.alpha ? 4 : 3))
+  if (size != (t.images[ct].alpha ? 4 : 3))
    error("Invalid DDS");
-  size *= t.width * t.height;
-  t.data.resize(size);
-  fread(&t.data[0], size, 1, f);
+  size *= t.images[ct].width * t.images[ct].height;
+  t.images[ct].data.resize(size);
+  fread(&t.images[ct].data[0], size, 1, f);
 #if 1
-  unsigned bpp = (t.alpha ? 4 : 3);
-  for (unsigned i = 0; i < t.height / 2; i++)
-   for (unsigned j = 0; j < t.width * bpp; j++)
+  unsigned bpp = (t.images[ct].alpha ? 4 : 3);
+  for (unsigned i = 0; i < t.images[ct].height / 2; i++)
+   for (unsigned j = 0; j < t.images[ct].width * bpp; j++)
     {
-      unsigned char& a = t.data[i * t.width * bpp + j];
-      unsigned char& b = t.data[(t.height - i - 1) * t.width * bpp + j];
+      unsigned char& a = t.images[ct].data[i * t.images[ct].width * bpp + j];
+      unsigned char& b = t.images[ct].data[(t.images[ct].height - i - 1) * t.images[ct].width * bpp + j];
       unsigned char c = a;
       a = b;
       b = c;
@@ -428,18 +529,8 @@ private:
  void load_ignore(void)
  {
   eet.ExportAnimationTextures(ign);
-  FILE* f = safe_fopen(ignore, "r");
-  char buf[256];
-  while (fgets(buf, sizeof(buf), f))
-   {
-    size_t l = strlen(buf);
-    while (l && isspace(buf[l - 1]))
-     l--;
-    buf[l] = '\0';
-    if (*buf)
-     ign.insert(eet.Append(buf));
-   }
-  fclose(f);
+  for (Ignore::const_iterator itor(ignore.begin()); itor != ignore.end(); ++itor)
+   ign.insert(eet.Append(itor->c_str()));
  }
  void gather_textures(void)
  {
@@ -483,15 +574,39 @@ private:
    {
     Text& t = itor->second;
     const char* name = eet.GetTexture(itor->first);
-    if (!t.data.empty())
+    if (!t.images[CT_DEFAULT].data.empty())
      continue;
-    if (!try_load(t, name))
+    if (!try_load(t, name, CT_DEFAULT))
      error("Failed to find texture %s", name);
+    try_load(t, name, CT_DESERT);
+    try_load(t, name, CT_WINTER);
    }
   bpp = 3;
+  has_desert = false;
+  has_winter = false;
   for (Texts::iterator itor(texts.begin()); itor != texts.end();)
    {
-    if (itor->second.alpha)
+#define CH1(X, Y) (itor->second.images[X].Y != itor->second.images[CT_DEFAULT].Y)
+#define CH(X) (CH1(X, alpha) || CH1(X, width) || CH1(X, height))
+    if (!itor->second.images[CT_DESERT].data.empty())
+     {
+      has_desert = true;
+      if (CH(CT_DESERT))
+       error("Different default and desert image parameters for %s", eet.GetTexture(itor->first));
+     }
+    else
+     itor->second.images[CT_DESERT] = itor->second.images[CT_DEFAULT];
+    if (!itor->second.images[CT_WINTER].data.empty())
+     {
+      has_winter = true;
+      if (CH(CT_WINTER))
+       error("Different default and winter image parameters for %s", eet.GetTexture(itor->first));
+     }
+    else
+     itor->second.images[CT_WINTER] = itor->second.images[CT_DEFAULT];
+#undef CH
+#undef CH1
+    if (itor->second.images[CT_DEFAULT].alpha)
      {
 #if 1
       printf("%s has alpha\n", eet.GetTexture(itor->first));
@@ -518,13 +633,15 @@ private:
     t.au = (int)(t.ua * PREC);
     t.iv = (int)(t.vi * PREC);
     t.av = (int)(t.va * PREC);
+#if 0
     t.iu = min(t.iu, 0);
     t.au = max(t.au, PREC);
     t.iv = min(t.iv, 0);
     t.av = max(t.av, PREC);
-    t.ru = (t.width * (t.au - t.iu) + PREC - 1) / PREC;
-    t.rv = (t.height * (t.av - t.iv) + PREC - 1) / PREC;
-    printf("% 5i % 5i % 5i % 5i % 7.3f % 7.3f % 7.3f % 7.3f %s\n", t.width, t.height, t.ru, t.rv, t.ui, t.ua, t.vi, t.va, eet.GetTexture(itor->first));
+#endif
+    t.ru = (t.images[CT_DEFAULT].width * (t.au - t.iu) + PREC - 1) / PREC;
+    t.rv = (t.images[CT_DEFAULT].height * (t.av - t.iv) + PREC - 1) / PREC;
+    printf("% 5i % 5i % 5i % 5i % 7.3f % 7.3f % 7.3f % 7.3f %s\n", t.images[CT_DEFAULT].width, t.images[CT_DEFAULT].height, t.ru, t.rv, t.ui, t.ua, t.vi, t.va, eet.GetTexture(itor->first));
     stexts.insert(STexts::value_type(t.ru < t.rv ? std::make_pair(t.rv, t.ru) : std::make_pair(t.ru, t.rv), &t));
    }
  }
@@ -534,12 +651,16 @@ private:
    {
     Decision d;
     make_decision(w, d);
-    if (!bd.get() || d.size.u * d.size.v < bd->size.u * bd->size.v)
+    if (!bd.get() || std::make_pair(d.size.u * d.size.v, d.size.u + d.size.v) < std::make_pair(bd->size.u * bd->size.v, bd->size.u + bd->size.v))
      bd.reset(new Decision(d));
     if (w >= (1 << 13))
      break;
    }
-   export_decision(*bd);
+   export_decision(*bd, CT_DEFAULT);
+   if (has_desert)
+    export_decision(*bd, CT_DESERT);
+   if (has_winter)
+    export_decision(*bd, CT_WINTER);
  }
  void make_decision(unsigned w, Decision& d)
  {
@@ -575,9 +696,9 @@ private:
   d.size.v = h[0];
   for (unsigned i = 1; i < h.size(); i++)
    d.size.v = max(d.size.v, h[i]);
-  d.size.v = 1 << log_2(d.size.v);
+  d.size.v = 1 << log_2(d.size.v - 1);
  }
- void export_decision(const Decision& d)
+ void export_decision(const Decision& d, CamoType ct)
  {
   std::vector<unsigned char> data;
   data.resize(d.size.u * d.size.v * bpp);
@@ -587,12 +708,12 @@ private:
 #endif
   for (Placement::const_iterator p(d.placement.begin()); p != d.placement.end(); ++p)
    if (p->first->ru < p->first->rv)
-    copyt(&data[0], d.size.u, *p->first, p->second);
+    copyt(&data[0], d.size.u, *p->first, ct, p->second);
    else
-    copy(&data[0], d.size.u, *p->first, p->second);
+    copy(&data[0], d.size.u, *p->first, ct, p->second);
 
   char filename[1024];
-  sprintf(filename, "%s\\%s.TGA", scene, scene);
+  sprintf(filename, "%s\\%s%s.TGA", scene, scene, SUF[ct]);
   FILE* file = safe_fopen(filename, "wb");
   fwrite("\0\0\002\0\0\0\0\0\0\0\0\0", 12, 1, file);
   fwrite(&d.size.u, 2, 1, file);
@@ -601,14 +722,14 @@ private:
   fwrite(&data[0], data.size(), 1, file);
   fclose(file);
  }
- void copy(unsigned char* data, unsigned um, const Text& t, const Position& p)
+ void copy(unsigned char* data, unsigned um, const Text& t, CamoType ct, const Position& p)
  {
-  unsigned tbpp = t.alpha ? 4 : 3;
+  unsigned tbpp = t.images[ct].alpha ? 4 : 3;
   unsigned char pixel[4];
   pixel[3] = 255;
-  int itu = t.iu * t.width, itv = t.iv * t.height;
-  for (; itu < 0; itu += t.width * PREC);
-  for (; itv < 0; itv += t.height * PREC);
+  int itu = t.iu * t.images[ct].width, itv = t.iv * t.images[ct].height;
+  for (; itu < 0; itu += t.images[ct].width * PREC);
+  for (; itv < 0; itv += t.images[ct].height * PREC);
   itv /= PREC;
   unsigned tu = itu / PREC;
   for (unsigned u = 0; u < t.ru; u++)
@@ -616,38 +737,38 @@ private:
     unsigned tv = itv;
     for (unsigned v = 0; v < t.rv; v++)
      {
-      memcpy(pixel, &t.data[((tv * t.width) + tu) * tbpp], tbpp);
+      memcpy(pixel, &t.images[ct].data[((tv * t.images[ct].width) + tu) * tbpp], tbpp);
       memcpy(data + ((p.v + v) * um + p.u + u) * bpp, pixel, bpp);
-      if (++tv == t.height)
+      if (++tv == t.images[ct].height)
        tv = 0;
      }
-    if (++tu == t.width)
+    if (++tu == t.images[ct].width)
      tu = 0;
    }
  }
- void copyt(unsigned char* data, unsigned um, const Text& t, const Position& p)
+ void copyt(unsigned char* data, unsigned um, const Text& t, CamoType ct, const Position& p)
  {
-  unsigned tbpp = t.alpha ? 4 : 3;
+  unsigned tbpp = t.images[ct].alpha ? 4 : 3;
   unsigned char pixel[4];
   pixel[3] = 255;
-  int itu = t.iu * t.width, itv = t.av * t.height;
-  for (; itu < 0; itu += t.width * PREC);
+  int itu = t.iu * t.images[ct].width, itv = t.av * t.images[ct].height;
+  for (; itu < 0; itu += t.images[ct].width * PREC);
   itu /= PREC;
-  for (; itv >= 0; itv -= t.height * PREC);
-  itv += t.height * PREC;
+  for (; itv >= 0; itv -= t.images[ct].height * PREC);
+  itv += t.images[ct].height * PREC;
   unsigned tv = itv / PREC;
   for (unsigned u = 0; u < t.rv; u++)
    {
     unsigned tu = itu;
     for (unsigned v = 0; v < t.ru; v++)
      {
-      memcpy(pixel, &t.data[((tv * t.width) + tu) * tbpp], tbpp);
+      memcpy(pixel, &t.images[ct].data[((tv * t.images[ct].width) + tu) * tbpp], tbpp);
       memcpy(data + ((p.v + v) * um + p.u + u) * bpp, pixel, bpp);
-      if (++tu == t.width)
+      if (++tu == t.images[ct].width)
        tu = 0;
      }
     if (!tv)
-     tv = t.height;
+     tv = t.images[ct].height;
     --tv;
    }
  }
@@ -676,8 +797,8 @@ private:
             OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT& p = cstp[s.has_luminosity_texture ? j * 2 : j];
             if (t.ru < t.rv)
              {
-              int utmp = (((int)(p.u * PREC)) - t.iu) * (t.width - 1);
-              int vtmp = (((int)(p.v * PREC)) - t.iv) * (t.height - 1);
+              int utmp = (((int)(p.u * PREC)) - t.iu) * (t.images[CT_DEFAULT].width - 1);
+              int vtmp = (((int)(p.v * PREC)) - t.iv) * (t.images[CT_DEFAULT].height - 1);
               if (utmp < 0 || utmp >= t.ru * PREC)
                error("utmp %s %f %i %i", eet.GetTexture(s.texture_index), p.u, utmp, t.ru * PREC);
               if (vtmp < 0 || vtmp >= t.rv * PREC)
@@ -687,8 +808,8 @@ private:
              }
             else
              {
-              int utmp = (((int)(p.u * PREC)) - t.iu) * (t.width - 1);
-              int vtmp = (((int)(p.v * PREC)) - t.iv) * (t.height - 1);
+              int utmp = (((int)(p.u * PREC)) - t.iu) * (t.images[CT_DEFAULT].width - 1);
+              int vtmp = (((int)(p.v * PREC)) - t.iv) * (t.images[CT_DEFAULT].height - 1);
               if (utmp < 0 || utmp >= t.ru * PREC)
                error("utmp %s %f %i %i", eet.GetTexture(s.texture_index), p.u, utmp, t.ru * PREC);
               if (vtmp < 0 || vtmp >= t.rv * PREC)
@@ -717,15 +838,15 @@ int main(int argc, char* argv[])
 {
  puts("Enemy Engaged Skin build " __DATE__);
 
- if (argc < 8)
+ if (argc != 3)
   {
-   puts("Usage: ee_skin.exe 3ddata_objects_directory common_objects_directory scene_objects_directory scene ignore_textures animations_directory textures_directories\nFor example, ee_skin.exe C:\\GAMES\\EE\\COHOKUM\\3DDATA C:\\GAMES\\EE\\COHOKUM\\3DDATA\\OBJECTS \"C:\\GAMES\\EE\\COHOKUM\\3DDATA\\OBJECTS\\AH-64D Apache Longbow\" AH64D_APACHE_LONGBOW IGNORE.TXT C:\\GAMES\\EE\\COHOKUM\\GRAPHICS\\TEXTURES\\ANIMATION C:\\GAMES\\EE\\COHOKUM\\GRAPHICS\\TEXTURES\\CAMO C:\\GAMES\\EE\\COHOKUM\\GRAPHICS\\TEXTURES\\GENERAL C:\\TEXTURES");
+   puts("Usage: ee_skin.exe config scene.ees\nFor example, ee_skin.exe CONFIG.TXT \"D:\\GAMES\\EE\\COHOKUM\\3DDATA\\OBJECTS\\AH-64D Apache Longbow\\AH64D_APACHE_LONGBOW.EES\"");
    return -1;
   }
 
- char scene[256];
- strcpy(scene, argv[4]);
- strupr(scene);
+ Config config(argv[1], argv[2]);
+
+ const char* scene = config.scene.c_str();
  mkdir(scene);
  char path[1024];
  sprintf(path, "%s\\%s.LOG", scene, scene);
@@ -737,12 +858,12 @@ int main(int argc, char* argv[])
  AllNames names(eet);
  TexturesExporter_ textures;
  textures.export_textures(eet, false);
- eet.LoadCustomAnimations(argv[6]);
- Objects objects(argv[1], 500);
- objects.LoadCustomObjects(argv[2], eet);
+ eet.LoadCustomAnimations(config.animations.c_str());
+ Objects objects(config.ee_objects.c_str(), 500);
+ objects.LoadCustomObjects(config.common_objects.c_str(), eet);
  Cameras cameras;
- Skin skin(argv[3], objects, eet, scene, argv[5], (const char* const *)(argv + 7));
- sprintf(path, "%s\\%s.EES", argv[3], argv[4]);
+ Skin skin(config.scene_objects.c_str(), objects, eet, scene, config.ignore, config.textures);
+ sprintf(path, "%s\\%s.EES", config.scene_objects.c_str(), config.scene.c_str());
  Scene sc(path, names, cameras, skin);
  LwsExport exporter(cameras);
  exporter.ExportScene(&skin, &sc, true);
