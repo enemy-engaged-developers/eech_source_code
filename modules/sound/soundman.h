@@ -163,7 +163,7 @@ extern int initialise_sound_system ( void );
 
 extern void deinitialise_sound_system ( void );
 
-extern int get_sound_system_devices ( const char **devices, const char **default_device );
+extern int get_sound_system_devices ( const char ***devices, const char **default_device );
 
 //
 // Sound Sample routines

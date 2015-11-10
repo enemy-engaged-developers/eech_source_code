@@ -5823,6 +5823,14 @@ Section "Clear EECH.INI" SectionINI
 
 SectionEnd
 
+Section "Install OpenAL-Soft" SectionOAL
+
+	SetOutPath "$INSTDIR"
+	File "$INSTDIR\cohokum\OPENAL32.DLL"
+	File "$INSTDIR\cohokum\OpenAL-Soft-1.6.0.txt"
+
+SectionEnd
+
 ;--------------------------------
 ;Descriptions
 
@@ -5837,6 +5845,7 @@ SectionEnd
 	LangString DESC_SectionComm ${LANG_ENGLISH} "Install data export communication tools"
 	LangString DESC_SectionFFB ${LANG_ENGLISH} "Forcefeedback effect files. Not necessary even if you have FFB joystick"
 	LangString DESC_SectionINI ${LANG_ENGLISH} "Necessary for first installation"
+	LangString DESC_SectionOAL ${LANG_ENGLISH} "OpenAL-Soft. Not required for Creative sound cards users with installed Creative OpenAL."
 
 	;Assign language strings to sections
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -5850,5 +5859,6 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionComm} $(DESC_SectionComm)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionFFB} $(DESC_SectionFFB)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionINI} $(DESC_SectionINI)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionOAL} $(DESC_SectionOAL)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------

@@ -2641,7 +2641,9 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 												}
 												else
 												{
+													#if DEBUG_MODULE
 													debug_log ( "Loading WAV file %s Freq %lu Size %lu", wav_filename, wh.Frequency, wh.Length );
+													#endif
 
 													load_from_file ( sound_sample_index, wh.Specific == 8 ? SAMPLE_TYPE_MONO_8BIT : SAMPLE_TYPE_MONO_16BIT , wh.Frequency, (int)wh.Length, fp );
 

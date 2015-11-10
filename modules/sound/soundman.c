@@ -131,13 +131,8 @@ int initialise_sound_system ( void )
 
 	int
 		count;
-		// no DS sound bug fix /thealx/
-//	if ( command_line_sound_hdwrbuf > 0 && command_line_sound_hdwrbuf <= MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS ) 
-//		maximum_current_system_sound_effects = command_line_sound_hdwrbuf;
-//	else
-	command_line_sound_hdwrbuf = 0;
+
 	maximum_current_system_sound_effects = MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS;
-		// end of fix
 	if ( initialise_direct_sound () )
 	{
 
@@ -217,7 +212,7 @@ void deinitialise_sound_system ( void )
 {
 }
 
-int get_sound_system_devices ( const char **devices, const char **default_device )
+int get_sound_system_devices ( const char ***devices, const char **default_device )
 {
 	return FALSE;
 }

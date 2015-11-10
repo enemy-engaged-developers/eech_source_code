@@ -24,18 +24,8 @@
 #define AL_CHECK(x) x
 #endif
 
-enum DEVICES_EXT_PRESENT
-{
-	DEP_UNKNOWN,
-	DEP_YES,
-	DEP_NO
-};
-
-static enum DEVICES_EXT_PRESENT
-	devices_ext_present = DEP_UNKNOWN;
-
 static const ALCchar
-	*reported_devices,
+	*reported_devices[256],
 	*reported_default_device;
 
 struct EXTENDED_SOUND_EFFECT_INFO
@@ -48,7 +38,6 @@ struct EXTENDED_SOUND_EFFECT_INFO
 typedef struct EXTENDED_SOUND_EFFECT_INFO extended_sound_effect_info;
 
 #define MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS 256
-#define DEFAULT_CURRENT_SYSTEM_SOUND_EFFECTS 50
 static int
 	maximum_current_system_sound_effects;
 
@@ -147,11 +136,7 @@ int initialise_sound_system ( void )
 	sound_system_initialised = FALSE;
 	sound_system_paused = FALSE;
 
-	if ( command_line_sound_hdwrbuf <= 0 || command_line_sound_hdwrbuf > MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS )
-	{
-		command_line_sound_hdwrbuf = DEFAULT_CURRENT_SYSTEM_SOUND_EFFECTS;
-	}
-	maximum_current_system_sound_effects = command_line_sound_hdwrbuf;
+	maximum_current_system_sound_effects = MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS;
 
 	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
@@ -164,6 +149,8 @@ int initialise_sound_system ( void )
 
 	number_of_contexts = 1;
 
+	debug_log ( "OpenAL: using device '%s'", command_line_sound_device );
+
 	devices[0] = alcOpenDevice ( *command_line_sound_device ? command_line_sound_device : NULL );
 	if ( !devices[0] )
 	{
@@ -175,6 +162,8 @@ int initialise_sound_system ( void )
 	if ( *command_line_sound_device_speech && strcmp ( command_line_sound_device_speech, command_line_sound_device ) )
 	{
 		number_of_contexts = 2;
+
+		debug_log ( "OpenAL: using speech device '%s'", command_line_sound_device_speech );
 
 		devices[1] = alcOpenDevice ( command_line_sound_device_speech );
 
@@ -196,7 +185,12 @@ int initialise_sound_system ( void )
 
 		for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 		{
-			AL_CHECK ( alGenSources ( 1, &source ) );
+			alGenSources ( 1, &source );
+			if ( alGetError () != AL_NO_ERROR)
+			{
+				maximum_current_system_sound_effects = count;
+				break;
+			}
 			current_system_extended_sound_effects[count].source[context] = source;
 			AL_CHECK ( alSourcei ( source, AL_BUFFER, 0 ) );
 			ASSERT ( alIsSource ( source ) );
@@ -204,6 +198,14 @@ int initialise_sound_system ( void )
 			AL_CHECK ( alSource3f ( source, AL_VELOCITY, 0.0f, 0.0f, 0.0f ) );
 		}
 	}
+
+	debug_log ( "OpenAL: using %i voices", maximum_current_system_sound_effects );
+
+	if ( !maximum_current_system_sound_effects )
+	{
+		return FALSE;
+	}
+
 	sound_system_initialised = TRUE;
 
 	return TRUE;
@@ -214,25 +216,49 @@ void deinitialise_sound_system ( void )
 	// FIXME
 }
 
-int get_sound_system_devices ( const char **devices, const char **default_device )
+int get_sound_system_devices ( const char ***devices, const char **default_device )
 {
-	if ( devices_ext_present == DEP_UNKNOWN )
+	if ( !*reported_devices )
 	{
-		devices_ext_present = DEP_NO;
+		const char
+			*devices,
+			*device;
+
+		int
+			count;
+
 		if ( alcIsExtensionPresent ( NULL, "ALC_ENUMERATION_EXT" ) == AL_TRUE )
 		{
-			reported_devices = alcGetString ( NULL, ALC_ALL_DEVICES_SPECIFIER );
-			reported_default_device = alcGetString ( NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER );
-			if ( reported_devices && reported_default_device )
+			devices = alcGetString ( NULL, ALC_DEVICE_SPECIFIER );
+			reported_default_device = alcGetString ( NULL, ALC_DEFAULT_DEVICE_SPECIFIER );
+			for ( count = 0, device = devices; *device; device = device + strlen ( device ) + 1, count++ )
 			{
-				devices_ext_present = DEP_YES;
+				debug_log ( "OpenAL: reported device '%s'", device );
+				reported_devices[count] = device;
 			}
 		}
-	}
+		else
+		{
+			debug_log ( "OpenAL: ALC_ENUMERATION_EXT is not present" );
+		}
 
-	if ( devices_ext_present == DEP_NO )
-	{
-		return FALSE;
+		if ( alcIsExtensionPresent ( NULL, "ALC_ENUMERATE_ALL_EXT" ) == AL_TRUE )
+		{
+			devices = alcGetString ( NULL, ALC_ALL_DEVICES_SPECIFIER );
+			reported_default_device = alcGetString ( NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER );
+			for ( device = devices; *device; device = device + strlen ( device ) + 1 )
+			{
+				debug_log ( "OpenAL: reported extended device '%s'", device );
+				for ( count = 0; reported_devices[count] && strcmp ( reported_devices[count], device ); count++ )
+				{
+				}
+				reported_devices[count] = device;
+			}
+		}
+		else
+		{
+			debug_log ( "OpenAL: ALC_ENUMERATE_ALL_EXT is not present" );
+		}
 	}
 
 	*devices = reported_devices;

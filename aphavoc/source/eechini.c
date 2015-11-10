@@ -281,42 +281,41 @@ static void set_sound_device ( const struct config_option *option, const char *v
 	if ( value && *value && strlen ( value ) < option->flag_length )
 	{
 		int
-			i;
+			i,
+			j;
 		const char
-			*devices,
+			**device,
 			*default_device;
 
-		for ( i = 0; ; i++ )
+		for ( i = j = 0; ; i++, j++ )
 		{
 			switch ( value[i] )
 			{
 			case '\0':
-				option->str_value[i] = '\0';
-				break;;
-			case '_':
-				option->str_value[i] = ' ';
-				continue;
-			case '%':
-				option->str_value[i] = '#';
+				option->str_value[j] = '\0';
+				break;
+		  case '%':
+			  if (isdigit(value[i + 1]) && isdigit(value[i + 2]))
+				{
+					option->str_value[j] = ( value[i + 1] - '0' ) * 10 + value[i + 2] - '0' + 32;
+					i += 2;
+				}
 				continue;
 			default:
-				option->str_value[i] = value[i];
+				option->str_value[j] = value[i];
 				continue;
 			}
 			break;
 		}
 
-		if ( get_sound_system_devices ( &devices, &default_device ) )
+		if ( get_sound_system_devices ( &device, &default_device ) )
 		{
-			const char*
-				device;
-
-			ASSERT ( devices );
+			ASSERT ( device );
 			ASSERT ( default_device );
 
-			for ( device = devices; *device; device += strlen ( device ) + 1 )
+			for ( ; *device; device++ )
 			{
-				if ( !strcmp ( device, option->str_value ) )
+				if ( !strcmp ( *device, option->str_value ) )
 				{
 					return;
 				}
@@ -330,22 +329,32 @@ static void set_sound_device ( const struct config_option *option, const char *v
 static void get_sound_device ( const struct config_option *option, char *value )
 {
 	int
-		i;
-	for ( i = 0; ; i++ )
+		i,
+		j;
+
+	for ( i = j = 0; ; i++, j++ )
 	{
 		switch ( option->str_value[i] )
 		{
 		case '\0':
-			value[i] = '\0';
-			break;;
-		case ' ':
-			value[i] = '_';
-			continue;
-		case '#':
-			value[i] = '%';
-			continue;
+			value[j] = '\0';
+			break;
 		default:
-			value[i] = option->str_value[i];
+			if ( isalnum ( option->str_value[i] ) )
+			{
+				value[j] = option->str_value[i];
+			}
+			else
+			{
+				char
+					v;
+
+				v = option->str_value[i] - 32;
+				value[j] = '%';
+				value[j + 1] = v / 10 + '0';
+				value[j + 2] = v % 10 + '0';
+				j += 2;
+			}
 			continue;
 		}
 		break;
@@ -1087,8 +1096,6 @@ static const struct config_option options[] =
 		SPECSTR(command_line_sound_device, set_sound_device, get_sound_device) },
 	{ "sound_device_speech", "", "sound device name for speech",
 		SPECSTR(command_line_sound_device_speech, set_sound_device, get_sound_device) },
-	{ "hdwrbuf", "", "hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)",
-		INT(command_line_sound_hdwrbuf) },
 	{ "canopy_sounds_amp", "", "canopy sounds amplifier controller",
 		SPEC(set_canopy_amp, get_canopy_amp) },
 	{ "radio_msgs_noise", "", "radio messages volume and pitch control (0 = off, 1 = on) (def = 1)",

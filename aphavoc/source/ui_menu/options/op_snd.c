@@ -95,14 +95,11 @@ static ui_object
 static const char
 	*option_boolean_text[2];
 
-static int
-	number_of_devices,
-	current_device,
-	original_device,
-	current_device_speech,
-	original_device_speech;
-
 static const char
+	**current_device,
+	**original_device,
+	**current_device_speech,
+	**original_device_speech,
 	**devices_array;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,9 +126,9 @@ void notify_show_sound_page (void)
 {
 	// initialise button text
 
-	set_ui_object_text (sound_device_option_button, devices_array[current_device]);
+	set_ui_object_text (sound_device_option_button, *current_device);
 
-	set_ui_object_text (sound_device_speech_option_button, devices_array[current_device_speech]);
+	set_ui_object_text (sound_device_speech_option_button, *current_device_speech);
 
 	set_ui_object_text (sound_effect_option_button, option_boolean_text[get_global_sound_effects_enabled ()]);
 
@@ -180,18 +177,20 @@ void define_options_screen_sound_page_objects (void)
 		*check_array [NUMBER_OF_UI_OBJECTS],
 		*change_array [NUMBER_OF_UI_OBJECTS];
 
+	int
+		number_of_devices;
+
 	// Determine devices to show and select
 
 	// Casm 07DEC09 OpenAL support
 	if ( !devices_array )
 	{
 		const char
-			*devices,
 			*default_device,
 			*default_device_speech,
-			*device;
+			**device;
 
-		if ( get_sound_system_devices ( &devices, &default_device ) )
+		if ( get_sound_system_devices ( &devices_array, &default_device ) )
 		{
 			if ( *command_line_sound_device )
 			{
@@ -201,31 +200,30 @@ void define_options_screen_sound_page_objects (void)
 		}
 		else
 		{
-			devices = default_device = default_device_speech = "Default\0\0";
+			static const char
+				*devices_default[2] = { "Default", NULL };
+
+			default_device = default_device_speech = *( devices_array = devices_default );
 		}
 
 		number_of_devices = 0;
-		for ( device = devices; *device; device += strlen ( device ) + 1 )
+		for ( device = devices_array; *device; device++ )
 		{
 			number_of_devices++;
 		}
-		devices_array = ( const char ** ) safe_malloc ( number_of_devices * sizeof ( const char * ) );
-		original_device = original_device_speech = -1;
-		for ( current_device = 0, device = devices; *device; current_device++, device += strlen ( device ) + 1 )
+		original_device = original_device_speech = NULL;
+		for ( device = devices_array; *device; device++ )
 		{
-			devices_array[current_device] = device;
-			if ( !strcmp ( devices_array[current_device], default_device ) )
+			if ( !strcmp ( *device, default_device ) )
 			{
-				original_device = current_device;
+				current_device = original_device = device;
 			}
-			if ( !strcmp ( devices_array[current_device], default_device_speech ) )
+			if ( !strcmp ( *device, default_device_speech ) )
 			{
-				original_device_speech = current_device;
+				current_device_speech = original_device_speech = device;
 			}
 		}
-		current_device = original_device;
-		current_device_speech = original_device_speech;
-		ASSERT ( current_device != -1 && current_device_speech != -1 );
+		ASSERT ( original_device && original_device_speech );
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -789,15 +787,15 @@ void define_options_screen_sound_page_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void change_device ( ui_object *obj, void *arg, ui_object* option_button, int *current_device, int original_device, char* sound_device, option_page_ok_button_reason reason )
+static void change_device ( ui_object *obj, void *arg, ui_object* option_button, const char ***current_device, const char **original_device, char* sound_device, option_page_ok_button_reason reason )
 {
-	if (++*current_device == number_of_devices)
+	if (!*++*current_device)
 	{
-		*current_device = 0;
+		*current_device = devices_array;
 	}
 
-	strcpy (sound_device, devices_array[*current_device]);
-	set_ui_object_text (option_button, devices_array[*current_device]);
+	strcpy (sound_device, **current_device);
+	set_ui_object_text (option_button, **current_device);
 
 	set_option_page_ok_button_reason (reason, *current_device != original_device);
 
