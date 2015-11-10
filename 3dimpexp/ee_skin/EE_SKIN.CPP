@@ -78,6 +78,7 @@ typedef std::vector<std::string> Textures;
 struct Config
 {
  Config(const char* file, const char* scene_file)
+  : blue_fill(false)
  {
   const char* p = strrchr(scene_file, '\\');
   if (p)
@@ -135,6 +136,11 @@ struct Config
              {
               if (!strcmp(buf, "ANIMATIONS"))
                animations = p;
+              else
+               {
+                if (!strcmp(buf, "BLUE_FILL"))
+                 blue_fill = atoi(p);
+               }
              }
            }
          }
@@ -148,14 +154,15 @@ struct Config
  std::string scene;
  Ignore ignore;
  Textures textures;
+ bool blue_fill;
 };
 
 class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExporter
 {
  public:
 
- Skin(const char* dir, Objects& objects, EET& eet, const char* scene, const Ignore& ignore, const Textures& textures)
-  : dir(dir), objects(objects), eet(eet), scene(scene), ignore(ignore), textures(textures)
+ Skin(const Config& config, Objects& objects, EET& eet)
+  : config(config), objects(objects), eet(eet), scene(config.scene.c_str())
  {
  }
 
@@ -163,12 +170,7 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
  {
   Objs::const_iterator itor = objs.find(number);
   if (itor == objs.end())
-   {
-    itor = spec.find(number);
-    if (itor == spec.end())
-     error ("object not found");
-    return objects[*itor].file;
-   }
+   error ("object not found");
   sprintf(file, "%s_%s", scene, objects[*itor].file);
   return file;
  }
@@ -188,7 +190,7 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
   if (l != loaded.end())
    return l->second;
   char buf[1024];
-  sprintf(buf, "%s\\%s.EEO", dir, file);
+  sprintf(buf, "%s\\%s.EEO", config.scene_objects.c_str(), file);
   int index = objects.LoadCustomObject(buf, eet);
   loaded.insert(Loaded::value_type(file, index));
   return index;
@@ -200,16 +202,10 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
  virtual void End(void)
  {
  }
- virtual void Object(int, int number, int, int special = 0, const char* = NULL)
+ virtual void Object(int, int number, int, int = 0, const char* = NULL)
  {
   if (number)
-   if (special)
-    {
-     if (special < 0)
-      spec.insert(number);
-    }
-   else
-    objs.insert(number);
+   objs.insert(number);
  }
  virtual void Parent(int)
  {
@@ -291,7 +287,7 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
   Text& t = itor->second;
   if (!try_load(t, name, ct))
    {
-    printf("Loading from textures.bin %s%s\n", name, suf[ct]);
+    printf("Loading %s%s from textures.bin\n", name, suf[ct]);
     t.images[ct].width = width;
     t.images[ct].height = height;
     t.images[ct].alpha = bpp == 4;
@@ -302,16 +298,14 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
  }
 
 private:
- const char* dir;
+ const Config& config;
  Objects& objects;
  EET& eet;
  const char* scene;
- const Ignore& ignore;
- const Textures& textures;
  typedef std::map<std::string, int> Loaded;
  Loaded loaded;
  typedef std::set<int> Objs;
- Objs spec, objs;
+ Objs objs;
  char file[256];
  std::set<unsigned> ign;
  bool has_desert, has_winter;
@@ -359,7 +353,7 @@ private:
  bool try_load(Text& t, const char* name, CamoType ct)
  {
   bool loaded = false;
-  for (Textures::const_iterator itor(textures.begin()); itor != textures.end(); ++itor)
+  for (Textures::const_iterator itor(config.textures.begin()); itor != config.textures.end(); ++itor)
    {
     char file[1024];
     FILE* f;
@@ -529,7 +523,7 @@ private:
  void load_ignore(void)
  {
   eet.ExportAnimationTextures(ign);
-  for (Ignore::const_iterator itor(ignore.begin()); itor != ignore.end(); ++itor)
+  for (Ignore::const_iterator itor(config.ignore.begin()); itor != config.ignore.end(); ++itor)
    ign.insert(eet.Append(itor->c_str()));
  }
  void gather_textures(void)
@@ -544,26 +538,43 @@ private:
       int number_of_points = s.number_of_points ? s.number_of_points : 256;
       if (s.textured)
        {
-        if (!s.texture_animation && ign.find(s.texture_index) == ign.end())
+        do
          {
-          //printf("%s %s\n", obj.file, eet.GetTexture(s.texture_index));
+          if (s.texture_animation)
+           {
+            printf("%s %s - animation\n", obj.file, eet.GetAnimation(s.texture_index));
+            break;
+           }
+          if (ign.find(s.texture_index) != ign.end())
+           {
+            printf("%s %s - ignored\n", obj.file, eet.GetTexture(s.texture_index));
+            break;
+           }
+          printf("%s %s\n", obj.file, eet.GetTexture(s.texture_index));
           Text& t = texts[eet.Append(eet.GetTexture(s.texture_index))];
           for (int j = 0; j < number_of_points; j++) 
            {
             OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT p = cstp[s.has_luminosity_texture ? j * 2 : j];
             if (!s.texture_wrapped_u && (p.u < 0.0f || p.u > 1.0f))
-             warning("Object %s texture %s not u wrapped but u %f", obj.file, eet.GetTexture(s.texture_index), p.u);
+             warning("u is not wrapped but %f", p.u);
             if (!s.texture_wrapped_v && (p.v < 0.0f || p.v > 1.0f))
-             warning("Object %s texture %s not v wrapped but v %f", obj.file, eet.GetTexture(s.texture_index), p.v);
+             warning("v is not wrapped but %f", p.v);
             t.ui = min(t.ui, p.u);
             t.ua = max(t.ua, p.u);
             t.vi = min(t.vi, p.v);
             t.va = max(t.va, p.v);
            }
          }
+        while (false);
         cstp += number_of_points;
         if (s.has_luminosity_texture)
-         cstp += number_of_points;
+         {
+          if (s.luminosity_texture_animation)
+           printf("%s %s - luminosity animation\n", obj.file, eet.GetAnimation(s.luminosity_texture_index));
+          else
+           printf("%s %s - luminosity\n", obj.file, eet.GetTexture(s.luminosity_texture_index));
+          cstp += number_of_points;
+         }
        }
      }
    }
@@ -609,7 +620,7 @@ private:
     if (itor->second.images[CT_DEFAULT].alpha)
      {
 #if 1
-      printf("%s has alpha\n", eet.GetTexture(itor->first));
+      printf("%s - alpha\n", eet.GetTexture(itor->first));
       Texts::iterator old(itor);
       ++itor;
       texts.erase(old);
@@ -702,10 +713,9 @@ private:
  {
   std::vector<unsigned char> data;
   data.resize(d.size.u * d.size.v * bpp);
-#if 0
-  for (unsigned i = 0; i < data.size(); i += bpp)
-   data[i] = 255;
-#endif
+  if (config.blue_fill)
+   for (unsigned i = 0; i < data.size(); i += bpp)
+    data[i] = 255;
   for (Placement::const_iterator p(d.placement.begin()); p != d.placement.end(); ++p)
    if (p->first->ru < p->first->rv)
     copyt(&data[0], d.size.u, *p->first, ct, p->second);
@@ -774,7 +784,33 @@ private:
  }
  void convert_objects()
  {
-  int texture = eet.Append(scene);
+  int texture;
+  {
+   const char* t[3] = { scene };
+   unsigned n = 1;
+   char buf1[256], buf2[256];
+   sprintf(buf1, "%s\\%s.TXT", scene, scene);
+   FILE* f = safe_fopen(buf1, "w");
+   fprintf(f, "%s\n", scene);
+   if (has_desert)
+    {
+     sprintf(buf1, "%s%s", scene, SUF[CT_DESERT]);
+     t[n++] = buf1;
+     fprintf(f, "%s\n", buf1);
+    }
+   if (has_winter)
+    {
+     sprintf(buf2, "%s%s", scene, SUF[CT_WINTER]);
+     t[n++] = buf2;
+     fprintf(f, "%s\n", buf2);
+    }
+   fclose(f);
+   texture = eet.AppendAnimation(scene, n, t);
+  }
+  char file[1024];
+  sprintf(file, "%s\\%s.CMD", scene, scene);
+  FILE* f = safe_fopen(file, "w");
+  fprintf(f, "LWS2EES %s.LWS %s.EES\n", scene, scene);
   for (Objs::iterator itor(objs.begin()); itor != objs.end(); ++itor)
    {
     OBJECT_3D& obj = const_cast<OBJECT_3D&>(objects[*itor]);
@@ -820,6 +856,7 @@ private:
            }
           s.texture_wrapped_u = 0;
           s.texture_wrapped_v = 0;
+          s.texture_animation = 1;
           s.texture_index = texture;
          }
         cstp += number_of_points;
@@ -827,10 +864,13 @@ private:
          cstp += number_of_points;
        }
      }
+    const char* name = operator()(*itor);
+    fprintf(f, "LWO2EEO %s.LWO %s.EEO\n", name, name);
     char file[1024];
-    sprintf(file, "%s\\%s.LWO", scene, operator()(*itor));
+    sprintf(file, "%s\\%s.LWO", scene, name);
     ExportLWO(eet, file, obj);
    }
+   fclose(f);
  }
 };
 
@@ -853,7 +893,11 @@ int main(int argc, char* argv[])
  FILE* f = freopen(path, "w", stdout);
  if (!f)
   error("Failed to create log file %s", path);
- TexturesFinder textures_finder('0');
+ std::vector<const char*> td;
+ for (Textures::const_iterator itor(config.textures.begin()); itor != config.textures.end(); ++itor)
+  td.push_back(itor->c_str());
+ td.push_back(0);
+ FileTexturesFinder textures_finder('0', (char**)&td[0], false);
  EET eet(textures_finder);
  AllNames names(eet);
  TexturesExporter_ textures;
@@ -862,7 +906,7 @@ int main(int argc, char* argv[])
  Objects objects(config.ee_objects.c_str(), 500);
  objects.LoadCustomObjects(config.common_objects.c_str(), eet);
  Cameras cameras;
- Skin skin(config.scene_objects.c_str(), objects, eet, scene, config.ignore, config.textures);
+ Skin skin(config, objects, eet);
  sprintf(path, "%s\\%s.EES", config.scene_objects.c_str(), config.scene.c_str());
  Scene sc(path, names, cameras, skin);
  LwsExport exporter(cameras);

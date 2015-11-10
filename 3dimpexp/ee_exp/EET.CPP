@@ -16,7 +16,10 @@ class TexturesFinder
 
  virtual void find(const char* texture, char* file)
  {
-  sprintf(file, "%c:TEXTURES/%s.%s", drive, texture, extention);
+  if (isalpha(drive))
+   sprintf(file, "%c:TEXTURES/%s.%s", drive, texture, extention);
+  else
+   sprintf(file, "%s.%s", texture, extention);
  }
 
  private:
@@ -29,8 +32,8 @@ class FileTexturesFinder : public TexturesFinder
 {
  public:
 
- FileTexturesFinder(char drive, char** dirs)
-  : TexturesFinder(drive), dirs(dirs)
+ FileTexturesFinder(char drive, char** dirs, bool recursive = true)
+  : TexturesFinder(drive), dirs(dirs), recursive(recursive)
  {
  }
 
@@ -73,6 +76,9 @@ class FileTexturesFinder : public TexturesFinder
     }
   _findclose(handle);
 
+  if (!recursive)
+   return false;
+
   sprintf(buf, "%s\\*.*", dir);
   for (rc = handle = _findfirst(buf, &fd); rc != -1; rc = _findnext(handle, &fd))
    if ((fd.attrib & _A_SUBDIR) && fd.name[0] != '.')
@@ -90,6 +96,7 @@ class FileTexturesFinder : public TexturesFinder
  }
 
  char** dirs;
+ bool recursive;
 };
 
 #endif
@@ -133,6 +140,7 @@ class EET
  void LoadCustomAnimations(const char* dir);
  const char* GetTexture(unsigned index) const;
  void ExportAnimationTextures(std::set<unsigned>& s) const;
+ unsigned AppendAnimation(const char* name, unsigned number_of_textures, const char** textures);
 #endif
  unsigned Append(const char* name);
 #ifndef EET_NO_EXPORT
@@ -244,6 +252,14 @@ void EET::ExportAnimationTextures(std::set<unsigned>& s) const
  for (unsigned i = 0; i < !animations; i++)
   for (unsigned j = 0; j < !animations[i].animation; j++)
    s.insert(animations[i].animation[j]);
+}
+unsigned EET::AppendAnimation(const char* name, unsigned number_of_textures, const char** textures)
+{
+ Animation* animation = &animations.Append();
+ strcpy(animation->name, name);
+ for (; number_of_textures--; textures++)
+  animation->animation.Append(Append(*textures));
+ return !animations - 1;
 }
 #endif
 
