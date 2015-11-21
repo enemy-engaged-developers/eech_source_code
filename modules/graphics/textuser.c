@@ -738,7 +738,7 @@ BOOL load_texturemap_data ( const char *path )
 	}
 
 	// adjust for texture indices added since EECH was released (i.e. not in the big texures-file)
-	number_of_system_textures += TEXTURE_INDEX_LAST - TEXTURE_INDEX_LAST_DEFAULT_INDEX - 1;
+	number_of_system_textures = TEXTURE_INDEX_LAST;
 
 	return ( TRUE );
 }
