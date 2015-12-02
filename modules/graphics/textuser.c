@@ -2676,7 +2676,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 		width = ( ( int ) header[13] << 8 ) | header[12];
 		height = ( ( int ) header[15] << 8 ) | header[14];
 
-		override_screen = create_texture_map ( width, height, type, 1 );
+		override_screen = create_texture_map ( width, height, type, 0 );
 
 		buffer_size = width * height * nrbytes;
 		buffer = ( unsigned char * ) safe_malloc ( buffer_size );

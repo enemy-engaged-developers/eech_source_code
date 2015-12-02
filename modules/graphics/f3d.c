@@ -488,7 +488,7 @@ void f3d_texture_create(screen *texture, int width, int height, int number_of_mi
 		res;
 
 	ASSERT ( texture );
-	ASSERT ( number_of_mipmaps );
+	ASSERT ( number_of_mipmaps || role != TEXTURE_ROLE_RENDER_TARGET);
 	ASSERT ( role == TEXTURE_ROLE_STATIC_RGBX || role == TEXTURE_ROLE_STATIC_RGBA || number_of_mipmaps == 1 );
 
 	texture->width = width;
@@ -499,7 +499,7 @@ void f3d_texture_create(screen *texture, int width, int height, int number_of_mi
 	texture->texture = NULL;
 	texture->data = NULL;
 
-	res = IDirect3DDevice9_CreateTexture ( d3d_data.device[D3D_MAIN], width, height, number_of_mipmaps, role == TEXTURE_ROLE_RENDER_TARGET ? D3DUSAGE_RENDERTARGET : 0, texture->contains_alpha ? D3DFMT_A8R8G8B8 : D3DFMT_X8R8G8B8, role == TEXTURE_ROLE_RENDER_TARGET ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED, &texture->texture, NULL );
+	res = IDirect3DDevice9_CreateTexture ( d3d_data.device[D3D_MAIN], width, height, number_of_mipmaps, role == TEXTURE_ROLE_RENDER_TARGET ? D3DUSAGE_RENDERTARGET : number_of_mipmaps ? 0 : D3DUSAGE_AUTOGENMIPMAP, texture->contains_alpha ? D3DFMT_A8R8G8B8 : D3DFMT_X8R8G8B8, role == TEXTURE_ROLE_RENDER_TARGET ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED, &texture->texture, NULL );
 
 	if ( FAILED ( res ) )
 	{
