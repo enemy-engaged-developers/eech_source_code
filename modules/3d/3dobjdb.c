@@ -106,7 +106,7 @@ int
 
 // XXX: These numbers must be large enough
 static int
-	custom_number_of_objects = 1000,
+	custom_number_of_objects = 2000,
 	custom_number_of_cameras = 2000;
 
 static int
