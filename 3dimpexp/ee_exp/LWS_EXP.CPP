@@ -81,9 +81,12 @@ class LwsFileExporter : public LwsExporter
  {
   fprintf(fp, "ParentItem %08X\n", 0x10000000 + index);
  }
- void KeyFrames(const char* type, int visibility, int color, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
+ void KeyFrames(const char* type, int visibility, int color, const Schem& schem, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
  {
-  fprintf(fp, "Show%s %i %i\n%sMotion\nNumChannels 9\n", type, visibility, color, type);
+  if (schem.has_schem)
+   fprintf(fp, "Show%s %i %i\nSchematicPosition %f %f\n%sMotion\nNumChannels 9\n", type, visibility, schem.color, schem.x, schem.y, type);
+  else
+   fprintf(fp, "Show%s %i %i\n%sMotion\nNumChannels 9\n", type, visibility, color, type);
   for (int c = 0; c < 9; c++)
    {
     fprintf(fp, "Channel %i\n{ Envelope\n  %i\n", c, number_of_keyframes);
@@ -232,6 +235,7 @@ struct sub_object_key
  int flag;
 #endif
  float object_dissolve, relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum;
+ Schem schem;
 };
 
 struct sub_object_lod
@@ -298,6 +302,9 @@ struct sub_object
   CH_EQ(relative_pitch_maximum)
   CH_EQ(relative_roll_minimum)
   CH_EQ(relative_roll_maximum)
+#ifndef NATIVE_TYPES
+  CH_EQ(schem);
+#endif
 
   for (int i = 0; i < sub->number_of_keyframes; i++)
    {
@@ -385,6 +392,9 @@ struct sub_object
       AS(relative_pitch_maximum)
       AS(relative_roll_minimum)
       AS(relative_roll_maximum)
+#ifndef NATIVE_TYPES
+      AS(schem);
+#endif
 
 #undef AS
      }
@@ -483,7 +493,7 @@ struct sub_object
     delete [] approximation_info;
    }
 
-  G_info->ex->KeyFrames("Object", 7, 3, key.number_of_keyframes, key.keyframes);
+  G_info->ex->KeyFrames("Object", 7, 3, key.schem, key.number_of_keyframes, key.keyframes);
   G_info->ex->Parent(parent);
 #ifndef NATIVE_TYPES
   if (key.flag)
@@ -524,6 +534,12 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
  ex = ex_;
  current = -1;
 
+#ifdef NATIVE_TYPES
+#define SCHEM(x) Schem()
+#else
+#define SCHEM(x) x
+#endif
+
  int max_keyframe_index = scene->keyframes[scene->number_of_keyframes - 1].index;
  for (int i = 0; i < scene->total_number_of_sub_objects; i++)
   {
@@ -551,14 +567,14 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
      ex->Object(++current, 0, 0, -1, num);
     }
    const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 50, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z, 0, 0, 0 };
-   ex->KeyFrames("Object", 7, 3, 1, &keyframe);
+   ex->KeyFrames("Object", 7, 3, SCHEM(scene->shadow_schem), 1, &keyframe);
   }
 
  if (scene->collision_object_index > 0)
   {
    ex->Object(++current, scene->collision_object_index, 0, -2);
    const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -50, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 0 };
-   ex->KeyFrames("Object", 7, 3, 1, &keyframe);
+   ex->KeyFrames("Object", 7, 3, SCHEM(scene->collision_schem), 1, &keyframe);
   }
 
  for (int i = 0; i < scene->number_of_scene_link_objects; i++)
@@ -567,11 +583,11 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
 
    ex->Object(++current, 0, 0, link->scene_index, "LINK_OBJECT");
    const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, link->x, link->y, link->z, link->heading, link->pitch, link->roll, 1.0, 1.0, 1.0, 0, 0, 0 };
-   ex->KeyFrames("Object", 7, 3, 1, &keyframe);
+   ex->KeyFrames("Object", 7, 3, SCHEM(link->schem), 1, &keyframe);
   }
 
  ex->Object(++current, scene->index, 0);
- ex->KeyFrames("Object", 7, 3, scene->number_of_keyframes, scene->keyframes);
+ ex->KeyFrames("Object", 7, 3, SCHEM(scene->schem), scene->number_of_keyframes, scene->keyframes);
  if (scene->number_of_approximations)
   {
    OBJECT_3D_APPROXIMATION_INFO* all;
@@ -616,7 +632,7 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
    const OBJECT_3D_SPRITE_LIGHT* s = &scene->sprite_lights[i];
    const OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, s->position.x, s->position.y, s->position.z, 0, 0, 0, s->scale.x, s->scale.y, s->scale.z, 0, 0, 0 };
    ex->Light(i);
-   ex->KeyFrames("Light", 0, 7, 1, &keyframe);
+   ex->KeyFrames("Light", 0, 7, SCHEM(s->schem), 1, &keyframe);
    ex->LightAttrs(&s->colour);
   }
 
@@ -628,10 +644,12 @@ void LwsExport::ExportScene(LwsExporter* ex_, const OBJECT_3D_SCENE_DATABASE_ENT
     error("Invalid camera index\n");
    const OBJECT_3D_SCENE_CAMERA* c = &cameras.GetCamera(s->camera_index);
    ex->Camera(i, s->camera_name_index);
-   ex->KeyFrames("Camera", 7, 3, c->number_of_keyframes, c->keyframes);
+   ex->KeyFrames("Camera", 7, 3, SCHEM(s->schem), c->number_of_keyframes, c->keyframes);
    ex->CameraAttrs(c->heading_locked, c->pitch_locked, c->roll_locked, root, c->target_sub_object_id >= 0 ? target_sub_object_index[c->target_sub_object_id] : -1);
   }
 #endif
+
+#undef SCHEM
 
  delete [] target_sub_object_index;
  target_sub_object_index = NULL;

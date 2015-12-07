@@ -210,7 +210,7 @@ class Skin : public AggTranslator, public LwsExporter, public BaseTexturesExport
  virtual void Parent(int)
  {
  }
- virtual void KeyFrames(const char*, int, int, int, const OBJECT_3D_SUB_OBJECT_KEYFRAME*)
+ virtual void KeyFrames(const char*, int, int, const Schem&, int, const OBJECT_3D_SUB_OBJECT_KEYFRAME*)
  {
  }
  virtual void Limits(const char*, double, double)

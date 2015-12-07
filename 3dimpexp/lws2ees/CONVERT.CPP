@@ -10,21 +10,18 @@ class Convert
 {
  public:
 
- Convert(const Lws& lws, const char* filename, const char* log_filename)
-  : root(0), collision(0), shadow(0), log(0)
+ Convert(const Lws& lws, const char* filename, const char* log_filename, int force_version)
+  : root(0), collision(0), shadow(0), log(0), version(force_version)
  {
   if (log_filename)
-    log = safe_fopen(log_filename, "w");
+   log = safe_fopen(log_filename, "w");
   convert(lws);
   if (log)
-    fclose(log);
+   fclose(log);
+  if (version < -3 || version > -1)
+   version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
   save(filename);
  }
-
- ~Convert(void)
- {
- }
-
 
  private:
 
@@ -578,6 +575,16 @@ class Convert
    }
  }
 
+ void save_schem(const GeneralObject& general_object) const
+ {
+  if (version <= -3)
+  {
+   fw(general_object.color);
+   fw(general_object.schem_x);
+   fw(general_object.schem_y);
+  }
+ }
+
  void save_animation(const GeneralObject& general_object) const
  {
   const Motion& motion = general_object.motion;
@@ -627,6 +634,7 @@ class Convert
 
  void save_subobject(const SubObject& subobject) const
  {
+  save_schem(*subobject.object);
   fw(subobject.filename.c_str());
 
   fw(subobject.object->collision.collision);
@@ -664,12 +672,12 @@ class Convert
  void save_scene(void) const
  {
   // Version
-  int version = ambient_lights.empty() && distant_lights.empty() ? -1 : -2;
   fw(version);
 
   fw(cameras.size());
   for (CameraDescs::const_iterator itor(cameras.begin()); itor != cameras.end(); ++itor)
    {
+    save_schem(*itor->camera);
     fw(itor->camera->name.c_str());
     fw(itor->target ? itor->target->search.c_str() : "");
     fw(itor->camera->locked & 8 ? 1 : 0);
@@ -681,6 +689,7 @@ class Convert
   fw(links.size());
   for (Links::const_iterator itor(links.begin()); itor != links.end(); ++itor)
    {
+    save_schem(**itor);
     fw((*itor)->search.c_str());
     fw((*itor)->motion.channels[0].keys.front().value);
     fw((*itor)->motion.channels[1].keys.front().value);
@@ -694,6 +703,9 @@ class Convert
   for (LightDescs::const_iterator itor(sprite_lights.begin()); itor != sprite_lights.end(); ++itor)
    {
     const Light* light = itor->light;
+
+    save_schem(*light);
+
     fw(light->motion.channels[0].keys.begin()->value);
     fw(light->motion.channels[1].keys.begin()->value);
     fw(light->motion.channels[2].keys.begin()->value);
@@ -713,6 +725,8 @@ class Convert
      {
       const Light* light = itor->light;
 
+      save_schem(*light);
+
       fw(light->light.red * light->intensity);
       fw(light->light.green * light->intensity);
       fw(light->light.blue * light->intensity);
@@ -724,6 +738,9 @@ class Convert
     for (LightDescs::const_iterator itor(distant_lights.begin()); itor != distant_lights.end(); ++itor)
      {
       const Light* light = itor->light;
+
+      save_schem(*light);
+
       fw(light->motion.channels[3].keys.begin()->value);
       fw(light->motion.channels[4].keys.begin()->value);
       fw(light->motion.channels[5].keys.begin()->value);
@@ -741,8 +758,11 @@ class Convert
 
   fw(0);
 
+  if (!main.object)
+   error("No main object");
+  save_schem(*main.object);
   fw(lods.size());
-  fw(main.object ? main.object->filename.c_str() : "");
+  fw(main.object->filename.c_str());
   for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
    {
     fw(itor->filename.c_str());
@@ -751,6 +771,7 @@ class Convert
 
   if (shadow && shadow->layer)
    {
+    save_schem(*shadow);
     fw(0);
     fw(shadow->filename.c_str());
     fw(shadow->motion.channels[6].keys.front().value);
@@ -761,7 +782,8 @@ class Convert
    {
     int shadow_approximation_index;
     shadow_approximation_index = !shadow || shadow->filename.empty() ? 0 : atoi(shadow->filename.c_str() + 1);
-    fwrite(&shadow_approximation_index, sizeof(int), 1, fp);
+    save_schem(shadow ? *static_cast<const GeneralObject*>(shadow) : GeneralObject());
+    fw(shadow_approximation_index);
     fw("");
     fw(1.0f);
     fw(1.0f);
@@ -769,9 +791,15 @@ class Convert
    }
 
   if (collision)
-   fw(collision->filename.c_str());
+   {
+    save_schem(*collision);
+    fw(collision->filename.c_str());
+   }
   else
-   fw("");
+   {
+    save_schem(GeneralObject());
+    fw("");
+   }
 
   save_animation(*main.object);
 
@@ -780,15 +808,15 @@ class Convert
 #if 1
   fw(0);
 #else
-  fwrite(&number_of_displacement_amplitude_keyframes, sizeof(int), 1, fp);
+  fw(number_of_displacement_amplitude_keyframes);
   for (int keyframe_count = 0; keyframe_count < number_of_displacement_amplitude_keyframes; keyframe_count++)
    {
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].index, sizeof(int), 1, fp);
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].linear, sizeof(int), 1, fp);
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].value, sizeof(float), 1, fp);
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].tension, sizeof(int), 1, fp);
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].continuity, sizeof(int), 1, fp);
-    fwrite(&displacement_amplitude_keyframes[keyframe_count].bias, sizeof(int), 1, fp);
+    fw(displacement_amplitude_keyframes[keyframe_count].index);
+    fw(displacement_amplitude_keyframes[keyframe_count].linear);
+    fw(displacement_amplitude_keyframes[keyframe_count].value);
+    fw(displacement_amplitude_keyframes[keyframe_count].tension);
+    fw(displacement_amplitude_keyframes[keyframe_count].continuity);
+    fw(displacement_amplitude_keyframes[keyframe_count].bias);
    }
 #endif
 
@@ -807,4 +835,5 @@ class Convert
  int total_indices, total_subobjects;
  FILE* fp;
  FILE* log;
+ int version;
 };

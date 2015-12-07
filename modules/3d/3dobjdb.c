@@ -186,7 +186,7 @@ static struct OBJECT_3D_SHORT_TEXTURED_POINT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object );
+static void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object, int version );
 
 static void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_instance *sub_objects, struct OBJECT_3D_DATABASE_ENTRY *source_objects, int number_of_sub_objects );
 
@@ -486,7 +486,7 @@ static void read_indices ( FILE *fp, int *number_of_sub_object_indices, object_3
 	}
 }
 
-static void read_subobjects ( FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATABASE_ENTRY **sub_objects, struct OBJECT_3D_DATABASE_ENTRY *parent )
+static void read_subobjects ( FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATABASE_ENTRY **sub_objects, struct OBJECT_3D_DATABASE_ENTRY *parent, int version )
 {
 	int
 		sub_object_count;
@@ -502,7 +502,7 @@ static void read_subobjects ( FILE *fp, int *number_of_sub_objects, struct OBJEC
 	current_scene_sub_object_array += *number_of_sub_objects;
 
 	for ( sub_object_count = 0; sub_object_count < *number_of_sub_objects; sub_object_count++ )
-		initialise_3d_sub_object ( fp, parent, &(*sub_objects)[sub_object_count] );
+		initialise_3d_sub_object ( fp, parent, &(*sub_objects)[sub_object_count], version );
 }
 
 static void read_camera ( FILE *fp, struct OBJECT_3D_SCENE_CAMERA *camera )
@@ -903,6 +903,14 @@ static void free_scene ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene )
 #undef F
 }
 
+static void skip_schem ( FILE *fp, int version )
+{
+	if ( version <= -3 )
+	{
+		fseek ( fp, sizeof ( int ) + sizeof ( float ) * 2, SEEK_CUR );
+	}
+}
+
 static void read_scene ( FILE *fp, int version )
 {
 	int
@@ -1014,6 +1022,7 @@ static void read_scene ( FILE *fp, int version )
 
 			if ( sceneid )
 			{
+				skip_schem ( fp, version );
 				objects_3d_scene_database[scene_index].cameras[camera_count].camera_name_index = get_camera ( fp );
 				objects_3d_scene_database[scene_index].cameras[camera_count].camera_index = read_new_camera ( fp );
 			}
@@ -1053,6 +1062,7 @@ static void read_scene ( FILE *fp, int version )
 				char
 					name[1024];
 
+				skip_schem ( fp, version );
 				get_nul_string ( name, sizeof ( name ), fp, TRUE );
 				objects_3d_scene_link_ptr->scene_index = get_scene ( name );
 			}
@@ -1095,6 +1105,8 @@ static void read_scene ( FILE *fp, int version )
 				red,
 				green,
 				blue;
+
+			skip_schem ( fp, version );
 
 			fread ( &objects_3d_scene_sprite_light_ptr->position.x, sizeof ( float ), 1, fp );
 			fread ( &objects_3d_scene_sprite_light_ptr->position.y, sizeof ( float ), 1, fp );
@@ -1143,6 +1155,8 @@ static void read_scene ( FILE *fp, int version )
 				green,
 				blue;
 
+			skip_schem ( fp, version );
+
 			fread ( &red, sizeof ( float ), 1, fp );
 			fread ( &green, sizeof ( float ), 1, fp );
 			fread ( &blue, sizeof ( float ), 1, fp );
@@ -1185,6 +1199,8 @@ static void read_scene ( FILE *fp, int version )
 				red,
 				green,
 				blue;
+
+			skip_schem ( fp, version );
 
 			fread ( &objects_3d_scene_distant_light_ptr->heading, sizeof ( float ), 1, fp );
 			fread ( &objects_3d_scene_distant_light_ptr->pitch, sizeof ( float ), 1, fp );
@@ -1244,6 +1260,8 @@ static void read_scene ( FILE *fp, int version )
 	else
 		objects_3d_scene_database[scene_index].texture_animations = NULL;
 
+	skip_schem ( fp, version );
+
 	fread ( &number_of_approximations, sizeof ( int ), 1, fp );
 
 	if ( sceneid )
@@ -1285,6 +1303,7 @@ static void read_scene ( FILE *fp, int version )
 	// Read in the shadow approximation index
 	//
 
+	skip_schem ( fp, version );
 	fread ( &objects_3d_scene_database[scene_index].shadow_approximation_index, sizeof ( int ), 1, fp );
 
 	//
@@ -1305,6 +1324,7 @@ static void read_scene ( FILE *fp, int version )
 
 	if ( sceneid )
 	{
+		skip_schem ( fp, version );
 		objects_3d_scene_database[scene_index].collision_object_index = get_object ( fp );
 		if ( !objects_3d_scene_database[scene_index].collision_object_index )
 			objects_3d_scene_database[scene_index].collision_object_index = -1;
@@ -1346,7 +1366,7 @@ static void read_scene ( FILE *fp, int version )
 	// Read in any immediate sub objects
 	//
 
-	read_subobjects ( fp, &objects_3d_scene_database[scene_index].number_of_sub_objects, &objects_3d_scene_database[scene_index].sub_objects, NULL );
+	read_subobjects ( fp, &objects_3d_scene_database[scene_index].number_of_sub_objects, &objects_3d_scene_database[scene_index].sub_objects, NULL, version );
 
 	// Check for animation textures references in the objects of the scene
 	if ( sceneid )
@@ -1524,7 +1544,7 @@ void read_custom_scene ( const char* filename )
 
 	fp = safe_fopen ( filename, "rb" );
 	fread ( &version, sizeof ( int ), 1, fp );
-	if ( version <= -1 && version >= -2 )
+	if ( version <= -1 && version >= -3 )
 	{
 		free_scene ( &objects_3d_scene_database[sceneid] );
 		read_scene ( fp, version );
@@ -2271,7 +2291,7 @@ void initialise_3d_objects ( const char *directory )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object )
+void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object, int version )
 {
 
 	int
@@ -2284,7 +2304,10 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 	sub_object->parent = parent;
 
 	if ( sceneid )
+	{
+		skip_schem ( fp, version );
 		index = get_object ( fp );
+	}
 	else
 		fread ( &index, sizeof ( int ), 1, fp );
 
@@ -2357,7 +2380,7 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 		int
 			number_of_sub_objects;
 
-		read_subobjects ( fp, &number_of_sub_objects, &sub_object->sub_objects, sub_object );
+		read_subobjects ( fp, &number_of_sub_objects, &sub_object->sub_objects, sub_object, version );
 		sub_object->number_of_sub_objects = number_of_sub_objects;
 	}
 }
