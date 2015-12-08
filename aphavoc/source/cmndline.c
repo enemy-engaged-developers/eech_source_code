@@ -154,7 +154,7 @@ int
 	command_line_3d_reset									= FALSE,
 	command_line_force_resolution							= FALSE,
 	command_line_3d_visual_clear_edges						= FALSE,
-	command_line_no_hardware_tnl								= FALSE,
+	command_line_no_hardware_tnl								= TRUE,
 	command_line_eads								= TRUE,
 	command_line_max_smoke_time								= 30,
 	command_line_smoke_optimization							= 1,

@@ -1,4 +1,4 @@
-Comanche Hokum version = 271
+Comanche Hokum version = 272
 left_engine_rpm value = 0.000000, min = 0.000000, max = 100.000000, modifier = 1.000000
 left_engine_torque value = 0.000000, min = 0.000000, max = 120.000000, modifier = 1.000000
 left_engine_temp value = 800.000000, min = 0.000000, max = 1000.000000, modifier = 1.000000
