@@ -1815,11 +1815,21 @@ void load_dynamics_model (event *ev)
 		if (version_number != global_options.version_number)
 		{
 
-			debug_log ("DYNAMICS: Can't load dynamics file... wrong version. Creating new dynamics file");
+			if (command_line_dynamics_flight_model == 2)
+			{
+				ASSERT (!"DYNAMICS: Can't load dynamics file... wrong version. Reset to default FM");
 
-			fclose (file_ptr);
+				command_line_dynamics_flight_model = 0;
+				initialise_flight_dynamics(get_gunship_entity ());
+			}
+			else
+			{
+				debug_log ("DYNAMICS: Can't load dynamics file... wrong version. Creating new dynamics file");
 
-			save_dynamics_model (NULL);
+				fclose (file_ptr);
+
+				save_dynamics_model (NULL);
+			}				
 
 			return;
 		}
