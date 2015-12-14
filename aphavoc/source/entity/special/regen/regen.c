@@ -193,6 +193,14 @@ int get_3d_object_updateable_flag ( int object )
 	
 				object_3d_updateable_flag[object] = TRUE;
 			}
+			
+			search.sub_object_index = OBJECT_3D_SUB_OBJECT_GROUND_CREW;
+		
+			if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			{
+	
+				object_3d_updateable_flag[object] = TRUE;
+			}
 		}
 
 		destruct_3d_object ( object_instance );

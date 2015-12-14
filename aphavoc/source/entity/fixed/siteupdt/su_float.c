@@ -126,6 +126,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_GROUND_CREW_ANIMATION:
+		////////////////////////////////////////
+		{
+			raw->ground_crew_animation = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -256,6 +264,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_GROUND_CREW_ANIMATION:
+		////////////////////////////////////////
+		{
+			value = raw->ground_crew_animation;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -295,6 +311,12 @@ void overload_site_updatable_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_LOADING_DOOR_TIMER][COMMS_MODEL_SERVER]		= set_server_float_value;
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_LOADING_DOOR_TIMER][COMMS_MODEL_CLIENT]		= set_client_float_value;
 	fn_get_local_entity_float_value				[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_LOADING_DOOR_TIMER]									= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_GROUND_CREW_ANIMATION]									= set_local_float_value;
+	fn_set_local_entity_float_value				[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_GROUND_CREW_ANIMATION]									= set_local_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_GROUND_CREW_ANIMATION][COMMS_MODEL_SERVER]		= set_server_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_GROUND_CREW_ANIMATION][COMMS_MODEL_CLIENT]		= set_client_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_SITE_UPDATABLE][FLOAT_TYPE_GROUND_CREW_ANIMATION]									= get_local_float_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

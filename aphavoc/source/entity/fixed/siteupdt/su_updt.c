@@ -90,6 +90,8 @@ static void update_server (entity *en)
 
 	update_site_radar (en);
 
+	update_ground_crew (en);
+
 	if (raw->loading_door_state == SITE_LOADING_DOORS_OPEN_FLOAT_VALUE)
 	{
 
@@ -121,6 +123,8 @@ static void update_client (entity *en)
 	update_site_loading_doors (en);
 
 	update_site_radar (en);
+
+	update_ground_crew (en);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

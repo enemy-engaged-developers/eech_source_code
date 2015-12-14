@@ -72,7 +72,8 @@ struct SITE_UPDATABLE
 	float
 		loading_door_timer,
 		loading_door_state,
-		radar_rotation_state;
+		radar_rotation_state,
+		ground_crew_animation;
 
 	int
 		damage_level;

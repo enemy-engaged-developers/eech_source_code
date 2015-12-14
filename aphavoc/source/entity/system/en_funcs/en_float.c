@@ -500,6 +500,14 @@ float_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"FLOAT_TYPE_GROUND_CREW_ANIMATION",						// name
+			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
 			"FLOAT_TYPE_GUIDE_CRITERIA_VALUE",						// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
 			16,																// pack_num_whole_bits (excluding sign bit)

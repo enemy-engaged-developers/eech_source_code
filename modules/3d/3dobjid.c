@@ -197,7 +197,7 @@ void initialise_3d_objects_info ( const char *directory )
 		{
 			object_3d_enumeration_names[count] = ( char * ) object_3d_scene_names[count];
 			object_3d_information_database[count].name = ( char * ) object_3d_scene_names[count];
-			object_3d_information_database[count].maximum_distance = 1000.0;
+			object_3d_information_database[count].maximum_distance = 4000.0;
 		}
 
 		object_3d_number_of_scene_names = OBJECT_3D_LAST;

@@ -101,6 +101,8 @@ static void draw_local_3d_object (entity *en, float range)
 			animate_site_radar (en, inst3d);
 
 			animate_site_loading_doors (en, inst3d);
+
+			animate_ground_crew (en, inst3d);
 		}
 
 		memcpy (&inst3d->vp.position, &raw->fix.position, sizeof (vec3d));
