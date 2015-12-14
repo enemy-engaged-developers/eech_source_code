@@ -127,11 +127,13 @@ void read_indices(FILE *fp, int *number_of_sub_object_indices, struct OBJECT_3D_
   }
 }
 
-void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object)
+void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object, int version)
 {
  int index, contributes_to_collisions, sub_object_approximation_in_level, sub_object_approximation_out_level;
 
  sub_object->parent = parent;
+ if (version <= -3)
+  sub_object->schem.read(fp);
  index = get_object(fp);
  if (index < 0)
   index = 0;
@@ -183,11 +185,11 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
  sub_object->number_of_sub_object_indices = number_of_sub_object_indices;
 
  int number_of_sub_objects;
- read_subobjects(fp, &number_of_sub_objects, &sub_object->sub_objects, sub_object);
+ read_subobjects(fp, &number_of_sub_objects, &sub_object->sub_objects, sub_object, version);
  sub_object->number_of_sub_objects = number_of_sub_objects;
 }
 
-void read_subobjects(FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATABASE_ENTRY **sub_objects, struct OBJECT_3D_DATABASE_ENTRY *parent)
+void read_subobjects(FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATABASE_ENTRY **sub_objects, struct OBJECT_3D_DATABASE_ENTRY *parent, int version)
 {
  fread(number_of_sub_objects, sizeof(int), 1, fp);
  if (!*number_of_sub_objects)
@@ -200,7 +202,7 @@ void read_subobjects(FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATA
  current_scene_sub_object_array += *number_of_sub_objects;
 
  for (int sub_object_count = 0; sub_object_count < *number_of_sub_objects; sub_object_count++)
-  initialise_3d_sub_object(fp, parent, &(*sub_objects)[sub_object_count]);
+  initialise_3d_sub_object(fp, parent, &(*sub_objects)[sub_object_count], version);
 }
 
 int read_new_camera(FILE *fp)
@@ -220,7 +222,7 @@ int read_new_camera(FILE *fp)
 
 void read_scene(FILE* fp, int version)
 {
- if (version > -1 || version < -2)
+ if (version > -1 || version < -3)
   error("Scene file version %d is not supported", version);
  fread(&number_of_cameras, sizeof(int), 1, fp);
  if (number_of_cameras)
@@ -228,6 +230,8 @@ void read_scene(FILE* fp, int version)
    cameras = new OBJECT_3D_SCENE_CAMERA_INFO[number_of_cameras];
    for (int camera_count = 0; camera_count < number_of_cameras; camera_count++)
     {
+     if (version <= -3)
+      cameras[camera_count].schem.read(fp);
      cameras[camera_count].camera_name_index = get_camera(fp);
      cameras[camera_count].camera_index = read_new_camera(fp);
     }
@@ -241,6 +245,8 @@ void read_scene(FILE* fp, int version)
    scene_link_objects = new OBJECT_3D_SCENE_LINK_OBJECT [number_of_scene_link_objects];
    for (int tmp = 0; tmp < number_of_scene_link_objects; tmp++)
     {
+     if (version <= -3)
+      scene_link_objects[tmp].schem.read(fp);
      scene_link_objects[tmp].scene_index = get_scene(fp);
      fread(&scene_link_objects[tmp].x, sizeof(float), 1, fp);
      fread(&scene_link_objects[tmp].y, sizeof(float), 1, fp);
@@ -262,12 +268,17 @@ void read_scene(FILE* fp, int version)
    for (int tmp = 0; tmp < number_of_sprite_lights; tmp++)
     {
      int red, green, blue;
+
+     if (version <= -3)
+      sprite_lights[tmp].schem.read(fp);
+
      fread(&sprite_lights[tmp].position.x, sizeof(float), 1, fp);
      fread(&sprite_lights[tmp].position.y, sizeof(float), 1, fp);
      fread(&sprite_lights[tmp].position.z, sizeof(float), 1, fp);
      fread(&sprite_lights[tmp].scale.x, sizeof(float), 1, fp);
      fread(&sprite_lights[tmp].scale.y, sizeof(float), 1, fp);
      fread(&sprite_lights[tmp].scale.z, sizeof(float), 1, fp);
+
      fread(&red, sizeof(int), 1, fp);
      fread(&green, sizeof(int), 1, fp);
      fread(&blue, sizeof(int), 1, fp);
@@ -289,6 +300,9 @@ void read_scene(FILE* fp, int version)
    ambient_lights = new OBJECT_3D_AMBIENT_LIGHT[number_of_ambient_lights];
    for (int tmp = 0; tmp < number_of_ambient_lights; tmp++)
     {
+     if (version <= -3)
+      ambient_lights[tmp].schem.read(fp);
+
      fread(&ambient_lights[tmp].colour.red, sizeof(float), 1, fp);
      fread(&ambient_lights[tmp].colour.green, sizeof(float), 1, fp);
      fread(&ambient_lights[tmp].colour.blue, sizeof(float), 1, fp);
@@ -309,6 +323,9 @@ void read_scene(FILE* fp, int version)
    distant_lights = new OBJECT_3D_DISTANT_LIGHT[number_of_distant_lights];
    for (int tmp = 0; tmp < number_of_distant_lights; tmp++)
     {
+     if (version <= -3)
+      distant_lights[tmp].schem.read(fp);
+
      fread(&distant_lights[tmp].heading, sizeof(float), 1, fp);
      fread(&distant_lights[tmp].pitch, sizeof(float), 1, fp);
      fread(&distant_lights[tmp].roll, sizeof(float), 1, fp);
@@ -345,6 +362,8 @@ void read_scene(FILE* fp, int version)
  else
   texture_animations = NULL;
 
+ if (version <= -3)
+  schem.read(fp);
  fread(&number_of_approximations, sizeof(int), 1, fp);
  index = get_object(fp);
  if (number_of_approximations)
@@ -357,6 +376,8 @@ void read_scene(FILE* fp, int version)
     }
   }
 
+ if (version <= -3)
+  shadow_schem.read(fp);
  fread(&shadow_approximation_index, sizeof(int), 1, fp);
 
  shadow_polygon_object_index = get_object(fp);
@@ -364,6 +385,8 @@ void read_scene(FILE* fp, int version)
  fread(&shadow_polygon_object_scale.y, sizeof(float), 1, fp);
  fread(&shadow_polygon_object_scale.z, sizeof(float), 1, fp);
 
+ if (version <= -3)
+  collision_schem.read(fp);
  collision_object_index = get_object(fp);
  if (!collision_object_index)
   collision_object_index = -1;
@@ -378,7 +401,7 @@ void read_scene(FILE* fp, int version)
 
  read_indices(fp, &number_of_sub_object_indices, &sub_object_indices);
 
- read_subobjects(fp, &number_of_sub_objects, &sub_objects, NULL);
+ read_subobjects(fp, &number_of_sub_objects, &sub_objects, NULL, version);
 
  QuickSearch quick(*this);
 }

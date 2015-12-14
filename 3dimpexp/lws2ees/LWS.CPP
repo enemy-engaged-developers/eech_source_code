@@ -117,13 +117,14 @@ struct PluginLod
 struct GeneralObject
 {
  GeneralObject(void)
-  : visibility(0), color(0), index(0)
+  : visibility(0), color(0), index(0), schem_x(0.0f), schem_y(0.0f)
  {
  }
 
  void Print(const char* type) const
  {
   printf("Show%s %i %i\n", type, visibility, color);
+  printf("SchematicPosition %f %f\n", schem_x, schem_y);
   printf("%sMotion\n", type);
   motion.Print();
   lods.Print();
@@ -133,6 +134,7 @@ struct GeneralObject
  std::string print_name;
  int visibility;
  int color;
+ float schem_x, schem_y;
  Motion motion;
  PluginLod lods;
  Channel dissolve;
@@ -515,19 +517,29 @@ class LwsFile : public Lws
   show(LastCamera);
  }
 
+ void ProcessSchematicPosition(void)
+ {
+  if (!LastGeneralObject)
+   error("Line %i: SchematicPosition without previous object/light/camera", line);
+  sscanf(str, "%f %f", &LastGeneralObject->schem_x, &LastGeneralObject->schem_y);
+ }
+
  void ProcessObjectMotion(void)
  {
-  LastGeneralObject = LastObject;
+  if (LastGeneralObject != LastObject)
+   error("Line %i: ObjectMotion without previous object", line);
  }
 
  void ProcessLightMotion(void)
  {
-  LastGeneralObject = LastLight;
+  if (LastGeneralObject != LastLight)
+   error("Line %i: LightMotion without previous light", line);
  }
 
  void ProcessCameraMotion(void)
  {
-  LastGeneralObject = LastCamera;
+  if (LastGeneralObject != LastCamera)
+   error("Line %i: CameraMotion without previous camera", line);
  }
 
  void ProcessParent(void)
@@ -580,7 +592,7 @@ class LwsFile : public Lws
   else
   if (type == "CustomObjHandler" && name == "LW_ItemShape")
    {
-	 	gets();
+    gets();
     int more = *str >= '6' ? 2 : 1;
     for (int i = 0; i < 11; i++)
      gets();
@@ -599,7 +611,7 @@ class LwsFile : public Lws
       LastObject->print_name.append(LastObject->search);
       LastObject->print_name.push_back('\'');
      }
-		while (more--)
+    while (more--)
      gets();
     if (strcmp(str, "EndPlugin"))
      gets();
@@ -658,7 +670,7 @@ class LwsFile : public Lws
   std::string fname(object.filename.substr(object.filename.rfind('\\') + 1));
   MakeName(object, fname.substr(0, fname.rfind('.')), ObjectNumbers);
   objects.push_back(object);
-  LastObject = &objects.back();
+  LastGeneralObject = LastObject = &objects.back();
  }
 
  void ProcessNull(void)
@@ -693,7 +705,7 @@ class LwsFile : public Lws
   object.layer = 0;
   MakeName(object, "NullObject", ObjectNumbers);
   objects.push_back(object);
-  LastObject = &objects.back();
+  LastGeneralObject = LastObject = &objects.back();
  }
 
  void ProcessLight(void)
@@ -702,7 +714,7 @@ class LwsFile : public Lws
   Light light;
   sscanf(str, "%lx", &light.index);
   lights.push_back(light);
-  LastLight = &lights.back();
+  LastGeneralObject = LastLight = &lights.back();
  }
 
  void ProcessLightName(void)
@@ -741,7 +753,7 @@ class LwsFile : public Lws
   Camera camera;
   sscanf(str, "%lx", &camera.index);
   cameras.push_back(camera);
-  LastCamera = &cameras.back();
+  LastGeneralObject = LastCamera = &cameras.back();
  }
 
  void ProcessCameraName(void)
@@ -823,6 +835,7 @@ LwsFile::ProcessorAssignment LwsFile::Processors[] =
  { "ShowObject", LwsFile::ProcessShowObject },
  { "ShowLight", LwsFile::ProcessShowLight },
  { "ShowCamera", LwsFile::ProcessShowCamera },
+ { "SchematicPosition", LwsFile::ProcessSchematicPosition },
  { "ObjectMotion", LwsFile::ProcessObjectMotion },
  { "LightMotion", LwsFile::ProcessLightMotion },
  { "CameraMotion", LwsFile::ProcessCameraMotion },

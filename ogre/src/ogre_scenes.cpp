@@ -9,6 +9,14 @@ static void error(...)
 	abort();
 }
 
+struct Schem
+{
+	bool operator ==(const Schem&) const
+	{
+		return true;
+	}
+};
+
 #include "lws_exp.cpp"
 
 namespace
@@ -63,7 +71,7 @@ namespace
 			scene.elements.back().parent = ito[index];
 		}
 
-		void KeyFrames(const char* type, int visibility, int color, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
+		void KeyFrames(const char* type, int visibility, int color, const Schem& schem, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
 		{
 			struct T
 			{

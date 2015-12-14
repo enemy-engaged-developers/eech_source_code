@@ -10,7 +10,7 @@ class LwsExporter
  virtual void End(void) = 0;
  virtual void Object(int index, int number, int sub_object_index, int special = 0, const char* null_special = NULL) = 0;
  virtual void Parent(int index) = 0;
- virtual void KeyFrames(const char* type, int visibility, int color, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes) = 0;
+ virtual void KeyFrames(const char* type, int visibility, int color, const Schem& schem, int number_of_keyframes, const OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes) = 0;
  virtual void Limits(const char* l, double min, double max) = 0;
  virtual void LODs(int number_of_approximation_info, const OBJECT_3D_APPROXIMATION_INFO* approximation_info) = 0;
  virtual void Collision(void) = 0;

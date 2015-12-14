@@ -6,6 +6,35 @@ class LwsExport;
 
 #include "cameras.cpp"
 
+struct Schem
+{
+ Schem(void)
+  : has_schem(false)
+ {
+ }
+
+ void read(FILE* fp)
+ {
+  fread(&color, sizeof(int), 1, fp);
+  fread(&x, sizeof(float), 1, fp);
+  fread(&y, sizeof(float), 1, fp);
+  has_schem = true;
+ }
+
+ bool has_schem;
+ int color;
+ float x, y;
+
+ bool operator ==(const Schem& schem) const
+ {
+  return has_schem ? schem.has_schem && color == schem.color && x == schem.x && y == schem.y : !has_schem;
+ }
+ bool operator !=(const Schem& schem) const
+ {
+  return !operator ==(schem);
+ }
+};
+
 #ifndef NATIVE_TYPES
 struct VEC3D
 {
@@ -69,6 +98,7 @@ struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
 
 struct OBJECT_3D_DATABASE_ENTRY
 {
+ Schem schem;
  unsigned short int index;
  unsigned char number_of_sub_objects, number_of_keyframes;
  unsigned char number_of_object_dissolve_keyframes, sub_object_approximation_in_level, sub_object_approximation_out_level;
@@ -77,14 +107,7 @@ struct OBJECT_3D_DATABASE_ENTRY
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
  struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *object_dissolve_keyframes;
  int flag;
- float
-  object_dissolve,
-  relative_heading_minimum,
-  relative_heading_maximum,
-  relative_pitch_minimum,
-  relative_pitch_maximum,
-  relative_roll_minimum,
-  relative_roll_maximum;
+ float object_dissolve, relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum;
 
  struct OBJECT_3D_DATABASE_ENTRY *parent, *sub_objects;
 
@@ -142,29 +165,34 @@ struct OBJECT_3D_DATABASE_ENTRY
 
 struct OBJECT_3D_SCENE_CAMERA_INFO
 {
+ Schem schem;
  int camera_name_index, camera_index;
 };
 
 struct OBJECT_3D_SCENE_LINK_OBJECT
 {
+ Schem schem;
  int scene_index;
  float x, y, z, heading, pitch, roll;
 };
 
 struct OBJECT_3D_SPRITE_LIGHT
 {
+ Schem schem;
  struct VEC3D position, scale;
  struct REAL_COLOUR colour;
 };
 
 struct OBJECT_3D_AMBIENT_LIGHT
 {
+ Schem schem;
  struct REAL_COLOUR colour;
  int light_index;
 };
 
 struct OBJECT_3D_DISTANT_LIGHT
 {
+ Schem schem;
  float heading, pitch, roll;
  struct REAL_COLOUR colour;
  int light_index;
@@ -213,6 +241,8 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
   number_of_sub_object_table_entries,
   total_number_of_sub_objects,
   total_number_of_sub_object_indices;
+
+ Schem schem, shadow_schem, collision_schem;
 
  struct OBJECT_3D_SUB_OBJECT_INDEX *scene_sub_object_indices_array; //Какая-то хрень, грузится. sub_object_index
  struct OBJECT_3D_DATABASE_ENTRY *scene_sub_object_array;
@@ -453,7 +483,6 @@ void initialise_scene_quick_sub_object_search(void)
 
 class Scenes
 {
-
  private:
 
 struct OBJECT_3D_SCENE_DATABASE_ENTRY *objects_3d_scene_database;
@@ -567,7 +596,6 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
 
  for (keyframe_count = 0; keyframe_count < number_of_keyframes; keyframe_count++)
  {
-
   fread(&sub_object->keyframes[keyframe_count].index, sizeof(int), 1, fp);
   fread(&sub_object->keyframes[keyframe_count].linear, sizeof(int), 1, fp);
   fread(&sub_object->keyframes[keyframe_count].x, sizeof(float), 1, fp);
