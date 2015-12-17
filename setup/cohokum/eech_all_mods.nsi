@@ -443,6 +443,9 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_MAT.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_MAT_GREY.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_MAT_GREY.EES"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_GRASS.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_GRASS_LOD1.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\FARP_GRASS_LOD2.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\AMERICAN_FARP01.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\AMERICAN_FARP02.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\FARP\AMERICAN_FARP03.EES"
@@ -474,6 +477,13 @@ Section "EECH ${VERSION} with mods" SectionBase
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\FOREST_TREE.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\FOREST_TREE_OBJECT.EES"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\NULL_OBJECT.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_TREE_LOD1.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_tree_lod2.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_tree_lod3.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_tree_lod4.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_tree_pojedynczy.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\fast_tree\forest_tree_pojedynczy_lod1.eeo"
 
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\ka-50-cockpit"
 
@@ -2550,6 +2560,9 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FLAMMABLE1.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FOLDED CLOTH_SMALL-D.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FOLDED CLOTH_SMALL-W.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FOREST1.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FOREST1-D.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\FOREST1-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\GLASS_DETAILS.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\GLOW.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\GREY_HANGAR_02.bmp"
