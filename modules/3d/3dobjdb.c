@@ -132,6 +132,16 @@ static char
 static int
 	fail;
 
+struct object_history
+{
+	char filename[260];
+	int object_id;
+};
+
+static struct object_history
+	get_object_history[1000];
+static int
+	get_object_history_current;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,18 +580,6 @@ static int get_next_object_id ( void )
 
 static int get_object ( FILE *fp )
 {
-	struct object_history
-	{
-		char filename[260];
-		int object_id;
-	};
-
-	static int
-		last_scene_id,
-		current;
-	static struct object_history
-		history[1000];
-
 	char
 		*ptr,
 		*ext,
@@ -606,36 +604,26 @@ static int get_object ( FILE *fp )
 		ptr++;
 	strupr ( ptr );
 
-	if ( isxdigit ( ptr[0] ) && isxdigit ( ptr[1] ) &&
-		isxdigit ( ptr[2] ) && isxdigit ( ptr[3] ) &&
-		strcasecmp(ptr + 4, ".LWO") == 0 &&
-		sscanf ( ptr, "%X.LWO", &objid ) == 1 &&
-		objid > 0 && objid < total_number_of_raw_3d_objects )
+	if ( isxdigit ( ptr[0] ) && isxdigit ( ptr[1] ) && isxdigit ( ptr[2] ) && isxdigit ( ptr[3] ) && !strcmp ( ptr + 4, ".LWO" )&& sscanf ( ptr, "%X.LWO", &objid ) == 1 && objid > 0 && objid < total_number_of_raw_3d_objects )
 		return objid;
 
 	ext = strrchr ( ptr, '.' );
 	if ( ext )
 		*ext = '\0';
 
-	if ( sceneid != last_scene_id )
-	{
-		current = 0;
-		last_scene_id = sceneid;
-	}
+	for ( i = 0; i < get_object_history_current; i++ )
+		if ( !strcmp ( get_object_history[i].filename, ptr ) )
+			return get_object_history[i].object_id;
 
-	for ( i = 0; i < current; i++ )
-		if ( !strcmp ( history[i].filename, ptr ) )
-			return history[i].object_id;
-
-	objid = get_next_object_id();
+	objid = get_next_object_id ();
 	if ( !objid )
 		return 0;
 
-	if ( current < sizeof ( history ) / sizeof ( *history ) )
+	if ( get_object_history_current < sizeof ( get_object_history ) / sizeof ( *get_object_history ) )
 	{
-		strcpy ( history[current].filename, ptr );
-		history[current].object_id = objid;
-		current++;
+		strcpy ( get_object_history[get_object_history_current].filename, ptr );
+		get_object_history[get_object_history_current].object_id = objid;
+		get_object_history_current++;
 	}
 
 	sprintf ( new_filename, "%s\\%s.EEO", prefix, ptr );
@@ -1430,6 +1418,8 @@ static void initialise_custom_scenes(const char* directory)
 
 		if ( !strcmp ( di.name, "." ) || !strcmp ( di.name, ".." ) )
 			continue;
+
+		get_object_history_current = 0;
 
 		snprintf ( filename, ARRAY_LENGTH(filename), "%s\\OBJECTS\\%s\\*.EES", directory, di.name );
 		for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )

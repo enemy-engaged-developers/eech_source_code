@@ -2509,7 +2509,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 		    type;
 
 		unsigned char
-			*buffer, *bufferswap;
+			*buffer;
 
 		int
 			mipmap,
@@ -2572,29 +2572,25 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 
 		for ( temp = 0; temp < mipmap; temp++ )  //was <= mipmap!
 		{
-			int x, y;
+			int o, t;
 			int nrbyte = ddsh.ddspf.dwRGBBitCount >> 3;
 			//VJ 050426 create a new texture map with mipmap levels if needed
 			//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 
 			buffer_size = width * height * nrbyte;
 			buffer = ( unsigned char * ) safe_malloc (buffer_size);
-			bufferswap = ( unsigned char * ) safe_malloc (buffer_size);
 
 			fread (buffer, buffer_size, 1, fp);
 
-			//swap lines around, bitmaps are upside down in the game
-			for ( y = 0; y < height; y++ )
+			for ( o = 0; o < buffer_size; o += nrbyte )
 			{
-				for ( x = 0; x < width; x++ )
-				{
-					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 2] * gamma_adjustment), 255);
-					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 1] * gamma_adjustment), 255);
-					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 0] * gamma_adjustment), 255);
-					//add alpha layer if necessary
-					if (nrbyte == 4)
-						bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 3] = min(255, max(0, buffer[y*width*nrbyte + x*nrbyte + 3]+step));
-				}
+				t = min((int)(buffer[o + 2] * gamma_adjustment), 255);
+				buffer[o + 1] = min((int)(buffer[o + 1] * gamma_adjustment), 255);
+				buffer[o + 2] = min((int)(buffer[o + 0] * gamma_adjustment), 255);
+				buffer[o + 0] = t;
+				//add alpha layer if necessary
+				if (nrbyte == 4)
+					buffer[o + 3] = bound(buffer[o + 3] + step, 0, 255);
 			}
 
 			while ( !lock_texture ( override_screen, temp ) )
@@ -2603,16 +2599,15 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			}
 
 			if (type == TEXTURE_TYPE_NOALPHA_NOPALETTE)
-				convert_no_alpha_24bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
+				convert_no_alpha_24bit_texture_map_data ( buffer, width, height, override_screen, fp );
 			if (type == TEXTURE_TYPE_MULTIPLEALPHA)// || type == TEXTURE_TYPE_SINGLEALPHA)
-				convert_multiple_alpha_32bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
+				convert_multiple_alpha_32bit_texture_map_data ( buffer, width, height, override_screen, fp );
 			if (type == TEXTURE_TYPE_SINGLEALPHA)
-				convert_single_alpha_32bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
+				convert_single_alpha_32bit_texture_map_data ( buffer, width, height, override_screen, fp );
 
 			unlock_texture ( override_screen );
 
 			safe_free (buffer);
-			safe_free (bufferswap);
 
 			width >>= 1;
 			height >>= 1;
