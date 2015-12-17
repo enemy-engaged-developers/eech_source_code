@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include	"3d.h"
+#include	"global.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -640,7 +641,7 @@ void deinitialise_3d_objects_info ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_index_from_name ( char *name )
+int get_object_3d_index_from_name ( const char *name )
 {
 
 	int
@@ -663,7 +664,7 @@ int get_object_3d_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_sub_index_from_name ( char *name )
+int get_object_3d_sub_index_from_name ( const char *name )
 {
 
 	int
@@ -687,7 +688,7 @@ int get_object_3d_sub_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_camoflage_index_from_name ( char *name )
+int get_object_3d_camoflage_index_from_name ( const char *name )
 {
 
 	int
@@ -710,7 +711,7 @@ int get_object_3d_camoflage_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_camera_index_from_name ( char *name )
+int get_object_3d_camera_index_from_name ( const char *name )
 {
 
 	int
@@ -733,7 +734,7 @@ int get_object_3d_camera_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_texture_animation_index_from_name ( char *name )
+int get_object_3d_texture_animation_index_from_name ( const char *name )
 {
 
 	int
@@ -756,7 +757,7 @@ int get_object_3d_texture_animation_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_object_3d_displacement_animation_index_from_name ( char *name )
+int get_object_3d_displacement_animation_index_from_name ( const char *name )
 {
 
 	int
@@ -779,7 +780,7 @@ int get_object_3d_displacement_animation_index_from_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-object_3d_instance *construct_3d_object_by_name ( char *name )
+object_3d_instance *construct_3d_object_by_name ( const char *name )
 {
 
 	int
@@ -805,7 +806,7 @@ object_3d_instance *construct_3d_object_by_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_object_3d_texture_camoflage_by_name ( char *name )
+void set_object_3d_texture_camoflage_by_name ( const char *name )
 {
 
 	int
@@ -825,7 +826,7 @@ void set_object_3d_texture_camoflage_by_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Casm 24JAN09 Adding textures animation loading for objects
-int add_new_animation(char* animation_name)
+int add_new_animation ( const char *animation_name )
 {
 	int
 		texture_animation;
@@ -838,3 +839,139 @@ int add_new_animation(char* animation_name)
 
 	return texture_animation;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 18DEC15 Skin
+
+#define SKIN_PREFIX_DESERT "DESERT_"
+#define SKIN_PREFIX_WINTER "WINTER_"
+
+enum SKIN_TYPE
+{
+	SKIN_DEFAULT,
+	SKIN_DESERT,
+	SKIN_WINTER
+};
+
+static enum SKIN_TYPE skin_type ( const char* name )
+{
+	if ( !strncmp ( name, SKIN_PREFIX_DESERT, sizeof ( SKIN_PREFIX_DESERT ) - 1 ) )
+	{
+		return SKIN_DESERT;
+	}
+	if ( !strncmp ( name, SKIN_PREFIX_WINTER, sizeof ( SKIN_PREFIX_WINTER ) - 1 ) )
+	{
+		return SKIN_WINTER;
+	}
+	return SKIN_DEFAULT;
+}
+
+void skin_init ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene )
+{
+	struct OBJECT_3D_SCENE_SKIN
+		*skin;
+	int
+		number_of_textures,
+		count;
+	enum SKIN_TYPE
+		type;
+
+	skin = &scene->skin;
+	memset ( skin, 0, sizeof ( *skin ) );
+	skin->animation = get_object_3d_texture_animation_index_from_name ( object_3d_scene_names[scene - objects_3d_scene_database] );
+	if ( skin->animation >= 0 )
+	{
+		number_of_textures = texture_animations[skin->animation].number_of_frames;
+		for ( count = 0; count < number_of_textures; count++ )
+		{
+			type = skin_type ( get_system_texture_name ( texture_animations[skin->animation].texture_indices[count] ) );
+			switch ( type )
+			{
+			case SKIN_DEFAULT:
+				skin->number_of_default++;
+				break;
+			case SKIN_DESERT:
+				skin->number_of_desert++;
+				break;
+			case SKIN_WINTER:
+				skin->number_of_winter++;
+				break;
+			default:
+				ASSERT ( FALSE );
+			}
+		}
+	}
+}
+
+void skin_random ( object_3d_instance* scene )
+{
+	struct OBJECT_3D_SCENE_SKIN
+		*skin;
+	int
+		number_of_textures,
+		texture,
+		count;
+	enum SKIN_TYPE
+		type;
+
+	skin = &objects_3d_scene_database[scene->object_number].skin;
+	if ( skin->animation < 0 )
+	{
+		return;
+	}
+
+	number_of_textures = texture_animations[skin->animation].number_of_frames;
+	texture = 0;
+	switch ( get_global_season () )
+	{
+	case SESSION_SEASON_DESERT:
+		texture = skin->number_of_desert;
+		type = SKIN_DESERT;
+		break;
+	case SESSION_SEASON_WINTER:
+		texture = skin->number_of_winter;
+		type = SKIN_WINTER;
+		break;
+	}
+
+	if ( !texture )
+	{
+		texture = skin->number_of_default;
+		type = SKIN_DEFAULT;
+	}
+
+	if ( !texture )
+	{
+		set_texture_animation_frame_on_object ( scene, ( texture_animation_indices ) skin->animation, rand() % number_of_textures );
+	}
+	else
+	{
+		texture = rand() % texture;
+		for ( count = 0; count < number_of_textures; count++ )
+		{
+			if ( skin_type ( get_system_texture_name ( texture_animations[skin->animation].texture_indices[count] ) ) == type && !texture-- )
+			{
+				set_texture_animation_frame_on_object ( scene, ( texture_animation_indices ) skin->animation, count );
+			}
+		}
+	}
+}
+
+void skin_next ( object_3d_instance* scene )
+{
+	struct OBJECT_3D_SCENE_SKIN
+		*skin;
+
+	skin = &objects_3d_scene_database[scene->object_number].skin;
+	if ( skin->animation >= 0 )
+	{
+		advance_texture_animation_frame_on_object ( scene, ( texture_animation_indices ) skin->animation );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

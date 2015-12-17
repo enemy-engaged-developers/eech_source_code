@@ -105,27 +105,30 @@ extern void initialise_3d_objects_info ( const char *directory );
 
 extern void deinitialise_3d_objects_info ( void );
 
-extern int get_object_3d_index_from_name ( char *name );
+extern int get_object_3d_index_from_name ( const char *name );
 
-extern int get_object_3d_sub_index_from_name ( char *name );
+extern int get_object_3d_sub_index_from_name ( const char *name );
 
-extern int get_object_3d_camoflage_index_from_name ( char *name );
+extern int get_object_3d_camoflage_index_from_name ( const char *name );
 
-extern int get_object_3d_camera_index_from_name ( char *name );
+extern int get_object_3d_camera_index_from_name ( const char *name );
 
-extern int get_object_3d_texture_animation_index_from_name ( char *name );
+extern int get_object_3d_texture_animation_index_from_name ( const char *name );
 
-extern int get_object_3d_displacement_animation_index_from_name ( char *name );
+extern int get_object_3d_displacement_animation_index_from_name ( const char *name );
 
 
 
-extern object_3d_instance *construct_3d_object_by_name ( char *name );
+extern object_3d_instance *construct_3d_object_by_name ( const char *name );
 
-extern void set_object_3d_texture_camoflage_by_name ( char *name );
+extern void set_object_3d_texture_camoflage_by_name ( const char *name );
 
-// returns index of animation
-// returns 0 if no more animation indices left (FOR NOW - for every non-standard animation)
-extern int add_new_animation(char* animation_name);
+extern int add_new_animation ( const char *animation_name );
+
+// Casm 18DEC15 Skin
+extern void skin_init ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene );
+extern void skin_random ( object_3d_instance* scene );
+extern void skin_next ( object_3d_instance* scene );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

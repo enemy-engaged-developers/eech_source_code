@@ -2230,6 +2230,12 @@ void initialise_3d_objects ( const char *directory )
 		total_number_of_surfaces = number_of_surfaces;
 	}
 
+	// Casm 18DEC15 Skin
+	for ( count = 1; count < OBJECT_3D_LAST; count++ )
+	{
+		skin_init ( &objects_3d_scene_database[count] );
+	}
+
 	//
 	// Initialise the d3d version of the objects now
 	//
@@ -2864,6 +2870,9 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 
 	object->object_dissolve_value = 255;
 	object->object_diffuse_value = 255;
+
+	// Casm 18DEC15 Skin
+	skin_random ( object );
 
 	return ( object );
 }
