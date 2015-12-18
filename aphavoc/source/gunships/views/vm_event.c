@@ -2358,7 +2358,7 @@ void set_gunship_view_mode_events (void)
 */
 	}
 
-	set_event (DIK_LALT, MODIFIER_LEFT_ALT, KEY_STATE_UP, release_virtual_cockpit_event);
+	set_event (DIK_LALT, MODIFIER_LEFT_CONTROL, KEY_STATE_UP, release_virtual_cockpit_event);
 
 	////////////////////////////////////////
 	//
