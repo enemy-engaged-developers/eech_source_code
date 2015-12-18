@@ -367,7 +367,7 @@ static void update_field_of_view(void)
 		set_view_angles(fov);
 	}
 	else if (increase_fov_key_down || decrease_fov_key_down)
-		set_view_angles(bound(full_screen_width_view_angle + (increase_fov_key_down - decrease_fov_key_down) * FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov)));
+		set_view_angles(bound(full_screen_virtual_fov + (increase_fov_key_down - decrease_fov_key_down) * FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov)));
 
 	// fov control by mouse wheel thealx 130212
 
