@@ -555,6 +555,9 @@ int sprite_light_valid (entity *en)
 	// uses entity index to offset sprite lights so that they are not all flashing in sync on all objects
 	//
 
+	if (!get_local_entity_int_value(en, INT_TYPE_ALIVE))
+		return FALSE;
+	
 	integer_offset = get_local_entity_index (en);
 
 	integer_offset = integer_offset & 0x0f;

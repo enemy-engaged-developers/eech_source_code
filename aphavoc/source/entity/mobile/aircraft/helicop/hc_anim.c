@@ -158,9 +158,8 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 	
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
-	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
-		return;
-	if (!ignore_drawn_once && get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+
+	if (!ignore_drawn_once && get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || !get_local_entity_int_value (en, INT_TYPE_ALIVE))
 		return;
 
 	raw = (helicopter *) get_local_entity_data (en);
@@ -617,7 +616,7 @@ void animate_helicopter_tail_rotor (entity *en)
 
 	raw = (helicopter *) get_local_entity_data (en);
 
-	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || raw->tail_rotor_damaged)
+	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || raw->tail_rotor_damaged || !get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
 		return;
 	}
@@ -792,7 +791,7 @@ void animate_helicopter_wipers (entity *en)
 
 	ASSERT (en);
 
-	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || !get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
 		return;
 	}
@@ -863,7 +862,7 @@ void animate_helicopter_eo (entity *en)
 
 	ASSERT (en);
 
-	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME))
+	if (get_local_entity_int_value (en, INT_TYPE_OBJECT_DRAWN_ONCE_THIS_FRAME) || !get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
 		return;
 	}
@@ -1024,10 +1023,12 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
+
 	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
 		return FALSE;
 
 	raw = (helicopter *) get_local_entity_data (en);
+	
 	inst3d = raw->ac.inst3d;
 	if (!inst3d)
 		return FALSE;
@@ -1220,12 +1221,15 @@ void damage_helicopter_tail_rotors (entity *en)
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	raw = (helicopter *) get_local_entity_data (en);
-
-	if (raw->tail_rotor_damaged)
+	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
 		return;
 
+	raw = (helicopter *) get_local_entity_data (en);
+	
 	inst3d = raw->ac.inst3d;
+
+	if (!inst3d)
+		return;
 
 	//
 	// disable moving tail rotor

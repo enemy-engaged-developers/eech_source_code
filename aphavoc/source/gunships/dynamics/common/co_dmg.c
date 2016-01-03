@@ -441,6 +441,8 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_TAIL_ROTOR_DAMAGED, TRUE);
 
+					damage_helicopter_tail_rotors (get_gunship_entity ());
+
 					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_TAIL_ROTOR_DAMAGED);
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
