@@ -1053,6 +1053,9 @@ static void read_scene ( FILE *fp, int version )
 				skip_schem ( fp, version );
 				get_nul_string ( name, sizeof ( name ), fp, TRUE );
 				objects_3d_scene_link_ptr->scene_index = get_scene ( name );
+				
+				if (objects_3d_scene_link_ptr->scene_index <= OBJECT_3D_INVALID_OBJECT_INDEX)
+					debug_log("Failed to load linkobject %s from scene %s", name, object_3d_information_database [scene_index].name);
 			}
 			else
 				fread ( &objects_3d_scene_link_ptr->scene_index, sizeof ( int ), 1, fp );

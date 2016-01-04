@@ -544,11 +544,18 @@ void initialise_destroyed_object_database (void)
 		{
 			if (strcmp (destroyed_object_string, object_3d_information_database [destroyed_object].name) == 0)
 			{
-				destroyed_object_table [normal_object] = destroyed_object;
+				if (objects_3d_scene_database[destroyed_object].succeeded)
+				{
+					destroyed_object_table [normal_object] = destroyed_object;
 
-				restored_object_table [destroyed_object] = normal_object;
+					restored_object_table [destroyed_object] = normal_object;
 
-				found_flag = TRUE;
+					found_flag = TRUE;
+				}
+				else
+				{
+					debug_log("DAMAGE : Failed to load destroyed scene for %s", normal_object_string);
+				}
 
 				break;
 			}
