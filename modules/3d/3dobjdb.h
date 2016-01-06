@@ -243,6 +243,18 @@ typedef struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY object_3d_scene_sub_object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Casm 18DEC15 Skin
+struct OBJECT_3D_SCENE_SKIN
+{
+	int
+		animation;
+
+	unsigned char
+		number_of_default,
+		number_of_desert,
+		number_of_winter;
+};
+
 struct OBJECT_3D_SCENE_DATABASE_ENTRY
 {
 	/* used to create object_3d_instance and its object_3d_sub_instance objects,
@@ -356,6 +368,9 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 
 	int
 		succeeded;
+
+	struct OBJECT_3D_SCENE_SKIN
+		skin;
 };
 
 typedef struct OBJECT_3D_SCENE_DATABASE_ENTRY object_3d_scene_database_entry;
