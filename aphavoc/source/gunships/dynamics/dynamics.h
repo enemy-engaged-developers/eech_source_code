@@ -542,6 +542,8 @@ extern void deinitialise_flight_dynamics (void);
 
 extern void set_dynamics_entity_values (entity *en);
 
+extern void update_helicopter_damage ();
+
 extern void update_flight_dynamics (void);
 
 extern void flight_model_pause (event *ev);

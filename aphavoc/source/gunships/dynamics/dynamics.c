@@ -827,8 +827,7 @@ void set_dynamics_entity_values (entity *en)
 		*motion_vector;
 
 	float
-		air_density,
-		damage_percentage;
+		air_density;
 
 	int
 		no_right_engine;
@@ -989,7 +988,42 @@ void set_dynamics_entity_values (entity *en)
 
 	//debug_log ("DYNAMICS: setting baro to %f, altitude %f", current_flight_dynamics->barometric_altitude.value, current_flight_dynamics->radar_altitude.value);
 
-	damage_percentage = (float) get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) / get_local_entity_int_value (en, INT_TYPE_INITIAL_DAMAGE_LEVEL);
+	// cross coupling to match main rotor rpm
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+	{
+
+		float
+			Mrpm,
+			Md,
+			Pmax,
+			Tl;
+
+		Mrpm = current_flight_dynamics->main_rotor_rpm.value;
+
+		Md = current_flight_dynamics->main_rotor_diameter.value;
+
+		Pmax = current_flight_dynamics->tail_blade_pitch.max;
+
+		Tl = current_flight_dynamics->tail_boom_length.value;
+
+		current_flight_dynamics->cross_coupling_effect.value = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_helicopter_damage ()
+{
+	float damage_percentage;
+	int invulunerable_flag = get_local_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS);
+	
+	set_client_server_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS, FALSE);
+	
+	damage_percentage = (float) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL) / (float) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL);
+
+	debug_log("DYNAMICS: damage_percentage is %.2f", damage_percentage);
 
 	if (damage_percentage > 0.8)
 	{
@@ -1022,32 +1056,14 @@ void set_dynamics_entity_values (entity *en)
 		dynamics_damage_model (DYNAMICS_DAMAGE_STABILISER, TRUE);
 	}
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS))
-	{
-
-		dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
-	}
-
-	// cross coupling to match main rotor rpm
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
-
-		float
-			Mrpm,
-			Md,
-			Pmax,
-			Tl;
-
-		Mrpm = current_flight_dynamics->main_rotor_rpm.value;
-
-		Md = current_flight_dynamics->main_rotor_diameter.value;
-
-		Pmax = current_flight_dynamics->tail_blade_pitch.max;
-
-		Tl = current_flight_dynamics->tail_boom_length.value;
-
-		current_flight_dynamics->cross_coupling_effect.value = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
-	}
+//	already happens in initialise_avionics finction /thealx/
+//	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS))
+//	{
+//
+//		dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+//	}
+	
+	 set_client_server_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS, invulunerable_flag);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

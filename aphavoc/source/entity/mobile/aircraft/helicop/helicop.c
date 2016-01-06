@@ -436,7 +436,9 @@ void assign_entity_to_user (entity *en)
 		// Initialise avionics, cockpits and flight model
 		//
 
-		initialise_flight_dynamics (en);
+		initialise_flight_dynamics (en); 
+
+		update_helicopter_damage ();
 
 		initialise_avionics ();
 

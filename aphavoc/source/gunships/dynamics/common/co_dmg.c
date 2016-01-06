@@ -281,7 +281,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 		return;
 	}
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS))
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS))
 	{
 
 		// if invulnerable only allow damage/use of fire extinguisher
@@ -1867,7 +1867,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.3;
 
 					#if DYNAMICS_DEBUG
 
@@ -1880,7 +1880,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.3;
 
 					#if DYNAMICS_DEBUG
 
