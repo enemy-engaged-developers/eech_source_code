@@ -2849,6 +2849,8 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 
 	ASSERT (source);
 
+	ASSERT(target);
+
 	ASSERT (get_local_entity_int_value (source, INT_TYPE_IDENTIFY_SHIP_VEHICLE));
 
 	// check valid package status
@@ -2884,15 +2886,6 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 	selected_weapon = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
 
 	ASSERT (entity_sub_type_weapon_valid (selected_weapon));
-
-	// check valid target
-
-//	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-
-//	if (!target)
-//	{
-//		return;
-//	}
 
 	get_local_entity_vec3d (target, VEC3D_TYPE_POSITION, &target_position);
 

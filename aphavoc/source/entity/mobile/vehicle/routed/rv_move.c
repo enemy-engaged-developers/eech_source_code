@@ -459,7 +459,7 @@ void routed_vehicle_death_movement (entity *en)
 
 	if (speed == 0.0)
 	{
-		if (!get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL))
+		if (get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) <= 0)
 			set_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_DEAD);
 
 		return;

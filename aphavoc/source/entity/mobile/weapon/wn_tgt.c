@@ -410,9 +410,11 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 		target_damage_level = 2 * get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL);
 		
-		ASSERT (target_damage_level > 0);
+		ASSERT(get_local_entity_int_value(target, INT_TYPE_ALIVE));
 
-		if (target_damage_level <= 0) // something wrong, abort
+		ASSERT(target_damage_level > 0);
+
+		if (!get_local_entity_int_value(target, INT_TYPE_ALIVE) || target_damage_level <= 0) // something wrong, abort
 			return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 		if (debug_flag)

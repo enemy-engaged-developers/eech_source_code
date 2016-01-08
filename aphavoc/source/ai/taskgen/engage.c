@@ -733,6 +733,8 @@ void engage_specific_targets(entity *wingman, entity *targets[])
 		if (!target)
 			break;
 
+		ASSERT(get_local_entity_int_value(target, INT_TYPE_ALIVE));
+
 		engage_specific_target(group, target, valid_members, FALSE);
 	}
 }
@@ -850,7 +852,13 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 
 			if (get_local_entity_int_value (task, INT_TYPE_TASK_TERMINATED) == TASK_TERMINATED_IN_PROGRESS)
 			{
-				task_count ++;
+				target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
+				
+				if (target)
+					if (get_local_entity_int_value(target, INT_TYPE_ALIVE) && get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL) > 0)
+					{
+						task_count ++;
+					}
 			}
 		}
 
@@ -925,12 +933,24 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 
 			if (get_local_entity_int_value (task, INT_TYPE_TASK_TERMINATED) == TASK_TERMINATED_IN_PROGRESS)
 			{
+				int abort_task = FALSE;
+				
 				target = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
-//				ASSERT (target);
-
 				if (!target)
+					abort_task = TRUE;
+				else if (!get_local_entity_int_value(target, INT_TYPE_ALIVE) || get_local_entity_int_value (target, INT_TYPE_DAMAGE_LEVEL) <= 0)
+					abort_task = TRUE;
+				
+				if (abort_task)
 				{
+					#if DEBUG_MODULE
+
+					debug_log ("ENGAGE: skipping dead target");
+
+					#endif
+				
+					/* cause game crash /thealx/
 					notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, group, TASK_TERMINATED_ABORTED);
 
 					free_mem (guide_list);
@@ -940,6 +960,11 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 					free_mem (assigned_count);
 				
 					return valid_members;
+					*/
+
+					guide = get_local_entity_child_succ (guide, LIST_TYPE_GUIDE_STACK);
+
+					continue;
 				}
 				
 				guide_list [loop] = guide;
