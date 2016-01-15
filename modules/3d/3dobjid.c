@@ -329,7 +329,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 	fread ( &number_of_texture_animations, sizeof ( int ), 1, fp );
 
-	ASSERT ( number_of_texture_animations == TEXTURE_ANIMATION_INDEX_OLD_LAST );
+	ASSERT ( number_of_texture_animations == TEXTURE_ANIMATION_INDEX_LAST_OLD );
 
 	if ( number_of_texture_animations )
 	{
@@ -573,7 +573,7 @@ void deinitialise_3d_objects_info ( void )
 		{
 			safe_free ( texture_animation_names[0] );
 		}
-		for ( count = TEXTURE_ANIMATION_INDEX_OLD_LAST; count < TEXTURE_ANIMATION_INDEX_LAST; count++ )
+		for ( count = TEXTURE_ANIMATION_INDEX_LAST_OLD; count < TEXTURE_ANIMATION_INDEX_LAST; count++ )
 		{
 			if ( texture_animation_names[count] )
 			{

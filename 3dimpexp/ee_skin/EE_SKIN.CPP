@@ -506,7 +506,7 @@ private:
   size *= t.images[ct].width * t.images[ct].height;
   t.images[ct].data.resize(size);
   fread(&t.images[ct].data[0], size, 1, f);
-#if 1
+#if 0
   unsigned bpp = (t.images[ct].alpha ? 4 : 3);
   for (unsigned i = 0; i < t.images[ct].height / 2; i++)
    for (unsigned j = 0; j < t.images[ct].width * bpp; j++)
