@@ -133,7 +133,7 @@ struct EE
 #endif
 
 #ifdef USE_TERRAIN_TREES
-		ogre_terrain_tree(&(*objects)[0x2167]);
+		ogre_terrain_tree(&(*objects)[scenes->GetScene(0x0A58).index]);
 #endif
 	}
 	~EE()
@@ -381,7 +381,7 @@ protected:
 
 		ogre_set("EE", mSceneMgr, mCamera);
 
-		init ();
+		init();
 
 #ifdef USE_OBJECTS_ONLY
 		Ogre::Light* light = mSceneMgr->createLight("light");

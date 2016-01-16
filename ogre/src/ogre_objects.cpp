@@ -51,8 +51,7 @@ namespace
 	Normal normal;
 
 	// Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
-	static bool
-	compare_surfaces(const face_surface_description& left, const face_surface_description& right)
+	static bool compare_surfaces(const face_surface_description& left, const face_surface_description& right)
 	{
 #if 0
 		return false;
@@ -100,10 +99,9 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 	{
 		// Calculate real point coordinates and normals
 
-		const float
-			xmax = std::max(fabs(o.bounding_box.xmin), fabs(o.bounding_box.xmax)) / 32767.0f,
-			ymax = std::max(fabs(o.bounding_box.ymin), fabs(o.bounding_box.ymax)) / 32767.0f,
-			zmax = std::max(fabs(o.bounding_box.zmin), fabs(o.bounding_box.zmax)) / 32767.0f;
+		const float xmax = std::max(fabs(o.bounding_box.xmin), fabs(o.bounding_box.xmax)) / 32767.0f;
+		const float ymax = std::max(fabs(o.bounding_box.ymin), fabs(o.bounding_box.ymax)) / 32767.0f;
+		const float zmax = std::max(fabs(o.bounding_box.zmin), fabs(o.bounding_box.zmax)) / 32767.0f;
 
 		for (int j = 0; j < o.number_of_points; j++)
 		{
@@ -152,10 +150,8 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		face_surface_description& s = o.surfaces[j];
 		Surfaces::iterator itor(surfaces.begin());
 		for (; itor != surfaces.end(); ++itor)
-		{
 			if (compare_surfaces(itor->surface, s))
 				break;
-		}
 		SurfacesInfo& info = itor == surfaces.end() ? (surfaces.push_back(SurfacesInfo()), surfaces.back()) : *itor;
 
 		info.surface = s;
@@ -167,10 +163,8 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		const size_t number_of_points = s.number_of_points ? s.number_of_points : 256;
 		size_t number_of_indices = 0;
 		if (s.polygons)
-		{
 			for (size_t k = 0; k < s.number_of_faces; k++)
 				number_of_indices += (cf[k].number_of_points - 2) * 3;
-		}
 		else
 			number_of_indices = s.number_of_faces * 2;
 

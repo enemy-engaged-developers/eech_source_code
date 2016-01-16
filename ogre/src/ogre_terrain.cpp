@@ -269,7 +269,7 @@ namespace
 		// Convert geometry
 		void convert_sector(unsigned x, unsigned z, Geometry* terrain_geometry)
 		{
-			ogre_log(__FUNCTION__, "%u %u", x, z);
+			//ogre_log(__FUNCTION__, "%u %u", x, z);
 
 			TERRAIN_3D_SECTOR& s = ogre_terrain.sectors[z][x];
 
@@ -441,7 +441,7 @@ namespace
 
 		void destroy_sector(unsigned x, unsigned z)
 		{
-			ogre_log(__FUNCTION__, "%u %u", x, z);
+			//ogre_log(__FUNCTION__, "%u %u", x, z);
 
 			TerrainObject terrain_object(z, x);
 			Ogre::MeshManager::getSingleton().unload(terrain_object);
@@ -499,7 +499,7 @@ namespace
 
 		void loadPage(Forests::PageInfo& page)
 		{
-			ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
+			//ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
 
 			int x = page.xIndex, z = page.zIndex;
 			z = -z - 1;
@@ -536,7 +536,7 @@ namespace
 
 		void unloadPage(Forests::PageInfo& page)
 		{
-			ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
+			//ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
 			si.reset(0);
 		}
 
@@ -597,7 +597,7 @@ namespace
 		// Make some sectors to be visible, some - to be invisible
 		void update(void)
 		{
-			ogre_log(__FUNCTION__, "");
+			//ogre_log(__FUNCTION__, "");
 
 			terrain->update();
 		}
@@ -661,7 +661,7 @@ void OGREEE_CALL ogre_terrain_clear(void)
 // Periodic update to reflect visibility changes
 void OGREEE_CALL ogre_terrain_update(void)
 {
-	ogre_log(__FUNCTION__, "");
+	//ogre_log(__FUNCTION__, "");
 
 	terrain_cache->update();
 }
