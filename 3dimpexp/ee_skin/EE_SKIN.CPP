@@ -893,6 +893,7 @@ int main(int argc, char* argv[])
  FILE* f = freopen(path, "w", stdout);
  if (!f)
   error("Failed to create log file %s", path);
+ setbuf(f, NULL);
  std::vector<const char*> td;
  for (Textures::const_iterator itor(config.textures.begin()); itor != config.textures.end(); ++itor)
   td.push_back(itor->c_str());
