@@ -119,7 +119,7 @@ struct VertexDescription
 // Collector of VertexBuffers and corresponding IndexBuffers.
 // Merges vertices of different submeshes with the same VertexDescriptors
 // Merges indices of different submeshes
-class Geometry
+class Geometry : private Uncopyable
 {
 public:
 	// Vertex buffer descriptor
@@ -149,10 +149,9 @@ public:
 	};
 
 	// Sets limits for buffers sizes. If limit is reached, an additional buffer is allocated
-	Geometry(unsigned POINTS_PER_VERTEX_BUFFER, unsigned POINTS_PER_INDEX_BUFFER)
+	Geometry(unsigned POINTS_PER_VERTEX_BUFFER = 1u << 20, unsigned POINTS_PER_INDEX_BUFFER = 1u << 22)
 		: POINTS_PER_VERTEX_BUFFER(POINTS_PER_VERTEX_BUFFER), POINTS_PER_INDEX_BUFFER(POINTS_PER_INDEX_BUFFER)
 	{
-		assert(POINTS_PER_VERTEX_BUFFER <= VERTICES_HARD_LIMIT);
 	}
 
 	~Geometry();
@@ -163,7 +162,7 @@ public:
 	// Flushes the caches of buffers
 	void flush(void);
 
-	void statistics(const char* filename) const;
+	void statistics() const;
 
 private:
 	const unsigned POINTS_PER_VERTEX_BUFFER;
@@ -173,7 +172,8 @@ private:
 	struct VBUF_LIST
 	{
 		LIST_VBUF list;
-		std::vector<float> shadow;
+		typedef std::vector<float> SHADOW;
+		SHADOW shadow;
 	};
 	typedef std::map<size_t, VBUF_LIST> VBUFS;
 
@@ -181,7 +181,8 @@ private:
 	struct IBUFS
 	{
 		LIST_IBUF list;
-		std::vector<IndexType> shadow;
+		typedef std::vector<IndexType> SHADOW;
+		SHADOW shadow;
 	};
 
 	VBUFS vbufs;

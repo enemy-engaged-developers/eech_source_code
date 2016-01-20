@@ -23,7 +23,7 @@ namespace
 		v.z = cp * cos(heading);
 	}
 
-	struct Normals
+	struct Normals : private Uncopyable
 	{
 		Normals()
 		{
@@ -33,10 +33,10 @@ namespace
 			count = 0;
 			for (int_pitch = 0; int_pitch < 90; int_pitch += 9)
 			{
-				pitch = (((float)int_pitch) / 90.0) *(M_PI / 2);
+				pitch = (int_pitch / 90.0f) *(M_PI / 2);
 				for (int_heading = 0; int_heading < 360; int_heading += 15)
 				{
-					heading = (((float)int_heading) / 360.0) * (M_PI * 2);
+					heading = (int_heading / 360.0f) * (M_PI * 2);
 					get_vector(point_normals[count++], heading, pitch);
 				}
 			}
@@ -44,10 +44,10 @@ namespace
 			get_vector(point_normals[count++], 0, M_PI / 2);
 
 			int_pitch = -45;
-			pitch = (((float)int_pitch) / 90.0) * (M_PI / 2);
+			pitch = (int_pitch / 90.0f) * (M_PI / 2);
 			for (int_heading = 0; int_heading < 360; int_heading += 30)
 			{
-				heading = (((float)int_heading) / 360.0) * (M_PI * 2);
+				heading = (int_heading / 360.0f) * (M_PI * 2);
 				get_vector(point_normals[count++], heading, pitch);
 			}
 
@@ -61,7 +61,7 @@ namespace
 
 	// Selects a subset of original sector's points for each Ogre::SubMesh.
 	// Performs old->new and reverse indices translation.
-	class Expander
+	class Expander : private Uncopyable
 	{
 	public:
 		Expander(float* fdata, size_t vertex_size, IndexType* idata, OriginalPoints& original_points, unsigned long* ref, size_t total_number_of_indices)
@@ -116,21 +116,23 @@ namespace
 			}
 		}
 
-		typedef std::vector<unsigned> UNREF;
-		static const unsigned NOUNREF = ~0u;
-		void make_unref(UNREF& unref)
+#ifdef USE_TERRAIN_VERTEX_COLOURS
+		typedef std::vector<unsigned> INVREF;
+		static const unsigned NOINVREF = ~0u;
+		void make_invref(INVREF& invref)
 		{
-			std::fill(unref.begin(), unref.end(), NOUNREF);
+			std::fill(invref.begin(), invref.end(), NOINVREF);
 			for (unsigned i = 0; i < total_number_of_indices; i++)
 			{
 				unsigned ref_index = ref[i];
 				if (ref_index != NOVALUE)
 				{
-					assert(unref[ref_index] == NOUNREF);
-					unref[ref[i]] = i;
+					assert(invref[ref_index] == NOINVREF);
+					invref[ref[i]] = i;
 				}
 			}
 		}
+#endif
 
 	private:
 		float* fdata;
@@ -144,7 +146,7 @@ namespace
 	};
 
 	// Converts EE terrain to Ogre::Meshes
-	class TerrainConverter
+	class TerrainConverter : private Uncopyable
 	{
 	public:
 		~TerrainConverter(void)
@@ -296,10 +298,9 @@ namespace
 				for (unsigned i = 0; i < s.number_of_points; i++)
 				{
 					OriginalPoint& p = original_points[i];
-					p.x = s.points_xz[i].x * TERRAIN_3D_XZ_SCALE;
+					p.x = s.points_xz[i].x * (float)TERRAIN_3D_XZ_SCALE;
 					p.y = s.points_y[i].y * ogre_terrain.map_scaled_height_difference + ogre_terrain.map_minimum_height;
-					p.z = s.points_xz[i].z * TERRAIN_3D_XZ_SCALE;
-					p.z = -p.z;
+					p.z = s.points_xz[i].z * (float)TERRAIN_3D_XZ_SCALE;
 #ifdef USE_TERRAIN_NORMALS
 					if (s.points_y[i].normal_change)
 						normal_indices++;
@@ -349,11 +350,11 @@ namespace
 #endif
 #ifdef USE_TERRAIN_VERTEX_COLOURS
 							unsigned vertex_colour = sd.vd.diffuse_offset;
-							Expander::UNREF unref;
+							Expander::INVREF invref;
 							if (vertex_colour)
 							{
-								unref.resize(s.number_of_points);
-								expander->make_unref(unref);
+								invref.resize(s.number_of_points);
+								expander->make_invref(invref);
 							}
 #endif
 							for (unsigned i = 0; i < number_of_points; i++)
@@ -361,8 +362,8 @@ namespace
 #ifdef USE_TERRAIN_VERTEX_COLOURS
 								if (vertex_colour)
 								{
-									unsigned real_index = unref[i];
-									assert(real_index != Expander::NOUNREF);
+									unsigned real_index = invref[i];
+									assert(real_index != Expander::NOINVREF);
 									TERRAIN_3D_COLOUR& c = s.point_colours[s.colour_indices[real_index].index];
 									rgb_colour* pc = (rgb_colour*)&fdata[vertex_colour];
 									pc->red = c.red;
@@ -380,6 +381,7 @@ namespace
 									fdata[texture2 + 1] = fdata[v] * texture_scale2_v;
 								}
 #endif
+								fdata[2] = -fdata[2];
 								fdata += sd.vd.vertex_size;
 							}
 						}
@@ -472,149 +474,282 @@ namespace
 	TerrainConverterPtr terrain_converter;
 
 
-#ifdef USE_TERRAIN_OBJECTS
 	typedef std::pair<unsigned, unsigned> Sector;
-	struct SectorObject
+
+#ifdef USE_TERRAIN_OBJECTS
+	class SectorObjects : private Uncopyable
 	{
-		Ogre::String object;
-		Ogre::Quaternion orientation;
-		Ogre::Vector3 position;
-		Ogre::Vector3 scale;
+	public:
+		SectorObjects()
+		{
+		}
+		SectorObjects(const SectorObjects& so)
+		{
+			assert(so.objects.empty());
+		}
+		~SectorObjects()
+		{
+			for (Objects::iterator itor(objects.begin()); itor != objects.end(); ++itor)
+				ogre_scene_destroy(*itor);
+		}
+		void append(struct OgreGameObjectScene* scene)
+		{
+			objects.push_back(scene);
+		}
+		void show()
+		{
+			Ogre::SceneNode* node = ogre_scene_manager->getRootSceneNode();
+			for (Objects::iterator itor(objects.begin()); itor != objects.end(); ++itor)
+				node->addChild(reinterpret_cast<Ogre::SceneNode*>((*itor)->root));
+		}
+		void hide()
+		{
+			Ogre::SceneNode* node = ogre_scene_manager->getRootSceneNode();
+			for (Objects::iterator itor(objects.begin()); itor != objects.end(); ++itor)
+				node->removeChild(reinterpret_cast<Ogre::SceneNode*>((*itor)->root));
+		}
+
+	private:
+		typedef std::deque<OgreGameObjectScene*> Objects;
+		Objects objects;
 	};
-	typedef std::deque<SectorObject> SectorObjects;
 	typedef std::map<Sector, SectorObjects> TerrainObjects;
 
 	TerrainObjects terrain_objects;
 #endif
 
-	class TerrainLoader : public Forests::PageLoader
-	{
-	public:
 #ifdef USE_TERRAIN_TREES
-		TerrainLoader(Ogre::Entity* tree_ent)
-			: tree_ent(tree_ent)
-		{
-		}
+	GeometryPtr tree_geometry;
+	Ogre::String tree_material;
+	Ogre::InstanceManager* tree_manager;
 #endif
-
-		void loadPage(Forests::PageInfo& page)
-		{
-			//ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
-
-			int x = page.xIndex, z = page.zIndex;
-			z = -z - 1;
-			if (x < 0 || (unsigned)x >= ogre_terrain.sector_x_max || z < 0 || (unsigned)z >= ogre_terrain.sector_z_max)
-			{
-				return;
-			}
-
-			si.reset(new SectorInfo(x, z));
-			terrain_converter->convert_sector(x, z, &si->terrain_geometry);
-			si->terrain_geometry.flush();
-			si->ent = ogre_scene_manager->createEntity(TerrainObject(z, x));
-			addEntity(si->ent, page.centerPoint, Ogre::Quaternion::IDENTITY);
-#ifdef USE_TERRAIN_TREES
-			for (int i = 0; i < ogre_terrain.tree_sectors[z][x].number_of_trees; i++)
-			{
-				const terrain_3d_tree_data& tree = ogre_terrain.tree_sectors[z][x].trees[i];
-				Ogre::Vector3 tree_position(tree.x * TERRAIN_3D_XZ_SCALE / 2, tree.y * ogre_terrain.map_scaled_height_difference / 2 + ogre_terrain.map_minimum_height, tree.z * TERRAIN_3D_XZ_SCALE / 2);
-				tree_position.z = -tree_position.z;
-				float scale = ogre_terrain.get_tree_scale(const_cast<terrain_3d_tree_data*>(&tree));
-				addEntity(tree_ent, page.centerPoint + tree_position, Ogre::Quaternion::IDENTITY, Ogre::Vector3(scale, scale, scale));
-			}
-#endif
-#ifdef USE_TERRAIN_OBJECTS
-			TerrainObjects::const_iterator to = terrain_objects.find(Sector(z, x));
-			if (to != terrain_objects.end())
-			{
-				const SectorObjects& sos = to->second;
-				for (SectorObjects::const_iterator so(sos.begin()); so != sos.end(); ++so)
-					addEntity(ogre_scene_manager->createEntity(so->object), page.centerPoint + so->position, so->orientation, so->scale);
-			}
-#endif
-		}
-
-		void unloadPage(Forests::PageInfo& page)
-		{
-			//ogre_log(__FUNCTION__, "%i %i", page.xIndex, page.zIndex);
-			si.reset(0);
-		}
-
-	private:
-		struct SectorInfo
-		{
-			SectorInfo(unsigned x, unsigned z)
-				: x(x), z(z), terrain_geometry(0, 0)
-			{
-			}
-			~SectorInfo()
-			{
-				ogre_scene_manager->destroyEntity(ent);
-				terrain_converter->destroy_sector(x, z);
-			}
-
-			unsigned x, z;
-			Geometry terrain_geometry;
-			Ogre::Entity* ent;
-		};
-		std::auto_ptr<SectorInfo> si;
-#ifdef USE_TERRAIN_TREES
-		Ogre::Entity* tree_ent;
-#endif
-	};
 
 	// Cache of terrain sector
 	// Contains currently vissible and recently invisible sectors
-	class TerrainCache
+	class TerrainCache : private Uncopyable
 	{
 	public:
 		TerrainCache()
 			:
-#ifdef USE_TERRAIN_TREES
-			tree_ent(ogre_scene_manager->createEntity(TerrainTreeObject())),
-#endif
-			terrain(new Forests::PagedGeometry(ogre_camera, TERRAIN_3D_SECTOR_SIDE_LENGTH)), terrain_loader(new TerrainLoader
-#ifdef USE_TERRAIN_TREES
-				(tree_ent)
-#endif
-			)
-		{
-#ifdef USE_TERRAIN_VISIBILITY
-			terrain->addDetailLevel<Forests::BatchPage>(USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
+#ifdef USE_TERRAIN_GROUP
+				groups(0),
 #else
-			terrain->addDetailLevel<Forests::BatchPage>(ogre_camera->getFarClipDistance());
+				terrain_geometry(1 << 20, 1 << 21),
 #endif
-			terrain->setPageLoader(terrain_loader.get());
+				terrain(0), cur_x(-1000), cur_z(-1000)
+		{
+#ifndef USE_TERRAIN_GROUP
+			for (unsigned z = 0; z < ogre_terrain.sector_z_max; z++)
+				for (unsigned x = 0; x < ogre_terrain.sector_x_max; x++)
+					terrain_converter->convert_sector(x, z, &terrain_geometry);
+			terrain_geometry.flush();
+#endif
 		}
-
 		~TerrainCache()
 		{
-#ifdef USE_TERRAIN_TREES
-			ogre_scene_manager->destroyEntity(tree_ent);
+#ifdef USE_TERRAIN_GROUP
+			terrain_clear();
+			while (groups)
+				destroy_group(groups);
+#else
+			terrain_clear();
+			for (unsigned z = 0; z < ogre_terrain.sector_z_max; z++)
+				for (unsigned x = 0; x < ogre_terrain.sector_x_max; x++)
+					terrain_converter->destroy_sector(x, z);
 #endif
 		}
-
-		// Make some sectors to be visible, some - to be invisible
 		void update(void)
 		{
-			//ogre_log(__FUNCTION__, "");
+			const int v = USE_TERRAIN_VISIBILITY;
 
-			terrain->update();
-		}
+			Ogre::Vector3 pos = ogre_camera->getPosition();
+			pos.z = -pos.z;
+			int x_sector = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
+			int z_sector = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
-private:
+			// Current sector is not changed, no sectors change visibility
+			if (x_sector == cur_x && z_sector == cur_z)
+				return;
+
 #ifdef USE_TERRAIN_TREES
-		Ogre::Entity* tree_ent;
+			for (Trees::iterator itor(trees.begin()); itor != trees.end();)
+				if (abs(cur_x - (int)itor->first.first) > v + 1 || abs(cur_z - (int)itor->first.second) > v)
+					itor = trees.erase(itor);
+				else
+					++itor;
 #endif
-		std::auto_ptr<Forests::PagedGeometry> terrain;
-		std::auto_ptr<TerrainLoader> terrain_loader;
+
+			cur_x = x_sector;
+			cur_z = z_sector;
+
+			terrain_clear();
+#ifdef USE_TERRAIN_GROUP
+			int g = (v - 1) / GROUP + 1;
+			int xg = cur_x / GROUP, zg = cur_z / GROUP;
+			for (Group** group = &groups; *group;)
+				if (abs(xg - (int)(*group)->x) > g + 1 || abs(zg - (int)(*group)->z) > g + 1)
+					destroy_group(*group);
+				else
+					group = &(*group)->next;
+			for (int z = std::max(zg - g, 0); z <= std::min(zg + g, (int)ogre_terrain.sector_z_max / GROUP); z++)
+				for (int x = std::max(xg - g, 0); x <= std::min(xg + g, (int)ogre_terrain.sector_x_max / GROUP); x++)
+					convert_group(x, z);
+#endif
+			terrain = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
+			for (int z = std::max(0, cur_z - v); z <= std::min((int)ogre_terrain.sector_z_max - 1, cur_z + v); z++)
+				for (int x = std::max(0, cur_x - v); x <= std::min((int)ogre_terrain.sector_x_max - 1, cur_x + v); x++)
+				{
+#if 1
+					Ogre::SceneNode* sector = terrain->createChildSceneNode();
+					Ogre::Vector3 position((float)(x * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2), 0.0f, (float)(z * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2));
+					position.z = -position.z;
+					sector->setPosition(position);
+					Ogre::Entity* entity = ogre_scene_manager->createEntity(TerrainObject(z, x));
+					sector->attachObject(entity);
+					SectorData sd = { sector, entity };
+#ifdef USE_TERRAIN_OBJECTS
+					TerrainObjects::iterator itor(terrain_objects.find(Sector(x, z)));
+					if (itor != terrain_objects.end())
+					{
+						itor->second.show();
+						sd.objects = &itor->second;
+					}
+#endif
+					sectors_data.push_back(sd);
+#endif
+#ifdef USE_TERRAIN_TREES
+					{
+						TerrainTree terrain_tree(z, x);
+						Trees::iterator itor(trees.find(Sector(x, z)));
+						if (itor == trees.end())
+						{
+							Ogre::Vector3 position((float)(x * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2), 0.0f, (float)(z * TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH / 2));
+							position.z = -position.z;
+							SectorTrees& st = trees[Sector(x, z)];
+							st.reserve(ogre_terrain.tree_sectors[z][x].number_of_trees);
+							const terrain_3d_tree_data* tree = ogre_terrain.tree_sectors[z][x].trees;
+							for (int i = 0; i < ogre_terrain.tree_sectors[z][x].number_of_trees; i++, tree++)
+							{
+								Ogre::InstancedEntity* ent = tree_manager->createInstancedEntity(tree_material);
+								Ogre::Vector3 tree_position((float)(tree->x * (TERRAIN_3D_XZ_SCALE / 2)), tree->y * ogre_terrain.map_scaled_height_difference / 2 + ogre_terrain.map_minimum_height, (float)(tree->z * (TERRAIN_3D_XZ_SCALE / 2)));
+								tree_position.z = -tree_position.z;
+								float scale = ogre_terrain.get_tree_scale(const_cast<terrain_3d_tree_data*>(tree));
+								ent->setPosition(position + tree_position);
+								ent->setScale(Ogre::Vector3(scale, scale, scale));
+								st.append(ent);
+							}
+						}
+					}
+#endif
+				}
+		}
+	private:
+#ifdef USE_TERRAIN_GROUP
+		static const int GROUP = 20;
+		struct Group : private Uncopyable
+		{
+			Group(unsigned x, unsigned z)
+				: x(x), z(z), geometry(1 << 20, 1 << 20), next(0)
+			{
+			}
+
+			const unsigned x, z;
+			Geometry geometry;
+			Group* next;
+		};
+		void convert_group(unsigned xg, unsigned zg)
+		{
+			ogre_log(__FUNCTION__, "%u %u", xg, zg);
+			Group* group = new Group(xg, zg);
+			group->next = groups;
+			groups = group;
+
+			Geometry* geometry = &group->geometry;
+			for (unsigned z = zg * GROUP; z < std::min((zg + 1) * GROUP, ogre_terrain.sector_z_max); z++)
+				for (unsigned x = xg * GROUP; x < std::min((xg + 1) * GROUP, ogre_terrain.sector_x_max); x++)
+					terrain_converter->convert_sector(x, z, geometry);
+			geometry->flush();
+		}
+		void destroy_group(Group*& group)
+		{
+			unsigned xg = group->x, zg = group->z;
+			for (unsigned z = zg * GROUP; z < std::min((zg + 1) * GROUP, ogre_terrain.sector_z_max); z++)
+				for (unsigned x = xg * GROUP; x < std::min((xg + 1) * GROUP, ogre_terrain.sector_x_max); x++)
+					terrain_converter->destroy_sector(x, z);
+			Group* g = group;
+			group = group->next;
+			delete g;
+		}
+		Group* groups;
+#else
+		Geometry terrain_geometry;
+#endif
+		void terrain_clear(void)
+		{
+			if (terrain)
+			{
+				while (!sectors_data.empty())
+				{
+					SectorsData::value_type& v = sectors_data.front();
+					v.node->detachObject(v.entity);
+					ogre_scene_manager->destroyEntity(v.entity);
+#ifndef OGRE_TERRAIN_OBJECTS
+					if (v.objects)
+						v.objects->hide();
+#endif
+					sectors_data.pop_front();
+				}
+				terrain->removeAndDestroyAllChildren();
+				terrain->getParentSceneNode()->removeChild(terrain);
+				terrain->getCreator()->destroySceneNode(terrain);
+			}
+		}
+		Ogre::SceneNode* terrain;
+		struct SectorData
+		{
+			Ogre::SceneNode* node;
+			Ogre::Entity* entity;
+#ifdef USE_TERRAIN_OBJECTS
+			SectorObjects* objects;
+#endif
+		};
+		typedef std::deque<SectorData> SectorsData;
+		SectorsData sectors_data;
+#ifdef USE_TERRAIN_TREES
+		class SectorTrees : private Uncopyable
+		{
+		public:
+			SectorTrees()
+			{
+			}
+			SectorTrees(const SectorTrees& st)
+			{
+				assert(st.trees.empty());
+			}
+			~SectorTrees()
+			{
+				for (Trees::iterator itor(trees.begin()); itor != trees.end(); ++itor)
+					ogre_scene_manager->destroyInstancedEntity(*itor);
+			}
+			void reserve(size_t size)
+			{
+				trees.reserve(size);
+			}
+			void append(Ogre::InstancedEntity* tree)
+			{
+				trees.push_back(tree);
+			}
+
+		private:
+			typedef std::vector<Ogre::InstancedEntity*> Trees;
+			Trees trees;
+		};
+		typedef std::map<Sector, SectorTrees> Trees;
+		Trees trees;
+#endif
+		int cur_x, cur_z;
 	};
 	typedef std::auto_ptr<TerrainCache> TerrainCachePtr;
-
-
-#ifdef USE_TERRAIN_TREES
-	GeometryPtr tree_geometry;
-#endif
 
 	TerrainCachePtr terrain_cache;
 }
@@ -625,6 +760,11 @@ void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init)
 	ogre_log(__FUNCTION__, "%u %u", init->sector_z_max, init->sector_x_max);
 
 	ogre_terrain = *init;
+
+#ifdef _DEBUG
+	ogre_terrain.sector_x_max = std::min(ogre_terrain.sector_x_max, 10u);
+	ogre_terrain.sector_z_max = std::min(ogre_terrain.sector_z_max, 10u);
+#endif
 
 	assert(!terrain_converter.get());
 	assert(!terrain_cache.get());
@@ -666,17 +806,26 @@ void OGREEE_CALL ogre_terrain_update(void)
 	terrain_cache->update();
 }
 
-#ifdef USE_TERRAIN_TREES
 // Use specified object as a tree
 void OGREEE_CALL ogre_terrain_tree(const struct OBJECT_3D* o)
 {
 	ogre_log(__FUNCTION__, "");
 
+#ifdef USE_TERRAIN_TREES
 	assert(!tree_geometry.get());
-	tree_geometry.reset(new Geometry(0, 0));
+	tree_geometry.reset(new Geometry(0));
 	AnimationMesh am;
-	ogre_objects_convert(*o, Ogre::MeshManager::getSingleton().createManual(TerrainTreeObject(), ogre_resource_group), am, tree_geometry.get());
+	TerrainTreeObject terrain_tree_object;
+	Ogre::MeshPtr tree = Ogre::MeshManager::getSingleton().createManual(terrain_tree_object, ogre_resource_group);
+	ogre_objects_convert(*o, tree, am, tree_geometry.get());
 	tree_geometry->flush();
+	tree_material = tree->getSubMesh(0)->getMaterialName();
+	Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().getByName(tree_material, ogre_resource_group);
+	Ogre::Pass* pass = mat->getTechnique(0)->getPass(0);
+	pass->setVertexProgram("Ogre/Instancing/ShaderBased_vs");
+	mat->load();
+	tree_manager = ogre_scene_manager->createInstanceManager(TerrainTreeManager(), terrain_tree_object, ogre_resource_group, Ogre::InstanceManager::ShaderBased, 80, Ogre::IM_USEALL);
+#endif
 }
 
 // Clear tree object
@@ -684,38 +833,35 @@ void OGREEE_CALL ogre_terrain_tree_clear(void)
 {
 	ogre_log(__FUNCTION__, "");
 
+#ifdef USE_TERRAIN_TREES
+	tree_material.clear();
+	ogre_scene_manager->destroyInstanceManager(tree_manager);
+	TerrainTreeObject terrain_tree_object;
+	Ogre::MeshManager::getSingleton().unload(terrain_tree_object);
+	Ogre::MeshManager::getSingleton().remove(terrain_tree_object);
 	tree_geometry.reset(0);
-}
 #endif
+}
 
-#ifdef USE_TERRAIN_OBJECTS
 void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 {
 	ogre_log(__FUNCTION__, "%p", scene);
 
-	const Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
-	const Ogre::Vector3& pos = node->getPosition();
+#ifdef USE_TERRAIN_OBJECTS
+	Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
+	Ogre::Vector3 pos = node->getPosition();
 	int x = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	int z = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	z = -z - 1;
+	if (x < 0 || x >= (int)ogre_terrain.sector_x_max || z < 0 || z >= (int)ogre_terrain.sector_z_max)
+		ogre_log(__FUNCTION__, "invalid sector for object %i %i", x, z);
 	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
 	if (database->elements.empty())
 		ogre_log(__FUNCTION__, "empty scene");
-	else
-		if (database->elements.front().object.empty())
-			ogre_log(__FUNCTION__, "NULL main object");
-	for (SceneDatabaseElements::const_iterator itor(database->elements.begin()); itor != database->elements.end(); ++itor)
-		if (!itor->object.empty())
-			{
-				SectorObject so;
-				so.object = itor->object;
-				//FIXME Probably there's something wrong with position
-				so.position = node->getPosition() - Ogre::Vector3(x * TERRAIN_3D_SECTOR_SIDE_LENGTH, 0, (-z - 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH) + itor->position;
-				ogre_log(__FUNCTION__, "%s %f %f %f", itor->object.c_str(), so.position.x, so.position.y, so.position.z);
-				so.orientation = node->getOrientation() * itor->orientation;
-				so.scale = node->getScale() * itor->scale;
-				terrain_objects[Sector(z, x)].push_back(so);
-				break;
-			}
-}
+	Ogre::SceneNode* parent = node->getParentSceneNode();
+	if (parent)
+		parent->removeChild(node);
+	ogre_log(__FUNCTION__, "%s %i %i %f %f %f", database->elements.front().object.c_str(), x, z, pos.x, pos.y, pos.z);
+	terrain_objects[Sector(x, z)].append(scene);
 #endif
+}

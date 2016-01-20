@@ -3,9 +3,7 @@ functionality onto Ogre3D rendering engine.
 
 You will need the following tools for build process
 1. Visual Studio 2008 SP1 (Express Edition is enough)
-2. Mercurial, for example TortoiseHg http://tortoisehg.bitbucket.org/
-3. CMake https://cmake.org/
-4. OgreSDK vc9 1.9 http://www.ogre3d.org/download/sdk
+2. OgreSDK vc9 1.9 http://www.ogre3d.org/download/sdk
 
 In order to build OgreEE you need to make the following steps
 1. OgreSDK
@@ -13,101 +11,8 @@ In order to build OgreEE you need to make the following steps
 1.2. Set Environment variable OGRE_SDK to the corresponding directory
 (for example, "D:\OgreSDK_vc9_v1-9-0", no quotes)
 
-2. PagedGeometry
-2.1. Get PagedGeometry from https://bitbucket.org/ogreaddons/pagedgeometry/
-2.2. Patch it with the following
-[begin]
-diff -r c05c372738a7 CMakeLists.txt
---- a/CMakeLists.txt	Fri Feb 20 18:13:34 2015 +0000
-+++ b/CMakeLists.txt	Thu Oct 22 08:26:03 2015 +0300
-@@ -5,10 +5,7 @@
- project(PagedGeometry)
- 
- if(WIN32)
--   set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
--   set(OGRE_SAMPLES_INCLUDEPATH
--      $ENV{OGRE_HOME}/Samples/include
--   )
-+   set(CMAKE_MODULE_PATH "$ENV{OGRE_SDK}/CMake;${CMAKE_MODULE_PATH}")
- endif(WIN32)
-  
- if(UNIX)
-@@ -108,11 +105,11 @@
- endif(APPLE)
- 
- if(NOT ((${OGRE_VERSION} VERSION_EQUAL "1.10.0") OR (${OGRE_VERSION} VERSION_GREATER "1.10.0")))
--    message(SEND_ERROR "You need Ogre 1.10 'Xalafu' to build this.")
-+	#message(SEND_ERROR "You need Ogre 1.10 'Xalafu' to build this.")
- endif()
- 
- include_directories(${OGRE_INCLUDE_DIRS})
--include_directories(${Boost_INCLUDE_DIR})
-+#include_directories(${Boost_INCLUDE_DIR})
- 
- set(HEADER_FILES
- 	include/BatchedGeometry.h
-@@ -155,13 +152,14 @@
- endif(UNIX)
- 
- add_library(PagedGeometry ${HEADER_FILES} ${SOURCE_FILES}  )
--set(LIBRARY_OUTPUT_PATH  ../../lib)
-+set(LIBRARY_OUTPUT_PATH  lib)
- 
- set_target_properties(PagedGeometry PROPERTIES INSTALL_RPATH ${OGRE_INSTALL_DIR}/lib/OGRE)
- set_target_properties(PagedGeometry PROPERTIES VERSION ${PG_VERSION} SOVERSION ${PG_VERSION_MAJOR})
- set_target_properties(PagedGeometry PROPERTIES COMPILE_DEFINITIONS PG_LIB)
- set_target_properties(PagedGeometry PROPERTIES SOLUTION_FOLDER Dependencies)
- 
--target_link_libraries(PagedGeometry ${OGRE_LIBRARIES} ${Boost_SYSTEM_LIBRARY})
-+#target_link_libraries(PagedGeometry ${OGRE_LIBRARIES} ${Boost_SYSTEM_LIBRARY})
-+target_link_libraries(PagedGeometry ${OGRE_LIBRARIES})
- 
- # vim: set sw=2 ts=2 noet:
-diff -r c05c372738a7 source/PagedGeometry.cpp
---- a/source/PagedGeometry.cpp	Fri Feb 20 18:13:34 2015 +0000
-+++ b/source/PagedGeometry.cpp	Thu Oct 22 08:26:03 2015 +0300
-@@ -158,7 +158,7 @@
- void PagedGeometry::setPageSize(Real size)
- {
- 	if (!managerList.empty())
--		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_CALL, "PagedGeometry::setPageSize() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setPageSize()");
-+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "PagedGeometry::setPageSize() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setPageSize()");
- 
- 	pageSize = size;
- }
-@@ -166,7 +166,7 @@
- void PagedGeometry::setInfinite()
- {
- 	if (!managerList.empty())
--		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_CALL, "PagedGeometry::setInfinite() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setInfinite()");
-+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "PagedGeometry::setInfinite() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setInfinite()");
- 
- 	m_bounds = TBounds(0, 0, 0, 0);
- }
-@@ -174,7 +174,7 @@
- void PagedGeometry::setBounds(TBounds bounds)
- {
- 	if (!managerList.empty())
--		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_CALL, "PagedGeometry::setBounds() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setBounds()");
-+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "PagedGeometry::setBounds() cannot be called after detail levels have been added. Call removeDetailLevels() first.", "PagedGeometry::setBounds()");
- 	if (!Math::RealEqual(bounds.width(), bounds.height(), 0.01f))
- 		OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Bounds must be square", "PagedGeometry::setBounds()");
- 	if (bounds.width() <= 0 || bounds.height() <=0)
-@@ -357,7 +357,7 @@
- 
- 	//Error check
- 	if (maxRange <= minRange){
--		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_CALL, "Closer detail levels must be added before farther ones", "PagedGeometry::addDetailLevel()");
-+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Closer detail levels must be added before farther ones", "PagedGeometry::addDetailLevel()");
- 	}
- 
- 	//Setup the new manager
-[end]
-2.3. Use CMake to Configure, Configure, and Generate
-2.4. Build it with Visual Studio
-2.5. Set Environment variable PG_ROOT to the corresponding directory
-(for example, "D:\PagedGeometry", no quotes)
+2. Build OgreEE with Visual Studio
 
-3. Build OgreEE with Visual Studio
-
-4. Build EE supplying "ogre=1" to wmake
+//3. Build EE supplying "ogre=1" to wmake
+3. Build cube with Visual Studio. Both src/ogre_int.hpp and cube/options.hpp
+have tunable options.

@@ -12,13 +12,49 @@ namespace
 	{
 #ifdef OGRE_TIMES
 	public:
-		Application()
+		Application(void)
 			: count(0), last(GetTickCount()), ogre(0), user(0)
 		{
 		}
 #endif
 
 	protected:
+		virtual void setupResources(void)
+		{
+			Ogre::ConfigFile cf;
+			cf.load(mResourcesCfg);
+			Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
+			Ogre::String sec, type, arch;
+			while (seci.hasMoreElements())
+			{
+				sec = seci.peekNextKey();
+				Ogre::ConfigFile::SettingsMultiMap* settings = seci.getNext();
+				Ogre::ConfigFile::SettingsMultiMap::iterator i;
+				for (i = settings->begin(); i != settings->end(); i++)
+				{
+					type = i->first;
+					arch = i->second;
+					Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch, type, sec);
+				}
+			}
+			const Ogre::ResourceGroupManager::LocationList genLocs = Ogre::ResourceGroupManager::getSingleton().getResourceLocationList("General");
+			arch = genLocs.front()->archive->getName();
+			type = "FileSystem";
+			sec = "Popular";
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSLES", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL150", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL400", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/Cg", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL_Cg", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSLES", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL150", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/Cg", type, sec);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL_Cg", type, sec);
+		}
 		virtual void createScene(void)
 		{
 			const char* resource_group_name = "EE";

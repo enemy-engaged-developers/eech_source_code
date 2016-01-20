@@ -43,6 +43,7 @@ OGREEE_API void OGREEE_CALL ogre_node_get_position(struct OgreNode* node, struct
 OGREEE_API void OGREEE_CALL ogre_node_set_position(struct OgreNode* node, struct VEC3D* position);
 OGREEE_API void OGREEE_CALL ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation);
 OGREEE_API void OGREEE_CALL ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orientation);
+OGREEE_API void OGREEE_CALL ogre_node_set_orientation_angles(struct OgreNode* node, float heading, float pitch, float roll);
 OGREEE_API void OGREEE_CALL ogre_node_get_scale(struct OgreNode* node, struct VEC3D* scale);
 OGREEE_API void OGREEE_CALL ogre_node_set_scale(struct OgreNode* node, struct VEC3D* scale);
 OGREEE_API void OGREEE_CALL ogre_node_set_visible(struct OgreNode* node, int visible);

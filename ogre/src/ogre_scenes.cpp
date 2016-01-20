@@ -77,10 +77,7 @@ namespace
 			{
 				static Ogre::Quaternion Orientation(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
-					float heading = frame->heading, pitch = frame->pitch, roll = frame->roll;
-					heading = -heading;
-					pitch = -pitch;
-					return Ogre::Quaternion(Ogre::Radian(heading), Ogre::Vector3::UNIT_Y) * Ogre::Quaternion(Ogre::Radian(pitch), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Radian(roll), Ogre::Vector3::UNIT_Z);
+					return ogre_orientation(frame->heading, frame->pitch, frame->roll);
 				}
 				static Ogre::Vector3 Position(const OBJECT_3D_SUB_OBJECT_KEYFRAME* frame)
 				{
@@ -247,10 +244,20 @@ void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene)
 	if (scene->internal)
 	{
 		Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(scene->root);
-		delete static_cast<GameObjectScene*>(scene->internal);
-		//FIXME
+		{
+			std::auto_ptr<GameObjectScene> gos(static_cast<GameObjectScene*>(scene->internal));
+			for (SceneNodes::iterator itor(gos->nodes.begin()); itor != gos->nodes.end(); ++itor)
+				if ((*itor)->numAttachedObjects())
+				{
+					assert((*itor)->numAttachedObjects() == 1);
+					Ogre::Entity* entity = dynamic_cast<Ogre::Entity*>((*itor)->getAttachedObject(0));
+					ogre_scene_manager->destroyEntity(entity);
+				}
+		}
 		sn->removeAndDestroyAllChildren();
-		sn->getParentSceneNode()->removeChild(sn);
+		Ogre::SceneNode* parent = sn->getParentSceneNode();
+		if (parent)
+			parent->removeChild(sn);
 		sn->getCreator()->destroySceneNode(sn);
 	}
 	ogre_scene_init(scene);
@@ -340,7 +347,7 @@ void OGREEE_CALL ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene
 
 void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame)
 {
-	ogre_log(__FUNCTION__, "%p %u %u", scene, animation, frame);
+	//ogre_log(__FUNCTION__, "%p %u %u", scene, animation, frame);
 
 	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
 	AnimationScene::const_iterator itor = gos->database->animation.find(animation);

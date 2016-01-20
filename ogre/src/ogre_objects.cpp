@@ -1,20 +1,12 @@
 #include "ogre_int.hpp"
 
-#ifdef USE_INDICES32
-#define OBJECTS_POINTS_PER_VERTEX_BUFFER (1u << 20)
-#define OBJECTS_POINTS_PER_INDEX_BUFFER (1u << 22)
-#else
-#define OBJECTS_POINTS_PER_VERTEX_BUFFER (1u << 16)
-#define OBJECTS_POINTS_PER_INDEX_BUFFER (1u << 22)
-#endif
-
 namespace
 {
 	GeometryPtr objects_geometry;
 	std::vector<AnimationMesh> objects_anim;
 	OgreObjectsInit* objects_init;
 
-	class Normal
+	class Normal : private Uncopyable
 	{
 	public:
 		Normal(void)
@@ -369,14 +361,12 @@ void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
 	objects_init = init;
 
 	assert(!objects_geometry.get());
-	objects_geometry.reset(new Geometry(OBJECTS_POINTS_PER_VERTEX_BUFFER, OBJECTS_POINTS_PER_INDEX_BUFFER));
+	objects_geometry.reset(new Geometry);
 
 	objects_anim.resize(objects_init->number_of_objects + 1);
 	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
 		ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
-
-	//objects_geometry->statistics("OG_STAT.TXT");
 
 	objects_init = 0;
 }
@@ -386,6 +376,12 @@ void OGREEE_CALL ogre_objects_clear(void)
 {
 	ogre_log(__FUNCTION__, "");
 
+	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
+	{
+		ObjectName object(i);
+		Ogre::MeshManager::getSingleton().unload(object);
+		Ogre::MeshManager::getSingleton().remove(object);
+	}
 	objects_anim.clear();
 	objects_geometry.reset(0);
 }

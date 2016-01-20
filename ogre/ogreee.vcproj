@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OGREEE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,10 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="$(TargetDir)$(TargetName).lib"
@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OGREEE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -140,9 +140,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib PagedGeometry.lib"
+				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

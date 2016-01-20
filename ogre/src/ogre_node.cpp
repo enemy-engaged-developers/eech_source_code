@@ -35,6 +35,12 @@ void OGREEE_CALL ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orie
 	sn->setOrientation(m);
 }
 
+void OGREEE_CALL ogre_node_set_orientation_angles(struct OgreNode* node, float heading, float pitch, float roll)
+{
+	Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(node);
+	sn->setOrientation(ogre_orientation(heading, pitch, roll));
+}
+
 void OGREEE_CALL ogre_node_get_scale(struct OgreNode* node, struct VEC3D* scale)
 {
 	Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(node);
