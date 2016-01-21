@@ -39,7 +39,7 @@
 //#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
 #define USE_TERRAIN_VISIBILITY 10
-#define USE_TERRAIN_GROUP
+//#define USE_TERRAIN_GROUP
 
 
 #ifndef M_PI
@@ -110,6 +110,7 @@ struct name : private fmt \
 #include "ogre_animation.hpp"
 #include "ogre_objects.hpp"
 #include "ogre_scenes.hpp"
+#include "ogre_terrain.hpp"
 
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
@@ -117,6 +118,7 @@ DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
+DEFINE_NAME(GameSceneName, struct OgreGameObjectScene* scene, "SCENE_%p", scene);
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
 DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER", 0);

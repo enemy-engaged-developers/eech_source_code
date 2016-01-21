@@ -496,17 +496,27 @@ namespace
 		{
 			objects.push_back(scene);
 		}
+		unsigned size() const
+		{
+			return objects.size();
+		}
 		void show()
 		{
 			Ogre::SceneNode* node = ogre_scene_manager->getRootSceneNode();
 			for (Objects::iterator itor(objects.begin()); itor != objects.end(); ++itor)
-				node->addChild(reinterpret_cast<Ogre::SceneNode*>((*itor)->root));
+			{
+				GameObjectScene& gos = *static_cast<GameObjectScene*>((*itor)->internal);
+				node->addChild(gos.root);
+			}
 		}
 		void hide()
 		{
 			Ogre::SceneNode* node = ogre_scene_manager->getRootSceneNode();
 			for (Objects::iterator itor(objects.begin()); itor != objects.end(); ++itor)
-				node->removeChild(reinterpret_cast<Ogre::SceneNode*>((*itor)->root));
+			{
+				GameObjectScene& gos = *static_cast<GameObjectScene*>((*itor)->internal);
+				node->removeChild(gos.root);
+			}
 		}
 
 	private:
@@ -607,13 +617,16 @@ namespace
 					Ogre::Entity* entity = ogre_scene_manager->createEntity(TerrainObject(z, x));
 					sector->attachObject(entity);
 					SectorData sd = { sector, entity };
+#if 0
 #ifdef USE_TERRAIN_OBJECTS
 					TerrainObjects::iterator itor(terrain_objects.find(Sector(x, z)));
 					if (itor != terrain_objects.end())
 					{
 						itor->second.show();
+						total += itor->second.size();
 						sd.objects = &itor->second;
 					}
+#endif
 #endif
 					sectors_data.push_back(sd);
 #endif
@@ -693,9 +706,11 @@ namespace
 					SectorsData::value_type& v = sectors_data.front();
 					v.node->detachObject(v.entity);
 					ogre_scene_manager->destroyEntity(v.entity);
-#ifndef OGRE_TERRAIN_OBJECTS
+#if 0
+#ifdef USE_TERRAIN_OBJECTS
 					if (v.objects)
 						v.objects->hide();
+#endif
 #endif
 					sectors_data.pop_front();
 				}
@@ -709,8 +724,10 @@ namespace
 		{
 			Ogre::SceneNode* node;
 			Ogre::Entity* entity;
+#if 0
 #ifdef USE_TERRAIN_OBJECTS
 			SectorObjects* objects;
+#endif
 #endif
 		};
 		typedef std::deque<SectorData> SectorsData;
@@ -761,11 +778,6 @@ void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init)
 
 	ogre_terrain = *init;
 
-#ifdef _DEBUG
-	ogre_terrain.sector_x_max = std::min(ogre_terrain.sector_x_max, 10u);
-	ogre_terrain.sector_z_max = std::min(ogre_terrain.sector_z_max, 10u);
-#endif
-
 	assert(!terrain_converter.get());
 	assert(!terrain_cache.get());
 
@@ -796,14 +808,6 @@ void OGREEE_CALL ogre_terrain_clear(void)
 	terrain_cache.reset(0);
 
 	terrain_converter.reset(0);
-}
-
-// Periodic update to reflect visibility changes
-void OGREEE_CALL ogre_terrain_update(void)
-{
-	//ogre_log(__FUNCTION__, "");
-
-	terrain_cache->update();
 }
 
 // Use specified object as a tree
@@ -848,20 +852,25 @@ void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 	ogre_log(__FUNCTION__, "%p", scene);
 
 #ifdef USE_TERRAIN_OBJECTS
-	Ogre::SceneNode* node = reinterpret_cast<Ogre::SceneNode*>(scene->root);
-	Ogre::Vector3 pos = node->getPosition();
+	const struct OgreVector3& pos(scene->position);
 	int x = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
 	int z = (int)floor(pos.z / TERRAIN_3D_SECTOR_SIDE_LENGTH);
-	z = -z - 1;
 	if (x < 0 || x >= (int)ogre_terrain.sector_x_max || z < 0 || z >= (int)ogre_terrain.sector_z_max)
 		ogre_log(__FUNCTION__, "invalid sector for object %i %i", x, z);
-	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
-	if (database->elements.empty())
+	if (!scene->number_of_elements)
 		ogre_log(__FUNCTION__, "empty scene");
-	Ogre::SceneNode* parent = node->getParentSceneNode();
+	ogre_scene_place(scene);
+	GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+	Ogre::SceneNode* parent = gos.root->getParentSceneNode();
 	if (parent)
-		parent->removeChild(node);
-	ogre_log(__FUNCTION__, "%s %i %i %f %f %f", database->elements.front().object.c_str(), x, z, pos.x, pos.y, pos.z);
+		parent->removeChild(gos.root);
+	ogre_log(__FUNCTION__, "%s %i %i %f %f %f", gos.database.elements.empty() ? "" : gos.database.elements.front().object.c_str(), x, z, pos.x, pos.y, pos.z);
 	terrain_objects[Sector(x, z)].append(scene);
 #endif
+}
+
+void ogre_terrain_update(void)
+{
+	if (terrain_cache.get())
+		terrain_cache->update();
 }

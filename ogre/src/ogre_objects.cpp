@@ -322,15 +322,17 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 					break;
 			}
 			unsigned smi = mesh->getNumSubMeshes() - 1;
-			animation[animation_index].push_back(AnimationRef(smi, material_index));
-			unsigned size = objects_init->get_animation_size(animation_index);
+			AnimationInfo& ai = animation[animation_index];
+			ai.limit = objects_init->get_animation_size(animation_index);
+			ai.refs.push_back(AnimationRef(smi, material_index));
+			unsigned size = ai.limit;
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
-				Ogre::MaterialPtr mata = Ogre::MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
-				*mata = *mat;
+				Ogre::MaterialPtr mata = mat->clone(material_animation_name);
 				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(objects_init->get_animation_texture(animation_index, frame)));
 			}
+			sm->setMaterialName(MaterialAnimationName(material_index, 0));
 		}
 		while (false);
 	}
@@ -346,9 +348,10 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 	const AnimationMesh& am = objects_anim[object];
 	for (AnimationMesh::const_iterator i(am.begin()); i != am.end(); ++i)
 	{
-		SceneAnimationRefs& sar = as[i->first];
-		for (AnimationRefs::const_iterator j(i->second.begin()); j != i->second.end(); j++)
-			sar.push_back(SceneAnimationRef(subobject, *j));
+		SceneAnimationInfo& sar = as[i->first];
+		sar.limit = i->second.limit;
+		for (AnimationRefs::const_iterator j(i->second.refs.begin()); j != i->second.refs.end(); j++)
+			sar.refs.push_back(SceneAnimationRef(subobject, *j));
 	}
 }
 
@@ -376,7 +379,7 @@ void OGREEE_CALL ogre_objects_clear(void)
 {
 	ogre_log(__FUNCTION__, "");
 
-	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
+	for (unsigned i = 0; i < objects_anim.size(); i++)
 	{
 		ObjectName object(i);
 		Ogre::MeshManager::getSingleton().unload(object);

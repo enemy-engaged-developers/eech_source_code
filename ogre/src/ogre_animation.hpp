@@ -9,7 +9,12 @@ struct AnimationRef
 	unsigned material_index;
 };
 typedef std::vector<AnimationRef> AnimationRefs;
-typedef std::map<unsigned, AnimationRefs> AnimationMesh;
+struct AnimationInfo
+{
+	unsigned limit;
+	AnimationRefs refs;
+};
+typedef std::map<unsigned, AnimationInfo> AnimationMesh;
 
 struct SceneAnimationRef : public AnimationRef
 {
@@ -21,4 +26,9 @@ struct SceneAnimationRef : public AnimationRef
 	unsigned subobject;
 };
 typedef std::vector<SceneAnimationRef> SceneAnimationRefs;
-typedef std::map<unsigned, SceneAnimationRefs> AnimationScene;
+struct SceneAnimationInfo
+{
+	unsigned limit;
+	SceneAnimationRefs refs;
+};
+typedef std::map<unsigned, SceneAnimationInfo> AnimationScene;

@@ -37,23 +37,34 @@ struct OgreObjectsInit
 OGREEE_API void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init);
 OGREEE_API void OGREEE_CALL ogre_objects_clear(void);
 
-struct OgreNode;
+struct OgreVector3
+{
+	float x, y, z;
+};
 
-OGREEE_API void OGREEE_CALL ogre_node_get_position(struct OgreNode* node, struct VEC3D* position);
-OGREEE_API void OGREEE_CALL ogre_node_set_position(struct OgreNode* node, struct VEC3D* position);
-OGREEE_API void OGREEE_CALL ogre_node_get_orientation(struct OgreNode* node, matrix3x3 orientation);
-OGREEE_API void OGREEE_CALL ogre_node_set_orientation(struct OgreNode* node, matrix3x3 orientation);
-OGREEE_API void OGREEE_CALL ogre_node_set_orientation_angles(struct OgreNode* node, float heading, float pitch, float roll);
-OGREEE_API void OGREEE_CALL ogre_node_get_scale(struct OgreNode* node, struct VEC3D* scale);
-OGREEE_API void OGREEE_CALL ogre_node_set_scale(struct OgreNode* node, struct VEC3D* scale);
-OGREEE_API void OGREEE_CALL ogre_node_set_visible(struct OgreNode* node, int visible);
+struct OgreGameObjectSceneElement
+{
+	struct OgreVector3 relative_position;
+	float relative_heading, relative_pitch, relative_roll;
+	struct OgreVector3 relative_scale;
+	float animation;
+	union
+	{
+		unsigned flags;
+		struct
+		{
+			unsigned visible_object:1;
+		};
+	};
+};
 
 struct OgreGameObjectScene
 {
 	void* internal;
-	struct OgreNode* root;
-	unsigned number_of_nodes;
-	struct OgreNode** nodes;
+	struct OgreVector3 position;
+	matrix3x3 attitude;
+	unsigned number_of_elements;
+	struct OgreGameObjectSceneElement* elements;
 };
 
 struct OgreSubObjectsSearch
@@ -72,8 +83,8 @@ OGREEE_API unsigned OGREEE_CALL ogre_scene_get_parent(struct OgreGameObjectScene
 OGREEE_API int OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id, struct OgreSubObjectsSearch* search);
 OGREEE_API int OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent, struct OgreSubObjectsSearch* search);
 OGREEE_API float OGREEE_CALL ogre_scene_subobject_keyframe_length(struct OgreGameObjectScene* scene, unsigned subobject);
-OGREEE_API void OGREEE_CALL ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time);
 OGREEE_API void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame);
+OGREEE_API void OGREEE_CALL ogre_scene_animation_advance(struct OgreGameObjectScene* scene, unsigned animation);
 
 typedef void (*OgreTerrainFunction)(int);
 
@@ -114,7 +125,6 @@ struct OgreTerrainInit
 
 OGREEE_API void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init);
 OGREEE_API void OGREEE_CALL ogre_terrain_clear(void);
-OGREEE_API void OGREEE_CALL ogre_terrain_update(void);
 OGREEE_API void OGREEE_CALL ogre_terrain_tree(const struct OBJECT_3D* o);
 OGREEE_API void OGREEE_CALL ogre_terrain_tree_clear(void);
 OGREEE_API void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene);
@@ -127,6 +137,7 @@ struct OgreRun
 };
 
 OGREEE_API void OGREEE_CALL ogre_run(struct OgreRun* run);
+OGREEE_API void OGREEE_CALL ogre_update(void);
 
 #ifdef __cplusplus
 }

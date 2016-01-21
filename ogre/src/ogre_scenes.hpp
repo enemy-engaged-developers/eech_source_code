@@ -25,9 +25,7 @@ struct SceneDatabaseElement
 	// Linked animation
 	Ogre::NodeAnimationTrack* track;
 	// Initial position
-	Ogre::Quaternion orientation;
-	Ogre::Vector3 position;
-	Ogre::Vector3 scale;
+	struct OgreGameObjectSceneElement initial;
 };
 typedef std::vector<SceneDatabaseElement> SceneDatabaseElements;
 
@@ -41,12 +39,32 @@ struct SceneDatabase
 };
 
 
-typedef std::vector<Ogre::SceneNode*> SceneNodes;
+typedef std::pair<Ogre::SceneNode*, Ogre::Entity*> SceneNode;
+typedef std::vector<SceneNode> SceneNodes;
+
+typedef std::map<unsigned, unsigned> SceneAnimation;
 
 // Dynamic scene - a representation of a game object
 struct GameObjectScene
 {
-	const SceneDatabase* database;
+	GameObjectScene(const SceneDatabase& database)
+		: database(database), root(0)
+	{
+	}
+	~GameObjectScene()
+	{
+		assert(!root);
+	}
 
+	const SceneDatabase& database;
+
+	size_t position;
+
+	SceneAnimation animation;
+
+	Ogre::SceneNode* root;
 	SceneNodes nodes;
 };
+
+void ogre_scenes_update(void);
+void ogre_scene_place(struct OgreGameObjectScene* scene);

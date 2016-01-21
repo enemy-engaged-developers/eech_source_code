@@ -27,6 +27,29 @@ namespace
 
 	std::string animation_mesh;
 
+
+	inline Ogre::Vector3 ogre_position(const struct OgreVector3& v)
+	{
+		return Ogre::Vector3(v.x, v.y, -v.z);
+	}
+
+	Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
+	{
+		heading *= -0.5f;
+		pitch *= -0.5f;
+		roll *= 0.5f;
+		const float ch = cos(heading), sh = sin(heading);
+		const float cp = cos(pitch), sp = sin(pitch);
+		const float cr = cos(roll), sr = sin(roll);
+		const float w = ch * cp, x = ch * sp, y = sh * cp, z = sh * sp;
+		return Ogre::Quaternion(w * cr - z * sr, x * cr + y * sr, y * cr + x * sr, w * sr + z * cr);
+	}
+
+	inline Ogre::Vector3 ogre_scale(const struct OgreVector3& v)
+	{
+		return Ogre::Vector3(v.x, v.y, v.z);
+	}
+
 	// Adapter for scenes loading. Fills scenes.
 	// TODO: Add support of Special objects, LODs, Lights and (maybe) Cameras
 	class SceneComposer : public LwsExporter
@@ -110,9 +133,19 @@ namespace
 					}
 					el.track = track;
 				}
-				el.position = T::Position(keyframes);
-				el.orientation = T::Orientation(keyframes);
-				el.scale = T::Scale(keyframes);
+				struct OgreGameObjectSceneElement& se = el.initial;
+				se.relative_position.x = keyframes->x;
+				se.relative_position.y = keyframes->y;
+				se.relative_position.z = keyframes->z;
+				se.relative_heading = keyframes->heading;
+				se.relative_pitch = keyframes->pitch;
+				se.relative_roll = keyframes->roll;
+				se.relative_scale.x = keyframes->scale_x;
+				se.relative_scale.y = keyframes->scale_y;
+				se.relative_scale.z = keyframes->scale_z;
+				se.animation = 0.0f;
+				se.flags = 0;
+				se.visible_object = true;
 			}
 
 			if (!strcmp(type, "Light"))
@@ -169,6 +202,105 @@ namespace
 	}
 
 	SceneDatabase empty_database;
+
+	void place_node(Ogre::SceneNode* node, const SceneDatabaseElement& sde, const struct OgreGameObjectSceneElement& p)
+	{
+		if (!p.visible_object)
+		{
+			node->setVisible(false, true);
+			return;
+		}
+		node->setVisible(true, false);
+		if (sde.track)
+		{
+			node->resetToInitialState();
+			sde.track->applyToNode(node, p.animation);
+		}
+		else
+		{
+			node->setPosition(ogre_position(p.relative_position));
+			node->setOrientation(ogre_orientation(p.relative_heading, p.relative_pitch, p.relative_roll));
+			node->setScale(ogre_scale(p.relative_scale));
+		}
+	}
+
+	void destroy_node(Ogre::SceneNode* node)
+	{
+		assert(!node->numAttachedObjects());
+		Ogre::SceneNode* parent = node->getParentSceneNode();
+		if (parent)
+			parent->removeChild(node);
+		node->getCreator()->destroySceneNode(node);
+	}
+
+	void convert_scene(struct OgreGameObjectScene* scene, GameObjectScene& gos)
+	{
+		assert(!gos.root);
+		gos.root = ogre_scene_manager->createSceneNode(GameSceneName(scene));
+		gos.nodes.reserve(gos.database.elements.size());
+		for (SceneDatabaseElements::const_iterator itor(gos.database.elements.begin()); itor != gos.database.elements.end(); ++itor)
+		{
+			Ogre::SceneNode* node = (itor->parent == SceneDatabaseElement::no_parent ? gos.root : gos.nodes[itor->parent].first)->createChildSceneNode();
+			Ogre::Entity* ent = 0;
+			if (!itor->object.empty())
+			{
+				ent = ogre_scene_manager->createEntity(itor->object);
+				node->attachObject(ent);
+			}
+			gos.nodes.push_back(SceneNode(node, ent));
+		}
+	}
+
+	void place_scene(struct OgreGameObjectScene* scene)
+	{
+		GameObjectScene& gos(*static_cast<GameObjectScene*>(scene->internal));
+		gos.root->setPosition(ogre_position(scene->position));
+		Ogre::Matrix3 m(scene->attitude);
+		ogre_matrix_mirror(m);
+		gos.root->setOrientation(m);
+		for (unsigned i = scene->number_of_elements; i--;)
+			place_node(gos.nodes[i].first, gos.database.elements[i], scene->elements[i]);
+		for (SceneAnimation::const_iterator itor(gos.animation.begin()); itor != gos.animation.end(); ++itor)
+		{
+			AnimationScene::const_iterator it = gos.database.animation.find(itor->first);
+			assert(it != gos.database.animation.end());
+			const SceneAnimationRefs& sars = it->second.refs;
+			for (SceneAnimationRefs::const_iterator sar(sars.begin()); sar != sars.end(); ++sar)
+			{
+				Ogre::Entity* entity = gos.nodes[sar->subobject].second;
+				assert(entity);
+				Ogre::SubEntity* subentity = entity->getSubEntity(sar->submesh);
+				assert(subentity);
+				subentity->setMaterialName(MaterialAnimationName(sar->material_index, itor->second));
+			}
+		}
+	}
+
+	void destroy_scene(GameObjectScene& gos)
+	{
+		while (!gos.nodes.empty())
+		{
+			SceneNode& sn = gos.nodes.back();
+			if (sn.second)
+			{
+				sn.first->detachObject(sn.second);
+				ogre_scene_manager->destroyEntity(sn.second);
+				destroy_node(sn.first);
+			}
+			gos.nodes.pop_back();
+		}
+		SceneNodes().swap(gos.nodes);
+		if (gos.root)
+		{
+			destroy_node(gos.root);
+			gos.root = 0;
+		}
+	}
+
+	typedef std::deque<struct OgreGameObjectScene*> GameScenes;
+	GameScenes game_scenes;
+	typedef std::deque<size_t> FreeScenes;
+	FreeScenes free_scenes;
 }
 
 // Convert the scenes into internal database
@@ -198,68 +330,117 @@ void OGREEE_CALL ogre_scenes_clear(void)
 {
 	ogre_log(__FUNCTION__, "");
 
-	scenes.clear();
+	assert(game_scenes.size() == free_scenes.size());
+	FreeScenes().swap(free_scenes);
+	GameScenes().swap(game_scenes);
+
+	AllScenes().swap(scenes);
+}
+
+void ogre_scenes_update(void)
+{
+	const int vl = 10000 * 10000;
+	const int vu = 11000 * 11000;
+	unsigned total = 0;
+
+	Ogre::Vector3 pos = ogre_camera->getPosition();
+
+	for (GameScenes::iterator itor(game_scenes.begin()); itor != game_scenes.end(); ++itor)
+	{
+		if (!*itor)
+			continue;
+		struct OgreGameObjectScene* scene = *itor;
+		GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+		Ogre::Real d = (pos - ogre_position(scene->position)).squaredLength();
+		if (d < vl)
+		{
+			ogre_scene_place(scene);
+			if (!gos.root->getParentSceneNode())
+				ogre_scene_manager->getRootSceneNode()->addChild(gos.root);
+			total++;
+		}
+		else
+		{
+			if (d < vu)
+			{
+				if (gos.root)
+				{
+					Ogre::SceneNode* parent = gos.root->getParentSceneNode();
+					if (parent)
+						parent->removeChild(gos.root);
+				}
+			}
+			else
+				destroy_scene(gos);
+		}
+	}
+
+	{
+		static unsigned next;
+		unsigned cur = GetTickCount();
+		if (cur > next)
+		{
+			ogre_log(__FUNCTION__, "%u/%u", total, game_scenes.size() - free_scenes.size());
+			next = cur + 1000;
+		}
+	}
 }
 
 void OGREEE_CALL ogre_scene_init(struct OgreGameObjectScene* scene)
 {
 	scene->internal = 0;
-	scene->root = 0;
-	scene->number_of_nodes = 0;
-	scene->nodes = 0;
+	memset(&scene->position, 0, sizeof(scene->position));
+	memset(&scene->attitude, 0, sizeof(scene->attitude));
+	scene->attitude[0][0] = 1.0f;
+	scene->attitude[1][1] = 1.0f;
+	scene->attitude[2][2] = 1.0f;
+	scene->number_of_elements = 0;
+	scene->elements = 0;
 }
 
 // Place the scene as a child of the supplied SceneNode
 void OGREEE_CALL ogre_scene_create(struct OgreGameObjectScene* scene, unsigned scene_number)
 {
-	ogre_log(__FUNCTION__, "%p %04X root children %u", scene, scene_number, (unsigned)ogre_scene_manager->getRootSceneNode()->numChildren());
+	ogre_log(__FUNCTION__, "%p %04X total %u", scene, scene_number, game_scenes.size() - free_scenes.size());
 
-	std::auto_ptr<GameObjectScene> gos(new GameObjectScene);
-	Ogre::SceneNode* root = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
+	ogre_scene_init(scene);
 	SceneDatabase& sd = scene_number < scenes.size() ? scenes[scene_number] : empty_database;
-	gos->database = &sd;
-	gos->nodes.clear();
-	gos->nodes.reserve(sd.elements.size());
-	for (SceneDatabaseElements::const_iterator itor(sd.elements.begin()); itor != sd.elements.end(); ++itor)
-	{
-		Ogre::SceneNode* node = (itor->parent == SceneDatabaseElement::no_parent ? root : gos->nodes[itor->parent])->createChildSceneNode();
-		node->setPosition(itor->position);
-		node->setOrientation(itor->orientation);
-		node->setScale(itor->scale);
-		if (!itor->object.empty())
-			node->attachObject(ogre_scene_manager->createEntity(itor->object));
+	std::auto_ptr<GameObjectScene> gos(new GameObjectScene(sd));
+	scene->number_of_elements = sd.elements.size();
+	scene->elements = scene->number_of_elements ? new struct OgreGameObjectSceneElement[scene->number_of_elements] : 0;
+	for (unsigned i = 0; i < scene->number_of_elements; i++)
+		scene->elements[i] = gos->database.elements[i].initial;
 
-		gos->nodes.push_back(node);
+	if (!free_scenes.empty())
+	{
+		size_t position = free_scenes.back();
+		free_scenes.pop_back();
+		assert(!game_scenes[position]);
+		gos->position = position;
+		game_scenes[position] = scene;
 	}
-	scene->root = reinterpret_cast<OgreNode*>(root);
-	scene->number_of_nodes = gos->nodes.size();
-	scene->nodes = !gos->nodes.empty() ? reinterpret_cast<struct OgreNode**>(&gos->nodes[0]) : 0;
+	else
+	{
+		gos->position = game_scenes.size();
+		game_scenes.push_back(scene);
+	}
+
 	scene->internal = gos.release();
 }
 
 void OGREEE_CALL ogre_scene_destroy(struct OgreGameObjectScene* scene)
 {
-	ogre_log(__FUNCTION__, "%p root children %u", scene, (unsigned)ogre_scene_manager->getRootSceneNode()->numChildren());
+	ogre_log(__FUNCTION__, "%p total %u", scene, game_scenes.size() - free_scenes.size());
 
 	if (scene->internal)
 	{
-		Ogre::SceneNode* sn = reinterpret_cast<Ogre::SceneNode*>(scene->root);
-		{
-			std::auto_ptr<GameObjectScene> gos(static_cast<GameObjectScene*>(scene->internal));
-			for (SceneNodes::iterator itor(gos->nodes.begin()); itor != gos->nodes.end(); ++itor)
-				if ((*itor)->numAttachedObjects())
-				{
-					assert((*itor)->numAttachedObjects() == 1);
-					Ogre::Entity* entity = dynamic_cast<Ogre::Entity*>((*itor)->getAttachedObject(0));
-					ogre_scene_manager->destroyEntity(entity);
-				}
-		}
-		sn->removeAndDestroyAllChildren();
-		Ogre::SceneNode* parent = sn->getParentSceneNode();
-		if (parent)
-			parent->removeChild(sn);
-		sn->getCreator()->destroySceneNode(sn);
+		std::auto_ptr<GameObjectScene> gos(static_cast<GameObjectScene*>(scene->internal));
+		game_scenes[gos->position] = 0;
+		free_scenes.push_back(gos->position);
+		destroy_scene(*gos);
 	}
+	if (scene->elements)
+		delete [] scene->elements;
 	ogre_scene_init(scene);
 }
 
@@ -267,9 +448,9 @@ unsigned OGREEE_CALL ogre_scene_get_object(struct OgreGameObjectScene* scene, un
 {
 	ogre_log(__FUNCTION__, "%p %u", scene, subobject);
 
-	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
-	assert(subobject < database->elements.size());
-	const Ogre::String& name = database->elements[subobject].object;
+	const SceneDatabase& database = static_cast<const GameObjectScene*>(scene->internal)->database;
+	assert(subobject < database.elements.size());
+	const Ogre::String& name = database.elements[subobject].object;
 	//FIXME
 	if (!name.empty())
 		return strtol(name.c_str() + 7, 0, 16);
@@ -280,35 +461,35 @@ unsigned OGREEE_CALL ogre_scene_get_parent(struct OgreGameObjectScene* scene, un
 {
 	//ogre_log(__FUNCTION__, "%p %u", scene, subobject);
 
-	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
-	assert(subobject < database->elements.size());
-	return database->elements[subobject].parent;
+	const SceneDatabase& database = static_cast<const GameObjectScene*>(scene->internal)->database;
+	assert(subobject < database.elements.size());
+	return database.elements[subobject].parent;
 }
 
 int OGREEE_CALL ogre_scene_find(struct OgreGameObjectScene* scene, unsigned sub_object_id, struct OgreSubObjectsSearch* search)
 {
 	//ogre_log(__FUNCTION__, "%p %u", scene, sub_object_id);
 
-	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
-	AllSubObjects::const_iterator i = database->sub_objects.find(sub_object_id);
-	return search_convert(i != database->sub_objects.end() ? &i->second : 0, search);
+	const SceneDatabase& database = static_cast<GameObjectScene*>(scene->internal)->database;
+	AllSubObjects::const_iterator i = database.sub_objects.find(sub_object_id);
+	return search_convert(i != database.sub_objects.end() ? &i->second : 0, search);
 }
 
 int OGREEE_CALL ogre_scene_find2(struct OgreGameObjectScene* scene, unsigned sub_object_id, unsigned parent, struct OgreSubObjectsSearch* search)
 {
 	//ogre_log(__FUNCTION__, "%p %u", scene, sub_object_id);
 
-	const SceneDatabase* database = static_cast<GameObjectScene*>(scene->internal)->database;
-	ParentSubObjects::const_iterator i = database->parent_sub_objects.find(std::make_pair(sub_object_id, parent));
-	if (i != database->parent_sub_objects.end())
+	const SceneDatabase& database = static_cast<GameObjectScene*>(scene->internal)->database;
+	ParentSubObjects::const_iterator i = database.parent_sub_objects.find(std::make_pair(sub_object_id, parent));
+	if (i != database.parent_sub_objects.end())
 		return search_convert(&i->second, search);
-	SubObjects& pso = const_cast<ParentSubObjects&>(database->parent_sub_objects)[std::make_pair(sub_object_id, parent)];
-	AllSubObjects::const_iterator j = database->sub_objects.find(sub_object_id);
-	if (j != database->sub_objects.end())
+	SubObjects& pso = const_cast<ParentSubObjects&>(database.parent_sub_objects)[std::make_pair(sub_object_id, parent)];
+	AllSubObjects::const_iterator j = database.sub_objects.find(sub_object_id);
+	if (j != database.sub_objects.end())
 	{
 		const SubObjects& so = j->second;
 		for (SubObjects::const_iterator k(so.begin()); k != so.end(); ++k)
-			for (unsigned index = *k; index != SceneDatabaseElement::no_parent; index = database->elements[index].parent)
+			for (unsigned index = *k; index != SceneDatabaseElement::no_parent; index = database.elements[index].parent)
 				if (index == parent)
 				{
 					pso.push_back(*k);
@@ -322,44 +503,41 @@ float OGREEE_CALL ogre_scene_subobject_keyframe_length(struct OgreGameObjectScen
 {
 	//ogre_log(__FUNCTION__, "%p %u", scene, subobject);
 
-	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
-	assert(subobject < gos->database->elements.size());
-	Ogre::NodeAnimationTrack* track = gos->database->elements[subobject].track;
+	GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+	assert(subobject < gos.database.elements.size());
+	Ogre::NodeAnimationTrack* track = gos.database.elements[subobject].track;
 	float length = track ? track->getParent()->getLength() : 0.0f;
-	//ogre_log(__FUNCTION__, "%f", length);
 	return length;
-}
-
-void OGREEE_CALL ogre_scene_subobject_keyframe(struct OgreGameObjectScene* scene, unsigned subobject, float time)
-{
-	//ogre_log(__FUNCTION__, "%p %u %f", scene, subobject, time);
-
-	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
-	assert(subobject < gos->database->elements.size());
-	Ogre::NodeAnimationTrack* track = gos->database->elements[subobject].track;
-	if (track)
-	{
-		Ogre::SceneNode* sn = gos->nodes[subobject];
-		sn->resetToInitialState();
-		track->applyToNode(sn, time);
-	}
 }
 
 void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame)
 {
 	//ogre_log(__FUNCTION__, "%p %u %u", scene, animation, frame);
 
-	GameObjectScene* gos = static_cast<GameObjectScene*>(scene->internal);
-	AnimationScene::const_iterator itor = gos->database->animation.find(animation);
-	if (itor == gos->database->animation.end())
+	GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+	AnimationScene::const_iterator it = gos.database.animation.find(animation);
+	if (it == gos.database.animation.end())
 		return;
-	const SceneAnimationRefs& sars = itor->second;
-	for (SceneAnimationRefs::const_iterator sar(sars.begin()); sar != sars.end(); ++sar)
-	{
-		Ogre::Entity* entity = dynamic_cast<Ogre::Entity*>(gos->nodes[sar->subobject]->getAttachedObject(0));
-		assert(entity);
-		Ogre::SubEntity* subentity = entity->getSubEntity(sar->submesh);
-		assert(subentity);
-		subentity->setMaterialName(MaterialAnimationName(sar->material_index, frame));
-	}
+	gos.animation[animation] = frame;
+}
+
+void OGREEE_CALL ogre_scene_animation_advance(struct OgreGameObjectScene* scene, unsigned animation)
+{
+	//ogre_log(__FUNCTION__, "%p %u", scene, animation);
+
+	GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+	AnimationScene::const_iterator it = gos.database.animation.find(animation);
+	if (it == gos.database.animation.end())
+		return;
+	unsigned& frame = gos.animation[animation];
+	if (++frame >= it->second.limit)
+		frame = 0;
+}
+
+void ogre_scene_place(struct OgreGameObjectScene* scene)
+{
+	GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
+	if (!gos.root)
+		convert_scene(scene, gos);
+	place_scene(scene);
 }

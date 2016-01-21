@@ -13,7 +13,7 @@ namespace
 #ifdef OGRE_TIMES
 	public:
 		Application(void)
-			: count(0), last(GetTickCount()), ogre(0), user(0)
+			: count(0), last(GetTickCount()), ogre(0), user(0), ogreee(0)
 		{
 		}
 #endif
@@ -69,6 +69,7 @@ namespace
 			BaseApplication::createFrameListener();
 			ogre_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "Ogre", "", 200);
 			user_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "User", "", 200);
+			ogreee_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "OgreEE", "", 200);
 		}
 #endif
 		virtual void destroyScene(void)
@@ -94,15 +95,25 @@ namespace
 			cur = GetTickCount();
 			user += cur - last;
 			last = cur;
+#endif
+
+			ogre_update();
+
+#ifdef OGRE_TIMES
+			cur = GetTickCount();
+			ogreee += cur - last;
+			last = cur;
 			count++;
-			if (ogre + user >= 1000)
+			if (ogre + user + ogreee >= 1000)
 			{
 				char buf[64];
 				sprintf(buf, "Ogre: %lu", ogre * 1000 / count);
 				ogre_label->setCaption(buf);
 				sprintf(buf, "User: %lu", user * 1000 / count);
 				user_label->setCaption(buf);
-				count = ogre = user = 0;
+				sprintf(buf, "OgreEE: %lu", ogreee * 1000 / count);
+				ogreee_label->setCaption(buf);
+				count = ogre = user = ogreee = 0;
 			}
 #endif
 
@@ -110,9 +121,10 @@ namespace
 		}
 
 #ifdef OGRE_TIMES
-		ULONG count, last, ogre, user;
+		ULONG count, last, ogre, user, ogreee;
 		OgreBites::Label* ogre_label;
 		OgreBites::Label* user_label;
+		OgreBites::Label* ogreee_label;
 #endif
 	};
 }
@@ -131,4 +143,10 @@ void OGREEE_CALL ogre_run(struct OgreRun* run)
 	{
 		MessageBoxA(NULL, e.getFullDescription().c_str(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	}
+}
+
+void OGREEE_CALL ogre_update(void)
+{
+	ogre_scenes_update();
+	ogre_terrain_update();
 }
