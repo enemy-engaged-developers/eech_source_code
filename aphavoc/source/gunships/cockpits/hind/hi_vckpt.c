@@ -447,7 +447,7 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
-	get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+	get_3d_sub_object_world_viewpoint (&search, &vp);
 
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &main_vp.position);
 

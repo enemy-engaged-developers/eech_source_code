@@ -315,3 +315,22 @@ void walk_memory_heap ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OGRE_EE
+#include <psapi.h>
+#pragma library("psapi.lib")
+
+void report_process_memory ( const char *where )
+{
+	HANDLE
+		hProc;
+
+	PROCESS_MEMORY_COUNTERS
+		pmcInfo;
+
+	hProc = OpenProcess ( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, GetCurrentProcessId () );
+	GetProcessMemoryInfo ( hProc, &pmcInfo, sizeof ( pmcInfo ) );
+	CloseHandle ( hProc );
+
+	debug_log ( "PROCESS WORKING SET %u %s", ( unsigned ) pmcInfo.WorkingSetSize, where );
+}
+#endif

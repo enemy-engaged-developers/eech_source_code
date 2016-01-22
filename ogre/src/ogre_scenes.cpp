@@ -339,8 +339,6 @@ void OGREEE_CALL ogre_scenes_clear(void)
 
 void ogre_scenes_update(void)
 {
-	const int vl = 10000 * 10000;
-	const int vu = 11000 * 11000;
 	unsigned total = 0;
 
 	Ogre::Vector3 pos = ogre_camera->getPosition();
@@ -352,7 +350,7 @@ void ogre_scenes_update(void)
 		struct OgreGameObjectScene* scene = *itor;
 		GameObjectScene& gos = *static_cast<GameObjectScene*>(scene->internal);
 		Ogre::Real d = (pos - ogre_position(scene->position)).squaredLength();
-		if (d < vl)
+		if (d < SCENES_VISIBILITY_LOW * SCENES_VISIBILITY_LOW)
 		{
 			ogre_scene_place(scene);
 			if (!gos.root->getParentSceneNode())
@@ -361,7 +359,7 @@ void ogre_scenes_update(void)
 		}
 		else
 		{
-			if (d < vu)
+			if (d < SCENES_VISIBILITY_HIGH * SCENES_VISIBILITY_HIGH)
 			{
 				if (gos.root)
 				{

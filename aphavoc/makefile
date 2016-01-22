@@ -406,7 +406,7 @@ cc_args += /dINSTALL_FROM_CDROM
 !endif
 
 !ifdef ogre
-cc_args += /dOGRE_EE
+cc_args += /dOGRE_EE /I=$(rootdir)\ogre\include
 !endif
 
 #################################################################################################################################

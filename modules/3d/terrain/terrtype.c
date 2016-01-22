@@ -116,7 +116,9 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 											float xz_texture_scale2, float y_texture_scale2,
 											int red, int green, int blue, surface_types surface_type );
 
+#ifndef OGRE_EE
 void set_terrain_textures ( terrain_types type,  int texture, int texture2 );
+#endif
 
 static void initialise_3d_thailand_terrain_types ( void );
 
@@ -986,6 +988,7 @@ void initialise_3d_custom_terrain_types( void )
    	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 2.0, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
    	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 2.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
 
+#ifndef OGRE_EE
 		if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME ) )
 		{
 			if (index == terrain_texture_builtup_area1_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1_infrared );
@@ -994,6 +997,7 @@ void initialise_3d_custom_terrain_types( void )
 			if (index == terrain_texture_builtup_area4_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4_infrared );
 		}
 		else
+#endif
 		{
 			if (index == terrain_texture_builtup_area1_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1 );
 			if (index == terrain_texture_builtup_area2_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2 );
@@ -1119,6 +1123,7 @@ void initialise_3d_terrain_types ( void )
    set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8.0, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_road );
    set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8.0, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_track );
 
+#ifndef OGRE_EE
 	if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED || active_3d_environment->render_filter == RENDER_MONOCHROME ) )
 	{
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1_infrared );
@@ -1127,6 +1132,7 @@ void initialise_3d_terrain_types ( void )
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area4_infrared );
 	}
 	else
+#endif
 	{
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1 );
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2 );
@@ -2235,17 +2241,19 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 	if ( xz_texture_size2 == 0.0 )	xz_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( y_texture_size2 == 0.0 )		y_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
 
-#ifdef OGRE_EE
+#ifndef OGRE_EE
+	terrain_type_information[type].texture = system_textures[texture];
+#else
 	terrain_type_information[type].texture_index = texture;
 #endif
-	terrain_type_information[type].texture = system_textures[texture];
 	terrain_type_information[type].xz_texture_scale = ( TERRAIN_3D_XZ_SCALE / xz_texture_size );
 	terrain_type_information[type].y_texture_scale =  1.0 / y_texture_size;
 
-#ifdef OGRE_EE
+#ifndef OGRE_EE
+	terrain_type_information[type].texture2 = system_textures[texture2];
+#else
 	terrain_type_information[type].texture2_index = texture2;
 #endif
-	terrain_type_information[type].texture2 = system_textures[texture2];
 	terrain_type_information[type].xz_texture_scale2 = ( noisemap_scale_adjustment * TERRAIN_3D_XZ_SCALE / (xz_texture_size2));
 	terrain_type_information[type].y_texture_scale2 = 1.0 / y_texture_size2;
 
@@ -2261,6 +2269,7 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void set_terrain_textures ( terrain_types type,  int texture, int texture2 )
 {
 
@@ -2273,6 +2282,7 @@ void set_terrain_textures ( terrain_types type,  int texture, int texture2 )
 #endif
 	terrain_type_information[type].texture2 = system_textures[texture2];
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2408,6 +2418,7 @@ static struct {
 	float gamma_correction;
 } textures_with_noisemap[64];
 
+#ifndef OGRE_EE
 float texture_gamma_correction(int texture_index)
 {
 	unsigned i;
@@ -2420,6 +2431,7 @@ float texture_gamma_correction(int texture_index)
 
 	return 1.0;
 }
+#endif
 
 void initialise_noisemaps(void)
 {

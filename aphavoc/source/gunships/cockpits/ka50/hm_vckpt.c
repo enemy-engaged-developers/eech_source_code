@@ -891,7 +891,7 @@ void get_ka50_crew_viewpoint (void)
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
-		get_3d_sub_object_world_viewpoint (search_viewpoint.result_sub_object, &vp);
+		get_3d_sub_object_world_viewpoint (&search_viewpoint, &vp);
 
 		get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
 
@@ -1019,7 +1019,7 @@ void get_ka50_display_viewpoint (view_modes mode)
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		get_3d_sub_object_world_viewpoint (search.result_sub_object, &main_vp);
+		get_3d_sub_object_world_viewpoint (&search, &main_vp);
 	}
 	else
 	{

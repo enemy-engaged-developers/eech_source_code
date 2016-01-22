@@ -25,6 +25,10 @@
 #define USE_OBJECTS_TEXTURES
 #endif
 
+// Scenes options
+#define SCENES_VISIBILITY_LOW 10000
+#define SCENES_VISIBILITY_HIGH 11000
+
 // Terrain options
 #ifdef USE_NORMALS
 // Use per-vertex normals for terrain or not
@@ -35,11 +39,14 @@
 // Use any textures (and UV mapping) for terrain or not
 #define USE_TERRAIN_TEXTURES
 #endif
+#ifdef USE_TERRAIN_TEXTURES
+//#define USE_TERRAIN_SINGLE_TEXTURE
+#endif
 // Use per-vertex terrain colours or per-surface ones (TODO: Looks like it's not used in the game)
 //#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
-#define USE_TERRAIN_VISIBILITY 10
-//#define USE_TERRAIN_GROUP
+#define USE_TERRAIN_VISIBILITY 5
+#define USE_TERRAIN_GROUP 5
 
 
 #ifndef M_PI
@@ -119,6 +126,7 @@ DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
 DEFINE_NAME(GameSceneName, struct OgreGameObjectScene* scene, "SCENE_%p", scene);
+DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u", index);
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
 DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER", 0);

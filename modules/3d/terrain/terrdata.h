@@ -114,7 +114,7 @@ typedef struct TERRAIN_3D_POINT_XZ terrain_3d_point_xz;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 struct TERRAIN_3D_POINT_Y
 {
@@ -181,7 +181,7 @@ struct TERRAIN_3D_NORMAL_INDEX
 
 typedef struct TERRAIN_3D_NORMAL_INDEX terrain_3d_normal_index;
 
-#pragma pack(4)
+#pragma pack(pop)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +295,7 @@ struct TERRAIN_3D_SECTOR
 	struct TERRAIN_3D_NORMAL_INDEX
 		*normal_changes;
 
+#ifndef OGRE_EE
 	struct TERRAIN_3D_COLOUR
 		*point_colours;
 
@@ -314,6 +315,7 @@ struct TERRAIN_3D_SECTOR
 
 	struct TERRAIN_3D_OBJECT
 		*objects;
+#endif
 };
 
 typedef struct TERRAIN_3D_SECTOR terrain_3d_sector;
@@ -522,6 +524,7 @@ extern float
 	terrain_3d_max_map_x,
 	terrain_3d_max_map_z;
 
+#ifndef OGRE_EE
 //
 // A conversion table for int -> float for the gouraud colour polygons in the terrain.
 //
@@ -535,17 +538,20 @@ extern float
 	terrain_3d_alpha_distance,
 	terrain_3d_alpha_constant,
 	terrain_3d_alpha_factor;
+#endif
 
 extern float
 	terrain_3d_map_minimum_height,
 	terrain_3d_map_maximum_height,
 	terrain_3d_map_scaled_height_difference;
 
+#ifndef OGRE_EE
 extern struct OBJECT_3D_INSTANCE
 	*terrain_3d_tree_object;
 
 extern int
 	terrain_3d_tree_rendering_enabled;
+#endif
 
 extern int
 	terrain_types_in_sector[TERRAIN_TYPE_LAST];
@@ -553,6 +559,7 @@ extern int
 extern terrain_3d_file_validation
 	current_terrain_version;
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -574,32 +581,41 @@ extern real_colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 extern void initialise_3d_terrain ( void );
 
+#ifndef OGRE_EE
 extern void set_3d_terrain_detail_blend_parameters ( float fog_factor );
 
 extern void set_3d_terrain_detail_blend_factors ( void );
+#endif
 
 extern int load_3d_terrain ( const char *path );
 
 extern void unload_3d_terrain ( void );
 
+#ifndef OGRE_EE
 extern void save_3d_object_as_terrain_sector ( int object );
 
 extern void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename );
+#endif
 
 extern void get_terrain_3d_sector ( float x, float z, int *sectorx, int *sectorz );
 
+#ifndef OGRE_EE
 extern int position_on_3d_terrain ( float x, float z );
 
 extern void animate_river_textures ( void );
 
 extern float get_terrain_3d_point_sector_min_elevation ( float x, float z );
+#endif
 
 extern float get_terrain_3d_point_sector_max_elevation ( float x, float z );
 
+#ifndef OGRE_EE
 extern float get_terrain_3d_point_sector_average_elevation ( float x, float z );
+#endif
 
 extern int get_terrain_3d_tree_sector_data ( int x, int z, terrain_3d_tree_data **ptr );
 
@@ -611,9 +627,10 @@ extern int get_terrain_3d_number_of_type_triangles_in_sector ( float x, float z,
 
 extern void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types type, terrain_3d_triangle *triangles );
 
+#ifndef OGRE_EE
 extern void set_terrain_3d_cloud_puffs_colours ( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#endif

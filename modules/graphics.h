@@ -247,10 +247,14 @@
 
 #pragma pack (8)
 
+#ifndef OGRE_EE
 #ifdef DEBUG
 #define D3D_DEBUG_INFO
 #endif
 #include <d3d9.h>
+#else
+#include <ogreee.h>
+#endif
 
 #pragma pack (4)
 

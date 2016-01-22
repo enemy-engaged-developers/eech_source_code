@@ -215,6 +215,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	// Copy the point data into each node.
 	//
 
+	// FIXME
 	object = &objects_3d_data[object_index];
 
 	number_of_waypoint_nodes = object->number_of_points;

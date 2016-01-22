@@ -111,6 +111,7 @@ int
 	terrain_3d_tree_map_height,
 	terrain_3d_number_of_sector_approximations;
 
+#ifndef OGRE_EE
 object_3d_instance
 	*terrain_3d_tree_object = NULL;
 
@@ -128,18 +129,22 @@ float
 	terrain_3d_alpha_distance,
 	terrain_3d_alpha_constant,
 	terrain_3d_alpha_factor;
+#endif
 
 float
 	terrain_3d_map_minimum_height,
 	terrain_3d_map_maximum_height,
 	terrain_3d_map_scaled_height_difference;
 
+#ifndef OGRE_EE
 float
 	terrain_colour_conversion_table[256];
+#endif
 
 terrain_3d_file_validation
 	current_terrain_version;
 
+#ifndef OGRE_EE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +174,7 @@ void initialise_3d_terrain_colour_conversion_table ( void );
 
 terrain_3d_colour
 	white_col[4048];
+#endif
 
 int load_3d_terrain ( const char *path )
 {
@@ -196,7 +202,9 @@ int load_3d_terrain ( const char *path )
 	terrain_3d_sector
 		*terrain_sector_ptr;
 
+#ifndef OGRE_EE
 	memset(white_col, 255, sizeof(white_col));
+#endif
 
 	ASSERT ( !terrain_initialised );
 
@@ -510,11 +518,15 @@ int load_3d_terrain ( const char *path )
 			//
 			offset = get_list_item ( terrain_3d_local_data, int );
 
+#ifndef OGRE_EE
 			terrain_sectors[z][x].colour_indices = ( terrain_3d_colour_index * ) ( terrain_3d_colour_data + offset );
+#endif
 
 			offset = get_list_item ( terrain_3d_local_data, int );
 
+#ifndef OGRE_EE
 			terrain_sectors[z][x].point_colours = ( terrain_3d_colour * ) ( terrain_3d_colour_data + offset );
+#endif
 
   // Craig start Feb. 2009
 			////////////////////////////////////////////////////////////////////////////////////////
@@ -526,6 +538,7 @@ int load_3d_terrain ( const char *path )
 			// mapinfo.txt files  -  Craig
 			////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 			if (command_line_texture_colour && !current_map_info.gouraud_shading)
 			{
 				// the colour is mixed with the textures' colours.
@@ -536,6 +549,7 @@ int load_3d_terrain ( const char *path )
 				if (terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col))
 					terrain_sectors[z][x].point_colours = white_col;
 			}
+#endif
 
 // Craig end
 			//
@@ -650,11 +664,15 @@ int load_3d_terrain ( const char *path )
 
 				offset = get_list_item ( terrain_3d_local_data, int );
 
+#ifndef OGRE_EE
 				terrain_sector_approximations[count].colour_indices = ( terrain_3d_colour_index * ) ( terrain_3d_colour_data + offset );
+#endif
 
 				offset = get_list_item ( terrain_3d_local_data, int );
 
+#ifndef OGRE_EE
 				terrain_sector_approximations[count].point_colours = ( terrain_3d_colour * ) ( terrain_3d_colour_data + offset );
+#endif
 			}
 		}
 	}
@@ -669,11 +687,13 @@ int load_3d_terrain ( const char *path )
 
 	initialise_3d_terrain_elevation ();
 
+#ifndef OGRE_EE
 	//
 	// Initialise the objects in the terrain
 	//
 
 	initialise_terrain_objects ();
+#endif
 
 	terrain_initialised = TRUE;
 
@@ -751,6 +771,7 @@ int load_3d_terrain ( const char *path )
 
 					debug_log ( "READ IN THE TREE DATA" );
 
+#ifndef OGRE_EE
 					//
 					// Construct a 3d object instance for the rendering of the terrain trees
 					//
@@ -783,6 +804,7 @@ int load_3d_terrain ( const char *path )
 							break;
 						}
 					}
+#endif
 
 					mclose ( terrain_3d_sector_data );
 				}
@@ -799,6 +821,7 @@ int load_3d_terrain ( const char *path )
 		debug_log ( "Cant find the terrain tree data" );
 	}
 
+#ifndef OGRE_EE
 	// Casm 20MAY12 Cloud puffs
 	terrain_3d_cloud_puff_object = construct_3d_object_by_name ( "CLOUD" );
 
@@ -875,6 +898,7 @@ int load_3d_terrain ( const char *path )
 		terrain_cloud_puff_sectors = NULL;
 		terrain_3d_cloud_puff_colours = NULL;
 	}
+#endif
 
 	return ( TRUE );
 }
@@ -886,6 +910,7 @@ int load_3d_terrain ( const char *path )
 
 void unload_3d_terrain ( void )
 {
+#ifndef OGRE_EE
 
 	int
 		x,
@@ -920,6 +945,7 @@ void unload_3d_terrain ( void )
 
 		}
 	}
+#endif
 
 	//
 	// Now free up the memory
@@ -981,6 +1007,7 @@ void unload_3d_terrain ( void )
 		terrain_tree_sectors = NULL;
 	}
 
+#ifndef OGRE_EE
 	if ( terrain_3d_tree_object )
 	{
 
@@ -988,6 +1015,7 @@ void unload_3d_terrain ( void )
 
 		terrain_3d_tree_object = NULL;
 	}
+#endif
 
 	if ( terrain_3d_trees_data )
 	{
@@ -999,6 +1027,7 @@ void unload_3d_terrain ( void )
 
 	terrain_initialised = FALSE;
 
+#ifndef OGRE_EE
 	//
 	// Unload the simple elevation map as well
 	//
@@ -1047,8 +1076,10 @@ void unload_3d_terrain ( void )
 
 		terrain_3d_cloud_puff_colours = NULL;
 	}
+#endif
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1080,10 +1111,12 @@ void set_3d_terrain_detail_blend_factors ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 void initialise_3d_terrain ( void )
 {
 
+#ifndef OGRE_EE
 	debug_colour_watch ( DEBUG_COLOUR_BLUE, "Points in terrain: %d", MT_INT, &final_total_number_of_terrain_points );
 
 	debug_colour_watch ( DEBUG_COLOUR_BLUE, "Points transformed: %d", MT_INT, &final_total_number_of_terrain_points_transformed );
@@ -1109,9 +1142,11 @@ void initialise_3d_terrain ( void )
 	debug_colour_watch ( DEBUG_COLOUR_BLUE, "Sectors complex culled: %d", MT_INT, &final_terrain_3d_sectors_complex_culled );
 
 	initialise_3d_terrain_colour_conversion_table ();
+#endif
 
 	initialise_3d_terrain_types ();
 
+#ifndef OGRE_EE
 	initialise_3d_terrain_normals ();
 
 	//
@@ -1147,10 +1182,12 @@ void initialise_3d_terrain ( void )
 	//
 	// Set the terrain initialised flag to FALSE - as no terrain is loaded.
 	//
+#endif
 
 	terrain_initialised = FALSE;
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1494,6 +1531,7 @@ void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 void get_terrain_3d_sector ( float x, float z, int *sectorx, int *sectorz )
 {
@@ -1505,6 +1543,7 @@ void get_terrain_3d_sector ( float x, float z, int *sectorx, int *sectorz )
 	convert_float_to_int ( ( z / TERRAIN_3D_SECTOR_SIDE_LENGTH ), sectorz );
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1612,6 +1651,7 @@ float get_terrain_3d_point_sector_min_elevation ( float x, float z )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 float get_terrain_3d_point_sector_max_elevation ( float x, float z )
 {
@@ -1633,6 +1673,7 @@ float get_terrain_3d_point_sector_max_elevation ( float x, float z )
 	return ( ( float ) terrain_sectors[sector_z][sector_x].maximum_height );
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1660,6 +1701,7 @@ float get_terrain_3d_point_sector_average_elevation ( float x, float z )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 int get_terrain_3d_tree_sector_data ( int x, int z, terrain_3d_tree_data **ptr )
 {
@@ -2188,6 +2230,7 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 }
 
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2211,3 +2254,4 @@ void set_terrain_3d_cloud_puffs_colours ( void )
 		terrain_3d_cloud_puff_colours[count].alpha = 255;
 	}
 }
+#endif

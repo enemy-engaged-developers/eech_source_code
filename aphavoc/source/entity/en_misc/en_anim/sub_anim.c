@@ -104,6 +104,7 @@ int object_contains_sub_object_type( object_3d_instance *inst3d, object_3d_sub_o
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 int sub_object_contains_sub_object_type( object_3d_sub_object_search_data *parent_search, object_3d_sub_object_index_numbers sub_object_type, int depth, object_3d_sub_object_search_data *search_result)
 {
 	object_3d_sub_object_search_data
@@ -128,6 +129,7 @@ int sub_object_contains_sub_object_type( object_3d_sub_object_search_data *paren
 		return FALSE;
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,25 +174,26 @@ int get_sub_object_relative_position( object_3d_instance *inst3d, object_3d_sub_
 	viewpoint
 		rel_vp;
 
+
 	search.search_object = inst3d;
 	search.search_depth = depth;
 	search.sub_object_index = sub_object_type;
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		get_3d_sub_object_world_viewpoint (search.result_sub_object, &rel_vp);
+		get_3d_sub_object_world_viewpoint (&search, &rel_vp);
 
 //		relative_position->x = search.object->relative_position.x;
 //		relative_position->y = search.object->relative_position.y;
 //		relative_position->z = search.object->relative_position.z;
 
-		relative_position->x = rel_vp.x - inst3d->vp.x;
-		relative_position->y = rel_vp.y - inst3d->vp.y;
-		relative_position->z = rel_vp.z - inst3d->vp.z;
+		relative_position->x = rel_vp.x - inst3d->vp.position.x;
+		relative_position->y = rel_vp.y - inst3d->vp.position.y;
+		relative_position->z = rel_vp.z - inst3d->vp.position.z;
 
 		if ( search_result )
 		{
-			memcpy( search_result, &search, sizeof( object_3d_sub_object_search_data ) );
+			*search_result = search;
 		}
 
 		return TRUE;
@@ -405,6 +408,7 @@ int activate_and_modify_sub_object_type_heading_pitch_and_roll( object_3d_instan
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 int interpolate_sub_object_type_heading_pitch_and_roll( object_3d_instance *inst3d, object_3d_sub_object_index_numbers sub_object_type, float scale_value )
 {
 	object_3d_sub_object_search_data
@@ -470,19 +474,8 @@ int interpolate_sub_object_type_heading_pitch_and_roll( object_3d_instance *inst
 
 	return found_flag;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-

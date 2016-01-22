@@ -154,12 +154,17 @@ namespace
 			for (unsigned z = 0; z < ogre_terrain.sector_z_max; z++)
 				for (unsigned x = 0; x < ogre_terrain.sector_x_max; x++)
 					destroy_sector(x, z);
+			for (terrain_types i = TERRAIN_TYPE_INVALID + 1; i != TERRAIN_TYPE_LAST; i++)
+			{
+				TerrainMaterialName material_name(i);
+				Ogre::MaterialManager::getSingleton().unload(material_name);
+				Ogre::MaterialManager::getSingleton().remove(material_name);
+			}
 		}
 
 		// Convert materials
 		void convert_types(void)
 		{
-			unsigned material = ogre_index();
 			for (terrain_types i = TERRAIN_TYPE_INVALID + 1; i != TERRAIN_TYPE_LAST; i++)
 			{
 				SurfDesc& sd = sda[i];
@@ -169,12 +174,12 @@ namespace
 						void (*func)(int);
 						SurfCaps caps;
 					};
-#ifdef USE_TERRAIN_TEXTURES
+#if defined(USE_TERRAIN_TEXTURES) && !defined(USE_TERRAIN_SINGLE_TEXTURE)
 #define TTRUE true
 #else
 #define TTRUE false
 #endif
-#ifdef USE_TERRAIN_VERTEX_COLOURS
+#if defined(USE_TERRAIN_VERTEX_COLOURS) && !defined(USE_TERRAIN_SINGLE_TEXTURE)
 #define VTRUE true
 #else
 #define VTRUE false
@@ -227,12 +232,14 @@ namespace
 
 				// TODO: Improve materials support
 
-				Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(MaterialName(ogre_index()), ogre_resource_group);
+				Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(TerrainMaterialName(i), ogre_resource_group);
 				mat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 				Ogre::Pass* pass = mat->getTechnique(0)->getPass(0);
 
+#ifndef USE_TERRAIN_SINGLE_TEXTURE
 				sd.colour = Ogre::ColourValue(ogre_terrain.type_information[i].red / 255.0f, ogre_terrain.type_information[i].green / 255.0f, ogre_terrain.type_information[i].blue / 255.0f, ogre_terrain.type_information[i].transparent / 255.0f);
+#endif
 				Ogre::TextureUnitState* tus = pass->createTextureUnitState();
 #ifdef USE_TERRAIN_TEXTURES
 				tus->setTextureName(TextureName(ogre_terrain.type_information[i].texture_index));
@@ -257,7 +264,9 @@ namespace
 					else
 					{
 #ifdef USE_TERRAIN_TEXTURES
+#ifndef USE_TERRAIN_SINGLE_TEXTURE
 						tus->setColourOperationEx(Ogre::LBX_MODULATE, Ogre::LBS_MANUAL, Ogre::LBS_TEXTURE, sd.colour);
+#endif
 #else
 						tus->setColourOperationEx(Ogre::LBX_SOURCE1, Ogre::LBS_MANUAL, Ogre::LBS_CURRENT, sd.colour);
 #endif
@@ -463,7 +472,9 @@ namespace
 		{
 			const SurfCaps* caps;
 			VertexDescription vd;
+#ifndef USE_TERRAIN_SINGLE_TEXTURE
 			Ogre::ColourValue colour;
+#endif
 			Ogre::MaterialPtr material;
 		};
 
@@ -557,12 +568,11 @@ namespace
 		}
 		~TerrainCache()
 		{
-#ifdef USE_TERRAIN_GROUP
 			terrain_clear();
+#ifdef USE_TERRAIN_GROUP
 			while (groups)
 				destroy_group(groups);
 #else
-			terrain_clear();
 			for (unsigned z = 0; z < ogre_terrain.sector_z_max; z++)
 				for (unsigned x = 0; x < ogre_terrain.sector_x_max; x++)
 					terrain_converter->destroy_sector(x, z);
@@ -570,8 +580,6 @@ namespace
 		}
 		void update(void)
 		{
-			const int v = USE_TERRAIN_VISIBILITY;
-
 			Ogre::Vector3 pos = ogre_camera->getPosition();
 			pos.z = -pos.z;
 			int x_sector = (int)floor(pos.x / TERRAIN_3D_SECTOR_SIDE_LENGTH);
@@ -583,7 +591,7 @@ namespace
 
 #ifdef USE_TERRAIN_TREES
 			for (Trees::iterator itor(trees.begin()); itor != trees.end();)
-				if (abs(cur_x - (int)itor->first.first) > v + 1 || abs(cur_z - (int)itor->first.second) > v)
+				if (abs(cur_x - (int)itor->first.first) > USE_TERRAIN_VISIBILITY || abs(cur_z - (int)itor->first.second) > USE_TERRAIN_VISIBILITY)
 					itor = trees.erase(itor);
 				else
 					++itor;
@@ -594,20 +602,20 @@ namespace
 
 			terrain_clear();
 #ifdef USE_TERRAIN_GROUP
-			int g = (v - 1) / GROUP + 1;
-			int xg = cur_x / GROUP, zg = cur_z / GROUP;
+			int g = (USE_TERRAIN_VISIBILITY - 1) / USE_TERRAIN_GROUP + 1;
+			int xg = cur_x / USE_TERRAIN_GROUP, zg = cur_z / USE_TERRAIN_GROUP;
 			for (Group** group = &groups; *group;)
 				if (abs(xg - (int)(*group)->x) > g + 1 || abs(zg - (int)(*group)->z) > g + 1)
 					destroy_group(*group);
 				else
 					group = &(*group)->next;
-			for (int z = std::max(zg - g, 0); z <= std::min(zg + g, (int)ogre_terrain.sector_z_max / GROUP); z++)
-				for (int x = std::max(xg - g, 0); x <= std::min(xg + g, (int)ogre_terrain.sector_x_max / GROUP); x++)
+			for (int z = std::max(zg - g, 0); z <= std::min(zg + g, (int)ogre_terrain.sector_z_max / USE_TERRAIN_GROUP); z++)
+				for (int x = std::max(xg - g, 0); x <= std::min(xg + g, (int)ogre_terrain.sector_x_max / USE_TERRAIN_GROUP); x++)
 					convert_group(x, z);
 #endif
 			terrain = ogre_scene_manager->getRootSceneNode()->createChildSceneNode();
-			for (int z = std::max(0, cur_z - v); z <= std::min((int)ogre_terrain.sector_z_max - 1, cur_z + v); z++)
-				for (int x = std::max(0, cur_x - v); x <= std::min((int)ogre_terrain.sector_x_max - 1, cur_x + v); x++)
+			for (int z = std::max(0, cur_z - USE_TERRAIN_VISIBILITY); z <= std::min((int)ogre_terrain.sector_z_max - 1, cur_z + USE_TERRAIN_VISIBILITY); z++)
+				for (int x = std::max(0, cur_x - USE_TERRAIN_VISIBILITY); x <= std::min((int)ogre_terrain.sector_x_max - 1, cur_x + USE_TERRAIN_VISIBILITY); x++)
 				{
 #if 1
 					Ogre::SceneNode* sector = terrain->createChildSceneNode();
@@ -658,7 +666,6 @@ namespace
 		}
 	private:
 #ifdef USE_TERRAIN_GROUP
-		static const int GROUP = 20;
 		struct Group : private Uncopyable
 		{
 			Group(unsigned x, unsigned z)
@@ -678,16 +685,16 @@ namespace
 			groups = group;
 
 			Geometry* geometry = &group->geometry;
-			for (unsigned z = zg * GROUP; z < std::min((zg + 1) * GROUP, ogre_terrain.sector_z_max); z++)
-				for (unsigned x = xg * GROUP; x < std::min((xg + 1) * GROUP, ogre_terrain.sector_x_max); x++)
+			for (unsigned z = zg * USE_TERRAIN_GROUP; z < std::min((zg + 1) * USE_TERRAIN_GROUP, ogre_terrain.sector_z_max); z++)
+				for (unsigned x = xg * USE_TERRAIN_GROUP; x < std::min((xg + 1) * USE_TERRAIN_GROUP, ogre_terrain.sector_x_max); x++)
 					terrain_converter->convert_sector(x, z, geometry);
 			geometry->flush();
 		}
 		void destroy_group(Group*& group)
 		{
 			unsigned xg = group->x, zg = group->z;
-			for (unsigned z = zg * GROUP; z < std::min((zg + 1) * GROUP, ogre_terrain.sector_z_max); z++)
-				for (unsigned x = xg * GROUP; x < std::min((xg + 1) * GROUP, ogre_terrain.sector_x_max); x++)
+			for (unsigned z = zg * USE_TERRAIN_GROUP; z < std::min((zg + 1) * USE_TERRAIN_GROUP, ogre_terrain.sector_z_max); z++)
+				for (unsigned x = xg * USE_TERRAIN_GROUP; x < std::min((xg + 1) * USE_TERRAIN_GROUP, ogre_terrain.sector_x_max); x++)
 					terrain_converter->destroy_sector(x, z);
 			Group* g = group;
 			group = group->next;

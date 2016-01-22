@@ -70,14 +70,17 @@ extern void initialise_scene_visible_sub_objects ( int scene_index );
 
 extern void initialise_scene_bounding_sub_objects ( int scene_index );
 
+#ifndef OGRE_EE
 extern void reset_sub_object_search_statistics ( void );
 
 extern void report_sub_object_search_statistics ( void );
+#endif
 
 extern enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search );
 
 extern enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *parent_search, struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search );
 
+#ifndef OGRE_EE
 // Returns the pointer to a named sub instance of an object, or gives a fatal warning if it doesn't exist
 extern object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id);
 
@@ -87,4 +90,4 @@ extern int find_object_3d_sub_objects (object_3d_instance *search_object, const 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#endif

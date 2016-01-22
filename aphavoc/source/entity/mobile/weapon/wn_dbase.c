@@ -6702,7 +6702,7 @@ void initialise_target_point_offsets (void)
 
 		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
-			get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+			get_3d_sub_object_world_viewpoint (&search, &vp);
 
 			target_point_offsets[object_3d_index] = vp.position;
 		}

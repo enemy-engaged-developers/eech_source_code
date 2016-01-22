@@ -2120,7 +2120,7 @@ entity *create_troop_movement_patrol_task (entity_sides side, vec3d *start_pos, 
 				get_local_entity_attitude_matrix(keysite, wp_viewpoint.attitude);
 				get_local_entity_vec3d (keysite, VEC3D_TYPE_POSITION, &wp_viewpoint.position);
 
-				get_3d_sub_object_viewpoint(child.result_sub_object, &wp_viewpoint, TRUE);
+				get_3d_sub_object_viewpoint(&child, &wp_viewpoint, TRUE);
 
 				new_route [loop].x = wp_viewpoint.position.x + 5.0 * sfrand1();
 				new_route [loop].z = wp_viewpoint.position.z + 5.0 * sfrand1();

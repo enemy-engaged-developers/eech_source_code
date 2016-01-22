@@ -141,7 +141,7 @@ void get_viper_eo_centred_viewpoint (viewpoint *vp)
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		get_3d_sub_object_world_viewpoint (search.result_sub_object, vp);
+		get_3d_sub_object_world_viewpoint (&search, vp);
 	}
 	else
 	{
@@ -192,7 +192,7 @@ void get_viper_eo_relative_centred_viewpoint (viewpoint *vp)
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		get_3d_sub_object_world_viewpoint (search.result_sub_object, vp);
+		get_3d_sub_object_world_viewpoint (&search, vp);
 	}
 	else
 	{

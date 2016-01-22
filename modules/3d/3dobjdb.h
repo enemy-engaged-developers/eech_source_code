@@ -544,7 +544,11 @@ struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 	struct OBJECT_3D_INSTANCE
 		*search_object;
 
+#ifndef OGRE_EE
 	struct OBJECT_3D_SUB_INSTANCE
+#else
+	struct OgreGameObjectSceneElement
+#endif
 		*result_sub_object;
 
 	int
@@ -553,6 +557,7 @@ struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 	object_3d_sub_object_index_numbers
 		sub_object_index;
 
+#ifndef OGRE_EE
 	struct OBJECT_3D_DATABASE_ENTRY
 		*object_scene;
 
@@ -568,10 +573,12 @@ struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 		relative_roll_initial,
 		relative_roll_minimum,
 		relative_roll_maximum;
+#endif
 };
 
 typedef struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA object_3d_sub_object_search_data;
 
+#ifndef OGRE_EE
 struct OBJECT_3D_SUB_OBJECT_SEARCH_BATCH
 {
 	object_3d_sub_object_index_numbers
@@ -584,6 +591,7 @@ typedef struct OBJECT_3D_SUB_OBJECT_SEARCH_BATCH object_3d_sub_object_search_bat
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 extern object_3d_scene_database_entry
 	*objects_3d_scene_database;
@@ -591,6 +599,7 @@ extern object_3d_scene_database_entry
 extern struct OBJECT_3D
 	*objects_3d_data;
 
+#ifndef OGRE_EE
 extern struct FACE_SURFACE_DESCRIPTION
 	*object_database_surfaces;
 
@@ -600,6 +609,7 @@ extern int
 extern int
 	current_number_of_3d_objects_constructed,
 	current_amount_of_3d_objects_memory;
+#endif
 
 extern const char* object_3d_scene_names[];
 extern const char* object_3d_subobject_names[];
@@ -614,6 +624,7 @@ extern void deinitialise_3d_objects ( void );
 
 extern int get_3d_objects_initialised ( void );
 
+#ifndef OGRE_EE
 extern int get_object_approximation_number ( int scene_index, float distance, int *draw_sub_objects );
 
 extern int get_object_shadow_polygon_object ( int scene_index );
@@ -621,28 +632,37 @@ extern int get_object_shadow_polygon_object ( int scene_index );
 extern int get_object_shadow_approximation_number ( int scene_index, float distance, int *draw_sub_objects );
 
 extern int get_object_light_sourcing ( int scene_index );
+#endif
 
 extern struct OBJECT_3D_INSTANCE * construct_3d_object ( object_3d_index_numbers index );
 
 extern void destruct_3d_object ( struct OBJECT_3D_INSTANCE *object );
 
+#ifndef OGRE_EE
 extern void scale_object_3d_approximation_distances ( object_3d_index_numbers scene_index, float factor );
+#endif
 
 extern int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers index, vec3d *return_points, int depth );
 
+#ifndef OGRE_EE
 extern int get_object_3d_number_of_poly_lines ( object_3d_index_numbers index );
 
 extern void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d *return_points );
+#endif
 
-extern void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp );
+extern void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp );
 
-extern void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp, int global);
+extern void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp, int global );
 
+#ifndef OGRE_EE
 extern int get_number_of_3d_scene_cameras ( object_3d_index_numbers scene_index, object_3d_camera_index_numbers camera_index );
+#endif
 
 extern int get_number_of_3d_object_cameras ( struct OBJECT_3D_INSTANCE *object, object_3d_camera_index_numbers camera_index );
 
+#ifndef OGRE_EE
 extern object_3d_scene_camera *get_3d_scene_camera ( object_3d_index_numbers scene_index, object_3d_camera_index_numbers camera_index, int camera_depth );
+#endif
 
 extern object_3d_scene_camera *get_3d_object_camera ( struct OBJECT_3D_INSTANCE *object, object_3d_camera_index_numbers camera_index, int camera_depth );
 
@@ -650,15 +670,22 @@ extern float get_object_3d_camera_lifetime ( struct OBJECT_3D_INSTANCE *obj, obj
 
 extern int get_object_3d_camera_position ( struct OBJECT_3D_INSTANCE *obj, object_3d_camera_index_numbers camera_index, int camera_depth, float t, viewpoint *vp );
 
+#ifndef OGRE_EE
 extern void report_all_3d_objects_statistics ( void );
+#endif
 
 extern void report_objects_not_destructed ( void );
 
+#ifndef OGRE_EE
 extern void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level);
 extern void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out);
+#endif
+
+#ifdef OGRE_EE
+extern int
+	total_number_of_objects;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
