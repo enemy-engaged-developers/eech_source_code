@@ -154,7 +154,9 @@ static void draw_screen_ui_object (ui_object *obj)
 						else
 						{
 
+#ifndef OGRE_EE
 							clear_screen ();
+#endif
 						}
 					}
 
@@ -170,7 +172,9 @@ static void draw_screen_ui_object (ui_object *obj)
 				else
 				{
 
+#ifndef OGRE_EE
 					clear_screen ();
+#endif
 				}
 
 			call_ui_object_draw_function (obj, NULL);

@@ -1,3 +1,4 @@
+#ifndef OGRE_EE
 // Retro 8Mar2005
 
 #define MAX_UFD_STRINGLEN 14
@@ -134,3 +135,4 @@ void update_dynamics_shared_mem (void);
 void update_texture_shared_mem (void* target);
 void update_waypoint_shared_mem(void);
 void update_weapon_load_shared_mem(void);
+#endif

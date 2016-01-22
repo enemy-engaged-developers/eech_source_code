@@ -280,7 +280,9 @@ static void draw_weapon_loading_gauge (ui_object *obj, float level)
 	// Always have to render to the video screen
 	//
 
+#ifndef OGRE_EE
 	ASSERT ( active_screen == video_screen );
+#endif
 
 	colour.red = 255;
 	colour.green = 255;

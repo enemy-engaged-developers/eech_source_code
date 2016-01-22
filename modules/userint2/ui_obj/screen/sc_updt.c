@@ -110,10 +110,12 @@ void update_ui_screen_stack (void)
 	old_viewport_x2 = active_viewport.x_max;
 	old_viewport_y2 = active_viewport.y_max;
 
+#ifndef OGRE_EE
 	if ( begin_3d_scene () )
 	{
 
 		set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, FALSE, FALSE );
+#endif
 
 		screen_stack_head = get_ui_screen_stack_head ();
 	
@@ -161,8 +163,10 @@ void update_ui_screen_stack (void)
 			}
 		}
 
+#ifndef OGRE_EE
 		end_3d_scene ();
 	}
+#endif
 
 	set_viewport (old_viewport_x1, old_viewport_y1, old_viewport_x2, old_viewport_y2);
 }

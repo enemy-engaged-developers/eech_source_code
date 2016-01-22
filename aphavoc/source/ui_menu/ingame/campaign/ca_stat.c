@@ -274,7 +274,9 @@ static void draw_stats_page_colour_bar (ui_object *obj, texture_graphic *graphic
 	// Always have to render to the video screen
 	//
 
+#ifndef OGRE_EE
 	ASSERT ( active_screen == video_screen );
+#endif
 
 	if (w >= 0)
 	{
@@ -330,7 +332,9 @@ static void draw_stats_page_solid_bar (ui_object *obj, texture_graphic *graphic,
 	// Always have to render to the video screen
 	//
 
+#ifndef OGRE_EE
 	ASSERT ( active_screen == video_screen );
+#endif
 
 	colour.red = 255;
 	colour.green = 255;

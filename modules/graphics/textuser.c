@@ -1273,9 +1273,9 @@ void report_system_texture_stats ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 {
+#ifndef OGRE_EE
 
 	int
 		width,
@@ -1301,10 +1301,12 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 
 	int
 		*texture_pitch;
+#endif
 
 	texture_graphic
 		*graphic;
 
+#ifndef OGRE_EE
 	screen
 		*old_active_screen;
 
@@ -1366,11 +1368,13 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 		width /= 2;
 		height /= 2;
 	}*/
+#endif
 
 	graphic = ( texture_graphic * ) safe_malloc ( sizeof ( texture_graphic ) );
 
 	graphic->ref_count = ref_count;
 
+#ifndef OGRE_EE
 	{
 
 		int
@@ -1701,6 +1705,7 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 	//
 
 	safe_free ( data );
+#endif
 
 	return ( graphic );
 }
@@ -1712,8 +1717,10 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 void destroy_texture_graphic ( texture_graphic *graphic )
 {
 
+#ifndef OGRE_EE
 	int
 		count;
+#endif
 
 	ASSERT ( graphic );
 	ASSERT ( graphic->ref_count > 0 );
@@ -1725,6 +1732,7 @@ void destroy_texture_graphic ( texture_graphic *graphic )
 		return;
 	}
 
+#ifndef OGRE_EE
 	for ( count = 0; count < graphic->number_of_textures; count++ )
 	{
 
@@ -1732,6 +1740,7 @@ void destroy_texture_graphic ( texture_graphic *graphic )
 	}
 
 	safe_free ( graphic->textures );
+#endif
 
 	safe_free ( graphic );
 }
@@ -1750,6 +1759,7 @@ texture_graphic *texture_graphic_addref ( texture_graphic *graphic )
 	return graphic;
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
