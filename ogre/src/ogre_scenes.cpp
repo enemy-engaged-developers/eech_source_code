@@ -28,28 +28,6 @@ namespace
 	std::string animation_mesh;
 
 
-	inline Ogre::Vector3 ogre_position(const struct OgreVector3& v)
-	{
-		return Ogre::Vector3(v.x, v.y, -v.z);
-	}
-
-	Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
-	{
-		heading *= -0.5f;
-		pitch *= -0.5f;
-		roll *= 0.5f;
-		const float ch = cos(heading), sh = sin(heading);
-		const float cp = cos(pitch), sp = sin(pitch);
-		const float cr = cos(roll), sr = sin(roll);
-		const float w = ch * cp, x = ch * sp, y = sh * cp, z = sh * sp;
-		return Ogre::Quaternion(w * cr - z * sr, x * cr + y * sr, y * cr + x * sr, w * sr + z * cr);
-	}
-
-	inline Ogre::Vector3 ogre_scale(const struct OgreVector3& v)
-	{
-		return Ogre::Vector3(v.x, v.y, v.z);
-	}
-
 	// Adapter for scenes loading. Fills scenes.
 	// TODO: Add support of Special objects, LODs, Lights and (maybe) Cameras
 	class SceneComposer : public LwsExporter
@@ -255,9 +233,7 @@ namespace
 	{
 		GameObjectScene& gos(*static_cast<GameObjectScene*>(scene->internal));
 		gos.root->setPosition(ogre_position(scene->position));
-		Ogre::Matrix3 m(scene->attitude);
-		ogre_matrix_mirror(m);
-		gos.root->setOrientation(m);
+		gos.root->setOrientation(ogre_orientation(scene->attitude));
 		for (unsigned i = scene->number_of_elements; i--;)
 			place_node(gos.nodes[i].first, gos.database.elements[i], scene->elements[i]);
 		for (SceneAnimation::const_iterator itor(gos.animation.begin()); itor != gos.animation.end(); ++itor)
