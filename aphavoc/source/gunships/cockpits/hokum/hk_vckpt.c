@@ -106,6 +106,8 @@ void initialise_hokum_virtual_cockpit (void)
 
 	co_pilot_head_pitch_datum = get_hokum_co_pilot_head_pitch_datum ();
 
+	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC, FALSE);
+
 	//
 	// wipers and rain
 	//
@@ -481,19 +483,6 @@ void update_hokum_virtual_cockpit (void)
 	//
 
 	animate_hokum_virtual_cockpit_canopy_doors ();
-
-	////////////////////////////////////////
-	//
-	// sort static hands
-	//
-	////////////////////////////////////////
-
-	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT);
-	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_PILOT_HAND_STATIC, draw_crew);
-
-//	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT);
-	draw_crew = FALSE;
-	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC, draw_crew);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

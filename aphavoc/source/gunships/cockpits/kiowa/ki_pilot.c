@@ -941,7 +941,7 @@ static void set_pilot_static_right_hand_on_cyclic_visibility (int visible)
 
 	if (find_object_3d_sub_object (&search_data) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		search_data.result_sub_object->visible_object = !visible;
+		search_data.result_sub_object->visible_object = !visible && !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_PILOT);
 	}
 
 	search_data.search_depth = 0;
@@ -950,7 +950,7 @@ static void set_pilot_static_right_hand_on_cyclic_visibility (int visible)
 
 	if (find_object_3d_sub_object (&search_data) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		search_data.result_sub_object->visible_object = visible;
+		search_data.result_sub_object->visible_object = visible && !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_PILOT);
 	}
 }
 

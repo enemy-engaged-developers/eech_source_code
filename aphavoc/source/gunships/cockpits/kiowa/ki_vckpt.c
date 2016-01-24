@@ -103,6 +103,8 @@ void initialise_kiowa_virtual_cockpit (void)
 
 	co_pilot_head_pitch_datum = get_kiowa_co_pilot_head_pitch_datum ();
 
+	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC, FALSE);
+
 	//
 	// wipers and rain
 	//
@@ -396,13 +398,6 @@ void update_kiowa_virtual_cockpit (void)
 	// sort static hands
 	//
 	////////////////////////////////////////
-
-	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_PILOT);
-	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_PILOT_HAND_STATIC, draw_crew);
-
-//	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_KIOWA_COPILOT);
-	draw_crew = FALSE;
-	set_sub_object_type_visible_status(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC, draw_crew);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
