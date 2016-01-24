@@ -487,7 +487,7 @@ void attack_guide_fire_reached (entity *en)
 					//
 
 					if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER))
-						set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+						set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
 
 					set_attack_guide_take_cover_position (en);
 
@@ -499,7 +499,7 @@ void attack_guide_fire_reached (entity *en)
 				case AIRCRAFT_FIRE_NO_TARGET:
 				case AIRCRAFT_FIRE_SUPPRESSED:
 				{
-					set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 10.0);
+					set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 10.0);
 					
 					if (get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER))
 						set_attack_guide_seek_cover_position (en);
@@ -567,7 +567,7 @@ void attack_guide_fire_reached (entity *en)
 			if (aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, TRUE) == AIRCRAFT_FIRE_OK)
 			{
 				if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER))
-					set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+					set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
 				set_attack_guide_disengage_position (en); // ready to fire, leave this loop
 			}
 			else if (get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER))
@@ -705,11 +705,11 @@ void attack_guide_hasty_fire_reached (entity *en)
 				// (as long as it is in "weapons free" mode)
 				//
 
-				set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0.0);
+				set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 0.0);
 				aircraft_fire_weapon (aggressor, AIRCRAFT_FIRE_CHECK_ALL, FALSE);
 
 				if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER))
-					set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+					set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
 			}
 		}
 	}

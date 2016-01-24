@@ -305,7 +305,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			// stop continuous sound effect
 			//
 
-			if (raw->selected_weapon != value)
+//			if (raw->selected_weapon != value)
 			{
 				pause_local_continuous_weapon_sound_effect (en, raw->selected_weapon);
 			}

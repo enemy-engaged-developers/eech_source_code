@@ -98,7 +98,8 @@ void update_vehicle_weapon_fire (entity *en)
 
 	float
 		range,
-		launch_angle_error;
+		launch_angle_error,
+		burst_timer_state;
 
 	vec3d
 		*pos,
@@ -110,7 +111,9 @@ void update_vehicle_weapon_fire (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-   raw = (vehicle *) get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
+
+	burst_timer_state = raw->weapon_burst_timer;
 
 	target = raw->mob.target_link.parent;
 
@@ -124,6 +127,8 @@ void update_vehicle_weapon_fire (entity *en)
 
 	#endif
 
+while(TRUE)
+{
 	// check vehicle not sleeping
 
 	if (raw->sleep > 0.0)
@@ -133,11 +138,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - Sleeping (%.1f seconds left", raw->sleep);
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-		raw->weapon_salvo_timer = 0;
-		raw->target_fire_timer = 0.01;		
+		raw->weapon_burst_timer = 0.0;
+		raw->weapon_salvo_timer = 0.0;
+		raw->target_fire_timer = 0.01;
 		
-		return;
+		break;
 	}
 
 	// check valid target
@@ -149,11 +154,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - No Target");
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-		raw->weapon_salvo_timer = 0;
-		raw->target_fire_timer = 0.01;		
+		raw->weapon_burst_timer = 0.0;
+		raw->weapon_salvo_timer = 0.0;
+		raw->target_fire_timer = 0.01;
 		
-		return;
+		break;
 	}
 
 	// Check Suppress AI fire
@@ -165,11 +170,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - AI fire suppressed");
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_burst_timer = 0.0;
 		raw->weapon_salvo_timer = 0.0;
-		raw->target_fire_timer = 0.01;		
+		raw->target_fire_timer = 0.01;
 
-		return;
+		break;
 	}
 
 	// check valid selected weapon
@@ -181,11 +186,10 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - No weapon");
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
 		raw->weapon_salvo_timer = 0.0;
-		raw->target_fire_timer = 0.01;		
+		raw->target_fire_timer = 0.01;
 
-		return;
+		break;
 	}
 
 	// check selected weapon is ready
@@ -197,11 +201,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - Weapon system not ready");
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_burst_timer = 0.0;
 		raw->weapon_salvo_timer = 0.0;
-		raw->target_fire_timer = 0.01;		
+		raw->target_fire_timer = 0.01;
 
-		return;
+		break;
 	}
 
 	// Check range
@@ -221,11 +225,10 @@ void update_vehicle_weapon_fire (entity *en)
 				debug_log ("VH_WPN: Not Firing - out of range");
 			}
 
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
 			raw->weapon_salvo_timer = 0.0;
-			raw->target_fire_timer = 0.01;		
+			raw->target_fire_timer = 0.01;
 
-			return;
+			break;
 		}
 	}
 
@@ -259,11 +262,11 @@ void update_vehicle_weapon_fire (entity *en)
 				debug_log ("VH_WPN: Not Firing - altitude");
 			}
 
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+			raw->weapon_burst_timer = 0.0;
 			raw->weapon_salvo_timer = 0.0;
-			raw->target_fire_timer = 0.01;		
+			raw->target_fire_timer = 0.01;
 
-				return;
+			break;
 		}
 	}
 
@@ -276,11 +279,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - outside launch angle (1)");
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_burst_timer = 0.0;
 		raw->weapon_salvo_timer = 0.0;
-		raw->target_fire_timer = 0.01;		
+		raw->target_fire_timer = 0.01;
 
-		return;
+		break;
 	}
 
 	weapon_vector = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_WEAPON_VECTOR);
@@ -300,11 +303,11 @@ void update_vehicle_weapon_fire (entity *en)
 			debug_log ("VH_WPN: Not Firing - outside launch angle (%f > %f)", deg(fabs (launch_angle_error)), deg(weapon_database[raw->selected_weapon].max_launch_angle_error));
 		}
 
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+		raw->weapon_burst_timer = 0.0;
 		raw->weapon_salvo_timer = 0.0;
-		raw->target_fire_timer = 0.01;		
+		raw->target_fire_timer = 0.01;
 
-		return;
+		break;
 	}
 
 	// Check Line Of Sight (Non-projectile weapons only)
@@ -320,11 +323,10 @@ void update_vehicle_weapon_fire (entity *en)
 					debug_log ("VH_WPN: Not Firing - No Line Of Sight");
 				}
 
-				pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
 				raw->weapon_salvo_timer = 0.0;
-				raw->target_fire_timer = 0.01;		
+				raw->target_fire_timer = 0.01;
 
-				return;
+				break;
 			}
 		}
 	}
@@ -333,14 +335,12 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (raw->weapon_burst_timer <= 0.0)
 	{
-		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-
 		if (raw->target_fire_timer > 0.0)
 		{
 			raw->target_fire_timer = max(0.0f, raw->target_fire_timer - get_delta_time ());
 			
 			if (raw->target_fire_timer > 0.0)
-				return;
+				break;
 		}
 		else
 		{
@@ -365,13 +365,13 @@ void update_vehicle_weapon_fire (entity *en)
 				debug_log("VH_WPN: Firing interval %f seconds", raw->target_fire_timer);
 			}
 
-			return;
+			break;
 		}
 	}
 	
-	if (raw->weapon_burst_timer > 0)
+	if (raw->weapon_burst_timer > 0.0)
 	{
-		raw->weapon_burst_timer = max(0.0f, raw->weapon_burst_timer - get_delta_time ());
+		set_local_entity_float_value (en, FLOAT_TYPE_WEAPON_BURST_TIMER, max(0.0f, raw->weapon_burst_timer - get_delta_time ()));
 
 		if (raw->weapon_burst_timer > 0.0)
 		{
@@ -387,10 +387,9 @@ void update_vehicle_weapon_fire (entity *en)
 				debug_log ("VH_WPN: Stop Burst this frame");
 			}
 
-			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
 			raw->weapon_salvo_timer = 0.0;
 			
-			return;
+			break;
 		}
 	}
 
@@ -402,7 +401,15 @@ void update_vehicle_weapon_fire (entity *en)
 	}
 
 	launch_client_server_weapon (en, raw->selected_weapon, FALSE);
-	
+
+	break;
+}
+
+	if (burst_timer_state > 0.0 && raw->weapon_burst_timer <= 0.0)
+	{
+		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
+	}
+
 	/////////////////////////////////////////////////////////////////
 	//
 	// SPECIAL_EFFECT_HOOK FOR LAUNCHING WEAPON
@@ -413,71 +420,10 @@ void update_vehicle_weapon_fire (entity *en)
 	// If current weapon is WEAPON_NO_WEAPON it means the last one was just fired - set vehicle to re-arming
 	//
 
-	if (raw->selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+/*	if (raw->selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
 		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-	}
-
-//	if (raw->selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-//	{
-//		entity
-//			*group;
-//
-//		float
-//			ammo,
-//			sleep_time;
-//
-//		weapon_config_types
-//			config_type;
-//
-//		pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
-//		raw->target_fire_timer = raw->weapon_salvo_timer = 0.0;
-//
-//		//
-//		// set vehicle to rearming and decrease groups ammo
-//		//
-//
-//		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
-//
-//		ASSERT (group);
-//
-////		sleep_time = get_local_entity_rearming_sleep_time (group);
-//		sleep_time = 10;
-//
-//		set_local_entity_float_value (en, FLOAT_TYPE_SLEEP, sleep_time);
-//
-//		ammo = get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL);
-//
-//		ammo -= get_local_entity_float_value (en, FLOAT_TYPE_AMMO_ECONOMY) * AMMO_USAGE_ACCELERATOR;
-//
-//		ammo = bound (ammo, 0.0, 100.0);
-//
-//		set_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL, ammo);
-//
-//		//
-//		// set vehicle to rearmed
-//		//
-//
-//		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
-//
-//		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
-//		{
-//			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
-//		}
-//
-//		set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
-//
-//		#if DEBUG_MODULE || DEBUG_SUPPLY
-//
-//		debug_log ("VH_WPN: SUPPLY_INFO: member %s (%d) rearmed, sleeping for %0.2f seconds (group ammo = %0.2f%%, fuel %0.2f%%)",
-//						get_local_entity_string (en, STRING_TYPE_FULL_NAME),
-//						get_local_entity_index (en),
-//						sleep_time,
-//						get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL),
-//						get_local_entity_float_value (group, FLOAT_TYPE_FUEL_SUPPLY_LEVEL));
-//
-//		#endif
-//	}
+	} */
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

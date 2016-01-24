@@ -304,7 +304,7 @@ void attack_guide_fire_intercept_reached (entity *en)
 		{
 			if (!get_local_entity_float_value (aggressor, FLOAT_TYPE_WEAPON_BURST_TIMER) && attack_guide_find_best_weapon (en))
 			{
-				set_client_server_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
+				set_local_entity_float_value(aggressor, FLOAT_TYPE_WEAPON_LAUNCH_DELAY, 5.0);
 
 				if (get_local_entity_type (aggressor) == ENTITY_TYPE_FIXED_WING)
 					set_attack_guide_move_six_position (en);
