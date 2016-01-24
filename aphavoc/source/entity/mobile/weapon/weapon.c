@@ -216,7 +216,7 @@ static int get_viewpoint_from_weapon(weapon_config_types config_type,
 			search_weapon_system_heading->result_sub_object->relative_heading = 0.0;
 			search_weapon_system_pitch->result_sub_object->relative_pitch = 0.0;
 
-			get_3d_sub_object_world_viewpoint (search_weapon_system_pitch->result_sub_object, vp);
+			get_3d_sub_object_world_viewpoint (search_weapon_system_pitch, vp);
 
 			// reset heading and pitch
 			search_weapon_system_heading->result_sub_object->relative_heading = package_status->weapon_system_heading;
@@ -393,7 +393,8 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 			// ensure that the 3D instance viewpoint is up to date (the object may not have been drawn)
 			//
 
-			memcpy (&inst3d->vp, vp, sizeof (viewpoint));
+			memcpy (&inst3d->vp.position, &vp->position, sizeof (vec3d));
+			memcpy (&inst3d->vp.attitude, &vp->attitude, sizeof (matrix3x3));
 
 			search_weapon_system_heading.search_depth = weapon_config_database[config_type][found_package].heading_depth;
 			search_weapon_system_heading.search_object = inst3d;
@@ -407,7 +408,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 				if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
 					unsigned weapon_device = FALSE;
-					
+
 					search_weapon_system_weapon.search_depth = weapon_config_database[config_type][found_package].number - package_status[found_package].number;
 					search_weapon_system_weapon.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_WEAPON;
 
@@ -415,8 +416,8 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 					{
 						search_weapon_system_weapon.result_sub_object->visible_object = FALSE;
 
-						get_3d_sub_object_world_viewpoint (search_weapon_system_weapon.result_sub_object, vp);
-						
+						get_3d_sub_object_world_viewpoint (&search_weapon_system_weapon, vp);
+
 						weapon_device = TRUE;
 
 						#if DEBUG_MODULE
@@ -441,7 +442,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 					if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_pitch, &search_weapon_system_muzzle) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
 						if (!weapon_device)
-							get_3d_sub_object_viewpoint (search_weapon_system_muzzle.result_sub_object, vp, TRUE);
+							get_3d_sub_object_viewpoint (&search_weapon_system_muzzle, vp, TRUE);
 
 						////////////////////////////////////////
 						//
@@ -522,7 +523,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 											case ENTITY_SUB_TYPE_WEAPON_9K34_STRELA_3:
 											{
 												length = 1.5;
-												
+
 												break;
 											}
 										}
@@ -579,7 +580,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 					else
 					{
 						if (!weapon_device)
-							get_3d_sub_object_viewpoint (search_weapon_system_pitch.result_sub_object, vp, TRUE);
+							get_3d_sub_object_viewpoint (&search_weapon_system_pitch, vp, TRUE);
 
 						#if DEBUG_MODULE
 
@@ -664,7 +665,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 	//
 
 	ASSERT(point_inside_map_area(&vp->position));
-	
+
 	terrain_elevation = get_3d_terrain_elevation (vp->position.x, vp->position.z);
 
 	if (vp->position.y < terrain_elevation)
@@ -1043,7 +1044,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				#endif
 				if (!point_inside_map_area (&new_intercept_point))
 					break;
-				
+
 				if (triangulate_range)
 				{
 					range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
@@ -1055,7 +1056,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 				if (number_of_iterations == 1)
 					range += 5 * sfrand1();
-					
+
 				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, time_of_flight, number_of_iterations > 1, FALSE, parent_velocity))
 					return FALSE;
 
@@ -1140,15 +1141,15 @@ static int get_pitch_device_to_target_vector
 	intercept_point_vector->x = 0.0;
 	intercept_point_vector->y = 0.0;
 	intercept_point_vector->z = -1.0;
-	
+
 	*intercept_point_range = 0.0;
-	
+
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-	
+
 	target_vector->x = target_position->x - pitch_device_position->x;
 	target_vector->y = target_position->y - pitch_device_position->y;
 	target_vector->z = target_position->z - pitch_device_position->z;
-	
+
 	normalise_3d_vector(target_vector);
 
 	switch (weapon_database[weapon_sub_type].aiming_type)
@@ -1184,7 +1185,7 @@ static int get_pitch_device_to_target_vector
 			intercept_point_vector->x = intercept_point_position.x - pitch_device_position->x;
 			intercept_point_vector->y = intercept_point_position.y - pitch_device_position->y;
 			intercept_point_vector->z = intercept_point_position.z - pitch_device_position->z;
-			
+
 			*intercept_point_range = get_3d_range (&intercept_point_position, pitch_device_position);
 
 			normalise_3d_vector (intercept_point_vector);
@@ -1231,12 +1232,12 @@ static int get_pitch_device_to_target_vector
 							get_local_entity_vec3d (source, VEC3D_TYPE_WEAPON_VECTOR, &weapon_vector);
 
 						weapon_vector = get_global_position_from_unit_vector(pitch_device_position, &weapon_vector, *intercept_point_range);
-						
+
 						create_debug_3d_line (pitch_device_position, &weapon_vector, i ? sys_col_blue : sys_col_red, 0.0);
 					}
-					
+
 					create_debug_3d_line (pitch_device_position, &intercept_point_position, sys_col_yellow, 0.0);
-	
+
 					create_rotated_debug_3d_object (&intercept_point_position, rad (0.0), rad (0.0), rad (0.0), OBJECT_3D_INTERCEPT_POINT_RED, 0.0, 0.25);
 				}
 #endif
@@ -1396,7 +1397,7 @@ void update_entity_weapon_systems (entity *source)
 						open_entity_weapon_system_ready (source);
 
 						selected_weapon_system_ready = get_local_entity_int_value (source, INT_TYPE_WEAPON_SYSTEM_READY);
-						
+
 						//Magitek - animation processing for clients outside of server vision
 						if(get_comms_model () == COMMS_MODEL_SERVER)//server only
 						{
@@ -2121,7 +2122,7 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 										// viewpoint
 										//
 
-										get_3d_sub_object_viewpoint (search_weapon_system_muzzle.result_sub_object, &effect_inst3d->vp, TRUE);
+										get_3d_sub_object_viewpoint (&search_weapon_system_muzzle, &effect_inst3d->vp, TRUE);
 
 										//
 										// timing info
@@ -2271,7 +2272,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 	weapon_to_intercept_point_vector_ptr->x = 0.0;
 	weapon_to_intercept_point_vector_ptr->y = 0.0;
 	weapon_to_intercept_point_vector_ptr->z = -1.0;
-	
+
 	weapon_to_intercept_point_range = 0.0;
 
 	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
@@ -2340,8 +2341,8 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 						{
 							vec3d* tracking_point = NULL;
 							int tracking_point_valid = FALSE;
-							
-							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
+
+							get_3d_sub_object_world_viewpoint (&search_weapon_system_pitch, &vp);
 							*weapon_vector_ptr = vp.zv;
 
 							if (get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
@@ -2363,7 +2364,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 									normalise_3d_vector (weapon_to_intercept_point_vector_ptr);
 								}
 							}
-							
+
 							if (target && !tracking_point_valid)
 								set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, weapon_to_target_vector_ptr, weapon_to_intercept_point_vector_ptr, &weapon_to_intercept_point_range));
 
@@ -2491,7 +2492,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 
 						if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
-							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
+							get_3d_sub_object_world_viewpoint (&search_weapon_system_pitch, &vp);
 
 							if (get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector, &weapon_to_intercept_point_vector, &weapon_to_intercept_point_range))
 							{
@@ -2609,7 +2610,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 
 					if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
-						get_3d_sub_object_viewpoint (search_weapon_system_pitch.result_sub_object, vp, FALSE);
+						get_3d_sub_object_viewpoint (&search_weapon_system_pitch, vp, FALSE);
 
 						result = TRUE;
 					}
@@ -2926,7 +2927,7 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 
 					search_weapon_system_pitch.result_sub_object->relative_pitch = 0.0;
 
-					get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
+					get_3d_sub_object_world_viewpoint (&search_weapon_system_pitch, &vp);
 
 					search_weapon_system_heading.result_sub_object->relative_heading = package_status[package].weapon_system_heading;
 
@@ -3204,15 +3205,15 @@ int check_guided_missile_type_alive (entity *en)
 {
 	entity *launched_weapon;
 	entity_sub_types selected_weapon;
-	
+
 	ASSERT(en);
-	
+
 	launched_weapon = get_local_entity_first_child (en, LIST_TYPE_LAUNCHED_WEAPON);
 	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
 	if (!launched_weapon || !selected_weapon || !weapon_database[selected_weapon].guidance_type)
 		return FALSE;
-	
+
 	while (launched_weapon)
 	{
 		if (weapon_database[get_local_entity_int_value (launched_weapon, INT_TYPE_ENTITY_SUB_TYPE)].guidance_type &&
@@ -3223,6 +3224,6 @@ int check_guided_missile_type_alive (entity *en)
 
 		launched_weapon = get_local_entity_child_succ (launched_weapon, LIST_TYPE_LAUNCHED_WEAPON);
 	}
-	
+
 	return FALSE;
 }

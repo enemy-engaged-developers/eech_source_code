@@ -252,7 +252,9 @@ void notify_options_page (options_pages page)
 	// Retro 12Dez2004 - apply new stick deadzone settings..
 	if (current_options_page == OPTIONS_PAGE_CONTROLLER)
 	{
+#ifndef OGRE_EE
 		change_joystick_properties ();
+#endif
 	}
 
 	switch (page)

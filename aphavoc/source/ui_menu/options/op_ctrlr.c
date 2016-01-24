@@ -2705,9 +2705,11 @@ void notify_autoconfigure_button ( ui_object *obj, void *arg)
 	// it get's increased by one.
 static int iDevice = 0;
 
+#ifndef OGRE_EE
 	// does nothing #ifndef WIN32
 	GetGUIDString(iDevice,strGuid);
-	
+#endif
+
 	if (!strGuid)
 		return;
 

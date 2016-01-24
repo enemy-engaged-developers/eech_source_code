@@ -129,7 +129,11 @@ c_module_object_files	+=	$+ &
 #################################################################################################################################
 
 !ifdef ogre
+!ifdef ogre_debug
+lib_files += $(modulesdir)\..\ogre\lib\Debug\ogreee_d.lib
+!else
 lib_files += $(modulesdir)\..\ogre\lib\Release\ogreee.lib
+!endif
 !else
 lib_files += $(modulesdir)\linklib\d3d9.lib
 !endif

@@ -1,3 +1,4 @@
+#ifndef OGRE_EE
 struct _D3DLIGHT9;
 struct _D3DMATRIX;
 struct _D3DVIEWPORT9;
@@ -57,3 +58,4 @@ void f3d_texture_pre(struct SCREEN *texture);
 void f3d_texture_post(struct SCREEN *texture);
 int f3d_texture_lock(struct SCREEN *texture, int mipmap_level);
 int f3d_texture_unlock(struct SCREEN *texture);
+#endif

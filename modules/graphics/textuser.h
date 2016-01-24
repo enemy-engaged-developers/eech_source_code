@@ -66,6 +66,7 @@
 
 #define MAX_TEXTURES 8192
 
+#ifndef OGRE_EE
 #define MAX_HARDWARE_TEXTURES 512
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,7 @@ extern char
 
 extern int
 	system_textures_referenced[MAX_TEXTURES];
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,17 +180,21 @@ extern void unload_texturemap_data ( void );
 
 extern int get_system_texture_index ( const char *name );
 
+#ifndef OGRE_EE
 extern struct SCREEN *create_texture_map ( int width, int height, texture_map_types type, int number_of_mipmaps );
 
 extern struct SCREEN *get_system_texture_ptr ( int index );
 
 extern void create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, enum TEXTURE_MAP_TYPES type );
+#endif
 
 extern const char *get_system_texture_name ( int index );
 
+#ifndef OGRE_EE
 extern void report_system_texture_stats ( void );
 
 extern screen *load_bmp_file_screen (const char *full_override_texture_filename);
+#endif
 
 extern struct TEXTURE_GRAPHIC *create_texture_graphic ( const char *filename, int ref_count );
 

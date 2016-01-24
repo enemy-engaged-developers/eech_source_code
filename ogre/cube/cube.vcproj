@@ -67,6 +67,7 @@
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
+				SubSystem="2"
 				TargetMachine="1"
 				Profile="false"
 			/>
@@ -145,6 +146,7 @@
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"

@@ -72,6 +72,7 @@
 
 void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 {
+#ifndef OGRE_EE
 	float
 		x,
 		y,
@@ -138,6 +139,7 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 	);
 
 	draw_application_ui_3d_scene ();
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,6 +148,7 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 
 void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float size)
 {
+#ifndef OGRE_EE
 	float
 		x1,
 		y1,
@@ -197,6 +200,7 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 	);
 
 	draw_application_3d_scene_to_texture (scr, size);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +258,7 @@ void draw_campaign_screen_entity_3d_scene (ui_object *obj, float distance, vec3d
 
 void draw_campaign_screen_texture_to_object (screen *scr, ui_object *obj)
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -327,6 +332,7 @@ void draw_campaign_screen_texture_to_object (screen *scr, ui_object *obj)
 
 		draw_wbuffered_flat_shaded_textured_polygon ( quad, colour, specular );
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

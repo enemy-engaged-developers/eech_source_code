@@ -311,7 +311,9 @@ void ui_draw_area (float x1, float y1, float x2, float y2, ui_object *obj)
 		}
 	}
 #else
+#ifndef OGRE_EE
 	d3d_color_fill ( background_colour.colour, new_x1, new_y1, new_x2, new_y2 );
+#endif
 #endif
 }
 

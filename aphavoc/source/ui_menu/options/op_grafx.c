@@ -136,6 +136,7 @@ float
 
 void notify_show_graphics_page (void)
 {
+#ifndef OGRE_EE
 	display_device
 		*device;
 
@@ -263,6 +264,7 @@ void notify_show_graphics_page (void)
 	}
 
 	display_options_page (OPTIONS_PAGE_GRAPHICS);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -986,7 +988,9 @@ void notify_terrain_detail_option_button ( ui_object *obj, void *arg )
 
 	set_global_graphics_terrain_detail_level (lod+1);
 
+#ifndef OGRE_EE
 	set_3d_detail_levels ();
+#endif
 
 	// don't leave text selected
 
@@ -1019,7 +1023,9 @@ void notify_object_detail_option_button ( ui_object *obj, void *arg )
 
 	set_ui_object_text (object_detail_button, detail_text [lod-1]);
 
+#ifndef OGRE_EE
 	set_3d_detail_levels ();
+#endif
 
 	// don't leave text selected
 
@@ -1052,7 +1058,9 @@ void notify_cockpit_detail_option_button ( ui_object *obj, void *arg )
 
 	set_ui_object_text (cockpit_detail_button, detail_text [lod]);
 
+#ifndef OGRE_EE
 	set_3d_detail_levels ();
+#endif
 
 	// don't leave text selected
 
@@ -1119,6 +1127,7 @@ void notify_incockpit_blurred_option_button ( ui_object *obj, void *arg )
 
 void notify_card_selection_button ( ui_object *obj, void *arg )
 {
+#ifndef OGRE_EE
 
 	display_device
 		*device;
@@ -1200,12 +1209,14 @@ void notify_card_selection_button ( ui_object *obj, void *arg )
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void set_card_selection_device ( display_device *device )
 {
 
@@ -1229,6 +1240,7 @@ void set_card_selection_device ( display_device *device )
 		set_global_graphics_device_selection_automatic ( TRUE );
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1236,6 +1248,7 @@ void set_card_selection_device ( display_device *device )
 
 display_device *get_card_selection_device ( void )
 {
+#ifndef OGRE_EE
 
 	display_device
 		*device;
@@ -1266,6 +1279,7 @@ display_device *get_card_selection_device ( void )
 
 		device = device->succ;
 	}
+#endif
 
 	return ( NULL );
 }
@@ -1341,6 +1355,7 @@ void notify_screen_resolution_button (ui_object *obj, void *arg)
 
 void notify_screen_accept_button (ui_object *obj, void *arg)
 {
+#ifndef OGRE_EE
 
 	if ( (new_width != global_options.visual_screen_width) || (new_height != global_options.visual_screen_height) )
 	{
@@ -1354,6 +1369,7 @@ void notify_screen_accept_button (ui_object *obj, void *arg)
 
 		set_ui_object_drawable (screen_accept_button, FALSE);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

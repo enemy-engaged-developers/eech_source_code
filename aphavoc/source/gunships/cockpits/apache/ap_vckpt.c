@@ -706,6 +706,8 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	viewpoint
 		vp;
+	object_3d_sub_object_search_data
+		search;
 
 	ASSERT (crew_viewpoint);
 
@@ -714,8 +716,6 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 	{
 		object_3d_sub_object_index_numbers
 			index;
-		object_3d_sub_object_search_data
-			search;
 
 		switch (get_view_mode())
 		{
@@ -796,7 +796,7 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 	}
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
-	get_3d_sub_object_world_viewpoint (head_object, &vp);
+	get_3d_sub_object_world_viewpoint (&search, &vp);
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &main_vp.position);
 
 	main_vp.x += vp.x;

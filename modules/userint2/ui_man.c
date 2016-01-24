@@ -183,13 +183,17 @@ void ui_repaint (void)
 	x = get_mouse_x ();
 	y = get_mouse_y ();
 
+#ifndef OGRE_EE
 	clear_zbuffer_screen ();
+#endif
 
 	update_ui_screen_stack ();
 
+#ifndef OGRE_EE
 	draw_raw_mouse_pointer (x, y);
 
 	ddraw_flip_surface ();
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -758,6 +762,7 @@ event *get_ui_last_event (void)
 
 void save_ui_screen (event *arg)
 {
+#ifndef OGRE_EE
 
 	int
 		file_count;
@@ -782,6 +787,7 @@ void save_ui_screen (event *arg)
 	}
 
 	debug_log ("Error Saving Screen: Limit exceeded");
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

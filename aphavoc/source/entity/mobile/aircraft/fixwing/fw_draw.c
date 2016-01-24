@@ -103,7 +103,7 @@ static void draw_local_3d_object (entity *en, float range)
 	// update viewpoint
 	//
 
-	raw->ac.inst3d->vp.position = raw->ac.mob.position;
+	memcpy (&raw->ac.inst3d->vp.position, &raw->ac.mob.position, sizeof (vec3d));
 
 	memcpy (&raw->ac.inst3d->vp.attitude, &raw->ac.mob.attitude, sizeof (matrix3x3));
 

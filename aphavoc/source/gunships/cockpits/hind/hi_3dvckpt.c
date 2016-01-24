@@ -1074,6 +1074,9 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 	object_3d_sub_instance*
 		head_object;
 
+	object_3d_sub_object_search_data
+		search;
+
 	ASSERT (crew_viewpoint);
 
 	// TODO: add co-pilot
@@ -1147,7 +1150,9 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 	}
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
-	get_3d_sub_object_world_viewpoint (head_object, &vp);
+	search.search_object = virtual_pilot_cockpit_inst3d;
+	search.result_sub_object = head_object;
+	get_3d_sub_object_world_viewpoint (&search, &vp);
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &main_vp.position);
 
 	main_vp.x += vp.x;

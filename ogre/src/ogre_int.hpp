@@ -25,6 +25,10 @@
 #define USE_OBJECTS_TEXTURES
 #endif
 
+// Scenes options
+#define SCENES_VISIBILITY_LOW 10000
+#define SCENES_VISIBILITY_HIGH 11000
+
 // Terrain options
 #ifdef USE_NORMALS
 // Use per-vertex normals for terrain or not
@@ -35,50 +39,67 @@
 // Use any textures (and UV mapping) for terrain or not
 #define USE_TERRAIN_TEXTURES
 #endif
+#ifdef USE_TERRAIN_TEXTURES
+//#define USE_TERRAIN_SINGLE_TEXTURE
+#endif
 // Use per-vertex terrain colours or per-surface ones (TODO: Looks like it's not used in the game)
 //#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
-#define USE_TERRAIN_VISIBILITY 10
+#define USE_TERRAIN_VISIBILITY 5
+#define USE_TERRAIN_GROUP 5
 
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846f
 #endif
 
-#include "PagedGeometryConfig.h"
-#include "PagedGeometry.h"
-#include "BatchPage.h"
 #include "OgreSubMesh.h"
 #include "OgreSubEntity.h"
+#include "OgreMaterialManager.h"
+#include "OgreTechnique.h"
 #include "OgreMeshManager.h"
 #include "OgreHardwarePixelBuffer.h"
-#include "OgreStaticGeometry.h"
+#include "OgreEntity.h"
+#include "OgreSceneNode.h"
+#include "OgreSceneManager.h"
+#include "OgreInstancedEntity.h"
 
 #define OGRE_EE
 
 #include "ee.h"
 
+class Uncopyable
+{
+public:
+	Uncopyable()
+	{
+	}
+
+private:
+	Uncopyable(const Uncopyable&);
+	void operator =(const Uncopyable&);
+};
+
 // Helper for Ogre resource names creation
-class fmt
+class fmt : private Uncopyable
 {
 public:
 	explicit fmt(const char* format, ...)
 	{
+		char buf[256];
 		va_list ap;
 		va_start(ap, format);
-		vsprintf(str, format, ap);
+		vsprintf(buf, format, ap);
 		va_end(ap);
+		str = buf;
 	}
-	operator Ogre::String(void) const
+	operator const Ogre::String&(void) const
 	{
 		return str;
 	}
 
 private:
-	char str[256];
-
-	fmt(fmt&);
-	void operator =(fmt&);
+	Ogre::String str;
 };
 
 #define DEFINE_NAME(name, args, format, params) \
@@ -88,7 +109,7 @@ struct name : private fmt \
 		: fmt(format, params) \
 	{ \
 	} \
-	using fmt::operator Ogre::String; \
+	using fmt::operator const Ogre::String&; \
 }
 
 #include "ogre_set.hpp"
@@ -96,6 +117,7 @@ struct name : private fmt \
 #include "ogre_animation.hpp"
 #include "ogre_objects.hpp"
 #include "ogre_scenes.hpp"
+#include "ogre_terrain.hpp"
 
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
@@ -103,9 +125,11 @@ DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
+DEFINE_NAME(GameSceneName, struct OgreGameObjectScene* scene, "SCENE_%p", scene);
+DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u", index);
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
-DEFINE_NAME(TerrainStaticGeometry, unsigned z _ unsigned x, "TERRAIN_STATIC_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
+DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER", 0);
 DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
 #undef _
 

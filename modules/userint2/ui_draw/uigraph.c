@@ -1099,6 +1099,7 @@ void ui_draw_masked_graphic (
 
 void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_graphic *graphic, real_colour colour)
 {
+#ifndef OGRE_EE
 
 	vertex
 		quad[4];
@@ -1305,6 +1306,7 @@ void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_gr
 	}
 
 //	flush_triangle_primitives ();
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

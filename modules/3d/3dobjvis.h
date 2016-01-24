@@ -83,6 +83,7 @@ typedef enum OBJECT_3D_VISIBILITY object_3d_visibility;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 extern void set_object_3d_instance_relative_position ( struct OBJECT_3D_INSTANCE *obj );
 
 extern void get_position_3d_relative_position ( vec3d *position, vec3d *result );
@@ -94,6 +95,7 @@ extern enum OBJECT_3D_VISIBILITY get_object_3d_screen_coordinates ( struct OBJEC
 extern enum OBJECT_3D_VISIBILITY get_object_3d_instance_visibility ( struct OBJECT_3D_INSTANCE *obj );
 
 extern enum OBJECT_3D_VISIBILITY get_scene_3d_instance_visibility ( object_3d_index_numbers index, vec3d *view_position );
+#endif
 
 extern struct OBJECT_3D_BOUNDS * get_object_3d_bounding_box ( object_3d_index_numbers object );
 
@@ -101,6 +103,7 @@ extern struct OBJECT_3D_BOUNDS * get_object_3d_bounding_box_without_lines ( obje
 
 extern float get_object_3d_radius ( object_3d_index_numbers object );
 
+#ifndef OGRE_EE
 //
 // The following routines are NOT for application use - so don't use it!
 //
@@ -112,4 +115,4 @@ extern int get_scaled_object_3d_outcode ( int object_number, vec3d *pos, vec3d *
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#endif

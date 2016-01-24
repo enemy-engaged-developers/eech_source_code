@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -122,7 +122,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	object_3d_instance
 		*inst3d;
-	
+
 	object_3d_sub_object_search_data
 		search_main_rotor_shaft,
 		search_main_rotor_pitch_bank_null,
@@ -140,7 +140,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		search_main_rotor_blade_moving_depth,
 		ejected,
 		blades_dissolve;
-	
+
 	unsigned int
 		last_moving_blade_state,
 		subtype;
@@ -155,7 +155,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		main_rotor_blade_droop_angle,
 		real_rotor_rpm,
 		blade_heading;
-	
+
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
@@ -169,9 +169,9 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	subtype = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 	ASSERT (subtype < NUM_ENTITY_SUB_TYPE_AIRCRAFT);
-	
+
 	// count rotors
-	
+
 	if (!quantity_of_roots[subtype])
 		quantity_of_roots[subtype] = count_sub_object_type_depth(inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC);
 	if (!quantity_of_shafts[subtype])
@@ -213,7 +213,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE) * 0.75;
 	ejected = get_local_entity_int_value (en, INT_TYPE_EJECTED);
 	blades_dissolve = 255 - 255 * command_line_blurred_rotor_blades * bound(1.1 * main_rotor_rpm - 70, 0, 30) / 30;
-	
+
 	switch (subtype)
 	{
 		// Seven rotor blades
@@ -274,7 +274,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		default:
 			real_rotor_rpm = 180;
 	}
-		
+
 	main_rotor_delta_heading = min(real_rotor_rpm * PI2 * main_rotor_rpm / 6000 * get_delta_time (), PI2 / quantity_of_roots[subtype] * quantity_of_shafts[subtype] / 3.75f);
 
 	main_rotor_blade_droop_angle *= max (1.0f - main_rotor_rpm / 60, - 0.1f);
@@ -333,7 +333,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 						{
 							blade_heading = search_main_rotor_blade_moving.result_sub_object->relative_heading;
 							search_main_rotor_blade_moving.result_sub_object->relative_pitch = main_rotor_rpm / 5000 + main_rotor_blade_coning_angle;
-							search_main_rotor_blade_moving.result_sub_object->relative_roll = 2 * main_rotor_direction * bound(- cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch + 
+							search_main_rotor_blade_moving.result_sub_object->relative_roll = 2 * main_rotor_direction * bound(- cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch +
 									sin(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_roll + main_rotor_blade_coning_angle, rad(-10), rad(10));
 							if ((get_time_acceleration () == TIME_ACCELERATION_PAUSE && !command_line_blurred_rotor_blades) || ejected) // hide moving blades
 								search_main_rotor_blade_moving.result_sub_object->visible_object = last_moving_blade_state = 0;
@@ -342,10 +342,10 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50) / 100, 0.0f);
 							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.1;
 							if (search_main_rotor_blade_moving.result_sub_object->visible_object < last_moving_blade_state)
-								start_wind_down_sound = TRUE;							
+								start_wind_down_sound = TRUE;
 							last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object;
 						}
-						
+
 						search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
 						search_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
 
@@ -355,7 +355,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch + main_rotor_blade_droop_angle;
 							search_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
 							search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = blades_dissolve;
-	
+
 							// locate static blade sections and set blade droop angle
 
 							search_main_rotor_blade_section_static_depth = 0;
@@ -419,7 +419,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		else
 			break;
 
-		
+
 		main_rotor_direction = -main_rotor_direction;
 		search_main_rotor_shaft_depth++;
 	}
@@ -463,7 +463,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 		search_cockpit_main_rotor_shaft.search_object = cockpit_main_rotor_inst3d;
 		search_main_rotor_shaft.sub_object_index = search_cockpit_main_rotor_shaft.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_SHAFT;
 
-		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND && 
+		if (find_object_3d_sub_object (&search_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
 				find_object_3d_sub_object (&search_cockpit_main_rotor_shaft) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
 			// locate pitch and bank null
@@ -474,7 +474,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 			if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_shaft, &search_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND &&
 					find_object_3d_sub_object_from_sub_object (&search_cockpit_main_rotor_shaft, &search_cockpit_main_rotor_pitch_bank_null) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				// cpoy pitch and bank
+				// copy pitch and bank
 
 				search_cockpit_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch;
 				search_cockpit_main_rotor_pitch_bank_null.result_sub_object->relative_roll = search_main_rotor_pitch_bank_null.result_sub_object->relative_roll;
@@ -510,7 +510,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_scale.x = search_main_rotor_blade_moving.result_sub_object->relative_scale.x;
 							search_cockpit_main_rotor_blade_moving.result_sub_object->relative_scale.y = search_main_rotor_blade_moving.result_sub_object->relative_scale.y;
 						}
-						
+
 						search_main_rotor_blade_root_static.search_depth = search_cockpit_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
 						search_main_rotor_blade_root_static.sub_object_index = search_cockpit_main_rotor_blade_root_static.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_ROOT_STATIC;
 
@@ -521,7 +521,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_root_static.result_sub_object->relative_pitch;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_root_static.result_sub_object->relative_roll;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value;
-	
+
 							// locate static blade sections and copy blade droop angle
 
 							search_main_rotor_blade_section_static_depth = 0;
@@ -584,7 +584,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 			break;
 
 		search_main_rotor_shaft_depth++;
-	}	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -987,7 +987,7 @@ void damage_helicopter_3d_object (entity *en)
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AH64D_PILOT, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING, FALSE);
 	set_sub_object_type_visible_status (raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_MOVING, FALSE);
-	
+
 	set_local_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD, 0);
 }
 
@@ -1012,10 +1012,10 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 		search_main_rotor_blade_section_static_depth;
 
 	unsigned int subtype;
-	
+
 	float
 		main_rotor_direction;
-	
+
 	helicopter
 		*raw;
 	object_3d_instance
@@ -1066,7 +1066,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 				{
 						// locate static blade root by it's number, if it presents
 					search_main_rotor_blade_root_static_depth = blade_number >= 0 ? (blade_number - search_main_rotor_shaft_depth * quantity_of_roots[subtype] / quantity_of_shafts[subtype]) : 0;
-					
+
 					while (search_main_rotor_blade_root_static_depth < quantity_of_roots[subtype] / quantity_of_shafts[subtype] && search_main_rotor_blade_root_static_depth >= 0)
 					{
 						search_main_rotor_blade_root_static.search_depth = search_main_rotor_blade_root_static_depth;
@@ -1100,7 +1100,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 							if (search_main_rotor_blade_section_static_depth > 0)
 							{
 								float collision_point = 0;
-								
+
 								section_cut_off_point = blade_number >= 0 ? (search_main_rotor_blade_section_static_depth - 1) :
 									(blade_number == -1 ? 0 : rand16() % search_main_rotor_blade_section_static_depth);
 
@@ -1131,7 +1131,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 
 												memcpy ( blade_vp.attitude, raw->ac.mob.attitude, sizeof ( matrix3x3 ) );
 												blade_vp.position = raw->ac.mob.position;
-												get_3d_sub_object_viewpoint(search_main_rotor_blade_section_static.result_sub_object, &blade_vp, TRUE);
+												get_3d_sub_object_viewpoint(&search_main_rotor_blade_section_static, &blade_vp, TRUE);
 
 												if (!bound_position_to_map_volume(&blade_vp.position))
 												{
@@ -1159,7 +1159,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 										break;
 
 									search_main_rotor_blade_section_static_depth++;
-								} 
+								}
 
 								// move collision point
 
@@ -1214,7 +1214,7 @@ void damage_helicopter_tail_rotors (entity *en)
 
 	int
 		depth;
-	
+
 	viewpoint
 		blade_vp;
 
@@ -1273,7 +1273,7 @@ void damage_helicopter_tail_rotors (entity *en)
 
 			memcpy ( blade_vp.attitude, raw->ac.mob.attitude, sizeof ( matrix3x3 ) );
 			blade_vp.position = raw->ac.mob.position;
-			get_3d_sub_object_viewpoint(search.result_sub_object, &blade_vp, TRUE);
+			get_3d_sub_object_viewpoint(&search, &blade_vp, TRUE);
 			if (!bound_position_to_map_volume(&blade_vp.position))
 				create_rotor_blade_fragment(en, blade_vp, FALSE);
 		}
@@ -1293,7 +1293,7 @@ void damage_helicopter_tail_rotors (entity *en)
 void create_rotor_blade_fragment (entity *en, viewpoint blade_vp, int main_rotor)
 {
 	object_3d_index_numbers blade_object;
-	
+
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
@@ -1591,6 +1591,9 @@ int restore_helicopter_tail_rotors (entity *en)
 
 		depth++;
 	}
+
+
+	raw->tail_rotor_damaged = FALSE;
 
 	return TRUE;
 }

@@ -202,7 +202,7 @@ void get_local_entity_target_point (entity *en, vec3d *target_point)
 
 			get_local_entity_attitude_matrix (en, inst3d->vp.attitude);
 
-			get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+			get_3d_sub_object_world_viewpoint (&search, &vp);
 
 			*target_point = vp.position;
 		}

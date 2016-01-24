@@ -506,7 +506,7 @@ private:
   size *= t.images[ct].width * t.images[ct].height;
   t.images[ct].data.resize(size);
   fread(&t.images[ct].data[0], size, 1, f);
-#if 1
+#if 0
   unsigned bpp = (t.images[ct].alpha ? 4 : 3);
   for (unsigned i = 0; i < t.images[ct].height / 2; i++)
    for (unsigned j = 0; j < t.images[ct].width * bpp; j++)
@@ -893,6 +893,7 @@ int main(int argc, char* argv[])
  FILE* f = freopen(path, "w", stdout);
  if (!f)
   error("Failed to create log file %s", path);
+ setbuf(f, NULL);
  std::vector<const char*> td;
  for (Textures::const_iterator itor(config.textures.begin()); itor != config.textures.end(); ++itor)
   td.push_back(itor->c_str());

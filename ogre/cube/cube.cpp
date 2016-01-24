@@ -133,7 +133,7 @@ struct EE
 #endif
 
 #ifdef USE_TERRAIN_TREES
-		ogre_terrain_tree(&(*objects)[0x2167]);
+		ogre_terrain_tree(&(*objects)[scenes->GetScene(0x0A58).index]);
 #endif
 	}
 	~EE()
@@ -181,8 +181,10 @@ void set_scene(int index, int change)
 
 	ogre_scene_destroy(&ogos[index]);
 	ogre_scene_create(&ogos[index], objects[index]);
-	vec3d v = { index ? -10 : 10, 0, 0 };
-	ogre_node_set_position(ogos[index].root, &v);
+	struct OgreVector3& p = ogos[index].position;
+	p.x = index ? -10 : 10;
+	p.y = 0;
+	p.z = 0;
 
 	for (unsigned animation_index = 0, size; size = get_animation_size(animation_index); animation_index++)
 		ogre_scene_animation(&ogos[index], animation_index, rand() % size);
@@ -273,7 +275,7 @@ void OGREEE_CALL frame(float dtime)
 	for (int index = 0; index < 2; index++)
 	{
 		OgreGameObjectScene* g = &ogos[index];
-		for (unsigned i = 0; i < g->number_of_nodes; i++)
+		for (unsigned i = 0; i < g->number_of_elements; i++)
 		{
 			float last = ogre_scene_subobject_keyframe_length(g, i);
 
@@ -286,19 +288,19 @@ void OGREEE_CALL frame(float dtime)
 			pos = pos >= last1 ? pos >= last3 ? 0.0f : (last3 - pos) : pos >= last ? last : pos;
 			assert(pos >= 0.0f && pos <= last);
 
-			ogre_scene_subobject_keyframe(g, i, pos);
+			g->elements[i].animation = pos;
 		}
 
 		struct RI
 		{
 			unsigned subobject;
-			const Ogre::Vector3& axis;
+			float OgreGameObjectSceneElement::* axis;
 		};
 		const RI so[] =
 		{
-			{ 19, Ogre::Vector3::UNIT_X },
-			{ 20, Ogre::Vector3::UNIT_X },
-			{ 24, Ogre::Vector3::UNIT_Y }
+			{ 19, &OgreGameObjectSceneElement::relative_pitch },
+			{ 20, &OgreGameObjectSceneElement::relative_pitch },
+			{ 24, &OgreGameObjectSceneElement::relative_heading }
 		};
 		for (unsigned o = 0; o < ARRAYSIZE(so); o++)
 		{
@@ -307,14 +309,9 @@ void OGREEE_CALL frame(float dtime)
 			{
 				for (unsigned j = 0; j != s.number_of_subobjects; j++)
 				{
-					OgreNode* n = g->nodes[s.subobjects[j]];
-					matrix3x3 m33;
-					ogre_node_get_orientation(n, m33);
-					Ogre::Matrix3 m(m33), r;
-					Ogre::Quaternion(Ogre::Radian(fmod(cur_time, 10.0f) * 0.01f), so[o].axis).ToRotationMatrix(r);
-					m = m * r;
-					memcpy(m33, m[0], sizeof(m33));
-					ogre_node_set_orientation(n, m33);
+					struct OgreGameObjectSceneElement& n = g->elements[s.subobjects[j]];
+					float& a = n.*so[o].axis;
+					a = fmod(a + fmod(cur_time, 10.0f) * 0.01f, PI2);
 				}
 			}
 		}
@@ -329,15 +326,15 @@ void OGREEE_CALL frame(float dtime)
 					{
 						unsigned sp = p.subobjects[((unsigned)cur_time) % p.number_of_subobjects];
 						for (unsigned pi = 0; pi != p.number_of_subobjects; pi++)
-							ogre_node_set_visible(g->nodes[p.subobjects[pi]], false);
-						ogre_node_set_visible(g->nodes[sp], true);
+							g->elements[p.subobjects[pi]].visible = false;
+						g->elements[sp].visible = true;
 						OgreSubObjectsSearch w;
 						if (ogre_scene_find2(g, 29, sp, &w))
 						{
 							double df = exp(((unsigned)cur_time) / p.number_of_subobjects / double(h.subobjects[hi]) + index);
 							unsigned flags = reinterpret_cast<const unsigned&>(df);
 							for (unsigned wi = 0; wi != w.number_of_subobjects; wi++)
-								ogre_node_set_visible(g->nodes[w.subobjects[wi]], flags & (1 << wi));
+								g->elements[w.subobjects[wi]].visible = flags & (1 << wi) ? true : false;
 						}
 					}
 				}
@@ -345,16 +342,48 @@ void OGREEE_CALL frame(float dtime)
 		}
 	}
 #endif
-#ifdef USE_TERRAIN
-	// Mark terrain sectors as visible and invisible
-	ogre_terrain_update();
-#endif
 }
 
 #ifndef USE_OGRE_RUN
 class TutorialApplication : public BaseApplication
 {
 protected:
+	virtual void setupResources(void)
+	{
+		Ogre::ConfigFile cf;
+		cf.load(mResourcesCfg);
+		Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
+		Ogre::String sec, type, arch;
+		while (seci.hasMoreElements())
+		{
+			sec = seci.peekNextKey();
+			Ogre::ConfigFile::SettingsMultiMap* settings = seci.getNext();
+			Ogre::ConfigFile::SettingsMultiMap::iterator i;
+			for (i = settings->begin(); i != settings->end(); i++)
+			{
+				type = i->first;
+				arch = i->second;
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch, type, sec);
+			}
+		}
+		const Ogre::ResourceGroupManager::LocationList genLocs = Ogre::ResourceGroupManager::getSingleton().getResourceLocationList("General");
+		arch = genLocs.front()->archive->getName();
+		type = "FileSystem";
+		sec = "Popular";
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSLES", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL150", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL400", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/Cg", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL_Cg", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSLES", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL150", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/Cg", type, sec);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL_Cg", type, sec);
+	}
 	virtual void createFrameListener(void)
 	{
 		BaseApplication::createFrameListener();
@@ -381,7 +410,7 @@ protected:
 
 		ogre_set("EE", mSceneMgr, mCamera);
 
-		init ();
+		init();
 
 #ifdef USE_OBJECTS_ONLY
 		Ogre::Light* light = mSceneMgr->createLight("light");
@@ -425,6 +454,7 @@ protected:
 			return false;
 
 		frame(evt.timeSinceLastFrame);
+		ogre_update();
 
 #ifdef USE_OBJECTS_ONLY
 		// Display objects numbers
@@ -469,6 +499,11 @@ protected:
 			// Change the map displayed
 			if (evt.key == OIS::KC_M)
 				set_terrain(sign);
+			if (evt.key == OIS::KC_J)
+			{
+				Ogre::Vector3 v(rand() * 1024.0f * terrain_3d_sector_x_max / RAND_MAX, 2000, rand() * -1024.0f * terrain_3d_sector_z_max / RAND_MAX);
+				mCamera->setPosition(v);
+			}
 #endif
 		}
 

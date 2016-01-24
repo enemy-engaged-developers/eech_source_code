@@ -1,20 +1,12 @@
 #include "ogre_int.hpp"
 
-#ifdef USE_INDICES32
-#define OBJECTS_POINTS_PER_VERTEX_BUFFER (1u << 20)
-#define OBJECTS_POINTS_PER_INDEX_BUFFER (1u << 22)
-#else
-#define OBJECTS_POINTS_PER_VERTEX_BUFFER (1u << 16)
-#define OBJECTS_POINTS_PER_INDEX_BUFFER (1u << 22)
-#endif
-
 namespace
 {
 	GeometryPtr objects_geometry;
 	std::vector<AnimationMesh> objects_anim;
 	OgreObjectsInit* objects_init;
 
-	class Normal
+	class Normal : private Uncopyable
 	{
 	public:
 		Normal(void)
@@ -51,8 +43,7 @@ namespace
 	Normal normal;
 
 	// Surface comparer. The polygons of the equal surfaces go into the single Ogre::SubMesh.
-	static bool
-	compare_surfaces(const face_surface_description& left, const face_surface_description& right)
+	static bool compare_surfaces(const face_surface_description& left, const face_surface_description& right)
 	{
 #if 0
 		return false;
@@ -100,10 +91,9 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 	{
 		// Calculate real point coordinates and normals
 
-		const float
-			xmax = std::max(fabs(o.bounding_box.xmin), fabs(o.bounding_box.xmax)) / 32767.0f,
-			ymax = std::max(fabs(o.bounding_box.ymin), fabs(o.bounding_box.ymax)) / 32767.0f,
-			zmax = std::max(fabs(o.bounding_box.zmin), fabs(o.bounding_box.zmax)) / 32767.0f;
+		const float xmax = std::max(fabs(o.bounding_box.xmin), fabs(o.bounding_box.xmax)) / 32767.0f;
+		const float ymax = std::max(fabs(o.bounding_box.ymin), fabs(o.bounding_box.ymax)) / 32767.0f;
+		const float zmax = std::max(fabs(o.bounding_box.zmin), fabs(o.bounding_box.zmax)) / 32767.0f;
 
 		for (int j = 0; j < o.number_of_points; j++)
 		{
@@ -152,10 +142,8 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		face_surface_description& s = o.surfaces[j];
 		Surfaces::iterator itor(surfaces.begin());
 		for (; itor != surfaces.end(); ++itor)
-		{
 			if (compare_surfaces(itor->surface, s))
 				break;
-		}
 		SurfacesInfo& info = itor == surfaces.end() ? (surfaces.push_back(SurfacesInfo()), surfaces.back()) : *itor;
 
 		info.surface = s;
@@ -167,10 +155,8 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		const size_t number_of_points = s.number_of_points ? s.number_of_points : 256;
 		size_t number_of_indices = 0;
 		if (s.polygons)
-		{
 			for (size_t k = 0; k < s.number_of_faces; k++)
 				number_of_indices += (cf[k].number_of_points - 2) * 3;
-		}
 		else
 			number_of_indices = s.number_of_faces * 2;
 
@@ -336,15 +322,17 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 					break;
 			}
 			unsigned smi = mesh->getNumSubMeshes() - 1;
-			animation[animation_index].push_back(AnimationRef(smi, material_index));
-			unsigned size = objects_init->get_animation_size(animation_index);
+			AnimationInfo& ai = animation[animation_index];
+			ai.limit = objects_init->get_animation_size(animation_index);
+			ai.refs.push_back(AnimationRef(smi, material_index));
+			unsigned size = ai.limit;
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
-				Ogre::MaterialPtr mata = Ogre::MaterialManager::getSingleton().create(material_animation_name, ogre_resource_group);
-				*mata = *mat;
+				Ogre::MaterialPtr mata = mat->clone(material_animation_name);
 				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(objects_init->get_animation_texture(animation_index, frame)));
 			}
+			sm->setMaterialName(MaterialAnimationName(material_index, 0));
 		}
 		while (false);
 	}
@@ -360,9 +348,10 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 	const AnimationMesh& am = objects_anim[object];
 	for (AnimationMesh::const_iterator i(am.begin()); i != am.end(); ++i)
 	{
-		SceneAnimationRefs& sar = as[i->first];
-		for (AnimationRefs::const_iterator j(i->second.begin()); j != i->second.end(); j++)
-			sar.push_back(SceneAnimationRef(subobject, *j));
+		SceneAnimationInfo& sar = as[i->first];
+		sar.limit = i->second.limit;
+		for (AnimationRefs::const_iterator j(i->second.refs.begin()); j != i->second.refs.end(); j++)
+			sar.refs.push_back(SceneAnimationRef(subobject, *j));
 	}
 }
 
@@ -375,14 +364,12 @@ void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
 	objects_init = init;
 
 	assert(!objects_geometry.get());
-	objects_geometry.reset(new Geometry(OBJECTS_POINTS_PER_VERTEX_BUFFER, OBJECTS_POINTS_PER_INDEX_BUFFER));
+	objects_geometry.reset(new Geometry);
 
 	objects_anim.resize(objects_init->number_of_objects + 1);
 	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
 		ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 	objects_geometry->flush();
-
-	//objects_geometry->statistics("OG_STAT.TXT");
 
 	objects_init = 0;
 }
@@ -392,6 +379,12 @@ void OGREEE_CALL ogre_objects_clear(void)
 {
 	ogre_log(__FUNCTION__, "");
 
+	for (unsigned i = 0; i < objects_anim.size(); i++)
+	{
+		ObjectName object(i);
+		Ogre::MeshManager::getSingleton().unload(object);
+		Ogre::MeshManager::getSingleton().remove(object);
+	}
 	objects_anim.clear();
 	objects_geometry.reset(0);
 }

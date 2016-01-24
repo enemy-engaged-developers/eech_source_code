@@ -592,7 +592,7 @@ void initialise_flight_dynamics_collision_points (int update_points_position)
 							viewpoint vp;
 							int point_number = i + current_flight_dynamics->number_of_fixed_collision_points;
 
-							get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+							get_3d_sub_object_world_viewpoint (&search, &vp);
 
 							current_flight_dynamics->fixed_collision_points [point_number].model_point.x = vp.position.x;
 							current_flight_dynamics->fixed_collision_points [point_number].model_point.y = vp.position.y;
@@ -682,7 +682,7 @@ void initialise_flight_dynamics_collision_points (int update_points_position)
 							viewpoint
 								vp;
 
-							get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
+							get_3d_sub_object_world_viewpoint (&search, &vp);
 
 							current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.x = vp.position.x;
 							current_flight_dynamics->moving_collision_points [i + current_flight_dynamics->number_of_moving_collision_points].model_point.y = vp.position.y;

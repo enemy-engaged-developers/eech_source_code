@@ -1364,6 +1364,9 @@ void get_apache_crew_viewpoint (int index, object_3d_instance   *virtual_cockpit
 	float
 		head_pitch_datum;
 
+	object_3d_sub_object_search_data
+		search;
+
 	head_pitch_datum = pilot_head_pitch_datum;
 
 	//
@@ -1384,7 +1387,9 @@ void get_apache_crew_viewpoint (int index, object_3d_instance   *virtual_cockpit
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
-	get_3d_sub_object_world_viewpoint (&virtual_cockpit_inst3d->sub_objects[index], &vp);
+	search.search_object = virtual_cockpit_inst3d;
+	search.result_sub_object = &virtual_cockpit_inst3d->sub_objects[index];
+	get_3d_sub_object_world_viewpoint (&search, &vp);
 
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
 

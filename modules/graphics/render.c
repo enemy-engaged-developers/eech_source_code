@@ -73,7 +73,9 @@
 BOOL initialise_graphics_rendering_system ( void )
 {
 
+#ifndef OGRE_EE
 	initialise_direct_3d ();
+#endif
 
 	set_fpu_rounding_mode_zero ();
 

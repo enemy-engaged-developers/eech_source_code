@@ -349,7 +349,7 @@ void session_list_function (ui_object *obj, void *arg)
 	int selection;
 	//int num_sessions; // Jabberwock 031210 Session filter
 
-	if (obj->type == UI_TYPE_LIST_BOX)
+	if (get_ui_object_type(obj) == UI_TYPE_LIST_BOX)
 	{
 
 		return;

@@ -19,7 +19,7 @@ void Geometry::get_buf(const VertexDescription& s, size_t number_of_points, size
 
 	// Vertex buffer
 
-	VBUF_LIST& vbl = vbufs[(s.flags << 16) | s.vertex_size];
+	VBUF_LIST& vbl = vbufs[(s.vertex_size << 16) | s.flags];
 
 	if (vbl.list.empty() || vbl.list.back().offset + number_of_points > POINTS_PER_VERTEX_BUFFER)
 	{
@@ -71,49 +71,46 @@ void Geometry::get_buf(const VertexDescription& s, size_t number_of_points, size
 void Geometry::flush(void)
 {
 	for (VBUFS::iterator itor(vbufs.begin()); itor != vbufs.end(); ++itor)
-		flush_vbuf(itor->second, itor->first & 0xFFFF);
+		flush_vbuf(itor->second, itor->first >> 16);
 	flush_ibuf();
+	statistics();
 }
 
-void Geometry::statistics(const char* filename) const
+void Geometry::statistics() const
 {
-	FILE* f = fopen(filename, "w");
-	assert(f);
+	ogre_log(__FUNCTION__, "%u %u", POINTS_PER_VERTEX_BUFFER, POINTS_PER_INDEX_BUFFER);
 
 	size_t grand = 0;
-
-	fprintf(f, "%u %u\n", POINTS_PER_VERTEX_BUFFER, POINTS_PER_INDEX_BUFFER);
-
+	char buf[8192];
 	for (VBUFS::const_iterator itor(vbufs.begin()); itor != vbufs.end(); ++itor)
 	{
-		size_t size = itor->first & 0xFFFF;
+		size_t size = itor->first >> 16;
 		size_t total = 0;
-		fprintf(f, "%u:", size); 
+		sprintf(buf, "%u:", size);
 		for (LIST_VBUF::const_iterator it(itor->second.list.begin()); it != itor->second.list.end(); ++it)
 		{
 			total += it->offset;
-			fprintf(f, " %u", it->offset);
+			sprintf(buf + strlen(buf), " %u", it->offset);
 		}
-		fprintf(f, " [%u]\n", total);
-		total *= size;
-		fprintf(f, " (%u)\n", total);
+		sprintf(buf + strlen(buf), " [%u]", total);
+		total *= size * sizeof(Ogre::Real);
+		ogre_log(__FUNCTION__, "%s (%u)", buf, total);
 		grand += total;
 	}
 
 	size_t size = 0;
+	*buf = '\0';
 	for (LIST_IBUF::const_iterator it(ibufs.list.begin()); it != ibufs.list.end(); ++it)
 	{
 		size += it->offset;
-		fprintf(f, " %u", it->offset);
+		sprintf(buf + strlen(buf), " %u", it->offset);
 	}
-	fprintf(f, " [%u]\n", size);
+	sprintf(buf + strlen(buf), " [%u]", size);
 	size *= sizeof(IndexType);
-	fprintf(f, " (%u)\n", size);
+	ogre_log(__FUNCTION__, "%s (%u)", buf, size);
 	grand += size;
 
-	fprintf(f, "%u\n", grand);
-
-	fclose(f);
+	ogre_log(__FUNCTION__, "%u'%03u'%03u", grand / 1000000, grand / 1000 % 1000, grand % 1000);
 }
 
 void Geometry::flush_vbuf(VBUF_LIST& vbl, size_t vertex_size)
@@ -130,7 +127,7 @@ void Geometry::flush_vbuf(VBUF_LIST& vbl, size_t vertex_size)
 	vbuf.hvb = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(vertex_size * sizeof(Ogre::Real), vbuf.offset, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 	vbuf.vbb->setBinding(vbuf.index, vbuf.hvb);
 	vbuf.hvb->writeData(0, vbuf.offset * vertex_size * sizeof(Ogre::Real), &vbl.shadow[0], true);
-	vbl.shadow.clear();
+	VBUF_LIST::SHADOW().swap(vbl.shadow);
 }
 
 void Geometry::flush_ibuf(void)
@@ -143,5 +140,5 @@ void Geometry::flush_ibuf(void)
 
 	IBUF& ibuf = ibufs.list.back();
 	ibuf.hib->writeData(0, ibuf.offset * sizeof(IndexType), &ibufs.shadow[0], true);
-	ibufs.shadow.clear();
+	IBUFS::SHADOW().swap(ibufs.shadow);
 }

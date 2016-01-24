@@ -109,7 +109,11 @@ static int
 	custom_number_of_objects = 2000,
 	custom_number_of_cameras = 2000;
 
+#ifndef OGRE_EE
 static int
+#else
+int
+#endif
 	total_number_of_objects,
 	total_number_of_cameras,
 	total_number_of_scene_link_objects,
@@ -1053,7 +1057,7 @@ static void read_scene ( FILE *fp, int version )
 				skip_schem ( fp, version );
 				get_nul_string ( name, sizeof ( name ), fp, TRUE );
 				objects_3d_scene_link_ptr->scene_index = get_scene ( name );
-				
+
 				if (objects_3d_scene_link_ptr->scene_index <= OBJECT_3D_INVALID_OBJECT_INDEX)
 					debug_log("Failed to load linkobject %s from scene %s", name, object_3d_information_database [scene_index].name);
 			}
@@ -2008,6 +2012,7 @@ void initialise_3d_objects ( const char *directory )
 				fread ( &objects_3d_data[count].surfaces[surface_count].reflectivity, sizeof ( unsigned char ), 1, fp );
 				fread ( &objects_3d_data[count].surfaces[surface_count].specularity, sizeof ( unsigned char ), 1, fp );
 
+#ifndef OGRE_EE
 				if ( objects_3d_data[count].surfaces[surface_count].textured )
 				{
 
@@ -2021,6 +2026,7 @@ void initialise_3d_objects ( const char *directory )
 						}
 					}
 				}
+#endif
 
 				if ( objects_3d_data[count].surfaces[surface_count].polygons )
 				{
@@ -2239,6 +2245,7 @@ void initialise_3d_objects ( const char *directory )
 		skin_init ( &objects_3d_scene_database[count] );
 	}
 
+#ifndef OGRE_EE
 	//
 	// Initialise the d3d version of the objects now
 	//
@@ -2248,6 +2255,7 @@ void initialise_3d_objects ( const char *directory )
 
 		initialise_3d_objects_in_d3d ();
 	}
+#endif
 
 #if REPORT_OBJECT_STATS
 	debug_log ( "Finished" );
@@ -2255,6 +2263,7 @@ void initialise_3d_objects ( const char *directory )
 
 	initialised_3d_objects = TRUE;
 
+#ifndef OGRE_EE
 	//
 	// Setup a sprite flare texture
 	//
@@ -2274,6 +2283,7 @@ void initialise_3d_objects ( const char *directory )
 			object_3d_sprite_flare_texture = get_system_texture_ptr ( index );
 		}
 	}
+#endif
 
 	current_number_of_3d_objects_constructed = 0;
 
@@ -2393,11 +2403,13 @@ void deinitialise_3d_objects ( void )
 	int
 		i;
 
+#ifndef OGRE_EE
 	//
 	// Deinitialise the d3d versions first
 	//
 
 	deinitialise_3d_objects_in_d3d ();
+#endif
 
 	for ( i = 0; i < OBJECT_3D_LAST; i++ )
 	{
@@ -2570,6 +2582,7 @@ int get_3d_objects_initialised ( void )
 	return ( initialised_3d_objects );
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2738,6 +2751,7 @@ object_3d_sub_instance
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 {
@@ -2745,9 +2759,11 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object_3d_instance
 		*object;
 
+#ifndef OGRE_EE
 	int
 		count,
 		found;
+#endif
 
 	ASSERT ( index > OBJECT_3D_INVALID_OBJECT_INDEX );
 	ASSERT ( index < OBJECT_3D_LAST );
@@ -2766,16 +2782,19 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 
 	object_3d_scenes_creation_count[index]++;
 
+#ifndef OGRE_EE
 	if ( objects_3d_scene_database[index].total_number_of_sub_objects )
 	{
 
 		object_3d_sub_instance_construction_array = ( object_3d_sub_instance * ) safe_malloc ( sizeof ( object_3d_sub_instance ) * objects_3d_scene_database[index].total_number_of_sub_objects );
 	}
+#endif
 
 	object = ( object_3d_instance * ) safe_malloc ( sizeof ( object_3d_instance ) );
 
 	object->object_number = index;
 
+#ifndef OGRE_EE
 	found = FALSE;
 
 	count = index;
@@ -2873,6 +2892,13 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 
 	object->object_dissolve_value = 255;
 	object->object_diffuse_value = 255;
+#else
+
+	object->magic = 0xDEADBEAF;
+
+	ogre_scene_create ( &object->vp, index );
+
+#endif
 
 	// Casm 18DEC15 Skin
 	skin_random ( object );
@@ -2880,6 +2906,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	return ( object );
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3019,6 +3046,7 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 void destruct_3d_object ( object_3d_instance *object )
 {
@@ -3035,6 +3063,7 @@ void destruct_3d_object ( object_3d_instance *object )
 
 	object_3d_scenes_creation_count[object->object_number]--;
 
+#ifndef OGRE_EE
 	//
 	// Free up the texture animations array
 	//
@@ -3052,6 +3081,13 @@ void destruct_3d_object ( object_3d_instance *object )
 
 		object->sub_objects = NULL;
 	}
+#else
+	ASSERT ( object->magic == 0xDEADBEAF );
+
+	ogre_scene_destroy ( &object->vp );
+
+	object->magic = 0xACE2FACC;
+#endif
 
 	safe_free ( object );
 /*
@@ -3219,6 +3255,7 @@ int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers i
 	}
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3344,13 +3381,20 @@ void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d *return
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
-void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp )
+void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp )
 {
 
+#ifndef OGRE_EE
 	object_3d_sub_instance
 		*this_object,
 		*objects[256];
+#else
+	unsigned
+		this_object,
+		objects[256];
+#endif
 
 	object_3d_instance
 		*main_object;
@@ -3358,18 +3402,15 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 	int
 		count = -1;
 
-	float
-		x,
-		y,
-		z,
-		x_scale,
-		y_scale,
-		z_scale;
+	vec3d
+		position,
+		scale;
 
 	matrix3x3
 		attitude;
 
-	this_object = object;
+#ifndef OGRE_EE
+	this_object = search->result_sub_object;
 
 	while ( this_object->parent )
 	{
@@ -3379,42 +3420,72 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 	}
 
 	main_object = ( object_3d_instance * ) this_object;
+#else
+	ASSERT ( search->search_object->magic == 0xDEADBEAF );
 
-	x = main_object->vp.x;
-	y = main_object->vp.y;
-	z = main_object->vp.z;
+	main_object = search->search_object;
+
+	this_object = search->result_sub_object - main_object->vp.elements;
+
+	while ( this_object )
+	{
+		count++;
+		objects[count] = this_object;
+		this_object = ogre_scene_get_parent ( &main_object->vp, this_object );
+	}
+#endif
+
+	memcpy ( &position, &main_object->vp.position, sizeof ( vec3d ) );
 
 	memcpy ( attitude, main_object->vp.attitude, sizeof ( matrix3x3 ) );
 
-	x_scale = main_object->relative_scale.x;
-	y_scale = main_object->relative_scale.y;
-	z_scale = main_object->relative_scale.z;
+#ifndef OGRE_EE
+	scale = main_object->relative_scale;
+#else
+	scale.x = scale.y = scale.z = 1.0f;
+#endif
 
 	for ( ; count >= 0; count-- )
 	{
 
-		float
-			sub_x,
-			sub_y,
-			sub_z;
+		vec3d
+			sub;
 
 		matrix3x3
 			result_attitude,
 			sub_attitude;
 
-		sub_x = objects[count]->relative_position.x * x_scale;
-		sub_y = objects[count]->relative_position.y * y_scale;
-		sub_z = objects[count]->relative_position.z * z_scale;
+#ifndef OGRE_EE
+		sub = objects[count]->relative_position;
+#else
+		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
+#endif
 
-		x += ( ( sub_x * attitude[0][0] ) + ( sub_y * attitude[1][0] ) + ( sub_z * attitude[2][0] ) );
-		y += ( ( sub_x * attitude[0][1] ) + ( sub_y * attitude[1][1] ) + ( sub_z * attitude[2][1] ) );
-		z += ( ( sub_x * attitude[0][2] ) + ( sub_y * attitude[1][2] ) + ( sub_z * attitude[2][2] ) );
+		sub.x *= scale.x;
+		sub.y *= scale.y;
+		sub.z *= scale.z;
 
-		x_scale *= objects[count]->relative_scale.x;
-		y_scale *= objects[count]->relative_scale.y;
-		z_scale *= objects[count]->relative_scale.z;
+		multiply_matrix3x3_vec3d ( &sub, attitude, &sub );
 
+		position.x += sub.x;
+		position.y += sub.y;
+		position.z += sub.z;
+
+#ifndef OGRE_EE
+		sub = objects[count]->relative_scale;
+#else
+		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
+#endif
+
+		scale.x *= sub.x;
+		scale.y *= sub.y;
+		scale.z *= sub.z;
+
+#ifndef OGRE_EE
 		get_3d_transformation_matrix ( sub_attitude, objects[count]->relative_heading, -objects[count]->relative_pitch, -objects[count]->relative_roll );
+#else
+		get_3d_transformation_matrix ( sub_attitude, main_object->vp.elements[objects[count]].relative_heading, -main_object->vp.elements[objects[count]].relative_pitch, -main_object->vp.elements[objects[count]].relative_roll );
+#endif
 
 		multiply_matrix3x3_matrix3x3 ( result_attitude, sub_attitude, attitude );
 
@@ -3423,9 +3494,7 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 
 	memcpy ( vp->attitude, attitude, sizeof ( matrix3x3 ) );
 
-	vp->x = x;
-	vp->y = y;
-	vp->z = z;
+	vp->position = position;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3434,12 +3503,18 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, 
 
 // You should provide correct vp.attitude and vp.position in case of wrong work of original code /thealx/
 
-void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpoint *vp, int global)
+void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp, int global )
 {
 
+#ifndef OGRE_EE
 	object_3d_sub_instance
 		*this_object,
 		*objects[256];
+#else
+	unsigned
+		this_object,
+		objects[256];
+#endif
 
 	object_3d_instance
 		*main_object;
@@ -3447,18 +3522,15 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 	int
 		count = -1;
 
-	float
-		x = 0,
-		y = 0,
-		z = 0,
-		x_scale = 1,
-		y_scale = 1,
-		z_scale = 1;
+	vec3d
+		position,
+		scale;
 
 	matrix3x3
 		attitude;
 
-	this_object = object;
+#ifndef OGRE_EE
+	this_object = search->result_sub_object;
 
 	while ( this_object->parent )
 	{
@@ -3468,66 +3540,103 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 	}
 
 	main_object = ( object_3d_instance * ) this_object;
+#else
+	ASSERT ( search->search_object->magic == 0xDEADBEAF );
 
-	if (main_object->vp.x < 100 && main_object->vp.z < 100 && global) // sometimes we don't get world coords, will make it manually
+	main_object = search->search_object;
+
+	this_object = search->result_sub_object - main_object->vp.elements;
+
+	while ( this_object )
 	{
-		float
-			sub_x = main_object->vp.x,
-			sub_y = main_object->vp.y,
-			sub_z = main_object->vp.z;
+		count++;
+		objects[count] = this_object;
+		this_object = ogre_scene_get_parent ( &main_object->vp, this_object );
+	}
+#endif
 
-		x = vp->position.x + ( ( sub_x * vp->attitude[0][0] ) + ( sub_y * vp->attitude[1][0] ) + ( sub_z * vp->attitude[2][0] ) );
-		y = vp->position.y + ( ( sub_x * vp->attitude[0][1] ) + ( sub_y * vp->attitude[1][1] ) + ( sub_z * vp->attitude[2][1] ) );
-		z = vp->position.z + ( ( sub_x * vp->attitude[0][2] ) + ( sub_y * vp->attitude[1][2] ) + ( sub_z * vp->attitude[2][2] ) );
+	memcpy ( &position, &main_object->vp.position, sizeof ( vec3d ) );
+
+	if (position.x < 100 && position.z < 100 && global) // sometimes we don't get world coords, will make it manually
+	{
+		multiply_matrix3x3_vec3d ( &position, vp->attitude, &position );
+		position.x += vp->position.x;
+		position.y += vp->position.y;
+		position.z += vp->position.z;
 
 		multiply_matrix3x3_matrix3x3 ( attitude, vp->attitude, main_object->vp.attitude );
 
-		x_scale = main_object->relative_scale.x;
-		y_scale = main_object->relative_scale.y;
-		z_scale = main_object->relative_scale.z;
+#ifndef OGRE_EE
+		scale = main_object->relative_scale;
+#else
+		scale.x = scale.y = scale.z = 1.0f;
+#endif
+
 	}
 	else if (global)
 	{
-		x = main_object->vp.x;
-		y = main_object->vp.y;
-		z = main_object->vp.z;
-
 		memcpy ( attitude, main_object->vp.attitude, sizeof ( matrix3x3 ) );
 
-		x_scale = main_object->relative_scale.x;
-		y_scale = main_object->relative_scale.y;
-		z_scale = main_object->relative_scale.z;
+#ifndef OGRE_EE
+		scale = main_object->relative_scale;
+#else
+		scale.x = scale.y = scale.z = 1.0f;
+#endif
 	}
 	else
 	{
-		get_3d_transformation_matrix(attitude, 0, 0, 0);
+		position.x = 0;
+		position.y = 0;
+		position.z = 0;
+
+		get_3d_transformation_matrix ( attitude, 0, 0, 0 );
+
+		scale.x = 1;
+		scale.y = 1;
+		scale.z = 1;
 	}
 
 	for ( ; count >= 0; count-- )
 	{
 
-		float
-			sub_x,
-			sub_y,
-			sub_z;
+		vec3d
+			sub;
 
 		matrix3x3
 			result_attitude,
 			sub_attitude;
 
-		sub_x = objects[count]->relative_position.x * x_scale;
-		sub_y = objects[count]->relative_position.y * y_scale;
-		sub_z = objects[count]->relative_position.z * z_scale;
+#ifndef OGRE_EE
+		sub = objects[count]->relative_position;
+#else
+		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
+#endif
 
-		x += ( ( sub_x * attitude[0][0] ) + ( sub_y * attitude[1][0] ) + ( sub_z * attitude[2][0] ) );
-		y += ( ( sub_x * attitude[0][1] ) + ( sub_y * attitude[1][1] ) + ( sub_z * attitude[2][1] ) );
-		z += ( ( sub_x * attitude[0][2] ) + ( sub_y * attitude[1][2] ) + ( sub_z * attitude[2][2] ) );
+		sub.x *= scale.x;
+		sub.y *= scale.y;
+		sub.z *= scale.z;
 
-		x_scale *= objects[count]->relative_scale.x;
-		y_scale *= objects[count]->relative_scale.y;
-		z_scale *= objects[count]->relative_scale.z;
+		multiply_matrix3x3_vec3d ( &sub, attitude, &sub );
 
+		position.x += sub.x;
+		position.y += sub.y;
+		position.z += sub.z;
+
+#ifndef OGRE_EE
+		sub = objects[count]->relative_scale;
+#else
+		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
+#endif
+
+		scale.x *= sub.x;
+		scale.y *= sub.y;
+		scale.z *= sub.z;
+
+#ifndef OGRE_EE
 		get_3d_transformation_matrix ( sub_attitude, objects[count]->relative_heading, -objects[count]->relative_pitch, -objects[count]->relative_roll );
+#else
+		get_3d_transformation_matrix ( sub_attitude, main_object->vp.elements[objects[count]].relative_heading, -main_object->vp.elements[objects[count]].relative_pitch, -main_object->vp.elements[objects[count]].relative_roll );
+#endif
 
 		multiply_matrix3x3_matrix3x3 ( result_attitude, sub_attitude, attitude );
 
@@ -3536,12 +3645,10 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_INSTANCE *object, viewpo
 
 	memcpy ( vp->attitude, attitude, sizeof ( matrix3x3 ) );
 
-	vp->x = x;
-	vp->y = y;
-	vp->z = z;
-
+	vp->position = position;
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3571,6 +3678,7 @@ int get_number_of_3d_scene_cameras ( object_3d_index_numbers scene_index, object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_camera_index_numbers camera_index )
 {
@@ -3579,17 +3687,21 @@ int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_came
 		total,
 		count;
 
-	object_3d_index_numbers
-		scene_index;
+	struct OBJECT_3D_SCENE_DATABASE_ENTRY
+		*scene;
 
-	scene_index = object->object_number;
+#ifdef OGRE_EE
+	ASSERT ( object->magic == 0xDEADBEAF );
+#endif
+
+	scene = &objects_3d_scene_database[object->object_number];
 
 	total = 0;
 
-	for ( count = 0; count < objects_3d_scene_database[scene_index].number_of_cameras; count++ )
+	for ( count = 0; count < scene->number_of_cameras; count++ )
 	{
 
-		if ( objects_3d_scene_database[scene_index].cameras[count].camera_name_index == camera_index )
+		if ( scene->cameras[count].camera_name_index == camera_index )
 		{
 
 			total++;
@@ -3599,6 +3711,7 @@ int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_came
 	return ( total );
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3637,29 +3750,36 @@ object_3d_scene_camera *get_3d_scene_camera ( object_3d_index_numbers scene_inde
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 object_3d_scene_camera *get_3d_object_camera ( object_3d_instance *object, object_3d_camera_index_numbers camera_index, int camera_depth )
 {
 
 	int
-		scene_index,
 		count,
 		depth;
 
+	struct OBJECT_3D_SCENE_DATABASE_ENTRY
+		*scene;
+
+#ifdef OGRE_EE
+	ASSERT ( object->magic == 0xDEADBEAF );
+#endif
+
+	scene = &objects_3d_scene_database[object->object_number];
+
 	depth = camera_depth;
 
-	scene_index = object->object_number;
-
-	for ( count = 0; count < objects_3d_scene_database[scene_index].number_of_cameras; count++ )
+	for ( count = 0; count < scene->number_of_cameras; count++ )
 	{
 
-		if ( objects_3d_scene_database[scene_index].cameras[count].camera_name_index == camera_index )
+		if ( scene->cameras[count].camera_name_index == camera_index )
 		{
 
 			if ( depth == 0 )
 			{
 
-				return ( &objects_3d_camera_database[ objects_3d_scene_database[scene_index].cameras[count].camera_index ] );
+				return ( &objects_3d_camera_database[ scene->cameras[count].camera_index ] );
 			}
 			else
 			{
@@ -3681,6 +3801,10 @@ float get_object_3d_camera_lifetime ( object_3d_instance *obj, object_3d_camera_
 
 	object_3d_scene_camera
 		*camera;
+
+#ifdef OGRE_EE
+	ASSERT ( obj->magic == 0xDEADBEAF );
+#endif
 
 	//
 	// Get the camera
@@ -3717,6 +3841,10 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 
 	object_3d_scene_camera
 		*camera;
+
+#ifdef OGRE_EE
+	ASSERT ( obj->magic == 0xDEADBEAF );
+#endif
 
 	//
 	// Get the camera
@@ -3786,9 +3914,9 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 //		multiply_matrix3x3_vec3d ( &vp->position, obj->vp.attitude, &relative_position );
 		multiply_matrix3x3_vec3d ( &vp->position, new_object_attitude, &relative_position );
 
-		vp->position.x += obj->vp.x;
-		vp->position.y += obj->vp.y;
-		vp->position.z += obj->vp.z;
+		vp->position.x += obj->vp.position.x;
+		vp->position.y += obj->vp.position.y;
+		vp->position.z += obj->vp.position.z;
 
 		heading = keyframe.heading;
 		pitch = keyframe.pitch;
@@ -3813,7 +3941,7 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 				vec3d
 					view_vector;
 
-				get_3d_sub_object_world_viewpoint ( search.result_sub_object, &sub_object_viewpoint );
+				get_3d_sub_object_world_viewpoint ( &search, &sub_object_viewpoint );
 
 				//
 				// Strike a vector between camera & sub object.
@@ -3852,6 +3980,7 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 	}
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4023,6 +4152,7 @@ void count_sub_object_statistics ( object_3d_database_entry *sub_object, int app
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 void report_objects_not_destructed ( void )
 {

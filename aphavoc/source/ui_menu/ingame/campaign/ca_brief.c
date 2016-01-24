@@ -1072,6 +1072,7 @@ void render_static_briefing_objective_preview (entity *en)
 
 	get_matrix3x3_from_unit_vec3d (vp.attitude, &vec);
 
+#ifndef OGRE_EE
 	//
 	// Hack time of day to mid-day (i.e. light scene from above)
 	//
@@ -1079,6 +1080,7 @@ void render_static_briefing_objective_preview (entity *en)
 	set_3d_time_of_day (main_3d_env, 12.0 * ONE_HOUR);
 
 	recalculate_3d_environment_settings (main_3d_env);
+#endif
 
 	//
 	// Draw scene
@@ -1137,7 +1139,9 @@ void render_static_briefing_objective_preview (entity *en)
 
 void initialise_campaign_screen_3d_textures (void)
 {
+#ifndef OGRE_EE
 	preview_texture_screen = create_user_3dvisual_texture_screen (PREVIEW_TEXTURE_SIZE, PREVIEW_TEXTURE_SIZE, TEXTURE_TYPE_SCREEN);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1146,7 +1150,9 @@ void initialise_campaign_screen_3d_textures (void)
 
 void deinitialise_campaign_screen_3d_textures (void)
 {
+#ifndef OGRE_EE
 	destroy_screen (preview_texture_screen);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

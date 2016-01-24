@@ -813,6 +813,7 @@ void set_gunship_screen_progress_message (int message)
 
 void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 {
+#ifndef OGRE_EE
 
 	object_3d_instance
 		*apache;
@@ -1124,6 +1125,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	//
 	// DO NOT DESTRUCT THE TEMPORARY INSTANCE - IT WILL CAUSE A PAGE FAULT
 	//
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

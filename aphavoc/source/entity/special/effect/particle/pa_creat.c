@@ -217,7 +217,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 				raw->inst3d[ loop ] = construct_3d_object (raw->object_3d_shape);
 
 				get_3d_transformation_matrix_fast (rotation_matrix, raw->heading, raw->pitch, raw->roll);
-				
+
 				memcpy (raw->inst3d [loop]->vp.attitude, rotation_matrix, sizeof (matrix3x3));
 			}
 			else
