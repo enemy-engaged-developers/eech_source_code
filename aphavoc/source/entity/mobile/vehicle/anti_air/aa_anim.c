@@ -163,25 +163,28 @@ void damage_anti_aircraft_3d_object (entity *en)
 
 	set_sub_object_type_visible_status (raw->vh.inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_READY, FALSE);
 
-//	//
-//	// destruct old object
-//	//
-//
-//	destruct_3d_object (raw->vh.inst3d);
-//
-//	//
-//	// construct new (damaged) object
-//	//
-//
-//	raw->vh.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
-//
-//	raw->vh.inst3d = construct_3d_object (raw->vh.object_3d_shape);
-//
-//	//
-//	// set id number for new object
-//	//
-//
-//	set_anti_aircraft_id_number (en);
+	if (get_local_entity_int_value (en, INT_TYPE_VIEW_TYPE) == VIEW_TYPE_INFANTRY_WITH_SAM) // replace MANPAD only
+	{
+		//
+		// destruct old object
+		//
+
+		destruct_3d_object (raw->vh.inst3d);
+
+		//
+		// construct new (damaged) object
+		//
+
+		raw->vh.object_3d_shape = get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE);
+
+		raw->vh.inst3d = construct_3d_object (raw->vh.object_3d_shape);
+
+		//
+		// set id number for new object
+		//
+
+		set_anti_aircraft_id_number (en);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
