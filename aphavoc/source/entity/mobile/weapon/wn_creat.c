@@ -602,6 +602,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			if (weapon)
 			{
 				int decoy = weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS);
+				int create_smoke_trail = TRUE;
 				
 				//
 				// send FIRE message to force (unless it's a decoy/cargo/debris being launched)
@@ -632,7 +633,11 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 				smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
-				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && !(!decoy && command_line_smoke_optimization && (salvo % 4 != 0))) // smoke optimization, only for weapons
+				
+				if (!(smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && !(!decoy && command_line_smoke_optimization && (salvo % 4 != 0)))) // smoke optimization, only for weapons
+					create_smoke_trail = FALSE;
+				
+				if (create_smoke_trail)
 				{
 					struct OBJECT_3D_BOUNDS
 						*bounding_box;
@@ -668,6 +673,10 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 					create_meta_smoke_list_specified_offset (smoke_trail_type, weapon, &exhaust_offset, smoke_trail_indices);
 				}
+				else
+				{
+					smoke_trail_indices = NULL;
+				}
 
 				transmit_entity_comms_message
 				(
@@ -677,6 +686,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 					weapon_sub_type,
 					get_local_entity_safe_index (weapon),
 					burst_size,
+					create_smoke_trail,
 					smoke_trail_indices
 				);
 
@@ -835,7 +845,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 			smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
-			if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE)
+			if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && smoke_trail_indices)
 			{
 				struct OBJECT_3D_BOUNDS
 					*bounding_box;

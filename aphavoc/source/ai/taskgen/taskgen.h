@@ -140,7 +140,7 @@ extern entity *create_sead_task (entity_sides side, entity *target, entity *orig
 
 extern entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, movement_types movement_type, float priority, entity *start_keysite, entity *end_keysite);
 
-extern entity *create_transfer_task (entity_sides side, entity_sub_types task_type, float priority, entity *start_keysite, entity *end_keysite);
+extern entity *create_transfer_task (entity_sides side, entity_sub_types task_type, float priority, entity *start_keysite, entity *end_keysite, int emergency);
 
 extern entity *create_troop_insertion_task (entity_sides side, entity *destination_keysite, entity *originator, int critical, float priority, entity *start_keysite, entity *end_keysite);
 

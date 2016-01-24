@@ -304,6 +304,14 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 	
 				if (notify_local_entity (ENTITY_MESSAGE_LOCK_TAKEOFF_ROUTE, landing_en, receiver))
 				{
+					#if DEBUG_MODULE
+	
+					debug_log ("MB_MSGS: Task %s : Mobile %s (%d) takeoff route locked",
+									get_local_entity_string (sender, STRING_TYPE_FULL_NAME),
+									get_local_entity_string (receiver, STRING_TYPE_FULL_NAME),
+									get_local_entity_index (receiver));
+
+					#endif
 	
 					insert_mobile_into_takeoff_route (receiver, landing_en);
 				}
@@ -1252,6 +1260,8 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 		{
 			new_task = get_local_group_primary_task (group);
 	
+			ASSERT(new_task);
+
 			new_keysite = (entity *) get_local_entity_ptr_value (new_task, PTR_TYPE_RETURN_KEYSITE);
 			
 			ASSERT(new_keysite);
@@ -2409,8 +2419,10 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 
 	side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
-	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_SPECIAL_FORCES_COMPANY, (entity_sides) side, get_local_force_entity (side), NULL, TRUE);
+	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_SPECIAL_FORCES_COMPANY, (entity_sides) side, get_local_force_entity (side), NULL, FALSE);
 	
+	ASSERT(division);
+
 	if (get_local_entity_int_value (group, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_KEYSITE_GROUP) // if possible, attach to helicopter's home
 		home_keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
 	else

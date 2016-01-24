@@ -893,7 +893,10 @@ void group_return_to_base (entity *en)
 
 	if (current_wp == last_wp)
 	{
-		return;
+		current_wp = get_local_entity_child_pred (current_wp, LIST_TYPE_WAYPOINT);
+
+		if (!current_wp || current_wp == last_wp)
+			return;
 	}
 
 	//
@@ -1165,11 +1168,11 @@ int create_group_emergency_transfer_task (entity *en)
 
 		if (landing_type == ENTITY_SUB_TYPE_LANDING_HELICOPTER)
 		{
-			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, 10.0, new_keysite, new_keysite);
+			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, 10.0, new_keysite, new_keysite, TRUE);
 		}
 		else
 		{
-			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, 10.0, new_keysite, new_keysite);
+			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, 10.0, new_keysite, new_keysite, TRUE);
 		}
 
 		ASSERT (new_task);

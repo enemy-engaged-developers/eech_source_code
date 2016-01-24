@@ -959,7 +959,7 @@ void update_collision_dynamics (void)
 
 	int
 		loop,
-		emerengency_landing = FALSE;
+		emergency_landing = FALSE;
 
 	helicopter
 		*raw;
@@ -1084,11 +1084,11 @@ void update_collision_dynamics (void)
 	if (current_flight_dynamics->main_rotor_rpm.value <= 50)
 		for (loop = 0; loop < current_flight_dynamics->number_of_fixed_collision_points; loop ++)
 			if(current_flight_dynamics->fixed_collision_points [loop].terrain_elevation < 0.1)
-				emerengency_landing = TRUE;
+				emergency_landing = TRUE;
 
-	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && !(weight_on_wheels() || emerengency_landing))
+	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && !(weight_on_wheels() || emergency_landing))
 		dynamics_takeoff ();
-	else if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && (weight_on_wheels() || emerengency_landing)) // TO DO - make fixed_collision_count works stable
+	else if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) && (weight_on_wheels() || emergency_landing)) // TO DO - make fixed_collision_count works stable
 		dynamics_land ();
 
 }

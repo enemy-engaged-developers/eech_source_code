@@ -1186,7 +1186,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				burst_size,
 				*smoke_trail_indices,
 				num_smoke_trail_entities,
-				i;
+				i,
+				create_smoke_trail = TRUE;
 
 			meta_smoke_list_types
 				smoke_trail_type;
@@ -1256,12 +1257,16 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			////////////////////////////////////////
 
+			create_smoke_trail = va_arg (pargs, int);
+
+			pack_int_value (en, INT_TYPE_SMOKE_TYPE, create_smoke_trail);
+
+			////////////////////////////////////////
+
 			smoke_trail_indices = va_arg (pargs, int *);
 
-			if (smoke_trail_indices)
+			if (get_comms_model () == COMMS_MODEL_SERVER && smoke_trail_indices && create_smoke_trail)
 			{
-				ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
-
 				smoke_trail_type = (meta_smoke_list_types) weapon_database[weapon_sub_type].smoke_trail_type;
 
 				ASSERT (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE);
@@ -1278,7 +1283,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			#if DEBUG_MODULE_MESSAGE_TEXT
 
-			debug_log ("EN_COMMS: sending create weapon for %s (%d)", entity_sub_type_weapon_names [weapon_sub_type], entity_type_names [launcher->type], get_local_entity_index (launcher));
+			debug_log ("EN_COMMS: sending create weapon %s for %s (%d)", entity_sub_type_weapon_names [weapon_sub_type], entity_type_names [launcher->type], get_local_entity_index (launcher));
 
 			#endif
 
@@ -1416,7 +1421,18 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			#if DEBUG_MODULE_MESSAGE_TEXT
 
-			debug_log ("EN_COMMS: sending destroy for %s (%d)", get_local_entity_type_name (en), get_local_entity_index (en));
+			switch(message)
+			{
+				case ENTITY_COMMS_DESTROY:
+					debug_log ("EN_COMMS: sending destroy entity %s index %d", get_local_entity_type_name (en), get_local_entity_index (en));
+					break;
+				case ENTITY_COMMS_DESTROY_FAMILY:
+					debug_log ("EN_COMMS: sending destroy entity family %s index %d", get_local_entity_type_name (en), get_local_entity_index (en));
+					break;
+				case ENTITY_COMMS_DESTROY_LOCAL_FAMILY:
+					debug_log ("EN_COMMS: sending destroy local entity family %s index %d", get_local_entity_type_name (en), get_local_entity_index (en));
+					break;
+			}
 
 			#endif
 
@@ -3529,7 +3545,8 @@ void process_received_entity_comms_messages (void)
 					burst_size,
 					*smoke_trail_indices,
 					num_smoke_trail_entities,
-					i;
+					i,
+					create_smoke_trail = TRUE;
 
 				meta_smoke_list_types
 					smoke_trail_type;
@@ -3582,9 +3599,13 @@ void process_received_entity_comms_messages (void)
 
 				////////////////////////////////////////
 
+				create_smoke_trail = unpack_int_value (NULL, INT_TYPE_SMOKE_TYPE);
+
+				////////////////////////////////////////
+
 				smoke_trail_indices = NULL;
 
-				if (get_comms_model () == COMMS_MODEL_CLIENT)
+				if (get_comms_model () == COMMS_MODEL_CLIENT && create_smoke_trail)
 				{
 					smoke_trail_type = (meta_smoke_list_types) weapon_database[weapon_sub_type].smoke_trail_type;
 

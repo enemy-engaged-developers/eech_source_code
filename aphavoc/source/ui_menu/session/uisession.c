@@ -838,13 +838,9 @@ int store_session (session_list_data_type *game_session, const char *filename)
 
 		if (count >= (command_line_saves_copies - 1))
 		{
-			if (!unlink(current_savefile) && !unlink(current_scriptfile))
+			if (unlink(current_savefile) || unlink(current_scriptfile))
 			{
-				debug_log("save file %s and script file %s are deleted", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
-			}
-			else
-			{
-				debug_log("delete error save file %s and script file %s", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
+				debug_fatal("Failed to delete save file %s and/or script file %s", get_directory_file_filename(saves_listing), get_directory_file_filename(scripts_listing));
 			}
 		}
 		else
@@ -856,15 +852,15 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			strcat (new_scriptfile, current_count);
 			strcat (new_savefile, ".sav");
 			strcat (new_scriptfile, extension);
-			if (!rename(current_savefile, new_savefile) && !rename(current_scriptfile, new_scriptfile))
+
+			if (rename(current_savefile, new_savefile))
 			{
-				debug_log("save file %s renamed to %s", get_directory_file_filename ( saves_listing ), new_savefile);
-				debug_log("script file %s renamed to %s", get_directory_file_filename ( scripts_listing ), new_scriptfile);
+				debug_fatal("Failed to rename save file %s to %s", get_directory_file_filename ( saves_listing ), new_savefile);
 			}
-			else
+			
+			if (rename(current_scriptfile, new_scriptfile))
 			{
-				debug_log("error to rename save file %s to %s", get_directory_file_filename ( saves_listing ), new_savefile);
-				debug_log("error to rename script file %s to %s", get_directory_file_filename ( scripts_listing ), new_scriptfile);
+				debug_fatal("Failed to rename script file %s to %s", get_directory_file_filename ( scripts_listing ), new_scriptfile);
 			}
 		}
 	}

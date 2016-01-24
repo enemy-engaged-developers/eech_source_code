@@ -414,6 +414,8 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
+	ASSERT (receiver);
+
 	raw = (task *) get_local_entity_data (receiver);
 
 	if (task_database [raw->sub_type].persistent_task)
@@ -422,7 +424,10 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 		// Landing / Takeoff etc SHOULD NOT be terminated
 		//
 
-		debug_fatal ("TS_MSGS: Task %s incorrectly terminated", get_local_entity_string (receiver, STRING_TYPE_FULL_NAME));
+//		debug_fatal ("TS_MSGS: Task %s incorrectly terminated", get_local_entity_string (receiver, STRING_TYPE_FULL_NAME));
+
+		ASSERT (!"TS_MSGS: Persistent task incorrectly terminated");
+		return FALSE;
 	}
 
 	//

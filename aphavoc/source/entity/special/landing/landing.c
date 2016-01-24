@@ -1053,6 +1053,7 @@ void play_landing_clear_for_takeoff_speech (entity *en)
 	//
 
 	ASSERT (en);
+	ASSERT (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_AIRCRAFT));
 
 	group_en = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 

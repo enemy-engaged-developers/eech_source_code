@@ -339,8 +339,9 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 			// ATC Introduction,
 			// [Permission denied],
 			// Please proceed to holding route and await further instructions
+			// Ignore ground vehicles!
 
-			if (get_game_status () != GAME_STATUS_INITIALISING)
+			if (get_game_status () != GAME_STATUS_INITIALISING && get_local_entity_int_value (member, INT_TYPE_IDENTIFY_AIRCRAFT))
 			{
 				if (incoming_group)
 				{
@@ -422,8 +423,9 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 			// ATC Introduction,
 			// [Permission granted],
 			// (You are clear to land) | (sea state calm, you are cleared to land) | (sea state rough, etc)
+			// Ignore ground vehicles!
 
-			if (get_game_status () != GAME_STATUS_INITIALISING)
+			if (get_game_status () != GAME_STATUS_INITIALISING && get_local_entity_int_value (member, INT_TYPE_IDENTIFY_AIRCRAFT))
 			{
 				if (incoming_group)
 				{
@@ -900,8 +902,9 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 	// ATC Introduction,
 	// [Permission denied],
 	// Please await takeoff clearance
+	// Ignore ground vehicles!
 
-	if (get_game_status () != GAME_STATUS_INITIALISING)
+	if (get_game_status () != GAME_STATUS_INITIALISING && get_local_entity_int_value (sender, INT_TYPE_IDENTIFY_AIRCRAFT))
 	{
 		entity
 			*group;
@@ -2258,10 +2261,12 @@ void pack_debug_entity_landing_locks (pack_modes mode)
 
 		pack_entity_safe_ptr (item->landing_en);
 
+	#if DEBUG_MODULE
 		debug_log ("LD_MSGS: packing landing lock for %s (%d) landing entity %d",
 						get_local_entity_string (item->en, STRING_TYPE_FULL_NAME),
 						get_local_entity_index (item->en),
 						get_local_entity_index (item->landing_en));
+	#endif
 
 		pack_int_value (NULL, INT_TYPE_VALUE, item->locks [DEBUG_LANDING_LOCK_RESERVE_LOCK]);
 
@@ -2309,10 +2314,12 @@ void unpack_debug_entity_landing_locks (pack_modes mode)
 
 		item->landing_en = (entity *) unpack_entity_safe_ptr ();
 
+	#if DEBUG_MODULE
 		debug_log ("LD_MSGS: unpacking landing lock for %s (%d) landing entity %d",
 						get_local_entity_string (item->en, STRING_TYPE_FULL_NAME),
 						get_local_entity_index (item->en),
 						get_local_entity_index (item->landing_en));
+	#endif
 
 		item->locks [DEBUG_LANDING_LOCK_RESERVE_LOCK] = unpack_int_value (NULL, INT_TYPE_VALUE);
 

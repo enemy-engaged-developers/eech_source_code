@@ -1519,7 +1519,7 @@ entity *create_repair_task (entity_sides side, vec3d *pos, entity *objective, fl
 
 	#endif
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_REPAIR, side, pos, &start_ks))
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_REPAIR, side, pos, &start_ks) || start_ks == objective)
 	{
 
 		return NULL;
@@ -1673,7 +1673,7 @@ entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, 
 
 	#endif
 
-	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_SUPPLY, side, start, &start_ks))
+	if (!get_task_start_keysite (ENTITY_SUB_TYPE_TASK_SUPPLY, side, start, &start_ks) || start_ks == requester)
 	{
 
 		return NULL;
@@ -1730,7 +1730,7 @@ entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *create_transfer_task (entity_sides side, entity_sub_types task_type, float priority, entity *start_keysite, entity *end_keysite)
+entity *create_transfer_task (entity_sides side, entity_sub_types task_type, float priority, entity *start_keysite, entity *end_keysite, int emergency)
 {
 	float
 		expire_time;
@@ -1748,7 +1748,7 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 
 	new_task = NULL;
 
-	debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
+	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
 	ASSERT (end_keysite);
 
@@ -1767,7 +1767,7 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 
 	#endif
 
-	if (!get_task_start_keysite (task_type, side, keysite_position, &start_ks))
+	if (!get_task_start_keysite (task_type, side, keysite_position, &start_ks) || (start_ks == end_keysite) && !emergency)
 	{
 
 		return NULL;

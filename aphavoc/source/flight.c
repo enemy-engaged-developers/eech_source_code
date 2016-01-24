@@ -492,13 +492,14 @@ void flight (void)
 #endif	// Retro 10Jul2004
 		// Casm 17JUN05 Autosave option
 		now = time ( NULL );
-		if ( command_line_autosave > 0 && last_autosaved + command_line_autosave < now )
-		{
-			debug_log ( "Autosaving..." );
-			store_session ( get_current_game_session (), "AUTOSAVE" );
-			last_autosaved = now;
-			debug_log ("Done with autosave");
-		}
+		if (get_comms_model () == COMMS_MODEL_SERVER) // game saving disabled for client by default /thealx/
+			if ( command_line_autosave > 0 && last_autosaved + command_line_autosave < now )
+			{
+				debug_log ( "Autosaving..." );
+				store_session ( get_current_game_session (), "AUTOSAVE" );
+				last_autosaved = now;
+				debug_log ("Done with autosave");
+			}
 		// Casm 17JUN05 Autosave option
 	}
 

@@ -109,7 +109,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			// pack particle data
 			//
 
-			pack_float_value (en, FLOAT_TYPE_INITIAL_SPEED, raw->initial_speed);
+			pack_float_value (en, FLOAT_TYPE_INITIAL_SPEED, max(1.0f, raw->initial_speed));
 	
 			pack_float_value (en, FLOAT_TYPE_HEADING, raw->heading);
 	

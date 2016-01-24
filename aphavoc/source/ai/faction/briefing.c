@@ -225,13 +225,13 @@ void initialise_briefing_parser (void)
 	file_tags
 		tag;
 
-	ASSERT ( extra_briefing_database == NULL );
-
 	//
 	// read in briefing text
 	//
 
 	deinitialise_briefing_parser ();
+
+	ASSERT ( extra_briefing_database == NULL );
 
 	ASSERT (get_valid_current_game_session ());
 

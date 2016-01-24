@@ -1404,9 +1404,9 @@ void capture_keysite (entity *en, entity_sides new_side)
 
 					delete_local_entity_from_parents_child_list (current_group, LIST_TYPE_KEYSITE_GROUP);
 
-					set_client_server_entity_int_value (current_group, INT_TYPE_GROUP_LIST_TYPE, LIST_TYPE_INDEPENDENT_GROUP);
+					set_local_entity_int_value (current_group, INT_TYPE_GROUP_LIST_TYPE, LIST_TYPE_INDEPENDENT_GROUP);
 
-					set_client_server_entity_parent (current_group, LIST_TYPE_INDEPENDENT_GROUP, force);
+					set_local_entity_parent (current_group, LIST_TYPE_INDEPENDENT_GROUP, force);
 				}
 				else
 				{

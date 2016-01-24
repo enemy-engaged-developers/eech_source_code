@@ -2320,7 +2320,7 @@ void create_fixed_wing_transfer_tasks (void)
 						
 							priority = ((target_rating [loop] - target_rating [loop2]) / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING].task_priority;
 	
-							create_transfer_task (this_side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, priority, donar, keysite);
+							create_transfer_task (this_side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, priority, donar, keysite, FALSE);
 	
 							ai_log ("(TASK) %s TRANSFER - From %s (%.3f) To %s (%.3f) - CREATED (Priority %f)",
 										entity_side_short_names [this_side],
@@ -2540,7 +2540,7 @@ void create_helicopter_transfer_tasks (void)
 						
 							priority = ((target_rating [loop] - target_rating [loop2]) / max_rating) * task_database [ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER].task_priority;
 	
-							create_transfer_task (this_side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, priority, donar, keysite);
+							create_transfer_task (this_side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, priority, donar, keysite, FALSE);
 	
 							ai_log ("(TASK) %s TRANSFER - From %s (%.3f) To %s (%.3f) - CREATED (Priority %f)",
 										entity_side_short_names [this_side],
