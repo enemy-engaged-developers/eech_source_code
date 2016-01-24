@@ -3317,8 +3317,8 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 		set_rgb_colour (bg_colour, 0, 40, 0, 255);
 
-		draw_bordered_box(-0.98, -1.0, -0.35, -0.8, bg_colour, MFD_COLOUR1);
-		draw_bordered_box(0.98, -1.0, 0.35, -0.8, bg_colour, MFD_COLOUR1);
+//		draw_bordered_box(-0.98, -1.0, -0.35, -0.8, bg_colour, MFD_COLOUR1);
+//		draw_bordered_box(0.98, -1.0, 0.35, -0.8, bg_colour, MFD_COLOUR1);
 	}
 	else
 	{
@@ -7359,7 +7359,6 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 		}
 	}
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7386,6 +7385,7 @@ static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rg
 	draw_line(x1, y2, x2, y2, border_colour);
 	draw_line(x2, y1, x2, y2, border_colour);
 }
+#endif
 
 static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
 {

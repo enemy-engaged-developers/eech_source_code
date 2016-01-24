@@ -11342,6 +11342,8 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		{
 			if (tsd_tads_underlay_active)
 			{
+				ASSERT (eo_3d_texture_screen);
+
 				if (location == MFD_LOCATION_PILOT_LHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 				else if (location == MFD_LOCATION_PILOT_RHS)
@@ -11354,19 +11356,23 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 				else
 					draw_3d_eo_display_on_texture (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV);
 
-				mfd_texture_screen = eo_3d_texture_screen;
+				mfd_texture_screen = eo_3d_texture_screen_over;
 			}
 
 			set_active_screen (mfd_texture_screen);
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				if (!tsd_tads_underlay_active)
-					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
+
+				draw_mfd_layout_grid ();
 
 				draw_tactical_situation_display_mfd ();
 
 				unlock_screen (mfd_texture_screen);
+
+				if (mfd_texture_screen == eo_3d_texture_screen_over)
+					eo_3d_texture_merge (eo_3d_texture_screen, mfd_texture_screen);
 			}
 
 			if (tsd_tads_underlay_active)
