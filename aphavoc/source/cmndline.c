@@ -124,7 +124,7 @@ int
 	command_line_comms_show_stats								= FALSE,
 	command_line_comms_packet_throttle_limit				= 10,
 	command_line_comms_resend_list_size						= 1000,
-	command_line_comms_packet_data_size						= 640,
+	command_line_comms_packet_data_size						= 512,
 	command_line_comms_packet_rerequest_limit				= 10,
 	command_line_comms_connection_receive_size			= (210 * 1024),
 	command_line_comms_data_record_size						= (210 * 1024),
@@ -266,6 +266,9 @@ int
 	session_ground_radar_ignores_infantry		= 1,
 	session_camcom										= 0,
 // Jabberwock 031118 ends
+	session_russian_nvg_no_ir					= TRUE,
+	session_cloud_puffs							= 1,
+	session_campaign_map_update_interval		= 120,
 // mue 070223 export_mfd
 	command_line_export_mfd						=FALSE,
 	command_line_export_mfd_adapter					=0,

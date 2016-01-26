@@ -1127,6 +1127,16 @@ void comms_process_data (void)
 
 							// Jabberwock 050129 ends
 
+							// 03DEC05 Casm Added season info transer
+							//VJ 051227 use set and get global season here
+							quick_set_list_item (ptr, int, get_global_season() );
+
+							size += sizeof (int);
+							
+							quick_set_list_item (ptr, float, get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY));
+
+							size += sizeof (float);
+
 							quick_set_list_item (ptr, int, command_line_planner_goto_button);
 
 							size += sizeof (int);
@@ -1143,14 +1153,28 @@ void comms_process_data (void)
 
 							size += sizeof (int);
 
-							// 03DEC05 Casm Added season info transer
-							//VJ 051227 use set and get global season here
-							quick_set_list_item (ptr, int, get_global_season() );
+							// arneh - send campaign map update interval
+							quick_set_list_item (ptr, int, command_line_campaign_map_update_interval);
 
 							size += sizeof (int);
 
-							// arneh - send campaign map update interval
-							quick_set_list_item (ptr, int, command_line_campaign_map_update_interval);
+							quick_set_list_item (ptr, int, command_line_russian_nvg_no_ir);
+
+							size += sizeof (int);
+
+							quick_set_list_item (ptr, int, command_line_cloud_puffs);
+
+							size += sizeof (int);
+
+							quick_set_list_item (ptr, int, (int) (100.0 * command_line_chaff_effectiveness));
+
+							size += sizeof (int);
+
+							quick_set_list_item (ptr, int, (int) (100.0 * command_line_flare_effectiveness));
+
+							size += sizeof (int);
+
+							quick_set_list_item (ptr, int, (int) (100.0 * command_line_smoke_effectiveness));
 
 							size += sizeof (int);
 
@@ -1355,13 +1379,52 @@ void comms_process_data (void)
 
 						// Jabberwock 050129 ends
 
-                        session_planner_goto_button = get_list_item (ptr, int);
+						// 03DEC05 Casm Added season info transer
+						season = get_list_item (ptr, int);
 
-                        size += sizeof (int);
+						size += sizeof (int);
 
-                        sprintf (buffer, "%s: %d", get_trans ("Map GOTO button"), session_planner_goto_button);
+						if (season > 0 && season <= 4)
+						{
+							static const char
+								*seasons[5] = { NULL, "Default", "Summer", "Winter", "Desert" };
+
+							//VJ 051227 use set and get global season here
+							//VJ 060319 further bug fixes
+							set_global_season ( season );
+							initialise_noisemaps();
+
+							sprintf (buffer, "%s", get_trans(seasons[season]));
+//							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						}
+						
+						switch (get_day_segment_type(get_list_item (ptr, float)))
+						{
+							case DAY_SEGMENT_TYPE_DAWN:
+								sprintf (buffer, "%s, %s", buffer, get_trans("Dawn"));
+								break;
+							case DAY_SEGMENT_TYPE_DAY:
+								sprintf (buffer, "%s, %s", buffer, get_trans("Day"));
+								break;
+							case DAY_SEGMENT_TYPE_DUSK:
+								sprintf (buffer, "%s, %s", buffer, get_trans("Dusk"));
+								break;
+							case DAY_SEGMENT_TYPE_NIGHT:
+								sprintf (buffer, "%s, %s", buffer, get_trans("Night"));
+								break;
+						}
+
+						size += sizeof (float);
 
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						session_planner_goto_button = get_list_item (ptr, int);
+
+						size += sizeof (int);
+
+//						sprintf (buffer, "%s: %d", get_trans ("Map GOTO button"), session_planner_goto_button); // cheats disabled anyway for MP
+
+//						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						session_vector_flight_model = get_list_item (ptr, int);
 
@@ -1381,38 +1444,44 @@ void comms_process_data (void)
 
 						session_camcom = get_list_item (ptr, int);
 
-                  size += sizeof (int);
+						size += sizeof (int);
 
-                  sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
+						sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
 
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
-						// 03DEC05 Casm Added season info transer
-						season = get_list_item (ptr, int);
-
-                  size += sizeof (int);
-
-						if (season > 0 && season <= 4)
-						{
-							static const char
-								*seasons[5] = { NULL, "Default", "Summer", "Winter", "Desert" };
-
-							//VJ 051227 use set and get global season here
-							//VJ 060319 further bug fixes
-							set_global_season ( season );
-							initialise_noisemaps();
-
-							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
-						}
-
-						command_line_campaign_map_update_interval = get_list_item(ptr, int);
+						session_campaign_map_update_interval = get_list_item (ptr, int);
 						size += sizeof (int);
+						sprintf (buffer, "%s: %d", get_trans ("Campaign map update interval"), session_campaign_map_update_interval);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
-               	set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
+						session_russian_nvg_no_ir = get_list_item (ptr, int);
+						size += sizeof (int);
+						sprintf (buffer, "%s: %d", get_trans ("Russian NVG has no IR"), session_russian_nvg_no_ir);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						session_cloud_puffs = get_list_item (ptr, int);
+						size += sizeof (int);
+						sprintf (buffer, "%s: %d", get_trans ("Cloud puffs"), session_cloud_puffs);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						sprintf (buffer, "%s: %d%%", get_trans ("Chaff effectiveness"), get_list_item (ptr, int));
+						size += sizeof (int);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						sprintf (buffer, "%s: %d%%", get_trans ("Flare effectiveness"), get_list_item (ptr, int));
+						size += sizeof (int);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						sprintf (buffer, "%s: %d%%", get_trans ("Smoke effectiveness"), get_list_item (ptr, int));
+						size += sizeof (int);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 
 						set_ui_object_drawable (session_screen_continue_button, FALSE);
 
-               	set_ui_object_drawable (session_screen_next_bdrop, TRUE);
+						set_ui_object_drawable (session_screen_next_bdrop, TRUE);
 
 						set_ui_object_drawable (session_screen_next_button, TRUE);
 

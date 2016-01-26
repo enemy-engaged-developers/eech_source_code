@@ -241,6 +241,9 @@ extern int
 	session_vector_flight_model,
 	session_ground_radar_ignores_infantry,
 	session_camcom,
+	session_russian_nvg_no_ir,
+	session_cloud_puffs,
+	session_campaign_map_update_interval,
 // mue 070223 export_mfd
 	command_line_export_mfd,
 	command_line_export_mfd_adapter,

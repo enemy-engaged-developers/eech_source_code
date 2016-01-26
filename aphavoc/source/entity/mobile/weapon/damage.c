@@ -221,7 +221,9 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	damage_capability = weapon_damage_capability (weapon, en, damage_modifier, get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE), FALSE);
 
-	if (damage_capability > 0 && !command_line_debug_damage_invulnerable)
+	ASSERT (get_session_entity ());
+
+	if (damage_capability > 0 && (!command_line_debug_damage_invulnerable || !get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED)))
 	{
 		damage_level -= damage_capability;
 

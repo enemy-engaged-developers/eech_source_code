@@ -773,6 +773,12 @@ void process_game_initialisation_phases (void)
 
 			    session_camcom = command_line_camcom;
 
+				session_campaign_map_update_interval = command_line_campaign_map_update_interval;
+
+				session_russian_nvg_no_ir = command_line_russian_nvg_no_ir;
+
+				session_cloud_puffs = command_line_cloud_puffs;
+
 				server_log ("separator"); // Jabberwock 031119 Server log
 
 				server_log ("Campaign started: %s", session->title); // Jabberwock 031119 Server log

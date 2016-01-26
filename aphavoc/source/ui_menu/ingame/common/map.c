@@ -291,7 +291,7 @@ static vec3d* get_last_known_position(entity* en)
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
 	is_enemy = side != get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
-	if (command_line_campaign_map_update_interval && is_enemy && en->type == ENTITY_TYPE_GROUP)
+	if (session_campaign_map_update_interval && is_enemy && en->type == ENTITY_TYPE_GROUP)
 	{
 		// arneh, 2007-07-08 - only update map position if update interval has passed
 
@@ -301,7 +301,7 @@ static vec3d* get_last_known_position(entity* en)
 		float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
 		float time_since_last_update = current_time - last_update;
 
-		if (time_since_last_update > command_line_campaign_map_update_interval)
+		if (time_since_last_update > session_campaign_map_update_interval)
 		{
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -2720,7 +2720,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 			{
 				group_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-//				if (!is_friendly && command_line_campaign_map_update_interval)
+//				if (!is_friendly && session_campaign_map_update_interval)
 					pos = get_last_known_position(en);
 /*				{
 					// arneh, 2007-07-08 - only update map position if update interval has passed
@@ -2728,7 +2728,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 					float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
 					float time_since_last_update = current_time - last_update;
 
-					if (time_since_last_update > command_line_campaign_map_update_interval)
+					if (time_since_last_update > session_campaign_map_update_interval)
 					{
 						pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 

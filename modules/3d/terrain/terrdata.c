@@ -825,7 +825,7 @@ int load_3d_terrain ( const char *path )
 	// Casm 20MAY12 Cloud puffs
 	terrain_3d_cloud_puff_object = construct_3d_object_by_name ( "CLOUD" );
 
-	if (command_line_cloud_puffs > 1 || command_line_cloud_puffs == 1 && get_global_season() != SESSION_SEASON_DESERT)
+	if (session_cloud_puffs > 1 || session_cloud_puffs == 1 && get_global_season() != SESSION_SEASON_DESERT)
 	{
 		terrain_cloud_puff_sectors = ( terrain_3d_cloud_puff_sector** ) safe_malloc ( terrain_3d_tree_map_height * sizeof ( *terrain_cloud_puff_sectors ) );
 		for ( z = 0; z < terrain_3d_tree_map_height; z++ )

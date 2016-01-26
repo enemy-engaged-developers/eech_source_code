@@ -1019,7 +1019,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
 			// start russian NVG WITHOUT FLIR by GCsDriver  08-12-2007
-			if(command_line_russian_nvg_no_ir)
+			if(session_russian_nvg_no_ir)
 			{
 				set_3d_infrared_mode ( main_3d_env, RENDER_NIGHTVISION );
 			}else{
