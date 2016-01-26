@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm256"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
 				PreprocessorDefinitions="OGRE_EE;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,9 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib PagedGeometry_d.lib ogreee_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib ogreee_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);$(OGRE_SDK)\boost\lib;..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -121,7 +121,7 @@
 				AdditionalOptions="-Zm256"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(PG_ROOT)\include;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
+				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
 				PreprocessorDefinitions="OGRE_EE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -142,9 +142,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib PagedGeometry.lib ogreee.lib"
+				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib ogreee.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(OGRE_SDK)\lib\$(ConfigurationName)&quot;;&quot;$(PG_ROOT)\lib\$(ConfigurationName)&quot;;..\lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);$(OGRE_SDK)\boost;..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

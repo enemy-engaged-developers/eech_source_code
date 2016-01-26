@@ -326,15 +326,15 @@ void OGREEE_CALL frame(float dtime)
 					{
 						unsigned sp = p.subobjects[((unsigned)cur_time) % p.number_of_subobjects];
 						for (unsigned pi = 0; pi != p.number_of_subobjects; pi++)
-							g->elements[p.subobjects[pi]].visible = false;
-						g->elements[sp].visible = true;
+							g->elements[p.subobjects[pi]].visible_object = false;
+						g->elements[sp].visible_object = true;
 						OgreSubObjectsSearch w;
 						if (ogre_scene_find2(g, 29, sp, &w))
 						{
 							double df = exp(((unsigned)cur_time) / p.number_of_subobjects / double(h.subobjects[hi]) + index);
 							unsigned flags = reinterpret_cast<const unsigned&>(df);
 							for (unsigned wi = 0; wi != w.number_of_subobjects; wi++)
-								g->elements[w.subobjects[wi]].visible = flags & (1 << wi) ? true : false;
+								g->elements[w.subobjects[wi]].visible_object = flags & (1 << wi) ? true : false;
 						}
 					}
 				}
