@@ -2,21 +2,26 @@
 
 #include "BaseApplication.h"
 
-#define OGRE_TIMES
+unsigned long ogre_thread_id, user_thread_id;
 
 namespace
 {
-	struct OgreRun* run_info;
+	const struct OgreRun* run_info;
+	HANDLE thread;
+	Semaphore frames(2, 5);
+	Ogre::String user_info;
 
 	class Application : public BaseApplication
 	{
-#ifdef OGRE_TIMES
 	public:
 		Application(void)
-			: count(0), last(GetTickCount()), ogre(0), user(0), ogreee(0)
-		{
-		}
+			: user_label(0)
+#ifdef USE_TIME
+				, count(0), last(GetTickCount()), ogre(0), wait(0), work(0)
 #endif
+		{
+			ogre_tasks = &tq;
+		}
 
 	protected:
 		virtual void setupResources(void)
@@ -61,76 +66,157 @@ namespace
 			Ogre::ResourceGroupManager::getSingleton().createResourceGroup(resource_group_name);
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", resource_group_name, false, true);
 			ogre_set(resource_group_name, mSceneMgr, mCamera);
-			run_info->init();
+			ogre_thread_id = GetCurrentThreadId();
+			thread = CreateThread(0, 0, run_info->thread_func, run_info->thread_param, 0, &user_thread_id);
 		}
-#ifdef OGRE_TIMES
+#ifdef USE_TIME
 		virtual void createFrameListener(void)
 		{
 			BaseApplication::createFrameListener();
 			ogre_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "Ogre", "", 200);
-			user_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "User", "", 200);
-			ogreee_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "OgreEE", "", 200);
+			wait_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "Wait", "", 200);
+			work_label = mTrayMgr->createLabel(OgreBites::TL_TOPLEFT, "Work", "", 200);
 		}
 #endif
 		virtual void destroyScene(void)
 		{
-			run_info->deinit();
 			Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("EE");
 			BaseApplication::destroyScene();
 		}
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt)
 		{
+			//ogre_log(__FUNCTION__, "");
+
 			if (!BaseApplication::frameRenderingQueued(evt))
 				return false;
 
-#ifdef OGRE_TIMES
-			ULONG cur = GetTickCount();
+			if (!user_label && !user_info.empty())
+				user_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "User", "", 200);
+			if (user_label)
+				user_label->setCaption(user_info);
+
+#ifdef USE_TIME
+			unsigned cur = GetTickCount();
 			ogre += cur - last;
 			last = cur;
-#endif
-
-			run_info->frame(evt.timeSinceLastFrame);
-
-#ifdef OGRE_TIMES
+			unsigned tqwork;
+			TaskResult tr = tq.run(tqwork);
 			cur = GetTickCount();
-			user += cur - last;
-			last = cur;
-#endif
-
-			ogre_update();
-
-#ifdef OGRE_TIMES
-			cur = GetTickCount();
-			ogreee += cur - last;
+			wait += cur - last - tqwork;
+			work += tqwork;
 			last = cur;
 			count++;
-			if (ogre + user + ogreee >= 1000)
+			if (ogre + wait + work >= 1000)
 			{
 				char buf[64];
 				sprintf(buf, "Ogre: %lu", ogre * 1000 / count);
 				ogre_label->setCaption(buf);
-				sprintf(buf, "User: %lu", user * 1000 / count);
-				user_label->setCaption(buf);
-				sprintf(buf, "OgreEE: %lu", ogreee * 1000 / count);
-				ogreee_label->setCaption(buf);
-				count = ogre = user = ogreee = 0;
+				sprintf(buf, "Wait: %lu", wait * 1000 / count);
+				wait_label->setCaption(buf);
+				sprintf(buf, "Work: %lu", work * 1000 / count);
+				work_label->setCaption(buf);
+				count = ogre = wait = work = 0;
 			}
+#else
+			TaskResult tr = tq.run();
 #endif
-
+			frames.release();
+			return tr != TR_APP;
+		}
+		virtual bool keyPressed(const OIS::KeyEvent& arg)
+		{
+			BaseApplication::keyPressed(arg);
+			mShutDown = false;
+			if (run_info->key_func)
+				run_info->key_func(arg.key);
+			return true;
+		}
+		virtual bool keyReleased(const OIS::KeyEvent& arg)
+		{
+			BaseApplication::keyReleased(arg);
+			if (run_info->key_func)
+				run_info->key_func(arg.key | 0x100);
+			return true;
+		}
+		virtual bool mouseMoved(const OIS::MouseEvent& arg)
+		{
+			BaseApplication::mouseMoved(arg);
+			if (run_info->mouse_func)
+				run_info->mouse_func(0, arg.state.X.rel, arg.state.Y.rel, arg.state.Z.rel);
+			return true;
+		}
+		virtual bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
+		{
+			BaseApplication::mousePressed(arg, id);
+			if (run_info->mouse_func)
+				run_info->mouse_func(1 << (2 * id), 0, 0, 0);
+			return true;
+		}
+		virtual bool mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
+		{
+			BaseApplication::mouseReleased(arg, id);
+			if (run_info->mouse_func)
+				run_info->mouse_func(2 << (2 * id), 0, 0, 0);
 			return true;
 		}
 
-#ifdef OGRE_TIMES
-		ULONG count, last, ogre, user, ogreee;
-		OgreBites::Label* ogre_label;
+		TaskQueue tq;
 		OgreBites::Label* user_label;
-		OgreBites::Label* ogreee_label;
+#ifdef USE_TIME
+		unsigned count, last, ogre, wait, work;
+		OgreBites::Label* ogre_label;
+		OgreBites::Label* wait_label;
+		OgreBites::Label* work_label;
 #endif
+	};
+
+	class TaskInfo : public Task
+	{
+	public:
+		TaskInfo(const char* info)
+			: info(info ? info : "")
+		{
+		}
+		virtual TaskResult task(void)
+		{
+			user_info = info;
+			return TR_TASK;
+		}
+	private:
+		Ogre::String info;
+	};
+
+	struct TaskFrameInit : public Task
+	{
+		virtual TaskResult task(void)
+		{
+			ogre_scenes_frame();
+			return TR_TASK;
+		}
+	};
+
+	struct TaskFrame : public Task
+	{
+		virtual TaskResult task(void)
+		{
+			ogre_terrain_frame();
+			return TR_FRAME;
+		}
+	};
+
+	struct TaskQuit : public Task
+	{
+		virtual TaskResult task(void)
+		{
+			return TR_APP;
+		}
 	};
 }
 
-void OGREEE_CALL ogre_run(struct OgreRun* run)
+void OGREEE_CALL ogre_run(const struct OgreRun* run)
 {
+	ogre_log_(__FUNCTION__, "");
+
 	run_info = run;
 
 	Application app;
@@ -138,6 +224,7 @@ void OGREEE_CALL ogre_run(struct OgreRun* run)
 	try
 	{
 		app.go();
+		WaitForSingleObject(thread, INFINITE);
 	}
 	catch (const Ogre::Exception& e)
 	{
@@ -145,8 +232,28 @@ void OGREEE_CALL ogre_run(struct OgreRun* run)
 	}
 }
 
-void OGREEE_CALL ogre_update(void)
+OGREEE_API void OGREEE_CALL ogre_info(const char* info)
 {
-	ogre_scenes_update();
-	ogre_terrain_update();
+	assert(GetCurrentThreadId() == user_thread_id);
+	//ogre_log_(__FUNCTION__, "");
+
+	ogre_tasks->enqueue(new TaskInfo(info));
+}
+
+OGREEE_API void OGREEE_CALL ogre_frame(void)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+	//ogre_log_(__FUNCTION__, "");
+
+	frames.acquire();
+	ogre_tasks->enqueue(new TaskFrame);
+	ogre_tasks->enqueue(new TaskFrameInit);
+}
+
+OGREEE_API void OGREEE_CALL ogre_quit(void)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+	ogre_log_(__FUNCTION__, "");
+
+	ogre_tasks->enqueue(new TaskQuit);
 }

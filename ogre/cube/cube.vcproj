@@ -39,9 +39,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="-Zm256"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
+				AdditionalIncludeDirectories="..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
 				PreprocessorDefinitions="OGRE_EE;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,9 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreOverlay_d.lib ogreee_d.lib"
+				AdditionalDependencies="ogreee_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);$(OGRE_SDK)\boost\lib;..\lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -118,10 +117,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="-Zm256"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
+				AdditionalIncludeDirectories="..\..\3dimpexp\ee_exp;.;..\..\modules\3d\terrain;..\include"
 				PreprocessorDefinitions="OGRE_EE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -142,9 +140,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib OgreOverlay.lib ogreee.lib"
+				AdditionalDependencies="ogreee.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="$(OGRE_SDK)\lib\$(ConfigurationName);$(OGRE_SDK)\boost;..\lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -183,10 +181,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BaseApplication.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\cube.cpp"
 				>
 				<FileConfiguration
@@ -194,7 +188,6 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="-Zm256"
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
@@ -203,7 +196,6 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="-Zm256"
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
@@ -214,10 +206,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\BaseApplication.h"
-				>
-			</File>
 			<File
 				RelativePath=".\ee.h"
 				>

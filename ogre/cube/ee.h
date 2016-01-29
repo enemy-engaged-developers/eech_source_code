@@ -69,11 +69,13 @@ static struct
 	int gouraud_shading;
 	int user_defined_contour_heights;
 	float* contour_heights;
-	int texture_override_scales[64][2];
+	float texture_override_scales[64][2];
 	int dry_river;
 	struct
 	{
-		int delay, scale_bottom, scale_top, placenr, number;
+		int delay;
+		float scale_bottom, scale_top;
+		int placenr, number;
 	} water_info[3];
 } current_map_info;
 //env_3d act_env, *active_3d_environment = ((act_env.render_filter = RENDER_CLEAR), &act_env);

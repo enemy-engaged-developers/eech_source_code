@@ -12,8 +12,8 @@ struct SceneDatabaseElement
 	{
 	}
 
-	SceneDatabaseElement(const Ogre::String& object_)
-		: parent(no_parent), object(object_), track(0)
+	SceneDatabaseElement(const Ogre::String& object)
+		: parent(no_parent), object(object), track(0), track_length(0.0f)
 	{
 	}
 
@@ -24,6 +24,7 @@ struct SceneDatabaseElement
 	Ogre::String object;
 	// Linked animation
 	Ogre::NodeAnimationTrack* track;
+	float track_length;
 	// Initial position
 	struct OgreGameObjectSceneElement initial;
 };
@@ -39,32 +40,51 @@ struct SceneDatabase
 };
 
 
-typedef std::pair<Ogre::SceneNode*, Ogre::Entity*> SceneNode;
-typedef std::vector<SceneNode> SceneNodes;
-
-typedef std::map<unsigned, unsigned> SceneAnimation;
-
 // Dynamic scene - a representation of a game object
+typedef std::map<unsigned, unsigned> SceneAnimation;
 struct GameObjectScene
 {
 	GameObjectScene(const SceneDatabase& database)
-		: database(database), root(0)
+		: database(database)
 	{
-	}
-	~GameObjectScene()
-	{
-		assert(!root);
 	}
 
 	const SceneDatabase& database;
-
-	size_t position;
-
 	SceneAnimation animation;
+};
+
+// Scene draw information
+typedef std::vector<std::pair<unsigned, unsigned> > SceneDrawAnimation;
+typedef std::vector<struct OgreGameObjectSceneElement> SceneDrawElements;
+
+struct SceneDraw
+{
+	const SceneDatabase* database;
+	SceneDrawAnimation animation;
+	Ogre::Vector3 position;
+	Ogre::Quaternion orientation;
+	Ogre::Vector3 scale;
+	SceneDrawElements elements;
+};
+typedef std::deque<SceneDraw> SceneDraws;
+
+
+// Drawn scene information
+typedef std::pair<Ogre::SceneNode*, Ogre::Entity*> SceneNode;
+typedef std::vector<SceneNode> SceneNodes;
+
+struct DrawnScene
+{
+	DrawnScene(void)
+		: root(0), database(0)
+	{
+	}
+	~DrawnScene();
 
 	Ogre::SceneNode* root;
 	SceneNodes nodes;
+	const SceneDatabase* database;
 };
 
-void ogre_scenes_update(void);
-void ogre_scene_place(struct OgreGameObjectScene* scene);
+void ogre_scenes_frame(void);
+void ogre_scene_place(const struct OgreGameObjectScene* scene, DrawnScene& ds);

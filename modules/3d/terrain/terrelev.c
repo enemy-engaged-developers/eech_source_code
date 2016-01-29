@@ -1874,13 +1874,13 @@ float get_3d_terrain_point_data ( float x, float z, terrain_3d_point_data *point
 				y1 = terrain_3d_map_minimum_height + ( point1y->y * terrain_3d_map_scaled_height_difference );
 				y2 = terrain_3d_map_minimum_height + ( point2y->y * terrain_3d_map_scaled_height_difference );
 
-				vector2.x = point2xz->x - point0xz->x;
+				vector2.x = ( float ) ( point2xz->x - point0xz->x );
 				vector2.y = y2 - y0;
-				vector2.z = point2xz->z - point0xz->z;
+				vector2.z = ( float ) ( point2xz->z - point0xz->z );
 
-				vector1.x = point1xz->x - point0xz->x;
+				vector1.x = ( float ) ( point1xz->x - point0xz->x );
 				vector1.y = y1 - y0;
-				vector1.z = point1xz->z - point0xz->z;
+				vector1.z = ( float ) ( point1xz->z - point0xz->z );
 
 				//
 				// The x & z parts of the vectors have been scaled by ( 65535 / 2048 ), so do the same to the y vectors.
@@ -2033,15 +2033,15 @@ void terrain_elevation_soak_test (int samples_per_sector_side)
 
 		for (x_sec = 0; x_sec < terrain_3d_sector_x_max; x_sec++)
 		{
-			z_start = z_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+			z_start = (float) (z_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
-			z_end = (z_sec + 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+			z_end = (float) ((z_sec + 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
 			for (z = z_start; z < z_end; z += sample_distance)
 			{
-				x_start = x_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+				x_start = (float) (x_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
-				x_end = (x_sec + 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH;
+				x_end = (float) ((x_sec + 1) * TERRAIN_3D_SECTOR_SIDE_LENGTH);
 
 				for (x = x_start; x < x_end; x += sample_distance)
 				{

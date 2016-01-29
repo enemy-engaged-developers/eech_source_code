@@ -397,7 +397,7 @@ void calc_view_angles ( float virtual_width_view_angle, float *width_view_angle,
 		float
 			virtual_height_tan_half_view_angle;
 
-		virtual_height_tan_half_view_angle = tan ( virtual_width_view_angle / 2 ) * 1.333333f;
+		virtual_height_tan_half_view_angle = tan ( virtual_width_view_angle / 2 ) * 0.75f;
 		*height_view_angle = 2 * atan ( virtual_height_tan_half_view_angle );
 		*width_view_angle = 2 * atan ( virtual_height_tan_half_view_angle * full_screen_aspect_ratio );
 	}

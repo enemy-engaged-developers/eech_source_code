@@ -2,12 +2,16 @@ extern Ogre::SceneManager* ogre_scene_manager;
 extern Ogre::Camera* ogre_camera;
 extern std::string ogre_resource_group;
 
+extern unsigned long ogre_thread_id, user_thread_id;
+
+void ogre_set(const char* resource_group, Ogre::SceneManager* scene_manager, Ogre::Camera* camera);
 unsigned ogre_index(void);
 void ogre_log(const char* function, const char* format, ...);
+void ogre_log_(const char* function, const char* format, ...);
 
-inline Ogre::Vector3 ogre_position(const struct OgreVector3& v)
+inline Ogre::Vector3 ogre_position(const float* f)
 {
-	return Ogre::Vector3(v.x, v.y, -v.z);
+	return Ogre::Vector3(f[0], f[1], -f[2]);
 }
 
 inline Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
@@ -22,12 +26,12 @@ inline Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
 	return Ogre::Quaternion(w * cr - z * sr, x * cr + y * sr, y * cr - x * sr, w * sr + z * cr);
 }
 
-inline Ogre::Quaternion ogre_orientation(matrix3x3 m)
+inline Ogre::Quaternion ogre_orientation(const float* m)
 {
-	return ogre_orientation(atan2(m[2][0], m[2][2]), asin(m[2][1]), atan2(-m[0][1], m[1][1]));
+	return ogre_orientation(atan2(m[6], m[8]), asin(m[7]), atan2(-m[1], m[4]));
 }
 
-inline Ogre::Vector3 ogre_scale(const struct OgreVector3& v)
+inline Ogre::Vector3 ogre_scale(const float* f)
 {
-	return Ogre::Vector3(v.x, v.y, v.z);
+	return Ogre::Vector3(f);
 }

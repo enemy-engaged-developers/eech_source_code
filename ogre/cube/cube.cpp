@@ -1,7 +1,21 @@
-#include "BaseApplication.h"
-#include <direct.h>
+#define _CRT_SECURE_NO_WARNINGS
 
-#pragma warning(disable:4305)
+#include <stdio.h>
+#include <direct.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+
+#include <memory>
+
+#define WIN32_LEAN_AND_MEAN
+#include "windows.h"
+
+#define strupr _strupr
+#define stricmp _stricmp
+#define chdir _chdir
+
 
 #include "ogreee.h"
 
@@ -116,6 +130,7 @@ struct EE
 		{
 			TexturesExporter2 exporter;
 			exporter.export_textures(eet, false);
+			ogre_textures_commit();
 		}
 
 		{
@@ -131,16 +146,9 @@ struct EE
 		OgreObjectsInit objects_init = { objects->GetNumberOfObjects(), &(*objects)[0], get_animation_size, get_animation_texture };
 		ogre_objects_init(&objects_init);
 #endif
-
-#ifdef USE_TERRAIN_TREES
-		ogre_terrain_tree(&(*objects)[scenes->GetScene(0x0A58).index]);
-#endif
 	}
 	~EE()
 	{
-#ifdef USE_TERRAIN_TREES
-		ogre_terrain_tree_clear();
-#endif
 #ifdef USE_OBJECTS_ONLY
 		ogre_objects_clear();
 #endif
@@ -163,9 +171,9 @@ OgreGameObjectScene ogos[2];
 #ifdef USE_TERRAIN
 int terrain;
 
-float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( terrain_3d_tree_data *tree )
+float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( const terrain_3d_tree_data *tree )
 {
-	return get_terrain_3d_tree_scale(tree);
+	return get_terrain_3d_tree_scale(const_cast<terrain_3d_tree_data*>(tree));
 }
 #endif
 
@@ -182,7 +190,7 @@ void set_scene(int index, int change)
 	ogre_scene_destroy(&ogos[index]);
 	ogre_scene_create(&ogos[index], objects[index]);
 	struct OgreVector3& p = ogos[index].position;
-	p.x = index ? -10 : 10;
+	p.x = index ? -10.0f : 10.0f;
 	p.y = 0;
 	p.z = 0;
 
@@ -203,13 +211,30 @@ void set_terrain(int diff)
 	sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 	load_3d_terrain(path);
-	struct OgreTerrainInit terrain_init = { terrain_3d_sector_z_max, terrain_3d_sector_x_max, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, get_terrain_3d_tree_scale_wrap, terrain_type_information, terrain_sectors, terrain_tree_sectors };
+#ifdef USE_TERRAIN_TREES
+	const struct OBJECT_3D* tree = &(*ee->objects)[ee->scenes->GetScene(0x0A58).index];
+#else
+	const struct OBJECT_3D* tree = 0;
+#endif
+	struct OgreTerrainInit terrain_init = { terrain_3d_sector_z_max, terrain_3d_sector_x_max, terrain_3d_map_scaled_height_difference, terrain_3d_map_minimum_height, terrain_3d_map_maximum_height, tree, get_terrain_3d_tree_scale_wrap, terrain_type_information, terrain_sectors, terrain_tree_sectors };
 	ogre_terrain_init(&terrain_init);
 }
 #endif
 
 void OGREEE_CALL init(void)
 {
+	{
+#ifdef USE_TERRAIN
+		float p[3] = { 0, 2000, 0 };
+		float f = sqrt(0.5f);
+		matrix3x3 o = { f, 0, -f, 0, 1, 0, f, 0, f };
+#else
+		float p[3] = { 0, 0, 30 };
+		matrix3x3 o = { -1, 0, 0, 0, 1, 0, 0, 0, -1 };
+#endif
+		ogre_set_viewpoint(p, o);
+	}
+
 	cur_time = 0.0f;
 
 	ee.reset(new EE);
@@ -340,190 +365,98 @@ void OGREEE_CALL frame(float dtime)
 				}
 			}
 		}
+
+		ogre_scene_draw(g, 0);
 	}
+	ogre_scenes_commit();
 #endif
+
+	{
+		char buf[128];
+#ifdef USE_OBJECTS_ONLY
+		sprintf(buf, "Scns: %04X %04X", objects[0], objects[1]);
+#endif
+#ifdef USE_TERRAIN
+		sprintf(buf, "MAP: %i", terrain);
+#endif
+		ogre_info(buf);
+	}
 }
 
-#ifndef USE_OGRE_RUN
-class TutorialApplication : public BaseApplication
+volatile int quit;
+volatile unsigned key_pressed;
+void OGREEE_CALL key_func(unsigned key)
 {
-protected:
-	virtual void setupResources(void)
+	key_pressed = key;
+}
+void key_func(void)
+{
+	static int sign = 1;
+	switch (key_pressed)
 	{
-		Ogre::ConfigFile cf;
-		cf.load(mResourcesCfg);
-		Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
-		Ogre::String sec, type, arch;
-		while (seci.hasMoreElements())
+	case DIK_ESCAPE:
+		quit = 1;
+		break;
+	case DIK_LSHIFT:
+		sign = -1;
+		break;
+	case DIK_LSHIFT | 0x100:
+		sign = 1;
+		break;
+#ifdef USE_OBJECTS_ONLY
+	case DIK_PERIOD:
+		set_scene(0, 0x0001 * sign);
+		break;
+	case DIK_SLASH:
+		set_scene(1, 0x0001 * sign);
+		break;
+	case DIK_SEMICOLON:
+		set_scene(0, 0x0010 * sign);
+		break;
+	case DIK_APOSTROPHE:
+		set_scene(1, 0x0010 * sign);
+		break;
+	case DIK_LBRACKET:
+		set_scene(0, 0x0100 * sign);
+		break;
+	case DIK_RBRACKET:
+		set_scene(1, 0x0100 * sign);
+		break;
+#endif
+#ifdef USE_TERRAIN
+	case DIK_M:
+		set_terrain(sign);
+		break;
+	case DIK_J:
 		{
-			sec = seci.peekNextKey();
-			Ogre::ConfigFile::SettingsMultiMap* settings = seci.getNext();
-			Ogre::ConfigFile::SettingsMultiMap::iterator i;
-			for (i = settings->begin(); i != settings->end(); i++)
-			{
-				type = i->first;
-				arch = i->second;
-				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch, type, sec);
-			}
+			float p[3] = { rand() * 1024.0f * terrain_3d_sector_x_max / RAND_MAX, 2000, rand() * 1024.0f * terrain_3d_sector_z_max / RAND_MAX };
+			float f = sqrt(0.5f);
+			matrix3x3 o = { f, 0, -f, 0, 1, 0, f, 0, f };
+			ogre_set_viewpoint(p, o);
 		}
-		const Ogre::ResourceGroupManager::LocationList genLocs = Ogre::ResourceGroupManager::getSingleton().getResourceLocationList("General");
-		arch = genLocs.front()->archive->getName();
-		type = "FileSystem";
-		sec = "Popular";
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSLES", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL150", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/GLSL400", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/Cg", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/materials/programs/HLSL_Cg", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSLES", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/GLSL150", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/Cg", type, sec);
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch + "/RTShaderLib/HLSL_Cg", type, sec);
+		break;
+#endif
+	default:
+		return;
 	}
-	virtual void createFrameListener(void)
+	key_pressed = 0;
+}
+unsigned long OGREEE_CALL thread(void*)
+{
+	init();
+	float last = GetTickCount() / 1000.0f;
+	while (!quit)
 	{
-		BaseApplication::createFrameListener();
-
-		float speed = mCameraMan->getTopSpeed();
-#ifdef USE_OBJECTS_ONLY
-		speed /= 10.0f;
-#else
-		speed *= 10.0f;
-#endif
-		mCameraMan->setTopSpeed(speed);
-
-		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
-#ifdef USE_OBJECTS_ONLY
-		obj_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Objects", "", 200);
-#endif
-#ifdef USE_TERRAIN
-		terr_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "Map", "", 100);
-#endif
+		float cur = GetTickCount() / 1000.0f;
+		key_func();
+		frame(cur - last);
+		ogre_frame();
+		last = cur;
 	}
-	virtual void createScene(void)
-	{
-		Ogre::ResourceGroupManager::getSingleton().createResourceGroup("EE");
-
-		ogre_set("EE", mSceneMgr, mCamera);
-
-		init();
-
-#ifdef USE_OBJECTS_ONLY
-		Ogre::Light* light = mSceneMgr->createLight("light");
-		light->setType(Ogre::Light::LT_POINT);
-		light->setDiffuseColour(Ogre::ColourValue::White);
-		light->setSpecularColour(Ogre::ColourValue::White);
-		light->setPosition(Ogre::Vector3(0,4,0));
-		light->setAttenuation(10.0f, 0.5f, 0.2f, 0.0f);
-
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
-#else
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
-
-		mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-#endif
-	}
-	virtual void destroyScene(void)
-	{
-		deinit();
-
-		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("EE");
-
-		BaseApplication::destroyScene();
-	}
-	virtual void createCamera(void)
-	{
-		BaseApplication::createCamera();
-#ifdef USE_TERRAIN
-		mCamera->setPosition(Ogre::Vector3(0, 2000, 0));
-		mCamera->setDirection(Ogre::Vector3(1, 0, -1));
-#else
-		mCamera->setPosition(Ogre::Vector3(0, 0, -30));
-		mCamera->setDirection(Ogre::Vector3(0, 0, 1));
-#endif
-		mCamera->setNearClipDistance(0.5f);
-		mCamera->setFarClipDistance(20000.0f);
-	}
-	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt)
-	{
-		if (!BaseApplication::frameRenderingQueued(evt))
-			return false;
-
-		frame(evt.timeSinceLastFrame);
-		ogre_update();
-
-#ifdef USE_OBJECTS_ONLY
-		// Display objects numbers
-		{
-			char buf[128];
-			sprintf(buf, "Scns: %04X %04X", objects[0], objects[1]);
-			obj_label->setCaption(buf);
-		}
-#endif
-#ifdef USE_TERRAIN
-		// Display map number
-		{
-			char buf[128];
-			sprintf(buf, "MAP: %i", terrain);
-			terr_label->setCaption(buf);
-		}
-#endif
-		return true;
-	}
-	virtual bool keyPressed(const OIS::KeyEvent &evt)
-	{
-		BaseApplication::keyPressed(evt);
-
-		{
-			int sign = mKeyboard->isKeyDown(OIS::KC_LSHIFT) || mKeyboard->isKeyDown(OIS::KC_RSHIFT) ? -1 : 1;
-#ifdef USE_OBJECTS_ONLY
-			// Change the objects displayed
-			if (evt.key == OIS::KC_PERIOD)
-				set_scene(0, 0x0001 * sign);
-			if (evt.key == OIS::KC_SLASH)
-				set_scene(1, 0x0001 * sign);
-			if (evt.key == OIS::KC_SEMICOLON)
-				set_scene(0, 0x0010 * sign);
-			if (evt.key == OIS::KC_APOSTROPHE)
-				set_scene(1, 0x0010 * sign);
-			if (evt.key == OIS::KC_LBRACKET)
-				set_scene(0, 0x0100 * sign);
-			if (evt.key == OIS::KC_RBRACKET)
-				set_scene(1, 0x0100 * sign);
-#endif
-#ifdef USE_TERRAIN
-			// Change the map displayed
-			if (evt.key == OIS::KC_M)
-				set_terrain(sign);
-			if (evt.key == OIS::KC_J)
-			{
-				Ogre::Vector3 v(rand() * 1024.0f * terrain_3d_sector_x_max / RAND_MAX, 2000, rand() * -1024.0f * terrain_3d_sector_z_max / RAND_MAX);
-				mCamera->setPosition(v);
-			}
-#endif
-		}
-
-		return true;
-	}
-
-private:
-#ifdef USE_OBJECTS_ONLY
-	OgreBites::Label* obj_label;
-#endif
-#ifdef USE_TERRAIN
-	OgreBites::Label* terr_label;
-#endif
-};
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
+	deinit();
+	ogre_quit();
+	return 0;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -538,30 +471,28 @@ int main(int argc, char **argv)
 #ifdef _CRTDBG_MAP_ALLOC
 _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
-#ifdef USE_OGRE_RUN
-	struct OgreRun run = { init, deinit, frame };
+	struct OgreRun run = { thread, 0, key_func, 0 };
 	ogre_run(&run);
-#else
-    {
-        // Create application object
-        TutorialApplication app;
-
-        try {
-            app.go();
-        } catch(Ogre::Exception& e)  {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            MessageBox(NULL, e.getFullDescription().c_str(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-#else
-            std::cerr << "An exception has occurred: " <<
-                e.getFullDescription().c_str() << std::endl;
-#endif
-        }
-
-        return 0;
-    }
-#endif
 }
 
 #ifdef __cplusplus
 }
+#endif
+
+#if 0
+		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
+#ifdef USE_OBJECTS_ONLY
+		Ogre::Light* light = mSceneMgr->createLight("light");
+		light->setType(Ogre::Light::LT_POINT);
+		light->setDiffuseColour(Ogre::ColourValue::White);
+		light->setSpecularColour(Ogre::ColourValue::White);
+		light->setPosition(Ogre::Vector3(0,4,0));
+		light->setAttenuation(10.0f, 0.5f, 0.2f, 0.0f);
+
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
+#else
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+
+		mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+#endif
 #endif

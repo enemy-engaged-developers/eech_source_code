@@ -949,7 +949,7 @@ void initialise_3d_custom_terrain_types( void )
 	for (count = 0; count < 64; count++)
 	if (current_map_info.texture_override_scales[count][0] > 0)
 	{
-		int index = current_map_info.texture_override_scales[count][0];
+		int index = (int)current_map_info.texture_override_scales[count][0];
 		sl = current_map_info.texture_override_scales[count][1];
 		sld = sl;
 		sldd = sl;
@@ -1023,9 +1023,9 @@ void initialise_3d_custom_terrain_types( void )
    	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );
 
 		//VJ 051223 fixed forest side textures and scaling: index was wrong
-		sld = sl/2.4;
+		sld = sl/2.4f;
 		// forest sides need separate scaling
-		sldd = sld/4;
+		sldd = sld/4.0f;
 		//scale top-side forest texture between top and side
 		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
 		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
@@ -1219,7 +1219,7 @@ void initialise_3d_thailand_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1385,7 +1385,7 @@ void initialise_3d_cuba_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1552,7 +1552,7 @@ void initialise_3d_georgia_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1721,7 +1721,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1884,7 +1884,7 @@ void initialise_3d_yemen_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2049,7 +2049,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2234,7 +2234,7 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 											int red, int green, int blue, surface_types surface_type )
 {
 	float
-		noisemap_scale_adjustment = (command_line_texture_colour == 2) ? noise_adjustment : 1.0;
+		noisemap_scale_adjustment = (command_line_texture_colour == 2) ? noise_adjustment : 1.0f;
 
 	if ( xz_texture_size == 0.0 )		xz_texture_size = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( y_texture_size == 0.0 )		y_texture_size = TERRAIN_DEFAULT_TEXTURE_SIZE;
@@ -2247,7 +2247,7 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 	terrain_type_information[type].texture_index = texture;
 #endif
 	terrain_type_information[type].xz_texture_scale = ( TERRAIN_3D_XZ_SCALE / xz_texture_size );
-	terrain_type_information[type].y_texture_scale =  1.0 / y_texture_size;
+	terrain_type_information[type].y_texture_scale =  1.0f / y_texture_size;
 
 #ifndef OGRE_EE
 	terrain_type_information[type].texture2 = system_textures[texture2];
@@ -2255,7 +2255,7 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 	terrain_type_information[type].texture2_index = texture2;
 #endif
 	terrain_type_information[type].xz_texture_scale2 = ( noisemap_scale_adjustment * TERRAIN_3D_XZ_SCALE / (xz_texture_size2));
-	terrain_type_information[type].y_texture_scale2 = 1.0 / y_texture_size2;
+	terrain_type_information[type].y_texture_scale2 = 1.0f / y_texture_size2;
 
 	terrain_type_information[type].red = red;
 	terrain_type_information[type].green = green;
@@ -2443,7 +2443,7 @@ void initialise_noisemaps(void)
 		field_noise,
 		noisemap;
 
-	float gamma = 1.25, gamma2 = 1.4;
+	float gamma = 1.25f, gamma2 = 1.4f;
 
 #if 0
 	switch (get_global_season())
@@ -2747,7 +2747,7 @@ void initialise_3d_alaska_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2835,7 +2835,7 @@ void initialise_3d_aleut_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2927,7 +2927,7 @@ void initialise_3d_kuwait_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -3021,7 +3021,7 @@ void initialise_3d_grand_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -3194,7 +3194,7 @@ void initialise_3d_custom_map_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,

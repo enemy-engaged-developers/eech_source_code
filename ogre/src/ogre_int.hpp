@@ -14,6 +14,7 @@
 //#define USE_INDICES32
 #define USE_TERRAIN_TREES
 #define USE_TERRAIN_OBJECTS
+#define USE_TIME
 
 // Objects options
 #ifdef USE_NORMALS
@@ -26,8 +27,7 @@
 #endif
 
 // Scenes options
-#define SCENES_VISIBILITY_LOW 10000
-#define SCENES_VISIBILITY_HIGH 11000
+#define SCENES_CACHE_FRAMES 10
 
 // Terrain options
 #ifdef USE_NORMALS
@@ -63,6 +63,8 @@
 #include "OgreSceneNode.h"
 #include "OgreSceneManager.h"
 #include "OgreInstancedEntity.h"
+
+#include <iterator>
 
 #define OGRE_EE
 
@@ -102,6 +104,79 @@ private:
 	Ogre::String str;
 };
 
+class Mutex : private Uncopyable
+{
+public:
+	Mutex(void)
+	{
+		InitializeCriticalSection(&cs);
+	}
+	~Mutex(void)
+	{
+		DeleteCriticalSection(&cs);
+	}
+	void lock(void)
+	{
+		EnterCriticalSection(&cs);
+	}
+	void unlock(void)
+	{
+		LeaveCriticalSection(&cs);
+	}
+
+private:
+	CRITICAL_SECTION cs;
+};
+
+class Guard : private Uncopyable
+{
+public:
+	Guard(Mutex& m)
+		: m(m)
+	{
+		m.lock();
+	}
+	~Guard(void)
+	{
+		m.unlock();
+	}
+
+private:
+	Mutex& m;
+};
+
+class Semaphore : private Uncopyable
+{
+public:
+	Semaphore(unsigned init, unsigned max)
+		: sem(CreateSemaphore(0, init, max, 0))
+	{
+	}
+	~Semaphore(void)
+	{
+		CloseHandle(sem);
+	}
+	void acquire(void)
+	{
+		WaitForSingleObject(sem, INFINITE);
+	}
+	void release(void)
+	{
+		ReleaseSemaphore(sem, 1, 0);
+	}
+
+private:
+	HANDLE sem;
+};
+
+#include "ogre_set.hpp"
+#include "ogre_tasks.hpp"
+#include "ogre_geometry.hpp"
+#include "ogre_animation.hpp"
+#include "ogre_objects.hpp"
+#include "ogre_scenes.hpp"
+#include "ogre_terrain.hpp"
+
 #define DEFINE_NAME(name, args, format, params) \
 struct name : private fmt \
 { \
@@ -112,20 +187,12 @@ struct name : private fmt \
 	using fmt::operator const Ogre::String&; \
 }
 
-#include "ogre_set.hpp"
-#include "ogre_geometry.hpp"
-#include "ogre_animation.hpp"
-#include "ogre_objects.hpp"
-#include "ogre_scenes.hpp"
-#include "ogre_terrain.hpp"
-
 #define _ ,
 DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
 DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u", index _ frame);
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
-DEFINE_NAME(GameSceneName, struct OgreGameObjectScene* scene, "SCENE_%p", scene);
 DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u", index);
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);

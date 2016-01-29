@@ -1953,9 +1953,9 @@ int initialize_texture_override_names ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef OGRE_EE
-static float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( terrain_3d_tree_data *tree )
+static float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( const terrain_3d_tree_data *tree )
 {
-	return get_terrain_3d_tree_scale(tree);
+	return get_terrain_3d_tree_scale ( ( terrain_3d_tree_data * ) tree );
 }
 #endif
 //VJ load warzone specific textures, called from: eech-new\aphavoc\source\flight.c about line 130
@@ -2105,6 +2105,7 @@ void load_warzone_override_textures ( void )
 		load_texture_water();
 
 #ifdef OGRE_EE
+	ogre_textures_commit ();
 	report_process_memory ( "after override textures loading" );
 	{
 		struct OgreObjectsInit
@@ -2120,16 +2121,16 @@ void load_warzone_override_textures ( void )
 	}
 	{
 		struct OgreTerrainInit terrain_init;
-		ogre_terrain_tree(&objects_3d_data[objects_3d_scene_database[OBJECT_3D_FOREST_TREE_OBJECT].index]);
 		terrain_init.sector_z_max = terrain_3d_sector_z_max;
 		terrain_init.sector_x_max = terrain_3d_sector_x_max;
 		terrain_init.map_scaled_height_difference = terrain_3d_map_scaled_height_difference;
 		terrain_init.map_minimum_height = terrain_3d_map_minimum_height;
 		terrain_init.map_maximum_height = terrain_3d_map_maximum_height;
+		terrain_init.tree = &objects_3d_data[objects_3d_scene_database[OBJECT_3D_FOREST_TREE_OBJECT].index];
 		terrain_init.get_tree_scale = get_terrain_3d_tree_scale_wrap;
 		terrain_init.type_information = terrain_type_information;
-		terrain_init.sectors = terrain_sectors;
-		terrain_init.tree_sectors = terrain_tree_sectors;
+		terrain_init.sectors = ( struct TERRAIN_3D_SECTOR const * const * ) terrain_sectors;
+		terrain_init.tree_sectors = ( struct TERRAIN_3D_TREE_SECTOR const * const * ) terrain_tree_sectors;
 		ogre_terrain_init (&terrain_init);
 		report_process_memory ( "after Ogre terrain init" );
 	}
@@ -2148,7 +2149,6 @@ void restore_default_textures ( void )
 
 #ifdef OGRE_EE
 	ogre_terrain_clear ();
-	ogre_terrain_tree_clear ();
 	ogre_scenes_clear ();
 	ogre_objects_clear ();
 	ogre_textures_clear ();

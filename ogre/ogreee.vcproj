@@ -226,6 +226,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\ogre_tasks.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\ogre_terrain.cpp"
 				>
 			</File>
@@ -269,6 +273,10 @@
 			</File>
 			<File
 				RelativePath=".\src\ogre_set.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_tasks.hpp"
 				>
 			</File>
 			<File

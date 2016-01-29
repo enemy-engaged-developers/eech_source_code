@@ -4,7 +4,7 @@ namespace
 {
 	GeometryPtr objects_geometry;
 	std::vector<AnimationMesh> objects_anim;
-	OgreObjectsInit* objects_init;
+	const OgreObjectsInit* objects_init;
 
 	class Normal : private Uncopyable
 	{
@@ -73,11 +73,69 @@ namespace
 		return true;
 #endif
 	}
+
+	class TaskObjectsInit : public Task
+	{
+	public:
+		TaskObjectsInit(const struct OgreObjectsInit* init, Semaphore& sem)
+			: init(init), sem(sem)
+		{
+		}
+		virtual TaskResult task(void)
+		{
+			objects_init = init;
+
+			assert(!objects_geometry.get());
+			objects_geometry.reset(new Geometry);
+
+			objects_anim.resize(objects_init->number_of_objects + 1);
+			for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
+				ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
+			objects_geometry->flush();
+
+			objects_init = 0;
+
+			sem.release();
+			return TR_TASK;
+		}
+
+	private:
+		const struct OgreObjectsInit* init;
+		Semaphore& sem;
+	};
+
+	class TaskObjectsClear : public Task
+	{
+	public:
+		TaskObjectsClear(Semaphore& sem)
+			: sem(sem)
+		{
+		}
+		virtual TaskResult task(void)
+		{
+			for (unsigned i = 0; i < objects_anim.size(); i++)
+			{
+				ObjectName object(i);
+				Ogre::MeshManager::getSingleton().unload(object);
+				Ogre::MeshManager::getSingleton().remove(object);
+			}
+			objects_anim.clear();
+			objects_geometry.reset(0);
+
+			sem.release();
+			return TR_TASK;
+		}
+
+	private:
+		Semaphore& sem;
+	};
 }
 
 // Converts EE's OBJECT_3D into Ogre::Mesh
 void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh& animation, Geometry* geometry)
 {
+	assert(GetCurrentThreadId() == ogre_thread_id);
+
 	if (!o.number_of_points)
 	{
 		mesh->load();
@@ -344,6 +402,8 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 
 void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned subobject)
 {
+	assert(GetCurrentThreadId() == ogre_thread_id);
+
 	assert(object < objects_anim.size());
 	const AnimationMesh& am = objects_anim[object];
 	for (AnimationMesh::const_iterator i(am.begin()); i != am.end(); ++i)
@@ -355,36 +415,22 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 	}
 }
 
-
 // Converts objects
-void OGREEE_CALL ogre_objects_init(struct OgreObjectsInit* init)
+void OGREEE_CALL ogre_objects_init(const struct OgreObjectsInit* init)
 {
-	ogre_log(__FUNCTION__, "");
+	assert(GetCurrentThreadId() == user_thread_id);
 
-	objects_init = init;
-
-	assert(!objects_geometry.get());
-	objects_geometry.reset(new Geometry);
-
-	objects_anim.resize(objects_init->number_of_objects + 1);
-	for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
-		ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
-	objects_geometry->flush();
-
-	objects_init = 0;
+	Semaphore sem(0, 1);
+	ogre_tasks->enqueue(new TaskObjectsInit(init, sem));
+	sem.acquire();
 }
 
 // Clears objects information
 void OGREEE_CALL ogre_objects_clear(void)
 {
-	ogre_log(__FUNCTION__, "");
+	assert(GetCurrentThreadId() == user_thread_id);
 
-	for (unsigned i = 0; i < objects_anim.size(); i++)
-	{
-		ObjectName object(i);
-		Ogre::MeshManager::getSingleton().unload(object);
-		Ogre::MeshManager::getSingleton().remove(object);
-	}
-	objects_anim.clear();
-	objects_geometry.reset(0);
+	Semaphore sem(0, 1);
+	ogre_tasks->enqueue(new TaskObjectsClear(sem));
+	sem.acquire();
 }

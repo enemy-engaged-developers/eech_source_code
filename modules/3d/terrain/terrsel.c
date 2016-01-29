@@ -208,9 +208,9 @@ int load_terrain_simple_elevation ( const char *filename )
 	
 	terrain_3d_simple_elevation_grid = ( float * ) ptr;
 	
-	terrain_3d_simple_elevation_x_grid_size_reciprocal = 1.0 / terrain_3d_simple_elevation_x_grid_size;
+	terrain_3d_simple_elevation_x_grid_size_reciprocal = 1.0f / terrain_3d_simple_elevation_x_grid_size;
 
-	terrain_3d_simple_elevation_z_grid_size_reciprocal = 1.0 / terrain_3d_simple_elevation_z_grid_size;
+	terrain_3d_simple_elevation_z_grid_size_reciprocal = 1.0f / terrain_3d_simple_elevation_z_grid_size;
 	
 	terrain_3d_simple_elevation_memory_mapped = TRUE;
 	
@@ -279,9 +279,9 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 	// Figure out the dimensions of the array.
 	//
 	
-	x_size = ( ( terrain_3d_sector_x_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / elevation_grid_size );
+	x_size = ( int ) ( ( terrain_3d_sector_x_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / elevation_grid_size );
 	
-	z_size = ( ( terrain_3d_sector_z_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / elevation_grid_size );
+	z_size = ( int ) ( ( terrain_3d_sector_z_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / elevation_grid_size );
 
 	//
 	// Round them to the nearest power of 2
@@ -317,9 +317,9 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 		}
 	}
 
-	x_elevation_grid_size = ( terrain_3d_sector_x_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / x_size;
+	x_elevation_grid_size = ( float ) ( ( terrain_3d_sector_x_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / x_size );
 
-	z_elevation_grid_size = ( terrain_3d_sector_z_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / z_size;
+	z_elevation_grid_size = ( float ) ( ( terrain_3d_sector_z_max * TERRAIN_3D_SECTOR_SIDE_LENGTH ) / z_size );
 
 	x_size++;
 
@@ -335,9 +335,9 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 
 	terrain_3d_simple_elevation_z_grid_size = z_elevation_grid_size;
 	
-	terrain_3d_simple_elevation_x_grid_size_reciprocal = 1.0 / terrain_3d_simple_elevation_x_grid_size;
+	terrain_3d_simple_elevation_x_grid_size_reciprocal = 1.0f / terrain_3d_simple_elevation_x_grid_size;
 
-	terrain_3d_simple_elevation_z_grid_size_reciprocal = 1.0 / terrain_3d_simple_elevation_z_grid_size;
+	terrain_3d_simple_elevation_z_grid_size_reciprocal = 1.0f / terrain_3d_simple_elevation_z_grid_size;
 	
 	for ( z_grid = 0; z_grid < z_size; z_grid++ )
 	{
@@ -449,7 +449,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
@@ -469,7 +469,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 	
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
@@ -489,7 +489,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
@@ -509,7 +509,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 	
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
@@ -529,7 +529,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 	
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
@@ -549,7 +549,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 						if ( t != -1.0 )
 						{
 	
-							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0 - t );
+							height1 = ( sea_height - ( t * height2 ) ) / ( 1.0f - t );
 
 							checked = TRUE;
 						}
