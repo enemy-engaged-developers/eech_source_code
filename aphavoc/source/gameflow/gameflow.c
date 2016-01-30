@@ -779,6 +779,8 @@ void process_game_initialisation_phases (void)
 
 				session_cloud_puffs = command_line_cloud_puffs;
 
+				session_comms_packet_data_size = command_line_comms_packet_data_size;
+
 				server_log ("separator"); // Jabberwock 031119 Server log
 
 				server_log ("Campaign started: %s", session->title); // Jabberwock 031119 Server log

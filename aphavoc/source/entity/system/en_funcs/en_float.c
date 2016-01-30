@@ -1951,7 +1951,10 @@ void pack_float_value (entity *en, float_types type, float value)
 				width;
 
 			if (value < 0)
+			{
 				debug_log("signed float restricted, type %s", get_float_type_name(type));
+			}
+
 			ASSERT (value >= 0.0);
 
 			ASSERT

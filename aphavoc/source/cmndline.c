@@ -269,6 +269,7 @@ int
 	session_russian_nvg_no_ir					= TRUE,
 	session_cloud_puffs							= 1,
 	session_campaign_map_update_interval		= 120,
+	session_comms_packet_data_size					= 512,
 // mue 070223 export_mfd
 	command_line_export_mfd						=FALSE,
 	command_line_export_mfd_adapter					=0,

@@ -291,7 +291,7 @@ void comms_record_data (unsigned char *data, int size)
         int
             packet_count;
 
-        packet_count = data_record_size / command_line_comms_packet_data_size;
+        packet_count = data_record_size / session_comms_packet_data_size;
 
         if (packet_count > 1)
         {
@@ -1178,6 +1178,10 @@ void comms_process_data (void)
 
 							size += sizeof (int);
 
+							quick_set_list_item (ptr, int, command_line_comms_packet_data_size);
+
+							size += sizeof (int);
+
 							send_packet (received_id, PACKET_TYPE_SETTINGS_DATA, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
 
 						}
@@ -1476,6 +1480,9 @@ void comms_process_data (void)
 						sprintf (buffer, "%s: %d%%", get_trans ("Smoke effectiveness"), get_list_item (ptr, int));
 						size += sizeof (int);
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						session_comms_packet_data_size = get_list_item (ptr, int);
+						size += sizeof (int);
 
 						set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 

@@ -838,7 +838,7 @@ void initialise_service_provider_connection ( void )
 
 			// need good way to restore default values without overwritting commandline params
 			//command_line_comms_resend_list_size						= 1000;
-			//command_line_comms_packet_data_size						= 512;
+			//session_comms_packet_data_size						= 512;
 			//command_line_comms_packet_rerequest_limit				= 100;
 			//command_line_comms_connection_receive_size			= (32 * 1024);
 			//command_line_comms_data_record_size						= (200 * 1024);
@@ -862,7 +862,7 @@ void initialise_service_provider_connection ( void )
 		{
 
 			//command_line_comms_resend_list_size						= 1000;
-			//command_line_comms_packet_data_size						= 512;
+			//session_comms_packet_data_size						= 512;
 			//command_line_comms_packet_rerequest_limit				= 100;
 			//command_line_comms_connection_receive_size			= (32 * 1024);
 			//command_line_comms_data_record_size						= (200 * 1024);
@@ -886,7 +886,7 @@ void initialise_service_provider_connection ( void )
 		{
 
 			//command_line_comms_resend_list_size						= 1000;
-			//command_line_comms_packet_data_size						= 512;
+			//session_comms_packet_data_size						= 512;
 			//command_line_comms_packet_rerequest_limit				= 100;
 			//command_line_comms_connection_receive_size			= (32 * 1024);
 			//command_line_comms_data_record_size						= (200 * 1024);
@@ -949,7 +949,7 @@ void initialise_service_provider_connection ( void )
 		{
 
 			//command_line_comms_resend_list_size						= 1000;
-			//command_line_comms_packet_data_size						= 512;
+			//session_comms_packet_data_size						= 512;
 			//command_line_comms_packet_rerequest_limit				= 10;
 			//command_line_comms_connection_receive_size			= (32 * 1024);
 			//command_line_comms_data_record_size						= (16 * 1024);

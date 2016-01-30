@@ -373,7 +373,7 @@ void initialise_comms_debug (void)
 
 	#if COMMS_STATS
 
-	debug_watch ("packets size								= %d", MT_INT, &command_line_comms_packet_data_size);
+	debug_watch ("packets size								= %d", MT_INT, &session_comms_packet_data_size);
 	debug_watch ("packets sent							= %d", MT_INT, &num_packets_sent);
 	debug_watch ("packets send size (instant)			= %.02f", MT_FLOAT, &instant_packet_size_sent);
 	debug_colour_watch ((debug_colours) COLOUR_RED, "packets send size (av)				= %.02f", MT_FLOAT, &av_packet_size_sent);
@@ -442,7 +442,7 @@ void deinitialise_comms (void)
 
 	debug_log ("COMMS STATS:");
 
-	debug_log ("packets size							= %d", command_line_comms_packet_data_size);
+	debug_log ("packets size							= %d", session_comms_packet_data_size);
 	debug_log ("packets sent							= %d", num_packets_sent);
 	debug_log ("packets send size (av)				= %.02f", av_packet_size_sent);
 	debug_log ("packets send size (max)				= %.02f", max_packet_size_sent);
@@ -577,12 +577,12 @@ void send_packet (DPID player_id, packet_types type, unsigned char *data, int si
 
 	#endif
 
-	number_of_packets = max ((size - 1) / command_line_comms_packet_data_size, 0) + 1;
+	number_of_packets = max ((size - 1) / session_comms_packet_data_size, 0) + 1;
 
 	do
 	{
 
-		send_size = min (size, command_line_comms_packet_data_size);
+		send_size = min (size, session_comms_packet_data_size);
 
 		//
 		// For variable sized packets, just tell direct play the true size of the packet
@@ -592,7 +592,7 @@ void send_packet (DPID player_id, packet_types type, unsigned char *data, int si
 		//
 		// For old style fixed length packets, tell direct play the size of the whole packet ( not just the data )
 		//
-//		packet_size = sizeof (packet_header_type) + (sizeof (unsigned char) * command_line_comms_packet_data_size);
+//		packet_size = sizeof (packet_header_type) + (sizeof (unsigned char) * session_comms_packet_data_size);
 
 		new_packet_data = (unsigned char *) malloc_heap_mem (packet_size);
 
@@ -745,7 +745,7 @@ void receive_packets (void)
 		// malloc_heap_mem new packet if required
 		//
 
-		packet_size = sizeof (packet_header_type) + (sizeof (unsigned char) * command_line_comms_packet_data_size);
+		packet_size = sizeof (packet_header_type) + (sizeof (unsigned char) * session_comms_packet_data_size);
 
 		if (!new_receive_packet)
 		{
@@ -1189,7 +1189,7 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 
 			connection->size += this_packet->packet->data_size;
 
-			predicted_size = ((this_packet->packet->packet_id - 1) * command_line_comms_packet_data_size) + this_packet->packet->data_size;
+			predicted_size = ((this_packet->packet->packet_id - 1) * session_comms_packet_data_size) + this_packet->packet->data_size;
 
 			#if DEBUG_MODULE >= 3
 

@@ -244,6 +244,7 @@ extern int
 	session_russian_nvg_no_ir,
 	session_cloud_puffs,
 	session_campaign_map_update_interval,
+	session_comms_packet_data_size,
 // mue 070223 export_mfd
 	command_line_export_mfd,
 	command_line_export_mfd_adapter,
