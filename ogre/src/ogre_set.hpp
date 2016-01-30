@@ -28,7 +28,7 @@ inline Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
 
 inline Ogre::Quaternion ogre_orientation(const float* m)
 {
-	return ogre_orientation(atan2(m[6], m[8]), asin(m[7]), atan2(-m[1], m[4]));
+	return ogre_orientation(atan2(m[6], m[8]), -asin(m[7]), atan2(-m[1], m[4]));
 }
 
 inline Ogre::Vector3 ogre_scale(const float* f)
