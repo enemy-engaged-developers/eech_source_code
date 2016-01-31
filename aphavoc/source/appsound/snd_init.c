@@ -86,7 +86,7 @@ void initialise_application_sound_system (void)
 	
 	initialise_application_sound_effects ();
 
-	if ( !command_line_no_sound )
+	if ( !command_line_no_sound && !command_line_comms_dedicated_server )
 	{
 	
 		//
@@ -119,7 +119,7 @@ void initialise_application_sound_system (void)
 void deinitialise_application_sound_system (void)
 {
 
-	if ( !command_line_no_sound )
+	if ( !command_line_no_sound && !command_line_comms_dedicated_server )
 	{
 	
 		if ( application_sound_system_enabled )

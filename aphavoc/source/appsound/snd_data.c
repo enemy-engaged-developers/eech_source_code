@@ -2442,7 +2442,7 @@ void load_application_sound_samples ( void )
 	if ( application_sound_system_enabled )
 	{
 
-		if ( !command_line_no_sound )
+		if ( !command_line_no_sound && !command_line_comms_dedicated_server )
 		{
 
 			number_of_application_sound_samples = ( sizeof ( application_sound_samples ) / sizeof ( sound_sample_information ) );
@@ -2489,7 +2489,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 			samples_loaded,
 			count;
 
-		if ( !command_line_no_sound )
+		if ( !command_line_no_sound && !command_line_comms_dedicated_server )
 		{
 
 			sound_system_side_loaded = side;
