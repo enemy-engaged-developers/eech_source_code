@@ -356,9 +356,9 @@ void initialise_ui_colours ( void )
 	ui_init_screen_text_colour.a = 255;
 
 	// screen title text - yellow - dead
-	ui_screen_title_text_colour.r = 0;
-	ui_screen_title_text_colour.g = 0;
-	ui_screen_title_text_colour.b = 160;
+	ui_screen_title_text_colour.r = 255;
+	ui_screen_title_text_colour.g = 255;
+	ui_screen_title_text_colour.b = 255;
 	ui_screen_title_text_colour.a = 255;
 
 	// option title text - orange - dead

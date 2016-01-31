@@ -416,19 +416,11 @@ void initialise_ui_font (void)
 
 	y_size = (int) round (14 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_THICK_ARIAL_22, "ArBold", x_size, y_size, UI_FONT_DEFAULT_WEIGHT, TRUE, TRUE );
+	load_windows_ui_font ( UI_FONT_THICK_ARIAL_22, "Arial", x_size, y_size, 1.0, TRUE, TRUE );
 
 	y_size = (int) round (21 * arial_factor_y);
 
-// warning - this will cause the game to crash if the wrong font files are installed...
-
-#if ( ( RUSSIAN_VERSION ) || ( POLISH_VERSION ) )
-	// russian - use arial
-	load_windows_ui_font ( UI_FONT_IMPACT_22, "Arial", 0.0, y_size, 0.9, FALSE, TRUE );
-#else
-	// normal title typeface
-	load_windows_ui_font ( UI_FONT_IMPACT_22, "SteelAb", 0.0, y_size, 0.9, FALSE, TRUE );
-#endif
+	load_windows_ui_font ( UI_FONT_IMPACT_22, "Impact", 0.0, y_size, 0.9, TRUE, TRUE );
 
 	y_size = (int) round (8.2 * unscalable_factor);
 

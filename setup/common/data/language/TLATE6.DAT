@@ -167,7 +167,7 @@ FRENCH Cyclic Roll
 GERMAN Cyclic Roll
 ITALIAN Cyclic Roll
 SPANISH Cyclic Roll
-RUSSIAN ...
+RUSSIAN Cyclic Roll
 
 
 :TRANSLATION Cyclic Pitch
@@ -176,7 +176,7 @@ FRENCH Cyclic Pitch
 GERMAN Cyclic Pitch
 ITALIAN Cyclic Pitch
 SPANISH Cyclic Pitch
-RUSSIAN ...
+RUSSIAN Cyclic Pitch
 
 
 :TRANSLATION EO Pan X
@@ -185,7 +185,7 @@ FRENCH EO Pan
 GERMAN EO Horizontal
 ITALIAN EO Pan
 SPANISH EO Pan
-RUSSIAN ...
+RUSSIAN EO Pan
 
 
 :TRANSLATION EO Pan Y
@@ -194,7 +194,7 @@ FRENCH EO Pitch
 GERMAN EO Vertikal
 ITALIAN EO Pitch
 SPANISH EO Pitch
-RUSSIAN ...
+RUSSIAN EO Pitch
 
 
 :TRANSLATION EO Zoom
@@ -203,7 +203,7 @@ FRENCH EO Zoom
 GERMAN EO Zoom
 ITALIAN EO Zoom
 SPANISH EO Zoom
-RUSSIAN ...
+RUSSIAN EO Zoom
 
 
 :TRANSLATION Joystick Look X
@@ -212,7 +212,7 @@ FRENCH Joystick Look X
 GERMAN Joystick Look X
 ITALIAN Joystick Look X
 SPANISH Joystick Look X
-RUSSIAN ...
+RUSSIAN Joystick Look X
 
 
 :TRANSLATION Joystick Look Y
@@ -221,7 +221,7 @@ FRENCH Joystick Look Y
 GERMAN Joystick Look Y
 ITALIAN Joystick Look Y
 SPANISH Joystick Look Y
-RUSSIAN ...
+RUSSIAN Joystick Look Y
 
 
 :TRANSLATION TrackIR
@@ -230,7 +230,7 @@ FRENCH TrackIR
 GERMAN TrackIR
 ITALIAN TrackIR
 SPANISH TrackIR
-RUSSIAN ...
+RUSSIAN TrackIR
 
 
 :TRANSLATION Mouselook
@@ -239,7 +239,7 @@ FRENCH Mouselook
 GERMAN Maussicht
 ITALIAN Mouselook
 SPANISH Mouselook
-RUSSIAN ...
+RUSSIAN Mouselook
 
 
 :TRANSLATION Reverse Pedal
@@ -248,15 +248,15 @@ FRENCH Reverse Pedal
 GERMAN Ruder Umkehren
 ITALIAN Reverse Pedal
 SPANISH Reverse Pedal
-RUSSIAN ...
+RUSSIAN Reverse Pedal
 
 :TRANSLATION Autoconfigure
 ENGLISH Autoconfigure
-FRENCH Reverse Pedal
+FRENCH Autoconfigure
 GERMAN Automatisch konfigurieren
-ITALIAN Reverse Pedal
-SPANISH Reverse Pedal
-RUSSIAN ...
+ITALIAN Autoconfigure
+SPANISH Autoconfigure
+RUSSIAN Autoconfigure
 
 :TRANSLATION Running
 ENGLISH Running
@@ -264,7 +264,7 @@ FRENCH Running
 GERMAN Läuft
 ITALIAN Running
 SPANISH Running
-RUSSIAN ...
+RUSSIAN Running
 
 :TRANSLATION Enable Mouselook
 ENGLISH Enable Mouselook
@@ -272,7 +272,7 @@ FRENCH Enable Mouselook
 GERMAN Maussicht aktivieren
 ITALIAN Enable Mouselook
 SPANISH Enable Mouselook
-RUSSIAN ...
+RUSSIAN Enable Mouselook
 
 :TRANSLATION Internal
 ENGLISH Internal
