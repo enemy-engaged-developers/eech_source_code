@@ -350,9 +350,9 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 
 	if (criteria &	MOBILE_LOS_CHECK_SOURCE_END_OBJECTS)
 	{
-		check_position.x = source_position->x + (direction.x * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
-		check_position.y = source_position->y + (direction.y * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
-		check_position.z = source_position->z + (direction.z * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
+		check_position.x = source_position->x + (direction.x * min(target_range, LOS_OBJECT_CHECK_DISTANCE_SOURCE_END));
+		check_position.y = source_position->y + (direction.y * min(target_range, LOS_OBJECT_CHECK_DISTANCE_SOURCE_END));
+		check_position.z = source_position->z + (direction.z * min(target_range, LOS_OBJECT_CHECK_DISTANCE_SOURCE_END));
 
 		collision_en = get_line_of_sight_collision_entity
 							(
@@ -383,9 +383,9 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 
 	if (criteria &	MOBILE_LOS_CHECK_TARGET_END_OBJECTS)
 	{	
-		check_position.x = target_position->x - (direction.x * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
-		check_position.y = target_position->y - (direction.y * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
-		check_position.z = target_position->z - (direction.z * LOS_OBJECT_CHECK_DISTANCE_TARGET_END);
+		check_position.x = target_position->x - (direction.x * min(target_range, LOS_OBJECT_CHECK_DISTANCE_TARGET_END));
+		check_position.y = target_position->y - (direction.y * min(target_range, LOS_OBJECT_CHECK_DISTANCE_TARGET_END));
+		check_position.z = target_position->z - (direction.z * min(target_range, LOS_OBJECT_CHECK_DISTANCE_TARGET_END));
 
 		collision_en = get_line_of_sight_collision_entity
 							(
