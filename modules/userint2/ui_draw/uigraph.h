@@ -64,6 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 struct RGB_DATA;
 
 extern void ui_draw_graphic (float x1, float y1, float x2, float y2, struct RGB_DATA *graphic);
@@ -95,6 +96,7 @@ extern void ui_draw_masked_graphic (
 										int destination_pitch, int source_pitch,
 										unsigned int *source_ptr,
 										unsigned int *destination_ptr );
+#endif
 
 extern void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_graphic *graphic, real_colour colour);
 
