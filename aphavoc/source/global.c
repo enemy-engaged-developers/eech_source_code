@@ -323,7 +323,9 @@ void initialise_global_options_data (void)
 
 	set_global_display_external_view_name (TRUE);
 
+#if 0
 	set_global_graphics_files_installed (FALSE);
+#endif
 
 	set_global_map (MAP1);
 
@@ -339,7 +341,9 @@ void initialise_global_options_data (void)
 
 	set_global_graphics_device_selection_automatic (TRUE);
 
+#if 0
 	set_global_graphics_files_wrong_format (FALSE);
+#endif
 
 	set_global_comms_port ( 1 );
 

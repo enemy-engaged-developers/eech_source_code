@@ -137,9 +137,6 @@
 #define get_screen_height(X) application_video_height 
 #define set_active_screen(X)
 #define get_active_screen() NULL
-#define set_block(A, B, C, D, E)
-#define draw_line(A, B, C, D, E)
-#define set_pixel(A, B, C)
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

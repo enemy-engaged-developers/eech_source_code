@@ -717,9 +717,11 @@ extern global_options_data
 
 ////////////////////////////////////////
 
+#if 0
 #define get_global_graphics_files_installed() (global_options.graphics_files_installed)
 
 #define set_global_graphics_files_installed(FLAG) (global_options.graphics_files_installed = (FLAG))
+#endif
 
 ////////////////////////////////////////
 
@@ -852,6 +854,7 @@ extern global_options_data
 
 ////////////////////////////////////////
 
+#if 0
 #define set_global_graphics_files_wrong_format(FLAG) (global_options.graphics_files_wrong_format = (FLAG))
 
 #define get_global_graphics_files_wrong_format() (global_options.graphics_files_wrong_format)
@@ -871,6 +874,7 @@ extern global_options_data
 #define set_global_graphics_files_alpha_mask(FLAG) (global_options.graphics_files_alpha_mask = (FLAG))
 
 #define get_global_graphics_files_alpha_mask() (global_options.graphics_files_alpha_mask)
+#endif
 
 ////////////////////////////////////////
 

@@ -92,7 +92,9 @@ extern int
 	command_line_cdrom_drive_letter,
 	command_line_hardware_render,
 	command_line_no_sound,
+#if 0
 	command_line_clean_graphics,
+#endif
 	command_line_new_graphics,
 	command_line_max_time_acceleration,
 	command_line_ai_use_route_generator,

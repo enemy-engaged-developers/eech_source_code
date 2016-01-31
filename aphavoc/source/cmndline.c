@@ -110,7 +110,9 @@ int
 	command_line_entity_update_frame_rate					= 2.0,
 	command_line_hardware_render								= FALSE,
 	command_line_no_sound										= FALSE,
+#if 0
 	command_line_clean_graphics								= FALSE,
+#endif
 
 	#ifdef DEBUG
 	command_line_new_graphics									= FALSE,

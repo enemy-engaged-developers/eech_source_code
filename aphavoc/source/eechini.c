@@ -740,8 +740,10 @@ static const struct config_option options[] =
 		INT(command_line_eads) },
 	{ "3dreset", "", "reset screen resolution to 800x600 (0 = off, 1 = on) (def = 0)",
 		SPEC(set_3dreset, get_zero) },
+#if 0
 	{ "cg", "clean_graphics", "(clean graphics) re-installs graphics files (0 = off, 1 = on) (def = 0)",
 		SPECINT(command_line_clean_graphics, set_int, get_zero) },
+#endif
 //	{ "eofullrange", "", "eo ranges near to max fog distance (and objects are drawn up to it) (0 = off, 1 = on) (def = 1)",
 //		INT(command_line_eo_full_range) },
 	{ "render-shadows", "", "(0 = off, 1 = all objects except trees, 2 = all objects) (def = 2)",

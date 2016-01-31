@@ -131,7 +131,9 @@ static void draw_number_ui_object (ui_object *obj)
 			if (get_ui_object_state (obj))
 			{
 	
+#if 0
 				ui_draw_hilight (x1 - 2, y1 - 1, x1 + x_size + 1, y1 + y_size + 1);
+#endif
 			}
 	
 			ui_restore_current_font ();

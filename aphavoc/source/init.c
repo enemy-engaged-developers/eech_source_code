@@ -384,6 +384,7 @@ void brief_initialise_game (void)
 
 	create_memory_block_configuration (memory_block_config, sizeof (memory_block_config) / sizeof (memory_block_configuration));
 
+#if 0
 	////////////////////////////////////////
 	//
 	// INITIALISE GRAPHICS FILES
@@ -447,6 +448,7 @@ void brief_initialise_game (void)
 	//
 
 	set_global_graphics_files_wrong_format ( FALSE );
+#endif
 
 	debug_log ( "Installing event stack" );
 
@@ -515,7 +517,11 @@ void brief_initialise_game (void)
 
 	debug_log ( "Initialising ui mouseptr" );
 
+#if 0
 	initialise_mouse_pointer ( get_graphics_file_data ( GRAPHICS_UI_COMMON_MOUSE_POINTER ) );
+#else
+	initialise_mouse_pointer ();
+#endif
 
 	debug_log ( "Finished brief install" );
 }
@@ -563,6 +569,7 @@ void full_initialise_game (void)
 //		add_to_pop_up_list ( buffer, init_screen_message_area, NULL, 0, UI_FONT_ARIAL_14, ui_colour_white );
 	}
 
+#if 0
 	if ( ( !get_global_graphics_files_installed () ) || command_line_new_graphics )
 	{
 
@@ -610,6 +617,7 @@ void full_initialise_game (void)
 			set_ui_object_text (initialising_text, buffer);
 		}
 	}
+#endif
 
 	save_global_options_data ();
 
@@ -631,7 +639,9 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
+#if 0
 	mopen_all_graphics_files (GRAPHICS_CONVERSION_SECOND_PASS);
+#endif
 
 	//
 	// Check Apache Havoc FFP files exist
@@ -654,7 +664,7 @@ void full_initialise_game (void)
 
 // VJ 050123 aphavoc install hack
 			if (global_aphavoc_maps && !get_global_apache_havoc_installed ())
-				sprintf (buffer, "Apache Havoc: %s", "Maps enabled");
+				sprintf (buffer, "Apache Havoc: %s", get_trans ("Maps enabled"));
 			else
 				sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));
 

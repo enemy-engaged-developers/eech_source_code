@@ -202,6 +202,7 @@ void deinitialise_game (void)
 
 	release_cd_audio_device ();
 
+#if 0
 	////////////////////////////////////////
 	//
 	// DEINITIALISE GRAPHICS FILES
@@ -209,6 +210,7 @@ void deinitialise_game (void)
 	////////////////////////////////////////
 
 	mclose_all_graphics_files ();
+#endif
 
 	////////////////////////////////////////
 	//
