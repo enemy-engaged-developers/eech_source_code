@@ -132,6 +132,8 @@ typedef struct FONT_DATABASE_HEADER font_database_header;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// The source file is in Latin-1 encoding. Here it is the same as UTF-8.
+
 #if ( POLISH_VERSION )
 
 unsigned char
@@ -234,9 +236,89 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef UNICODE
+static char
+	unicode_table[256][2];
+static int
+	unicode_table_filled;
+
+char* string_to_utf8(const char* str)
+{
+	if (!unicode_table_filled)
+	{
+		unsigned
+			count;
+
+		wchar_t
+			ch, rp;
+
+		for (count = 0; count < 256; count++)
+		{
+			unicode_table[count][0] = '~';
+			unicode_table[count][1] = '\0';
+		}
+		for (count = 0; count < ARRAYSIZE(font_character_table); count++)
+		{
+			ch = font_character_table[count];
+			rp = ch >= 126 && ch <= 190 ? unicode_character_table[ch - 126] : ch == 255 ? 0xA9 : ch;
+			if (rp >= FONT_CHARACTERS)
+				rp = ' ';
+			if (rp < 0x80)
+			{
+				unicode_table[ch][0] = (char) rp;
+				unicode_table[ch][1] = 0;
+			}
+			else
+			{
+				unicode_table[ch][0] = (char) (0xC0 | (rp >> 6));
+				unicode_table[ch][1] = (char) (0x80 | (rp & 0x3F));
+			}
+		}
+		unicode_table_filled = 1;
+	}
+
+	{
+		size_t
+			len;
+
+		const char
+			*src;
+
+		char
+			*dst,
+			*ptr;
+
+		len = 0;
+		for (src = str; *src; src++)
+		{
+			len += unicode_table[(unsigned char) *src][1] ? 2 : 1;
+		}
+
+		dst = safe_malloc(len + 1);
+
+		for (ptr = dst; *str; str++)
+		{
+			src = unicode_table[(unsigned char) *str];
+			*ptr++ = *src;
+			if (src[1])
+			{
+				*ptr++ = src[1];
+			}
+		}
+		*ptr = '\0';
+
+		return dst;
+	}
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void load_windows_ui_font ( font_types font, const char *type_name, int height, int width, float thickness, int italics, int dropshadow );
 
-static int get_kerning_offset ( const char *ptr );
+static int get_kerning_offset ( wchar_t first, wchar_t second );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -698,7 +780,11 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		font_character_maximum_width = 0;
 		font_character_maximum_height = 0;
 
+#ifdef UNICODE
+		for ( character_count = 32; character_count < FONT_CHARACTERS; character_count++ )
+#else
 		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
+#endif
 		{
 
 			int
@@ -722,12 +808,19 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			memset ( aliased_character, 0, 128*128 );
 
+#ifdef UNICODE
+			if ( character_count != ' ' )
+#else
 			if ( font_character_table[character_count] != ' ' )
+#endif
 			{
 
 				unsigned int
 					actual_character;
 
+#ifdef UNICODE
+				actual_character = character_count;
+#else
 				actual_character = font_character_table[character_count];
 
 				if ( ( actual_character >= 126 ) && ( actual_character <= 190 ) )
@@ -740,6 +833,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 					actual_character = '©';
 				}
+#endif
 
 				hdc = GetDC ( application_window );
 
@@ -894,7 +988,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				GetTextMetrics ( hdc, &metric );
 
-				if ( !GetCharABCWidths ( hdc, font_character_table[character_count], font_character_table[character_count], &widths ) )
+				if ( !GetCharABCWidths ( hdc, ' ', ' ', &widths ) )
 				{
 
 					debug_log ( "Failed to get widths" );
@@ -1037,7 +1131,11 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
 
+#ifdef UNICODE
+			if ( ( characters_wide * characters_high ) >= FONT_CHARACTERS )
+#else
 			if ( ( characters_wide * characters_high ) >= sizeof ( font_character_table ) )
+#endif
 			{
 
 				finished = TRUE;
@@ -1078,7 +1176,11 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
+#ifdef UNICODE
+			number_of_screens = ( FONT_CHARACTERS / ( characters_wide * characters_high ) ) + 1;
+#else
 			number_of_screens = ( sizeof ( font_character_table ) / ( characters_wide * characters_high ) ) + 1;
+#endif
 		}
 
 		new_font->number_of_screens = number_of_screens;
@@ -1112,10 +1214,15 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		fseek ( fp, font_headers[font_offset].graphic_data_offset, SEEK_SET );
 
+#ifdef UNICODE
+		for ( character_count = 32; character_count < FONT_CHARACTERS; character_count++ )
+#else
 		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
+#endif
 		{
 
 			int
+				index,
 				character_width,
 				character_height;
 
@@ -1123,18 +1230,24 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				u,
 				v;
 
+#ifdef UNICODE
+			index = character_count;
+#else
+			index = font_character_table[character_count];
+#endif
+
 			safe_fread ( &character_width, sizeof ( int ), 1, fp );
 			safe_fread ( &character_height, sizeof ( int ), 1, fp );
 
-			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcA, sizeof ( int ), 1, fp );
-			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcB, sizeof ( int ), 1, fp );
-			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcC, sizeof ( int ), 1, fp );
+			safe_fread ( &new_font->characters[index].abcA, sizeof ( int ), 1, fp );
+			safe_fread ( &new_font->characters[index].abcB, sizeof ( int ), 1, fp );
+			safe_fread ( &new_font->characters[index].abcC, sizeof ( int ), 1, fp );
 
 			//
 			// Put a pointer to the kerning pairs for this character
 			//
 
-			new_font->characters[ font_character_table[character_count] ].kerning_pairs = NULL;
+			new_font->characters[index].kerning_pairs = NULL;
 
 			{
 
@@ -1147,10 +1260,10 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				for ( kerning_count = 0; kerning_count < new_font->number_of_kerning_pairs; kerning_count++ )
 				{
 
-					if ( new_font->kerning_pairs[kerning_count].wFirst == font_character_table[character_count] )
+					if ( new_font->kerning_pairs[kerning_count].wFirst == index )
 					{
 
-						new_font->characters[ font_character_table[character_count] ].kerning_pairs = &new_font->kerning_pairs[kerning_count];
+						new_font->characters[index].kerning_pairs = &new_font->kerning_pairs[kerning_count];
 
 						found = TRUE;
 
@@ -1164,7 +1277,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 					for ( ; kerning_count < new_font->number_of_kerning_pairs; kerning_count++ )
 					{
 
-						if ( new_font->kerning_pairs[kerning_count].wFirst != font_character_table[character_count] )
+						if ( new_font->kerning_pairs[kerning_count].wFirst != index )
 						{
 
 							break;
@@ -1174,12 +1287,12 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 					for ( ; kerning_count < new_font->number_of_kerning_pairs; kerning_count++ )
 					{
 
-						ASSERT ( new_font->kerning_pairs[kerning_count].wFirst != font_character_table[character_count] );
+						ASSERT ( new_font->kerning_pairs[kerning_count].wFirst != index );
 					}
 				}
 			}
 
-			if ( font_character_table[character_count] != ' ' )
+			if ( index != ' ' )
 			{
 
 				//
@@ -1220,24 +1333,24 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			u -= ( 1.0 / ( texture_width * 2 ) );
 			v -= ( 1.0 / ( texture_width * 2 ) );
 
-			new_font->characters[ font_character_table[character_count] ].width = character_width;
-			new_font->characters[ font_character_table[character_count] ].height = character_height;
-			new_font->characters[ font_character_table[character_count] ].screen_index = screen_index;
-			new_font->characters[ font_character_table[character_count] ].valid = TRUE;
-			new_font->characters[ font_character_table[character_count] ].u1 = u;
-			new_font->characters[ font_character_table[character_count] ].v1 = v;
+			new_font->characters[index].width = character_width;
+			new_font->characters[index].height = character_height;
+			new_font->characters[index].screen_index = screen_index;
+			new_font->characters[index].valid = TRUE;
+			new_font->characters[index].u1 = u;
+			new_font->characters[index].v1 = v;
 
 			/*if ( d3d_using_permedia2_chipset )
 			{
 
-				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 0.0 ) / ( float ) texture_width );
-				new_font->characters[ font_character_table[character_count] ].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
+				new_font->characters[index].u2 = u + ( ( ( float ) character_width + 0.0 ) / ( float ) texture_width );
+				new_font->characters[index].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
 			}
 			else*/
 			{
 
-				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 1.0 ) / ( float ) texture_width );
-				new_font->characters[ font_character_table[character_count] ].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
+				new_font->characters[index].u2 = u + ( ( ( float ) character_width + 1.0 ) / ( float ) texture_width );
+				new_font->characters[index].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
 			}
 
 			character_x += new_font->font_width;
@@ -1314,6 +1427,31 @@ void deinitialise_ui_font (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif
 
+static wchar_t fetch_character ( const char **ptr )
+{
+	wchar_t
+		ch;
+
+#ifdef UNICODE
+	if ((unsigned char) **ptr < 0x80)
+	{
+		ch = **ptr;
+		(*ptr)++;
+	}
+	else
+	{
+		ch = (((unsigned) ((*ptr)[0] & 0x1F)) << 6) | ((*ptr)[1] & 0x3F);
+		(*ptr) += 2;
+	}
+
+	return ch;
+#else
+	ch = (unsigned char) **ptr;
+	(*ptr)++;
+	return ch >= 126 && ch <= 190 ? unicode_character_table[ch - 126] : ch == 255 ? 0xA9 : ch;
+#endif
+}
+
 float ui_display_text (const char *text, float x, float y)
 {
 #ifndef OGRE_EE
@@ -1327,8 +1465,7 @@ float ui_display_text (const char *text, float x, float y)
 
 		int
 			ix,
-			iy,
-			loop_string;
+			iy;
 
 		font_character
 			*character;
@@ -1357,6 +1494,10 @@ float ui_display_text (const char *text, float x, float y)
 
 		screen
 			*texture;
+
+		wchar_t
+			cur,
+			next;
 
 		//
 		// Always have to render text to the video screen
@@ -1456,7 +1597,9 @@ float ui_display_text (const char *text, float x, float y)
 			// loop the whole string
 			//
 
-			for (loop_string = strlen (text); loop_string > 0; loop_string --)
+			cur = fetch_character (&text_ptr);
+
+			while ( cur )
 			{
 
 				vertex
@@ -1470,7 +1613,7 @@ float ui_display_text (const char *text, float x, float y)
 				// work out what char
 				//
 
-				character = &current_font->characters[(int)*text_ptr];
+				character = &current_font->characters[cur];
 
 				if ( !character->valid )
 				{
@@ -1668,9 +1811,11 @@ float ui_display_text (const char *text, float x, float y)
 
 				x += character->abcA + character->abcB + character->abcC;	//character->width;	//float_font_width;
 
-				x += get_kerning_offset ( text_ptr );
+				next = fetch_character ( &text_ptr );
 
-				text_ptr ++;
+				x += get_kerning_offset ( cur, next );
+
+				cur = next;
 			}
 
 			//
@@ -1716,7 +1861,7 @@ float ui_display_text (const char *text, float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_kerning_offset ( const char *ptr )
+int get_kerning_offset ( wchar_t first, wchar_t second )
 {
 
 	int
@@ -1725,7 +1870,7 @@ int get_kerning_offset ( const char *ptr )
 	font_character
 		*character;
 
-	character = &current_font->characters[(int)ptr[0]];
+	character = &current_font->characters[first];
 
 	if ( character->kerning_pairs )
 	{
@@ -1735,7 +1880,7 @@ int get_kerning_offset ( const char *ptr )
 		while ( TRUE )
 		{
 
-			if ( character->kerning_pairs[count].wFirst != ptr[0] )
+			if ( character->kerning_pairs[count].wFirst != first )
 			{
 
 				return ( 0 );
@@ -1743,7 +1888,7 @@ int get_kerning_offset ( const char *ptr )
 			else
 			{
 
-				if ( character->kerning_pairs[count].wSecond == ptr[1] )
+				if ( character->kerning_pairs[count].wSecond == second )
 				{
 
 					return ( character->kerning_pairs[count].iKernAmount );
@@ -1775,6 +1920,10 @@ float ui_get_string_length (const char *string)
 	font_character
 		*character;
 
+	wchar_t
+		cur,
+		next;
+
 	if (!string)
 	{
 
@@ -1789,10 +1938,12 @@ float ui_get_string_length (const char *string)
 	// spin along string adding up length in pixels
 	//
 
-	while (*current_char)
+	cur = fetch_character (&current_char);
+
+	while (cur)
 	{
 
-		character = &current_font->characters[(int)*current_char];
+		character = &current_font->characters[cur];
 
 		if (!character->valid)
 		{
@@ -1808,9 +1959,11 @@ float ui_get_string_length (const char *string)
 
 		length += character->abcA + character->abcB + character->abcC;
 
-		length += get_kerning_offset ( current_char );
+		next = fetch_character ( &current_char );
 
-		current_char ++;
+		length += get_kerning_offset ( cur, next );
+
+		cur = next;
 	}
 
 	return length;

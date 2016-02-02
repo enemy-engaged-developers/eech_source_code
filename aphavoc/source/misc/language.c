@@ -331,6 +331,7 @@ void initialise_language_file (FILE *fp)
 
 	int
 		lang_type,
+		unicode = 0,
 		end = 0;
 
 	ASSERT (fp);
@@ -344,6 +345,11 @@ void initialise_language_file (FILE *fp)
 		{
 			case FILE_TAG_START:
 			{
+				continue;
+			}
+			case FILE_TAG_UNICODE:
+			{
+				unicode = 1;
 				continue;
 			}
 			case FILE_TAG_TRANSLATION:
@@ -376,9 +382,16 @@ void initialise_language_file (FILE *fp)
 							{
 								safe_free (lang->translation);
 							}
-							lang->translation = (char*) safe_malloc(sizeof(char) * (strlen(buf) +1) );
+							if (unicode)
+							{
+								lang->translation = (char *) safe_malloc (strlen (buf) + 1);
 
-							strcpy(lang->translation, buf);
+								strcpy (lang->translation, buf);
+							}
+							else
+							{
+								lang->translation = string_to_utf8 (buf);
+							}
 						}
 						else
 						{
