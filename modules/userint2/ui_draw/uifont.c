@@ -66,9 +66,9 @@
 
 #include "userint2.h"
 
-#ifndef OGRE_EE
 #include "graphics.h"
 
+#ifndef OGRE_EE
 #include "misc.h"
 
 #include "3d.h"
@@ -131,6 +131,7 @@ typedef struct FONT_DATABASE_HEADER font_database_header;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
 // The source file is in Latin-1 encoding.
 
@@ -198,7 +199,6 @@ unsigned int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 ui_font_type
 	ui_fonts[NUM_FONT_TYPES];
@@ -217,7 +217,6 @@ static rgb_colour
 rgb_colour
 	ui_default_colour;
 
-#ifndef OGRE_EE
 rgb_colour
 	ui_white_colour,
 	ui_black_colour,
@@ -236,7 +235,6 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef UNICODE
 static char
 	unicode_table[256][2];
 static int
@@ -294,7 +292,7 @@ char* string_to_utf8(const char* str)
 			len += unicode_table[(unsigned char) *src][1] ? 2 : 1;
 		}
 
-		dst = safe_malloc(len + 1);
+		dst = (char *) safe_malloc(len + 1);
 
 		for (ptr = dst; *str; str++)
 		{
@@ -310,7 +308,6 @@ char* string_to_utf8(const char* str)
 		return dst;
 	}
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,7 +315,9 @@ char* string_to_utf8(const char* str)
 
 static void load_windows_ui_font ( font_types font, const char *type_name, int height, int width, float thickness, int italics, int dropshadow );
 
+#ifndef OGRE_EE
 static int get_kerning_offset ( wchar_t first, wchar_t second );
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -365,8 +364,10 @@ void initialise_ui_font (void)
 		debug_log ("UI_FONT: %d %d", current_font_resolution_width, current_font_resolution_height );
 	#endif
 
+#ifndef OGRE_EE
 	unlink ( UI_FONT_HEADER_FILE );
 	unlink ( UI_FONT_DATA_FILE );
+#endif
 
 	memset ( ui_fonts, 0, sizeof ( ui_fonts ) );
 
@@ -523,6 +524,7 @@ void initialise_ui_font (void)
 
 void load_windows_ui_font ( font_types font, const char *type_name, int width, int height, float weight, int italics, int dropshadow )
 {
+#ifndef OGRE_EE
 
 	HFONT
 		my_font;
@@ -780,11 +782,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		font_character_maximum_width = 0;
 		font_character_maximum_height = 0;
 
-#ifdef UNICODE
 		for ( character_count = 32; character_count < FONT_CHARACTERS; character_count++ )
-#else
-		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
-#endif
 		{
 
 			int
@@ -808,32 +806,13 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			memset ( aliased_character, 0, 128*128 );
 
-#ifdef UNICODE
 			if ( character_count != ' ' )
-#else
-			if ( font_character_table[character_count] != ' ' )
-#endif
 			{
 
 				unsigned int
 					actual_character;
 
-#ifdef UNICODE
 				actual_character = character_count;
-#else
-				actual_character = font_character_table[character_count];
-
-				if ( ( actual_character >= 126 ) && ( actual_character <= 190 ) )
-				{
-
-					actual_character = unicode_character_table[actual_character-126];
-				}
-				else if ( actual_character == 255 )
-				{
-
-					actual_character = '©';
-				}
-#endif
 
 				hdc = GetDC ( application_window );
 
@@ -1131,11 +1110,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
 
-#ifdef UNICODE
 			if ( ( characters_wide * characters_high ) >= FONT_CHARACTERS )
-#else
-			if ( ( characters_wide * characters_high ) >= sizeof ( font_character_table ) )
-#endif
 			{
 
 				finished = TRUE;
@@ -1176,11 +1151,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
-#ifdef UNICODE
 			number_of_screens = ( FONT_CHARACTERS / ( characters_wide * characters_high ) ) + 1;
-#else
-			number_of_screens = ( sizeof ( font_character_table ) / ( characters_wide * characters_high ) ) + 1;
-#endif
 		}
 
 		new_font->number_of_screens = number_of_screens;
@@ -1214,11 +1185,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		fseek ( fp, font_headers[font_offset].graphic_data_offset, SEEK_SET );
 
-#ifdef UNICODE
 		for ( character_count = 32; character_count < FONT_CHARACTERS; character_count++ )
-#else
-		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
-#endif
 		{
 
 			int
@@ -1230,11 +1197,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				u,
 				v;
 
-#ifdef UNICODE
 			index = character_count;
-#else
-			index = font_character_table[character_count];
-#endif
 
 			safe_fread ( &character_width, sizeof ( int ), 1, fp );
 			safe_fread ( &character_height, sizeof ( int ), 1, fp );
@@ -1378,6 +1341,18 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		safe_fclose ( fp );
 	}
+
+#else
+	ui_font_type
+		*new_font;
+
+	new_font = &ui_fonts[font];
+
+	// FIXME
+	new_font->font_width = height;
+	new_font->font_height = height;
+	ogre_ui_font ( font, type_name, height );
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1386,6 +1361,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 void deinitialise_ui_font (void)
 {
+#ifndef OGRE_EE
 
 	int
 		count;
@@ -1420,19 +1396,21 @@ void deinitialise_ui_font (void)
 	}
 
 	memset ( ui_fonts, 0, sizeof ( ui_fonts ) );
+#else
+	// FIXME
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
+#ifndef OGRE_EE
 static wchar_t fetch_character ( const char **ptr )
 {
 	wchar_t
 		ch;
 
-#ifdef UNICODE
 	if ((unsigned char) **ptr < 0x80)
 	{
 		ch = **ptr;
@@ -1445,12 +1423,8 @@ static wchar_t fetch_character ( const char **ptr )
 	}
 
 	return ch;
-#else
-	ch = (unsigned char) **ptr;
-	(*ptr)++;
-	return ch >= 126 && ch <= 190 ? unicode_character_table[ch - 126] : ch == 255 ? 0xA9 : ch;
-#endif
 }
+#endif
 
 float ui_display_text (const char *text, float x, float y)
 {
@@ -1852,6 +1826,18 @@ float ui_display_text (const char *text, float x, float y)
 		return ( 0 );
 	}
 #else
+	int
+		ix,
+		iy;
+
+	if (text)
+	{
+		x += ui_x_origin;
+		y += ui_y_origin;
+		convert_float_to_int ( x, &ix );
+		convert_float_to_int ( y, &iy );
+		ogre_ui_text ( current_font - ui_fonts, ix, iy, text, current_font_colour.colour );
+	}
 	return 0;
 #endif
 }
@@ -1968,7 +1954,7 @@ float ui_get_string_length (const char *string)
 
 	return length;
 #else
-	return 0;
+	return string ? ogre_ui_width ( current_font - ui_fonts, string ) : 0;
 #endif
 }
 

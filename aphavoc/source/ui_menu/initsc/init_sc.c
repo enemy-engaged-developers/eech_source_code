@@ -91,9 +91,6 @@ void initialise_init_screen (void)
 		y1,
 		y2;
 
-	char
-		buf[128];
-
 	x1 = 0.0;
 	x2 = 1.0;
 	y1 = 0.0;
@@ -193,10 +190,6 @@ void initialise_init_screen (void)
 	x2 = 0.3;
 	y2 = 0.0625;
 
-	buf[0] = 255;
-	buf[1] = '\0';
-	strcat ( buf, " 2000 Razorworks Ltd." );
-
 	copyright_text = create_ui_object
 		(
 			UI_TYPE_TEXT,
@@ -206,7 +199,7 @@ void initialise_init_screen (void)
 			UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_14),
       	UI_ATTR_FONT_COLOUR (ui_init_screen_text_colour.r, ui_init_screen_text_colour.g, ui_init_screen_text_colour.b, 255),
 			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_CENTRE),
-			UI_ATTR_TEXT (buf),
+			UI_ATTR_TEXT ("\xC2\xA9 2000 Razorworks Ltd."),
 			UI_ATTR_CLEAR (TRUE),
 			UI_ATTR_END
 		);

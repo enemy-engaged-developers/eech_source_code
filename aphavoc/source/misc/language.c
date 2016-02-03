@@ -99,7 +99,7 @@ static language_struct *initialise_translation (void);
 
 static void insert_translation (language_struct *insert_me);
 
-static void delete_translation (language_struct *position, language_struct *delete_me);
+static void delete_translation (language_struct *delete_me);
 
 static void initialise_language_file (FILE *fp);
 
@@ -134,70 +134,15 @@ const char
 	};
 
 language_struct
-	*translation_list,
 	*alphabet_pointers [NUM_ALPHABET_POINTERS];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_alphabet_pointers (void)
+static unsigned l2i(char ch)
 {
-	language_struct
-		*current;
-
-	char
-		a,
-		letter;
-
-	int
-		count;
-
-	ASSERT (translation_list);
-
-	current = translation_list;
-
-	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
-
-	// set 1st pointer to 1st of misc. characters
-	a = current->tag [0];
-
-	if ((toupper (a) < 'A') || (toupper (a) > 'Z'))
-	{
-		alphabet_pointers [0] = translation_list;
-	}
-
-	current = current->next;
-
-	count = 1;
-
-	letter = 'A';
-
-	// get alphabet pointers
-	while (current)
-	{
-		a = toupper (current->tag [0]);
-
-		if (a == toupper (letter))
-		{
-			letter++;
-
-			alphabet_pointers [letter - 'A'] = current;
-		}
-		// in case there are no translations for current letter, move on.
-		else if (a > toupper (letter))
-		{
-			letter = a + 1;
-
-			alphabet_pointers [letter - 'A'] = current;
-		}
-
-		current = current->next;
-
-		count++;
-	}
-
-	alphabet_pointers [NUM_ALPHABET_POINTERS - 1] = NULL;
+	return isalpha(ch) ? toupper(ch) - 64 : 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,79 +171,20 @@ language_struct *initialise_translation (void)
 
 void insert_translation (language_struct *insert_me)
 {
-	language_struct
-		*previous,
-		*current;
+	unsigned
+		index;
 
-	previous = NULL;
-
-	current = translation_list;
-
-	if (current != NULL)
-	{
-		while ((current != NULL) && (stricmp (insert_me->tag, current->tag) > 0))
-		{
-			previous = current;
-
-			current = current->next;
-		}
-
-		// do not insert duplicate translations
-		if (current != NULL)
-		{
-			if (strcmp (insert_me->tag, current->tag) == 0)
-			{
-				if (strcmp (insert_me->translation, current->translation) != 0)
-				{
-					#if DEBUG_LANGUAGES
-						debug_filtered_log ("WARNING: translation with same tags & different translations");
-
-						debug_filtered_log ("old: %s  :  %s", current->tag, current->translation);
-
-						debug_filtered_log ("new: %s  :  %s", insert_me->tag, insert_me->translation);
-					#endif
-				}
-				else
-				{
-					#if DEBUG_LANGUAGES
-						debug_filtered_log ("WARNING: deleting duplicate translation");
-					#endif
-
-					delete_translation (NULL, insert_me);
-
-					return;
-				}
-			}
-		}
-
-		insert_me->next = current;
-
-		if (previous != NULL)
-		{
-			previous->next = insert_me;
-		}
-		else
-		{
-			translation_list = insert_me;
-		}
-	}
-	else
-	{
-		translation_list = insert_me;
-	}
+	index = l2i(insert_me->tag[0]);
+	insert_me->next = alphabet_pointers[index];
+	alphabet_pointers[index] = insert_me;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void delete_translation (language_struct *position, language_struct *delete_me)
+void delete_translation (language_struct *delete_me)
 {
-	if (position != NULL)
-	{
-		position->next = delete_me->next;
-	}
-
 	if (delete_me->tag)
 	{
 		safe_free (delete_me->tag);
@@ -310,8 +196,6 @@ void delete_translation (language_struct *position, language_struct *delete_me)
 	}
 
 	safe_free (delete_me);
-
-	delete_me = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -359,9 +243,9 @@ void initialise_language_file (FILE *fp)
 				{
 					lang = initialise_translation ();
 
-					lang->tag = (char*) safe_malloc( sizeof(char) * (strlen(buf) + 1) );
+					lang->tag = (char*) safe_malloc (strlen(buf) + 1);
 
-					strcpy(lang->tag, buf);
+					strcpy (lang->tag, buf);
 				}
 				else
 				{
@@ -423,7 +307,7 @@ void initialise_language_file (FILE *fp)
 				{
 					lang = initialise_translation ();
 
-					lang->tag = (char*) safe_malloc( sizeof(char) * (strlen(buf) + 1) );
+					lang->tag = (char*) safe_malloc(strlen(buf) + 1);
 
 					strcpy(lang->tag, buf);
 				}
@@ -447,7 +331,7 @@ void initialise_language_file (FILE *fp)
 							{
 								safe_free (lang->translation);
 							}
-							lang->translation = (char*) safe_malloc(sizeof(char) * (strlen(buf) +1) );
+							lang->translation = (char*) safe_malloc(strlen(buf) + 1);
 
 							strcpy(lang->translation, buf);
 
@@ -506,8 +390,6 @@ void initialise_language_database (void)
 	const char
 		*filename;
 
-	translation_list = NULL;
-
 	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
 
 	#if PREPROCESS_DAT_FILES
@@ -560,12 +442,6 @@ void initialise_language_database (void)
 	}
 
 	destroy_directory_file_list ( directory_listing );
-
-	initialise_alphabet_pointers ();
-
-	#if DEBUG_LANGUAGES
-		test_translation_list ();
-	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -578,48 +454,60 @@ const char *get_trans (const char *string)
 		*temp;
 
 	const char
-		*result = NULL;
+		*result;
 
-	int
-		not_found,
-		start,
-		end;
-
-	if (isalpha (string [0]))
+	for (temp = alphabet_pointers [l2i(string[0])]; temp; temp = temp->next)
 	{
-		start = toupper (string [0]) - 64;
-	}
-	else
-	{
-		start = 0;
-	}
-
-	end = start + 1;
-
-	ASSERT (end < NUM_ALPHABET_POINTERS);
-
-	temp = alphabet_pointers [start];
-
-	not_found = 1;
-
-	if (temp != NULL)
-	{
-		while ((not_found) && (temp != alphabet_pointers [end]))
+		if (strcmp(temp->tag, string) == 0)
 		{
-			if( strcmp(temp->tag, string) == 0)
-			{
-				result = temp->translation;
-
-				not_found = 0;
-			}
-
-			temp = temp->next;
+			result = temp->translation;
+			break;
 		}
 	}
 
-	if(result == NULL)
+	if (!temp)
 	{
-		result = string;
+		int
+			unicode = 1,
+			count;
+
+		for (count = 0; string[count]; count++)
+		{
+			unsigned char
+				ch;
+
+			ch = string[count];
+			if (ch < 0x80)
+			{
+				continue;
+			}
+			if ((ch & 0xE0) == 0xC0)
+			{
+				count++;
+				ch = string[count];
+				if ((ch & 0xC0) == 0x80)
+				{
+					continue;
+				}
+			}
+
+			unicode = 0;
+			break;
+		}
+
+		if (unicode)
+		{
+			result = string;
+		}
+		else
+		{
+			temp = initialise_translation ();
+			temp->tag = (char*) safe_malloc (strlen(string) + 1);
+			strcpy (temp->tag, string);
+			temp->translation = string_to_utf8 (string);
+			insert_translation (temp);
+			result = temp->translation;
+		}
 
 		#if DEBUG_MODULE
 
@@ -643,13 +531,16 @@ void deinitialise_language_database (void)
 	language_struct
 		*temp;
 
-	while (translation_list)
+	int
+		count;
+
+	for (count = 0; count < ARRAYSIZE(alphabet_pointers); count++)
 	{
-		temp = translation_list->next;
-
-		delete_translation (NULL, translation_list);
-
-		translation_list = temp;
+		while ((temp = alphabet_pointers[count]))
+		{
+			alphabet_pointers[count] = alphabet_pointers[count]->next;
+			delete_translation (temp);
+		}
 	}
 }
 
@@ -662,38 +553,6 @@ void set_current_language (int language)
 	if ((language >= LANGUAGE_ENGLISH) && ( language < NUM_LANGUAGES))
 	{
 		global_options.current_language = language;
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void test_translation_list (void)
-{
-	language_struct
-		*temp;
-
-	int
-		alphabet_count = 0,
-		count = 0;
-
-	temp = translation_list;
-
-	while (temp != NULL)
-	{
-		if (alphabet_pointers [alphabet_count] == temp)
-		{
-			debug_filtered_log ("\n~~~ ALPHABET_POINTER  %c ~~~\n", (alphabet_count + 64));
-
-			alphabet_count++;
-		}
-
-		debug_filtered_log ("%3d:  %s  :  %s", count, temp->tag, temp->translation);
-
-		temp = temp->next;
-
-		count++;
 	}
 }
 
