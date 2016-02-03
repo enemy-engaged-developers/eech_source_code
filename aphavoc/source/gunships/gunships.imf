@@ -88,9 +88,11 @@ asm_object_files	+=	$+ &
 #################################################################################################################################
 #################################################################################################################################
 
+!ifndef ogre
 !include $(projectdir)\source\gunships\avionics\avionics.imf
 
 !include $(projectdir)\source\gunships\cockpits\cockpits.imf
+!endif
 
 !include $(projectdir)\source\gunships\dynamics\dynamics.imf
 

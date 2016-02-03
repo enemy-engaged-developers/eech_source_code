@@ -425,11 +425,14 @@ BOOL check_key ( const SHORT key )
 		return ( TRUE );
 	}
 	else
-#endif
 	{
 
 		return ( FALSE );
 	}
+#else
+	// FIXME
+	return FALSE;
+#endif
 }
 
 #ifndef OGRE_EE

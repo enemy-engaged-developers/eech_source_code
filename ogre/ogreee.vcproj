@@ -237,6 +237,10 @@
 				RelativePath=".\src\ogre_textures.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\src\ogre_ui.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

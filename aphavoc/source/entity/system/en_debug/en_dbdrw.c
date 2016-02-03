@@ -261,6 +261,7 @@ void destroy_all_debug_3d_objects (void)
 
 void draw_debug_3d_objects (viewpoint *vp, float visual_range)
 {
+#ifndef OGRE_EE
 	debug_3d_object
 		*object,
 		*succ;
@@ -308,6 +309,7 @@ void draw_debug_3d_objects (viewpoint *vp, float visual_range)
 
 		object = succ;
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,6 +412,7 @@ void destroy_all_debug_3d_lines (void)
 
 void draw_debug_3d_lines (viewpoint *vp, float visual_range)
 {
+#ifndef OGRE_EE
 	debug_3d_line
 		*line,
 		*succ;
@@ -446,6 +449,7 @@ void draw_debug_3d_lines (viewpoint *vp, float visual_range)
 
 		line = succ;
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

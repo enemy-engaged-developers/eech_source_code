@@ -13,6 +13,9 @@ In order to build OgreEE you need to make the following steps
 
 2. Build OgreEE with Visual Studio
 
-//3. Build EE supplying "ogre=1" to wmake
-3. Build cube with Visual Studio. Both src/ogre_int.hpp and cube/options.hpp
-have tunable options.
+3. Optionally build cube with Visual Studio. Both src/ogre_int.hpp and
+cube/options.hpp have tunable options.
+
+4. Build EE supplying "ogre=1" to wmake.
+Addition of ogre_debug=1 will link the project with debug version of
+OgreEE and Ogre3D.

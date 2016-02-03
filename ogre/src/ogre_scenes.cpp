@@ -433,7 +433,7 @@ void ogre_scenes_frame(void)
 	{
 		DrawnScenes::iterator it(drawn_scenes.begin());
 		it->ds.root->getParentSceneNode()->removeChild(it->ds.root);
-		it->left = SCENES_CACHE_FRAMES;
+		it->left = USE_SCENES_CACHE_FRAMES;
 		DrawnScenes& ds = old_drawn_scenes[it->ds.database];
 		ds.splice(ds.begin(), drawn_scenes, it);
 	}

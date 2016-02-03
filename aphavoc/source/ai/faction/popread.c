@@ -216,6 +216,7 @@ static void read_population_sam_placements ( FILE *fp );
 
 static unsigned int get_waypoint_inhangar_bits ( route_waypoint_position *waypoint, object_3d_instance *inst3d );
 
+#ifndef OGRE_EE
 static object_3d_database_entry * get_airfield_waypoint_route_object ( object_3d_instance *instance, object_3d_sub_object_index_numbers index );
 
 static void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, object_3d_database_entry *landing, object_3d_database_entry *takeoff );
@@ -229,6 +230,21 @@ static void insert_airport_ship_routes ( vec3d *position, object_3d_database_ent
 static void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *position, object_3d_database_entry *landing_route, object_3d_database_entry *takeoff_route );
 
 static void insert_airport_holding_routes ( vec3d *position, object_3d_database_entry *landing_holding_route, object_3d_database_entry *takeoff_holding_route );
+#else
+static unsigned get_airfield_waypoint_route_object ( object_3d_instance *instance, object_3d_sub_object_index_numbers index );
+
+static void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, unsigned landing, unsigned takeoff );
+
+static void insert_airport_helicopter_routes ( vec3d *position, unsigned landing, unsigned takeoff, unsigned landing_holding, unsigned takeoff_holding );
+
+static void insert_airport_routed_vehicles_routes ( vec3d *position, unsigned landing, unsigned takeoff );
+
+static void insert_airport_ship_routes ( vec3d *position, unsigned landing, unsigned takeoff );
+
+static void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *position, unsigned landing_route, unsigned takeoff_route );
+
+static void insert_airport_holding_routes ( vec3d *position, unsigned landing_holding_route, unsigned takeoff_holding_route );
+#endif
 
 static void create_airfield_waypoint ( entity_sub_types type, vec3d *waypoint_world_pos, int formation_index, float altitude );
 
@@ -1562,12 +1578,19 @@ void read_population_airfield_placements ( FILE *fp )
 			current_airport_inst3d->vp.position.y = y;
 			current_airport_inst3d->vp.position.z = z;
 
+#ifndef OGRE_EE
 			current_airport_inst3d->object_has_shadow = FALSE;
 			current_airport_inst3d->object_internal_lighting = FALSE;
+#endif
 
 			get_3d_transformation_matrix ( current_airport_inst3d->vp.attitude, 0.0, 0.0, 0.0 );
 
 			insert_3d_object_into_terrain ( current_airport_inst3d );
+
+#ifdef OGRE_EE
+			destruct_3d_object ( current_airport_inst3d );
+			current_airport_inst3d = NULL;
+#endif
 		}
 		else
 		{
@@ -1731,7 +1754,9 @@ void read_population_airfield_placements ( FILE *fp )
 			current_airport_inst3d->vp.position.y = y+0.05;
 			current_airport_inst3d->vp.position.z = z;
 
+#ifndef OGRE_EE
 			current_airport_inst3d->object_has_shadow = FALSE;
+#endif
 
 			get_3d_transformation_matrix ( current_airport_inst3d->vp.attitude, 0.0, 0.0, 0.0 );
 
@@ -1762,7 +1787,9 @@ void read_population_airfield_placements ( FILE *fp )
 			if ( keysite_sub_type != ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE )
 			{
 
+#ifndef OGRE_EE
 				current_airport_inst3d->object_internal_lighting = TRUE;
+#endif
 
 				insert_3d_object_into_terrain ( current_airport_inst3d );
 			}
@@ -1801,11 +1828,19 @@ void read_population_airfield_placements ( FILE *fp )
 				entity_sides
 					keysite_side;
 
+#ifndef OGRE_EE
 				object_3d_database_entry
 					*landing_route,
 					*takeoff_route,
 					*landing_holding_route,
 					*takeoff_holding_route;
+#else
+				unsigned
+					landing_route,
+					takeoff_route,
+					landing_holding_route,
+					takeoff_holding_route;
+#endif
 
 				position.x = x;
 				position.y = y;
@@ -2076,6 +2111,7 @@ void read_population_airfield_placements ( FILE *fp )
 				{
 
 					destruct_3d_object ( current_airport_inst3d );
+					current_airport_inst3d = NULL;
 				}
 
 				// debug_log used to generate POPNAME.DAT. just replace the - with newlines....
@@ -2093,6 +2129,14 @@ void read_population_airfield_placements ( FILE *fp )
 
 				validate_keysite_landing_site_heights (keysite);
 			}
+
+#ifdef OGRE_EE
+			if ( current_airport_inst3d )
+			{
+				destruct_3d_object ( current_airport_inst3d );
+				current_airport_inst3d = NULL;
+			}
+#endif
 		}
 	}
 }
@@ -2177,6 +2221,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 	object_3d_instance
 		*current_airport_inst3d;
 
+#ifndef OGRE_EE
 	object_3d_database_entry
 		*fixedwing_landing_route,
 		*fixedwing_takeoff_route,
@@ -2194,6 +2239,25 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 		*vehicle_takeoff_holding_route,
 		*ship_landing_holding_route,
 		*ship_takeoff_holding_route;
+#else
+	unsigned
+		fixedwing_landing_route,
+		fixedwing_takeoff_route,
+		helicopter_landing_route,
+		helicopter_takeoff_route,
+		vehicle_landing_route,
+		vehicle_takeoff_route,
+		ship_landing_route,
+		ship_takeoff_route,
+		fixedwing_landing_holding_route,
+		fixedwing_takeoff_holding_route,
+		helicopter_landing_holding_route,
+		helicopter_takeoff_holding_route,
+		vehicle_landing_holding_route,
+		vehicle_takeoff_holding_route,
+		ship_landing_holding_route,
+		ship_takeoff_holding_route;
+#endif
 
 	current_airport_inst3d = construct_3d_object ( object_index );
 
@@ -2255,7 +2319,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the landing routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = fixedwing_landing_route->index;
+#else
+			raw_object_index = fixedwing_landing_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2283,7 +2351,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the takeoff routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = fixedwing_takeoff_route->index;
+#else
+			raw_object_index = fixedwing_takeoff_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -2300,7 +2372,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the landing holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = fixedwing_landing_holding_route->index;
+#else
+				raw_object_index = fixedwing_landing_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2310,7 +2386,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the takeoff holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = fixedwing_takeoff_holding_route->index;
+#else
+				raw_object_index = fixedwing_takeoff_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2337,7 +2417,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the landing routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = helicopter_landing_route->index;
+#else
+			raw_object_index = helicopter_landing_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2365,7 +2449,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the takeoff routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = helicopter_takeoff_route->index;
+#else
+			raw_object_index = helicopter_takeoff_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -2382,7 +2470,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the landing holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = helicopter_landing_holding_route->index;
+#else
+				raw_object_index = helicopter_landing_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2392,7 +2484,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the takeoff holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = helicopter_takeoff_holding_route->index;
+#else
+				raw_object_index = helicopter_takeoff_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2419,7 +2515,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the landing routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = vehicle_landing_route->index;
+#else
+			raw_object_index = vehicle_landing_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2447,7 +2547,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the takeoff routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = vehicle_takeoff_route->index;
+#else
+			raw_object_index = vehicle_takeoff_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -2464,7 +2568,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the landing holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = vehicle_landing_holding_route->index;
+#else
+				raw_object_index = vehicle_landing_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2474,7 +2582,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the takeoff holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = vehicle_takeoff_holding_route->index;
+#else
+				raw_object_index = vehicle_takeoff_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2501,7 +2613,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the landing routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = ship_landing_route->index;
+#else
+			raw_object_index = ship_landing_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2529,7 +2645,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			// Insert the takeoff routes
 			//
 
+#ifndef OGRE_EE
 			raw_object_index = ship_takeoff_route->index;
+#else
+			raw_object_index = ship_takeoff_route;
+#endif
 
 			parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -2546,7 +2666,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the landing holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = ship_landing_holding_route->index;
+#else
+				raw_object_index = ship_landing_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2556,7 +2680,11 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 				// Insert the takeoff holding routes
 				//
 
+#ifndef OGRE_EE
 				raw_object_index = ship_takeoff_holding_route->index;
+#else
+				raw_object_index = ship_takeoff_holding_route;
+#endif
 
 				parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2573,6 +2701,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 		}
 
 		destruct_3d_object ( current_airport_inst3d );
+		current_airport_inst3d = NULL;
 	}
 }
 
@@ -2643,7 +2772,11 @@ unsigned int get_waypoint_inhangar_bits ( route_waypoint_position *waypoint, obj
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 object_3d_database_entry * get_airfield_waypoint_route_object ( object_3d_instance *instance, object_3d_sub_object_index_numbers index )
+#else
+unsigned get_airfield_waypoint_route_object ( object_3d_instance *instance, object_3d_sub_object_index_numbers index )
+#endif
 {
 
 	object_3d_sub_object_search_data
@@ -2656,12 +2789,20 @@ object_3d_database_entry * get_airfield_waypoint_route_object ( object_3d_instan
 	if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 	{
 
+#ifndef OGRE_EE
 		return ( search.object_scene );
+#else
+		return ogre_scene_get_object ( &search.search_object->vp, search.result_sub_object - search.search_object->vp.elements );
+#endif
 	}
 	else
 	{
 
+#ifndef OGRE_EE
 		return ( NULL );
+#else
+		return 0;
+#endif
 	}
 }
 
@@ -2669,7 +2810,11 @@ object_3d_database_entry * get_airfield_waypoint_route_object ( object_3d_instan
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, object_3d_database_entry *landing_route, object_3d_database_entry *takeoff_route )
+#else
+void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, unsigned landing_route, unsigned takeoff_route )
+#endif
 {
 
 	int
@@ -2695,7 +2840,11 @@ void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, obje
 	// Insert the landing routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = landing_route->index;
+#else
+	raw_object_index = landing_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -2845,7 +2994,11 @@ void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, obje
 	// Insert the takeoff routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = takeoff_route->index;
+#else
+	raw_object_index = takeoff_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -2939,7 +3092,11 @@ void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, obje
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entry *landing_route, object_3d_database_entry *takeoff_route, object_3d_database_entry *landing_holding_route, object_3d_database_entry *takeoff_holding_route )
+#else
+void insert_airport_helicopter_routes ( vec3d *position, unsigned landing_route, unsigned takeoff_route, unsigned landing_holding_route, unsigned takeoff_holding_route )
+#endif
 {
 
 	int
@@ -2970,7 +3127,11 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 	// Insert the landing routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = landing_route->index;
+#else
+	raw_object_index = landing_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3140,7 +3301,11 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 	// Insert the takeoff routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = takeoff_route->index;
+#else
+	raw_object_index = takeoff_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -3260,7 +3425,11 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 		// Insert the landing holding routes
 		//
 
+#ifndef OGRE_EE
 		raw_object_index = landing_holding_route->index;
+#else
+		raw_object_index = landing_holding_route;
+#endif
 
 		parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3338,7 +3507,11 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 		// Insert the takeoff holding routes
 		//
 
+#ifndef OGRE_EE
 		raw_object_index = takeoff_holding_route->index;
+#else
+		raw_object_index = takeoff_holding_route;
+#endif
 
 		parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3426,7 +3599,11 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *position, object_3d_database_entry *landing_route, object_3d_database_entry *takeoff_route )
+#else
+void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *position, unsigned landing_route, unsigned takeoff_route )
+#endif
 {
 
 	int
@@ -3449,7 +3626,11 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 	// Insert the landing routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = landing_route->index;
+#else
+	raw_object_index = landing_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3543,7 +3724,11 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 	// Insert the takeoff routes
 	//
 
+#ifndef OGRE_EE
 	raw_object_index = takeoff_route->index;
+#else
+	raw_object_index = takeoff_route;
+#endif
 
 	parse_waypoint_routes_from_object ( raw_object_index, number_of_matching_slots, matching_slots );
 
@@ -3598,7 +3783,11 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void insert_airport_holding_routes ( vec3d *position, object_3d_database_entry *landing_holding_route, object_3d_database_entry *takeoff_holding_route )
+#else
+void insert_airport_holding_routes ( vec3d *position, unsigned landing_holding_route, unsigned takeoff_holding_route )
+#endif
 {
 
 	int
@@ -3620,7 +3809,11 @@ void insert_airport_holding_routes ( vec3d *position, object_3d_database_entry *
 		// Insert the landing holding routes
 		//
 
+#ifndef OGRE_EE
 		raw_object_index = landing_holding_route->index;
+#else
+		raw_object_index = landing_holding_route;
+#endif
 
 		parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3666,7 +3859,11 @@ void insert_airport_holding_routes ( vec3d *position, object_3d_database_entry *
 		// Insert the takeoff holding routes
 		//
 
+#ifndef OGRE_EE
 		raw_object_index = takeoff_holding_route->index;
+#else
+		raw_object_index = takeoff_holding_route;
+#endif
 
 		parse_waypoint_routes_from_object ( raw_object_index, 0, NULL );
 
@@ -3755,9 +3952,15 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 		*keysite_group,
 		*building;
 
+	struct OBJECT_3D_SCENE_DATABASE_ENTRY
+		*scene;
+
+
+	scene = &objects_3d_scene_database[instance->object_number];
+
 	keysite_group = get_local_entity_first_child ( get_parser_keysite (), LIST_TYPE_BUILDING_GROUP );
 
-	for ( count = 0; count < objects_3d_scene_database[instance->object_number].number_of_scene_link_objects; count++ )
+	for ( count = 0; count < scene->number_of_scene_link_objects; count++ )
 	{
 
 		float
@@ -3769,13 +3972,13 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 		int
 			object_index;
 
-		position.x = objects_3d_scene_database[instance->object_number].scene_link_objects[count].x;
-		position.y = objects_3d_scene_database[instance->object_number].scene_link_objects[count].y;
-		position.z = objects_3d_scene_database[instance->object_number].scene_link_objects[count].z;
+		position.x = scene->scene_link_objects[count].x;
+		position.y = scene->scene_link_objects[count].y;
+		position.z = scene->scene_link_objects[count].z;
 
-		position.x += instance->vp.x;
-		position.y += instance->vp.y;
-		position.z += instance->vp.z;
+		position.x += instance->vp.position.x;
+		position.y += instance->vp.position.y;
+		position.z += instance->vp.position.z;
 
 		if (get_local_entity_int_value (get_parser_keysite (), INT_TYPE_ALIGN_WITH_TERRAIN))
 		{
@@ -3784,9 +3987,9 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 			position.y = get_3d_terrain_elevation (position.x, position.z);
 		}
 
-		heading = objects_3d_scene_database[instance->object_number].scene_link_objects[count].heading;
+		heading = scene->scene_link_objects[count].heading;
 
-		object_index = objects_3d_scene_database[instance->object_number].scene_link_objects[count].scene_index;
+		object_index = scene->scene_link_objects[count].scene_index;
 
 		regeneration_sub_type = get_object_3d_regeneration_type ( object_index, &landing_sub_type );
 
@@ -4180,8 +4383,13 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 
+#ifndef OGRE_EE
 			object_3d_database_entry
 				*route;
+#else
+			unsigned
+				route;
+#endif
 
 			route = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LANDING_ROUTE );
 
@@ -4191,7 +4399,11 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 				int
 					count;
 
+#ifndef OGRE_EE
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
+#else
+				parse_waypoint_routes_from_object ( route, 0, NULL );
+#endif
 
 				object_3d_troop_routes[object_index].landing_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
@@ -4252,8 +4464,13 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 
+#ifndef OGRE_EE
 			object_3d_database_entry
 				*route;
+#else
+			unsigned
+				route;
+#endif
 
 			route = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_TAKEOFF_ROUTE );
 
@@ -4263,7 +4480,11 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 				int
 					count;
 
+#ifndef OGRE_EE
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
+#else
+				parse_waypoint_routes_from_object ( route, 0, NULL );
+#endif
 
 				object_3d_troop_routes[object_index].takeoff_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
@@ -4355,6 +4576,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 		if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 
+#ifndef OGRE_EE
 			object_3d_database_entry
 				*troop_lz;
 
@@ -4368,6 +4590,24 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 				object_3d_troop_routes[object_index].landing_position.z = troop_lz->keyframes[0].z;
 				object_3d_troop_routes[object_index].heading = troop_lz->keyframes[0].heading;
 			}
+#else
+			unsigned
+				troop_lz_index;
+			struct OgreGameObjectSceneElement
+				*troop_lz;
+
+			troop_lz_index = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LZ );
+			troop_lz = troop_lz_index ? &object->vp.elements[troop_lz_index] : NULL;
+
+			if ( troop_lz )
+			{
+
+				object_3d_troop_routes[object_index].landing_position.x = troop_lz->relative_position.x;
+				object_3d_troop_routes[object_index].landing_position.y = troop_lz->relative_position.y;
+				object_3d_troop_routes[object_index].landing_position.z = troop_lz->relative_position.z;
+				object_3d_troop_routes[object_index].heading = troop_lz->relative_heading;
+			}
+#endif
 		}
 
 		destruct_3d_object ( object );

@@ -78,6 +78,7 @@
 
 static void draw_local_3d_object (entity *en, float range)
 {
+#ifndef OGRE_EE
 
 	sprite
 		*raw;
@@ -208,6 +209,7 @@ static void draw_local_3d_object (entity *en, float range)
 	}
 
 	insert_zbiased_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_SPRITE, &spr, -1.0);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

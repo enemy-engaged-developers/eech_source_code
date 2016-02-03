@@ -155,10 +155,6 @@ void create_campaign (session_list_data_type *session)
 //VJ 060319 further bug fixes
  	read_map_info_data();
 	debug_log("###CUSTOM TEXTURE STARTUP: faction.c: create_campaign: read_map_info_data");
-
-#ifdef OGRE_EE
-	report_process_memory ( "after campaign created" );
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

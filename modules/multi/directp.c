@@ -198,7 +198,9 @@ int direct_play_initialise_system (void)
 
 		direct_play_set_player_name ( "Unnamed Player" );
 
+#ifndef OGRE_EE
 		register_exit_function ( direct_play_deinitialise_system );
+#endif
 
 		direct_play_initialised = TRUE;
 
@@ -1338,13 +1340,17 @@ int direct_play_refresh_modem_session ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OGRE_EE
+#define system_thread_function(x, y) ((void)&(x), (void)(y), -1)
+#endif
+
 // static void internal_direct_play_destroy_modem ( void *data );
 static int internal_direct_play_destroy_modem ( void *data );
 
 void direct_play_destroy_modem ( void )
 {
 
-	system_thread_function ( internal_direct_play_destroy_modem, NULL );
+	(void) system_thread_function ( internal_direct_play_destroy_modem, NULL );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -763,11 +763,13 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 
 							add_message_action_to_database (sub_item, 6, message,	index, DIK_7, "Bob-Up");
 
+#ifndef OGRE_EE
 							// Attack PFZ, leader only
 							if (pfz_active()
 								&& get_local_entity_int_value(member, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW)
 								add_message_action_to_database (sub_item, 7, MESSAGE_WINGMAN_ATTACK_PFZ,	index, DIK_8, "Attack PFZ");
 							else
+#endif
 								add_message_action_to_database (sub_item, 7, MESSAGE_NONE,	index, DIK_8, "Attack PFZ");
 
 							//
@@ -1606,6 +1608,7 @@ void send_wingman_message (message_type message)
 
 	if (message.type == MESSAGE_WINGMAN_ATTACK_PFZ)
 	{
+#ifndef OGRE_EE
 		entity* targets[17];
 		entity* target;
 		unsigned int i=0;
@@ -1650,6 +1653,7 @@ void send_wingman_message (message_type message)
 
 		if (get_comms_model () == COMMS_MODEL_SERVER)
 			process_radio_message (en, message.type, message.value);
+#endif
 	}
 	else
 	{
@@ -2241,4 +2245,3 @@ void send_channel_message (message_type message)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

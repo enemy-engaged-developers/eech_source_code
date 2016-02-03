@@ -1397,7 +1397,7 @@ void deinitialise_ui_font (void)
 
 	memset ( ui_fonts, 0, sizeof ( ui_fonts ) );
 #else
-	// FIXME
+	ogre_ui_fonts_clear ();
 #endif
 }
 

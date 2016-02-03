@@ -158,6 +158,7 @@ static void update_time_of_day_resync (entity *en)
 
 void update_lightning_effect (entity *en)
 {
+#ifndef OGRE_EE
 	session
 		*raw;
 
@@ -292,6 +293,7 @@ void update_lightning_effect (entity *en)
 			);
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -542,13 +544,17 @@ void update_session_sound_effects (entity *en)
 	vec3d
 		*camera_pos;
 
+#ifndef OGRE_EE
 	weathermodes
 		current_weather_mode,
 		target_weather_mode;
+#endif
 
 	float
 		alt,
+#ifndef OGRE_EE
 		trans,
+#endif
 		value,
 		light_wind_sound_level,
 		heavy_wind_sound_level,
@@ -577,6 +583,7 @@ void update_session_sound_effects (entity *en)
 
 	memset (rain_sound_levels, 0, sizeof (float) * WEATHERMODE_LAST);
 
+#ifndef OGRE_EE
 	if (camera_pos->y < get_cloud_3d_base_height ())
 	{
 		if ((!in_cockpit) && (alt >= SESSION_RAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE))
@@ -607,6 +614,7 @@ void update_session_sound_effects (entity *en)
 			}
 		}
 	}
+#endif
 	
 	//
 	// wind

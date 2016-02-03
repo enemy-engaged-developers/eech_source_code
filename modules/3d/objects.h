@@ -594,8 +594,12 @@ struct OBJECT_3D_INSTANCE // 92 bytes
 		magic;
 	struct OgreGameObjectScene
 		vp;
+	struct VEC3D
+		relative_scale;
 	int
 		object_number;
+	int
+		temporary;
 #endif
 };
 

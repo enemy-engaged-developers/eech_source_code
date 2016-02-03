@@ -221,6 +221,10 @@ void set_terrain(int diff)
 }
 #endif
 
+#ifdef USE_UI
+unsigned ui1, ui2;
+#endif
+
 void OGREEE_CALL init(void)
 {
 	{
@@ -262,6 +266,13 @@ void OGREEE_CALL init(void)
 	terrain = 1;
 	set_terrain(0);
 #endif
+
+#ifdef USE_UI
+	ui1 = ogre_texture_load("..\\graphics\\ui\\cohokum\\Combat.psd");
+	ui2 = ogre_texture_load("..\\graphics\\ui\\cohokum\\Map\\ExitBTN.psd");
+	ogre_ui_font(1, "times", 20);
+	ogre_ui_font(2, "arial", 40);
+#endif
 }
 
 void OGREEE_CALL deinit(void)
@@ -288,6 +299,12 @@ void OGREEE_CALL deinit(void)
 #ifdef USE_TERRAIN
 	deinitialise_file_system();
 #endif
+
+#ifdef USE_UI
+	ogre_texture_clear(ui1);
+	ogre_texture_clear(ui2);
+	ogre_ui_fonts_clear();
+#endif
 }
 
 void OGREEE_CALL frame(float dtime)
@@ -295,6 +312,7 @@ void OGREEE_CALL frame(float dtime)
 	cur_time += dtime;
 	if (cur_time > 10000.0f)
 		cur_time = 0.0f;
+
 #ifdef USE_OBJECTS_ONLY
 	// Animate current objects if required
 	for (int index = 0; index < 2; index++)
@@ -369,6 +387,19 @@ void OGREEE_CALL frame(float dtime)
 		ogre_scene_draw(g, 0);
 	}
 	ogre_scenes_commit();
+#endif
+#ifdef USE_TERRAIN
+	ogre_terrain_draw();
+#endif
+
+#ifdef USE_UI
+	ogre_ui_draw(ui1, 100, 200, 300, 400);
+	ogre_ui_draw(ui2, 200, 300, 400, 500);
+	ogre_ui_draw(ui2, 450, 200, 605, 260);
+	ogre_ui_draw(ui2, 450, 300, 605, 361);
+	ogre_ui_text(1, 600, 300, "ABC\xD0\x81" "abc", 0xFFFF0000);
+	ogre_ui_text(2, 600, 330, "ABC\xD0\x81" "abc", 0xFF00FF00);
+	ogre_ui_text(2, 600, 350, "ABC\xD0\x81" "abc", 0xFF0000FF);
 #endif
 
 	{

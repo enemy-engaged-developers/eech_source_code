@@ -26,8 +26,10 @@
 #define USE_OBJECTS_TEXTURES
 #endif
 
+#define USE_UI_CHARACTERS 0x530
+
 // Scenes options
-#define SCENES_CACHE_FRAMES 10
+#define USE_SCENES_CACHE_FRAMES 10
 
 // Terrain options
 #ifdef USE_NORMALS
@@ -46,7 +48,9 @@
 //#define USE_TERRAIN_VERTEX_COLOURS
 // Limit number of terrain sectors to draw
 #define USE_TERRAIN_VISIBILITY 5
+#define USE_TERRAIN_SECTOR_FRAMES 10
 #define USE_TERRAIN_GROUP 5
+#define USE_TERRAIN_GROUP_FRAMES 5
 
 
 #ifndef M_PI
@@ -63,6 +67,10 @@
 #include "OgreSceneNode.h"
 #include "OgreSceneManager.h"
 #include "OgreInstancedEntity.h"
+#include "OgreOverlayManager.h"
+#include "OgreOverlayContainer.h"
+#include "OgreOverlayElementFactory.h"
+#include "OgreFontManager.h"
 
 #include <iterator>
 
@@ -176,6 +184,7 @@ private:
 #include "ogre_objects.hpp"
 #include "ogre_scenes.hpp"
 #include "ogre_terrain.hpp"
+#include "ogre_ui.hpp"
 
 #define DEFINE_NAME(name, args, format, params) \
 struct name : private fmt \
@@ -192,12 +201,15 @@ DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
 DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u", index _ frame);
 DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
 DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
+DEFINE_NAME(MaterialTextureName, unsigned index, "MATERIAL_TEXTURE_%u", index);
+DEFINE_NAME(FontName, unsigned index, "FONT_%u", index);
 DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
 DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u", index);
 DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
 DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
 DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER", 0);
 DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
+DEFINE_NAME(UIElement, unsigned index, "UI_%u", index);
 #undef _
 
 #undef DEFINE_NAME

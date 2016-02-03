@@ -140,8 +140,10 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 		scan_origin,
       *position;
 
+#ifndef OGRE_EE
 	env_3d
 		*env;
+#endif
 
    ASSERT (vp);
 
@@ -149,11 +151,17 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 	// get active 3D environment max range
 	//
 
+#ifndef OGRE_EE
 	env = get_3d_active_environment ();
 
 	ASSERT (env);
 
 	get_3d_view_distances (env, &env_max_range, &hither);
+#else
+	// FIXME
+	env_max_range = 10000.0f;
+	hither = 1.0f;
+#endif
 
 	//
 	// get sector scan limits
@@ -201,7 +209,13 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 
 					if (range < env_max_range)
 					{
+#ifndef OGRE_EE
 						get_3d_fog_distances (env, &fog_start, &fog_end);
+#else
+						// FIXME
+						fog_start = 9000.0f;
+						fog_end = 10000.0f;
+#endif
 						
 						if (draw_eo_3d_scene)
 						{

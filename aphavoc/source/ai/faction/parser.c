@@ -2536,6 +2536,10 @@ void load_campaign_object_population_data (char *filename)
 
 				insert_3d_object_into_terrain (inst3d);
 
+#ifdef OGRE_EE
+				destruct_3d_object (inst3d);
+#endif
+
 				#if DEBUG_MODULE
 
 				debug_log ("PARSER: load keysite database: insert terrain object %d at %f, %f, %f", object_number, position.x, position.y, position.z);

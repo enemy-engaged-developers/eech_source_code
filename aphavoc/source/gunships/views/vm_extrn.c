@@ -130,6 +130,7 @@ void update_external_view (void)
 
 void draw_demo_logo (void)
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -233,6 +234,7 @@ void draw_demo_logo (void)
 			end_3d_scene ();
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -745,6 +747,7 @@ void draw_external_3d_view (void)
 	{
 		if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_EJECT)
 		{
+#ifndef OGRE_EE
 			if (begin_3d_scene ())
 			{
 				vertex
@@ -813,6 +816,7 @@ void draw_external_3d_view (void)
 
 				end_3d_scene ();
 			}
+#endif
 		}
 	}
 

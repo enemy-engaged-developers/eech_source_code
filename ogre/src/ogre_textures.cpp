@@ -38,7 +38,6 @@ namespace
 				else
 					Ogre::TextureManager::getSingleton().loadImage(texture_name, ogre_resource_group, Ogre::Image().load(itor->second.file, ogre_resource_group));
 			}
-			textures.clear();
 			sem.release();
 			return TR_TASK;
 		}
@@ -50,22 +49,90 @@ namespace
 	struct TaskTexturesClear : public Task
 	{
 	public:
-		TaskTexturesClear(Semaphore& sem)
-			: sem(sem)
+		TaskTexturesClear(int full, Semaphore& sem)
+			: full(full), sem(sem)
 		{
 		}
 		virtual TaskResult task(void)
 		{
 			ogre_log(__FUNCTION__, "");
 
-			// TODO
+			for (Textures::iterator itor(textures.begin()); itor != textures.end(); ++itor)
+			{
+				Ogre::String().swap(itor->second.file);
+				TextureName texture_name(itor->first);
+				Ogre::TextureManager::getSingleton().unload(texture_name);
+				Ogre::TextureManager::getSingleton().remove(texture_name);
+			}
+
+			if (full)
+				textures.clear();
 
 			sem.release();
 			return TR_TASK;
 		}
 
 	private:
+		int full;
 		Semaphore& sem;
+	};
+
+	class TaskTextureLoad : public Task
+	{
+	public:
+		TaskTextureLoad(unsigned index, const char* filename)
+			: index(index), filename(filename)
+		{
+		}
+
+		virtual TaskResult task(void)
+		{
+			ogre_log(__FUNCTION__, "");
+
+			TextureName texture_name(index);
+			Ogre::TextureManager::getSingleton().loadImage(texture_name, ogre_resource_group, Ogre::Image().load(filename, ogre_resource_group));
+
+			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(MaterialTextureName(index), ogre_resource_group);
+			Ogre::Pass* pass = mat->getTechnique(0)->getPass(0);
+			pass->createTextureUnitState(texture_name);
+			pass->setLightingEnabled(false);
+			pass->setDepthCheckEnabled(false);
+			pass->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+			pass->getTextureUnitState(0)->setTextureFiltering(Ogre::TFO_BILINEAR);
+
+			return TR_TASK;
+		}
+
+	private:
+		unsigned index;
+		Ogre::String filename;
+	};
+
+	class TaskTextureClear : public Task
+	{
+	public:
+		TaskTextureClear(unsigned index)
+			: index(index)
+		{
+		}
+
+		virtual TaskResult task(void)
+		{
+			ogre_log(__FUNCTION__, "");
+
+			MaterialTextureName material_texture_name(index);
+			Ogre::MaterialManager::getSingleton().unload(material_texture_name);
+			Ogre::MaterialManager::getSingleton().remove(material_texture_name);
+
+			TextureName texture_name(index);
+			Ogre::TextureManager::getSingleton().unload(texture_name);
+			Ogre::TextureManager::getSingleton().remove(texture_name);
+
+			return TR_TASK;
+		}
+
+	private:
+		unsigned index;
 	};
 }
 
@@ -106,12 +173,31 @@ void OGREEE_CALL ogre_textures_commit(void)
 	sem.acquire();
 }
 
-void OGREEE_CALL ogre_textures_clear(void)
+void OGREEE_CALL ogre_textures_clear(int full)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
 	ogre_log_(__FUNCTION__, "");
 
 	Semaphore sem(0, 1);
-	ogre_tasks->enqueue(new TaskTexturesClear(sem));
+	ogre_tasks->enqueue(new TaskTexturesClear(full, sem));
 	sem.acquire();
+}
+
+unsigned OGREEE_CALL ogre_texture_load(const char* filename)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+	//ogre_log_(__FUNCTION__, "");
+
+	static unsigned index = 100000;
+
+	ogre_tasks->enqueue(new TaskTextureLoad(index, filename));
+	return index++;
+}
+
+void OGREEE_CALL ogre_texture_clear(unsigned handle)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+	//ogre_log_(__FUNCTION__, "");
+
+	ogre_tasks->enqueue(new TaskTextureClear(handle));
 }

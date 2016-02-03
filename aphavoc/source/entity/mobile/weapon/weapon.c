@@ -954,7 +954,9 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 {
 	int
 		airborne_target,
+#ifndef OGRE_EE
 		triangulate_range,
+#endif
 		result,
 		number_of_iterations;
 
@@ -984,6 +986,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 	airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
 
+#ifndef OGRE_EE
 	triangulate_range = (source == get_gunship_entity() && get_range_finder() == RANGEFINDER_TRIANGULATION);
 	if (triangulate_range)
 	{
@@ -995,6 +998,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		#endif
 	}
 	else
+#endif
 		range = get_3d_range (pitch_device_position, intercept_point);
 
 	if (range < 0.001)
@@ -1045,6 +1049,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				if (!point_inside_map_area (&new_intercept_point))
 					break;
 
+#ifndef OGRE_EE
 				if (triangulate_range)
 				{
 					range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
@@ -1052,6 +1057,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 						range = 1000.0;  // use 200 meters if unable to triangulate range
 				}
 				else
+#endif
 					range = get_3d_range (pitch_device_position, intercept_point);
 
 				if (number_of_iterations == 1)
@@ -1331,7 +1337,7 @@ void update_entity_weapon_systems (entity *source)
 
 			ASSERT (inst3d);
 
-			get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+			get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 			get_local_entity_attitude_matrix (source, inst3d->vp.attitude);
 
@@ -1593,6 +1599,7 @@ void update_entity_weapon_systems (entity *source)
 
 							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 							{
+#ifndef OGRE_EE
 								if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
 								{
 									int use_eo_sight_for_direction = is_using_eo_system(command_line_cannontrack != 2);
@@ -1735,6 +1742,7 @@ void update_entity_weapon_systems (entity *source)
 									weapon_config_database[config_type][package].max_pitch_limit
 								);
 
+#endif
 							}
 						// 050320 Jabberwock ends
 						}
@@ -2112,7 +2120,7 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 										// ensure that the 3D instance viewpoint is up to date (the object may not have been drawn)
 										//
 
-										get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &entity_inst3d->vp.position);
+										get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, (vec3d *) &entity_inst3d->vp.position);
 
 										get_local_entity_attitude_matrix (en, entity_inst3d->vp.attitude);
 
@@ -2122,7 +2130,7 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 										// viewpoint
 										//
 
-										get_3d_sub_object_viewpoint (&search_weapon_system_muzzle, &effect_inst3d->vp, TRUE);
+										get_3d_sub_object_viewpoint (&search_weapon_system_muzzle, (viewpoint *) &effect_inst3d->vp, TRUE);
 
 										//
 										// timing info
@@ -2168,10 +2176,16 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 										// draw
 										//
 
+#ifndef OGRE_EE
 										effect_inst3d->object_has_shadow = FALSE;
-										effect_inst3d->relative_scale = search_weapon_system_muzzle.result_sub_object->relative_scale;
+#endif
+										effect_inst3d->relative_scale = *(vec3d *) &search_weapon_system_muzzle.result_sub_object->relative_scale;
 
+#ifndef OGRE_EE
 										insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, effect_inst3d);
+#else
+										object_3d_draw (effect_inst3d);
+#endif
 
 										//
 										// rotate muzzle
@@ -2324,7 +2338,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 					// ensure that the 3D instance viewpoint is up to date (the object may not have been drawn)
 					//
 
-					get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+					get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 					get_local_entity_attitude_matrix (launcher, inst3d->vp.attitude);
 
@@ -2351,6 +2365,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 							if (tracking_point)  // use get vector to EO tracking point, if any
 							{
 								ASSERT(get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);  // only player aircraft have tracking point
+#ifndef OGRE_EE
 
 								if (eo_tracking_point_valid(tracking_point))
 								{
@@ -2363,6 +2378,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 									weapon_to_intercept_point_range = get_3d_range(&vp.position, weapon_to_intercept_point_vector_ptr);
 									normalise_3d_vector (weapon_to_intercept_point_vector_ptr);
 								}
+#endif
 							}
 
 							if (target && !tracking_point_valid)
@@ -2477,7 +2493,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 					// ensure that the 3D instance viewpoint is up to date (the object may not have been drawn)
 					//
 
-					get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+					get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 					get_local_entity_attitude_matrix (launcher, inst3d->vp.attitude);
 
@@ -2595,7 +2611,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 				// ensure that the 3D instance viewpoint is up to date (the object may not have been drawn)
 				//
 
-				get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+				get_local_entity_vec3d (launcher, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 				get_local_entity_attitude_matrix (launcher, inst3d->vp.attitude);
 
@@ -2896,7 +2912,7 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 
 	ASSERT (inst3d);
 
-	get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+	get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 	get_local_entity_attitude_matrix (source, inst3d->vp.attitude);
 

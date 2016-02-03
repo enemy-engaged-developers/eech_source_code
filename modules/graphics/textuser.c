@@ -807,6 +807,8 @@ void unload_texturemap_data ( void )
 			system_texture_info[count].texture_screen->used = FALSE;
 		}
 	}
+#else
+	ogre_textures_clear ( TRUE );
 #endif
 }
 
@@ -1705,6 +1707,8 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 	//
 
 	safe_free ( data );
+#else
+	graphic->texture = ogre_texture_load ( filename );
 #endif
 
 	return ( graphic );
@@ -1740,6 +1744,8 @@ void destroy_texture_graphic ( texture_graphic *graphic )
 	}
 
 	safe_free ( graphic->textures );
+#else
+	ogre_texture_clear ( graphic->texture );
 #endif
 
 	safe_free ( graphic );
@@ -1965,9 +1971,7 @@ void load_warzone_override_textures ( void )
 {
 	char directory_textdir_path[256];
 	int nrtextfound = 0;
-#ifndef OGRE_EE
 	int count;
-#endif
 
 	// VJ 051226 NOTE: map_info structure is called from aphavoc\source\ui_menu\sessparm\sparm_sc.c
 	// and main variables are already set (warzone name, number, countours etc.
@@ -1997,10 +2001,8 @@ void load_warzone_override_textures ( void )
 
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
-	if ( texture_colour_bak == -1 )
-	{
-		texture_colour_bak = command_line_texture_colour;
-	}
+	ASSERT ( texture_colour_bak == -1 );
+	texture_colour_bak = command_line_texture_colour;
 
 
 	if (command_line_texture_colour)
@@ -2087,14 +2089,14 @@ void load_warzone_override_textures ( void )
 #ifndef OGRE_EE
 	//VJ 050619 make a backup of the original pointers to the screens
 	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
+#endif
 	for (count = 0; count < number_of_system_textures; count++)
 	{
+#ifndef OGRE_EE
 		backup_system_textures[count] = system_textures[count];
+#endif
 		backup_system_texture_info[count] = system_texture_info[count];
 	}
-#else
-	report_process_memory ( "before override textures loading" );
-#endif
 
 	//VJ 050530 read single bmp files
 	//VJ 050530 read mipmapped dds files
@@ -2106,7 +2108,6 @@ void load_warzone_override_textures ( void )
 
 #ifdef OGRE_EE
 	ogre_textures_commit ();
-	report_process_memory ( "after override textures loading" );
 	{
 		struct OgreObjectsInit
 			ooi;
@@ -2117,7 +2118,6 @@ void load_warzone_override_textures ( void )
 		ooi.get_animation_texture = ee_animation_texture;
 		ogre_objects_init (&ooi);
 		ogre_scenes_init (OBJECT_3D_LAST - 1, objects_3d_scene_database);
-		report_process_memory ( "after Ogre objects&scenes init" );
 	}
 	{
 		struct OgreTerrainInit terrain_init;
@@ -2132,7 +2132,6 @@ void load_warzone_override_textures ( void )
 		terrain_init.sectors = ( struct TERRAIN_3D_SECTOR const * const * ) terrain_sectors;
 		terrain_init.tree_sectors = ( struct TERRAIN_3D_TREE_SECTOR const * const * ) terrain_tree_sectors;
 		ogre_terrain_init (&terrain_init);
-		report_process_memory ( "after Ogre terrain init" );
 	}
 #endif
 }
@@ -2151,13 +2150,14 @@ void restore_default_textures ( void )
 	ogre_terrain_clear ();
 	ogre_scenes_clear ();
 	ogre_objects_clear ();
-	ogre_textures_clear ();
+	ogre_textures_clear ( FALSE );
 #endif
 
 	//VJ 050621 restore backup commandline
 	if ( texture_colour_bak != -1 )
 	{
 		command_line_texture_colour = texture_colour_bak;
+		texture_colour_bak = -1;
 	}
 
 	for (count = 0; count < MAX_TEXTURES; count++)

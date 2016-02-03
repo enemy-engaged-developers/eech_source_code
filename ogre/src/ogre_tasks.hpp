@@ -21,7 +21,7 @@ public:
 	~TaskQueue(void);
 	void enqueue(Task* task);
 #ifdef USE_TIME
-	TaskResult run(unsigned& work);
+	TaskResult run(unsigned& wait);
 #else
 	TaskResult run(void);
 #endif

@@ -194,6 +194,11 @@ void deinitialise_game (void)
 
 	deinitialise_mouse_pointer ();
 
+#ifdef OGRE_UI
+	ogre_ui_clear ();
+#endif
+
+#ifndef OGRE_EE
 	////////////////////////////////////////
 	//
 	// DEINITIALISE CD PLAYER
@@ -201,6 +206,7 @@ void deinitialise_game (void)
 	////////////////////////////////////////
 
 	release_cd_audio_device ();
+#endif
 
 #if 0
 	////////////////////////////////////////
@@ -221,6 +227,7 @@ void deinitialise_game (void)
 	deinitialise_entity_system ();
 
 
+#ifndef OGRE_EE
 	////////////////////////////////////////
 	//
 	// Retro 12Nov2004
@@ -244,13 +251,16 @@ void deinitialise_game (void)
 	// Retro 8Mar2005 - 14Aug2006
 
 	DeInitialise_Shared_Memory(); // we do this in any case, even if it was not set up..
+#endif
 
 	// arneh - delete the ballistics tables
 	delete_ballistics_tables();
 
+#ifndef OGRE_EE
 	// free ffb data
 
 	deinitialise_joysticks();
+#endif
 
 	////////////////////////////////////////
 	//

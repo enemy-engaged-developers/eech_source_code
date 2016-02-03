@@ -153,7 +153,9 @@ void ui_object_manager (void)
 
 		ui_repaint ();
 
+#ifndef OGRE_EE
 		system_sleep (0);
+#endif
 
 		set_ui_redraw (FALSE);
 
@@ -189,10 +191,12 @@ void ui_repaint (void)
 
 	update_ui_screen_stack ();
 
-#ifndef OGRE_EE
 	draw_raw_mouse_pointer (x, y);
 
+#ifndef OGRE_EE
 	ddraw_flip_surface ();
+#else
+	ogre_frame ();
 #endif
 }
 

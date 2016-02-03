@@ -70,9 +70,11 @@
 
 #include "views/views.h"
 
+#ifndef OGRE_EE
 #include "avionics/avionics.h"
 
 #include "cockpits/cockpits.h"
+#endif
 
 #include "dynamics/dynamics.h"
 

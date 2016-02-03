@@ -236,6 +236,7 @@ void application_main (int argc, char **argv)
 
 	#endif
 
+#ifndef OGRE_EE
 	//
 	// setup input system
 	//
@@ -474,6 +475,16 @@ void application_main (int argc, char **argv)
 	clear_screen ();
 
 	ddraw_flip_surface ();
+#else
+	set_global_3d_visual_screen_width (application_video_width);
+	set_global_3d_visual_screen_height (application_video_height);
+
+	// ddraw_set_display_resolution ()
+	set_viewport (0, 0, application_video_width, application_video_height);
+
+	// initialise_input_system ()
+	initialise_mouse ();
+#endif
 
 	//
 	// Test the avis
@@ -653,3 +664,28 @@ void set_registry_language_settings ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef OGRE_EE
+// This is temporary while gunships\avionics and gnuships\cockpits build disabled
+// gunships
+int rocket_salvo_count, fire_continuous_weapon, hud_mode, previous_hud_mode;
+int crew_role;
+int
+	mouse_move_left,
+	mouse_move_right,
+	mouse_move_up,
+	mouse_move_down,
+	mouse_wheel_up,
+	mouse_wheel_down;
+float canopy_door_state;
+int display_hud_layout_grid, display_mfd_layout_grid, test_cockpit_instruments, draw_virtual_cockpit_needles_on_fixed_cockpits, night_vision_system_active, draw_radar_sweep, draw_hms_field_of_view, draw_radar_terrain_los_markers, draw_hms_terrain_los_markers, draw_eo_boresight, draw_eo_terrain_los_markers;
+int fire_extinguisher_used;
+float debug_var_x, debug_var_y, debug_var_z;
+float radar_range_apache[5];
+float radar_range_comanche[5];
+float radar_range_blackhawk[5];
+float radar_range_havoc[5];
+float radar_range_hokum[5];
+float radar_range_hind[5];
+float radar_range_default[5];
+float pilot_head_pitch_datum, co_pilot_head_pitch_datum;
+#endif

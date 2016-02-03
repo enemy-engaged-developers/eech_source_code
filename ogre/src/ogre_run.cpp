@@ -65,8 +65,23 @@ namespace
 			const char* resource_group_name = "EE";
 			Ogre::ResourceGroupManager::getSingleton().createResourceGroup(resource_group_name);
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", resource_group_name, false, true);
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation("C:\\WINDOWS\\Fonts", "FileSystem", resource_group_name, false, true);
 			ogre_set(resource_group_name, mSceneMgr, mCamera);
+
+			Ogre::OverlayManager& om = Ogre::OverlayManager::getSingleton();
+			overlay = om.create("OgreUIOverlay");
+			ogre_ui = static_cast<Ogre::OverlayContainer*>(om.createOverlayElement("Panel", "OgreUI"));
+			overlay->add2D(ogre_ui);
+			overlay->show();
+
 			ogre_thread_id = GetCurrentThreadId();
+			if (run_info->resolution)
+			{
+				unsigned int width, height, colourDepth;
+				int left, top;
+				mWindow->getMetrics(width, height, colourDepth, left, top);
+				run_info->resolution(width, height);
+			}
 			thread = CreateThread(0, 0, run_info->thread_func, run_info->thread_param, 0, &user_thread_id);
 		}
 #ifdef USE_TIME
@@ -80,6 +95,8 @@ namespace
 #endif
 		virtual void destroyScene(void)
 		{
+			Ogre::OverlayManager& om = Ogre::OverlayManager::getSingleton();
+			Ogre::OverlayManager::getSingleton().destroyOverlayElement(ogre_ui);
 			Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("EE");
 			BaseApplication::destroyScene();
 		}
@@ -99,11 +116,16 @@ namespace
 			unsigned cur = GetTickCount();
 			ogre += cur - last;
 			last = cur;
-			unsigned tqwork;
-			TaskResult tr = tq.run(tqwork);
+			unsigned tqwait;
+			ogre_terrain_frame(false);
+			ogre_scenes_frame();
+			ogre_ui_frame();
+			TaskResult tr = tq.run(tqwait);
+			ogre_terrain_frame(true);
+			overlay->setZOrder(10);
 			cur = GetTickCount();
-			wait += cur - last - tqwork;
-			work += tqwork;
+			work += cur - last - tqwait;
+			wait += tqwait;
 			last = cur;
 			count++;
 			if (ogre + wait + work >= 1000)
@@ -161,6 +183,7 @@ namespace
 		}
 
 		TaskQueue tq;
+		Ogre::Overlay* overlay;
 		OgreBites::Label* user_label;
 #ifdef USE_TIME
 		unsigned count, last, ogre, wait, work;
@@ -186,20 +209,10 @@ namespace
 		Ogre::String info;
 	};
 
-	struct TaskFrameInit : public Task
-	{
-		virtual TaskResult task(void)
-		{
-			ogre_scenes_frame();
-			return TR_TASK;
-		}
-	};
-
 	struct TaskFrame : public Task
 	{
 		virtual TaskResult task(void)
 		{
-			ogre_terrain_frame();
 			return TR_FRAME;
 		}
 	};
@@ -245,9 +258,9 @@ OGREEE_API void OGREEE_CALL ogre_frame(void)
 	assert(GetCurrentThreadId() == user_thread_id);
 	//ogre_log_(__FUNCTION__, "");
 
+	ogre_ui_commit();
 	frames.acquire();
 	ogre_tasks->enqueue(new TaskFrame);
-	ogre_tasks->enqueue(new TaskFrameInit);
 }
 
 OGREEE_API void OGREEE_CALL ogre_quit(void)

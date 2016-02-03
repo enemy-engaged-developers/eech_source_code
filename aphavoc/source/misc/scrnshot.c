@@ -97,6 +97,7 @@ static int
 
 void save_screen_image_and_viewpoint_data (void)
 {
+#ifndef OGRE_EE
 	char
 		filename[100],
 		large_image_filename[100],
@@ -204,6 +205,7 @@ void save_screen_image_and_viewpoint_data (void)
 	{
 		debug_colour_log (DEBUG_COLOUR_RED, "Exceeded screen image limit");
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +250,7 @@ void delete_screen_image_and_viewpoint_data (void)
 
 void save_high_res_screen_image ( void )
 {
+#ifndef OGRE_EE
 	char
 		filename[100],
 		image_filename[100];
@@ -374,6 +377,7 @@ void save_high_res_screen_image ( void )
 	}
 
 	safe_free ( huge_screen_shot_memory );
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

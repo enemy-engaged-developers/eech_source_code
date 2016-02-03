@@ -708,7 +708,9 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
+#ifndef OGRE_EE
 	capture_cd_audio_device ();
+#endif
 
 #ifdef COMMERCIAL
 #if !DEMO_VERSION
@@ -722,6 +724,7 @@ void full_initialise_game (void)
 #endif
 #endif
 
+#ifndef OGRE_EE
 	////////////////////////////////////////
 	//
 	// INITIALISE JOYSTICK
@@ -778,6 +781,7 @@ void full_initialise_game (void)
 			command_line_shared_mem_export = 0;
 		}
 	}
+#endif
 
 	////////////////////////////////////////
 	//
@@ -809,6 +813,7 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
+#ifndef OGRE_EE
 	direct_play_initialise_system ();
 
 	//
@@ -816,6 +821,7 @@ void full_initialise_game (void)
 	//
 
 	direct_play_register_application ( "COMANCHE HOKUM", "cohokum.exe" );
+#endif
 
 	////////////////////////////////////////
 	//

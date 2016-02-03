@@ -228,6 +228,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 void draw_local_waypoint_2d_symbol (entity *en, int add_waypoint_flag, int draw_waypoint_icon, sys_colours waypoint_route_colour)
 {
+#ifndef OGRE_EE
 
 	int
 		loop;
@@ -305,6 +306,7 @@ void draw_local_waypoint_2d_symbol (entity *en, int add_waypoint_flag, int draw_
 			}
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -107,19 +107,21 @@ extern void deinitialise_3d_objects_info ( void );
 
 extern int get_object_3d_index_from_name ( const char *name );
 
+#ifndef OGRE_EE
 extern int get_object_3d_sub_index_from_name ( const char *name );
 
 extern int get_object_3d_camoflage_index_from_name ( const char *name );
 
 extern int get_object_3d_camera_index_from_name ( const char *name );
+#endif
 
 extern int get_object_3d_texture_animation_index_from_name ( const char *name );
 
 extern int get_object_3d_displacement_animation_index_from_name ( const char *name );
 
-
-
+#ifndef OGRE_EE
 extern object_3d_instance *construct_3d_object_by_name ( const char *name );
+#endif
 
 extern void set_object_3d_texture_camoflage_by_name ( const char *name );
 
@@ -130,6 +132,7 @@ extern void skin_init ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene );
 extern void skin_random ( object_3d_instance* scene );
 extern void skin_next ( object_3d_instance* scene );
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,4 +163,10 @@ extern int
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#else
+extern char
+	**object_3d_enumeration_names,
+	**texture_animation_names;
+extern texture_animation_information
+	*texture_animations;
+#endif

@@ -808,6 +808,7 @@ object_3d_instance *construct_3d_object_by_name ( const char *name )
 
 void set_object_3d_texture_camoflage_by_name ( const char *name )
 {
+#ifndef OGRE_EE
 
 	int
 		index;
@@ -819,6 +820,7 @@ void set_object_3d_texture_camoflage_by_name ( const char *name )
 
 		set_texture_camoflage ( index );
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

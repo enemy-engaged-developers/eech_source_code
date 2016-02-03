@@ -443,7 +443,7 @@ void update_cinematic_camera_continued (camera *raw)
 
 			inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
-			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 			get_local_entity_attitude_matrix (en, inst3d->vp.attitude);
 
@@ -463,7 +463,7 @@ void update_cinematic_camera_continued (camera *raw)
 
 			inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
-			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 			get_local_entity_attitude_matrix (en, inst3d->vp.attitude);
 

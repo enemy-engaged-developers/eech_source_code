@@ -1127,12 +1127,14 @@ void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_gr
 
 	real_colour
 		specular;
+#endif
 
 	x1 = floor ( x1 );
 	x2 = ceil ( x2 );
 	y1 = floor ( y1 );
 	y2 = ceil ( y2 );
 
+#ifndef OGRE_EE
 	start_x = x1;
 	start_y = y1;
 
@@ -1306,6 +1308,8 @@ void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_gr
 	}
 
 //	flush_triangle_primitives ();
+#else
+	ogre_ui_draw ( graphic->texture, x1 < 0 ? 0 : ( unsigned ) x1, ( unsigned ) y1, ( unsigned ) x2, ( unsigned ) y2 );
 #endif
 }
 

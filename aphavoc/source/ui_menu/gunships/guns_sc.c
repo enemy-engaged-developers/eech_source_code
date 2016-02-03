@@ -514,10 +514,12 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 
 		gunship_just_entered_screen = TRUE;
 
+#ifndef OGRE_EE
 		// Casm 31MAR2009 Loading custom map textures before the first
 		// 3d object is shown
 		// VJ 050116 custom texture mod
 		load_warzone_override_textures ();
+#endif
 	}
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)

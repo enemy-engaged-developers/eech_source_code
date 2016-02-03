@@ -354,7 +354,9 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 							search_main_rotor_blade_root_static.result_sub_object->visible_object = !ejected;
 							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch + main_rotor_blade_droop_angle;
 							search_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
+#ifndef OGRE_EE
 							search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = blades_dissolve;
+#endif
 
 							// locate static blade sections and set blade droop angle
 
@@ -375,7 +377,9 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 									else
 									{
 										last_moving_blade_state = search_main_rotor_blade_moving.result_sub_object->visible_object = FALSE; // disable moving blade if it's damaged
+#ifndef OGRE_EE
 										search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = 255;
+#endif
 										break;
 									}
 								}
@@ -520,7 +524,9 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->visible_object = search_main_rotor_blade_root_static.result_sub_object->visible_object;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_root_static.result_sub_object->relative_pitch;
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_root_static.result_sub_object->relative_roll;
+#ifndef OGRE_EE
 							search_cockpit_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value;
+#endif
 
 							// locate static blade sections and copy blade droop angle
 
@@ -786,6 +792,7 @@ void animate_helicopter_tail_rotor (entity *en)
 
 void animate_helicopter_wipers (entity *en)
 {
+#ifndef OGRE_EE
 	helicopter
 		*raw;
 
@@ -849,6 +856,7 @@ void animate_helicopter_wipers (entity *en)
 		////Moje 030619 End
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -857,6 +865,7 @@ void animate_helicopter_wipers (entity *en)
 
 void animate_helicopter_eo (entity *en)
 {
+#ifndef OGRE_EE
 	helicopter
 		*raw;
 
@@ -935,6 +944,7 @@ void animate_helicopter_eo (entity *en)
 		}
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1028,7 +1038,7 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 		return FALSE;
 
 	raw = (helicopter *) get_local_entity_data (en);
-	
+
 	inst3d = raw->ac.inst3d;
 	if (!inst3d)
 		return FALSE;
@@ -1225,7 +1235,7 @@ void damage_helicopter_tail_rotors (entity *en)
 		return;
 
 	raw = (helicopter *) get_local_entity_data (en);
-	
+
 	inst3d = raw->ac.inst3d;
 
 	if (!inst3d)
@@ -1488,7 +1498,7 @@ int restore_helicopter_main_rotors (entity *en)
 
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_blade_root_static, &search_main_rotor_collision_point) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
-							collision_point = - aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius + get_3d_vector_magnitude(&search_main_rotor_blade_root_static.result_sub_object->relative_position);
+							collision_point = - aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius + get_3d_vector_magnitude((vec3d *) &search_main_rotor_blade_root_static.result_sub_object->relative_position);
 
 							#if DEBUG_MODULE
 								debug_log("restoring blade collision point - old position %f, new position %f", search_main_rotor_collision_point.result_sub_object->relative_position.z, collision_point);
@@ -1509,7 +1519,6 @@ int restore_helicopter_main_rotors (entity *en)
 
 		search_main_rotor_shaft_depth++;
 	}
-
 
 	raw->main_rotor_damaged = FALSE;
 

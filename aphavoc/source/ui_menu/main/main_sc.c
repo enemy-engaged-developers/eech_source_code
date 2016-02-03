@@ -546,6 +546,7 @@ void initialise_main_screen (void)
 	set_text_option_backdrop_object (option_bdrop, change_obj);
 
 
+#if 0
 #ifndef COMMERCIAL
 
 	if (check_cdrom_file_exists ("CONFIG.BIN"))
@@ -564,6 +565,7 @@ void initialise_main_screen (void)
 		#endif
 	}
 
+#endif
 #endif
 }
 

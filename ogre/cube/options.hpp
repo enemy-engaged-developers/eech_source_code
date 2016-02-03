@@ -6,6 +6,8 @@
 #define USE_OBJECTS
 // Whether display terrain or not
 #define USE_TERRAIN
+// Whether display UI or not
+//#define USE_UI
 
 // Use current terrdata.c, otherwise terrdata_oldest.c - the oldest one available
 #define USE_TERRAIN_CURRENT

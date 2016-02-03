@@ -126,6 +126,7 @@ void flight (void)
 
 	ASSERT (get_current_game_session ());
 
+#ifndef OGRE_EE
 	// Casm 11JUN09 Loading textures here if DEMO mode
 	if (get_game_type () == GAME_TYPE_DEMO)
 	{
@@ -135,6 +136,7 @@ void flight (void)
 	//repaint the screen to show the textures are loaded
 	ui_repaint ();
 /////////////////////////////////////////
+#endif
 
 	set_exit_flight_loop (FALSE);
 
@@ -316,14 +318,18 @@ void flight (void)
 
 			pages_clear ++;
 
+#ifndef OGRE_EE
 			clear_screen ();
+#endif
 		}
 
+#ifndef OGRE_EE
 		//
 		// Allow system thread some processor time (for events etc)
 		//
 
 		system_sleep (0);
+#endif
 
 		//
 		// Time acceleration
@@ -394,11 +400,13 @@ void flight (void)
 				// Check the resolution!
 				//
 
+#ifndef OGRE_EE
 				if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 				{
 
 					ddraw_change_display_resolution ( ( int ) full_screen_width, ( int ) full_screen_height );
 				}
+#endif
 
 				//
 				// Draw view
@@ -427,7 +435,11 @@ void flight (void)
 
 				display_exit_message ();
 
+#ifndef OGRE_EE
 				ddraw_flip_surface ();
+#else
+				ogre_frame ();
+#endif
 
 				break;
 			}
@@ -438,12 +450,14 @@ void flight (void)
 				// Check the resolution!
 				//
 
+#ifndef OGRE_EE
 				if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 				{
 
 					ddraw_change_display_resolution ( get_global_3d_visual_screen_width (),
 																	get_global_3d_visual_screen_height () );
 				}
+#endif
 
 				update_in_flight_menus ();
 
@@ -516,12 +530,14 @@ void flight (void)
 	// Check resolution we're in.
 	//
 
+#ifndef OGRE_EE
 	if ( ( application_video_width != ( int ) full_screen_width ) || ( application_video_height != ( int ) full_screen_height ) )
 	{
 
 		ddraw_change_display_resolution ( get_global_3d_visual_screen_width (),
 														get_global_3d_visual_screen_height () );
 	}
+#endif
 
 	////////////////////////////////////////
 	//
@@ -712,6 +728,7 @@ void update_in_flight_timers (void)
 
 void limit_frame_rate (void)
 {
+#ifndef OGRE_EE
 
 	if (get_delta_time () < ((float) 1.0 / command_line_max_frame_rate))
 	{
@@ -724,6 +741,7 @@ void limit_frame_rate (void)
 
 		system_sleep ((((float) 1.0 / command_line_max_frame_rate) - get_delta_time ()) * TIME_1_SECOND);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

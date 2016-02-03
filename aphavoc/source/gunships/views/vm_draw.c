@@ -79,8 +79,10 @@ static float
 static status_message_types
 	status_message_type;
 
+#ifndef OGRE_EE
 static int
 	in_tir_periscope = FALSE;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,6 +336,7 @@ static void display_time_acceleration (void)
 
 static void update_field_of_view(void)
 {
+#ifndef OGRE_EE
 	float
 		max_fov = get_max_fov ();
 	camera
@@ -384,6 +387,7 @@ static void update_field_of_view(void)
 				mouse_wheel_down--;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,6 +467,7 @@ void draw_view (void)
 			else
 #endif
 			{
+#ifndef OGRE_EE
 				float old_angle = full_screen_virtual_fov;
 
 				set_view_angles(view_mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD ? rad(40.00) : rad(59.99));
@@ -470,6 +475,7 @@ void draw_view (void)
 				draw_virtual_cockpit_3d_display_view ();
 
 				set_view_angles(old_angle);
+#endif
 			}
 
 			break;
@@ -478,6 +484,7 @@ void draw_view (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT:
 		////////////////////////////////////////
 		{
+#ifndef OGRE_EE
 			if (command_line_TIR_6DOF && query_TIR_active() && TIR_looking_in_periscope())
 			{
 				in_tir_periscope = TRUE;
@@ -485,6 +492,7 @@ void draw_view (void)
 				draw_virtual_cockpit_3d_periscope_view ();
 			}
 			else
+#endif
 				draw_virtual_cockpit_3d_view ();
 
 			break;
@@ -518,6 +526,7 @@ void draw_view (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
+#ifndef OGRE_EE
 			if (in_tir_periscope && command_line_TIR_6DOF && query_TIR_active() && !TIR_looking_in_periscope())
 			{
 				set_view_mode ( VIEW_MODE_VIRTUAL_COCKPIT );
@@ -525,6 +534,7 @@ void draw_view (void)
 				in_tir_periscope = FALSE;
 			}
 			else	// original Razorworks call..
+#endif
 				draw_virtual_cockpit_3d_periscope_view ();
 
 			break;

@@ -198,6 +198,7 @@ static float get_local_float_value (entity *en, float_types type)
 		case FLOAT_TYPE_MAX_3D_OBJECT_VISUAL_RANGE:
 		////////////////////////////////////////
 		{
+#ifndef OGRE_EE
 			env_3d
 				*env;
 
@@ -212,6 +213,10 @@ static float get_local_float_value (entity *en, float_types type)
 			get_3d_view_distances (env, &yonder, &hither);
 
 			value = yonder;
+#else
+			// FIXME
+			value = 5000;
+#endif
 
 			break;
 		}

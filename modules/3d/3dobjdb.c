@@ -2853,6 +2853,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->vp.x = 0;
 	object->vp.y = 0;
 	object->vp.z = 0;
+#endif
 
 	//
 	// All objects scaled to original size to start with
@@ -2862,6 +2863,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->relative_scale.y = 1;
 	object->relative_scale.z = 1;
 
+#ifndef OGRE_EE
 	//
 	// Objects normally have shadows ( default )
 	//
@@ -2897,6 +2899,8 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->magic = 0xDEADBEAF;
 
 	ogre_scene_create ( &object->vp, index );
+
+	object->temporary = FALSE;
 
 #endif
 

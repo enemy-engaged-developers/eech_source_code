@@ -223,9 +223,12 @@ static void update_recognition_guide_camera (camera *raw, object_3d_camera_index
 
 	ASSERT (inst3d);
 
+#ifndef OGRE_EE
+	// FIXME
 	set_3d_exclusive_instance ( inst3d );
+#endif
 
-	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 	get_local_entity_attitude_matrix (en, inst3d->vp.attitude);
 

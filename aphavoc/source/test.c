@@ -273,6 +273,7 @@ void post_flight_test (void)
 
 static float display_in_flight_debug_misc_info (float y)
 {
+#ifndef OGRE_EE
 	char
 		s[200];
 
@@ -595,6 +596,9 @@ static float display_in_flight_debug_misc_info (float y)
 	}
 
 	return (y);
+#else
+	return 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -689,6 +693,7 @@ static float display_in_flight_debug_demo_message (float y)
 
 static float display_in_flight_debug_keysite_info (float y)
 {
+#ifndef OGRE_EE
 
 	#ifdef DEBUG
 
@@ -810,6 +815,9 @@ static float display_in_flight_debug_keysite_info (float y)
 	#endif
 
 	return y;
+#else
+	return 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -818,6 +826,7 @@ static float display_in_flight_debug_keysite_info (float y)
 
 static float display_in_flight_debug_force_info (float y)
 {
+#ifndef OGRE_EE
 
 	entity
 		*keysite_en,
@@ -963,6 +972,9 @@ static float display_in_flight_debug_force_info (float y)
 	}
 
 	return y;
+#else
+	return 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -971,6 +983,7 @@ static float display_in_flight_debug_force_info (float y)
 
 static float display_in_flight_external_view_entity_debug_flight_info (float y)
 {
+#ifndef OGRE_EE
 
 	entity
 		*group,
@@ -1380,6 +1393,9 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 	}
 
 	return y;
+#else
+	return 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1388,6 +1404,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 
 static float display_in_flight_external_view_entity_debug_task_info (float y)
 {
+#ifndef OGRE_EE
 
 	entity
 		*current_task,
@@ -1639,6 +1656,9 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 	}
 
 	return y;
+#else
+	return 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1647,6 +1667,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 
 static void display_in_flight_external_view_entity_weapon_info (void)
 {
+#ifndef OGRE_EE
 	entity
 		*en,
 		*target,
@@ -2059,6 +2080,7 @@ static void display_in_flight_external_view_entity_weapon_info (void)
 			unlock_screen (active_screen);
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2067,6 +2089,7 @@ static void display_in_flight_external_view_entity_weapon_info (void)
 
 static void display_in_flight_gunship_target_list_info (void)
 {
+#ifndef OGRE_EE
 	entity
 		*source,
 		*target,
@@ -2189,6 +2212,7 @@ static void display_in_flight_gunship_target_list_info (void)
 			unlock_screen (active_screen);
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2197,6 +2221,7 @@ static void display_in_flight_gunship_target_list_info (void)
 
 static void display_in_flight_external_view_entity_guide_info (void)
 {
+#ifndef OGRE_EE
 	entity
 		*en,
 		*wp,
@@ -2485,6 +2510,7 @@ static void display_in_flight_external_view_entity_guide_info (void)
 			}
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

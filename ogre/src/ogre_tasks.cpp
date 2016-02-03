@@ -21,16 +21,19 @@ void TaskQueue::enqueue(Task* task)
 }
 
 #ifdef USE_TIME
-TaskResult TaskQueue::run(unsigned& work)
+TaskResult TaskQueue::run(unsigned& wait)
 #else
 TaskResult TaskQueue::run(void)
 #endif
 {
 #ifdef USE_TIME
-	work = 0;
+	wait = 0;
 #endif
 	for (;;)
 	{
+#ifdef USE_TIME
+		DWORD last = GetTickCount();
+#endif
 		sem.acquire();
 		Task* task;
 		{
@@ -40,13 +43,10 @@ TaskResult TaskQueue::run(void)
 			tasks.pop_front();
 		}
 #ifdef USE_TIME
-		DWORD last = GetTickCount();
+		wait += GetTickCount() - last;
 #endif
 		TaskResult r = task->task();
 		delete task;
-#ifdef USE_TIME
-		work += GetTickCount() - last;
-#endif
 		if (r != TR_TASK)
 			return r;
 	}

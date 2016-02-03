@@ -1650,6 +1650,7 @@ void display_view_menu (void)
 
 	y_max = full_screen_height * VIEW_MENU_Y_MAX;
 
+#ifndef OGRE_EE
 	////////////////////////////////////////
 	//
 	// backdrop
@@ -1722,6 +1723,7 @@ void display_view_menu (void)
 
 		draw_wbuffered_plain_polygon (quad, colour, specular);
 	}
+#endif
 
 	////////////////////////////////////////
 	//

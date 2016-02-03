@@ -3,8 +3,10 @@
 namespace
 {
 	GeometryPtr objects_geometry;
-	std::vector<AnimationMesh> objects_anim;
+	typedef std::vector<AnimationMesh> ObjectsAnim;
+	ObjectsAnim objects_anim;
 	const OgreObjectsInit* objects_init;
+	unsigned material_first, material_last;
 
 	class Normal : private Uncopyable
 	{
@@ -88,10 +90,14 @@ namespace
 			assert(!objects_geometry.get());
 			objects_geometry.reset(new Geometry);
 
+			material_first = ogre_index() + 1;
+
 			objects_anim.resize(objects_init->number_of_objects + 1);
 			for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
 				ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 			objects_geometry->flush();
+
+			material_last = ogre_index() - 1;
 
 			objects_init = 0;
 
@@ -119,7 +125,25 @@ namespace
 				Ogre::MeshManager::getSingleton().unload(object);
 				Ogre::MeshManager::getSingleton().remove(object);
 			}
+
+			for (ObjectsAnim::iterator oa(objects_anim.begin()); oa != objects_anim.end(); ++oa)
+				for (AnimationMesh::iterator am(oa->begin()); am != oa->end(); ++am)
+					for (AnimationRefs::iterator ar(am->second.refs.begin()); ar != am->second.refs.end(); ++ar)
+						for (unsigned frame = 0; frame < am->second.limit; frame++)
+						{
+							MaterialAnimationName material_animation_name(ar->material_index, frame);
+							Ogre::MaterialManager::getSingleton().unload(material_animation_name);
+							Ogre::MaterialManager::getSingleton().remove(material_animation_name);
+						}
 			objects_anim.clear();
+
+			for (unsigned material_index = material_first ; material_index < material_last; material_index++)
+			{
+				MaterialName material_name(material_index);
+				Ogre::MaterialManager::getSingleton().unload(material_name);
+				Ogre::MaterialManager::getSingleton().remove(material_name);
+			}
+
 			objects_geometry.reset(0);
 
 			sem.release();

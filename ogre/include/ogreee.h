@@ -18,10 +18,19 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY;
 
 OGREEE_API void OGREEE_CALL ogre_set_viewpoint(const float* position, const float orientation[][3]);
 
+OGREEE_API void OGREEE_CALL ogre_ui_font(unsigned font, const char* name, float height);
+OGREEE_API void OGREEE_CALL ogre_ui_fonts_clear(void);
+OGREEE_API void OGREEE_CALL ogre_ui_draw(unsigned texture, unsigned x1, unsigned y1, unsigned x2, unsigned y2);
+OGREEE_API unsigned OGREEE_CALL ogre_ui_width(unsigned font, const char* str);
+OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, unsigned x, unsigned y, const char* str, unsigned colour);
+OGREEE_API void OGREEE_CALL ogre_ui_clear(void);
+
 OGREEE_API void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data);
 OGREEE_API void OGREEE_CALL ogre_textures_override(unsigned index, const char* file);
 OGREEE_API void OGREEE_CALL ogre_textures_commit(void);
-OGREEE_API void OGREEE_CALL ogre_textures_clear(void);
+OGREEE_API void OGREEE_CALL ogre_textures_clear(int full);
+OGREEE_API unsigned OGREEE_CALL ogre_texture_load(const char* filename);
+OGREEE_API void OGREEE_CALL ogre_texture_clear(unsigned handle);
 
 struct OgreObjectsInit
 {
@@ -131,6 +140,7 @@ struct OgreTerrainInit
 OGREEE_API void OGREEE_CALL ogre_terrain_init(struct OgreTerrainInit* init);
 OGREEE_API void OGREEE_CALL ogre_terrain_clear(void);
 OGREEE_API void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene);
+OGREEE_API void OGREEE_CALL ogre_terrain_draw(void);
 
 struct OgreRun
 {
@@ -138,6 +148,7 @@ struct OgreRun
 	void* thread_param;
 	void (OGREEE_CALL *key_func)(unsigned key);
 	void (OGREEE_CALL *mouse_func)(unsigned buttons, int dx, int dy, int dz);
+	void (OGREEE_CALL *resolution)(unsigned, unsigned);
 };
 
 OGREEE_API void OGREEE_CALL ogre_run(const struct OgreRun* run);

@@ -198,7 +198,7 @@ void get_local_entity_target_point (entity *en, vec3d *target_point)
 
 		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 		{
-			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
+			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, (vec3d *) &inst3d->vp.position);
 
 			get_local_entity_attitude_matrix (en, inst3d->vp.attitude);
 

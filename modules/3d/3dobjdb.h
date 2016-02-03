@@ -684,6 +684,8 @@ extern void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE*
 #ifdef OGRE_EE
 extern int
 	total_number_of_objects;
+
+#define object_3d_draw(inst3d) do { ogre_scene_draw(&(inst3d)->vp, &(inst3d)->relative_scale.x); if ((inst3d)->temporary) destruct_3d_object((inst3d)); } while (0)
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
