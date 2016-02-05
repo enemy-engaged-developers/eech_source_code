@@ -74,6 +74,9 @@
 
 #define MAX_NUMBER_FILES 1024
 
+// Workaround for memory fragmentation issue
+#define MFA
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +126,29 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef MFA
+#ifdef WIN32
+// MEMORY1 must be large enough for any TREE_POS.DAT
+// MAP3 Georgia 40'998'136 bytes
+#define MEMORY1 (40 << 20)
+
+// MEMORY1 must be large enough for any TERRAIN.FFP
+// MAP17 Afognak 141'422'414 bytes
+#define MEMORY2 (140 << 20)
+
+void
+	*memory1,
+	*memory2;
+int
+	memory1_used,
+	memory2_used;
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void deinitialise_file_system ( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,6 +176,21 @@ BOOL initialise_file_system ( void )
 #endif
 		file_maps[count].data = NULL;
 	}
+
+#ifdef MFA
+#ifdef WIN32
+	memory1 = VirtualAlloc ( NULL, MEMORY1, MEM_COMMIT | MEM_RESERVE | MEM_TOP_DOWN, PAGE_READWRITE );
+	if ( !memory1 )
+	{
+		debug_fatal ( "Failed to allocate %u bytes: 0x%08X", MEMORY1, GetLastError () );
+	}
+	memory2 = VirtualAlloc ( NULL, MEMORY2, MEM_COMMIT | MEM_RESERVE | MEM_TOP_DOWN, PAGE_READWRITE );
+	if ( !memory2 )
+	{
+		debug_fatal ( "Failed to allocate %u bytes: 0x%08X", MEMORY2, GetLastError () );
+	}
+#endif
+#endif
 
 #ifndef OGRE_EE
 	register_exit_function ( deinitialise_file_system );
@@ -183,6 +224,13 @@ void deinitialise_file_system ( void )
 			mclose ( file_maps[count].data );
 		}
 	}
+
+#ifdef MFA
+#ifdef WIN32
+	VirtualFree(memory1, MEMORY1, MEM_RELEASE);
+	VirtualFree(memory2, MEMORY2, MEM_RELEASE);
+#endif
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,6 +326,47 @@ void * mopen ( const char *filename )
 
 		data = mmap(0, length, PROT_READ, MAP_SHARED, fd, 0);
 #endif
+
+#ifdef MFA
+#ifdef WIN32
+		if ( !data )
+		{
+			unsigned long
+				length;
+
+			DWORD
+				offset,
+				read;
+
+			length = GetFileSize ( hFile, NULL );
+			if ( length <= MEMORY1 && !memory1_used )
+			{
+				data = memory1;
+				memory1_used = TRUE;
+			}
+			else if ( length <= MEMORY2 && !memory2_used )
+			{
+				data = memory2;
+				memory2_used = TRUE;
+			}
+
+			if ( data )
+			{
+				offset = 0;
+				while ( length )
+				{
+					if ( !ReadFile ( hFile, ( char * ) data + offset, length, &read, NULL ) )
+					{
+						debug_fatal ( "Failed to read %u bytes from file %s: 0x%08X", length, filename, GetLastError () );
+					}
+					offset += read;
+					length -= read;
+				}
+			}
+		}
+#endif
+#endif
+
 		if ( ! data )
 		{
 
@@ -344,6 +433,17 @@ BOOL mclose ( void *data )
 	}
 
 #ifdef WIN32
+#ifdef MFA
+	if ( file_maps[count].data == memory1 )
+	{
+		memory1_used = FALSE;
+	}
+	else if ( file_maps[count].data == memory1 )
+	{
+		memory2_used = FALSE;
+	}
+	else
+#endif
 	UnmapViewOfFile ( file_maps[count].data );
 
 	CloseHandle ( file_maps[count].hMap );

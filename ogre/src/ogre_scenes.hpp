@@ -1,9 +1,9 @@
 // Offsets (in both SceneDatabaseElements and SceneNodes) for objects with a specific sub_object_id
-typedef std::vector<unsigned> SubObjects;
+typedef Ogre::vector<unsigned>::type SubObjects;
 // All sub_object_id listed
-typedef std::map<unsigned, SubObjects> AllSubObjects;
+typedef Ogre::map<unsigned, SubObjects>::type AllSubObjects;
 // All sub_object_id and parent listed
-typedef std::map<std::pair<unsigned, unsigned>, SubObjects> ParentSubObjects;
+typedef Ogre::map<std::pair<unsigned, unsigned>, SubObjects>::type ParentSubObjects;
 
 // Object as a part of the scene (SceneDatabase)
 struct SceneDatabaseElement
@@ -28,7 +28,7 @@ struct SceneDatabaseElement
 	// Initial position
 	struct OgreGameObjectSceneElement initial;
 };
-typedef std::vector<SceneDatabaseElement> SceneDatabaseElements;
+typedef Ogre::vector<SceneDatabaseElement>::type SceneDatabaseElements;
 
 // Static scene
 struct SceneDatabase
@@ -41,7 +41,7 @@ struct SceneDatabase
 
 
 // Dynamic scene - a representation of a game object
-typedef std::map<unsigned, unsigned> SceneAnimation;
+typedef Ogre::map<unsigned, unsigned>::type SceneAnimation;
 struct GameObjectScene
 {
 	GameObjectScene(const SceneDatabase& database)
@@ -54,8 +54,8 @@ struct GameObjectScene
 };
 
 // Scene draw information
-typedef std::vector<std::pair<unsigned, unsigned> > SceneDrawAnimation;
-typedef std::vector<struct OgreGameObjectSceneElement> SceneDrawElements;
+typedef Ogre::vector<std::pair<unsigned, unsigned> >::type SceneDrawAnimation;
+typedef Ogre::vector<struct OgreGameObjectSceneElement>::type SceneDrawElements;
 
 struct SceneDraw
 {
@@ -66,12 +66,12 @@ struct SceneDraw
 	Ogre::Vector3 scale;
 	SceneDrawElements elements;
 };
-typedef std::deque<SceneDraw> SceneDraws;
+typedef Ogre::deque<SceneDraw>::type SceneDraws;
 
 
 // Drawn scene information
 typedef std::pair<Ogre::SceneNode*, Ogre::Entity*> SceneNode;
-typedef std::vector<SceneNode> SceneNodes;
+typedef Ogre::vector<SceneNode>::type SceneNodes;
 
 struct DrawnScene
 {

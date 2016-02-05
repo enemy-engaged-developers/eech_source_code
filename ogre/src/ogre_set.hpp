@@ -1,6 +1,6 @@
 extern Ogre::SceneManager* ogre_scene_manager;
 extern Ogre::Camera* ogre_camera;
-extern std::string ogre_resource_group;
+extern Ogre::String ogre_resource_group;
 
 extern unsigned long ogre_thread_id, user_thread_id;
 

@@ -168,20 +168,20 @@ private:
 	const unsigned POINTS_PER_VERTEX_BUFFER;
 	const unsigned POINTS_PER_INDEX_BUFFER;
 
-	typedef std::list<VBUF> LIST_VBUF;
+	typedef Ogre::list<VBUF>::type LIST_VBUF;
 	struct VBUF_LIST
 	{
 		LIST_VBUF list;
-		typedef std::vector<float> SHADOW;
+		typedef Ogre::vector<float>::type SHADOW;
 		SHADOW shadow;
 	};
-	typedef std::map<size_t, VBUF_LIST> VBUFS;
+	typedef Ogre::map<size_t, VBUF_LIST>::type VBUFS;
 
-	typedef std::list<IBUF> LIST_IBUF;
+	typedef Ogre::list<IBUF>::type LIST_IBUF;
 	struct IBUFS
 	{
 		LIST_IBUF list;
-		typedef std::vector<IndexType> SHADOW;
+		typedef Ogre::vector<IndexType>::type SHADOW;
 		SHADOW shadow;
 	};
 

@@ -784,7 +784,7 @@ void process_game_initialisation_phases (void)
 
 #ifdef OGRE_EE
 				// VJ 050116 custom texture mod
-				load_warzone_override_textures ();
+				load_terrain_override_textures ();
 #endif
 
 				initialise_population_name_database ();

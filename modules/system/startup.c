@@ -505,6 +505,11 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	{
 		struct OgreRun run = { start_application, 0, ee_key_func, ee_mouse_func, ee_resolution };
 		ogre_run(&run);
+
+		if (*application_debug_fatal_string)
+		{
+			MessageBoxA(NULL, application_debug_fatal_string, "Fatal error", MB_OK);
+		}
 	}
 
 	return 0;

@@ -715,6 +715,10 @@ void ui_force_update (void)
 
 	do_highlighting ();
 
+#ifdef OGRE_EE
+	ui_repaint ();
+#endif
+
 	ui_repaint ();
 
 	//

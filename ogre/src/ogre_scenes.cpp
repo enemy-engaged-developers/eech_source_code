@@ -21,11 +21,11 @@ struct Schem
 
 namespace
 {
-	typedef std::vector<SceneDatabase> AllScenes;
+	typedef Ogre::vector<SceneDatabase>::type AllScenes;
 
 	AllScenes scenes;
 
-	std::string animation_mesh;
+	Ogre::String animation_mesh;
 
 
 	// Adapter for scenes loading. Fills scenes.
@@ -148,7 +148,7 @@ namespace
 	private:
 		SceneDatabase& scene;
 
-		typedef std::map<int, unsigned> IndexToOffset;
+		typedef Ogre::map<int, unsigned>::type IndexToOffset;
 		IndexToOffset ito;
 		bool skip_object;
 	};
@@ -323,10 +323,10 @@ namespace
 		DrawnScene ds;
 		unsigned left;
 	};
-	typedef std::list<DrawnSceneEx> DrawnScenes;
+	typedef Ogre::list<DrawnSceneEx>::type DrawnScenes;
 	DrawnScenes drawn_scenes;
 
-	typedef std::map<const SceneDatabase*, DrawnScenes> OldDrawnScenes;
+	typedef Ogre::map<const SceneDatabase*, DrawnScenes>::type OldDrawnScenes;
 	OldDrawnScenes old_drawn_scenes;
 
 	class TaskScenesDraw : public Task
@@ -408,7 +408,7 @@ void OGREEE_CALL ogre_scenes_init(int number_of_scenes, const struct OBJECT_3D_S
 	assert(GetCurrentThreadId() == user_thread_id);
 	ogre_log_(__FUNCTION__, "");
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskScenesInit(number_of_scenes, objects_3d_scene_database, sem));
 	sem.acquire();
 }
@@ -419,7 +419,7 @@ void OGREEE_CALL ogre_scenes_clear(void)
 	assert(GetCurrentThreadId() == user_thread_id);
 	ogre_log_(__FUNCTION__, "");
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskScenesClear(sem));
 	sem.acquire();
 }

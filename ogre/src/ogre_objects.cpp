@@ -3,7 +3,7 @@
 namespace
 {
 	GeometryPtr objects_geometry;
-	typedef std::vector<AnimationMesh> ObjectsAnim;
+	typedef Ogre::vector<AnimationMesh>::type ObjectsAnim;
 	ObjectsAnim objects_anim;
 	const OgreObjectsInit* objects_init;
 	unsigned material_first, material_last;
@@ -137,7 +137,7 @@ namespace
 						}
 			objects_anim.clear();
 
-			for (unsigned material_index = material_first ; material_index < material_last; material_index++)
+			for (unsigned material_index = material_first ; material_index <= material_last; material_index++)
 			{
 				MaterialName material_name(material_index);
 				Ogre::MaterialManager::getSingleton().unload(material_name);
@@ -166,9 +166,9 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		return;
 	}
 
-	std::vector<object_3d_point> points(o.number_of_points);
+	Ogre::vector<object_3d_point>::type points(o.number_of_points);
 #ifdef USE_OBJECTS_NORMALS
-	std::vector<vec3d> normals(o.number_of_point_normals);
+	Ogre::vector<vec3d>::type normals(o.number_of_point_normals);
 #endif
 	{
 		// Calculate real point coordinates and normals
@@ -210,10 +210,10 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 	{
 		face_surface_description surface;
 		VertexDescription vd;
-		std::vector<float> fdata;
-		std::vector<IndexType> idata;
+		Ogre::vector<float>::type fdata;
+		Ogre::vector<IndexType>::type idata;
 	};
-	typedef std::list<SurfacesInfo> Surfaces;
+	typedef Ogre::list<SurfacesInfo>::type Surfaces;
 	Surfaces surfaces;
 
 	// Merge equal surfaces into the single SurfaceInfo.
@@ -444,7 +444,7 @@ void OGREEE_CALL ogre_objects_init(const struct OgreObjectsInit* init)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskObjectsInit(init, sem));
 	sem.acquire();
 }
@@ -454,7 +454,7 @@ void OGREEE_CALL ogre_objects_clear(void)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskObjectsClear(sem));
 	sem.acquire();
 }

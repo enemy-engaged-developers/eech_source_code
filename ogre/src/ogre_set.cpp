@@ -24,7 +24,7 @@ namespace
 
 Ogre::SceneManager* ogre_scene_manager;
 Ogre::Camera* ogre_camera;
-std::string ogre_resource_group;
+Ogre::String ogre_resource_group;
 
 void ogre_set(const char* resource_group, Ogre::SceneManager* scene_manager, Ogre::Camera* camera)
 {
@@ -57,6 +57,8 @@ unsigned ogre_index(void)
 
 void ogre_log(const char* function, const char* format, ...)
 {
+	assert(GetCurrentThreadId() == ogre_thread_id);
+
 	char buf[1024];
 	va_list ap;
 	va_start(ap, format);
@@ -67,6 +69,8 @@ void ogre_log(const char* function, const char* format, ...)
 
 void ogre_log_(const char* function, const char* format, ...)
 {
+	assert(GetCurrentThreadId() == user_thread_id);
+
 	static FILE* fd;
 	char buf[1024];
 	va_list ap;

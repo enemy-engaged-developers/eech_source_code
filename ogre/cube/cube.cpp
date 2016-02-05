@@ -130,7 +130,7 @@ struct EE
 		{
 			TexturesExporter2 exporter;
 			exporter.export_textures(eet, false);
-			ogre_textures_commit();
+			ogre_textures_commit(false);
 		}
 
 		{
@@ -152,7 +152,7 @@ struct EE
 #ifdef USE_OBJECTS_ONLY
 		ogre_objects_clear();
 #endif
-		ogre_textures_clear();
+		ogre_textures_clear(TRUE);
 	}
 
 #ifdef USE_OBJECTS

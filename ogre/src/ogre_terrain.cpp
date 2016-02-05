@@ -11,7 +11,7 @@ namespace
 #endif
 	};
 	// All points of terrain's sector
-	typedef std::vector<OriginalPoint> OriginalPoints;
+	typedef Ogre::vector<OriginalPoint>::type OriginalPoints;
 
 	void get_vector(vec3d& v, float heading, float pitch)
 	{
@@ -115,7 +115,7 @@ namespace
 		}
 
 #ifdef USE_TERRAIN_VERTEX_COLOURS
-		typedef std::vector<unsigned> INVREF;
+		typedef Ogre::vector<unsigned>::type INVREF;
 		static const unsigned NOINVREF = ~0u;
 		void make_invref(INVREF& invref)
 		{
@@ -297,9 +297,9 @@ namespace
 			assert(s.number_of_polygons);
 			assert(total_number_of_indices);
 
-			std::vector<Ogre::Real> points;
-			std::vector<unsigned long> ref(total_number_of_indices);
-			std::vector<IndexType> indices(total_number_of_indices);
+			Ogre::vector<Ogre::Real>::type points;
+			Ogre::vector<unsigned long>::type ref(total_number_of_indices);
+			Ogre::vector<IndexType>::type indices(total_number_of_indices);
 
 			OriginalPoints original_points(s.number_of_points);
 			{
@@ -526,10 +526,10 @@ namespace
 		}
 
 	private:
-		typedef std::deque<DrawnScene> Objects;
+		typedef Ogre::deque<DrawnScene>::type Objects;
 		Objects objects;
 	};
-	typedef std::map<Sector, SectorObjects> TerrainObjects;
+	typedef Ogre::map<Sector, SectorObjects>::type TerrainObjects;
 
 	TerrainObjects terrain_objects;
 #endif
@@ -590,6 +590,9 @@ namespace
 #ifdef USE_TERRAIN_TREES
 					trees.clear();
 #endif
+					Ogre::SceneNode* sky = ogre_scene_manager->getSkyDomeNode();
+					if (sky)
+						sky->setVisible(false, true);
 				}
 			}
 			else
@@ -611,6 +614,10 @@ namespace
 			cur_x = x_sector;
 			cur_z = z_sector;
 
+			Ogre::SceneNode* sky = ogre_scene_manager->getSkyDomeNode();
+			if (sky)
+				sky->setVisible(true, true);
+
 #ifdef USE_TERRAIN_TREES
 			for (Trees::iterator itor(trees.begin()); itor != trees.end();)
 				if (abs(cur_x - (int)itor->first.first) > USE_TERRAIN_VISIBILITY || abs(cur_z - (int)itor->first.second) > USE_TERRAIN_VISIBILITY)
@@ -619,7 +626,7 @@ namespace
 					++itor;
 #endif
 
-			typedef std::map<std::pair<unsigned, unsigned>, SectorData*> SectorsData;
+			typedef Ogre::map<std::pair<unsigned, unsigned>, SectorData*>::type SectorsData;
 			SectorsData sectors;
 			for (SectorData* sd = sectors_data; sd; sd = sd->next)
 				sectors[std::make_pair(sd->x, sd->z)] = sd;
@@ -692,7 +699,7 @@ namespace
 		struct Group : private Uncopyable
 		{
 			Group(unsigned xg, unsigned zg)
-				: xg(xg), zg(zg), ref(0), next(0), geometry(1 << 20, 1 << 20)
+				: xg(xg), zg(zg), ref(0), next(0), geometry(1 << 20, 1 << 18)
 			{
 			}
 			bool decr_ref(void)
@@ -866,10 +873,10 @@ namespace
 			}
 
 		private:
-			typedef std::vector<Ogre::InstancedEntity*> Trees;
+			typedef Ogre::vector<Ogre::InstancedEntity*>::type Trees;
 			Trees trees;
 		};
-		typedef std::map<Sector, SectorTrees> Trees;
+		typedef Ogre::map<Sector, SectorTrees>::type Trees;
 		Trees trees;
 #endif
 	};
@@ -1029,7 +1036,7 @@ void OGREEE_CALL ogre_terrain_clear(void)
 	assert(GetCurrentThreadId() == user_thread_id);
 	ogre_log_(__FUNCTION__, "");
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskTerrainClear(sem));
 	sem.acquire();
 }
@@ -1040,7 +1047,7 @@ void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 	ogre_log_(__FUNCTION__, "%p", scene);
 
 #ifdef USE_TERRAIN_OBJECTS
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskTerrainObject(scene, sem));
 	sem.acquire();
 #endif

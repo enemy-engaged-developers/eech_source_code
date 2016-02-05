@@ -1826,17 +1826,11 @@ float ui_display_text (const char *text, float x, float y)
 		return ( 0 );
 	}
 #else
-	int
-		ix,
-		iy;
-
 	if (text)
 	{
 		x += ui_x_origin;
 		y += ui_y_origin;
-		convert_float_to_int ( x, &ix );
-		convert_float_to_int ( y, &iy );
-		ogre_ui_text ( current_font - ui_fonts, ix, iy, text, current_font_colour.colour );
+		ogre_ui_text ( current_font - ui_fonts, x, y, text, current_font_colour.colour );
 	}
 	return 0;
 #endif

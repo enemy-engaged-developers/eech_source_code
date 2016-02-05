@@ -84,7 +84,7 @@ unsigned
 
 #define POINTER
 
-#if defined(POINTER) && !defined(OGRE_EE)
+#if defined(POINTER)
 struct
 {
 	unsigned width, height;
@@ -132,6 +132,10 @@ void initialise_mouse_pointer ( void )
 	{
 		Sleep ( 100 );
 	}
+#else
+	static unsigned int
+		data[10 * 20];
+#endif
 	{
 		unsigned int
 			*ptr;
@@ -149,9 +153,14 @@ void initialise_mouse_pointer ( void )
 			*image;
 #endif
 
+#ifndef OGRE_EE
 		ptr = get_screen_data ( mouse_pointer );
 		pitch = get_screen_pitch ( mouse_pointer );
 		memset ( ptr, 0, pitch * mouse_pointer_height * 4 );
+#else
+		ptr = data;
+		pitch = pointer->width;
+#endif
 		image = pointer->image;
 		for ( y = 0; y < pointer->height; y++ )
 		{
@@ -169,9 +178,10 @@ void initialise_mouse_pointer ( void )
 			ptr += pitch - pointer->width;
 		}
 	}
+#ifndef OGRE_EE
 	unlock_screen ( mouse_pointer );
 #else
-	mouse_pointer = ogre_texture_load ( "graphics\\ui\\common\\pointer.PSD" );
+	mouse_pointer = ogre_texture_define ( pointer->width, pointer->height, 4, data );
 #endif
 }
 

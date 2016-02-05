@@ -74,7 +74,6 @@ namespace
 			overlay->add2D(ogre_ui);
 			overlay->show();
 
-			ogre_thread_id = GetCurrentThreadId();
 			if (run_info->resolution)
 			{
 				unsigned int width, height, colourDepth;
@@ -228,6 +227,8 @@ namespace
 
 void OGREEE_CALL ogre_run(const struct OgreRun* run)
 {
+	user_thread_id = ogre_thread_id = GetCurrentThreadId();
+
 	ogre_log_(__FUNCTION__, "");
 
 	run_info = run;
@@ -267,6 +268,11 @@ OGREEE_API void OGREEE_CALL ogre_quit(void)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
 	ogre_log_(__FUNCTION__, "");
+
+	ogre_terrain_clear();
+	ogre_scenes_clear();
+	ogre_objects_clear();
+	ogre_textures_clear(true);
 
 	ogre_tasks->enqueue(new TaskQuit);
 }

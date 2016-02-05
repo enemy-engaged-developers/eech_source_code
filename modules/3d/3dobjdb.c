@@ -2296,6 +2296,21 @@ void initialise_3d_objects ( const char *directory )
 	debug_watch ( "3D INSTANCES MEMORY: %d", MT_INT, &current_amount_of_3d_objects_memory );
 
 	memset ( object_3d_scenes_creation_count, 0, sizeof ( int ) * OBJECT_3D_LAST );
+
+#ifdef OGRE_EE
+	load_models_override_textures ();
+	{
+		struct OgreObjectsInit
+			ooi;
+
+		ooi.number_of_objects = total_number_of_objects;
+		ooi.objects = objects_3d_data;
+		ooi.get_animation_size = ee_animation_size;
+		ooi.get_animation_texture = ee_animation_texture;
+		ogre_objects_init (&ooi);
+		ogre_scenes_init (OBJECT_3D_LAST - 1, objects_3d_scene_database);
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2411,6 +2426,9 @@ void deinitialise_3d_objects ( void )
 	//
 
 	deinitialise_3d_objects_in_d3d ();
+#else
+	ogre_scenes_clear ();
+	ogre_objects_clear ();
 #endif
 
 	for ( i = 0; i < OBJECT_3D_LAST; i++ )

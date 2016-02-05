@@ -1050,12 +1050,9 @@ void debug_fatal ( const char *string, ... )
 
 #ifndef OGRE_EE
 	application_debug_fatal = TRUE;
+#endif
 
 	strcpy ( application_debug_fatal_string, buffer );
-#else
-	// FIXME
-	MessageBoxA ( NULL, buffer, "Fatal", MB_OK );
-#endif
 
 	end_application ();
 }

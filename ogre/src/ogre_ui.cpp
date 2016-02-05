@@ -7,11 +7,12 @@ namespace
 	struct Operation
 	{
 		unsigned texture;
-		unsigned x, y;
-		unsigned width, height;
+		float x, y;
+		float width, height;
+		unsigned font, colour;
 		Ogre::String text;
 	};
-	typedef std::deque<Operation> Operations;
+	typedef Ogre::deque<Operation>::type Operations;
 
 	Operations operations;
 
@@ -20,7 +21,7 @@ namespace
 		Ogre::OverlayContainer* container = dynamic_cast<Ogre::OverlayContainer*>(element);
 		if (container)
 		{
-			std::deque<Ogre::OverlayElement*> elems;
+			Ogre::deque<Ogre::OverlayElement*>::type elems;
 			Ogre::OverlayContainer::ChildIterator children = container->getChildIterator();
 			while (children.hasMoreElements())
 				elems.push_back(children.getNext());
@@ -45,7 +46,7 @@ namespace
 		unsigned characters[USE_UI_CHARACTERS];
 	};
 
-	typedef std::map<unsigned, Font> Fonts;
+	typedef Ogre::map<unsigned, Font>::type Fonts;
 	Fonts fonts;
 };
 
@@ -72,25 +73,27 @@ namespace
 				{
 					el = om.createOverlayElement("Panel", UIElement(index++));
 					el->setMetricsMode(Ogre::GMM_PIXELS);
-					el->setPosition((float)itor->x, (float)itor->y);
-					el->setDimensions((float)itor->width, (float)itor->height);
+					el->setPosition(itor->x, itor->y);
+					el->setDimensions(itor->width, itor->height);
 					el->setMaterialName(MaterialTextureName(itor->texture));
 				}
 				else
 				{
-					Fonts::const_iterator it(fonts.find(itor->width));
+					//ogre_log(__FUNCTION__, "%s", itor->text.c_str());
+
+					Fonts::const_iterator it(fonts.find(itor->font));
 					if (it == fonts.end())
 						continue;
 					el = om.createOverlayElement("TextArea", UIElement(index++));
 					el->setMetricsMode(Ogre::GMM_PIXELS);
-					el->setPosition((float)itor->x, (float)itor->y);
+					el->setPosition(itor->x, itor->y);
 					el->setCaption(itor->text);
 					el->setDimensions(0.1f, 0.1f);
-					el->setParameter("font_name", FontName(itor->width));
+					el->setParameter("font_name", FontName(itor->font));
 					char buf[32];
 					sprintf(buf, "%f", it->second.height);
 					el->setParameter("char_height", buf);
-					el->setColour(Ogre::ColourValue(((itor->height >> 16) & 0xFF) / 255.0f, ((itor->height >> 8) & 0xFF) / 255.0f, ((itor->height >> 0) & 0xFF) / 255.0f));
+					el->setColour(Ogre::ColourValue(((itor->colour >> 16) & 0xFF) / 255.0f, ((itor->colour >> 8) & 0xFF) / 255.0f, ((itor->colour >> 0) & 0xFF) / 255.0f));
 				}
 				el->initialise();
 				el->show();
@@ -174,10 +177,10 @@ namespace
 	};
 }
 
-void OGREEE_CALL ogre_ui_draw(unsigned texture, unsigned x1, unsigned y1, unsigned x2, unsigned y2)
+void OGREEE_CALL ogre_ui_draw(unsigned texture, float x1, float y1, float x2, float y2)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
-	//ogre_log_(__FUNCTION__, "%u %u %u %u %u", texture, x1, y1, x2, y2);
+	//ogre_log_(__FUNCTION__, "%u %f %f %f %f", texture, x1, y1, x2, y2);
 
 	Operation op = { texture, x1, y1, x2 - x1, y2 - y1 };
 	operations.push_back(op);
@@ -189,7 +192,7 @@ OGREEE_API void OGREEE_CALL ogre_ui_font(unsigned font, const char* name, float 
 	assert(GetCurrentThreadId() == user_thread_id);
 	//ogre_log_(__FUNCTION__, "");
 
-	Semaphore sem(0, 1);
+	Semaphore sem;
 	ogre_tasks->enqueue(new TaskUIFont(font, name, height, sem));
 	sem.acquire();
 }
@@ -220,13 +223,21 @@ OGREEE_API unsigned OGREEE_CALL ogre_ui_width(unsigned font, const char* str)
 	return total;
 }
 
-OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, unsigned x, unsigned y, const char* str, unsigned colour)
+OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, float x, float y, const char* str, unsigned colour)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
-	//ogre_log_(__FUNCTION__, "%s %u %u %u %08X", str, x, y, font, colour);
+	//ogre_log_(__FUNCTION__, "%s %f %f %u %08X", str, x, y, font, colour);
 
-	Operation op = { 0, x, y, font, colour, str };
+	Operation op = { 0, x, y, 0, 0, font, colour, str };
 	operations.push_back(op);
+}
+
+void OGREEE_CALL ogre_ui_clear_screen(void)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+	//ogre_log_(__FUNCTION__, "");
+
+	Operations().swap(operations);
 }
 
 void ogre_ui_commit(void)

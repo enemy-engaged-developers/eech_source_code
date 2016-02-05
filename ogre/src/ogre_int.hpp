@@ -156,6 +156,10 @@ private:
 class Semaphore : private Uncopyable
 {
 public:
+	Semaphore(void)
+		: sem(CreateSemaphore(0, 0, 1, 0))
+	{
+	}
 	Semaphore(unsigned init, unsigned max)
 		: sem(CreateSemaphore(0, init, max, 0))
 	{

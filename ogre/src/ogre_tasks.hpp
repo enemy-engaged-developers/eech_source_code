@@ -29,7 +29,7 @@ public:
 private:
 	Mutex m;
 	Semaphore sem;
-	typedef std::deque<Task*> Tasks;
+	typedef Ogre::deque<Task*>::type Tasks;
 	Tasks tasks;
 };
 

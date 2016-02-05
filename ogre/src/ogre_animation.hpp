@@ -8,13 +8,13 @@ struct AnimationRef
 	unsigned submesh;
 	unsigned material_index;
 };
-typedef std::vector<AnimationRef> AnimationRefs;
+typedef Ogre::vector<AnimationRef>::type AnimationRefs;
 struct AnimationInfo
 {
 	unsigned limit;
 	AnimationRefs refs;
 };
-typedef std::map<unsigned, AnimationInfo> AnimationMesh;
+typedef Ogre::map<unsigned, AnimationInfo>::type AnimationMesh;
 
 struct SceneAnimationRef : public AnimationRef
 {
@@ -25,10 +25,10 @@ struct SceneAnimationRef : public AnimationRef
 
 	unsigned subobject;
 };
-typedef std::vector<SceneAnimationRef> SceneAnimationRefs;
+typedef Ogre::vector<SceneAnimationRef>::type SceneAnimationRefs;
 struct SceneAnimationInfo
 {
 	unsigned limit;
 	SceneAnimationRefs refs;
 };
-typedef std::map<unsigned, SceneAnimationInfo> AnimationScene;
+typedef Ogre::map<unsigned, SceneAnimationInfo>::type AnimationScene;

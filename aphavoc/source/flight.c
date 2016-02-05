@@ -318,9 +318,7 @@ void flight (void)
 
 			pages_clear ++;
 
-#ifndef OGRE_EE
 			clear_screen ();
-#endif
 		}
 
 #ifndef OGRE_EE

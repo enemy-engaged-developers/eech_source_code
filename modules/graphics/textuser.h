@@ -206,7 +206,12 @@ extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *grap
 
 //VJ 050116 custom texture mod: all functions are in textuser.c except for this one
 //VJ 051223 changed function parameter to void
+#ifndef OGRE_EE
 extern void load_warzone_override_textures ( void );
+#else
+extern void load_models_override_textures ( void );
+extern void load_terrain_override_textures ( void );
+#endif
 
 extern void restore_default_textures( void );
 

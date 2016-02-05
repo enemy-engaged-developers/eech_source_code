@@ -508,8 +508,14 @@ $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).l
 
 !else
 
-$(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk
+laa.exe : laa.c
+	@wcl386 laa.c
+	@del laa.obj
+
+$(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk laa.exe
                 wlink debug all library winmm library ws2_32 @$(projectname).lnk
+				@laa.exe $@
+				@del laa.exe
 
 !endif
 

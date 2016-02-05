@@ -20,16 +20,18 @@ OGREEE_API void OGREEE_CALL ogre_set_viewpoint(const float* position, const floa
 
 OGREEE_API void OGREEE_CALL ogre_ui_font(unsigned font, const char* name, float height);
 OGREEE_API void OGREEE_CALL ogre_ui_fonts_clear(void);
-OGREEE_API void OGREEE_CALL ogre_ui_draw(unsigned texture, unsigned x1, unsigned y1, unsigned x2, unsigned y2);
+OGREEE_API void OGREEE_CALL ogre_ui_draw(unsigned texture, float x1, float y1, float x2, float y2);
 OGREEE_API unsigned OGREEE_CALL ogre_ui_width(unsigned font, const char* str);
-OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, unsigned x, unsigned y, const char* str, unsigned colour);
+OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, float x, float y, const char* str, unsigned colour);
+OGREEE_API void OGREEE_CALL ogre_ui_clear_screen(void);
 OGREEE_API void OGREEE_CALL ogre_ui_clear(void);
 
-OGREEE_API void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, void* texture_image_data);
+OGREEE_API void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, const void* texture_image_data);
 OGREEE_API void OGREEE_CALL ogre_textures_override(unsigned index, const char* file);
-OGREEE_API void OGREEE_CALL ogre_textures_commit(void);
+OGREEE_API void OGREEE_CALL ogre_textures_commit(int clearable);
 OGREEE_API void OGREEE_CALL ogre_textures_clear(int full);
 OGREEE_API unsigned OGREEE_CALL ogre_texture_load(const char* filename);
+OGREEE_API unsigned OGREEE_CALL ogre_texture_define(unsigned width, unsigned height, unsigned bpp, const void* data);
 OGREEE_API void OGREEE_CALL ogre_texture_clear(unsigned handle);
 
 struct OgreObjectsInit
