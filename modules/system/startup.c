@@ -340,11 +340,13 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	application_active = TRUE;
 #endif
 
+#if 0
 	//
 	// Initialise the memory statistics
 	//
 
 	initialise_memory_totals ();
+#endif
 
 #ifndef OGRE_EE
 	if ( !initialise_windows ( hInstance, nCmdShow ) )

@@ -262,6 +262,7 @@ void deinitialise_game (void)
 	deinitialise_joysticks();
 #endif
 
+#if 0
 	////////////////////////////////////////
 	//
 	// DEINITIALISE MEMORY BLOCK SYSTEM
@@ -275,6 +276,7 @@ void deinitialise_game (void)
 	check_safe_memory_counter ();
 
 	check_safe_memory_mapped_file_counter ();
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

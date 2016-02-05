@@ -111,6 +111,7 @@ c_module_object_files   += $+ &
 										$(currentdir)\event.obj &
 										$(currentdir)\ev_stack.obj &
 										$(currentdir)\ev_alpha.obj &
+										$(currentdir)\nedmalloc.obj &
                            $-
 
 #################################################################################################################################

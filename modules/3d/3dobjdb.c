@@ -1772,7 +1772,9 @@ void initialise_3d_objects ( const char *directory )
 	char
 		filename[512];
 
+#if 0
 	ASSERT ( get_memory_block_system_installed () );
+#endif
 
 	//
 	// Initialise the objects lookup tablesj

@@ -114,7 +114,9 @@ int
 
 void pre_flight_test (void)
 {
+#if 0
 	check_memory_block_system_integrity ();
+#endif
 
 	if (command_line_dump_session)
 	{

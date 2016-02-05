@@ -103,11 +103,13 @@ void initialise_ui_system (int num_ui_objects)
 
 	set_ui_installed (TRUE);
 
+#if 0
    if (!get_memory_block_system_installed ())
    {
 
       debug_fatal ("Initialising UI system, Memory Blocks not installed");
    }
+#endif
 
    initialise_system_ui_objects (num_ui_objects);
 

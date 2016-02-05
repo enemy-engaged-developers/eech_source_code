@@ -278,7 +278,7 @@ void filename_input_function ( ui_object *obj, void *arg )
 	{
 		if (strlen (text) > 0)
 		{
-			copy = (char *) malloc_fast_memory ( strlen ( text ) + 1 );
+			copy = (char *) malloc_fast_mem ( strlen ( text ) + 1 );
 			strcpy ( copy, text );
 
 			parse_filename (copy, FILENAME_MAX_LENGTH);
@@ -437,7 +437,7 @@ static void notify_save_file_list (ui_object *obj, void *arg)
 	{
 		if (strlen (text) > 0)
 		{
-			copy = (char *) malloc_fast_memory ( strlen ( text ) + 1 );
+			copy = (char *) malloc_fast_mem ( strlen ( text ) + 1 );
 			strcpy ( copy, text );
 
 			parse_filename (copy, FILENAME_MAX_LENGTH);

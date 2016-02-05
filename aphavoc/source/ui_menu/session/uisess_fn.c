@@ -1054,7 +1054,7 @@ void session_name_input_function ( ui_object *obj, void *arg )
 
 	if ((text) && (strlen (text) > 0))
 	{
-		copy = ( char * ) malloc_fast_memory ( strlen ( text ) + 30 );
+		copy = ( char * ) malloc_fast_mem ( strlen ( text ) + 30 );
 		strcpy ( copy, text );
 
 		parse_filename (copy, 30);
