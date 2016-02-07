@@ -1541,6 +1541,14 @@ void read_custom_scene ( const char* filename )
 	{
 		free_scene ( &objects_3d_scene_database[sceneid] );
 		read_scene ( fp, version );
+		if ( !objects_3d_scene_database[sceneid].succeeded )
+		{
+			debug_fatal ( "Failed to load scene %s", filename );
+		}
+	}
+	else
+	{
+		debug_log ( "Unsupported scene version %i in file %s", version, filename );
 	}
 	safe_fclose ( fp );
 }

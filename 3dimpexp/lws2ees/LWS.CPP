@@ -579,7 +579,7 @@ class LwsFile : public Lws
       if (str[0] && str[1])
        {
         int length = strlen(str);
-        if (strcmp(str, "NullObject") && strcmp(str, "\"NullObject\""))
+        if (stricmp(str, "NullObject") && stricmp(str, "\"NullObject\""))
          if (str[0] == '"' && str[length - 1] == '"')
           lod.filename.assign(str + 1, length - 2);
          else
