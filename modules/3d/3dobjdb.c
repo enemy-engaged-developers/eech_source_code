@@ -109,11 +109,7 @@ static int
 	custom_number_of_objects = 2000,
 	custom_number_of_cameras = 2000;
 
-#ifndef OGRE_EE
 static int
-#else
-int
-#endif
 	total_number_of_objects,
 	total_number_of_cameras,
 	total_number_of_scene_link_objects,

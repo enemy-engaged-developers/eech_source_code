@@ -186,6 +186,7 @@ int TIR_looking_in_periscope(void)
 
 void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -403,6 +404,7 @@ void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 
 		end_3d_scene ();
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,6 +413,7 @@ void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 
 void draw_virtual_cockpit_periscope_filler (int x_min, int x_max)
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -502,6 +505,7 @@ void draw_virtual_cockpit_periscope_filler (int x_min, int x_max)
 
 		end_3d_scene ();
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

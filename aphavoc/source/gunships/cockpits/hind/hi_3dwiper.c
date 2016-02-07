@@ -5,7 +5,11 @@
 static object_3d_instance
 	*wiper_inst3d;
 
+#ifndef OGRE_EE
 static object_3d_sub_instance
+#else
+static struct OgreGameObjectSceneElement
+#endif
 	*wiper_arm_object,
 	*wiper_rod_object,
 	*wiper_blade_object;
@@ -52,5 +56,9 @@ void draw_hind_3d_cockpit_wiper (viewpoint *vp)
 	//
 
 	memcpy (&wiper_inst3d->vp, vp, sizeof (viewpoint));
+#ifndef OGRE_EE
 	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &wiper_inst3d->vp.position, wiper_inst3d);
+#else
+	object_3d_draw (wiper_inst3d);
+#endif
 }

@@ -491,7 +491,11 @@ object_3d_camera_index_numbers get_crew_camera_index (crew_roles role)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static screen
+#else
+const char
+#endif
 	*us_pilot_high_detail_face,
 	*us_pilot_low_detail_face,
 	*us_pilot_neck,
@@ -515,6 +519,11 @@ static screen
 
 void initialise_common_crew_skins (void)
 {
+#ifdef OGRE_EE
+#define load_bmp_file_screen(X) (X)
+#define set_system_texture_screen(X, Y) ogre_textures_override ((Y), (X))
+#endif
+
 	//
 	// load BMPs
 	//
@@ -558,6 +567,11 @@ void initialise_common_crew_skins (void)
 	set_system_texture_screen (russian_co_pilot_low_detail_face, TEXTURE_INDEX_RUSSIAN_WSO_FACE_LOW_RES);
 	set_system_texture_screen (russian_co_pilot_neck, TEXTURE_INDEX_RUSSIAN_WSO_NECK_01);
 	set_system_texture_screen (russian_co_pilot_hands, TEXTURE_INDEX_RUSSIAN_WSO_SKIN);
+
+#ifdef OGRE_EE
+#undef load_bmp_file_screen
+#undef set_system_texture_screen
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -566,6 +580,7 @@ void initialise_common_crew_skins (void)
 
 void deinitialise_common_crew_skins (void)
 {
+#ifndef OGRE_EE
 #ifdef DEBUG
 	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_FACE_01);
 	set_system_texture_screen (NULL, TEXTURE_INDEX_US_PILOT_FACE_01_LOW_RES);
@@ -603,6 +618,7 @@ void deinitialise_common_crew_skins (void)
 	destroy_screen (russian_co_pilot_low_detail_face);
 	destroy_screen (russian_co_pilot_neck);
 	destroy_screen (russian_co_pilot_hands);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

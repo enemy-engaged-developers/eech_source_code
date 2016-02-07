@@ -1267,8 +1267,8 @@ float get_3d_terrain_point_data ( float x, float z, terrain_3d_point_data *point
 	{
 		ASSERT (!"Terrain elevation off map");
 	
-		bound(x, terrain_3d_min_map_x + 0.0001, terrain_3d_max_map_x - 0.0001);
-		bound(z, terrain_3d_min_map_z + 0.0001, terrain_3d_max_map_z - 0.0001);
+		x = bound(x, terrain_3d_min_map_x + 0.0001f, terrain_3d_max_map_x - 0.0001f);
+		z = bound(z, terrain_3d_min_map_z + 0.0001f, terrain_3d_max_map_z - 0.0001f);
 		
 	}
 

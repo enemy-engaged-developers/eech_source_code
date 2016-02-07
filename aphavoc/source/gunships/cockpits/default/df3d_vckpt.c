@@ -148,11 +148,13 @@ static object_3d_instance
 	*virtual_cockpit_rhs_mfd_inst3d,
 	*virtual_cockpit_display_view_mfd_inst3d;
 
+#ifndef OGRE_EE
 static env_2d
 	*lamp1_env;
 
 static screen
 	*lamp1_texture_screen;//,	*Lamp1_overlaid_texture_screen;
+#endif
 
 #if 0
 static float
@@ -247,6 +249,7 @@ void initialise_default_virtual_cockpit_3d (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void set_cockpit_lighting (matrix3x3 attitude)
 {
 	matrix3x3
@@ -417,6 +420,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 
 	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,6 +433,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 
 void draw_default_internal_virtual_cockpit_3d (unsigned int flags)
 {
+#ifndef OGRE_EE
 
 	viewpoint
 		vp;
@@ -1059,6 +1064,7 @@ void draw_default_internal_virtual_cockpit_3d (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1067,6 +1073,7 @@ void draw_default_internal_virtual_cockpit_3d (unsigned int flags)
 
 void draw_default_external_virtual_cockpit_3d (unsigned int flags)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -1349,6 +1356,7 @@ void draw_default_external_virtual_cockpit_3d (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1357,14 +1365,18 @@ void draw_default_external_virtual_cockpit_3d (unsigned int flags)
 
 void get_default_crew_viewpoint (int index, object_3d_instance   *virtual_cockpit_inst3d)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
+#endif
 
 	float
 		head_pitch_datum;
 
+#ifndef OGRE_EE
 	object_3d_sub_object_search_data
 		search;
+#endif
 
 	head_pitch_datum = pilot_head_pitch_datum;
 
@@ -1372,20 +1384,23 @@ void get_default_crew_viewpoint (int index, object_3d_instance   *virtual_cockpi
 	// rotate head
 	//
 
+#ifndef OGRE_EE
 	virtual_cockpit_inst3d->sub_objects[index].relative_heading = -pilot_head_heading;
 	virtual_cockpit_inst3d->sub_objects[index].relative_pitch = head_pitch_datum - pilot_head_pitch;
 	virtual_cockpit_inst3d->sub_objects[index].relative_roll = 0.0;
+#endif
 
 	//
 	// get viewpoint (avoid jitter)
 	//
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
+#ifndef OGRE_EE
 	search.search_object = virtual_cockpit_inst3d;
 	search.result_sub_object = &virtual_cockpit_inst3d->sub_objects[index];
 	get_3d_sub_object_world_viewpoint (&search, &vp);
@@ -1406,6 +1421,7 @@ void get_default_crew_viewpoint (int index, object_3d_instance   *virtual_cockpi
 	vp.z = -vp.z;
 
 	multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, pilot_head_vp.attitude, &vp.position);
+#endif
 
 
 }
@@ -1489,6 +1505,7 @@ void draw_default_indicator_lamps_3d (void)
 
 void initialise_default_lamp_screen (void)
 {
+#ifndef OGRE_EE
 
 	lamp1_env = create_2d_environment ();
 
@@ -1496,15 +1513,18 @@ void initialise_default_lamp_screen (void)
 
 //	Lamp1_overlaid_texture_screen = create_system_texture_screen (LAMP1_TEXTURE_SIZE, LAMP1_TEXTURE_SIZE, LAMP1_OVERLAID_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
+#endif
 }
 
 void deinitialise_default_lamp_screen (void)
 {
+#ifndef OGRE_EE
 	destroy_2d_environment (lamp1_env);
 
 	destroy_screen (lamp1_texture_screen);
 
 //	destroy_screen (lamp1_overlaid_texture_screen);
+#endif
 }
 
 

@@ -179,6 +179,7 @@ extern void decrease_3d_resolutions ( event *ev );
 extern void toggle_3d_information ( event *ev );
 
 extern void toggle_3d_object_lod_calculations ( event *ev );
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -190,7 +191,6 @@ extern int get_integer_screen_x_mid (void);
 extern int get_integer_screen_y_mid (void);
 extern int get_integer_screen_x_max (void);
 extern int get_integer_screen_y_max (void);
-#endif
 
 
 // 13JUL2011 Casm corrected vertical view angle calculations

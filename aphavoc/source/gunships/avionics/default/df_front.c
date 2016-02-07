@@ -98,6 +98,7 @@ static char
 
 static void display_messages (float x_org, float y_org)
 {
+#ifndef OGRE_EE
 	float
 		x_min,
 		y_min,
@@ -142,6 +143,7 @@ static void display_messages (float x_org, float y_org)
 	set_mono_font_position (x_min, y_line4);
 
 	print_mono_font_string (line4);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

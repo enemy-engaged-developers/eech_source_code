@@ -380,7 +380,6 @@ static void draw_local_3d_object (entity *en, float range)
 						{
 							animate_and_draw_entity_muzzle_flash_effect (en);
 
-#ifndef OGRE_EE
 							raw->ac.inst3d->vp.position = virtual_cockpit_inst3d->vp.position;
 
 							memcpy (&raw->ac.inst3d->vp.attitude, &virtual_cockpit_inst3d->vp.attitude, sizeof (matrix3x3));
@@ -389,7 +388,6 @@ static void draw_local_3d_object (entity *en, float range)
 							insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &raw->ac.inst3d->vp.position, raw->ac.inst3d);
 #else
 							object_3d_draw (raw->ac.inst3d);
-#endif
 #endif
 						}
 					}

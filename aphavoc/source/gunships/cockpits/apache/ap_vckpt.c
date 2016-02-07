@@ -101,7 +101,9 @@ static object_3d_instance
 	*virtual_cockpit_nose_inst3d;
 
 
+#ifndef OGRE_EE
 static float clipx;
+#endif
 #if DEBUG_MODULE
 static float dx, dy, dz;
 #endif
@@ -302,6 +304,7 @@ void update_apache_virtual_cockpit (void)
 {
 }
 
+#ifndef OGRE_EE
 static void animate_pnvs(object_3d_instance* nose_inst3d)
 {
 	float
@@ -325,8 +328,10 @@ static void animate_pnvs(object_3d_instance* nose_inst3d)
 	if ( find_object_3d_sub_object ( &search ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		search.result_sub_object->relative_heading = pnvs_heading;
 }
+#endif
 extern float debug_var_x, debug_var_y, debug_var_z;
 
+#ifndef OGRE_EE
 static void set_pitch(object_3d_instance* inst3d, float pitch, int sub_object_index)
 {
 	object_3d_sub_object_search_data
@@ -371,6 +376,7 @@ static void animate_throttles(object_3d_instance* inst3d)
 	throttle_pitch_2 += bound(throttle_angle - throttle_pitch_2, -max_movement, max_movement);
 	set_pitch ( inst3d, throttle_pitch_2, OBJECT_3D_SUB_OBJECT_ARNEH_AH64D_THROTTLE_RIGHT );
 }
+#endif
 
 int apache_pnvs_active(void)
 {
@@ -526,6 +532,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void set_cockpit_white_lighting (matrix3x3 attitude)
 {
 	matrix3x3
@@ -626,6 +633,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 
 	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -699,9 +707,15 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 ///  Positions and rotates the viewpoint to the correct position for the pilot and view selected
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 {
-	object_3d_sub_instance *head_object;
+#ifndef OGRE_EE
+	object_3d_sub_instance
+#else
+	struct OgreGameObjectSceneElement
+#endif
+		*head_object;
 	int is_copilot = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT;
 
 	viewpoint
@@ -748,9 +762,9 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 		head_object = search.result_sub_object;
 	}
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	switch (get_view_mode())
 	{
@@ -811,8 +825,9 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, vp.attitude, &vp.position);
 
-	*crew_viewpoint = virtual_cockpit_inst3d->vp;
+	*crew_viewpoint = *(viewpoint *) &virtual_cockpit_inst3d->vp;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///vj draws internal cockpit, dashboad, dials including frame/////////////////////////////////////
@@ -820,6 +835,7 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 
 void draw_apache_internal_virtual_cockpit (unsigned int flags)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -1150,6 +1166,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1158,6 +1175,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -1324,6 +1342,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

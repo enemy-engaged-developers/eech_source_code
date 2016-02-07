@@ -83,11 +83,15 @@ static object_3d_instance
 	*virtual_cockpit_fillet_level1_inst3d,
 	*virtual_cockpit_fillet_level2_inst3d,
 	*virtual_cockpit_fillet_level3_inst3d,
+#ifndef OGRE_EE
 	*virtual_cockpit_hud_glass_inst3d,
+#endif
 	*virtual_cockpit_hud_glass_level1_inst3d,
 	*virtual_cockpit_hud_glass_level2_inst3d,
 	*virtual_cockpit_hud_glass_level3_inst3d,
+#ifndef OGRE_EE
 	*virtual_cockpit_large_hud_glass_inst3d,
+#endif
 	*virtual_cockpit_large_hud_glass_level1_inst3d,
 	*virtual_cockpit_large_hud_glass_level2_inst3d,
 	*virtual_cockpit_large_hud_glass_level3_inst3d,
@@ -95,7 +99,9 @@ static object_3d_instance
 	*virtual_cockpit_main_rotor_inst3d,
 	*virtual_cockpit_large_hud_main_rotor_inst3d,
 	*virtual_cockpit_adi_inst3d,
+#ifndef OGRE_EE
 	*virtual_cockpit_hsi_inst3d,
+#endif
 	*virtual_cockpit_hsi_level1_inst3d,
 	*virtual_cockpit_hsi_level2_inst3d,
 	*virtual_cockpit_hsi_direction_finder_inst3d,
@@ -103,7 +109,9 @@ static object_3d_instance
 	*virtual_cockpit_hsi_drift_inst3d,
 	*virtual_cockpit_ekran_display_inst3d,
 	*virtual_cockpit_crt_display_inst3d,
+#ifndef OGRE_EE
 	*virtual_cockpit_compass_inst3d,
+#endif
 	*virtual_cockpit_compass_level1_inst3d,
 	*virtual_cockpit_compass_level2_inst3d;
 
@@ -279,6 +287,7 @@ void update_havoc_virtual_cockpit (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void set_cockpit_lighting (matrix3x3 attitude)
 {
 	matrix3x3
@@ -443,9 +452,9 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 		debug_fatal ("Failed to locate display viewpoint in virtual cockpit");
 	}
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
@@ -467,6 +476,7 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 	memcpy (display_viewpoint, &virtual_cockpit_inst3d->vp, sizeof (viewpoint));
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -474,6 +484,7 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -991,6 +1002,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -999,6 +1011,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -1389,6 +1402,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

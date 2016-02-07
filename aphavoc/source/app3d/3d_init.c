@@ -140,6 +140,12 @@ void initialise_application_3d_system (void)
 	initialise_3d_system ();
 #endif
 
+	//
+	//
+	//
+
+	initialise_common_crew_skins ();
+
 	initialise_3d_objects ( "3ddata" );
 
 #ifndef OGRE_EE
@@ -149,12 +155,6 @@ void initialise_application_3d_system (void)
 	initialise_3d_terrain ();
 
 #ifndef OGRE_EE
-	//
-	//
-	//
-
-	initialise_common_crew_skins ();
-
 	//
 	// Initialise Default Terrain Data
 	//

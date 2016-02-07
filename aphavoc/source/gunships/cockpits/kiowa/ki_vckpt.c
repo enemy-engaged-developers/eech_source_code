@@ -520,6 +520,7 @@ void draw_kiowa_virtual_cockpit (void)
 		search.result_sub_object->visible_object = draw_main_rotors;
 	}
 
+#ifndef OGRE_EE
 	//
 	// draw 3D scene
 	//
@@ -838,6 +839,7 @@ void draw_kiowa_virtual_cockpit (void)
 #endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -908,9 +910,9 @@ void get_kiowa_crew_viewpoint (void)
 
 	if (find_object_3d_sub_object (&search_viewpoint) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		virtual_cockpit_inst3d->vp.x = 0.0;
-		virtual_cockpit_inst3d->vp.y = 0.0;
-		virtual_cockpit_inst3d->vp.z = 0.0;
+		virtual_cockpit_inst3d->vp.position.x = 0.0;
+		virtual_cockpit_inst3d->vp.position.y = 0.0;
+		virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
@@ -956,9 +958,9 @@ void get_kiowa_crew_viewpoint (void)
 		{
 			// Now shift the viewpoint (AND the model) by the positive displacement.. puts the cockpit back were it belongs..
 			// but the viewpoint (the head) is in another place.. fini
-			virtual_cockpit_inst3d->vp.x += current_custom_cockpit_viewpoint.x;
-			virtual_cockpit_inst3d->vp.y += current_custom_cockpit_viewpoint.y;
-			virtual_cockpit_inst3d->vp.z += current_custom_cockpit_viewpoint.z;
+			virtual_cockpit_inst3d->vp.position.x += current_custom_cockpit_viewpoint.x;
+			virtual_cockpit_inst3d->vp.position.y += current_custom_cockpit_viewpoint.y;
+			virtual_cockpit_inst3d->vp.position.z += current_custom_cockpit_viewpoint.z;
 		}
 
 	}
@@ -1031,9 +1033,9 @@ void get_kiowa_display_viewpoint (view_modes mode)
 		}
 	}
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	////////////////////////////////////////
 	//

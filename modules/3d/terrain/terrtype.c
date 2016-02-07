@@ -1199,11 +1199,11 @@ void initialise_3d_terrain_types ( void )
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
 
-   	add_new_texture("REFLECTION_JUNGLE", "");
-   	add_new_texture("REFLECTION_WINTER", "");
-   	add_new_texture("REFLECTION_FOREST", "");
-   	add_new_texture("REFLECTION_ROCKS", "");
-   	add_new_texture("REFLECTION_DESERT", "");
+   	(void) add_new_texture("REFLECTION_JUNGLE", "");
+   	(void) add_new_texture("REFLECTION_WINTER", "");
+   	(void) add_new_texture("REFLECTION_FOREST", "");
+   	(void) add_new_texture("REFLECTION_ROCKS", "");
+   	(void) add_new_texture("REFLECTION_DESERT", "");
 
 }
 

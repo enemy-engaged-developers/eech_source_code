@@ -886,7 +886,6 @@ void update_virtual_cockpit_display_view (void)
 
 void get_pilot_head_viewpoint (void)
 {
-#ifndef OGRE_EE
 	if (get_gunship_entity ())
 	{
 		switch (get_global_gunship_type ())
@@ -1185,7 +1184,6 @@ void get_pilot_head_viewpoint (void)
 
 		get_identity_matrix3x3 (pilot_head_vp.attitude);
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1470,12 +1468,15 @@ void draw_virtual_cockpit_3d_view (void)
 {
 #ifndef OGRE_EE
 	int specular = 	specular_rendering_enabled;
+#endif
 
 	ASSERT (get_gunship_entity ());
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = FALSE;
+#endif
 
 	switch (get_global_gunship_type ())
 	{
@@ -2110,10 +2111,11 @@ void draw_virtual_cockpit_3d_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = specular;
+#endif
 
 	get_pilot_head_viewpoint ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2122,11 +2124,12 @@ void draw_virtual_cockpit_3d_view (void)
 
 void draw_virtual_cockpit_3d_crew_view (void)
 {
-#ifndef OGRE_EE
 	vec3d
 		position;
 
+#ifndef OGRE_EE
 	int specular = 	specular_rendering_enabled;
+#endif
 
 	ASSERT (get_gunship_entity ());
 
@@ -2140,7 +2143,9 @@ void draw_virtual_cockpit_3d_crew_view (void)
 
 	ASSERT (get_current_virtual_cockpit_camera (get_crew_role ()) != INVALID_VIRTUAL_COCKPIT_CAMERA);
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = FALSE;
+#endif
 
 	////////////////////////////////////////
 	//
@@ -2209,9 +2214,9 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	// get camera viewpoint
 	//
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
@@ -2286,10 +2291,11 @@ void draw_virtual_cockpit_3d_crew_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = specular;
+#endif
 
 	get_pilot_head_viewpoint ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2300,10 +2306,13 @@ void draw_virtual_cockpit_3d_hud_view (void)
 {
 #ifndef OGRE_EE
 	int specular = 	specular_rendering_enabled;
+#endif
 
 	ASSERT (get_gunship_entity ());
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = FALSE;
+#endif
 
 	switch (get_global_gunship_type ())
 	{
@@ -2367,9 +2376,9 @@ void draw_virtual_cockpit_3d_hud_view (void)
 			// get camera viewpoint
 			//
 
-			virtual_cockpit_inst3d->vp.x = 0.0;
-			virtual_cockpit_inst3d->vp.y = 0.0;
-			virtual_cockpit_inst3d->vp.z = 0.0;
+			virtual_cockpit_inst3d->vp.position.x = 0.0;
+			virtual_cockpit_inst3d->vp.position.y = 0.0;
+			virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 			get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
@@ -2454,9 +2463,9 @@ void draw_virtual_cockpit_3d_hud_view (void)
 			// get camera viewpoint
 			//
 
-			virtual_cockpit_inst3d->vp.x = 0.0;
-			virtual_cockpit_inst3d->vp.y = 0.0;
-			virtual_cockpit_inst3d->vp.z = 0.0;
+			virtual_cockpit_inst3d->vp.position.x = 0.0;
+			virtual_cockpit_inst3d->vp.position.y = 0.0;
+			virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 			get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
 
@@ -2497,10 +2506,11 @@ void draw_virtual_cockpit_3d_hud_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = specular;
+#endif
 
 	get_pilot_head_viewpoint ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2509,15 +2519,18 @@ void draw_virtual_cockpit_3d_hud_view (void)
 
 void draw_virtual_cockpit_3d_periscope_view (void)
 {
-#ifndef OGRE_EE
 	int
 		x_excess = ((full_screen_x_max - full_screen_x_min) - (full_screen_y_max - full_screen_y_min)) / 2,
 		x_min = full_screen_x_min + x_excess,
-		x_max = full_screen_x_max - x_excess,
+		x_max = full_screen_x_max - x_excess;
+#ifndef OGRE_EE
+	int
 		specular = 	specular_rendering_enabled;
+#endif
 
 	ASSERT (get_gunship_entity ());
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = FALSE;
 
 	// clear lights and fog
@@ -2525,6 +2538,7 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
 	set_3d_fogmode ( main_3d_env, FOGMODE_ON_AUTOMATIC );
 	recalculate_3d_environment_settings (main_3d_env);
+#endif
 
 	switch (get_global_gunship_type())
 	{
@@ -2552,10 +2566,11 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = specular;
+#endif
 
 	get_pilot_head_viewpoint ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2564,12 +2579,13 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 
 void draw_virtual_cockpit_3d_display_view (void)
 {
-#ifndef OGRE_EE
 	//VJ# THIS CODE IS ONLY REACHED WHEN CLOSEUP F3 or F4!!!!!!!
 	//
+#ifndef OGRE_EE
 	int specular = 	specular_rendering_enabled;
 
 	specular_rendering_enabled = FALSE;
+#endif
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 
@@ -2794,10 +2810,11 @@ void draw_virtual_cockpit_3d_display_view (void)
 	// restore virtual cockpit 3D instance
 	//
 
+#ifndef OGRE_EE
 	specular_rendering_enabled = specular;
+#endif
 
 	get_pilot_head_viewpoint ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2992,7 +3009,6 @@ void switch_seat_position (void)
 			break;
 		}
 
-#ifndef OGRE_EE
 		// start periscope check by GCsDriver  08-12-2007
 	  	// as copilot is no longer periscopes default position it can already be active
 		if(command_line_pilot_as_periscope_default){
@@ -3001,7 +3017,6 @@ void switch_seat_position (void)
 			set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
 		}
 		}
-#endif
 		// end periscope check by GCsDriver  08-12-2007
 
 	}
@@ -4537,11 +4552,9 @@ enum OBJECT_3D_VISIBILITY get_position_nose_relative_coordinates ( vec3d *positi
 
 	*x = active_3d_environment->x_origin + i;
 	*y = active_3d_environment->y_origin - j;
+#endif
 
 	return ( OBJECT_3D_COMPLETELY_VISIBLE );
-#else
-	return OBJECT_3D_NOT_VISIBLE;
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

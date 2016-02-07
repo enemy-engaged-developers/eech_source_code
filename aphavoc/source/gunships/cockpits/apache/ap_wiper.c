@@ -101,6 +101,7 @@ void initialise_apache_virtual_cockpit_wiper_and_rain_effect (void)
 
 	co_pilot_wipe_type = WIPE_TYPE_UP_THEN_DOWN;
 
+#ifndef OGRE_EE
 	// move wipers to where they need to be with the new cockpit
 	{
 		virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.x = -0.395;
@@ -111,6 +112,7 @@ void initialise_apache_virtual_cockpit_wiper_and_rain_effect (void)
 		virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.y = -0.490;
 		virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.z =  2.190;
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +169,11 @@ void draw_apache_virtual_cockpit_wiper (viewpoint *vp)
 
 	memcpy (&virtual_cockpit_wiper_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_wiper_inst3d->vp.position, virtual_cockpit_wiper_inst3d);
+#else
+	object_3d_draw (virtual_cockpit_wiper_inst3d);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +188,11 @@ void draw_apache_virtual_cockpit_rain_effect (viewpoint *vp)
 	{
 		memcpy (&virtual_cockpit_rain_effect_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 		insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rain_effect_inst3d->vp.position, virtual_cockpit_rain_effect_inst3d);
+#else
+		object_3d_draw (virtual_cockpit_rain_effect_inst3d);
+#endif
 	}
 }
 

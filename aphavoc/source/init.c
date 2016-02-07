@@ -743,6 +743,7 @@ void full_initialise_game (void)
 	ui_force_update ();
 
 	initialise_joysticks ();
+#endif
 
 	////////////////////////////////////////
 	//
@@ -785,7 +786,6 @@ void full_initialise_game (void)
 			command_line_shared_mem_export = 0;
 		}
 	}
-#endif
 
 	////////////////////////////////////////
 	//

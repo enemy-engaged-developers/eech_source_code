@@ -187,9 +187,9 @@ void get_ka50_eo_relative_centred_viewpoint (viewpoint *vp)
 
 	ASSERT (inst3d);
 
-	inst3d->vp.x = 0.0;
-	inst3d->vp.y = 0.0;
-	inst3d->vp.z = 0.0;
+	inst3d->vp.position.x = 0.0;
+	inst3d->vp.position.y = 0.0;
+	inst3d->vp.position.z = 0.0;
 
 	get_local_entity_attitude_matrix (source, inst3d->vp.attitude);
 

@@ -2,7 +2,6 @@
 
 #include "project.h"
 
-#ifndef OGRE_EE
 // fixing watcom 1.7 critical error
 
 #include <stdio.h>
@@ -356,4 +355,3 @@ void update_weapon_load_shared_mem (void)
 	else
 		memset(gPtrSharedMemory->weapon_load, 0, sizeof(gPtrSharedMemory->weapon_load));
 }
-#endif

@@ -954,9 +954,7 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 {
 	int
 		airborne_target,
-#ifndef OGRE_EE
 		triangulate_range,
-#endif
 		result,
 		number_of_iterations;
 
@@ -986,7 +984,6 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 	airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
 
-#ifndef OGRE_EE
 	triangulate_range = (source == get_gunship_entity() && get_range_finder() == RANGEFINDER_TRIANGULATION);
 	if (triangulate_range)
 	{
@@ -998,7 +995,6 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		#endif
 	}
 	else
-#endif
 		range = get_3d_range (pitch_device_position, intercept_point);
 
 	if (range < 0.001)
@@ -1049,7 +1045,6 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				if (!point_inside_map_area (&new_intercept_point))
 					break;
 
-#ifndef OGRE_EE
 				if (triangulate_range)
 				{
 					range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
@@ -1057,7 +1052,6 @@ int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 						range = 1000.0;  // use 200 meters if unable to triangulate range
 				}
 				else
-#endif
 					range = get_3d_range (pitch_device_position, intercept_point);
 
 				if (number_of_iterations == 1)
@@ -1599,7 +1593,6 @@ void update_entity_weapon_systems (entity *source)
 
 							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 							{
-#ifndef OGRE_EE
 								if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
 								{
 									int use_eo_sight_for_direction = is_using_eo_system(command_line_cannontrack != 2);
@@ -1742,7 +1735,6 @@ void update_entity_weapon_systems (entity *source)
 									weapon_config_database[config_type][package].max_pitch_limit
 								);
 
-#endif
 							}
 						// 050320 Jabberwock ends
 						}
@@ -2365,7 +2357,6 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 							if (tracking_point)  // use get vector to EO tracking point, if any
 							{
 								ASSERT(get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);  // only player aircraft have tracking point
-#ifndef OGRE_EE
 
 								if (eo_tracking_point_valid(tracking_point))
 								{
@@ -2378,7 +2369,6 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 									weapon_to_intercept_point_range = get_3d_range(&vp.position, weapon_to_intercept_point_vector_ptr);
 									normalise_3d_vector (weapon_to_intercept_point_vector_ptr);
 								}
-#endif
 							}
 
 							if (target && !tracking_point_valid)

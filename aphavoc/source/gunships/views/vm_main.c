@@ -456,7 +456,6 @@ static int view_mode_available (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-#ifndef OGRE_EE
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
@@ -481,7 +480,6 @@ static int view_mode_available (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-#endif
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		////////////////////////////////////////
 		{
@@ -775,7 +773,6 @@ static void leave_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-#ifndef OGRE_EE
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
@@ -789,7 +786,6 @@ static void leave_view_mode (view_modes mode)
 
 			break;
 		}
-#endif
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		////////////////////////////////////////
@@ -929,7 +925,6 @@ static void enter_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-#ifndef OGRE_EE
 		case VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD:
 		////////////////////////////////////////
 		{
@@ -1011,7 +1006,6 @@ static void enter_view_mode (view_modes mode)
 
 			break;
 		}
-#endif
 		////////////////////////////////////////
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
@@ -1072,7 +1066,6 @@ static void enter_view_mode (view_modes mode)
 			break;
 		}
 		////////////////////////////////////////
-#ifndef OGRE_EE
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
@@ -1088,7 +1081,6 @@ static void enter_view_mode (view_modes mode)
 
 			break;
 		}
-#endif
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////

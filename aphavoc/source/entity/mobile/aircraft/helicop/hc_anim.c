@@ -792,7 +792,6 @@ void animate_helicopter_tail_rotor (entity *en)
 
 void animate_helicopter_wipers (entity *en)
 {
-#ifndef OGRE_EE
 	helicopter
 		*raw;
 
@@ -856,7 +855,6 @@ void animate_helicopter_wipers (entity *en)
 		////Moje 030619 End
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -865,7 +863,6 @@ void animate_helicopter_wipers (entity *en)
 
 void animate_helicopter_eo (entity *en)
 {
-#ifndef OGRE_EE
 	helicopter
 		*raw;
 
@@ -944,7 +941,6 @@ void animate_helicopter_eo (entity *en)
 		}
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

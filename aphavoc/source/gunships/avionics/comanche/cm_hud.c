@@ -85,6 +85,7 @@
 
 #define LENS_HUD_VIEWPORT_SIZE	(64)
 
+#ifndef OGRE_EE
 static env_2d
 	*hud_env;
 
@@ -2326,6 +2327,7 @@ static void draw_weapon_mode_hud (void)
 	display_target_information ();
 	display_weapon_information ();
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2333,6 +2335,7 @@ static void draw_weapon_mode_hud (void)
 
 void initialise_comanche_hud (void)
 {
+#ifndef OGRE_EE
 	hud_env = create_2d_environment ();
 
 	hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SIZE, HUD_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
@@ -2355,6 +2358,7 @@ void initialise_comanche_hud (void)
 	df = 1.0;
 	_dx = 0;
 	_dy = 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2363,6 +2367,7 @@ void initialise_comanche_hud (void)
 
 void deinitialise_comanche_hud (void)
 {
+#ifndef OGRE_EE
 	destroy_2d_environment (hud_env);
 
 	destroy_screen (hud_texture_screen);
@@ -2370,6 +2375,7 @@ void deinitialise_comanche_hud (void)
 	destroy_screen (lens_hud_texture_screen);
 
 	destroy_screen (lens_outer_texture_screen);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2378,6 +2384,7 @@ void deinitialise_comanche_hud (void)
 
 void draw_comanche_hud (void)
 {
+#ifndef OGRE_EE
 	rgb_colour
 		store_hud_colour;
 
@@ -2722,6 +2729,7 @@ char buffer[255];
 
 		end_3d_scene ();
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2730,6 +2738,7 @@ char buffer[255];
 
 void draw_comanche_hud_on_lens_texture (void)
 {
+#ifndef OGRE_EE
 	rgb_colour
 		store_hud_colour;
 
@@ -2865,6 +2874,7 @@ void draw_comanche_hud_on_lens_texture (void)
 	set_active_screen (video_screen);
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

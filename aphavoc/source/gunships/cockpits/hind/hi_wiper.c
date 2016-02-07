@@ -207,7 +207,11 @@ void draw_hind_virtual_cockpit_wiper (viewpoint *vp, int large_hud)
 
 	memcpy (&wiper_arm_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &wiper_arm_inst3d->vp.position, wiper_arm_inst3d);
+#else
+	object_3d_draw (wiper_arm_inst3d);
+#endif
 
 	//
 	// draw wiper rod
@@ -215,7 +219,11 @@ void draw_hind_virtual_cockpit_wiper (viewpoint *vp, int large_hud)
 
 	memcpy (&wiper_rod_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 	insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &wiper_rod_inst3d->vp.position, wiper_rod_inst3d);
+#else
+	object_3d_draw (wiper_rod_inst3d);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,13 +240,21 @@ void draw_hind_virtual_cockpit_rain_effect (viewpoint *vp, int large_hud)
 		{
 			memcpy (&virtual_cockpit_large_hud_rain_effect_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_large_hud_rain_effect_inst3d->vp.position, virtual_cockpit_large_hud_rain_effect_inst3d);
+#else
+			object_3d_draw (virtual_cockpit_large_hud_rain_effect_inst3d);
+#endif
 		}
 		else
 		{
 			memcpy (&virtual_cockpit_rain_effect_inst3d->vp, vp, sizeof (viewpoint));
 
+#ifndef OGRE_EE
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rain_effect_inst3d->vp.position, virtual_cockpit_rain_effect_inst3d);
+#else
+			object_3d_draw (virtual_cockpit_rain_effect_inst3d);
+#endif
 		}
 	}
 }

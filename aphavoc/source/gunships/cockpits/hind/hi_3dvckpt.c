@@ -106,7 +106,11 @@ static object_3d_instance
 	*virtual_cockpit_ekran_display_inst3d,
 	*virtual_cockpit_compass_inst3d;
 
+#ifndef OGRE_EE
 static object_3d_sub_instance
+#else
+static struct OgreGameObjectSceneElement
+#endif
 	*high_detail,
 	*door_high_detail,
 	*door_handle,
@@ -286,8 +290,10 @@ static float
 	door_handle_timer = 0.0,
 	door_state = 0.0;
 
+#ifndef OGRE_EE
 static float
   over_stress_light_value = 0.0;
+#endif
 
 static void animate_shutoff_valve(object_3d_sub_instance* inst, int closed);
 
@@ -325,8 +331,10 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_MAIN_ROTOR);
 	virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_ADI);
 
+#ifndef OGRE_EE
 	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.z = -2.9;
 	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.y = 1.6;
+#endif
 
 	virtual_cockpit_hsi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_HSI_LEVEL1);
 	virtual_cockpit_ekran_display_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_DISPLAYS_EKRAN);
@@ -677,6 +685,7 @@ static void animate_fan(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void animate_rotor_brake(int enabled)
 {
 	float
@@ -688,6 +697,7 @@ static void animate_rotor_brake(int enabled)
 
 	modify_angle(&rotor_brake->relative_pitch, brake_angle, max_movement);
 }
+#endif
 
 static void animate_electrical_instruments(void)
 {
@@ -731,6 +741,7 @@ static void animate_gear_lever(void)
 	modify_angle(&gear_lever->relative_roll, angle, max_movement);
 }
 
+#ifndef OGRE_EE
 static void animate_weapon_switch(entity_sub_types selected_weapon)
 {
 	float
@@ -759,6 +770,7 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 
 	modify_angle(&weapon_select_switch->relative_roll, angle, max_movement);
 }
+#endif
 
 void toggle_mi24_cockpit_doors(void)
 {
@@ -801,6 +813,7 @@ static void animate_doors(void)
 	}
 }
 
+#ifndef OGRE_EE
 static void update_threat_warning_lights(void)
 {
 	rwr_above_light->visible_object = hind_lamps.threat_warning_missile_above;
@@ -913,6 +926,7 @@ static void animate_air_data_vanes()
 	max_movement = (velocity.x * velocity.x + velocity.z * velocity.z) / (rad(360))* get_delta_time() * fabs(offset) / rad(90);
 	vertical_air_data_vanes->relative_heading = bound(vertical_air_data_vanes->relative_heading + bound(offset, -max_movement, max_movement), rad(-90), rad(90));
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1034,6 +1048,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 }
 #endif
 
+#ifndef OGRE_EE
 static void set_cockpit_lighting (matrix3x3 attitude)
 {
 	light_colour
@@ -1052,6 +1067,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 
 	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &current_3d_sun->light_direction, FALSE);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1064,6 +1080,7 @@ void get_hind_3d_cockpit_hud_view_position(float* x, float* y, float* z)
 	*z = hud_view_object->relative_position.z;
 }
 
+#ifndef OGRE_EE
 static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 {
 	int is_copilot = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT;
@@ -1071,8 +1088,12 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 	viewpoint
 		vp;
 
-	object_3d_sub_instance*
-		head_object;
+#ifndef OGRE_EE
+	object_3d_sub_instance
+#else
+	struct OgreGameObjectSceneElement
+#endif
+		*head_object;
 
 	object_3d_sub_object_search_data
 		search;
@@ -1097,9 +1118,9 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 			break;
 		}
 
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
+	virtual_cockpit_inst3d->vp.position.x = 0.0;
+	virtual_cockpit_inst3d->vp.position.y = 0.0;
+	virtual_cockpit_inst3d->vp.position.z = 0.0;
 
 	switch (get_view_mode())
 	{
@@ -1167,8 +1188,9 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, vp.attitude, &vp.position);
 
-	*crew_viewpoint = virtual_cockpit_inst3d->vp;
+	*crew_viewpoint = *( viewpoint *) &virtual_cockpit_inst3d->vp;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1176,6 +1198,7 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 
 void draw_hind_internal_3d_cockpit (unsigned int flags)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -1712,6 +1735,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1720,6 +1744,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic)
 {
+#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -2086,12 +2111,14 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void animate_shutoff_valve(object_3d_sub_instance* inst, int closed)
 {
 	float
@@ -2104,3 +2131,4 @@ void animate_shutoff_valve(object_3d_sub_instance* inst, int closed)
 
 	modify_angle(&inst->relative_pitch, valve_angle, max_movement);
 }
+#endif

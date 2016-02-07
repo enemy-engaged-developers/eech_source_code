@@ -607,6 +607,7 @@ void draw_apache_fixed_cockpit_barometric_altimeter_needle (cockpit_panels panel
 
 void draw_apache_fixed_cockpit_barometric_altimeter_digits (cockpit_panels panel)
 {
+#ifndef OGRE_EE
 	float
 		altimeter_digital_value,
 		x,
@@ -747,6 +748,7 @@ void draw_apache_fixed_cockpit_barometric_altimeter_digits (cockpit_panels panel
 			break;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1030,6 +1032,7 @@ void get_apache_virtual_cockpit_clock_hand_values (float *hours, float *minutes,
 
 static void draw_altitude_counter_digits(void)
 {
+#ifndef OGRE_EE
 	float
 		x_org = 0.0,
 		y_org = 0.0,
@@ -1063,6 +1066,7 @@ static void draw_altitude_counter_digits(void)
 	set_mono_font_position(13.0, 3.0);
 
 	print_mono_font_string(buffer);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

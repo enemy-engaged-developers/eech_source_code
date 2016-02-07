@@ -227,7 +227,6 @@ void deinitialise_game (void)
 	deinitialise_entity_system ();
 
 
-#ifndef OGRE_EE
 	////////////////////////////////////////
 	//
 	// Retro 12Nov2004
@@ -241,7 +240,9 @@ void deinitialise_game (void)
 	if (query_TIR_active() == TRUE)
 		ExitTrackIR();
 
+#ifndef OGRE_EE
 	ShutdownAxisInformation();
+#endif
 
 	////////////////////////////////////////
 	//
@@ -251,7 +252,6 @@ void deinitialise_game (void)
 	// Retro 8Mar2005 - 14Aug2006
 
 	DeInitialise_Shared_Memory(); // we do this in any case, even if it was not set up..
-#endif
 
 	// arneh - delete the ballistics tables
 	delete_ballistics_tables();

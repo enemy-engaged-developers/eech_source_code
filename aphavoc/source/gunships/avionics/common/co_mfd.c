@@ -293,6 +293,7 @@ void draw_symbology_to_texture(
 	rgb_colour background_colour,
 	void (*draw_2d_symbols_function)(int))
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -404,6 +405,7 @@ void draw_symbology_to_texture(
 		set_d3d_culling (TRUE);
 		end_3d_scene ();
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -412,6 +414,7 @@ void draw_symbology_to_texture(
 
 void draw_mfd_layout_grid (void)
 {
+#ifndef OGRE_EE
 	float
 		x,
 		y;
@@ -430,6 +433,7 @@ void draw_mfd_layout_grid (void)
 			draw_2d_line (-1.0, y, 1.0, y, sys_col_red);
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,6 +442,7 @@ void draw_mfd_layout_grid (void)
 
 void eo_3d_texture_merge (screen *eo_3d_texture_screen, screen *eo_3d_texture_screen_over)
 {
+#ifndef OGRE_EE
 	set_3d_render_target (eo_3d_texture_screen);
 
 	d3d_texture_draw (eo_3d_texture_screen_over, 0, 0);
@@ -445,4 +450,5 @@ void eo_3d_texture_merge (screen *eo_3d_texture_screen, screen *eo_3d_texture_sc
 	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
+#endif
 }

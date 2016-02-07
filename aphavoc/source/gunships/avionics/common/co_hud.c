@@ -390,6 +390,7 @@ void display_hud_on_external_view (void)
 //VJ 050126 hud mod background colour
 void draw_hud_background (hud_screen_data *hd, int alpha )
 {
+#ifndef OGRE_EE
 	vertex
 		quad[4];
 
@@ -517,6 +518,7 @@ void draw_hud_background (hud_screen_data *hd, int alpha )
 
 		end_3d_scene ();
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

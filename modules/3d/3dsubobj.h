@@ -80,11 +80,15 @@ extern enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OB
 
 extern enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *parent_search, struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search );
 
-#ifndef OGRE_EE
 // Returns the pointer to a named sub instance of an object, or gives a fatal warning if it doesn't exist
+#ifndef OGRE_EE
 extern object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id);
+#else
+extern struct OgreGameObjectSceneElement* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id);
+#endif
 
 
+#ifndef OGRE_EE
 extern int find_object_3d_sub_objects (object_3d_instance *search_object, const object_3d_sub_object_search_batch *search, int number_of_sub_objects);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

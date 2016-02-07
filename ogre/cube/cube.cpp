@@ -6,15 +6,22 @@
 #include <math.h>
 #include <assert.h>
 #include <string.h>
+#include <fcntl.h>
 
+#include <algorithm>
 #include <memory>
+#include <vector>
+#include <deque>
 
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
 
+#ifdef _MSC_VER
 #define strupr _strupr
 #define stricmp _stricmp
 #define chdir _chdir
+#define snprintf sprintf_s
+#endif
 
 
 #include "ogreee.h"
@@ -35,8 +42,6 @@ void error(const char* msg, ...)
 
 #define safe_fopen_rb(x) safe_fopen(x, "rb")
 
-
-#define snprintf sprintf_s
 
 #define PI (3.14159265359f)
 #define PI2 (PI*2)
@@ -96,11 +101,28 @@ int get_system_texture_index ( const char *name )
 }
 
 // Adapter for textures loading
+typedef std::vector<unsigned char> Text;
+std::deque<Text> texts;
 class TexturesExporter2 : public BaseTexturesExporter
 {
 	virtual void use_texture(int index, const char* name, int mip)
 	{
-		ogre_textures_define(index, number_of_mipmaps, mip, width, height, bpp, texture_image_data);
+		const void* ptr = texture_image_data;
+		if (mip <= 0)
+		{
+			if (bpp == 3)
+			{
+				texts.push_back(Text());
+				texts.back().assign(texture_image_data, texture_image_data + width * height * bpp);
+				ptr = &texts.back()[0];
+			}
+			else
+			{
+				for (unsigned size = width * height * bpp, off = 3; size; size -= 4, off += 4)
+					texture_image_data[off] = ~texture_image_data[off];
+			}
+		}
+		ogre_textures_define(index, number_of_mipmaps, mip, width, height, bpp, ptr);
 	}
 };
 
@@ -109,23 +131,7 @@ struct EE
 {
 	EE(void)
 	{
-		{
-			HKEY key;
-			if (RegOpenKey(HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &key) == ERROR_SUCCESS)
-			{
-				char path[260] = "";
-				DWORD size = sizeof(path);
-				DWORD type = REG_SZ;
-				RegQueryValueEx(key, "Installation Path", NULL, &type, (LPBYTE)path, &size);
-				if (*path && size)
-				{
-					path[size] = '\0';
-					strcat(path, "\\COHOKUM\\3DDATA");
-					chdir(path);
-				}
-			}
-			RegCloseKey(key);
-		}
+		chdir("3ddata");
 
 		{
 			TexturesExporter2 exporter;
@@ -502,8 +508,26 @@ int main(int argc, char **argv)
 #ifdef _CRTDBG_MAP_ALLOC
 _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
+	{
+		HKEY key;
+		if (RegOpenKey(HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &key) == ERROR_SUCCESS)
+		{
+			char path[260] = "";
+			DWORD size = sizeof(path);
+			DWORD type = REG_SZ;
+			RegQueryValueEx(key, "Installation Path", NULL, &type, (LPBYTE)path, &size);
+			if (*path && size)
+			{
+				path[size] = '\0';
+				strcat(path, "\\COHOKUM");
+				chdir(path);
+			}
+		}
+		RegCloseKey(key);
+	}
 	struct OgreRun run = { thread, 0, key_func, 0 };
 	ogre_run(&run);
+	return 0;
 }
 
 #ifdef __cplusplus

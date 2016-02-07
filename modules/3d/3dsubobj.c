@@ -1089,7 +1089,7 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( 
 	ASSERT ( parent_search->search_object->magic == 0xDEADBEAF );
 	ASSERT ( parent_search->search_object->vp.internal );
 
-	if ( !ogre_scene_find2 ( &parent_search->search_object->vp, search->sub_object_index, parent_search->sub_object_index, &ogre_search ) || ( unsigned ) search->search_depth >= ogre_search.number_of_subobjects )
+	if ( !ogre_scene_find2 ( &parent_search->search_object->vp, search->sub_object_index, parent_search->result_sub_object - parent_search->search_object->vp.elements, &ogre_search ) || ( unsigned ) search->search_depth >= ogre_search.number_of_subobjects )
 	{
 		search->result_sub_object = NULL;
 		return SUB_OBJECT_SEARCH_RESULT_OBJECT_NOT_FOUND;
@@ -1189,8 +1189,13 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
+#ifndef OGRE_EE
 object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id)
+#else
+struct OgreGameObjectSceneElement* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id)
+#endif
 {
 	object_3d_sub_object_search_data
 		search;
@@ -1210,6 +1215,7 @@ object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsig
 	return search.result_sub_object;
 }
 
+#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

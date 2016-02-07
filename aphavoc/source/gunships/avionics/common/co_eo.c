@@ -2531,9 +2531,16 @@ void update_eo_max_visual_range(void)
 	float amb_red, amb_green, amb_blue,
 			sun_red, sun_green, sun_blue;
 
+#ifndef OGRE_EE
 	get_3d_fog_distances (main_3d_env, &fog_start, &fog_end);
 	get_3d_ambient_light_level (&amb_red, &amb_green, &amb_blue);
 	get_3d_main_light_level (&sun_red, &sun_green, &sun_blue);
+#else
+	// FIXME
+	fog_start = 5000.0f; fog_end = 10000.0f;
+	amb_red = amb_green = amb_blue = 1.0f;
+	sun_red = sun_green = sun_blue = 1.0f;
+#endif
 
 	//eo_max_visual_range = fog_end;
 

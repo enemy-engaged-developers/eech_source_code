@@ -1432,6 +1432,7 @@ float ui_display_text (const char *text, float x, float y)
 
 	if ( d3d_in_3d_scene )
 	{
+#endif
 
 		float
 			ox,
@@ -1441,6 +1442,7 @@ float ui_display_text (const char *text, float x, float y)
 			ix,
 			iy;
 
+#ifndef OGRE_EE
 		font_character
 			*character;
 
@@ -1453,11 +1455,13 @@ float ui_display_text (const char *text, float x, float y)
 
 		const char
 			*text_ptr;
+#endif
 
 		viewport
 			old_active_viewport,
 			new_viewport;
 
+#ifndef OGRE_EE
 		int_viewport
 			old_active_int_viewport;
 
@@ -1481,6 +1485,7 @@ float ui_display_text (const char *text, float x, float y)
 
 	//	if ( begin_3d_scene () )
 		{
+#endif
 
 			if (!text)
 			{
@@ -1499,6 +1504,7 @@ float ui_display_text (const char *text, float x, float y)
 			convert_float_to_int ( x, &ix );
 			convert_float_to_int ( y, &iy );
 
+#ifndef OGRE_EE
 			x = ix;
 			y = iy;
 
@@ -1520,6 +1526,7 @@ float ui_display_text (const char *text, float x, float y)
 			specular.green = 0;
 			specular.blue = 0;
 			specular.alpha = 255;
+#endif
 
 			//
 			// Save old viewport values
@@ -1527,7 +1534,9 @@ float ui_display_text (const char *text, float x, float y)
 
 			old_active_viewport = active_viewport;
 
+#ifndef OGRE_EE
 			old_active_int_viewport = active_int_viewport;
+#endif
 
 			//
 			// Calculate new viewport settings
@@ -1545,6 +1554,7 @@ float ui_display_text (const char *text, float x, float y)
 
 			ui_set_origin (ox, oy);
 
+#ifndef OGRE_EE
 			//
 			// Set renderstates
 			//
@@ -1797,7 +1807,15 @@ float ui_display_text (const char *text, float x, float y)
 			//
 
 			flush_triangle_primitives ();
+#else
+			if ( x < active_viewport.x_max && y < active_viewport.y_max )
+			{
+				ogre_ui_text ( current_font - ui_fonts, x, y, text, current_font_colour.colour );
+				return ogre_ui_width ( current_font - ui_fonts, text );
+			}
+#endif
 
+#ifndef OGRE_EE
 			//
 			// Restore the old viewport settings
 			//
@@ -1821,19 +1839,11 @@ float ui_display_text (const char *text, float x, float y)
 		}
 	}
 	else
+#endif
 	{
 
 		return ( 0 );
 	}
-#else
-	if (text)
-	{
-		x += ui_x_origin;
-		y += ui_y_origin;
-		ogre_ui_text ( current_font - ui_fonts, x, y, text, current_font_colour.colour );
-	}
-	return 0;
-#endif
 }
 
 #ifndef OGRE_EE

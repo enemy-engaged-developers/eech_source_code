@@ -165,7 +165,11 @@ static int set_new_ort_position(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 static void switch_head_aiming_state(object_3d_sub_instance* helmet_inst)
+#else
+static void switch_head_aiming_state(struct OgreGameObjectSceneElement* helmet_inst)
+#endif
 {
 	int
 		valid_state = FALSE;
@@ -223,7 +227,11 @@ void animate_co_pilot_head(object_3d_instance* cockpit_inst3d)
 		diff = 0.0,
 		dt = get_delta_time(),
 		delta;
+#ifndef OGRE_EE
 	object_3d_sub_instance
+#else
+	struct OgreGameObjectSceneElement
+#endif
 		*torso_inst,
 		*helmet_inst;
 	object_3d_sub_object_search_data
