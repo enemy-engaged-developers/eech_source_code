@@ -608,7 +608,7 @@ namespace
 			ogre_scene_manager->getRootSceneNode()->addChild(terrain);
 
 			// Current sector is not changed, no sectors change visibility
-			if (abs(x_sector == cur_x) <= 1 && abs(z_sector - cur_z) <= 1)
+			if (abs(x_sector - cur_x) <= 1 && abs(z_sector - cur_z) <= 1)
 				return;
 
 			cur_x = x_sector;
@@ -1044,7 +1044,7 @@ void OGREEE_CALL ogre_terrain_clear(void)
 void OGREEE_CALL ogre_terrain_user_scene(struct OgreGameObjectScene* scene)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
-	ogre_log_(__FUNCTION__, "%p", scene);
+	//ogre_log_(__FUNCTION__, "%p", scene);
 
 #ifdef USE_TERRAIN_OBJECTS
 	Semaphore sem;

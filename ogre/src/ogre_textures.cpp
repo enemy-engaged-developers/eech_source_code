@@ -49,10 +49,13 @@ namespace
 
 			for (Textures::iterator itor(textures.begin()); itor != textures.end(); ++itor)
 			{
-				assert(clearable || !itor->second.file.empty() || !itor->second.override.empty());
 				if (clearable && itor->second.override.empty())
+				{
+					assert(itor->second.pb.data || !itor->second.file.empty());
 					continue;
+				}
 
+				assert(itor->second.pb.data || !itor->second.file.empty() || !itor->second.override.empty());
 				TextureName texture_name(itor->first);
 				Ogre::TextureManager::getSingleton().unload(texture_name);
 				Ogre::TextureManager::getSingleton().remove(texture_name);
