@@ -79,7 +79,6 @@ void set_full_screen_viewport (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 void set_main_3d_params
 (
 	display_3d_tints tint,
@@ -117,11 +116,9 @@ void set_main_3d_params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_levels light_level, display_3d_noise_levels noise_level)
 {
-#ifndef OGRE_EE
 	set_main_3d_params
 	(
 		tint,
@@ -134,9 +131,6 @@ void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_lev
 		full_screen_width_view_angle,
 		full_screen_height_view_angle
 	);
-#else
-	//FIXME
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +139,6 @@ void set_main_3d_full_screen_params (display_3d_tints tint, display_3d_light_lev
 
 void set_pilots_full_screen_params (int night_vision_system_active)
 {
-#ifndef OGRE_EE
 	display_3d_tints
 		tint;
 	display_3d_light_levels
@@ -182,9 +175,6 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 		level = DISPLAY_3D_LIGHT_LEVEL_HIGH;
 	}
 	set_main_3d_full_screen_params (tint, level, DISPLAY_3D_NOISE_LEVEL_NONE);
-#else
-	//FIXME
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +183,6 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 
 void set_main_3d_inset_target_screen_params (void)
 {
-#ifndef OGRE_EE
 	set_main_3d_params
 	(
 		DISPLAY_3D_TINT_CLEAR,
@@ -208,9 +197,6 @@ void set_main_3d_inset_target_screen_params (void)
 	);
 
 	application_3d_rain_active = FALSE;
-#else
-	// FIXME
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +205,6 @@ void set_main_3d_inset_target_screen_params (void)
 
 void set_crew_view_full_screen_params (void)
 {
-#ifndef OGRE_EE
 	float
 		width_view_angle,
 		height_view_angle;
@@ -238,9 +223,6 @@ void set_crew_view_full_screen_params (void)
 		width_view_angle,
 		height_view_angle
 	);
-#else
-	// FIXME
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,11 +242,6 @@ void draw_main_3d_scene (viewpoint *vp)
 
 		main_vp = *vp;
 	}
-
-#ifdef OGRE_EE
-	// FIXME
-	ogre_set_viewpoint (&main_vp.position.x, main_vp.attitude);
-#endif
 
 	draw_application_3d_scene ();
 

@@ -60,7 +60,6 @@
 
 
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,11 +221,13 @@ void destroy_3d_environment ( env_3d *env )
 
 	reset_3d_shadow_settings ( env );
 
+#ifndef OGRE_EE
 	//
 	// Remove any horizon images
 	//
 
 	destroy_all_3d_horizon_images ( env );
+#endif
 
 	safe_free ( env );
 }
@@ -1925,7 +1926,9 @@ void recalculate_3d_environment_settings ( env_3d *env )
 	// Update the positioning according to the time of day
 	//
 
+#ifndef OGRE_EE
 	update_3d_horizon ( env );
+#endif
 
 	if ( env->fogmode == FOGMODE_ON_AUTOMATIC )
 	{
@@ -2150,6 +2153,7 @@ void calculate_3d_sun_light ( env_3d *env )
 
 	interpolate_two_light_settings ( &env->sun_light, &start_light, &end_light, weather_t );
 
+#ifndef OGRE_EE
 	//
 	// Handle the case where there is only one light setting
 	//
@@ -2159,6 +2163,7 @@ void calculate_3d_sun_light ( env_3d *env )
 	set_3d_sun_colour ( &env->sun_light.object_colour );
 
 	set_3d_sun_scale ( env->sun_light.scale );
+#endif
 
 	if ( env->sun_light.main_light )
 	{
@@ -2180,7 +2185,9 @@ void calculate_3d_sun_light ( env_3d *env )
 		env->shadows_enabled = TRUE * !!command_line_render_shadows;
 		env->shadow_strength = env->sun_light.shadow;
 
+#ifndef OGRE_EE
 		set_3d_sun_light_intensity ( env->sun_light.object_colour.alpha );
+#endif
 	}
 }
 
@@ -2257,9 +2264,11 @@ void calculate_3d_moon_light ( env_3d *env )
 	// Handle the case where there is only one light setting
 	//
 
+#ifndef OGRE_EE
 	set_3d_moon_position ( env->moon_light.heading, env->moon_light.pitch );
 
 	set_3d_moon_colour ( &env->moon_light.object_colour );
+#endif
 
 	if ( env->moon_light.main_light )
 	{
@@ -2484,4 +2493,3 @@ float get_interpolated_angle ( float angle1, float angle2, float t )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

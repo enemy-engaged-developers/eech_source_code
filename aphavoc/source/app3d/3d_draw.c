@@ -70,7 +70,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 int
 	application_3d_rain_active = TRUE;
 
@@ -157,7 +156,9 @@ static void set_main_3d_rain_wind (void)
 		rain_wind_velocity = 0.0;
 	}
 
+#ifndef OGRE_EE
 	set_3d_rain_wind (&rain_wind_unit_vector, rain_wind_velocity);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,21 +171,21 @@ void update_application_3d_scene ( void )
 	if ( application_3d_rain_active )
 	{
 
+#ifndef OGRE_EE
 		update_3d_rain (main_3d_env, get_3d_time_of_day (main_3d_env), main_vp.attitude);
 
 		update_3d_lightning_strikes ( main_3d_env );
+#endif
 	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void draw_application_3d_scene (void)
 {
 
-#ifndef OGRE_EE
 	set_3d_active_environment (main_3d_env);
 
 	set_3d_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
@@ -205,6 +206,12 @@ void draw_application_3d_scene (void)
 
 	recalculate_3d_environment_settings (main_3d_env);
 
+#ifdef OGRE_EE
+	// FIXME pass current environment to Ogre
+	ogre_set_viewpoint (&main_vp.position.x, main_vp.attitude);
+#endif
+
+#ifndef OGRE_EE
 	if ( command_line_3d_visual_clear_edges )
 	{
 
@@ -334,6 +341,7 @@ void draw_application_3d_scene (void)
 	ogre_scenes_commit ();
 #endif
 
+#ifndef OGRE_EE
 #if ( OEM_3DLABS_VERSION )
 
 	if ( full_screen_3d_information )
@@ -407,6 +415,7 @@ void draw_application_3d_scene (void)
 		}
 	}
 
+#endif
 #endif
 
 }

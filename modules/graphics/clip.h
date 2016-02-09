@@ -76,6 +76,7 @@ extern int
 
 extern vertex
 	clip_3d_crds[64];
+#endif
 
 extern float
 	clip_hither,
@@ -83,6 +84,7 @@ extern float
 	clip_yonder,
 	clip_yonder_reciprocal;
 
+#ifndef OGRE_EE
 extern int
 	number_of_xmin_coordinates_inserted,
 	number_of_xmax_coordinates_inserted,
@@ -99,9 +101,11 @@ extern void initialise_3d_clip_system ( void );
 extern void reset_clip_statistics ( void );
 
 extern void report_clip_statistics ( void );
+#endif
 
 extern void set_3d_clip_extents ( float yonder, float hither, float xmin, float ymin, float xmax, float ymax, float zbuffer_zmin, float zbuffer_zmax );
 
+#ifndef OGRE_EE
 extern vertex *clip_3d_polygon ( vertex *polygon, int outcode );
 
 extern vertex *clip_3d_dual_texture_polygon ( vertex *polygon, int outcode );

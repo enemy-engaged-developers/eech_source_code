@@ -2920,8 +2920,6 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->object_diffuse_value = 255;
 #else
 
-	object->magic = 0xDEADBEAF;
-
 	ogre_scene_create ( &object->vp, index );
 
 	object->temporary = FALSE;
@@ -3110,11 +3108,7 @@ void destruct_3d_object ( object_3d_instance *object )
 		object->sub_objects = NULL;
 	}
 #else
-	ASSERT ( object->magic == 0xDEADBEAF );
-
 	ogre_scene_destroy ( &object->vp );
-
-	object->magic = 0xACE2FACC;
 #endif
 
 	safe_free ( object );
@@ -3449,8 +3443,6 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 
 	main_object = ( object_3d_instance * ) this_object;
 #else
-	ASSERT ( search->search_object->magic == 0xDEADBEAF );
-
 	main_object = search->search_object;
 
 	this_object = search->result_sub_object - main_object->vp.elements;
@@ -3569,8 +3561,6 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 
 	main_object = ( object_3d_instance * ) this_object;
 #else
-	ASSERT ( search->search_object->magic == 0xDEADBEAF );
-
 	main_object = search->search_object;
 
 	this_object = search->result_sub_object - main_object->vp.elements;
@@ -3718,10 +3708,6 @@ int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_came
 	struct OBJECT_3D_SCENE_DATABASE_ENTRY
 		*scene;
 
-#ifdef OGRE_EE
-	ASSERT ( object->magic == 0xDEADBEAF );
-#endif
-
 	scene = &objects_3d_scene_database[object->object_number];
 
 	total = 0;
@@ -3790,10 +3776,6 @@ object_3d_scene_camera *get_3d_object_camera ( object_3d_instance *object, objec
 	struct OBJECT_3D_SCENE_DATABASE_ENTRY
 		*scene;
 
-#ifdef OGRE_EE
-	ASSERT ( object->magic == 0xDEADBEAF );
-#endif
-
 	scene = &objects_3d_scene_database[object->object_number];
 
 	depth = camera_depth;
@@ -3830,10 +3812,6 @@ float get_object_3d_camera_lifetime ( object_3d_instance *obj, object_3d_camera_
 	object_3d_scene_camera
 		*camera;
 
-#ifdef OGRE_EE
-	ASSERT ( obj->magic == 0xDEADBEAF );
-#endif
-
 	//
 	// Get the camera
 	//
@@ -3869,10 +3847,6 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 
 	object_3d_scene_camera
 		*camera;
-
-#ifdef OGRE_EE
-	ASSERT ( obj->magic == 0xDEADBEAF );
-#endif
 
 	//
 	// Get the camera

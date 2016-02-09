@@ -947,7 +947,7 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 
 					target_sqr_range = (dx * dx) + (dy * dy) + (dz * dz);
 
- 					los_to_target_distance = 0.0;
+					los_to_target_distance = 0.0;
 
 					object_3d_index = get_local_entity_int_value (target, INT_TYPE_OBJECT_3D_SHAPE);
 
@@ -983,7 +983,7 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 
 									if (target_sqr_range < max_sqr_range)
 									{
-				 						los_to_target_distance = get_3d_perp_dist_of_point_from_line (los_start, los_end, &target_position, NULL);
+										los_to_target_distance = get_3d_perp_dist_of_point_from_line (los_start, los_end, &target_position, NULL);
 
 										object_3d_index = get_local_entity_int_value (target, INT_TYPE_OBJECT_3D_SHAPE);
 
@@ -1417,10 +1417,10 @@ static void slew_eo(float elevation, float azimuth)
 	float
 		adjusted_elevation,
 		adjusted_azimuth,
-		 delta_eo_azimuth,
-		 frame_delta_eo_azimuth,
-		 delta_eo_elevation,
-		 frame_delta_eo_elevation;
+		delta_eo_azimuth,
+		frame_delta_eo_azimuth,
+		delta_eo_elevation,
+		frame_delta_eo_elevation;
 
 
 	float frame_slew_rate = rad (60.0) * get_delta_time ();
@@ -1797,10 +1797,10 @@ void select_previous_eo_target (void)
 
 	set_eo_slave_target(new__target);
 
-  if(new__target)
-  {
-    cpg_report_next_prev_target(new__target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
-  }
+	if(new__target)
+	{
+		cpg_report_next_prev_target(new__target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2079,7 +2079,7 @@ static void switch_to_point_lock(void)
 		eo_target_locked = 0;
 		eo_stop_tracking();
 	}
-	
+
 	eo_max_visual_range = visible_range;
 
 }
@@ -2140,7 +2140,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 			previous_mouse_update_flag = get_mouse_update_flag();
 		}
-		
+
 		// move tracking point perpendicular
 		if (continuous_target_acquisition_system_steer_left_fast_key || dx < - 2500.0)
 			movement_rate -= COARSE_TRACKING_RATE;
@@ -2373,7 +2373,7 @@ void joystick_slew_eo_system(float slew_rate)
 
 float get_eo_azimuth (float rotate_rate, float coarse_slew_rate, float eo_azimuth, float eo_min_azimuth, float eo_max_azimuth, float mouse_slew_rate)
 {
-	 // POV flir control thealx 130215
+	// POV flir control thealx 130215
 
 	if (!eo_target_locked)
 	{
@@ -2412,13 +2412,13 @@ float get_eo_azimuth (float rotate_rate, float coarse_slew_rate, float eo_azimut
 			}
 		}
 	}
-	
+
 	return eo_azimuth;
 }
 
 float get_eo_elevation (float rotate_rate, float coarse_slew_rate, float eo_elevation, float eo_min_elevation, float eo_max_elevation, float mouse_slew_rate)
 {
-	 // POV flir control thealx 130215
+	// POV flir control thealx 130215
 
 	if (!eo_target_locked)
 	{
@@ -2482,7 +2482,7 @@ float get_new_eo_zoom (float zoom)
 float get_old_eo_zoom (float fov, float max_fov, float min_fov)
 {
 
-		// "Old EO" Zoom control by Joystick thealx 130215 
+		// "Old EO" Zoom control by Joystick thealx 130215
 
 		if (command_line_eo_zoom_joystick_index != -1 && min_fov != max_fov)
 		{
@@ -2531,16 +2531,9 @@ void update_eo_max_visual_range(void)
 	float amb_red, amb_green, amb_blue,
 			sun_red, sun_green, sun_blue;
 
-#ifndef OGRE_EE
 	get_3d_fog_distances (main_3d_env, &fog_start, &fog_end);
 	get_3d_ambient_light_level (&amb_red, &amb_green, &amb_blue);
 	get_3d_main_light_level (&sun_red, &sun_green, &sun_blue);
-#else
-	// FIXME
-	fog_start = 5000.0f; fog_end = 10000.0f;
-	amb_red = amb_green = amb_blue = 1.0f;
-	sun_red = sun_green = sun_blue = 1.0f;
-#endif
 
 	//eo_max_visual_range = fog_end;
 
@@ -2570,9 +2563,9 @@ void update_eo_max_visual_range(void)
 			break;
 		}
 	}
-	
+
 	eo_max_visual_range = visible_range;
-	
+
 //	debug_log("eo_max_visual_range %f, fog end %f, eo_low_light %i", eo_max_visual_range, fog_range, eo_low_light);
 }
 // end full_eo_range by GCsDriver  08-12-2007

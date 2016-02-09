@@ -67,7 +67,6 @@
 #include "project.h"
 
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,11 +89,9 @@ static void modify_3d_objects_approximations ( float factor );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void initialise_application_3d_system (void)
 {
-#ifndef OGRE_EE
 
   float light_level = max(min(1.0f,global_night_light_level),0.0f);
 
@@ -103,7 +100,6 @@ void initialise_application_3d_system (void)
 	ASSERT ( !main_3d_env );
 
 	ASSERT ( !main_3d_single_light_env );
-#endif
 
 	//
 	// 3D resolution
@@ -154,25 +150,29 @@ void initialise_application_3d_system (void)
 
 	initialise_3d_terrain ();
 
-#ifndef OGRE_EE
 	//
 	// Initialise Default Terrain Data
 	//
 
+#ifndef OGRE_EE
 	set_3d_terrain_detail_blend_parameters ( 0.7 );
 //set_3d_terrain_detail_blend_parameters ( 0 );
 
 	//set_terrain_3d_sector_scan_radius ( 10 );
 	set_terrain_3d_sector_scan_radius ( 5 );
+#endif
 
+#ifndef OGRE_EE
 	//
 	// Initialise 3D environment
 	//
 
 	initialise_3d_lightning ( TEXTURE_ANIMATION_INDEX_LIGHTNING, TEXTURE_INDEX_LIGHTNING_BASE );
+#endif
 
 	main_3d_env = create_3d_environment ();
 
+#ifndef OGRE_EE
 	{
 
 		//
@@ -233,7 +233,9 @@ void initialise_application_3d_system (void)
 		add_3d_horizon_image ( main_3d_env, "3ddata\\horizon\\snow12am",	MIDNIGHT_TIME,			WEATHERMODE_SNOW );
 		add_3d_horizon_image ( main_3d_env, "3ddata\\horizon\\snow12am",	NIGHT_TIME,				WEATHERMODE_SNOW );
 	}
+#endif
 
+#ifndef OGRE_EE
 	//
 	// Initialise sun / moon / stars
 	//
@@ -243,7 +245,9 @@ void initialise_application_3d_system (void)
 	initialise_3d_moon ( TEXTURE_INDEX_MOON );
 
 	initialise_3d_stars ( "3ddata\\stars.bin" );
+#endif
 
+#ifndef OGRE_EE
 	//
 	// Initialise the clouds
 	//
@@ -261,6 +265,7 @@ void initialise_application_3d_system (void)
 	set_cloud_3d_base_height ( 6000 );
 
 	set_cloud_3d_scan_radius ( 7 );
+#endif
 
 	//
 	// Initialise the viewing system for the environment
@@ -647,6 +652,7 @@ void initialise_application_3d_system (void)
 
 	set_3d_fog_distances ( main_3d_env, 0.0, 10000.0 );
 
+#ifndef OGRE_EE
 	//
 	// Initialise the weather conditions
 	//
@@ -672,6 +678,7 @@ void initialise_application_3d_system (void)
 
 		set_3d_snow_texture ( TEXTURE_INDEX_SNOW_1 );
 	}
+#endif
 
 	//
 	// initialise viewpoint
@@ -779,7 +786,6 @@ void initialise_application_3d_system (void)
 	//
 
 	set_3d_detail_levels ();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -792,6 +798,7 @@ void deinitialise_application_3d_system (void)
 
 #ifndef OGRE_EE
 	deinitialise_3d_stars ();
+#endif
 
 	destroy_3d_environment (main_3d_env);
 
@@ -801,6 +808,7 @@ void deinitialise_application_3d_system (void)
 
 	main_3d_single_light_env = NULL;
 
+#ifndef OGRE_EE
 	//
 	// 3D textures
 	//
@@ -831,7 +839,6 @@ void deinitialise_application_3d_system (void)
 	deinitialise_3d_objects ();
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1637,4 +1644,3 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

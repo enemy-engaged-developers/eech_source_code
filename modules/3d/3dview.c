@@ -60,7 +60,6 @@
 
 
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,8 +123,10 @@ void set_3d_view_distances ( env_3d *env, float yonder, float hither, float zbuf
 	env->yonder_distance = yonder;
 	env->hither_distance = hither;
 
+#ifndef OGRE_EE
 	env->zbuffer_z_minimum_value = zbuffer_zmin;
 	env->zbuffer_z_maximum_value = zbuffer_zmax;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,12 +135,14 @@ void set_3d_view_distances ( env_3d *env, float yonder, float hither, float zbuf
 
 void set_3d_origin ( env_3d *env, float xorigin, float yorigin )
 {
+#ifndef OGRE_EE
 
 	ASSERT ( env );
 
 	env->x_origin = xorigin;
 
 	env->y_origin = yorigin;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,13 +151,16 @@ void set_3d_origin ( env_3d *env, float xorigin, float yorigin )
 
 void set_3d_viewcone (  env_3d *env, float width, float height, float width_view_angle, float height_view_angle )
 {
+#ifndef OGRE_EE
 
 	float
 		tan_width_angle,
 		tan_height_angle;
+#endif
 
 	ASSERT ( env );
 
+#ifndef OGRE_EE
 	//
 	// viewangle must never be PI/2 or above, as it is impossible to occur in nature
 	//
@@ -168,6 +174,7 @@ void set_3d_viewcone (  env_3d *env, float width, float height, float width_view
 	env->screen_j_scale = ( height / ( 2.0 * tan_height_angle ) );
 
 	env->width_view_angle = width_view_angle;
+#endif
 
 	env->height_view_angle = height_view_angle;
 }
@@ -321,6 +328,7 @@ void get_3d_view_distances ( env_3d *env, float *yonder, float *hither )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 void get_3d_origin ( env_3d *env, float *xorigin, float *yorigin )
 {
 
@@ -329,6 +337,7 @@ void get_3d_origin ( env_3d *env, float *xorigin, float *yorigin )
 	*xorigin = env->x_origin;
 	*yorigin = env->y_origin;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,12 +386,20 @@ void realise_3d_clip_extents ( env_3d *env )
 
 	ASSERT ( env );
 
+#ifndef OGRE_EE
 	set_3d_clip_extents ( env->yonder_distance, env->hither_distance,
 									env->clip_xmin, env->clip_ymin,
 									env->clip_xmax, env->clip_ymax,
 									env->zbuffer_z_minimum_value,
 									env->zbuffer_z_maximum_value );
+#else
+	set_3d_clip_extents ( env->yonder_distance, env->hither_distance,
+									env->clip_xmin, env->clip_ymin,
+									env->clip_xmax, env->clip_ymax,
+									0, 0 );
+#endif
 
+#ifndef OGRE_EE
 	//
 	// Also set the viewcone stuff here
 	//
@@ -397,11 +414,12 @@ void realise_3d_clip_extents ( env_3d *env )
 	{
 		debug_fatal ("wrong high_lod_hack or eo_models_quality value, please check eech.ini");
 	}
-	
+
 	if (!draw_eo_3d_scene)
 		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( (59.99 + command_line_high_lod_hack * 20) / 2 ) );
 	else
 		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( (9.99 + command_line_eo_quality * 25) / 2 ) );
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,7 +447,11 @@ void realise_3d_lightmode ( env_3d *env )
 	// Now put in the main lights ( sun, moon, or main_3d_light )
 	//
 
+#ifndef OGRE_EE
 	setup_environment_lights_in_scene ( env );
+#else
+	// FIXME
+#endif
 
 	shadows_enabled = env->shadows_enabled;
 
@@ -466,7 +488,11 @@ void realise_3d_fogmode ( env_3d *env )
 	if ( ( env->fogmode == FOGMODE_ON_AUTOMATIC ) || ( env->fogmode == FOGMODE_ON_MANUAL ) )
 	{
 
+#ifndef OGRE_EE
 		set_d3d_fog_parameters ( TRUE, env->fog_colour, env->fog_start, env->fog_end );
+#else
+		// FIXME
+#endif
 
 		if ( env->yonder_distance > env->fog_end )
 		{
@@ -477,7 +503,11 @@ void realise_3d_fogmode ( env_3d *env )
 	else
 	{
 
+#ifndef OGRE_EE
 		set_d3d_fog_parameters ( FALSE, env->fog_colour, env->fog_start, env->fog_end );
+#else
+		// FIXME
+#endif
 	}
 }
 
@@ -490,16 +520,21 @@ void realise_3d_shadow_setting ( env_3d *env )
 
 	ASSERT ( env );
 
+#ifndef OGRE_EE
 	set_d3d_shadow_colour ( env->shadow_setting.light__colour.red * 255.0,
 									env->shadow_setting.light__colour.green * 255.0,
 									env->shadow_setting.light__colour.blue * 255.0,
 									128.0 );
+#else
+	// FIXME
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef OGRE_EE
 int get_3d_point_2d_outcode ( float x, float y, float z )
 {
 
@@ -556,8 +591,8 @@ int get_3d_point_2d_outcode ( float x, float y, float z )
 
 	return ( outcode );
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

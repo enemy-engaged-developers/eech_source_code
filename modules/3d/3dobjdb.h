@@ -573,6 +573,9 @@ struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 		relative_roll_initial,
 		relative_roll_minimum,
 		relative_roll_maximum;
+#else
+	struct OgreSubObjectsSearch
+		saved_search;
 #endif
 };
 
@@ -638,9 +641,7 @@ extern struct OBJECT_3D_INSTANCE * construct_3d_object ( object_3d_index_numbers
 
 extern void destruct_3d_object ( struct OBJECT_3D_INSTANCE *object );
 
-#ifndef OGRE_EE
 extern void scale_object_3d_approximation_distances ( object_3d_index_numbers scene_index, float factor );
-#endif
 
 extern int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers index, vec3d *return_points, int depth );
 

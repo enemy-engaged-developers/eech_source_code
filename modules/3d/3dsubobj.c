@@ -921,18 +921,14 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OBJECT_3D
 		return ( SUB_OBJECT_SEARCH_RESULT_OBJECT_NOT_FOUND );
 	}
 #else
-	struct OgreSubObjectsSearch
-		ogre_search;
-
-	ASSERT ( search->search_object->magic == 0xDEADBEAF );
 	ASSERT ( search->search_object->vp.internal );
 
-	if ( !ogre_scene_find ( &search->search_object->vp, search->sub_object_index, &ogre_search ) || ( unsigned ) search->search_depth >= ogre_search.number_of_subobjects )
+	if ( ( !search->search_depth && !ogre_scene_find ( &search->search_object->vp, search->sub_object_index, &search->saved_search ) ) || ( unsigned ) search->search_depth >= search->saved_search.number_of_subobjects )
 	{
 		search->result_sub_object = NULL;
 		return SUB_OBJECT_SEARCH_RESULT_OBJECT_NOT_FOUND;
 	}
-	search->result_sub_object = &search->search_object->vp.elements[ogre_search.subobjects[search->search_depth]];
+	search->result_sub_object = &search->search_object->vp.elements[search->saved_search.subobjects[search->search_depth]];
 	return SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND;
 #endif
 }
@@ -1083,19 +1079,15 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( 
 		return ( SUB_OBJECT_SEARCH_RESULT_OBJECT_NOT_FOUND );
 	}
 #else
-	struct OgreSubObjectsSearch
-		ogre_search;
-
-	ASSERT ( parent_search->search_object->magic == 0xDEADBEAF );
 	ASSERT ( parent_search->search_object->vp.internal );
 
-	if ( !ogre_scene_find2 ( &parent_search->search_object->vp, search->sub_object_index, parent_search->result_sub_object - parent_search->search_object->vp.elements, &ogre_search ) || ( unsigned ) search->search_depth >= ogre_search.number_of_subobjects )
+	if ( ( !search->search_depth && !ogre_scene_find2 ( &parent_search->search_object->vp, search->sub_object_index, parent_search->result_sub_object - parent_search->search_object->vp.elements, &search->saved_search ) ) || ( unsigned ) search->search_depth >= search->saved_search.number_of_subobjects )
 	{
 		search->result_sub_object = NULL;
 		return SUB_OBJECT_SEARCH_RESULT_OBJECT_NOT_FOUND;
 	}
 	search->search_object = parent_search->search_object;
-	search->result_sub_object = &parent_search->search_object->vp.elements[ogre_search.subobjects[search->search_depth]];
+	search->result_sub_object = &parent_search->search_object->vp.elements[search->saved_search.subobjects[search->search_depth]];
 	return SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND;
 #endif
 }

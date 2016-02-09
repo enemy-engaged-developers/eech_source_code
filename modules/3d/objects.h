@@ -589,9 +589,6 @@ struct OBJECT_3D_INSTANCE // 92 bytes
 	struct OBJECT_3D_SUB_INSTANCE
 		*sub_objects;
 #else
-	// FIXME
-	unsigned long
-		magic;
 	struct OgreGameObjectScene
 		vp;
 	struct VEC3D
