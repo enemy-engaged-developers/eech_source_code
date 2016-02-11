@@ -2,23 +2,28 @@
 
 namespace
 {
-	class TaskCamera : public Task
+	class TaskEnv : public Task
 	{
 	public:
-		TaskCamera(const Ogre::Vector3& position, const Ogre::Quaternion& orientation)
-			: position(position), orientation(orientation)
+		TaskEnv(const struct OgreEnvironment& env)
+			: env(env)
 		{
 		}
 		virtual TaskResult task(void)
 		{
-			ogre_camera->setPosition(position);
-			ogre_camera->setOrientation(orientation);
+			ogre_camera->setPosition(ogre_position(&env.position.x));
+			ogre_camera->setOrientation(ogre_orientation(env.attitude[0]));
+			ogre_camera->setNearClipDistance(env.hither);
+			ogre_camera->setFarClipDistance(env.yonder);
+			ogre_scene_manager->setAmbientLight(ogre_colour(env.ambient));
+			ogre_scene_manager->setFog(Ogre::FOG_LINEAR, ogre_colour(env.fog_colour), 0, env.fog_start, env.fog_end);
+			ogre_camera->getViewport()->setBackgroundColour(ogre_colour(env.background_colour));
+
 			return TR_TASK;
 		}
 
 	private:
-		Ogre::Vector3 position;
-		Ogre::Quaternion orientation;
+		struct OgreEnvironment env;
 	};
 }
 
@@ -28,6 +33,7 @@ Ogre::String ogre_resource_group;
 
 void ogre_set(const char* resource_group, Ogre::SceneManager* scene_manager, Ogre::Camera* camera)
 {
+	assert(GetCurrentThreadId() == ogre_thread_id);
 	ogre_log(__FUNCTION__, "");
 
 	ogre_resource_group = resource_group;
@@ -35,16 +41,13 @@ void ogre_set(const char* resource_group, Ogre::SceneManager* scene_manager, Ogr
 	ogre_camera = camera;
 
 	//FIXME
-	ogre_camera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
-	ogre_camera->setNearClipDistance(0.5f);
-	ogre_camera->setFarClipDistance(10000.0f);
-	ogre_scene_manager->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
+	ogre_scene_manager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 }
 
-void OGREEE_CALL ogre_set_viewpoint(const float* position, const float orientation[][3])
+void OGREEE_CALL ogre_environment(const struct OgreEnvironment* env)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
-	ogre_tasks->enqueue(new TaskCamera(ogre_position(position), ogre_orientation(orientation[0])));
+	ogre_tasks->enqueue(new TaskEnv(*env));
 }
 
 unsigned ogre_index(void)

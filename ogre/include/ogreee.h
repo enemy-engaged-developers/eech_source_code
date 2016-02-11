@@ -16,7 +16,24 @@ extern "C"
 struct OBJECT_3D;
 struct OBJECT_3D_SCENE_DATABASE_ENTRY;
 
-OGREEE_API void OGREEE_CALL ogre_set_viewpoint(const float* position, const float orientation[][3]);
+struct OgreVector3
+{
+	float x, y, z;
+};
+
+struct OgreEnvironment
+{
+	struct OgreVector3 position;
+	float attitude[3][3];
+	float vfov;
+	float hither, yonder;
+	unsigned ambient;
+	float fog_start, fog_end;
+	unsigned fog_colour;
+	unsigned background_colour;
+};
+
+OGREEE_API void OGREEE_CALL ogre_environment(const struct OgreEnvironment* env);
 
 OGREEE_API void OGREEE_CALL ogre_ui_font(unsigned font, const char* name, float height);
 OGREEE_API void OGREEE_CALL ogre_ui_fonts_clear(void);
@@ -44,11 +61,6 @@ struct OgreObjectsInit
 
 OGREEE_API void OGREEE_CALL ogre_objects_init(const struct OgreObjectsInit* init);
 OGREEE_API void OGREEE_CALL ogre_objects_clear(void);
-
-struct OgreVector3
-{
-	float x, y, z;
-};
 
 struct OgreGameObjectSceneElement
 {

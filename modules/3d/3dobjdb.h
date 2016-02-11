@@ -554,8 +554,23 @@ struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 	int
 		search_depth;
 
+#ifndef OGRE_EE
 	object_3d_sub_object_index_numbers
 		sub_object_index;
+#else
+	union
+	{
+		object_3d_sub_object_index_numbers
+			sub_object_index;
+
+		struct
+		{
+			unsigned
+				index:30,
+				loaded:1;
+		};
+	};
+#endif
 
 #ifndef OGRE_EE
 	struct OBJECT_3D_DATABASE_ENTRY

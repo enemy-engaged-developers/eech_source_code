@@ -915,14 +915,6 @@ namespace
 			assert(!terrain_converter.get());
 			assert(!terrain_cache.get());
 
-#ifdef USE_TERRAIN_VISIBILITY
-			//TODO: Wrong place
-			ogre_camera->setNearClipDistance(1.0f);
-			ogre_scene_manager->setFog(Ogre::FOG_LINEAR, Ogre::ColourValue(0.18f, 0.77f, 0.87f), 0, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH / 2, USE_TERRAIN_VISIBILITY * TERRAIN_3D_SECTOR_SIDE_LENGTH);
-			ogre_scene_manager->setAmbientLight(Ogre::ColourValue(0.6f, 0.6f, 0.6f));
-			ogre_scene_manager->setSkyDome(true, "Examples/CloudySky", 5, 8);
-#endif
-
 			terrain_converter.reset(new TerrainConverter);
 
 			terrain_converter->convert_types();

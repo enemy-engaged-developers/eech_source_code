@@ -9,6 +9,11 @@ unsigned ogre_index(void);
 void ogre_log(const char* function, const char* format, ...);
 void ogre_log_(const char* function, const char* format, ...);
 
+inline Ogre::ColourValue ogre_colour(unsigned colour)
+{
+	return Ogre::ColourValue(((colour >> 16) & 0xFF) / 255.0f, ((colour >> 8) & 0xFF) / 255.0f, ((colour >> 0) & 0xFF) / 255.0f, ((colour >> 24) & 0xFF) / 255.0f);
+}
+
 inline Ogre::Vector3 ogre_position(const float* f)
 {
 	return Ogre::Vector3(f[0], f[1], -f[2]);

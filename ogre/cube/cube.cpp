@@ -231,19 +231,19 @@ void set_terrain(int diff)
 unsigned ui1, ui2;
 #endif
 
+#ifdef USE_TERRAIN
+#define POSITION { 0, 2000, 0 }
+float F = sqrt(0.5f);
+#define ORIENTATION { F, 0, -F, 0, 1, 0, F, 0, F }
+#else
+#define POSITION { 0, 0, 30 }
+#define ORIENTATION { -1, 0, 0, 0, 1, 0, 0, 0, -1 }
+#endif
+struct OgreEnvironment env = { POSITION, ORIENTATION, PI / 4.0f, 1.0f, 10000.0f, 0xFF999999, 5000.0f, 10000.0f, 0xFF2EC4DE, 0xFF2EC4DE };
+
 void OGREEE_CALL init(void)
 {
-	{
-#ifdef USE_TERRAIN
-		float p[3] = { 0, 2000, 0 };
-		float f = sqrt(0.5f);
-		matrix3x3 o = { f, 0, -f, 0, 1, 0, f, 0, f };
-#else
-		float p[3] = { 0, 0, 30 };
-		matrix3x3 o = { -1, 0, 0, 0, 1, 0, 0, 0, -1 };
-#endif
-		ogre_set_viewpoint(p, o);
-	}
+	ogre_environment(&env);
 
 	cur_time = 0.0f;
 
@@ -466,10 +466,9 @@ void key_func(void)
 		break;
 	case DIK_J:
 		{
-			float p[3] = { rand() * 1024.0f * terrain_3d_sector_x_max / RAND_MAX, 2000, rand() * 1024.0f * terrain_3d_sector_z_max / RAND_MAX };
-			float f = sqrt(0.5f);
-			matrix3x3 o = { f, 0, -f, 0, 1, 0, f, 0, f };
-			ogre_set_viewpoint(p, o);
+			struct OgreVector3 p = { rand() * 1024.0f * terrain_3d_sector_x_max / RAND_MAX, 2000, rand() * 1024.0f * terrain_3d_sector_z_max / RAND_MAX };
+			env.position = p;
+			ogre_environment(&env);
 		}
 		break;
 #endif
@@ -535,7 +534,6 @@ _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
 
 #if 0
-		mCamera->getViewport()->setBackgroundColour(Ogre::ColourValue(0.18f, 0.77f, 0.87f));
 #ifdef USE_OBJECTS_ONLY
 		Ogre::Light* light = mSceneMgr->createLight("light");
 		light->setType(Ogre::Light::LT_POINT);

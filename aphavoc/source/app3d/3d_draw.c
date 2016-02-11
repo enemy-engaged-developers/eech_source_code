@@ -182,6 +182,16 @@ void update_application_3d_scene ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef OGRE_EE
+static unsigned ogre_f2u(float f)
+{
+	return (unsigned)(f * 255.0f);
+}
+static unsigned ogre_light(const struct LIGHT_COLOUR* light)
+{
+	return (ogre_f2u(light->blue) << 0) | (ogre_f2u(light->green) << 8) | (ogre_f2u(light->red) << 16) | (ogre_f2u(light->alpha) << 24);
+}
+#endif
 
 void draw_application_3d_scene (void)
 {
@@ -207,8 +217,29 @@ void draw_application_3d_scene (void)
 	recalculate_3d_environment_settings (main_3d_env);
 
 #ifdef OGRE_EE
-	// FIXME pass current environment to Ogre
-	ogre_set_viewpoint (&main_vp.position.x, main_vp.attitude);
+	{
+		struct OgreEnvironment env;
+		*(viewpoint *) &env = main_vp;
+		env.vfov = main_3d_env->height_view_angle;
+		env.hither = main_3d_env->hither_distance;
+		env.yonder = main_3d_env->yonder_distance;
+		env.ambient = ogre_light (&main_3d_env->ambient_light);
+		if (main_3d_env->fogmode == FOGMODE_ON_AUTOMATIC)
+		{
+			env.fog_start = main_3d_env->fog_start;
+			env.fog_end = main_3d_env->fog_end;
+			env.fog_colour = main_3d_env->fog_colour.colour;
+		}
+		else
+		{
+			env.fog_start = 0;
+			env.fog_end = 0;
+			env.fog_colour = 0;
+		}
+		env.background_colour = 0;
+
+		ogre_environment (&env);
+	}
 #endif
 
 #ifndef OGRE_EE
