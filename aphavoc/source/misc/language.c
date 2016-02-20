@@ -107,10 +107,6 @@ static void validate_translation_database (void);
 
 static int get_next_file_translation (FILE *file_ptr, char *buffer, int size);
 
-#if DEBUG_LANGUAGES
-	static void test_translation_list (void);
-#endif
-
 #if PREPROCESS_DAT_FILES
 	static void preprocess_language_file (FILE *fp, FILE *fp_out);
 
@@ -331,9 +327,16 @@ void initialise_language_file (FILE *fp)
 							{
 								safe_free (lang->translation);
 							}
-							lang->translation = (char*) safe_malloc(strlen(buf) + 1);
+							if (unicode)
+							{
+								lang->translation = (char*) safe_malloc(strlen(buf) + 1);
 
-							strcpy(lang->translation, buf);
+								strcpy(lang->translation, buf);
+							}
+							else
+							{
+								lang->translation = string_to_utf8 (buf);
+							}
 
 							fseek (fp, +1, SEEK_CUR);
 						}

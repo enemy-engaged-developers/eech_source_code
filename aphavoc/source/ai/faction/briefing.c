@@ -210,6 +210,7 @@ void initialise_briefing_parser (void)
 {
 
 	int
+		unicode = 0,
 		result;
 
 	char
@@ -260,6 +261,13 @@ void initialise_briefing_parser (void)
 				break;
 			}
 
+			case FILE_TAG_UNICODE:
+			{
+
+				unicode = 1;
+				break;
+			}
+
 			case FILE_TAG_TYPE:
 			{
 
@@ -302,10 +310,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_TEXT1:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].briefing_text1 [task_briefing_database [task_type].briefing_text1_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -321,10 +338,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_TEXT2:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].briefing_text2 [task_briefing_database [task_type].briefing_text2_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -340,10 +366,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_TEXT3:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].briefing_text3 [task_briefing_database [task_type].briefing_text3_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -386,10 +421,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_SUCCESS:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -405,10 +449,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_PARTIAL:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].debriefing_text_partial [task_briefing_database [task_type].debriefing_text_partial_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -424,10 +477,19 @@ void initialise_briefing_parser (void)
 						case FILE_TAG_FAILURE:
 						{
 
-							memset (&temp_buffer, 0, sizeof (temp_buffer));
+							memset (temp_buffer, 0, sizeof (temp_buffer));
 							get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
-							task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-							sprintf (task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count], "%s", &temp_buffer);
+							if (unicode)
+							{
+
+								task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+								strcpy (task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count], temp_buffer);
+							}
+							else
+							{
+
+								task_briefing_database [task_type].debriefing_text_failure [task_briefing_database [task_type].debriefing_text_failure_count] = string_to_utf8 (temp_buffer);
+							}
 
 							#if DEBUG_MODULE
 
@@ -501,11 +563,20 @@ void initialise_briefing_parser (void)
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
 
-					memset (&temp_buffer, 0, sizeof (temp_buffer));
+					memset (temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
-					new_medal_briefing->briefing_text [new_medal_briefing->text_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-					sprintf (new_medal_briefing->briefing_text [new_medal_briefing->text_count], "%s", &temp_buffer);
+					if (unicode)
+					{
+
+						new_medal_briefing->briefing_text [new_medal_briefing->text_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+						strcpy (new_medal_briefing->briefing_text [new_medal_briefing->text_count], temp_buffer);
+					}
+					else
+					{
+
+						new_medal_briefing->briefing_text [new_medal_briefing->text_count] = string_to_utf8 (temp_buffer);
+					}
 
 					new_medal_briefing->text_count ++;
 				}
@@ -546,11 +617,20 @@ void initialise_briefing_parser (void)
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
 
-					memset (&temp_buffer, 0, sizeof (temp_buffer));
+					memset (temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
-					new_promotion_briefing->briefing_text [new_promotion_briefing->text_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-					sprintf (new_promotion_briefing->briefing_text [new_promotion_briefing->text_count], "%s", &temp_buffer);
+					if (unicode)
+					{
+
+						new_promotion_briefing->briefing_text [new_promotion_briefing->text_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+						strcpy (new_promotion_briefing->briefing_text [new_promotion_briefing->text_count], temp_buffer);
+					}
+					else
+					{
+
+						new_promotion_briefing->briefing_text [new_promotion_briefing->text_count] = string_to_utf8 (temp_buffer);
+					}
 
 					new_promotion_briefing->text_count ++;
 				}
@@ -596,11 +676,20 @@ void initialise_briefing_parser (void)
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TEXT1);
 
-					memset (&temp_buffer, 0, sizeof (temp_buffer));
+					memset (temp_buffer, 0, sizeof (temp_buffer));
 					get_next_file_paragraph (file_ptr, temp_buffer, sizeof (temp_buffer));
 
-					new_objective_briefing->briefing_text [new_objective_briefing->text_count] = (char *) malloc_heap_mem (sizeof (char) * (strlen (temp_buffer) + 1));
-					sprintf (new_objective_briefing->briefing_text [new_objective_briefing->text_count], "%s", &temp_buffer);
+					if (unicode)
+					{
+
+						new_objective_briefing->briefing_text [new_objective_briefing->text_count] = (char *) safe_malloc (strlen (temp_buffer) + 1);
+						strcpy (new_objective_briefing->briefing_text [new_objective_briefing->text_count], temp_buffer);
+					}
+					else
+					{
+
+						new_objective_briefing->briefing_text [new_objective_briefing->text_count] = string_to_utf8 (temp_buffer);
+					}
 
 					new_objective_briefing->text_count ++;
 				}
@@ -659,19 +748,19 @@ void deinitialise_briefing_parser (void)
 				if (task_briefing_database [loop].briefing_text1 [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].briefing_text1 [loop2]);
+					safe_free (task_briefing_database [loop].briefing_text1 [loop2]);
 				}
 
 				if (task_briefing_database [loop].briefing_text2 [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].briefing_text2 [loop2]);
+					safe_free (task_briefing_database [loop].briefing_text2 [loop2]);
 				}
 
 				if (task_briefing_database [loop].briefing_text3 [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].briefing_text3 [loop2]);
+					safe_free (task_briefing_database [loop].briefing_text3 [loop2]);
 				}
 
 				// debriefing
@@ -679,19 +768,19 @@ void deinitialise_briefing_parser (void)
 				if (task_briefing_database [loop].debriefing_text_success [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].debriefing_text_success [loop2]);
+					safe_free (task_briefing_database [loop].debriefing_text_success [loop2]);
 				}
 
 				if (task_briefing_database [loop].debriefing_text_partial [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].debriefing_text_partial [loop2]);
+					safe_free (task_briefing_database [loop].debriefing_text_partial [loop2]);
 				}
 
 				if (task_briefing_database [loop].debriefing_text_failure [loop2])
 				{
 
-					free_mem (task_briefing_database [loop].debriefing_text_failure [loop2]);
+					safe_free (task_briefing_database [loop].debriefing_text_failure [loop2]);
 				}
 			}
 		}
@@ -722,7 +811,7 @@ void deinitialise_briefing_parser (void)
 			if (this_medal->briefing_text [loop])
 			{
 
-				free_mem (this_medal->briefing_text [loop]);
+				safe_free (this_medal->briefing_text [loop]);
 			}
 		}
 
