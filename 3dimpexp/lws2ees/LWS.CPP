@@ -583,7 +583,7 @@ class LwsFile : public Lws
          if (str[0] == '"' && str[length - 1] == '"')
           lod.filename.assign(str + 1, length - 2);
          else
-           error("Line %i: Unknown object reference in LODs list", line);
+          error("Line %i: Unknown object reference in LODs list", line);
        }
       LastObject->lods.lods.push_back(lod);
      }
@@ -667,7 +667,7 @@ class LwsFile : public Lws
     object.filename = keyword;
    }
 
-  std::string fname(object.filename.substr(object.filename.rfind('\\') + 1));
+  std::string fname(object.filename.substr(object.filename.rfind('/') + 1));
   MakeName(object, fname.substr(0, fname.rfind('.')), ObjectNumbers);
   objects.push_back(object);
   LastGeneralObject = LastObject = &objects.back();
