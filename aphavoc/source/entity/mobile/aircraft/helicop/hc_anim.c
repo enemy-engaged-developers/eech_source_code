@@ -853,6 +853,11 @@ void animate_helicopter_wipers (entity *en)
 			break;
 		}
 		////Moje 030619 End
+		default:
+		{
+			animate_default_external_wipers(raw->ac.inst3d);
+			break;
+		}
 		}
 	}
 }
