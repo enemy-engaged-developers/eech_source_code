@@ -124,6 +124,10 @@ Section "EECH ${VERSION} with mods" SectionBase
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects"
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1007.EEO"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1D83.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1D84.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1D85.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1D86.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\2403.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\2404.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\2405.EEO"
@@ -388,10 +392,6 @@ Section "EECH ${VERSION} with mods" SectionBase
 	SetOutPath "$INSTDIR\cohokum\3ddata\objects\CIS_MARINE_WALK"
 
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\CIS_MARINE_WALK.EES"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\1D83.eeo"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\1D84.eeo"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\1D85.eeo"
-	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\1D86.eeo"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\PKM.EEO"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\RS_HEAVY_FIRING_POINT.EES"
 	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\CIS_MARINE_WALK\RS_LIGHT_FIRING_POINT.EES"
