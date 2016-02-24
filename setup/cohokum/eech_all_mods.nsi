@@ -2803,11 +2803,16 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NEW-CLOUDS.TGA"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_BEACH.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_BEACH-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_FIELD.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_FIELD-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_GRASS.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_GRASS-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_ROAD.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_SAND.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_SAND-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_SNOW.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_SNOW-W.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_TREE_CANOPY.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\NOISEMAP_WATER.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\general\PILOT_FACE_A_01.bmp"
@@ -3759,7 +3764,58 @@ Section "EECH ${VERSION} terrain textures" SectionTT
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea14.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea15.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea16.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea001.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea002.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea003.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea004.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea005.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea006.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea007.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea008.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea009.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea010.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea011.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea012.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea013.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea014.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea015.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea016.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea017.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea018.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea019.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea020.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea021.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea022.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea023.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea024.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea025.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea026.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea027.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea028.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea029.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea030.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea031.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea032.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea033.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea034.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea035.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea036.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea037.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea038.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea039.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea040.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea041.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea042.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea043.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea044.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea045.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea046.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea047.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea048.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea049.bmp"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\Sea050.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\SEAbottom.dds"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\water.dds"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\terrain\water\waterinfo.txt"
 
 	SetOutPath "$INSTDIR\cohokum\graphics\textures\terrain\yemen"
@@ -4645,22 +4701,22 @@ Section "Maps and campaigns" SectionMaps
 	File "${EE_MAPS_DIR}\common\maps\map2\RAFskirm04\Cuba.sid"
 	File "${EE_MAPS_DIR}\common\maps\map2\RAFskirm04\Cuba.skr"
 
-	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp"
-
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.BIN"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\Base_temp.BTP"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.CHC"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\FORMCOMP.DAT"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SCR"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SID"
-
-	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp2"
-
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.BIN"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.CHC"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\FORMCOMP.DAT"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SCR"
-	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SID"
+;	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp"
+;
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.BIN"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\Base_temp.BTP"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.CHC"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\FORMCOMP.DAT"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SCR"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp\CUBA.SID"
+;
+;	SetOutPath "$INSTDIR\common\maps\map2\Ricclcamp2"
+;
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.BIN"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.CHC"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\FORMCOMP.DAT"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SCR"
+;	File "${EE_MAPS_DIR}\common\maps\map2\Ricclcamp2\CUBA.SID"
 
 	SetOutPath "$INSTDIR\common\maps\map2\route"
 
@@ -5439,6 +5495,69 @@ Section "Maps and campaigns" SectionMaps
 	File "${EE_MAPS_DIR}\common\maps\map9\terrain\terrain.sim"
 	File "${EE_MAPS_DIR}\common\maps\map9\terrain\tree_pos.dat"
 	File "${EE_MAPS_DIR}\common\maps\map9\terrain\tree_pos.sec"
+
+SectionEnd
+
+Section "Helicopter pilots external models" SectionPilots
+
+	SetOutPath "$INSTDIR\cohokum\3ddata\objects"
+
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f89.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f8a.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f8b.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f91.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f92.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f93.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f94.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f95.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9a.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9b.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9c.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9d.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9e.eeo"
+	File "${EE_3DOBJ_DIR}\cohokum\3ddata\objects\1f9f.eeo"
+
+SectionEnd
+
+Section /o "Airfields mod" SectionAirfields
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\airfields\"
+
+SectionEnd
+
+Section /o "CIS helicopters skins" SectionCISHelicoptersSkins
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\new_skins_for_russian_helicopters\"
+
+SectionEnd
+
+Section /o "US helicopters skins" SectionUSHelicoptersSkins
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\new_skins_for_us_helicopters\"
+
+SectionEnd
+
+Section /o "Water textures ver.1150" SectionWater1
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\water_1\"
+
+SectionEnd
+
+Section /o "Water textures ver.1152" SectionWater2
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\water_2\"
+
+SectionEnd
+
+Section /o "New Clouds mod" SectionClouds
+
+	SetOutPath "$INSTDIR"
+	File /r "${SHDDIR}\new_clouds\"
 
 SectionEnd
 
@@ -6822,9 +6941,16 @@ SectionEnd
 
 	;Language strings
 	LangString DESC_SectionBase ${LANG_ENGLISH} "Install EECH ${VERSION} with mods (sounds, 3d objects, textures, etc...)"
-	LangString DESC_SectionTT ${LANG_ENGLISH} "Install EECH ${VERSION} terrain textures"
+	LangString DESC_SectionTT ${LANG_ENGLISH} "Install EECH ${VERSION} terrain and water textures"
 	LangString DESC_SectionSmokes ${LANG_ENGLISH} "Install EECH ${VERSION} smokes, explosions, weapon effects"
 	LangString DESC_SectionMaps ${LANG_ENGLISH} "Install EECH ${VERSION} maps"
+	LangString DESC_SectionPilots ${LANG_ENGLISH} "Install new external models for Heli pilots"
+	LangString DESC_SectionAirfields ${LANG_ENGLISH} "Install Airfields mod v1.2 (unfinished, performance drop, affects MP comptatible)"
+	LangString DESC_SectionCISHelicoptersSkins ${LANG_ENGLISH} "Install Russian helicopters skins mod (unfinished)"
+	LangString DESC_SectionUSHelicoptersSkins ${LANG_ENGLISH} "Install US helicopters skins mod (unfinished)"
+	LangString DESC_SectionWater1 ${LANG_ENGLISH} "Install water texture ver.1150 (optional)"
+	LangString DESC_SectionWater2 ${LANG_ENGLISH} "Install water texture ver.1152 (optional)"
+	LangString DESC_SectionClouds ${LANG_ENGLISH} "Install New Clouds mod v1.0 (performance drop)"
 	LangString DESC_SectionBetty ${LANG_ENGLISH} "Install new co-pilot and betty sounds for blue side"
 	LangString DESC_SectionUSATC ${LANG_ENGLISH} "Install US ATC male voice pack v0.9"
 	LangString DESC_SectionRussianSpeech ${LANG_ENGLISH} "Install Russian speech for red side (warning: no subtitles)"
@@ -6840,6 +6966,13 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionTT} $(DESC_SectionTT)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionSmokes} $(DESC_SectionSmokes)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionMaps} $(DESC_SectionMaps)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionPilots} $(DESC_SectionPilots)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionAirfields} $(DESC_SectionAirfields)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionCISHelicoptersSkins} $(DESC_SectionCISHelicoptersSkins)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionUSHelicoptersSkins} $(DESC_SectionUSHelicoptersSkins)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionWater1} $(DESC_SectionWater1)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionWater2} $(DESC_SectionWater2)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionClouds} $(DESC_SectionClouds)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionBetty} $(DESC_SectionBetty)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionUSATC} $(DESC_SectionUSATC)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SectionRussianSpeech} $(DESC_SectionRussianSpeech)
