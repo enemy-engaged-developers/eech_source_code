@@ -1028,23 +1028,14 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( 
 
 						scene_result = table[table_index].sub_objects[search_object_depth];
 
-						if ( search_depth == 0 )
-						{
-
-							break;
-						}
-						else
-						{
-
-							search_depth--;
-						}
+						search_depth--;
 					}
 				}
 
 				search_object_depth++;
 			}
 
-			if ( search_depth != 0 )
+			if ( search_depth != -1 )
 			{
 
 				scene_result = NULL;
