@@ -1,4 +1,4 @@
-:START
+﻿:START
 
 :UNICODE
 
@@ -291,6 +291,239 @@ GERMAN Nur extern
 ITALIAN External
 SPANISH External
 RUSSIAN На внешних видах
+
+:TRANSLATION Flight Hours
+ENGLISH Flight Hours
+FRENCH Flight Hours
+GERMAN Flight Hours
+ITALIAN Flight Hours
+SPANISH Flight Hours
+RUSSIAN Налет
+
+
+:TRANSLATION Not Available
+ENGLISH Not Available
+FRENCH Not Available
+GERMAN Not Available
+ITALIAN Not Available
+SPANISH Not Available
+RUSSIAN Не доступен
+
+
+:TRANSLATION Enabled
+ENGLISH Enabled
+FRENCH Enabled
+GERMAN Enabled
+ITALIAN Enabled
+SPANISH Enabled
+RUSSIAN Включен
+
+
+:TRANSLATION Disabled
+ENGLISH Disabled
+FRENCH Disabled
+GERMAN Disabled
+ITALIAN Disabled
+SPANISH Disabled
+RUSSIAN Выключен
+
+
+:TRANSLATION Engines Throttle
+ENGLISH Engines Throttle
+FRENCH Engines Throttle
+GERMAN Engines Throttle
+ITALIAN Engines Throttle
+SPANISH Engines Throttle
+RUSSIAN Управление двигателем
+
+
+:TRANSLATION Joystick FOV
+ENGLISH Joystick FOV
+FRENCH Joystick FOV
+GERMAN Joystick FOV
+ITALIAN Joystick FOV
+SPANISH Joystick FOV
+RUSSIAN Джойстик угол поля зрения
+
+
+:TRANSLATION ForceFeedback
+ENGLISH ForceFeedback
+FRENCH ForceFeedback
+GERMAN ForceFeedback
+ITALIAN ForceFeedback
+SPANISH ForceFeedback
+RUSSIAN Обратная отдача джойстика
+
+
+:TRANSLATION Joystic axis
+ENGLISH Joystic axis
+FRENCH Joystic axis
+GERMAN Joystic axis
+ITALIAN Joystic axis
+SPANISH Joystic axis
+RUSSIAN Ось джойстика
+
+
+:TRANSLATION Reverse
+ENGLISH Reverse
+FRENCH Reverse
+GERMAN Reverse
+ITALIAN Reverse
+SPANISH Reverse
+RUSSIAN Инвертировать
+
+
+:TRANSLATION Non-linear
+ENGLISH Non-linear
+FRENCH Non-linear
+GERMAN Non-linear
+ITALIAN Non-linear
+SPANISH Non-linear
+RUSSIAN Нелинейный
+
+
+:TRANSLATION Co-Pilot report targets
+ENGLISH Co-Pilot report targets
+FRENCH Co-Pilot report targets
+GERMAN Co-Pilot report targets
+ITALIAN Co-Pilot report targets
+SPANISH Co-Pilot report targets
+RUSSIAN Второй пилот сообщает о целях
+
+
+:TRANSLATION Sound Device
+ENGLISH Sound Device
+FRENCH Sound Device
+GERMAN Sound Device
+ITALIAN Sound Device
+SPANISH Sound Device
+RUSSIAN Устройство воспроизведения звуков
+
+
+:TRANSLATION Speech Sound Device
+ENGLISH Speech Sound Device
+FRENCH Speech Sound Device
+GERMAN Speech Sound Device
+ITALIAN Speech Sound Device
+SPANISH Speech Sound Device
+RUSSIAN Устройство воспроизведения переговоров
+
+
+:TRANSLATION PROCEED
+ENGLISH PROCEED
+FRENCH PROCEED
+GERMAN PROCEED
+ITALIAN PROCEED
+SPANISH PROCEED
+RUSSIAN ПРОДОЛЖИТЬ
+
+
+:TRANSLATION Default
+ENGLISH Default
+FRENCH Default
+GERMAN Default
+ITALIAN Default
+SPANISH Default
+RUSSIAN Стандарт
+
+
+:TRANSLATION Summer
+ENGLISH Summer
+FRENCH Summer
+GERMAN Summer
+ITALIAN Summer
+SPANISH Summer
+RUSSIAN Лето
+
+
+:TRANSLATION Winter
+ENGLISH Winter
+FRENCH Winter
+GERMAN Winter
+ITALIAN Winter
+SPANISH Winter
+RUSSIAN Зима
+
+
+:TRANSLATION Desert
+ENGLISH Desert
+FRENCH Desert
+GERMAN Desert
+ITALIAN Desert
+SPANISH Desert
+RUSSIAN Пустыня
+
+
+:TRANSLATION Season
+ENGLISH Season
+FRENCH Season
+GERMAN Season
+ITALIAN Season
+SPANISH Season
+RUSSIAN Время года
+
+
+:TRANSLATION Score
+ENGLISH Score
+FRENCH Score
+GERMAN Score
+ITALIAN Score
+SPANISH Score
+RUSSIAN Рейтинг
+
+
+:TRANSLATION Aircraft kills
+ENGLISH Aircraft kills
+FRENCH Aircraft kills
+GERMAN Aircraft kills
+ITALIAN Aircraft kills
+SPANISH Aircraft kills
+RUSSIAN Самолетов уничтожено
+
+
+:TRANSLATION Helicopter kills
+ENGLISH Helicopter kills
+FRENCH Helicopter kills
+GERMAN Helicopter kills
+ITALIAN Helicopter kills
+SPANISH Helicopter kills
+RUSSIAN Вертолетов уничтожено
+
+
+:TRANSLATION   Air defence
+ENGLISH   Air defence
+FRENCH   Air defence
+GERMAN   Air defence
+ITALIAN   Air defence
+SPANISH   Air defence
+RUSSIAN   ПВО
+
+
+:TRANSLATION   Armour
+ENGLISH   Armour
+FRENCH   Armour
+GERMAN   Armour
+ITALIAN   Armour
+SPANISH   Armour
+RUSSIAN   Бронированные цели
+
+
+:TRANSLATION   Artillery
+ENGLISH   Artillery
+FRENCH   Artillery
+GERMAN   Artillery
+ITALIAN   Artillery
+SPANISH   Artillery
+RUSSIAN   Артиллерия
+
+
+:TRANSLATION Helicopters lost
+ENGLISH Helicopters lost
+FRENCH Helicopters lost
+GERMAN Helicopters lost
+ITALIAN Helicopters lost
+SPANISH Helicopters lost
+RUSSIAN Вертолетов потеряно
 
 
 :END
