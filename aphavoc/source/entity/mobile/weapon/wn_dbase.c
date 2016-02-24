@@ -6504,6 +6504,7 @@ weapon_package
 		#include "configs/freestyl.h"			// ENTITY_SUB_TYPE_AIRCRAFT_YAK41_FREESTYLE
 		#include "configs/hornet.h"			// ENTITY_SUB_TYPE_AIRCRAFT_FA18_HORNET
 		#include "configs/flanker.h"			// ENTITY_SUB_TYPE_AIRCRAFT_SU33_FLANKER
+		#include "configs/fullback.h"			// ENTITY_SUB_TYPE_AIRCRAFT_SU34_FULLBACK
 		#include "configs/apache_a.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE
 		#include "configs/werewolf.h"			// ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM
 		#include "configs/kiowa.h"				// ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR

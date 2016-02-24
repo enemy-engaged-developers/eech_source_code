@@ -240,6 +240,9 @@ char* get_threat_id_number(entity* threat)
 		case ENTITY_SUB_TYPE_AIRCRAFT_SU33_FLANKER:
 			id = "33";
 			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_SU34_FULLBACK:
+			id = "34";
+			break;
 		}
 	}
 	

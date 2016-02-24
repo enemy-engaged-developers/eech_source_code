@@ -1632,6 +1632,84 @@ aircraft_data
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
 
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_AIRCRAFT_SU34_FULLBACK
+		//
+		////////////////////////////////////////
+		{
+			"Su-34 Fullback",														// full_name
+         "Su-34 FULLBACK",	 			 										// long_display_name
+         "Su-34",	 	 	 														// short_display_name
+			"AIRCRAFT",																// easy_display_name
+
+			OBJECT_3D_SU34,														// default_3d_shape
+			NUM_GUNSHIP_TYPES,													// gunship_type
+			ENTITY_FORCE_AIR,														// force
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_2,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_1,								// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_2,								// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_1,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_2,								// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_SU34_FULLBACK_2,								// scout_weapon_config_type
+			ENTITY_SUB_TYPE_WEAPON_GSH_30_1_30MM_ROUND,						// default_weapon_type
+			TARGET_SYMBOL_AIRCRAFT,												// target_symbol_type
+			TARGET_PRIORITY_MEDIUM,												// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_FIXED_WING,							// force_info_catagory
+			THREAT_TYPE_AIRBORNE_RADAR,										// threat_type
+			VIEW_CATEGORY_COMBAT_AIRCRAFT,									// view_category
+			VIEW_TYPE_SU34_FULLBACK,												// view_type
+			MAP_ICON_JET,															// map icon
+			5,																		// armor_level
+
+			2.8,																		// centre_of_gravity_to_ground_distance
+         1.00,																		// centre_of_gravity_to_ground_distance_destroyed
+         15.0,																		// chase_view_min_distance
+         100.0,	  																// chase_view_max_distance
+			0.5,																		// chase_view_min_distance_test
+         2.0 * KILOMETRE,														// chase_view_max_distance_test
+			knots_to_metres_per_second (450.0),								// cruise_velocity
+			1000.0,																	// cruise_altitude
+			100.0,																	// attack_altitude
+			0.0,																		// destroyed_bank_offset
+			rad (-1.7),																// destroyed_pitch_offset
+			rad (-3.7),																// fuselage_angle
+			knots_to_metres_per_second (230),								// liftoff_velocity
+			rad (0.0),																// main_rotor_shaft_angle
+			0.0,																		// main_rotor_direction
+			rad (0.0),																// main_rotor_blade_droop_angle
+			0.0,																		// propellor_direction
+			rad (180),																// max_turn_rate (deg / sec)
+			rad (180.0),															// max_roll
+			1.0,																		// max_vertical_turn_allowance
+			15.0,																		// avoidance_radius
+			10.0 * G,																// g_max
+			20.0,																		// power_output
+			0.0,																		// tail_rotor_direction
+			10000.0,																	// recon_radius
+			10.0,																		// target_scan_delay
+			6000.0,																	// air_scan_range
+			4000.0,																	// surface_scan_range
+			1.0,																		// potential_air_to_air_threat
+			1.0,																		// potential_air_to_surface_threat
+			10.0,																		// Ammo_economy
+			1136.0,																	// Fuel_default_weight
+			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
+			700,																		// initial_damage_level
+
+			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
+			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
+			TRUE,																		// offensive_capability
+			FALSE,																	// player_controllable
+			350,																		// points value
+
+			SOUND_SAMPLE_INDEX_JET_MEDIUM,									// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
+			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
+		},
+
 		////////////////////////////////////////////////////////////////////////////////
 		//
 		// COMANCHE HOKUM

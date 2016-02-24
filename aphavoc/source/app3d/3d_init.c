@@ -911,6 +911,7 @@ static void modify_3d_objects_approximations ( float factor )
 	scale_object_3d_approximation_distances ( OBJECT_3D_HARRIER_DESTROYED,		1.0 * factor );
 	scale_object_3d_approximation_distances ( OBJECT_3D_SU25,						1.0 * factor );
 	scale_object_3d_approximation_distances ( OBJECT_3D_SU33,						1.0 * factor );
+	scale_object_3d_approximation_distances ( OBJECT_3D_SU34,						1.0 * factor );
 	scale_object_3d_approximation_distances ( OBJECT_3D_YAK_41,						1.0 * factor );
 
 	scale_object_3d_approximation_distances ( OBJECT_3D_M730A1,						1.0 * factor );

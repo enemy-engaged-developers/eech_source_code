@@ -251,6 +251,7 @@ static const char
 		"MiG-29 Fulcrum",						// VIEW_TYPE_MIG29_FULCRUM
 		"Su-25 Frogfoot",						// VIEW_TYPE_SU25_FROGFOOT
 		"Su-33 Flanker",						// VIEW_TYPE_SU33_FLANKER
+		"Su-34 Fullback",						// VIEW_TYPE_SU34_FULLBACK
 		"Yak-41 Freestyle",					// VIEW_TYPE_YAK41_FREESTYLE
 		"An-12B Cub",							// VIEW_TYPE_AN12B_CUB
 		"C-17 Globemaster III",				// VIEW_TYPE_C17_GLOBEMASTER_III
