@@ -2561,7 +2561,7 @@ void load_texture_water( void )
 		#endif
 
 #ifndef OGRE_EE
-		override_screen = load_dds_file_screen(filename, 0, 1.0);
+		override_screen = load_tga_file_screen(filename, 0, 1.0);
 #else
 		override_screen = NULL;
 #endif
