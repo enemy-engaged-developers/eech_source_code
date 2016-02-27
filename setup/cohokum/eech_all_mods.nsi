@@ -1449,6 +1449,7 @@ Section "EECH ${VERSION} with mods" SectionBase
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\SMOKE003.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\SMOKE004.tga"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\SMOKE005.tga"
+	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\SPRITE_LIGHT.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\TRAK0001-D.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\TRAK0001.bmp"
 	File "${EE_TEXT_DIR}\cohokum\graphics\textures\animation\TRAK0002-D.bmp"

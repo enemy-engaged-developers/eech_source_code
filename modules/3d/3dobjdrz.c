@@ -613,7 +613,7 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 			sprite.blue = scene->sprite_lights[count].colour.blue;
 			sprite.additive = TRUE;
 			//DEBUG// THIS LINE WAS COMMENTED OUT
-			sprite.texture = system_textures[TEXTURE_INDEX_FLARE001];
+			sprite.texture = system_textures[TEXTURE_INDEX_SPRITE_LIGHT];
 			//DEBUG// THIS LINE WAS COMMENTED OUT
 
 			insert_zbiased_object_into_3d_scene ( OBJECT_3D_DRAW_TYPE_SPRITE, &sprite, 0 );

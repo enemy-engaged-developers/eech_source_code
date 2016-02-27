@@ -560,7 +560,7 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 			sprite.green = scene->sprite_lights[count].colour.green;
 			sprite.blue = scene->sprite_lights[count].colour.blue;
 			sprite.additive = TRUE;
-			sprite.texture = system_textures[TEXTURE_INDEX_FLARE001];
+			sprite.texture = system_textures[TEXTURE_INDEX_SPRITE_LIGHT];
 
 			insert_zbiased_object_into_3d_scene ( OBJECT_3D_DRAW_TYPE_SPRITE, &sprite, 0 );
 		}
@@ -1470,7 +1470,7 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 			sprite.green = scene->sprite_lights[count].colour.green;
 			sprite.blue = scene->sprite_lights[count].colour.blue;
 			sprite.additive = TRUE;
-			sprite.texture = system_textures[TEXTURE_INDEX_FLARE001];
+			sprite.texture = system_textures[TEXTURE_INDEX_SPRITE_LIGHT];
 
 			insert_zbiased_object_into_3d_scene ( OBJECT_3D_DRAW_TYPE_SPRITE, &sprite, 0 );
 		}
