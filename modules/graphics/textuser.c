@@ -779,6 +779,10 @@ BOOL load_texturemap_data ( const char *path )
 	mclose ( ( void * ) textures_bin );
 #endif
 
+#ifndef OGRE_EE
+	register_exit_function ( &restore_default_textures );
+#endif
+
 	// adjust for texture indices added since EECH was released (i.e. not in the big texures-file)
 #ifndef OGRE_EE
 	number_of_system_textures = TEXTURE_INDEX_LAST;
