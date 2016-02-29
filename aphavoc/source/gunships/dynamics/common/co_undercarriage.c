@@ -40,8 +40,7 @@ typedef struct {
 	double
 		suspension_compression,  // how much the suspension is compressed, meters
 		water_immersion, // how deep suspension points under water
-		damping,        // resistance to change in compression
-		last_wheel_load; // interpolation
+		damping;        // resistance to change in compression
 	char
 		name[SUSPENSION_NAME_MAX_LENGTH];
 
@@ -513,13 +512,12 @@ static void apply_suspension_forces(void)
 //			else
 			wheel_load = G * (point->suspension_compression ? min(point->suspension_compression, (double)point->max_suspension_compression) * suspension_stiffness : point->water_immersion);
 
-			wheel_load = (wheel_load + point->damping + point->last_wheel_load) / 2;
+			wheel_load = wheel_load + point->damping;
 
 			sprintf(buffer, "%s load", point->name);
 			if (!(point->water_immersion > 0 && !strcmp(point->name, "name = tail bumper")))
 				add_dynamic_force (buffer, wheel_load, 0.0, &position, &up_direction, TRUE);
 
-			point->last_wheel_load = wheel_load;
 			point->suspension_compression = bound(point->suspension_compression, 0, point->max_suspension_compression);
 
 			// wheel sideways resistance
