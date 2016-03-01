@@ -1204,6 +1204,7 @@ void initialise_3d_terrain_types ( void )
    	(void) add_new_texture("REFLECTION_FOREST", "");
    	(void) add_new_texture("REFLECTION_ROCKS", "");
    	(void) add_new_texture("REFLECTION_DESERT", "");
+   	(void) add_new_texture("SPRITE_LIGHT", "");
 
 }
 
