@@ -2622,8 +2622,8 @@ int net_CheckForDataOnSocket (int p1, int p2)
 // Send a UDP packet to the masterserver
 void net_sendDataToMaster (char *data, int servernum)
 {
-    if (command_line_report_to_masterserver == FALSE)
-    	return;
+//    if (command_line_report_to_masterserver == FALSE)
+//    	return;
 
 
     if (servernum == 1)
@@ -2756,10 +2756,8 @@ void net_getServerList(void)
     int index = 0;
     int respondingServer = 0;
 
-    if (command_line_report_to_masterserver == FALSE)
-    	return;
-
-    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "GETSERVERLIST: Init");
+//    if (command_line_report_to_masterserver == FALSE)
+//    	return;
 
     if ((mastersocket <=0) && (mastersocket2 <=0))
     {
@@ -2767,6 +2765,7 @@ void net_getServerList(void)
 	return;
     }
 
+    debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "GETSERVERLIST: Init");
 
     if (num_multiplayer_refreshes == 1)
     {
@@ -2826,8 +2825,8 @@ void net_getServerList(void)
 // TODO: Replace hardcoded address with .ini-aware parameter.
 void net_init_heartbeat(void)
 {
-    if (command_line_report_to_masterserver == FALSE)
-    	return;
+//    if (command_line_report_to_masterserver == FALSE)
+//    	return;
 
         mastersocket = net_connectToMaster (command_line_primary_server_setting, MasterPort, 1);
         if (mastersocket <= 0)
@@ -2854,7 +2853,7 @@ void net_handle_heartbeat(void)
     connection_data_type
         *this_connection;
 
-    if (command_line_report_to_masterserver == FALSE)
+    if (command_line_report_to_masterserver == FALSE) // send heartbeat only if it's allowed
     	return;
 
         // Time for another heartbeat?
@@ -2890,8 +2889,8 @@ void net_handle_heartbeat(void)
 // Close masterserver socket.
 void net_uninit_heartbeat(void)
 {
-    if (command_line_report_to_masterserver == FALSE)
-    	return;
+//    if (command_line_report_to_masterserver == FALSE)
+//    	return;
 
     if (mastersocket >= 0)
           closesocket (mastersocket);
