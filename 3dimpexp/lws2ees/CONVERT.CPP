@@ -184,7 +184,7 @@ class Convert
        if (itor->lods.lods[i - 1].distance >= itor->lods.lods[i].distance)
         error("Invalid distances for LODs %i and %i for object %s", i - 1, i, itor->print_name.c_str());
       if (itor->filename.empty())
-       warning("Null object %s with LODs", itor->print_name.c_str());
+       warning("Null object %s has LODs", itor->print_name.c_str());
       if ((itor->lods.lods.size() > 1 || !itor->lods.lods.back().filename.empty()) && !itor->search.empty())
        warning("Object %s has both a label and LODs", itor->print_name.c_str());
      }
@@ -578,11 +578,11 @@ class Convert
  void save_schem(const GeneralObject& general_object) const
  {
   if (version <= -3)
-  {
-   fw(general_object.color);
-   fw(general_object.schem_x);
-   fw(general_object.schem_y);
-  }
+   {
+    fw(general_object.color);
+    fw(general_object.schem_x);
+    fw(general_object.schem_y);
+   }
  }
 
  void save_animation(const GeneralObject& general_object) const
