@@ -258,7 +258,63 @@ void deinitialise_joysticks (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance, LPVOID user_data)
+static char* string_to_unicode(const char* str)
+{
+	WCHAR
+		wstr[256];
+
+	static CHAR
+		ustr[256];
+
+	MultiByteToWideChar(CP_ACP, 0, str, -1, wstr, ARRAYSIZE(wstr));
+	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, ustr, ARRAYSIZE(ustr), NULL, NULL);
+	return ustr;
+}
+
+static unsigned process_axis(LPDIRECTINPUTDEVICE7 device, LPDIDEVICEOBJECTINSTANCE device_part, LPDIPROPRANGE device_range, LPDIPROPDWORD device_property, unsigned obj, unsigned index, const char* name)
+{
+	HRESULT
+		di_err;
+
+	di_err = IDirectInputDevice7_GetObjectInfo (device, device_part, obj, DIPH_BYOFFSET);
+
+	if (di_err == DI_OK)
+	{
+#if 0	// Retro 12Dez2004
+		device_property->dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+#else
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, index))
+			device_property->dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property->dwData = 0;
+#endif
+
+		device_range->diph.dwObj = obj;
+		device_property->diph.dwObj = obj;
+	
+		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range->diph);
+		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property->diph);
+
+		strcpy (device_part->tszName, string_to_unicode (device_part->tszName));
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = index;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(joystick_devices[number_of_joystick_devices].device_product_name)+strlen(name)+strlen(device_part->tszName)+1);
+		strcpy(AxisInfo[AxisCount].AxisName,joystick_devices[number_of_joystick_devices].device_product_name);
+		strcat(AxisInfo[AxisCount].AxisName,name);
+		strcat(AxisInfo[AxisCount].AxisName,device_part->tszName);
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance, LPVOID user_data)
 {
 
 	HRESULT
@@ -523,6 +579,14 @@ void deinitialise_joysticks (void)
 	}
 
 	//
+	// Copy the name of the device
+	//
+
+	strcpy (joystick_devices[number_of_joystick_devices].device_name, string_to_unicode (device_instance->tszInstanceName));
+
+	strcpy (joystick_devices[number_of_joystick_devices].device_product_name, string_to_unicode (device_instance->tszProductName));
+
+	//
 	// Initialise the device part for the next lot of queries
 	//
 
@@ -565,298 +629,49 @@ void deinitialise_joysticks (void)
 	// Initialise the X axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_X, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 0))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-
-		joystick_devices[number_of_joystick_devices].joystick_xaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_X;
-		device_property.diph.dwObj = DIJOFS_X;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 0;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (X) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (X) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_xaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_X, 0, " (X) : ");
 
 	//
 	// Initialise the Y axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_Y, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 1))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-
-		joystick_devices[number_of_joystick_devices].joystick_yaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_Y;
-		device_property.diph.dwObj = DIJOFS_Y;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 1;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (Y) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (Y) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_yaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_Y, 1, " (Y) : ");
 
 	//
 	// Initialise the Z axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_Z, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-
-		//
-		// The Z axis required a dead zone of ZERO (its the collective)
-		//
-
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 2))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-
-		joystick_devices[number_of_joystick_devices].joystick_zaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_Z;
-		device_property.diph.dwObj = DIJOFS_Z;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 2;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (Z) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (Z) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_zaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_Z, 2, " (Z) : ");
 
 	//
 	// Initialise the Rx axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_RX, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 3))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-
-		joystick_devices[number_of_joystick_devices].joystick_rxaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_RX;
-		device_property.diph.dwObj = DIJOFS_RX;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 3;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (RX) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (RX) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_rxaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_RX, 3, " (RX) : ");
 
 	//
 	// Initialise the Ry axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_RY, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 4))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-		joystick_devices[number_of_joystick_devices].joystick_ryaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_RY;
-		device_property.diph.dwObj = DIJOFS_RY;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 4;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (RY) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (RY) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_ryaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_RY, 4, " (RY) : ");
 
 	//
 	// Initialise the Rz axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_RZ, DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 5))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-		joystick_devices[number_of_joystick_devices].joystick_rzaxis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_RZ;
-		device_property.diph.dwObj = DIJOFS_RZ;
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 5;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (RZ) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (RZ) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_rzaxis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_RZ, 5, " (RZ) : ");
 
 	//
 	// Initialise the Slider0 axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_SLIDER(0), DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 6))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-		joystick_devices[number_of_joystick_devices].joystick_slider0axis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_SLIDER(0);
-		device_property.diph.dwObj = DIJOFS_SLIDER(0);
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 6;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (SLIDER1) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (SLIDER1) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_slider0axis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_SLIDER(0), 6, " (SLIDER1) : ");
 
 	//
 	// Initialise the Slider1 axis (if there is one)
 	//
 
-	di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, DIJOFS_SLIDER(1), DIPH_BYOFFSET);
-
-	if (di_err == DI_OK)
-	{
-#if 0	// Retro 12Dez2004
-		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-#else
-		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 7))
-			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-		else
-			device_property.dwData = 0;
-#endif
-		joystick_devices[number_of_joystick_devices].joystick_slider1axis_valid = TRUE;
-
-		device_range.diph.dwObj = DIJOFS_SLIDER(1);
-		device_property.diph.dwObj = DIJOFS_SLIDER(1);
-	
-		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
-		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
-
-		// Retro 10Jul2004 start
-		AxisInfo[AxisCount].axis = 7;
-		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(" (SLIDER2) : ")+strlen(device_part.tszName)+1);
-		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName," (SLIDER2) : ");
-		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
-		AxisInfo[AxisCount].inUse = FALSE;
-		AxisCount++;
-		// Retro 10Jul2004 end
-	}
+	joystick_devices[number_of_joystick_devices].joystick_slider1axis_valid = process_axis (device, &device_part, &device_range, &device_property, DIJOFS_SLIDER(1), 7, " (SLIDER2) : ");
 
 	//
 	// Parse the capabilities
@@ -904,14 +719,6 @@ void deinitialise_joysticks (void)
 
 		joystick_devices[number_of_joystick_devices].joystick_has_pov = TRUE;
 	}
-
-	//
-	// Copy the name of the device
-	//
-
-	strcpy (joystick_devices[number_of_joystick_devices].device_name, device_instance->tszInstanceName);
-
-	strcpy (joystick_devices[number_of_joystick_devices].device_product_name, device_instance->tszProductName);
 
 #if DEBUG_MODULE
 
