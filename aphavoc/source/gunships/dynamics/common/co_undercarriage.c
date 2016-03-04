@@ -333,9 +333,9 @@ static void update_suspension(void)
 				spring_compression,
 				terrain_elevation,
 				compression_change,
-				water_immersion = 0;
-			unsigned
-				keysite_area = 0;
+				water_immersion = 0.0;
+			char
+				keysite_area = FALSE;
 
 			old_world_position = point->world_position;
 
@@ -366,10 +366,9 @@ static void update_suspension(void)
 					spring_compression += (get_local_entity_int_value (keysite, INT_TYPE_SIDE) == ENTITY_SIDE_BLUE_FORCE) ? 19.95 : 16.65;	// update it of you will change carrier model! TODO: eliminate gunship side divide /thealx/
 				else
 				{
-					water_immersion = min (2.0, spring_compression + point->position.y / 3);
-					spring_compression = 0;
+					water_immersion = min (2.0, spring_compression + point->position.y / 3.0);
+					spring_compression = 0.0;
 				}
-//					debug_log("spring %f, immersion %f, airborn %i", spring_compression, water_immersion, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT));			
 			}
 			
 			if (spring_compression > 0.0) // solid
@@ -403,19 +402,21 @@ static void update_suspension(void)
 
 				compression_change = spring_compression - point->suspension_compression;
 
-				point->damping = bound(compression_change * inv_delta_time * point->damper_stiffness, -25.0f, 25.0f);
+				point->damping = bound( compression_change * inv_delta_time * (double) point->damper_stiffness, 0.0f, 500.0 * get_model_delta_time() );
+
+//				debug_log("point %i - old %f, new %f, change %f, damping %f", i, point->suspension_compression, spring_compression, compression_change, point->damping);
 
 				point->suspension_compression = spring_compression;
-				point->water_immersion = 0;
+				point->water_immersion = 0.0;
 
 					// let's add some roughness of terrain /thealx/
-				if (fabs(point->velocity.z) > 1 && raw->ac.mob.velocity > 1)
-					point->suspension_compression *= 1 + bound(point->velocity.z * sfrand1() / 200, 0, point->max_suspension_compression / 3);
+				if (fabs( point->velocity.z ) > 1.0 && raw->ac.mob.velocity > 1.0)
+					point->suspension_compression *= 1.0 + bound( point->velocity.z * sfrand1() / 200.0, 0.0f, point->max_suspension_compression / 3.0 );
 				
 				if (point->can_turn && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
 				{
 					float
-						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0)) * 0.5,
+						max_turn_rate = rad(180.0) * get_model_delta_time() * (min( fabs(point->velocity.z) + fabs(point->velocity.x), 2.0) ) * 0.5,
 						new_angle;
 
 
@@ -440,10 +441,10 @@ static void update_suspension(void)
 			{
 				compression_change = water_immersion - point->water_immersion;
 
-				point->damping = - compression_change * inv_delta_time / 10;
+				point->damping = - compression_change * inv_delta_time / 10.0;
 
 				point->water_immersion = water_immersion;
-				point->suspension_compression = 0;
+				point->suspension_compression = 0.0;
 			}
 			else
 			{
@@ -494,14 +495,14 @@ static void apply_suspension_forces(void)
 
 		if (point->suspension_compression > 0 || point->water_immersion > 0)
 		{
-			float suspension_stiffness;
+			double suspension_stiffness;
 			
 			if (!point->damaged || point->suspension_compression >= point->max_suspension_compression)
 				suspension_stiffness = point->suspension_stiffness;
 			else if (point->suspension_compression / point->max_suspension_compression >= 0.5) // damaged wheel works only when it close to edge
-				suspension_stiffness = point->suspension_stiffness * (point->suspension_compression / point->max_suspension_compression - 0.5) * 2;
+				suspension_stiffness = point->suspension_stiffness * (point->suspension_compression / point->max_suspension_compression - 0.5) * 2.0;
 			else
-				suspension_stiffness = 0;
+				suspension_stiffness = 0.0;
 			
 			position.x = point->position.x;
 			position.y = -1.0;
@@ -512,24 +513,24 @@ static void apply_suspension_forces(void)
 //			else
 			wheel_load = G * (point->suspension_compression ? min(point->suspension_compression, (double)point->max_suspension_compression) * suspension_stiffness : point->water_immersion);
 
-			wheel_load = wheel_load + point->damping;
+			wheel_load += point->damping;
 
 			sprintf(buffer, "%s load", point->name);
-			if (!(point->water_immersion > 0 && !strcmp(point->name, "name = tail bumper")))
+			if (!(point->water_immersion > 0.0 && !strcmp(point->name, "name = tail bumper")))
 				add_dynamic_force (buffer, wheel_load, 0.0, &position, &up_direction, TRUE);
 
-			point->suspension_compression = bound(point->suspension_compression, 0, point->max_suspension_compression);
+			point->suspension_compression = bound( point->suspension_compression, 0.0f, point->max_suspension_compression );
 
 			// wheel sideways resistance
 			{
 				float
-					wheight_on_wheel = G * max(0.0, 1 - (point->max_suspension_compression - point->suspension_compression) / point->max_suspension_compression),  // depends on load on wheel
-					force_diff = (wheight_on_wheel * point->velocity.x + point->resistance_force) / 2,
+					wheight_on_wheel = G * max( 0.0, 1.0 - (point->max_suspension_compression - point->suspension_compression) / point->max_suspension_compression ),  // depends on load on wheel
+					force_diff = (wheight_on_wheel * point->velocity.x + point->resistance_force) / 2.0,
 					max_force_change = get_model_delta_time() * 1000.0;
 
 				if (!point->can_turn || point->water_immersion > 0 )
 				{
-					point->resistance_force = bound(force_diff, -max_force_change, max_force_change);
+					point->resistance_force = bound( force_diff, -max_force_change, max_force_change );
 
 					direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
 					direction.y = 0.0;
@@ -544,7 +545,7 @@ static void apply_suspension_forces(void)
 				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0)
 					wheight_on_wheel *= 0.005;  // general rolling resistance
 
-				force_diff = (wheight_on_wheel * point->velocity.z + point->brake_force) / 2;
+				force_diff = (wheight_on_wheel * point->velocity.z + point->brake_force) / 2.0;
 				point->brake_force = bound(force_diff, - max_force_change * 0.1, max_force_change * 0.1);
 
 				direction.x = 0.0;
@@ -1030,4 +1031,57 @@ void rotate_helicopter_wheels(object_3d_instance* inst3d)
 				search.result_sub_object->relative_pitch = current_landing_gear->gear_points[i].rotation_angle;
 			}
 		}
+}
+
+void debug_adjust_damper_stiffness (event *ev)
+{
+	int i, sign;
+	
+	if (!get_gunship_entity())
+		return;
+
+	switch (ev->key)
+	{
+		case DIK_NUMPAD0:
+			i = 0;
+			break;
+		case DIK_NUMPAD1:
+			i = 1;
+			break;
+		case DIK_NUMPAD2:
+			i = 2;
+			break;
+		case DIK_NUMPAD3:
+			i = 3;
+			break;
+		case DIK_NUMPAD4:
+			i = 4;
+			break;
+		case DIK_NUMPAD5:
+			i = 5;
+			break;
+		case DIK_NUMPAD6:
+			i = 6;
+			break;
+		case DIK_NUMPAD7:
+			i = 7;
+			break;
+	}
+	
+	switch (ev->modifier)
+	{
+		case MODIFIER_RIGHT_CONTROL:
+			sign = 1;
+			break;
+		default:
+			sign = -1;
+	}
+	
+	if (i < current_landing_gear->num_gear_points)
+	{
+		landing_gear_point* point = &current_landing_gear->gear_points[i];
+		
+		point->damper_stiffness += 0.1 * sign;
+		debug_log("wheel %i damper_stiffness changed to %.1f", i, point->damper_stiffness);
+	}		
 }

@@ -71,6 +71,7 @@
 #include "ai/taskgen/engage.h"
 #include "ai/taskgen/taskgen.h"
 #include "ai/highlevl/imaps.h"
+#include "gunships/dynamics/common/co_undercarriage.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2572,6 +2573,23 @@ void set_flight_debug_events (void)
 	set_event (DIK_MINUS, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, select_previous_weapon_config_event);
 
 	set_event (DIK_MINUS, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, decrease_drag_z_event);
+
+	set_event (DIK_NUMPAD0, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD0, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD1, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD1, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD2, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD2, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD3, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD3, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD4, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD4, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD5, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD5, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD6, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD6, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD7, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
+	set_event (DIK_NUMPAD7, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_adjust_damper_stiffness);
 
 }
 

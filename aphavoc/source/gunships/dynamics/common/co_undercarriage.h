@@ -21,4 +21,5 @@ int weight_on_wheels(void);
 void animate_aircraft_suspension(entity* en);
 void rotate_helicopter_wheels(object_3d_instance* inst3d);
 
+void debug_adjust_damper_stiffness (event *ev);
 #endif
