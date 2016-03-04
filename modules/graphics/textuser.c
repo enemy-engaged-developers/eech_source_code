@@ -199,6 +199,7 @@ typedef struct TEXTURE_NAME_HASH_ENTRY texture_name_hash_entry;
 
 int
 	number_of_system_textures,
+	texture_sprite_index,
 	number_of_system_texture_camoflages;
 
 #ifndef OGRE_EE
@@ -792,6 +793,8 @@ BOOL load_texturemap_data ( const char *path )
 		ogre_textures_define (number_of_system_textures, 1, -1, 1, 1, 3, white);
 	}
 #endif
+
+	texture_sprite_index = add_new_texture("SPRITE_LIGHT", "");
 
 	return ( TRUE );
 }
