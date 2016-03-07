@@ -405,11 +405,12 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_LOCKED:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_TRACKED:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_WARNING_MESSAGE:
+			channel = 1;
+			// FALLTHROUGH
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE:
 		default:
 			csa_code = CSA_CODES_LAST;
-			channel = 1;
 			break;
 		}
 
