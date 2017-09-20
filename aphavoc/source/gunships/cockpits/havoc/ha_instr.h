@@ -100,6 +100,8 @@ extern void get_havoc_virtual_cockpit_adi_angles (matrix3x3 attitude, float *hea
 
 extern void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float *flight_path, float *drift);
 
+extern float get_havoc_virtual_cockpit_airspeed_indicator_needle_value (void);
+
 // Casm 10SEP05 Havoc Instruments
 extern void initialise_havoc_instruments (void);
 

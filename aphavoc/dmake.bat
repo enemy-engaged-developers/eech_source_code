@@ -1,5 +1,5 @@
 @echo off
-SET EECH_ROOTDIR=c:\eech-dev
+SET EECH_ROOTDIR=D:\workspace\eech-dev-unchanged-master
 
 del project.exe
 

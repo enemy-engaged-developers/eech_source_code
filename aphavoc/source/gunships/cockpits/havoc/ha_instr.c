@@ -510,6 +510,39 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 	*drift = drift_needle_value;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static float get_airspeed_indicator_needle_value (void)
+{
+	float
+		airspeed_needle_value;
+
+	if (test_cockpit_instruments)
+	{
+		static float
+			value = -50.0;
+
+		value += 2.0;
+
+		if (value > 300.0)
+		{
+			value = -50.0;
+		}
+
+		airspeed_needle_value = value;
+	}
+	else
+	{
+		airspeed_needle_value = knots (current_flight_dynamics->indicated_airspeed.value);
+	}
+
+	airspeed_needle_value = bound (airspeed_needle_value, 0.0, 250.0);
+
+	return (airspeed_needle_value);
+}
+
 #if 0
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2188,6 +2221,57 @@ void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float
 	*flight_path = flight_path_needle_value * -1.0;
 
 	*drift = drift_needle_value * -1.0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_virtual_cockpit_airspeed_indicator_needle_value (void)
+{
+	float
+		airspeed_needle_value,
+		fraction,
+		roll;
+
+	airspeed_needle_value = get_airspeed_indicator_needle_value ();
+
+	//
+	// non-linear scale
+	//
+
+	if (airspeed_needle_value <= 50.0)
+	{
+		fraction = airspeed_needle_value * (1.0 / 50.0);
+
+		roll = fraction * rad (60.0);
+	}
+	else if (airspeed_needle_value <= 100.0)
+	{
+		fraction = (airspeed_needle_value - 50.0) * (1.0 / 50.0);
+
+		roll = (fraction * (rad (150.0) - rad (60.0))) + rad (60.0);
+	}
+	else if (airspeed_needle_value <= 150.0)
+	{
+		fraction = (airspeed_needle_value - 100.0) * (1.0 / 50.0);
+
+		roll = (fraction * (rad (210.0) - rad (150.0))) + rad (150.0);
+	}
+	else if (airspeed_needle_value <= 200.0)
+	{
+		fraction = (airspeed_needle_value - 150.0) * (1.0 / 50.0);
+
+		roll = (fraction * (rad (270.0) - rad (210.0))) + rad (210.0);
+	}
+	else
+	{
+		fraction = (airspeed_needle_value - 200.0) * (1.0 / 50.0);
+
+		roll = (fraction * (rad (330.0) - rad (270.0))) + rad (270.0);
+	}
+
+	return (-roll);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

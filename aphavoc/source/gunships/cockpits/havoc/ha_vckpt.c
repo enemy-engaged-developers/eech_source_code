@@ -113,7 +113,9 @@ static object_3d_instance
 	*virtual_cockpit_compass_inst3d,
 #endif
 	*virtual_cockpit_compass_level1_inst3d,
-	*virtual_cockpit_compass_level2_inst3d;
+	*virtual_cockpit_compass_level2_inst3d,
+	// using apache needles
+	*virtual_cockpit_instrument_needles_inst3d;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +182,8 @@ void initialise_havoc_virtual_cockpit (void)
 	virtual_cockpit_compass_level1_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_COMPASS_LEVEL1);
 
 	virtual_cockpit_compass_level2_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_COMPASS_LEVEL2);
+
+	virtual_cockpit_instrument_needles_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES);
 
 	//
 	// wipers and rain
@@ -259,6 +263,9 @@ void deinitialise_havoc_virtual_cockpit (void)
 	destruct_3d_object (virtual_cockpit_compass_level1_inst3d);
 
 	destruct_3d_object (virtual_cockpit_compass_level2_inst3d);
+
+	// using apache needles
+	destruct_3d_object (virtual_cockpit_instrument_needles_inst3d);
 
 	//
 	// wipers and rain
@@ -722,6 +729,27 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					memcpy (&virtual_cockpit_hsi_drift_inst3d->vp, &vp, sizeof (viewpoint));
 
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_drift_inst3d->vp.position, virtual_cockpit_hsi_drift_inst3d);
+
+					// using apache needles
+					//
+					// airspeed
+					//
+
+					search.search_depth = 0;
+					search.search_object = virtual_cockpit_instrument_needles_inst3d;
+					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_AIRSPEED_NEEDLE;
+
+					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search.result_sub_object->visible_object = draw_virtual_cockpit_needles_on_fixed_cockpits;
+
+						search.result_sub_object->relative_roll = get_havoc_virtual_cockpit_airspeed_indicator_needle_value ();
+					}
+
+					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
+
+					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
+
 
 					//VJ wideview mod, date: 18-mar-03
 					// re-insert compass here (internal is draw after external
