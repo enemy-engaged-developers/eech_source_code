@@ -247,15 +247,13 @@ namespace
 #ifdef USE_TERRAIN_TEXTURES
 				tus->setTextureName(TextureName(ogre_terrain.type_information[i].texture_index));
 				tus->setTextureAddressingMode(Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_CLAMP);
+				tus->setTextureFiltering(Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
 				if (sd.caps->texture2)
 				{
-					//pass->setSceneBlending(SBT_TRANSPARENT_ALPHA);
-					pass->setSceneBlending(Ogre::SBT_MODULATE);
-
-					tus = pass->createTextureUnitState();
-					//tus->setColourOperation(LBO_MODULATE);
-					tus->setTextureName(TextureName(ogre_terrain.type_information[i].texture2_index));
+					tus = pass->createTextureUnitState(TextureName(ogre_terrain.type_information[i].texture2_index), 1);
 					tus->setTextureAddressingMode(Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_CLAMP);
+					tus->setTextureFiltering(Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
+					tus->setColourOperation(Ogre::LBO_ALPHA_BLEND);
 				}
 				else
 #endif
@@ -651,6 +649,7 @@ namespace
 
 
 #ifdef USE_TERRAIN_TREES
+					if (ogre_terrain.tree)
 					{
 						TerrainTree terrain_tree(z, x);
 						Trees::iterator itor(trees.find(Sector(x, z)));
@@ -664,6 +663,7 @@ namespace
 							for (int i = 0; i < ogre_terrain.tree_sectors[z][x].number_of_trees; i++, tree++)
 							{
 								Ogre::InstancedEntity* ent = tree_manager->createInstancedEntity(tree_material);
+								ent->setRenderQueueGroup(Ogre::RENDER_QUEUE_3 + 1);
 								Ogre::Vector3 tree_position((float)(tree->x * (TERRAIN_3D_XZ_SCALE / 2)), tree->y * ogre_terrain.map_scaled_height_difference / 2 + ogre_terrain.map_minimum_height, (float)(tree->z * (TERRAIN_3D_XZ_SCALE / 2)));
 								tree_position.z = -tree_position.z;
 								float scale = ogre_terrain.get_tree_scale(tree);
@@ -760,7 +760,10 @@ namespace
 				position.z = -position.z;
 				node->setPosition(position);
 				if (entity)
+				{
+					entity->setRenderQueueGroup(Ogre::RENDER_QUEUE_3);
 					node->attachObject(entity);
+				}
 			}
 			~SectorData(void)
 			{

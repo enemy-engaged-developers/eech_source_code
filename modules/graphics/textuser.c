@@ -1984,6 +1984,8 @@ void load_warzone_override_textures ( void )
 	// empty all the strings
 	clear_texture_override_names ();
 
+	initialize_terrain_textures ();
+
 	// first seek all textures in common directories
 	//VJ 051024 do not use root directory to search
 	//nrtextfound = initialize_texture_override_names ( "." );
@@ -2116,6 +2118,8 @@ static float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( const terrain_3d_tree_
 
 void load_models_override_textures ( void )
 {
+	initialize_terrain_textures ();
+
 	clear_texture_override_names ();
 
 	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_GENERAL);
@@ -2134,7 +2138,7 @@ void load_models_override_textures ( void )
 	ogre_textures_commit (FALSE);
 }
 
-void load_terrain_override_textures ( void )
+void find_terrain_override_textures ( void )
 {
 	char
 		directory_textdir_path[256];
@@ -2145,12 +2149,15 @@ void load_terrain_override_textures ( void )
 
 	initialize_terrain_texture_scales (directory_textdir_path);
 
+	if (global_dynamic_water)
+		load_texture_water ();
+}
+
+void load_terrain_override_textures ( void )
+{
 	memcpy (backup_system_texture_info, system_texture_info, sizeof (backup_system_texture_info));
 
 	load_texture_override ();
-
-	if (global_dynamic_water)
-		load_texture_water();
 
 	ogre_textures_commit (TRUE);
 	{
@@ -2236,7 +2243,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 		FILE *fin;
 		char buf[256];
 		char *p;
-		int c, index, count;
+		int count;
 
 		fin = fopen(filename,"r");
 
@@ -2263,17 +2270,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 				p[i+1]='\0';
 				while (p[0] == ' ')
 					p++;
-				index = -1;
-
-				for ( c = 0; c < number_of_system_textures; c++ )
-				{
-					if ( strcmp ( system_texture_names[c], p ) == 0 )
-					{
-						index = c;
-						break;
-					}
-				}
-				current_map_info.texture_override_scales[count][0] = index;
+				current_map_info.texture_override_scales[count][0] = get_system_texture_index (p);
 			}
 
 			//scan scale
@@ -2454,12 +2451,12 @@ void load_texture_override ( void )
 //VJ 051226 changed function parameter to void
 void load_texture_water( void )
 {
-#ifndef OGRE_EE
-//FIXME
 	FILE *fin;
 
+#ifndef OGRE_EE
 	screen
 		*override_screen;
+#endif
 
 	int
 		i, placenr, count;
@@ -2552,13 +2549,18 @@ void load_texture_water( void )
 	//rivertextures are put behind last texture in system_texture_info array
 	// order is river, sea, reservoir (0, 1, 2)
 
+#ifndef OGRE_EE
 	placenr = number_of_system_textures;
+#endif
 
 	////// load textures
 
 	for (i = 0; i < 3; i++)
 	{
 		int rivernr = 0;
+#ifdef OGRE_EE
+		placenr = add_new_texture(current_map_info.water_info[i].name_top, "textuser.c");
+#endif
 		current_map_info.water_info[i].placenr = placenr;
 		// read the bottom texture
 		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, current_map_info.water_info[i].name_top);
@@ -2570,39 +2572,45 @@ void load_texture_water( void )
 #ifndef OGRE_EE
 		override_screen = load_tga_file_screen(filename, 0, 1.0);
 #else
-		override_screen = NULL;
+		system_texture_override_names[placenr].type = TYPE_TGA;
+		strcpy(system_texture_override_names[placenr].path, filename);
+		system_texture_override_names[placenr].camo = CAMO_REGULAR;
 #endif
 
-		count = placenr;
-		system_texture_info[count].flags.contains_alpha = 1;
-		system_texture_info[count].flags.vertically_inverted = 1;
-		system_texture_info[count].flags.mipmap_enabled = 1;
-		system_texture_info[count].flags.wrapped = 1;
+		system_texture_info[placenr].flags.contains_alpha = 1;
+		system_texture_info[placenr].flags.vertically_inverted = 1;
+		system_texture_info[placenr].flags.mipmap_enabled = 1;
+		system_texture_info[placenr].flags.wrapped = 1;
 
 #ifndef OGRE_EE
-		system_textures[count] = override_screen;
+		system_textures[placenr] = override_screen;
+		system_texture_info[placenr].texture_screen = override_screen;
 #endif
-		system_texture_info[count].texture_screen = override_screen;
 
 		// load dynamic texture series
 		rivernr = current_map_info.water_info[i].start;
-		for ( count = placenr+1; count < placenr+1+current_map_info.water_info[i].number; count++ )
+		for ( count = 0; count < current_map_info.water_info[i].number; count++ )
 		{
-			system_texture_info[count].flags.contains_alpha = 1;
-			system_texture_info[count].flags.vertically_inverted = 1;
-			system_texture_info[count].flags.mipmap_enabled = 1;
-			system_texture_info[count].flags.wrapped = 1;
+			char
+				name[256];
+			sprintf(name, "%s%0*d", current_map_info.water_info[i].name_bottom, current_map_info.water_info[i].number < 100 ? 2 : 3, rivernr);
 
-			system_texture_info[count].texture_screen = NULL;
+#ifndef OGRE_EE
+			placenr++;
+#else
+			placenr = add_new_texture(name, "textuser.c");
+#endif
+			system_texture_info[placenr].flags.contains_alpha = 1;
+			system_texture_info[placenr].flags.vertically_inverted = 1;
+			system_texture_info[placenr].flags.mipmap_enabled = 1;
+			system_texture_info[placenr].flags.wrapped = 1;
 
-			memset ( system_texture_names[count], 0, 128 );
+#ifndef OGRE_EE
+			system_texture_info[placenr].texture_screen = NULL;
+			strcpy ( system_texture_names[placenr], name );
+#endif
 
-			if (current_map_info.water_info[i].number < 100)
-				sprintf(system_texture_names[count],"%s%02d",current_map_info.water_info[i].name_bottom,rivernr);
-			else
-				sprintf(system_texture_names[count],"%s%03d",current_map_info.water_info[i].name_bottom,rivernr);
-
-			//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
+			//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[placenr]);
 
 			rivernr++;
 
@@ -2610,7 +2618,7 @@ void load_texture_water( void )
 			{
 			case TYPE_BMP:
 			{
-				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
+				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
 #ifndef OGRE_EE
 				override_screen = load_bmp_file_screen(filename);
 #endif
@@ -2618,7 +2626,7 @@ void load_texture_water( void )
 			}
 			case TYPE_TGA:
 			{
-				sprintf(filename,"%s\\%s\\%s.tga", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
+				sprintf(filename,"%s\\%s\\%s.tga", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
 #ifndef OGRE_EE
 				override_screen = load_tga_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
 #endif
@@ -2626,7 +2634,7 @@ void load_texture_water( void )
 			}
 			case TYPE_DDS:
 			{
-				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
+				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
 #ifndef OGRE_EE
 				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
 #endif
@@ -2634,20 +2642,22 @@ void load_texture_water( void )
 			}
 			}
 
-			if (override_screen) {
 #ifndef OGRE_EE
-				system_textures[count] = override_screen;
+			if (override_screen)
 #endif
-				system_texture_info[count].texture_screen = override_screen;
+			{
+#ifndef OGRE_EE
+				system_textures[placenr] = override_screen;
+				system_texture_info[placenr].texture_screen = override_screen;
+#else
+				system_texture_override_names[placenr].type = current_map_info.water_info[i].type;
+				strcpy(system_texture_override_names[placenr].path, filename);
+				system_texture_override_names[placenr].camo = CAMO_REGULAR;
+#endif
 			}
 		}
-		placenr += current_map_info.water_info[i].number+1;
+		placenr++;
 	}
-
-	//VJ 010620 add total number of textures
-	current_map_info.last_texture = placenr;
-
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3122,8 +3132,6 @@ void initialise_custom_map_info( void )
 	current_map_info.dry_river = 0;
 
 	current_map_info.gouraud_shading = 0; // Craig Feb. 2009
-
-	current_map_info.last_texture = number_of_system_textures;
 
 	current_map_info.latitude = current_map_info.longitude = 0.0;
 

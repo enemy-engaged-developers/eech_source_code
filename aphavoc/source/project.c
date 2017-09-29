@@ -476,6 +476,8 @@ void application_main (int argc, char **argv)
 
 	ddraw_flip_surface ();
 #else
+	initialise_graphics_colours ();
+
 	set_global_3d_visual_screen_width (application_video_width);
 	set_global_3d_visual_screen_height (application_video_height);
 

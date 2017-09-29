@@ -164,6 +164,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 	insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, raw->ac.inst3d);
 #else
+	animate_and_draw_entity_muzzle_flash_effect (en);
 	object_3d_draw (raw->ac.inst3d);
 #endif
 

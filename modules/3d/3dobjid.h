@@ -169,4 +169,6 @@ extern char
 	**texture_animation_names;
 extern texture_animation_information
 	*texture_animations;
+extern int
+	number_of_texture_animations;
 #endif

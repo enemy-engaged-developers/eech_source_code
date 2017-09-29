@@ -2,6 +2,11 @@
 
 namespace
 {
+	Ogre::vector<TextureAnimation>::type texture_animations;
+}
+
+namespace
+{
 	typedef Ogre::vector<unsigned char>::type Data;
 	Data data;
 	struct Info
@@ -14,12 +19,33 @@ namespace
 		{
 			if (override.empty() && file.empty())
 			{
+				ogre_log(__FUNCTION__, "%s %s", texture_name.c_str(), pb.data ? "data" : "empty");
 				Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().createManual(texture_name, ogre_resource_group, Ogre::TEX_TYPE_2D, pb.right, pb.bottom, 0, pb.format, Ogre::TU_STATIC_WRITE_ONLY);
 				if (pb.data)
 					tex->getBuffer(0, 0)->blitFromMemory(pb);
 			}
 			else
-				Ogre::TextureManager::getSingleton().loadImage(texture_name, ogre_resource_group, Ogre::Image().load(override.empty() ? file : override, ogre_resource_group));
+			{
+				const Ogre::String& name = override.empty() ? file : override;
+				ogre_log(__FUNCTION__, "%s %s", texture_name.c_str(), name.c_str());
+				Ogre::Image image;
+				image.load(name, ogre_resource_group);
+				if (image.getFormat() == Ogre::PF_A8R8G8B8 && image.getNumMipmaps() == 0)
+				{
+					Ogre::PixelBox pb = image.getPixelBox();
+					unsigned char* data = static_cast<unsigned char*>(pb.data) + 3;
+					for (unsigned y = pb.getHeight(); y--;)
+					{
+						for (unsigned x = pb.getWidth(); x--;)
+						{
+							*data = ~*data;
+							data += 4;
+						}
+						data += pb.getRowSkip();
+					}
+				}
+				Ogre::TextureManager::getSingleton().loadImage(texture_name, ogre_resource_group, image);
+			}
 		}
 	};
 	typedef Ogre::map<unsigned, Info>::type Textures;
@@ -209,6 +235,26 @@ namespace
 	private:
 		unsigned index;
 	};
+}
+
+void OGREEE_CALL ogre_textures_animation(unsigned number_of_animations, const unsigned* data)
+{
+	assert(GetCurrentThreadId() == user_thread_id);
+
+	texture_animations.resize(number_of_animations + 1);
+	for (unsigned i = 0; i < number_of_animations; i++)
+	{
+		unsigned size = *data++;
+		texture_animations[i].assign(data, data + size);
+		data += size;
+	}
+}
+
+const TextureAnimation& ogre_textures_animation(unsigned texture_animation)
+{
+	assert(GetCurrentThreadId() == ogre_thread_id);
+
+	return texture_animations[std::min(texture_animation, texture_animations.size() - 1)];
 }
 
 void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, const void* texture_image_data)

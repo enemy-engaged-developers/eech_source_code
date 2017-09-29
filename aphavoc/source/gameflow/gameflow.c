@@ -780,6 +780,10 @@ void process_game_initialisation_phases (void)
 
 				set_valid_combat_zone (TRUE);
 
+#ifdef OGRE_EE
+				find_terrain_override_textures ();
+#endif
+
 				load_3d_terrain_game_data ();
 
 #ifdef OGRE_EE

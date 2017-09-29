@@ -322,7 +322,10 @@ int load_3d_terrain ( const char *path )
 	// Initialise the terrain rendering routines ( sets the type of polygon )
 	//
 
-	initialise_3d_terrain_rendering_routines ( FALSE );
+	set_3d_terrain_dual_pass_rendering ( command_line_texture_colour == 2 || global_dynamic_water );
+
+	initialise_3d_terrain_rendering_routines ( get_3d_terrain_dual_pass_rendering () );
+
 
 	//
 	// Initialise the texture indices

@@ -215,9 +215,9 @@ int advance_texture_animation_frame_on_object ( object_3d_instance *obj, enum TE
 int get_texture_animation_number_of_frames ( enum TEXTURE_ANIMATION_INDICES index )
 {
 	ASSERT ( index >= 0 );
-	ASSERT ( index < TEXTURE_INDEX_LAST );
+	ASSERT ( index < number_of_texture_animations );
 	//-- Werewolf: Sanity check to fix a crash 4 Apr 2003
-	if (index < 0 || index >= TEXTURE_INDEX_LAST)
+	if (index < 0 || index >= number_of_texture_animations)
 		return ( 0 );
 	else
 	//-- Werewolf
@@ -261,15 +261,6 @@ screen *get_texture_map_pointer ( texture_index_numbers index )
 	ASSERT ( index < TEXTURE_INDEX_LAST );
 
 	return ( system_textures[index] );
-}
-#else
-unsigned OGREEE_CALL ee_animation_size(unsigned index)
-{
-	return get_texture_animation_number_of_frames((enum TEXTURE_ANIMATION_INDICES)index);
-}
-unsigned OGREEE_CALL ee_animation_texture(unsigned index, unsigned frame)
-{
-	return texture_animations[index].texture_indices[frame];
 }
 #endif
 

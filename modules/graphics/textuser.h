@@ -150,11 +150,6 @@ struct CUSTOM_MAP_INFO
 	int
 		texture_override_scales[64][2];
 
-	//VJ 060120 keep the total number of textures =
-	//number_of_system_textures+all water textures+extra terrain textures
-	int
-		last_texture;
-
 	// Coordinates of lower left (south west) corner.  In radians
 	float
 		latitude,   // negative is south of equator, positive north
@@ -211,6 +206,7 @@ extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *grap
 extern void load_warzone_override_textures ( void );
 #else
 extern void load_models_override_textures ( void );
+extern void find_terrain_override_textures ( void );
 extern void load_terrain_override_textures ( void );
 #endif
 

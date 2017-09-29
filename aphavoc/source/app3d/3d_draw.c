@@ -370,6 +370,7 @@ void draw_application_3d_scene (void)
 	update_application_3d_scene ();
 #else
 	ogre_scenes_commit ();
+	ogre_particles_commit ();
 #endif
 
 #ifndef OGRE_EE

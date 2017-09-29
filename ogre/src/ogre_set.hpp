@@ -33,7 +33,11 @@ inline Ogre::Quaternion ogre_orientation(float heading, float pitch, float roll)
 
 inline Ogre::Quaternion ogre_orientation(const float* m)
 {
-	return ogre_orientation(atan2(m[6], m[8]), -asin(m[7]), atan2(-m[1], m[4]));
+	Ogre::Matrix3 m3(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+	Ogre::Quaternion q;
+	q.FromRotationMatrix(m3);
+	q.z = -q.z;
+	return q;
 }
 
 inline Ogre::Vector3 ogre_scale(const float* f)

@@ -19,3 +19,5 @@ cube/options.hpp have tunable options.
 4. Build EE supplying "ogre=1" to wmake.
 Addition of ogre_debug=1 will link the project with debug version of
 OgreEE and Ogre3D.
+
+5. Use run.bat to create EE-compatible Ogre environment and run EE.

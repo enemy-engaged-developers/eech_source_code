@@ -31,6 +31,9 @@
 // Scenes options
 #define USE_SCENES_CACHE_FRAMES 10
 
+// Particles options
+#define USE_PARTICLES_CACHE_FRAMES 10
+
 // Terrain options
 #ifdef USE_NORMALS
 // Use per-vertex normals for terrain or not
@@ -57,20 +60,22 @@
 #define M_PI 3.14159265358979323846f
 #endif
 
-#include "OgreSubMesh.h"
-#include "OgreSubEntity.h"
-#include "OgreMaterialManager.h"
-#include "OgreTechnique.h"
-#include "OgreMeshManager.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreEntity.h"
-#include "OgreSceneNode.h"
-#include "OgreSceneManager.h"
-#include "OgreInstancedEntity.h"
-#include "OgreOverlayManager.h"
-#include "OgreOverlayContainer.h"
-#include "OgreOverlayElementFactory.h"
-#include "OgreFontManager.h"
+#include <OgreSubMesh.h>
+#include <OgreSubEntity.h>
+#include <OgreMaterialManager.h>
+#include <OgreTechnique.h>
+#include <OgreMeshManager.h>
+#include <OgreHardwarePixelBuffer.h>
+#include <OgreEntity.h>
+#include <OgreSceneNode.h>
+#include <OgreSceneManager.h>
+#include <OgreInstancedEntity.h>
+#include <OgreOverlayManager.h>
+#include <OgreOverlayContainer.h>
+#include <OgreOverlayElementFactory.h>
+#include <OgreFontManager.h>
+#include <OgreBillboardSet.h>
+#include <OgreBillboard.h>
 
 #include <iterator>
 
@@ -185,35 +190,38 @@ private:
 #include "ogre_tasks.hpp"
 #include "ogre_geometry.hpp"
 #include "ogre_animation.hpp"
+#include "ogre_particles.hpp"
 #include "ogre_objects.hpp"
 #include "ogre_scenes.hpp"
 #include "ogre_terrain.hpp"
+#include "ogre_textures.hpp"
 #include "ogre_ui.hpp"
 
-#define DEFINE_NAME(name, args, format, params) \
+#define DEFINE_NAME(name, args, format_params) \
 struct name : private fmt \
 { \
 	explicit name(args) \
-		: fmt(format, params) \
+		: fmt(format_params) \
 	{ \
 	} \
 	using fmt::operator const Ogre::String&; \
 }
 
 #define _ ,
-DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u", index);
-DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u", index _ frame);
-DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X", index);
-DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u", index);
-DEFINE_NAME(MaterialTextureName, unsigned index, "MATERIAL_TEXTURE_%u", index);
-DEFINE_NAME(FontName, unsigned index, "FONT_%u", index);
-DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u", index);
-DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u", index);
-DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u", z _ x);
-DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT", 0);
-DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER", 0);
-DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u", z _ x);
-DEFINE_NAME(UIElement, unsigned index, "UI_%u", index);
+DEFINE_NAME(MaterialName, unsigned index, "MATERIAL_%u" _ index);
+DEFINE_NAME(MaterialAnimationName, unsigned index _ unsigned frame, "MATERIAL_%u_%u" _ index _ frame);
+DEFINE_NAME(ObjectName, unsigned index, "OBJECT_%04X" _ index);
+DEFINE_NAME(TextureName, unsigned index, "TEXTURE_%u" _ index);
+DEFINE_NAME(MaterialTextureName, unsigned index, "MATERIAL_TEXTURE_%u" _ index);
+DEFINE_NAME(FontName, unsigned index, "FONT_%u" _ index);
+DEFINE_NAME(KeyframeAnimationName, unsigned index, "ANIMATION_%u" _ index);
+DEFINE_NAME(MaterialParticlesName, unsigned index _ unsigned frame _ int additive, "MATERIAL_PARTICLES_%u_%u_%i" _ index _ frame _ additive);
+DEFINE_NAME(TerrainMaterialName, unsigned index, "TERRAIN_MATERIAL_%u" _ index);
+DEFINE_NAME(TerrainObject, unsigned z _ unsigned x, "TERRAIN_%u_%u" _ z _ x);
+DEFINE_NAME(TerrainTreeObject, void, "TERRAIN_TREE_OBJECT");
+DEFINE_NAME(TerrainTreeManager, void, "TERRAIN_TREE_MANAGER");
+DEFINE_NAME(TerrainTree, unsigned z _ unsigned x, "TERRAIN_TREE_%u_%u" _ z _ x);
+DEFINE_NAME(UIElement, unsigned index, "UI_%u" _ index);
 #undef _
 
 #undef DEFINE_NAME

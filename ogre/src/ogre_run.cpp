@@ -107,7 +107,7 @@ namespace
 				return false;
 
 			if (!user_label && !user_info.empty())
-				user_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "User", "", 200);
+				user_label = mTrayMgr->createLabel(OgreBites::TL_TOP, "User", "", 400);
 			if (user_label)
 				user_label->setCaption(user_info);
 
@@ -116,12 +116,19 @@ namespace
 			ogre += cur - last;
 			last = cur;
 			unsigned tqwait;
+#endif
 			ogre_terrain_frame(false);
 			ogre_scenes_frame();
+			ogre_particles_frame();
 			ogre_ui_frame();
+#ifdef USE_TIME
 			TaskResult tr = tq.run(tqwait);
+#else
+			TaskResult tr = tq.run();
+#endif
 			ogre_terrain_frame(true);
 			overlay->setZOrder(10);
+#ifdef USE_TIME
 			cur = GetTickCount();
 			work += cur - last - tqwait;
 			wait += tqwait;
@@ -138,8 +145,6 @@ namespace
 				work_label->setCaption(buf);
 				count = ogre = wait = work = 0;
 			}
-#else
-			TaskResult tr = tq.run();
 #endif
 			frames.release();
 			return tr != TR_APP;

@@ -43,6 +43,7 @@ OGREEE_API void OGREEE_CALL ogre_ui_text(unsigned font, float x, float y, const 
 OGREEE_API void OGREEE_CALL ogre_ui_clear_screen(void);
 OGREEE_API void OGREEE_CALL ogre_ui_clear(void);
 
+OGREEE_API void OGREEE_CALL ogre_textures_animation(unsigned number_of_animations, const unsigned* data);
 OGREEE_API void OGREEE_CALL ogre_textures_define(unsigned index, unsigned number_of_mipmaps, int mip, unsigned width, unsigned height, unsigned bpp, const void* texture_image_data);
 OGREEE_API void OGREEE_CALL ogre_textures_override(unsigned index, const char* file);
 OGREEE_API void OGREEE_CALL ogre_textures_commit(int clearable);
@@ -51,15 +52,7 @@ OGREEE_API unsigned OGREEE_CALL ogre_texture_load(const char* filename);
 OGREEE_API unsigned OGREEE_CALL ogre_texture_define(unsigned width, unsigned height, unsigned bpp, const void* data);
 OGREEE_API void OGREEE_CALL ogre_texture_clear(unsigned handle);
 
-struct OgreObjectsInit
-{
-	unsigned number_of_objects;
-	const struct OBJECT_3D* objects;
-	unsigned (OGREEE_CALL *get_animation_size)(unsigned index);
-	unsigned (OGREEE_CALL *get_animation_texture)(unsigned index, unsigned frame);
-};
-
-OGREEE_API void OGREEE_CALL ogre_objects_init(const struct OgreObjectsInit* init);
+OGREEE_API void OGREEE_CALL ogre_objects_init(unsigned number_of_objects, const struct OBJECT_3D* objects);
 OGREEE_API void OGREEE_CALL ogre_objects_clear(void);
 
 struct OgreGameObjectSceneElement
@@ -107,6 +100,21 @@ OGREEE_API float OGREEE_CALL ogre_scene_subobject_keyframe_length(const struct O
 OGREEE_API void OGREEE_CALL ogre_scene_animation(struct OgreGameObjectScene* scene, unsigned animation, unsigned frame);
 OGREEE_API void OGREEE_CALL ogre_scene_animation_advance(struct OgreGameObjectScene* scene, unsigned animation);
 OGREEE_API void OGREEE_CALL ogre_scene_draw(const struct OgreGameObjectScene* scene, const float* scale);
+
+struct OgreParticle
+{
+	unsigned texture_animation;
+	unsigned frame;
+	int additive;
+	unsigned colour;
+	float roll;
+	float radius;
+	struct OgreVector3 position;
+};
+OGREEE_API void OGREEE_CALL ogre_particles_init(void);
+OGREEE_API void OGREEE_CALL ogre_particles_clear(void);
+OGREEE_API void OGREEE_CALL ogre_particles_draw(const struct OgreParticle* particle, unsigned number_of_positions, struct OgreVector3* positions);
+OGREEE_API void OGREEE_CALL ogre_particles_commit(void);
 
 typedef void (*OgreTerrainFunction)(int);
 

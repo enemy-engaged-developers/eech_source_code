@@ -243,21 +243,32 @@ static surface_types
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void initialize_terrain_textures ( void )
+{
+   	add_new_texture("REFLECTION_JUNGLE", "terrtype.c");
+   	add_new_texture("REFLECTION_WINTER", "terrtype.c");
+   	add_new_texture("REFLECTION_FOREST", "terrtype.c");
+   	add_new_texture("REFLECTION_ROCKS", "terrtype.c");
+   	add_new_texture("REFLECTION_DESERT", "terrtype.c");
+	add_new_texture("NOISEMAP_FIELD", "terrtype.c"),
+	add_new_texture("NOISEMAP_TREE_CANOPY", "terrtype.c"),
+	add_new_texture("NOISEMAP_SAND", "terrtype.c");
+	add_new_texture("NOISEMAP_SNOW", "terrtype.c");
+	add_new_texture("NOISEMAP_GRASS", "terrtype.c");
+	add_new_texture("NOISEMAP", "terrtype.c");
+	add_new_texture("NOISEMAP_WATER", "terrtype.c");
+	add_new_texture("NOISEMAP_BEACH", "terrtype.c");
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void set_3d_terrain_dual_pass_rendering ( int enabled )
 {
 
-	if ( enabled != terrain_dual_pass_rendering_enabled )
-	{
-
-		terrain_dual_pass_rendering_enabled = enabled;
-
-		//
-		// Reinitialise the terrain rendering routines
-		//
-
-		initialise_3d_terrain_rendering_routines ( terrain_dual_pass_rendering_enabled );
-	}
+	terrain_dual_pass_rendering_enabled = enabled;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -950,7 +961,7 @@ void initialise_3d_custom_terrain_types( void )
 	if (current_map_info.texture_override_scales[count][0] > 0)
 	{
 		int index = (int)current_map_info.texture_override_scales[count][0];
-		sl = current_map_info.texture_override_scales[count][1];
+		sl = (float)current_map_info.texture_override_scales[count][1];
 		sld = sl;
 		sldd = sl;
 
@@ -1095,8 +1106,6 @@ void initialise_3d_terrain_types ( void )
 {
 	const float default_noise_detail = 32.0;
 
-	set_3d_terrain_dual_pass_rendering(command_line_texture_colour == 2 || global_dynamic_water);
-
 	// Xhit: the last argument in follwing calls sets the type of surface for the terrain. (030328)
 
 	set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, 1.0, 256, 256, 2048, 2048, 4, 103, 115, terrain_surface_sea );
@@ -1198,13 +1207,6 @@ void initialise_3d_terrain_types ( void )
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_TELEPHONE_LINE,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
    set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
-
-   	(void) add_new_texture("REFLECTION_JUNGLE", "");
-   	(void) add_new_texture("REFLECTION_WINTER", "");
-   	(void) add_new_texture("REFLECTION_FOREST", "");
-   	(void) add_new_texture("REFLECTION_ROCKS", "");
-   	(void) add_new_texture("REFLECTION_DESERT", "");
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2438,8 +2440,8 @@ void initialise_noisemaps(void)
 	unsigned i = 0;
 	int
 		grass_noisemap,
-		rock_noisemap = add_new_texture("NOISEMAP_FIELD", "terrtype.c"),
-		tree_noisemap = add_new_texture("NOISEMAP_TREE_CANOPY", "terrtype.c"),
+		rock_noisemap = get_system_texture_index("NOISEMAP_FIELD"),
+		tree_noisemap = get_system_texture_index("NOISEMAP_TREE_CANOPY"),
 		field_noise,
 		noisemap;
 
@@ -2452,36 +2454,36 @@ void initialise_noisemaps(void)
 	case SESSION_SEASON_INVALID:
 	case SESSION_SEASON_DEFAULT:
 	default:
-		grass_noisemap = add_new_texture("NOISEMAP_GRASS", "terrtype.c");
+		grass_noisemap = get_system_texture_index("NOISEMAP_GRASS");
 		field_noise = grass_noisemap;
-		noisemap = add_new_texture("NOISEMAP", "terrtype.c");
+		noisemap = get_system_texture_index("NOISEMAP");
 		break;
 	case SESSION_SEASON_DESERT:
-		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SAND", "terrtype.c");
+		grass_noisemap = field_noise = noisemap = get_system_texture_index("NOISEMAP_SAND");
 		break;
 	case SESSION_SEASON_WINTER:
-		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SNOW", "terrtype.c");
+		grass_noisemap = field_noise = noisemap = get_system_texture_index("NOISEMAP_SNOW");
 		break;
 	}
 #endif
 
 	if (get_global_season() == SESSION_SEASON_DESERT)
-		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SAND", "terrtype.c");
+		grass_noisemap = field_noise = noisemap = get_system_texture_index("NOISEMAP_SAND");
 	else if (get_global_season() == SESSION_SEASON_WINTER)
-		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SNOW", "terrtype.c");
+		grass_noisemap = field_noise = noisemap = get_system_texture_index("NOISEMAP_SNOW");
 	else
 	{
-		grass_noisemap = add_new_texture("NOISEMAP_GRASS", "terrtype.c");
+		grass_noisemap = get_system_texture_index("NOISEMAP_GRASS");
 		field_noise = grass_noisemap;
-		noisemap = add_new_texture("NOISEMAP", "terrtype.c");
+		noisemap = get_system_texture_index("NOISEMAP");
 	}
 
 	terrain_texture_sea_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SEA_1" );
-	terrain_texture_sea_colour_pass	= add_new_texture("NOISEMAP_WATER", "terrtype.c");
+	terrain_texture_sea_colour_pass	= get_system_texture_index("NOISEMAP_WATER");
 	textures_with_noisemap[i++].gamma_correction = gamma;
 
 	terrain_texture_beach_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_BEACH" );
-	terrain_texture_beach_colour_pass = add_new_texture("NOISEMAP_BEACH", "terrtype.c");
+	terrain_texture_beach_colour_pass = get_system_texture_index("NOISEMAP_BEACH");
 	textures_with_noisemap[i++].gamma_correction = gamma;
 
 	terrain_texture_land_detail	= textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_DETAIL_4" );

@@ -5,7 +5,6 @@ namespace
 	GeometryPtr objects_geometry;
 	typedef Ogre::vector<AnimationMesh>::type ObjectsAnim;
 	ObjectsAnim objects_anim;
-	const OgreObjectsInit* objects_init;
 	unsigned material_first, material_last;
 
 	class Normal : private Uncopyable
@@ -79,34 +78,31 @@ namespace
 	class TaskObjectsInit : public Task
 	{
 	public:
-		TaskObjectsInit(const struct OgreObjectsInit* init, Semaphore& sem)
-			: init(init), sem(sem)
+		TaskObjectsInit(unsigned number_of_objects, const struct OBJECT_3D* objects, Semaphore& sem)
+			: number_of_objects(number_of_objects), objects(objects), sem(sem)
 		{
 		}
 		virtual TaskResult task(void)
 		{
-			objects_init = init;
-
 			assert(!objects_geometry.get());
 			objects_geometry.reset(new Geometry);
 
 			material_first = ogre_index() + 1;
 
-			objects_anim.resize(objects_init->number_of_objects + 1);
-			for (unsigned i = 0; i <= objects_init->number_of_objects; i++)
-				ogre_objects_convert(objects_init->objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
+			objects_anim.resize(number_of_objects + 1);
+			for (unsigned i = 0; i <= number_of_objects; i++)
+				ogre_objects_convert(objects[i], Ogre::MeshManager::getSingleton().createManual(ObjectName(i), ogre_resource_group), objects_anim[i], objects_geometry.get());
 			objects_geometry->flush();
 
 			material_last = ogre_index() - 1;
-
-			objects_init = 0;
 
 			sem.release();
 			return TR_TASK;
 		}
 
 	private:
-		const struct OgreObjectsInit* init;
+		unsigned number_of_objects;
+		const struct OBJECT_3D* objects;
 		Semaphore& sem;
 	};
 
@@ -153,6 +149,12 @@ namespace
 	private:
 		Semaphore& sem;
 	};
+
+	bool texture_contains_alpha(const Ogre::String& texture_name)
+	{
+		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().getByName(texture_name);
+		return texture.get() && Ogre::PixelUtil::hasAlpha(texture->getFormat());
+	}
 }
 
 // Converts EE's OBJECT_3D into Ogre::Mesh
@@ -325,7 +327,7 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 		Ogre::Pass* pass = mat->getTechnique(0)->getPass(0);
 
 		if (s.detail)
-			pass->setDepthBias(2.0f);
+			pass->setDepthBias(2.0f, 1.0f);
 
 		Ogre::TextureUnitState* tus = pass->createTextureUnitState();
 
@@ -338,13 +340,12 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 #if 1
 			if (s.has_luminosity_texture)
 			{
-				Ogre::Pass* pass = mat->getTechnique(0)->createPass();
-				Ogre::TextureUnitState* tus = pass->createTextureUnitState();
+				Ogre::TextureUnitState* tus = pass->createTextureUnitState(Ogre::String(), 1);
 
 				if (!s.luminosity_texture_animation)
 					tus->setTextureName(TextureName(s.luminosity_texture_index));
 				tus->setTextureAddressingMode(s.luminosity_texture_wrapped_u ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, s.luminosity_texture_wrapped_v ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, Ogre::TextureUnitState::TAM_CLAMP);
-				pass->setSceneBlending(Ogre::SBT_MODULATE);
+				tus->setColourOperation(Ogre::LBO_MODULATE);
 			}
 #endif
 		}
@@ -355,7 +356,7 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 				tus->setAlphaOperation(Ogre::LBX_SOURCE1, Ogre::LBS_MANUAL, Ogre::LBS_CURRENT, colour.a);
 		}
 
-		if (/*s.textured && !s.texture_animation && get_textures_info(s.texture_index).contains_alpha ||*/ s.additive || s.translucent)
+		if (s.textured && !s.texture_animation && texture_contains_alpha(TextureName(s.texture_index)) || s.additive || s.translucent)
 		{
 			pass->setSceneBlending(s.additive ? Ogre::SBT_ADD : Ogre::SBT_TRANSPARENT_ALPHA);
 			pass->setDepthWriteEnabled(false);
@@ -387,32 +388,40 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 
 			assert(!s.texture_animation || !s.luminosity_texture_animation);
 			unsigned animation_index;
-			unsigned pass;
+			unsigned tus_index;
 			if (s.texture_animation)
 			{
 				animation_index = s.texture_index;
-				pass = 0;
+				tus_index = 0;
 			}
 			else
 			{
 				if (s.luminosity_texture_animation)
 				{
 					animation_index = s.luminosity_texture_index;
-					pass = 1;
+					tus_index = 1;
 				}
 				else
 					break;
 			}
 			unsigned smi = mesh->getNumSubMeshes() - 1;
 			AnimationInfo& ai = animation[animation_index];
-			ai.limit = objects_init->get_animation_size(animation_index);
+			const TextureAnimation& texture_animation = ogre_textures_animation(animation_index);
+			ai.limit = texture_animation.size();
 			ai.refs.push_back(AnimationRef(smi, material_index));
 			unsigned size = ai.limit;
 			for (unsigned frame = 0; frame < size; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
 				Ogre::MaterialPtr mata = mat->clone(material_animation_name);
-				mata->getTechnique(0)->getPass(pass)->getTextureUnitState(0)->setTextureName(TextureName(objects_init->get_animation_texture(animation_index, frame)));
+				TextureName texture_name(texture_animation[frame]);
+				Ogre::Pass* pass = mata->getTechnique(0)->getPass(0);
+				pass->getTextureUnitState(tus_index)->setTextureName(texture_name);
+				if (texture_contains_alpha(texture_name))
+				{
+					pass->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+					pass->setDepthWriteEnabled(false);
+				}
 			}
 			sm->setMaterialName(MaterialAnimationName(material_index, 0));
 		}
@@ -440,12 +449,12 @@ void ogre_objects_add_animation(unsigned object, AnimationScene& as, unsigned su
 }
 
 // Converts objects
-void OGREEE_CALL ogre_objects_init(const struct OgreObjectsInit* init)
+void OGREEE_CALL ogre_objects_init(unsigned number_of_objects, const struct OBJECT_3D* objects)
 {
 	assert(GetCurrentThreadId() == user_thread_id);
 
 	Semaphore sem;
-	ogre_tasks->enqueue(new TaskObjectsInit(init, sem));
+	ogre_tasks->enqueue(new TaskObjectsInit(number_of_objects, objects, sem));
 	sem.acquire();
 }
 

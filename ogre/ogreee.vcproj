@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OGREEE_EXPORTS"
@@ -118,6 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="$(OGRE_SDK)\include;$(OGRE_SDK)\include\OGRE;$(OGRE_SDK)\include\OIS;$(OGRE_SDK)\include\OGRE\Overlay;$(OGRE_SDK)\boost;..\3dimpexp\ee_exp;..\modules\3d\terrain;include;src"
@@ -214,6 +216,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\ogre_particles.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\ogre_run.cpp"
 				>
 			</File>
@@ -268,6 +274,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\ogre_particles.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\ogre_objects.hpp"
 				>
 			</File>
@@ -281,6 +291,14 @@
 			</File>
 			<File
 				RelativePath=".\src\ogre_tasks.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_terrain.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ogre_textures.hpp"
 				>
 			</File>
 			<File

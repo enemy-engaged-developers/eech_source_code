@@ -79,17 +79,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
+#ifdef OGRE_EE
+#define object_3d_sprite struct OgreParticle
+#endif
+
 static void draw_smoke_sprites( entity *en );
 
 static void draw_smoke_trails( entity *en );
 
 static void draw_smoke_trail( entity *en, int start, int end, int number_of_slots );
 
-static void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos );
+static void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos, int no_alpha );
 
 static void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_index, smoke_list_data *smoke_info, float alpha_modifier, vec3d *smoke_pos  );
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +107,6 @@ static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 static int
 	number_of_trail_points;
 
@@ -121,6 +122,10 @@ static float
 
 static float
 	*trail_radius;
+
+#ifdef OGRE_EE
+static struct OgreVector3
+	trail_positions[TRAIL_RIBBONS * MAX_SMOKE_TRAIL_POINTS];
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +134,6 @@ static float
 
 static void draw_local_3d_object (entity *en, float range)
 {
-#ifndef OGRE_EE
 
 	smoke_list
 		*raw;
@@ -144,14 +148,12 @@ static void draw_local_3d_object (entity *en, float range)
 	{
 		draw_smoke_trails( en );
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 static void draw_smoke_sprites( entity *en )
 {
 
@@ -239,15 +241,15 @@ static void draw_smoke_sprites( entity *en )
 
 		smoke_pos = &(raw->position[ current ]);
 
-		get_smoke_sprite_display_values( raw, current, lifetime, &spr, smoke_info, smoke_pos );
-
-		// fade in the trail
-		if (!current && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL)
-			spr.alpha = 0;
+		get_smoke_sprite_display_values( raw, current, lifetime, &spr, smoke_info, smoke_pos, !current && get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL );
 
 		memcpy (&(spr.position), smoke_pos, sizeof (vec3d));
 
+#ifndef OGRE_EE
 		insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_SPRITE, &spr);
+#else
+		ogre_particles_draw (&spr, 0, NULL);
+#endif
 
 	}
 }
@@ -356,7 +358,9 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 	float
 		lifetime,
 		alpha_modifier,
+#ifndef OGRE_EE
 		zb,
+#endif
 		dt,
 		texture_distance;
 
@@ -371,11 +375,23 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 	vec3d
 		*smoke_pos;
 
+#ifndef OGRE_EE
 	screen
 		*trail_texture;
+#endif
 
 	smoke_list_data
 		*smoke_info;
+
+#ifdef OGRE_EE
+	struct OgreParticle
+		spr;
+	int
+		count,
+		total = 0;
+	smoke_trail_data
+		*each_trail_data;
+#endif
 
 	raw = (smoke_list *) get_local_entity_data( en );
 
@@ -468,6 +484,7 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 
 	convert_float_to_int (raw->current_frame, &frame);
 
+#ifndef OGRE_EE
 	trail_texture = get_texture_animation_texture_pointer ( smoke_info->texture, frame );
 
 //	if ( smoke_info->additive )
@@ -478,13 +495,39 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 //	{
 		zb = 0.0;
 //	}
+#else
+	spr.texture_animation = smoke_info->texture;
+	spr.frame = frame;
+	spr.additive = smoke_info->additive;
+	spr.colour = -1;
+	spr.roll = 0;
+	spr.radius = smoke_info->texture_size;
+#endif
 
 	do
 	{		
+#ifndef OGRE_EE
 		insert_zbiased_smoke_trail_into_3d_scene ( number_of_trail_points, zb, smoke_info->additive, trail_texture, texture_distance, smoke_info->texture_size, trail_data[ trail ] );
+#else
+		each_trail_data = trail_data[ trail ];
+		for (count = 0; count < number_of_trail_points; count++)
+		{
+			trail_positions[total].x = ( each_trail_data[count].point1.x + each_trail_data[count].point2.x ) / 2;
+			trail_positions[total].y = ( each_trail_data[count].point1.y + each_trail_data[count].point2.y ) / 2;
+			trail_positions[total].z = ( each_trail_data[count].point1.z + each_trail_data[count].point2.z ) / 2;
+			total++;
+		}
+#endif
 		trail++;
 	}
 	while (	trail < TRAIL_RIBBONS * !smoke_info->flat);
+
+#ifdef OGRE_EE
+	if (total)
+	{
+		ogre_particles_draw (&spr, total, trail_positions);
+	}
+#endif
 	
 	#if DEBUG_MODULE
 
@@ -762,7 +805,7 @@ static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos )
+void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime, object_3d_sprite *spr, smoke_list_data *smoke_info, vec3d *smoke_pos, int no_alpha )
 {
 	float
 		d,
@@ -781,13 +824,14 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		scale,
 		fog_start,
 		fog_end,
-		fog_modifier,
-		max_multiplier;
+		fog_modifier;
 
 	light_colour
 		ambient;
 	rgb_colour
 		fog_color;
+	real_colour
+		colour;
 	
 	unsigned char
 		alpha_percentage;
@@ -807,6 +851,10 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		ambient.red = ambient.green = ambient.blue = 1;
 	else
 	{
+#ifndef OGRE_EE
+		float
+			max_multiplier;
+
 		ambient.red = ambient_3d_light.colour.red + 0.75 * current_3d_sun->colour.red;
 		ambient.green = ambient_3d_light.colour.green + 0.75 * current_3d_sun->colour.green;
 		ambient.blue = ambient_3d_light.colour.blue + 0.75 * current_3d_sun->colour.blue;
@@ -819,6 +867,9 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 			ambient.green /= max_multiplier;
 			ambient.blue /= max_multiplier;
 		}
+#else
+		ambient.red = ambient.green = ambient.blue = 1;
+#endif
 	}
 	
 	if ( lifescale < smoke_info->colour_change_1 )
@@ -899,17 +950,26 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	// 
 	
 	convert_float_to_int (red_start + (d * (red_end - red_start)), &result);
-	spr->red = result * (1 - fog_modifier) + fog_color.red * fog_modifier;
+	colour.red = result * (1 - fog_modifier) + fog_color.red * fog_modifier;
 
 	convert_float_to_int (green_start + (d * (green_end - green_start)), &result);
-	spr->green = result * (1 - fog_modifier) + fog_color.green * fog_modifier;
+	colour.green = result * (1 - fog_modifier) + fog_color.green * fog_modifier;
 
 	convert_float_to_int (blue_start + (d * (blue_end - blue_start)), &result);
-	spr->blue = result * (1 - fog_modifier) + fog_color.blue * fog_modifier;
+	colour.blue = result * (1 - fog_modifier) + fog_color.blue * fog_modifier;
 
-	// Xhit: added "* (alpha_percentage/100)" for downwash effect (030328)
-	convert_float_to_int (((alpha_start + ( d * (alpha_end - alpha_start))) * (alpha_percentage/100.0)), &result);
-	spr->alpha = result / (active_3d_environment->render_filter == RENDER_INFRARED ? 4 : 1);
+	if (no_alpha)
+	{
+		colour.alpha = 0;
+	}
+	else
+	{
+		// Xhit: added "* (alpha_percentage/100)" for downwash effect (030328)
+		convert_float_to_int (((alpha_start + ( d * (alpha_end - alpha_start))) * (alpha_percentage/100.0)), &result);
+		colour.alpha = result / (active_3d_environment->render_filter == RENDER_INFRARED ? 4 : 1);
+	}
+
+	spr->colour = colour.colour;
 
 	//
 	// set sprites size
@@ -935,7 +995,12 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 
 	while (number_of_frames != 0 && frame >= number_of_frames) frame -= number_of_frames;
 
+#ifndef OGRE_EE
 	spr->texture = get_texture_animation_texture_pointer ( smoke_info->texture, frame );
+#else
+	spr->texture_animation = smoke_info->texture;
+	spr->frame = frame;
+#endif
 
 	spr->additive = smoke_info->additive;
 
@@ -960,8 +1025,7 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 		red_result, green_result, blue_result, alpha_result,
 		fog_start,
 		fog_end,
-		fog_modifier,
-		max_multiplier;
+		fog_modifier;
 
 	light_colour
 		ambient;
@@ -975,6 +1039,10 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 		ambient.red = ambient.green = ambient.blue = 1;
 	else
 	{
+#ifndef OGRE_EE
+		float
+			max_multiplier;
+
 		ambient.red = ambient_3d_light.colour.red + 0.75 * current_3d_sun->colour.red;
 		ambient.green = ambient_3d_light.colour.green + 0.75 * current_3d_sun->colour.green;
 		ambient.blue = ambient_3d_light.colour.blue + 0.75 * current_3d_sun->colour.blue;
@@ -987,6 +1055,9 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 			ambient.green /= max_multiplier;
 			ambient.blue /= max_multiplier;
 		}
+#else
+		ambient.red = ambient.green = ambient.blue = 1;
+#endif
 	}
 	
 	lifescale = lifetime / raw->smoke_lifetime;
@@ -1103,11 +1174,9 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void initialise_smoke_list_draw_arrays (void)
 {
-#ifndef OGRE_EE
 	int trail;
 	
 	for ( trail = 0 ; trail < TRAIL_RIBBONS ; trail ++ )
@@ -1118,7 +1187,6 @@ void initialise_smoke_list_draw_arrays (void)
 	trail_lifetimes = (float *) safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
 
 	trail_radius = (float *) safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1127,7 +1195,6 @@ void initialise_smoke_list_draw_arrays (void)
 
 void deinitialise_smoke_list_draw_arrays (void)
 {
-#ifndef OGRE_EE
 	int trail;
 	
 	for ( trail = 0 ; trail < TRAIL_RIBBONS ; trail ++ )
@@ -1138,7 +1205,6 @@ void deinitialise_smoke_list_draw_arrays (void)
 	safe_free (trail_lifetimes);
 
 	safe_free (trail_radius);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

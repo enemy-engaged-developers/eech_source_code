@@ -2304,15 +2304,34 @@ void initialise_3d_objects ( const char *directory )
 #ifdef OGRE_EE
 	load_models_override_textures ();
 	{
-		struct OgreObjectsInit
-			ooi;
+		unsigned
+			count,
+			index,
+			size,
+			*data,
+			*ptr;
 
-		ooi.number_of_objects = total_number_of_objects;
-		ooi.objects = objects_3d_data;
-		ooi.get_animation_size = ee_animation_size;
-		ooi.get_animation_texture = ee_animation_texture;
-		ogre_objects_init (&ooi);
+		size = 0;
+		for (count = 0; count < number_of_texture_animations; count++)
+		{
+			size += texture_animations[count].number_of_frames + 1;
+		}
+		data = (unsigned *) safe_malloc (sizeof(unsigned) * size);
+		ptr = data;
+		for (count = 0; count < number_of_texture_animations; count++)
+		{
+			size = texture_animations[count].number_of_frames;
+			*ptr++ = size;
+			for (index = 0; index < size; index++)
+			{
+				*ptr++ = texture_animations[count].texture_indices[index];
+			}
+		}
+		ogre_textures_animation (number_of_texture_animations, data);
+		safe_free (data);
+		ogre_objects_init (total_number_of_objects, objects_3d_data);
 		ogre_scenes_init (OBJECT_3D_LAST - 1, objects_3d_scene_database);
+		ogre_particles_init ();
 	}
 #endif
 }
@@ -2432,6 +2451,7 @@ void deinitialise_3d_objects ( void )
 	deinitialise_3d_objects_in_d3d ();
 #else
 	ogre_scenes_clear ();
+	ogre_particles_clear ();
 	ogre_objects_clear ();
 #endif
 

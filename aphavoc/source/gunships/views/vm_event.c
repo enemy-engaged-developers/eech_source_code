@@ -2558,6 +2558,7 @@ void pop_numpad_cockpit_view_events_overlay (void)
 
 void update_joystick_pov_position (void)
 {
+#ifndef OGRE_EE
 	joystick_hat_position
 		joystick_pov_position;
 
@@ -2565,6 +2566,7 @@ void update_joystick_pov_position (void)
 		previous_joystick_pov_centred;
 
 	previous_joystick_pov_centred = joystick_pov_centred;
+#endif
 
 	joystick_pov_engage = FALSE;
 
@@ -2580,6 +2582,7 @@ void update_joystick_pov_position (void)
 
 	joystick_pov_down = FALSE;
 
+#ifndef OGRE_EE
 	if (get_global_cyclic_input () == JOYSTICK_INPUT)
 	{
 #ifdef WIN32
@@ -2634,6 +2637,7 @@ void update_joystick_pov_position (void)
 		}
 	}
 	else
+#endif
 	{
 		joystick_pov_centred = TRUE;
 	}

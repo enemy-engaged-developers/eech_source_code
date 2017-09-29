@@ -151,7 +151,9 @@ class EET
  unsigned GetAnimation(const char* name) const;
  void ExportAnimations(void) const;
 #else
+ unsigned GetTextures() const;
  const char* GetTexture(unsigned index) const;
+ unsigned GetAnimations() const;
  unsigned GetAnimationSize(unsigned index) const;
  unsigned GetAnimationTexture(unsigned index, unsigned frame) const;
 #endif
@@ -387,9 +389,17 @@ void EET::ExportAnimations(void) const
  ExportAnimations(displacement_animations, "_DISPLACEMENT");
 }
 #else
+unsigned EET::GetTextures() const
+{
+ return !textures;
+}
 const char* EET::GetTexture(unsigned index) const
 {
  return index < !textures ? textures[index].name : NULL;
+}
+unsigned EET::GetAnimations() const
+{
+ return !animations;
 }
 unsigned EET::GetAnimationSize(unsigned index) const
 {

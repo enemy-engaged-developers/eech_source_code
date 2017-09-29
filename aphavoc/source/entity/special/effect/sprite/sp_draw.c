@@ -78,13 +78,19 @@
 
 static void draw_local_3d_object (entity *en, float range)
 {
-#ifndef OGRE_EE
 
 	sprite
 		*raw;
 
+#ifndef OGRE_EE
 	object_3d_sprite
+#else
+	struct OgreParticle
+#endif
 		spr;
+
+	real_colour
+		colour;
 
 	float
 		lifescale;
@@ -136,7 +142,12 @@ static void draw_local_3d_object (entity *en, float range)
 		frame = min (frame, number_of_frames - 1);
 	}
 
+#ifndef OGRE_EE
 	spr.texture = get_texture_animation_texture_pointer ( raw->animated_texture, frame );
+#else
+	spr.texture_animation = raw->animated_texture;
+	spr.frame = frame;
+#endif
 
 	spr.additive = raw->additive;
 
@@ -147,15 +158,15 @@ static void draw_local_3d_object (entity *en, float range)
 			green,
 			blue;
 
-		spr.alpha = 255;
+		colour.alpha = 255;
 
 		red = (float)raw->colour_red * ( 1.0 - lifescale );
 		green = (float)raw->colour_green * ( 1.0 - lifescale );
 		blue = (float)raw->colour_blue * ( 1.0 - lifescale );
 
-		spr.red = (unsigned char)red;
-		spr.green = (unsigned char)green;
-		spr.blue = (unsigned char)blue;
+		colour.red = (unsigned char)red;
+		colour.green = (unsigned char)green;
+		colour.blue = (unsigned char)blue;
 	}
 	else
 	{
@@ -164,12 +175,14 @@ static void draw_local_3d_object (entity *en, float range)
 
 		alpha = 255.0 * ( 1.0 - lifescale );
 
-		spr.alpha = (unsigned char)alpha;
+		colour.alpha = (unsigned char)alpha;
 
-		spr.red = raw->colour_red;
-		spr.green = raw->colour_green;
-		spr.blue = raw->colour_blue;
+		colour.red = raw->colour_red;
+		colour.green = raw->colour_green;
+		colour.blue = raw->colour_blue;
 	}
+
+	spr.colour = colour.colour;
 
 	spr.roll = wrap_angle( ( raw->rotation_rate * raw->effect_lifetime * PI ) );		//temp
 
@@ -208,7 +221,10 @@ static void draw_local_3d_object (entity *en, float range)
 		memcpy (&(spr.position), &(raw->eff.position), sizeof (vec3d));
 	}
 
+#ifndef OGRE_EE
 	insert_zbiased_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_SPRITE, &spr, -1.0);
+#else
+	ogre_particles_draw (&spr, 0, NULL);
 #endif
 }
 

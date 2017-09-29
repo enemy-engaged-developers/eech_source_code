@@ -1,3 +1,5 @@
+typedef Ogre::vector<unsigned>::type TextureAnimation;
+
 struct AnimationRef
 {
 	AnimationRef(unsigned submesh, unsigned material_index)

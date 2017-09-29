@@ -8,9 +8,12 @@
 #define USE_TERRAIN
 // Whether display UI or not
 //#define USE_UI
+// Whether display particles or not
+//#define USE_PARTICLES
 
 // Use current terrdata.c, otherwise terrdata_oldest.c - the oldest one available
 #define USE_TERRAIN_CURRENT
+#define USE_TERRAIN_NEW_TEXTURES
 
 #ifdef USE_OBJECTS
 #ifdef USE_TERRAIN

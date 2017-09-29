@@ -7,11 +7,14 @@
 #include <assert.h>
 #include <string.h>
 #include <fcntl.h>
+#include <io.h>
 
 #include <algorithm>
 #include <memory>
 #include <vector>
 #include <deque>
+#include <map>
+#include <string>
 
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
@@ -56,6 +59,7 @@ void error(const char* msg, ...)
 #include <TRANS.CPP>
 #include <LWS_EXP.CPP>
 
+#define bound(VALUE,LOWER,UPPER) ( ( VALUE ) < ( LOWER ) ? ( LOWER ) : ( ( VALUE ) > ( UPPER ) ? ( UPPER ) : ( VALUE ) ) )
 #ifdef USE_TERRAIN
 #include "ee.h"
 #ifdef USE_TERRAIN_CURRENT
@@ -75,31 +79,50 @@ char* get_terrain_type_name(terrain_types type);
 
 // INCLUDES finish
 
+namespace
+{
 EET eet;
 
-unsigned OGREEE_CALL get_animation_size(unsigned index)
-{
-	return eet.GetAnimationSize(index);
+#ifdef USE_TERRAIN_NEW_TEXTURES
+typedef std::map<std::string, unsigned> NewTextures;
+NewTextures new_textures;
+#endif
 }
 
-unsigned OGREEE_CALL get_animation_texture(unsigned index, unsigned frame)
+int add_new_texture(const char* texture_name, const char* source)
 {
-	return eet.GetAnimationTexture(index, frame);
+#if defined(USE_TERRAIN) && defined(USE_TERRAIN_NEW_TEXTURES)
+	int found = get_system_texture_index ( texture_name );
+	if (found != -1)
+		return found;
+	unsigned index = eet.GetTextures() + new_textures.size();
+	new_textures[texture_name] = index;
+	return index;
+#else
+	return -1;
+#endif
 }
 
 int get_system_texture_index ( const char *name )
 {
-	for (unsigned i = 0; ; i++)
+	unsigned size = eet.GetTextures();
+#ifdef USE_TERRAIN_NEW_TEXTURES
+	NewTextures::iterator itor(new_textures.find(name));
+	if (itor != new_textures.end())
 	{
-		const char* texture = eet.GetTexture(i);
-		if (!texture)
-			break;
-		if (!stricmp(name, texture))
+		return itor->second;
+	}
+#endif
+	for (unsigned i = 0; i < size; i++)
+	{
+		if (!stricmp(name, eet.GetTexture(i)))
 			return i;
 	}
 	return -1;
 }
 
+namespace
+{
 // Adapter for textures loading
 typedef std::vector<unsigned char> Text;
 std::deque<Text> texts;
@@ -148,9 +171,24 @@ struct EE
 		scenes.reset(new Scenes(*objects));
 #endif
 
+#if defined(USE_OBJECTS_ONLY) || defined(USE_PARTICLES)
+		unsigned number_of_animations = eet.GetAnimations();
+		std::vector<unsigned> data;
+		for (unsigned i = 0; i < number_of_animations; i++)
+		{
+			unsigned size = eet.GetAnimationSize(i);
+			data.push_back(size);
+			for (unsigned j = 0; j < size; j++)
+			{
+				data.push_back(eet.GetAnimationTexture(i, j));
+			}
+		}
+		ogre_textures_animation(number_of_animations, &data[0]);
+		data.clear();
+#endif
+
 #ifdef USE_OBJECTS_ONLY
-		OgreObjectsInit objects_init = { objects->GetNumberOfObjects(), &(*objects)[0], get_animation_size, get_animation_texture };
-		ogre_objects_init(&objects_init);
+		ogre_objects_init(objects->GetNumberOfObjects(), &(*objects)[0]);
 #endif
 	}
 	~EE()
@@ -200,23 +238,122 @@ void set_scene(int index, int change)
 	p.y = 0;
 	p.z = 0;
 
-	for (unsigned animation_index = 0, size; size = get_animation_size(animation_index); animation_index++)
-		ogre_scene_animation(&ogos[index], animation_index, rand() % size);
+	for (unsigned animation_index = 0; animation_index < eet.GetAnimations(); animation_index++)
+		ogre_scene_animation(&ogos[index], animation_index, rand() % eet.GetAnimationSize(animation_index));
 }
 #endif
 
 #ifdef USE_TERRAIN
+const char* terrain_name(int terrain)
+{
+	const char* maps[] =
+	{
+		NULL,
+		"Thailand",
+		"Cuba",
+		"Georgia",
+		"Taiwan",
+		"Lebanon",
+		"Yemen",
+		"Alaska",
+		"Aleut",
+		"Kuwait",
+		"Lybia",
+		"Grand Canyon",
+		"Mars",
+		"Alexander Archipelago",
+		"Skagway",
+		"Saudi Arabia Red Sea",
+		"Kenai Peninsula",
+		"Afognak",
+		"Puerto Rico",
+		"Jordan Dead Sea",
+		"Lake Powell",
+	};
+	if (terrain > 0 && terrain <= 20)
+		return maps[terrain];
+	switch (terrain)
+	{
+	case 31:
+		return "Grand";
+		break;
+	case 32:
+		return "Europe";
+		break;
+	case 35:
+		return "Norway";
+		break;
+	};
+	return "Unknown";
+}
+
 // Remove previously displayed terrain and create new one
 void set_terrain(int diff)
 {
 	ogre_terrain_clear();
 	unload_3d_terrain();
+	ogre_textures_clear(FALSE);
 
 	terrain += diff;
 	char path[1024];
 	sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
+	initialize_terrain_textures();
 	load_3d_terrain(path);
+#ifdef USE_TERRAIN_NEW_TEXTURES
+	initialize_terrain_texture_scales(path);
+	const char* name = terrain_name(terrain);
+	const char* paths[] =
+	{
+		"..\\GRAPHICS\\TEXTURES\\GENERAL",
+		"..\\GRAPHICS\\TEXTURES\\CAMO",
+		"..\\GRAPHICS\\TEXTURES\\TERRAIN\\WATER",
+	};
+	const char* ext[] = { "BMP", "TGA" };
+
+	typedef std::map<unsigned, std::string> Override;
+	Override override;
+	for (NewTextures::const_iterator itor(new_textures.begin()); itor != new_textures.end(); ++itor)
+	{
+		for (unsigned i = 0; i < ARRAY_LENGTH(paths); i++)
+			for (unsigned j = 0; j < ARRAY_LENGTH(ext); j++)
+			{
+				char name[1024];
+				sprintf(name, "%s\\%s.%s", paths[i], itor->first.c_str(), ext[j]);
+				if (file_exist(name))
+					override[itor->second] = name;
+			}
+		if (override[itor->second].empty())
+			error("Failed to find texture file for '%s'", itor->first.c_str());
+	}
+	char textures_path[1024];
+	sprintf(textures_path, "..\\GRAPHICS\\TEXTURES\\TERRAIN\\%s", name);
+	for (unsigned j = 0; j < ARRAY_LENGTH(ext); j++)
+	{
+		char name[1024];
+		sprintf(name, "%s\\*.%s", textures_path, ext[j]);
+		int rc;
+		long handle;
+		struct _finddata_t fd;
+		for (rc = handle = _findfirst(name, &fd); rc != -1; rc = _findnext(handle, &fd))
+			if (!(fd.attrib & _A_SUBDIR))
+			{
+				strcpy(name, fd.name);
+				*strrchr(name, '.') = '\0';
+				strupr(name);
+				int index = get_system_texture_index(name);
+				if (index >= 0)
+				{
+					sprintf(name, "%s\\%s", textures_path, fd.name);
+					override[index] = name;
+				}
+			}
+		_findclose(handle);
+	}
+	for (Override::const_iterator itor(override.begin()); itor != override.end(); ++itor)
+		ogre_textures_override(itor->first, itor->second.c_str());
+#endif
+	ogre_textures_commit(TRUE);
 #ifdef USE_TERRAIN_TREES
 	const struct OBJECT_3D* tree = &(*ee->objects)[ee->scenes->GetScene(0x0A58).index];
 #else
@@ -239,11 +376,21 @@ float F = sqrt(0.5f);
 #define POSITION { 0, 0, 30 }
 #define ORIENTATION { -1, 0, 0, 0, 1, 0, 0, 0, -1 }
 #endif
+float ared = 0.6f, agreen = 0.6f, ablue = 0.6f;
 struct OgreEnvironment env = { POSITION, ORIENTATION, PI / 4.0f, 1.0f, 10000.0f, 0xFF999999, 5000.0f, 10000.0f, 0xFF2EC4DE, 0xFF2EC4DE };
+
+void set_env(void)
+{
+	ared = bound(ared, 0.0f, 1.0f);
+	agreen = bound(agreen, 0.0f, 1.0f);
+	ablue = bound(ablue, 0.0f, 1.0f);
+	env.ambient = 0xFF000000 | (((unsigned)(255 * ared)) << 0) | (((unsigned)(255 * agreen)) << 8) | (((unsigned)(255 * ablue)) << 16);
+	ogre_environment(&env);
+}
 
 void OGREEE_CALL init(void)
 {
-	ogre_environment(&env);
+	set_env();
 
 	cur_time = 0.0f;
 
@@ -279,6 +426,10 @@ void OGREEE_CALL init(void)
 	ogre_ui_font(1, "times", 20);
 	ogre_ui_font(2, "arial", 40);
 #endif
+
+#ifdef USE_PARTICLES
+	ogre_particles_init();
+#endif
 }
 
 void OGREEE_CALL deinit(void)
@@ -311,7 +462,28 @@ void OGREEE_CALL deinit(void)
 	ogre_texture_clear(ui2);
 	ogre_ui_fonts_clear();
 #endif
+
+#ifdef USE_PARTICLES
+	ogre_particles_clear();
+#endif
 }
+
+#ifdef USE_PARTICLES
+struct Particle
+{
+	OgreParticle particle;
+	float current;
+	float duration;
+	float repeat;
+	float start_radius;
+	float stop_radius;
+	float start_alpha;
+	float end_alpha;
+	float roll_speed;
+};
+#define PARTICLES 20
+Particle particles[PARTICLES];
+#endif
 
 void OGREEE_CALL frame(float dtime)
 {
@@ -410,14 +582,47 @@ void OGREEE_CALL frame(float dtime)
 
 	{
 		char buf[128];
+		sprintf(buf, "R:%.1f G:%.1f B:%.1f ", ared, agreen, ablue);
 #ifdef USE_OBJECTS_ONLY
-		sprintf(buf, "Scns: %04X %04X", objects[0], objects[1]);
+		sprintf(buf + strlen(buf), "Scns: %04X %04X", objects[0], objects[1]);
 #endif
 #ifdef USE_TERRAIN
-		sprintf(buf, "MAP: %i", terrain);
+		sprintf(buf + strlen(buf), "MAP: %s (%i)", terrain_name(terrain), terrain);
 #endif
 		ogre_info(buf);
 	}
+
+#ifdef USE_PARTICLES
+	for (unsigned i = 0; i < PARTICLES; i++)
+	{
+		Particle& p = particles[i];
+		p.current += dtime;
+		if (p.current >= p.duration)
+		{
+			p.current = 0;
+			p.duration = rand() * 10.0f / RAND_MAX + 2.0f;
+			p.repeat = (float)(rand() % 5 + 1);
+			p.start_radius = rand() * 20.0f / RAND_MAX + 1.0f;
+			p.stop_radius = rand() * 20.0f / RAND_MAX + 1.0f;
+			p.start_alpha = rand() * 1.0f / RAND_MAX;
+			p.end_alpha = rand() * 1.0f / RAND_MAX;
+			p.roll_speed = rand() * 20.0f / RAND_MAX - 10.0f;
+			p.particle.position = env.position;
+			p.particle.position.x += rand() * 200.0f / RAND_MAX - 100.0f;
+			p.particle.position.y += rand() * 200.0f / RAND_MAX - 100.0f;
+			p.particle.position.z += rand() * 200.0f / RAND_MAX - 100.0f;
+			p.particle.texture_animation = rand() % eet.GetAnimations();
+			p.particle.additive = rand() & 1;
+		}
+		const float factor = fmod(p.current * p.repeat / p.duration, 1.0f);
+		p.particle.frame = (unsigned)(eet.GetAnimationSize(p.particle.texture_animation) * factor);
+		p.particle.colour = ((unsigned)(255u * (p.start_alpha + (p.end_alpha - p.start_alpha) * factor)) << 24) | 0xFFFFFFu;
+		p.particle.roll = p.roll_speed * factor;
+		p.particle.radius = p.start_radius + (p.stop_radius - p.start_radius) * factor;
+		ogre_particles_draw(&p.particle, 0, 0);
+	}
+	ogre_particles_commit();
+#endif
 }
 
 volatile int quit;
@@ -439,6 +644,24 @@ void key_func(void)
 		break;
 	case DIK_LSHIFT | 0x100:
 		sign = 1;
+		break;
+	case DIK_U:
+		ared += sign * 0.05f;
+		agreen += sign * 0.05f;
+		ablue += sign * 0.05f;
+		set_env();
+		break;
+	case DIK_I:
+		ared += sign * 0.05f;
+		set_env();
+		break;
+	case DIK_O:
+		agreen += sign * 0.05f;
+		set_env();
+		break;
+	case DIK_P:
+		ablue += sign * 0.05f;
+		set_env();
 		break;
 #ifdef USE_OBJECTS_ONLY
 	case DIK_PERIOD:
@@ -492,6 +715,7 @@ unsigned long OGREEE_CALL thread(void*)
 	deinit();
 	ogre_quit();
 	return 0;
+}
 }
 
 #ifdef __cplusplus

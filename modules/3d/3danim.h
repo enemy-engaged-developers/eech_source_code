@@ -82,9 +82,6 @@ extern int get_texture_animation_number_of_frames ( texture_animation_indices in
 extern struct SCREEN *get_texture_animation_texture_pointer ( texture_animation_indices index, int frame );
 
 extern struct SCREEN *get_texture_map_pointer ( texture_index_numbers index );
-#else
-extern unsigned OGREEE_CALL ee_animation_size(unsigned index);
-extern unsigned OGREEE_CALL ee_animation_texture(unsigned index, unsigned frame);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 #define ASSERT assert
 
 using std::min;
-#define bound(VALUE,LOWER,UPPER) ( ( VALUE ) < ( LOWER ) ? ( LOWER ) : ( ( VALUE ) > ( UPPER ) ? ( UPPER ) : ( VALUE ) ) )
 enum SESSION_SEASON_SETTINGS
 {
 
@@ -49,7 +48,7 @@ static void debug_fatal(...)
 }
 #define debug_colour_log debug_log
 #define debug_colour_watch debug_log
-#define command_line_texture_colour 0
+#define command_line_texture_colour 2
 #define command_line_cloud_puffs 0
 #define cloud_puffs_colours ((real_colour*)NULL)
 #define number_of_cloud_puffs_colours 1
@@ -59,17 +58,16 @@ static void debug_fatal(...)
 #define global_anisotropic 0
 #define d3d_modulate_alpha 0
 #define d3d_using_hardware_tnl 0
-#define global_dynamic_water 0
+#define global_dynamic_water 1
 #define set_3d_rain_special_snow_flag(x)
 #define set_object_3d_texture_camoflage_by_name(x)
 #define set_object_3d_reflection_texture_map(x)
-#define add_new_texture(x, y) -1
 static struct
 {
 	int gouraud_shading;
 	int user_defined_contour_heights;
 	float* contour_heights;
-	float texture_override_scales[64][2];
+	int texture_override_scales[64][2];
 	int dry_river;
 	struct
 	{
@@ -447,6 +445,67 @@ void deinitialise_file_system ( void )
 #define get_3d_transformation_matrix(m, heading, pitch, roll) memset(m, 0, sizeof(m))
 
 int get_system_texture_index(const char* name);
+
+int add_new_texture(const char* texture_name, const char* source);
+
+#define TEXTURE_OVERRIDE_DIRECTORY "..\\COHOKUM\\GRAPHICS\\TEXTURES"
+static void initialize_terrain_texture_scales ( const char *mapname )
+{
+	char filename[128];
+
+	sprintf (filename, "%s\\%s\\texture_scales.txt", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+
+	if ( file_exist ( filename ) )
+	{
+		FILE *fin;
+		char buf[256];
+		char *p;
+		int count;
+
+		fin = fopen(filename,"r");
+
+		// skip comment lines
+		fscanf(fin,"%[^\n]\n",buf);
+		while (buf[0] == '#')
+				fscanf(fin,"%[^\n]\n",buf);
+
+		count = 0;
+		while (count < 64 &&
+			strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))
+		{
+			int i;
+			p = strtok(buf,"=");
+
+			//scan name
+			if (p)
+			{
+				//strip leading and trailing spaces
+				i = strlen(p)-1;
+
+				while (i > 0 && (p[i] == ' ' || p[i] == '\t'))
+					i--;
+				p[i+1]='\0';
+				while (p[0] == ' ')
+					p++;
+				current_map_info.texture_override_scales[count][0] = get_system_texture_index (p);
+			}
+
+			//scan scale
+			p = strtok(NULL,"#");
+			if (p)
+			{
+				current_map_info.texture_override_scales[count][1] = atoi(p);
+			}
+
+			fscanf(fin,"%[^\n]\n",buf);
+			// next line
+
+			count++;
+		}
+
+		fclose(fin);
+	}
+}
 
 void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 {
