@@ -514,34 +514,67 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static float get_airspeed_indicator_needle_value (void)
+float get_airspeed_indicator_needle_value (void)
+{
+	float ias;
+
+	ias = bound(kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value), -50.0, 450.0);
+
+//	debug_log ("IAS is: %.02f", ias);
+
+	ias *= rad (-180.0) / 300.0;
+
+//	debug_log ("IAS is now: %.02f", ias);
+
+	return (ias);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_g_meter_needle_value (void)
 {
 	float
-		airspeed_needle_value;
+		g_meter_value;
 
-	if (test_cockpit_instruments)
-	{
-		static float
-			value = -50.0;
+	g_meter_value = bound((current_flight_dynamics->g_force.value), -2.0, 4.0);
 
-		value += 2.0;
-
-		if (value > 300.0)
-		{
-			value = -50.0;
-		}
-
-		airspeed_needle_value = value;
-	}
-	else
-	{
-		airspeed_needle_value = knots (current_flight_dynamics->indicated_airspeed.value);
-	}
-
-	airspeed_needle_value = bound (airspeed_needle_value, 0.0, 250.0);
-
-	return (airspeed_needle_value);
+	return (g_meter_value);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_vsi_needle_value (void)
+{
+	float
+	vertical_speed;
+
+	vertical_speed = bound(metres_per_minute (current_flight_dynamics->world_velocity_y.value), -300.0, 300.0);
+
+	return (vertical_speed);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_rad_alt_needle_value (void)
+{
+	float
+	radar_altitude;
+
+	radar_altitude = bound((current_flight_dynamics->radar_altitude.value), 0.00, 500.00);
+
+	return (radar_altitude);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if 0
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -907,114 +940,6 @@ void draw_havoc_main_rotor_rpm_indicator (cockpit_panels panel)
 	if (test_cockpit_instruments && DEBUG_MODULE)
 	{
 		test_scale (main_rotor_rpm_needle_scale, 0.0, 100.0, 10.0);
-
-		set_pixel (ix_640_480 + x_centre, iy_640_480 + y_centre, sys_col_red);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_havoc_g_meter (cockpit_panels panel)
-{
-	float
-		g_meter_needle_value,
-		x_centre,
-		y_centre;
-
-	scale_data
-		*g_meter_needle_scale,
-		*p;
-
-	if (test_cockpit_instruments)
-	{
-		static float
-			value = -2.5;
-
-		value += 0.05;
-
-		if (value > 4.5)
-		{
-			value = -2.5;
-		}
-
-		g_meter_needle_value = value;
-	}
-	else
-	{
-		g_meter_needle_value = current_flight_dynamics->g_force.value;
-	}
-
-	g_meter_needle_value = bound (g_meter_needle_value, -2.0, 4.0);
-
-	switch (panel)
-	{
-		////////////////////////////////////////
-		case COCKPIT_PANEL_LEVEL_AHEAD:
-		////////////////////////////////////////
-		{
-			x_centre = 117.0;
-
-			y_centre = 374.0;
-
-			g_meter_needle_scale = g_meter_needle_scale_level_ahead;
-
-			break;
-		}
-		////////////////////////////////////////
-		case COCKPIT_PANEL_DOWN20_AHEAD:
-		////////////////////////////////////////
-		{
-			x_centre = 122.0;
-
-			y_centre = 177.0;
-
-			g_meter_needle_scale = g_meter_needle_scale_down_20_ahead;
-
-			break;
-		}
-		////////////////////////////////////////
-		case COCKPIT_PANEL_LEVEL_LEFT30:
-		////////////////////////////////////////
-		{
-			x_centre = 418.0;
-
-			y_centre = 368.0;
-
-			g_meter_needle_scale = g_meter_needle_scale_level_left_30;
-
-			break;
-		}
-		////////////////////////////////////////
-		case COCKPIT_PANEL_DOWN20_LEFT30:
-		////////////////////////////////////////
-		{
-			x_centre = 416.0;
-
-			y_centre = 171.0;
-
-			g_meter_needle_scale = g_meter_needle_scale_down_20_left_30;
-
-			break;
-		}
-		////////////////////////////////////////
-		default:
-		////////////////////////////////////////
-		{
-			debug_fatal (instrument_error);
-
-			break;
-		}
-	}
-
-	p = find_scale_value (g_meter_needle_scale, g_meter_needle_value);
-
-	draw_line (fx_640_480 + x_centre, fy_640_480 + y_centre, fx_640_480 + p->x, fy_640_480 + p->y, white_needle_colour);
-
-	if (test_cockpit_instruments && DEBUG_MODULE)
-	{
-		test_scale (g_meter_needle_scale, -2.0, 4.0, 1.0);
 
 		set_pixel (ix_640_480 + x_centre, iy_640_480 + y_centre, sys_col_red);
 	}
@@ -2169,7 +2094,7 @@ void get_havoc_virtual_cockpit_adi_angles (matrix3x3 attitude, float *heading, f
 		result;
 
 	//
-	// get inverse attitude (attiude * inverse attitude = identity) which aligns the ADI with the world axis
+	// get inverse attitude (attitude * inverse attitude = identity) which aligns the ADI with the world axis
 	//
 
 	inverse_attitude[0][0] = attitude[0][0];
@@ -2227,51 +2152,86 @@ void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float get_havoc_virtual_cockpit_airspeed_indicator_needle_value (void)
+float get_havoc_virtual_cockpit_vsi_needle_value (void)
 {
 	float
-		airspeed_needle_value,
-		fraction,
-		roll;
+	vertical_speed,
+	roll;
 
-	airspeed_needle_value = get_airspeed_indicator_needle_value ();
+	vertical_speed = get_havoc_vsi_needle_value();
 
-	//
-	// non-linear scale
-	//
+	vertical_speed = fabs(vertical_speed);
 
-	if (airspeed_needle_value <= 50.0)
-	{
-		fraction = airspeed_needle_value * (1.0 / 50.0);
-
-		roll = fraction * rad (60.0);
-	}
-	else if (airspeed_needle_value <= 100.0)
-	{
-		fraction = (airspeed_needle_value - 50.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (150.0) - rad (60.0))) + rad (60.0);
-	}
-	else if (airspeed_needle_value <= 150.0)
-	{
-		fraction = (airspeed_needle_value - 100.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (210.0) - rad (150.0))) + rad (150.0);
-	}
-	else if (airspeed_needle_value <= 200.0)
-	{
-		fraction = (airspeed_needle_value - 150.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (270.0) - rad (210.0))) + rad (210.0);
-	}
+	if (vertical_speed < 5.0)
+		roll = vertical_speed / 5.0 * rad(42.0);
+	else if (vertical_speed < 10.0)
+		roll = rad(42.0) + (vertical_speed - 5.0) / 5.0 * rad(38.5);
+	else if (vertical_speed < 20.0)
+		roll = rad(80.5) + (vertical_speed - 10.0) / 10.0 * rad(60.0);
 	else
-	{
-		fraction = (airspeed_needle_value - 200.0) * (1.0 / 50.0);
+		roll = rad(140.5) + (vertical_speed - 20.0) / 10.0 * rad(39.5);
 
-		roll = (fraction * (rad (330.0) - rad (270.0))) + rad (270.0);
-	}
+	return -roll;
+}
 
-	return (-roll);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_virtual_cockpit_gmeter_needle_value (void)
+{
+	float
+	g_meter_value;
+
+	g_meter_value = get_havoc_g_meter_needle_value();
+
+	return -g_meter_value;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_havoc_virtual_cockpit_rad_alt_needle_value (void)
+{
+	float
+	radar_alt_value,
+	roll = 0.0;
+
+	radar_alt_value = get_havoc_rad_alt_needle_value();
+
+	if (radar_alt_value < 20.0)
+		roll = radar_alt_value / 20.0 * rad(29.0);
+	else if (radar_alt_value < 60.0)
+		roll = rad(29.0) + (radar_alt_value - 20.0) / 40.0 * rad(64.0);
+	else if (radar_alt_value < 100.0)
+		roll = rad(93.0) + (radar_alt_value - 60.0) / 40.0 * rad(62.0);
+	else if (radar_alt_value < 500.0)
+		roll = rad(155.0) + (radar_alt_value - 100.0) / 400.0 * rad(105.0);
+	else
+		roll = rad(260.0) + (radar_alt_value - 500.0) / 200.0 * rad(49.0);
+
+	return -roll;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void get_havoc_virtual_cockpit_clock_hand_values (float *hour_hand, float *minute_hand, float *second_hand)
+{
+	float
+		time_of_day,
+		hour_hand_value,
+		minute_hand_value,
+		second_hand_value;
+
+	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+	get_analogue_clock_values (time_of_day, &hour_hand_value, &minute_hand_value, &second_hand_value);
+
+	*hour_hand = hour_hand_value * rad(-30.0);
+	*minute_hand = minute_hand_value * rad(-6.0);
+	*second_hand = floor(second_hand_value) * rad(-6.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

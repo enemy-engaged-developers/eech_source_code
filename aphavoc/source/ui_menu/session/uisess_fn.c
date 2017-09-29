@@ -265,7 +265,7 @@ void notify_session_next_button (ui_object *obj, void *arg)
 				case GAME_TYPE_DEMO:
 				{
 
-					// dont think demo gets here... check.
+					// TODO don't think demo gets here... check.
 
 					push_ui_screen (loading_screen);
 
