@@ -58,7 +58,7 @@ static void debug_fatal(...)
 #define global_anisotropic 0
 #define d3d_modulate_alpha 0
 #define d3d_using_hardware_tnl 0
-#define global_dynamic_water 1
+#define global_dynamic_water 0
 #define set_3d_rain_special_snow_flag(x)
 #define set_object_3d_texture_camoflage_by_name(x)
 #define set_object_3d_reflection_texture_map(x)
@@ -448,7 +448,7 @@ int get_system_texture_index(const char* name);
 
 int add_new_texture(const char* texture_name, const char* source);
 
-#define TEXTURE_OVERRIDE_DIRECTORY "..\\COHOKUM\\GRAPHICS\\TEXTURES"
+#define TEXTURE_OVERRIDE_DIRECTORY "..\\..\\COHOKUM\\GRAPHICS\\TEXTURES\\TERRAIN"
 static void initialize_terrain_texture_scales ( const char *mapname )
 {
 	char filename[128];

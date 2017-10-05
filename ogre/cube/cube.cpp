@@ -59,6 +59,8 @@ void error(const char* msg, ...)
 #include <TRANS.CPP>
 #include <LWS_EXP.CPP>
 
+#include "../textname.h"
+
 #define bound(VALUE,LOWER,UPPER) ( ( VALUE ) < ( LOWER ) ? ( LOWER ) : ( ( VALUE ) > ( UPPER ) ? ( UPPER ) : ( VALUE ) ) )
 #ifdef USE_TERRAIN
 #include "ee.h"
@@ -81,6 +83,73 @@ char* get_terrain_type_name(terrain_types type);
 
 namespace
 {
+void initialise_common_crew_skins (void)
+{
+const char
+	*us_pilot_high_detail_face,
+	*us_pilot_low_detail_face,
+	*us_pilot_neck,
+	*us_pilot_hands,
+	*us_co_pilot_high_detail_face,
+	*us_co_pilot_low_detail_face,
+	*us_co_pilot_neck,
+	*us_co_pilot_hands,
+	*russian_pilot_high_detail_face,
+	*russian_pilot_low_detail_face,
+	*russian_pilot_neck,
+	*russian_pilot_hands,
+	*russian_co_pilot_high_detail_face,
+	*russian_co_pilot_low_detail_face,
+	*russian_co_pilot_neck,
+	*russian_co_pilot_hands;
+#define load_bmp_file_screen(X) ("..\\" X)
+#define set_system_texture_screen(X, Y) ogre_textures_override ((Y), (X))
+
+	//
+	// load BMPs
+	//
+
+	us_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\HI_FACE.BMP");
+	us_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\LOW_FACE.BMP");
+	us_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\NECK.BMP");
+	us_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\PILOT\\HANDS.BMP");
+	us_co_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\HI_FACE.BMP");
+	us_co_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\LOW_FACE.BMP");
+	us_co_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\NECK.BMP");
+	us_co_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\USA\\CPG\\HANDS.BMP");
+
+	russian_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HI_FACE.BMP");
+	russian_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\LOW_FACE.BMP");
+	russian_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\NECK.BMP");
+	russian_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\PILOT\\HANDS.BMP");
+	russian_co_pilot_high_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HI_FACE.BMP");
+	russian_co_pilot_low_detail_face = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\LOW_FACE.BMP");
+	russian_co_pilot_neck = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\NECK.BMP");
+	russian_co_pilot_hands = load_bmp_file_screen ("GRAPHICS\\SKINS\\RUSSIAN\\CPG\\HANDS.BMP");
+
+	//
+	// set texture screens
+	//
+
+	set_system_texture_screen (us_pilot_high_detail_face, TEXTURE_INDEX_US_PILOT_FACE_01);
+	set_system_texture_screen (us_pilot_low_detail_face, TEXTURE_INDEX_US_PILOT_FACE_01_LOW_RES);
+	set_system_texture_screen (us_pilot_neck, TEXTURE_INDEX_US_PILOT_NECK_01);
+	set_system_texture_screen (us_pilot_hands, TEXTURE_INDEX_US_PILOT_SKIN);
+	set_system_texture_screen (us_co_pilot_high_detail_face, TEXTURE_INDEX_US_WSO_FACE_01);
+	set_system_texture_screen (us_co_pilot_low_detail_face, TEXTURE_INDEX_US_WSO_FACE_01_LOW_RES);
+	set_system_texture_screen (us_co_pilot_neck, TEXTURE_INDEX_US_WSO_NECK_01);
+	set_system_texture_screen (us_co_pilot_hands, TEXTURE_INDEX_US_WSO_SKIN);
+
+	set_system_texture_screen (russian_pilot_high_detail_face, TEXTURE_INDEX_RUSSIAN_PILOT_FACE_01);
+	set_system_texture_screen (russian_pilot_low_detail_face, TEXTURE_INDEX_RUSSIAN_PILOT_FACE_LOW_RES);
+	set_system_texture_screen (russian_pilot_neck, TEXTURE_INDEX_RUSSIAN_PILOT_NECK_01);
+	set_system_texture_screen (russian_pilot_hands, TEXTURE_INDEX_RUSSIAN_PILOT_SKIN);
+	set_system_texture_screen (russian_co_pilot_high_detail_face, TEXTURE_INDEX_RUSSIAN_WSO_FACE_01);
+	set_system_texture_screen (russian_co_pilot_low_detail_face, TEXTURE_INDEX_RUSSIAN_WSO_FACE_LOW_RES);
+	set_system_texture_screen (russian_co_pilot_neck, TEXTURE_INDEX_RUSSIAN_WSO_NECK_01);
+	set_system_texture_screen (russian_co_pilot_hands, TEXTURE_INDEX_RUSSIAN_WSO_SKIN);
+}
+
 EET eet;
 
 #ifdef USE_TERRAIN_NEW_TEXTURES
@@ -159,6 +228,7 @@ struct EE
 		{
 			TexturesExporter2 exporter;
 			exporter.export_textures(eet, false);
+			initialise_common_crew_skins();
 			ogre_textures_commit(false);
 		}
 
@@ -299,10 +369,12 @@ void set_terrain(int diff)
 	sprintf(path, "..\\..\\COMMON\\MAPS\\MAP%i\\TERRAIN", terrain);
 
 	initialize_terrain_textures();
+#ifdef USE_TERRAIN_NEW_TEXTURES
+	const char* name = terrain_name(terrain);
+	initialize_terrain_texture_scales(name);
+#endif
 	load_3d_terrain(path);
 #ifdef USE_TERRAIN_NEW_TEXTURES
-	initialize_terrain_texture_scales(path);
-	const char* name = terrain_name(terrain);
 	const char* paths[] =
 	{
 		"..\\GRAPHICS\\TEXTURES\\GENERAL",
@@ -521,7 +593,10 @@ void OGREEE_CALL frame(float dtime)
 		{
 			{ 19, &OgreGameObjectSceneElement::relative_pitch },
 			{ 20, &OgreGameObjectSceneElement::relative_pitch },
-			{ 24, &OgreGameObjectSceneElement::relative_heading }
+			{ 24, &OgreGameObjectSceneElement::relative_heading },
+			{ 276, &OgreGameObjectSceneElement::relative_pitch },
+			{ 277, &OgreGameObjectSceneElement::relative_pitch },
+			{ 278, &OgreGameObjectSceneElement::relative_pitch },
 		};
 		for (unsigned o = 0; o < ARRAYSIZE(so); o++)
 		{

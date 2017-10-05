@@ -120,6 +120,10 @@ void set_terrain_type_textures ( terrain_types type, int texture, int texture2, 
 void set_terrain_textures ( terrain_types type,  int texture, int texture2 );
 #endif
 
+static void initialise_3d_terrain_types ( void );
+
+static void initialise_3d_terrain_map_specific_texture_indices ( void );
+
 static void initialise_3d_thailand_terrain_types ( void );
 
 static void initialise_3d_yemen_terrain_types ( void );

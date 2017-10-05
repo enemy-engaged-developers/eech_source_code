@@ -247,12 +247,10 @@ namespace
 #ifdef USE_TERRAIN_TEXTURES
 				tus->setTextureName(TextureName(ogre_terrain.type_information[i].texture_index));
 				tus->setTextureAddressingMode(Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_CLAMP);
-				tus->setTextureFiltering(Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
 				if (sd.caps->texture2)
 				{
 					tus = pass->createTextureUnitState(TextureName(ogre_terrain.type_information[i].texture2_index), 1);
 					tus->setTextureAddressingMode(Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_WRAP, Ogre::TextureUnitState::TAM_CLAMP);
-					tus->setTextureFiltering(Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
 					tus->setColourOperation(Ogre::LBO_ALPHA_BLEND);
 				}
 				else
@@ -266,7 +264,7 @@ namespace
 					{
 #ifdef USE_TERRAIN_TEXTURES
 #ifndef USE_TERRAIN_SINGLE_TEXTURE
-						tus->setColourOperationEx(Ogre::LBX_MODULATE, Ogre::LBS_MANUAL, Ogre::LBS_TEXTURE, sd.colour);
+						tus->setColourOperationEx(Ogre::LBX_MODULATE, Ogre::LBS_TEXTURE, Ogre::LBS_MANUAL, sd.colour);
 #endif
 #else
 						tus->setColourOperationEx(Ogre::LBX_SOURCE1, Ogre::LBS_MANUAL, Ogre::LBS_CURRENT, sd.colour);

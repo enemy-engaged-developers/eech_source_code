@@ -336,10 +336,6 @@ extern int get_3d_terrain_dual_pass_rendering ( void );
 
 extern void initialise_3d_terrain_rendering_routines ( int dual_pass );
 
-extern void initialise_3d_terrain_types ( void );
-
-extern void initialise_3d_terrain_map_specific_texture_indices ( void );
-
 extern const char *get_terrain_type_name ( terrain_types type );
 
 // Xhit: added to get surface_type for downwash effect. (030328)

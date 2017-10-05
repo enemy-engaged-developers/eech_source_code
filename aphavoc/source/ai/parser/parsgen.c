@@ -2194,7 +2194,6 @@ int parser_campaign_file (const char *filename, int *offset)
 				season = get_next_file_int (file_ptr);
 				//VJ 051227 use set and get global season here
 				set_global_season( season );
-				initialise_noisemaps();
 
 				#if DEBUG_MODULE
 

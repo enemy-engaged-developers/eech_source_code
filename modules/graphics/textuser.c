@@ -1985,6 +1985,7 @@ void load_warzone_override_textures ( void )
 	clear_texture_override_names ();
 
 	initialize_terrain_textures ();
+	initialise_noisemaps ();
 
 	// first seek all textures in common directories
 	//VJ 051024 do not use root directory to search

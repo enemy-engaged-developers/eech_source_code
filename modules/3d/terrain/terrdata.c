@@ -326,19 +326,6 @@ int load_3d_terrain ( const char *path )
 
 	initialise_3d_terrain_rendering_routines ( get_3d_terrain_dual_pass_rendering () );
 
-
-	//
-	// Initialise the texture indices
-	//
-
-	initialise_3d_terrain_map_specific_texture_indices ();
-
-	//
-	// Initialise the default terrain types
-	//
-
-	initialise_3d_terrain_types ();
-
 	//
 	// The sectors are listed going along each x axis in turn
 	//
@@ -1145,11 +1132,7 @@ void initialise_3d_terrain ( void )
 	debug_colour_watch ( DEBUG_COLOUR_BLUE, "Sectors complex culled: %d", MT_INT, &final_terrain_3d_sectors_complex_culled );
 
 	initialise_3d_terrain_colour_conversion_table ();
-#endif
 
-	initialise_3d_terrain_types ();
-
-#ifndef OGRE_EE
 	initialise_3d_terrain_normals ();
 
 	//

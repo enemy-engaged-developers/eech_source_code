@@ -1396,7 +1396,6 @@ void comms_process_data (void)
 							//VJ 051227 use set and get global season here
 							//VJ 060319 further bug fixes
 							set_global_season ( season );
-							initialise_noisemaps();
 
 							sprintf (buffer, "%s", get_trans(seasons[season]));
 //							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);

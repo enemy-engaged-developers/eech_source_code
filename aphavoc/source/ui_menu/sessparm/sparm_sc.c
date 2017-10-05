@@ -168,7 +168,6 @@ void notify_session_parameters (void)
 
 	//VJ 051227 set season info with map_info structure
 	set_global_season( current_map_info.season );
-	initialise_noisemaps();
 
 	if (get_current_game_session()->type == SESSION_LIST_TYPE_RESTORE)
 	{
@@ -1006,9 +1005,6 @@ void notify_season_function ( ui_object *obj, void *arg )
 		tod = SESSION_SEASON_SUMMER;
 
 	set_global_season (tod);
-
-	// this is totally the wrong place to call this, but it fixes bug with non-default seasons not working with noisemaps
-	initialise_noisemaps();
 
 	set_ui_object_text (obj, season_text [get_global_season () - 1]);
 

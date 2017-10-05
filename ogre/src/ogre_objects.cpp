@@ -336,8 +336,9 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 			if (!s.texture_animation)
 				tus->setTextureName(TextureName(s.texture_index));
 			tus->setTextureAddressingMode(s.texture_wrapped_u ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, s.texture_wrapped_v ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, Ogre::TextureUnitState::TAM_CLAMP);
+			if (s.additive || s.translucent)
+				tus->setAlphaOperation(Ogre::LBX_MODULATE, Ogre::LBS_TEXTURE, Ogre::LBS_MANUAL, colour.a);
 
-#if 1
 			if (s.has_luminosity_texture)
 			{
 				Ogre::TextureUnitState* tus = pass->createTextureUnitState(Ogre::String(), 1);
@@ -347,7 +348,6 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 				tus->setTextureAddressingMode(s.luminosity_texture_wrapped_u ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, s.luminosity_texture_wrapped_v ? Ogre::TextureUnitState::TAM_WRAP : Ogre::TextureUnitState::TAM_CLAMP, Ogre::TextureUnitState::TAM_CLAMP);
 				tus->setColourOperation(Ogre::LBO_MODULATE);
 			}
-#endif
 		}
 		else
 		{
@@ -409,15 +409,14 @@ void ogre_objects_convert(const OBJECT_3D& o, Ogre::MeshPtr mesh, AnimationMesh&
 			const TextureAnimation& texture_animation = ogre_textures_animation(animation_index);
 			ai.limit = texture_animation.size();
 			ai.refs.push_back(AnimationRef(smi, material_index));
-			unsigned size = ai.limit;
-			for (unsigned frame = 0; frame < size; frame++)
+			for (unsigned frame = 0; frame < ai.limit; frame++)
 			{
 				MaterialAnimationName material_animation_name(material_index, frame);
 				Ogre::MaterialPtr mata = mat->clone(material_animation_name);
 				TextureName texture_name(texture_animation[frame]);
 				Ogre::Pass* pass = mata->getTechnique(0)->getPass(0);
 				pass->getTextureUnitState(tus_index)->setTextureName(texture_name);
-				if (texture_contains_alpha(texture_name))
+				if (!tus_index && texture_contains_alpha(texture_name))
 				{
 					pass->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 					pass->setDepthWriteEnabled(false);
