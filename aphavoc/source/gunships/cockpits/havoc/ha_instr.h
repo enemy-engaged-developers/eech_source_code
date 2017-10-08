@@ -110,6 +110,8 @@ extern float get_havoc_virtual_cockpit_rad_alt_needle_value (void);
 
 extern void get_havoc_virtual_cockpit_clock_hand_values (float *hours, float *minutes, float *seconds);
 
+extern float get_havoc_virtual_cockpit_rotor_rpm_needle_value(float rpm);
+
 // Casm 10SEP05 Havoc Instruments
 extern void initialise_havoc_instruments (void);
 

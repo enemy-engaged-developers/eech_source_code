@@ -548,15 +548,15 @@ float get_havoc_g_meter_needle_value (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float get_havoc_vsi_needle_value (void)
-{
-	float
-	vertical_speed;
-
-	vertical_speed = bound(metres_per_minute (current_flight_dynamics->world_velocity_y.value), -300.0, 300.0);
-
-	return (vertical_speed);
-}
+//float get_havoc_vsi_needle_value (void)
+//{
+//	float
+//	vertical_speed;
+//
+//	vertical_speed = bound(metres_per_minute (current_flight_dynamics->world_velocity_y.value), -300.0, 300.0);
+//
+//	return (vertical_speed);
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -571,6 +571,32 @@ float get_havoc_rad_alt_needle_value (void)
 
 	return (radar_altitude);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//static void get_clock_hand_values (float *hours, float *minutes, float *seconds)
+//{
+//	float
+//		time_of_day,
+//		hour_hand_value,
+//		minute_hand_value,
+//		second_hand_value;
+//
+//	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+//
+//	get_analogue_clock_values (time_of_day, &hour_hand_value, &minute_hand_value, &second_hand_value);
+//
+//	*hours = hour_hand_value;
+//	debug_colour_log (DEBUG_COLOUR_DARK_BLUE, "Hours: %.02f", hours);
+//
+//	*minutes = minute_hand_value;
+//	debug_colour_log (DEBUG_COLOUR_DARK_GREEN, "minutes: %.02f", minutes);
+//
+//	*seconds = second_hand_value;
+//	debug_colour_log (DEBUG_COLOUR_DARK_RED, "seconds: %.02f", seconds);
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2154,24 +2180,25 @@ void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float
 
 float get_havoc_virtual_cockpit_vsi_needle_value (void)
 {
-	float
-	vertical_speed,
-	roll;
+	float vvi = bound(kilometres_per_hour(current_flight_dynamics->world_velocity_y.value), -30.0, 30.0);
+	int negative = vvi < 0.0;
+	float roll = 0.0;
 
-	vertical_speed = get_havoc_vsi_needle_value();
-
-	vertical_speed = fabs(vertical_speed);
-
-	if (vertical_speed < 5.0)
-		roll = vertical_speed / 5.0 * rad(42.0);
-	else if (vertical_speed < 10.0)
-		roll = rad(42.0) + (vertical_speed - 5.0) / 5.0 * rad(38.5);
-	else if (vertical_speed < 20.0)
-		roll = rad(80.5) + (vertical_speed - 10.0) / 10.0 * rad(60.0);
+	vvi = fabs(vvi);
+	debug_log ("VVI is: %.02f", vvi);
+	if (vvi < 5.0)
+		roll = vvi / 5.0 * rad(42.0);
+	else if (vvi < 10.0)
+		roll = rad(42.0) + (vvi - 5.0) / 5.0 * rad(38.5);
+	else if (vvi < 20.0)
+		roll = rad(80.5) + (vvi - 10.0) / 10.0 * rad(60.0);
 	else
-		roll = rad(140.5) + (vertical_speed - 20.0) / 10.0 * rad(39.5);
+		roll = rad(140.5) + (vvi - 20.0) / 10.0 * rad(39.5);
 
-	return -roll;
+	if (negative)
+		return roll;
+	else
+		return - roll;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2218,21 +2245,27 @@ float get_havoc_virtual_cockpit_rad_alt_needle_value (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_havoc_virtual_cockpit_clock_hand_values (float *hour_hand, float *minute_hand, float *second_hand)
-{
-	float
-		time_of_day,
-		hour_hand_value,
-		minute_hand_value,
-		second_hand_value;
-
-	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
-	get_analogue_clock_values (time_of_day, &hour_hand_value, &minute_hand_value, &second_hand_value);
-
-	*hour_hand = hour_hand_value * rad(-30.0);
-	*minute_hand = minute_hand_value * rad(-6.0);
-	*second_hand = floor(second_hand_value) * rad(-6.0);
-}
+//void get_havoc_virtual_cockpit_clock_hand_values (float *hours, float *minutes, float *seconds)
+//{
+//	float
+//		hour_hand_value,
+//		minute_hand_value,
+//		second_hand_value;
+//
+//	get_clock_hand_values (&hour_hand_value, &minute_hand_value, &second_hand_value);
+//
+//	hour_hand_value *= -PI2 / 12.0;
+//
+//	minute_hand_value *= -PI2 / 60.0;
+//
+//	second_hand_value *= -PI2 / 60.0;
+//
+//	*hours = hour_hand_value;
+//
+//	*minutes = minute_hand_value;
+//
+//	*seconds = second_hand_value;
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
