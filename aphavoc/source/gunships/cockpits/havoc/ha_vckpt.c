@@ -729,7 +729,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_drift_inst3d->vp.position, virtual_cockpit_hsi_drift_inst3d);
 
 					//
-					// airspeed
+					// Airspeed
 					//
 
 					search.search_depth = 0;
@@ -743,10 +743,20 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 						search.result_sub_object->relative_roll = get_airspeed_indicator_needle_value ();
 					}
 
-					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
+					//
+					// Slip indicator
+					//
 
-					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
+					search.search_depth = 0;
+					search.search_object = virtual_cockpit_instrument_needles_inst3d;
+					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_SIDE_SLIP_NEEDLE;
 
+					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search.result_sub_object->visible_object = draw_virtual_cockpit_needles_on_fixed_cockpits;
+
+						search.result_sub_object->relative_roll = get_havoc_slip_needle_value();
+					}
 
 					//
 					// G meter
@@ -763,10 +773,6 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 						search.result_sub_object->relative_roll = get_havoc_virtual_cockpit_gmeter_needle_value();
 					}
 
-//					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
-
-//					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
-
 					//
 					// Vertical Speed Indicator
 					//
@@ -781,10 +787,6 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 						search.result_sub_object->relative_roll = get_havoc_virtual_cockpit_vsi_needle_value ();
 					}
-
-//					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
-
-//					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
 
 					//
 					// Radar Altimeter
@@ -817,61 +819,51 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					}
 
 					//
-					// clock
+					// Barometric Altitude
 					//
 
-//					{
-//						float
-//							hours,
-//							minutes,
-//							seconds;
-//
-//						//
-//						// only read clock values if drawing virtual cockpit needles to prevent speeding up clock debug values
-//						//
-//
-//						get_havoc_virtual_cockpit_clock_hand_values (&hours, &minutes, &seconds);
-//
-//						//
-//						// hour hand
-//						//
-//
-//						search.search_depth = 0;
-//						search.search_object = virtual_cockpit_instrument_needles_inst3d;
-//						search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_CLOCK_HOUR_NEEDLE;
-//
-//						if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-//						{
-//							search.result_sub_object->relative_roll = hours;
-//						}
-//
-//						//
-//						// minute hand
-//						//
-//
-//						search.search_depth = 0;
-//						search.search_object = virtual_cockpit_instrument_needles_inst3d;
-//						search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_CLOCK_MINUTE_NEEDLE;
-//
-//						if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-//						{
-//							search.result_sub_object->relative_roll = minutes;
-//						}
-//
-//						//
-//						// second hand
-//						//
-//
-//						search.search_depth = 0;
-//						search.search_object = virtual_cockpit_instrument_needles_inst3d;
-//						search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_CLOCK_SECOND_NEEDLE;
-//
-//						if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-//						{
-//							search.result_sub_object->relative_roll = seconds;
-//						}
-//
-//					}
+					// Long needle
+
+					search.search_depth = 0;
+					search.search_object = virtual_cockpit_instrument_needles_inst3d;
+					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_BAR_ALT_LRG_NEEDLE;
+
+					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search.result_sub_object->visible_object = draw_virtual_cockpit_needles_on_fixed_cockpits;
+
+						search.result_sub_object->relative_roll = get_havoc_barometric_alt_long_needle_value();
+					}
+
+					// Short needle
+
+					search.search_depth = 0;
+					search.search_object = virtual_cockpit_instrument_needles_inst3d;
+					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_BAR_ALT_SML_NEEDLE;
+
+					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search.result_sub_object->visible_object = draw_virtual_cockpit_needles_on_fixed_cockpits;
+
+						search.result_sub_object->relative_roll = get_havoc_barometric_alt_shrt_needle_value();
+					}
+
+					// Fuel Gauge
+
+					search.search_depth = 0;
+					search.search_object = virtual_cockpit_instrument_needles_inst3d;
+					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_FUEL_NEEDLE;
+
+					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+					{
+						search.result_sub_object->visible_object = draw_virtual_cockpit_needles_on_fixed_cockpits;
+
+						search.result_sub_object->relative_roll = get_havoc_fuel_quantity_needle_value();
+					}
+
+					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
+
+					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
 
 					//VJ wideview mod, date: 18-mar-03
 					// re-insert compass here (internal is draw after external
