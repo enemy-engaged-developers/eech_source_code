@@ -72,7 +72,7 @@
 
 void initialise_hokum_hms (void)
 {
-	if (get_global_simple_avionics ())
+	if (get_global_avionics_realism_level () == AVIONICS_REALISM_LEVEL_SIMPLE)
 	{
 		hms_max_visual_range		= 5000.0;
 		hms_max_field_of_view	= rad (45.0);
@@ -98,7 +98,7 @@ void deinitialise_hokum_hms (void)
 
 void update_hokum_hms (void)
 {
-	if (get_global_simple_avionics ())
+	if (get_global_avionics_realism_level () == AVIONICS_REALISM_LEVEL_SIMPLE)
 	{
 		hms_max_visual_range		= 5000.0;
 		hms_max_field_of_view	= rad (45.0);

@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-	}
+	select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 
 static void select_target_acquisition_system_air_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-	}
+	select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,10 +99,7 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 
 static void select_target_acquisition_system_flir_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
-	}
+	select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +108,7 @@ static void select_target_acquisition_system_flir_event (event *ev)
 
 static void select_target_acquisition_system_dtv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
-	}
+	select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,10 +120,7 @@ static void select_target_acquisition_system_dvo_event (event *ev)
 	// If ORT is not active then first press activates it
 	if (view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
 	{
-		if (!get_global_simple_avionics ())
-		{
-			select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
-		}
+		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
 	}
 	else
 		set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
@@ -147,10 +132,7 @@ static void select_target_acquisition_system_dvo_event (event *ev)
 
 static void select_target_acquisition_system_ihadss_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
-	}
+	select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

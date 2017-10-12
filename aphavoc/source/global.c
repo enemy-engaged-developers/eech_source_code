@@ -384,7 +384,7 @@ void initialise_global_options_data_version2 (void)
 {
 	set_global_apache_havoc_installed (FALSE);
 
-	set_global_auto_counter_measures (TRUE);
+	set_global_counter_measures_mode(COUNTER_MEASURES_MODE_AUTO);
 
 	set_global_ase_auto_page (TRUE);
 
@@ -429,7 +429,7 @@ void initialise_global_options_data_version2 (void)
 
 	set_global_cockpit_detail_level (COCKPIT_DETAIL_LEVEL_HIGH);
 
-	set_global_simple_avionics (FALSE);
+	set_global_avionics_realism_level (AVIONICS_REALISM_LEVEL_ADVANCED);
 
 	set_global_display_in_flight_intelligence_messages (TRUE);
 

@@ -83,14 +83,9 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
 	switch (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE))
 	{
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
-		
-	if (!get_global_simple_avionics ())
-	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-	}
-
-	break;
+//		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+//			select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
+//			break;
 	default:
 	break;
 	}
@@ -104,15 +99,9 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 {
 	switch (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE))
 	{
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
-	
-	if (!get_global_simple_avionics ())
-	{
-		// has no air radar, left for later use on other helis
-		//select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-	}
-
-	break;
+//		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+//			select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
+//			break;
 	default:
 	break;
 	}
@@ -124,10 +113,7 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 
 static void select_target_acquisition_system_flir_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
-	}
+	select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,10 +122,7 @@ static void select_target_acquisition_system_flir_event (event *ev)
 
 static void select_target_acquisition_system_dtv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
-	}
+	select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,10 +131,7 @@ static void select_target_acquisition_system_dtv_event (event *ev)
 
 static void select_target_acquisition_system_dvo_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
-	}
+	select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,10 +140,7 @@ static void select_target_acquisition_system_dvo_event (event *ev)
 
 static void select_target_acquisition_system_ihadss_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
-	}
+	select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -823,9 +823,12 @@ static void toggle_night_vision_system_active_event (event *ev)
 
 static void toggle_simple_avionics_event (event *ev)
 {
-	set_global_simple_avionics (get_global_simple_avionics () ^ 1);
+	if (get_global_avionics_realism_level () < AVIONICS_REALISM_LEVEL_REALISTIC)
+		set_global_avionics_realism_level (get_global_avionics_realism_level () + 1);
+	else 
+		set_global_avionics_realism_level (AVIONICS_REALISM_LEVEL_SIMPLE);
 
-	debug_colour_log (DEBUG_COLOUR_AMBER, "simple_avionics = %d", get_global_simple_avionics ());
+	debug_colour_log (DEBUG_COLOUR_AMBER, "simple_avionics = %d", get_global_avionics_realism_level ());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

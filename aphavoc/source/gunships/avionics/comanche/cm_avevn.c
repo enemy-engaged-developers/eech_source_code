@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-	}
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 
 static void select_target_acquisition_system_air_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-	}
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,10 +99,7 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 
 static void select_target_acquisition_system_flir_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
-	}
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +108,7 @@ static void select_target_acquisition_system_flir_event (event *ev)
 
 static void select_target_acquisition_system_dtv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
-	}
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,14 +117,11 @@ static void select_target_acquisition_system_dtv_event (event *ev)
 
 static void select_target_acquisition_system_dvo_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		//DVO REMOVED//
-		/*
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
-		*/
-		//DVO REMOVED//
-	}
+	//DVO REMOVED//
+	/*
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
+	*/
+	//DVO REMOVED//
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,10 +130,7 @@ static void select_target_acquisition_system_dvo_event (event *ev)
 
 static void select_target_acquisition_system_hidss_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HIDSS);
-	}
+	select_comanche_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HIDSS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

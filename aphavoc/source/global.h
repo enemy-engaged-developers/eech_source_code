@@ -437,6 +437,27 @@ enum COCKPIT_DETAIL_LEVELS
 
 typedef enum COCKPIT_DETAIL_LEVELS cockpit_detail_levels;
 
+enum AVIONICS_REALISM_LEVELS
+{
+	AVIONICS_REALISM_LEVEL_SIMPLE,
+	AVIONICS_REALISM_LEVEL_ADVANCED,
+	AVIONICS_REALISM_LEVEL_REALISTIC,
+	NUM_AVIONICS_REALISM_LEVELS
+};
+
+typedef enum AVIONICS_REALISM_LEVELS avionics_realism_levels;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef enum {
+	COUNTER_MEASURES_MODE_SAFE,
+	COUNTER_MEASURES_MODE_MANUAL,
+	COUNTER_MEASURES_MODE_SEMI,
+	COUNTER_MEASURES_MODE_AUTO,
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -543,7 +564,7 @@ struct GLOBAL_OPTIONS_DATA
 		cpg_assist_type;
 
 	int
-		auto_counter_measures;
+		counter_measures_mode;
 
 	char
 		ip_address[128];
@@ -616,7 +637,7 @@ struct GLOBAL_OPTIONS_DATA
 		apache_havoc_installed,
 		ase_auto_page,
 		glass_cockpit,
-		simple_avionics,
+		avionics_realism_level,
 		display_in_flight_intelligence_messages,
 		unscaled_displays;
 
@@ -904,9 +925,11 @@ extern global_options_data
 
 #define get_global_cpg_assist_type() (global_options.cpg_assist_type)
 
-#define set_global_auto_counter_measures(FLAG) (global_options.auto_counter_measures = (FLAG))
+#define set_global_auto_counter_measures(FLAG) (global_options.counter_measures_mode = ((FLAG) ? COUNTER_MEASURES_MODE_AUTO : COUNTER_MEASURES_MODE_MANUAL))
+#define get_global_auto_counter_measures() (global_options.counter_measures_mode == COUNTER_MEASURES_MODE_AUTO)
 
-#define get_global_auto_counter_measures() (global_options.auto_counter_measures)
+#define set_global_counter_measures_mode(MODE) (global_options.counter_measures_mode = (MODE))
+#define get_global_counter_measures_mode() (global_options.counter_measures_mode)
 
 #define set_global_ase_auto_page(FLAG) (global_options.ase_auto_page = (FLAG))
 
@@ -920,9 +943,9 @@ extern global_options_data
 
 #define get_global_cockpit_detail_level() (global_options.cockpit_detail_level)
 
-#define set_global_simple_avionics(FLAG) (global_options.simple_avionics = (FLAG))
+#define set_global_avionics_realism_level(LEVEL) (global_options.avionics_realism_level = (LEVEL))
 
-#define get_global_simple_avionics() (global_options.simple_avionics)
+#define get_global_avionics_realism_level() (global_options.avionics_realism_level)
 
 #define set_global_display_in_flight_intelligence_messages(FLAG) (global_options.display_in_flight_intelligence_messages = (FLAG))
 

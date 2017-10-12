@@ -92,7 +92,7 @@ ui_object
 static const char
 	*option_boolean_text[2],
 	*option_cpg_text[3],
-	*option_avionics_text[2],
+	*option_avionics_text[3],
 	*option_difficulty_text[3],
 	*option_cpg_report_targets_text[2];
 	
@@ -128,10 +128,10 @@ void notify_show_realism_page (void)
 	debug_filtered_log ("acm: %d text: %s", get_global_auto_counter_measures (), option_boolean_text [get_global_auto_counter_measures ()]);
 	#endif
 
-	set_ui_object_text (avionics_option_button, option_avionics_text [get_global_simple_avionics ()]);
+	set_ui_object_text (avionics_option_button, option_avionics_text [get_global_avionics_realism_level ()]);
 
 	#if DEBUG_MODULE
-	debug_filtered_log ("avionics: %d text: %s", get_global_simple_avionics (), option_avionics_text [get_global_simple_avionics ()]);
+	debug_filtered_log ("avionics: %d text: %s", get_global_avionics_realism_level (), option_avionics_text [get_global_avionics_realism_level ()]);
 	#endif
 
 	set_ui_object_text (difficulty_option_button, option_difficulty_text [get_global_difficulty_level () - 1]);
@@ -181,8 +181,9 @@ void define_options_screen_realism_page_objects (void)
 	option_cpg_text [1] = get_trans ("Novice");
 	option_cpg_text [2] = get_trans ("Realistic");
 
-	option_avionics_text [0] = get_trans ("Realistic");
-	option_avionics_text [1] = get_trans ("Novice");
+	option_avionics_text [0] = get_trans ("Simple");
+	option_avionics_text [1] = get_trans ("Advanced");
+	option_avionics_text [2] = get_trans ("Realistic");
 
 	option_difficulty_text [0] = get_trans ("Hard");
 	option_difficulty_text [1] = get_trans ("Medium");
@@ -695,12 +696,15 @@ void notify_co_pilot_ecm_option_button ( ui_object *obj, void *arg )
 void notify_avionics_option_button ( ui_object *obj, void *arg )
 {
 
-	set_global_simple_avionics (!get_global_simple_avionics ());
+	if (get_global_avionics_realism_level () < AVIONICS_REALISM_LEVEL_REALISTIC)
+		set_global_avionics_realism_level (get_global_avionics_realism_level () + 1);
+	else
+		set_global_avionics_realism_level (AVIONICS_REALISM_LEVEL_SIMPLE);
 
-	set_ui_object_text (obj, option_avionics_text [get_global_simple_avionics ()]);
+	set_ui_object_text (obj, option_avionics_text [get_global_avionics_realism_level ()]);
 
 	#if DEBUG_MODULE
-	debug_filtered_log ("avionics: %d text: %s", get_global_simple_avionics (), option_avionics_text [get_global_simple_avionics ()]);
+	debug_filtered_log ("avionics: %d text: %s", get_global_avionics_realism_level (), option_avionics_text [get_global_avionics_realism_level ()]);
 	#endif
 
 	// don't leave text selected

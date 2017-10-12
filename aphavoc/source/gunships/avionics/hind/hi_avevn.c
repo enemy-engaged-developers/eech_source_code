@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 /*static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-	}
+	select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 }*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 /*static void select_target_acquisition_system_air_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-	}
+	select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 }*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,10 +99,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_dtv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
-	}
+	select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +108,7 @@ static void select_target_acquisition_system_dtv_event (event *ev)
 
 static void select_target_acquisition_system_llltv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
-	}
+	select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,10 +117,8 @@ static void select_target_acquisition_system_llltv_event (event *ev)
 
 static void select_target_acquisition_system_hms_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
+	if (get_global_avionics_realism_level () != AVIONICS_REALISM_LEVEL_REALISTIC)
 		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +172,8 @@ static void steer_centre_event (event *ev)
 
 static void toggle_auto_target_event (event *ev)
 {
-	toggle_hind_auto_target ();
+	if (get_global_avionics_realism_level () != AVIONICS_REALISM_LEVEL_REALISTIC)
+		toggle_hind_auto_target ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +182,8 @@ static void toggle_auto_target_event (event *ev)
 
 static void toggle_lock_target_event (event *ev)
 {
-	toggle_hind_lock_target ();
+	if (get_global_avionics_realism_level () != AVIONICS_REALISM_LEVEL_REALISTIC)
+		toggle_hind_lock_target ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,7 +284,8 @@ static void select_cannon_event (event *ev)
 
 static void toggle_radar_jammer_event (event *ev)
 {
-	toggle_hind_radar_jammer_manual ();
+	// HAVE NO RADAR JAMMER
+	// toggle_hind_radar_jammer_manual ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +303,8 @@ static void toggle_infra_red_jammer_event (event *ev)
 
 static void toggle_backup_sight_event(event* ev)
 {
-	toggle_hind_backup_sight();
+	// HAVE NO BACKUP SIGHT
+	// toggle_hind_backup_sight();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

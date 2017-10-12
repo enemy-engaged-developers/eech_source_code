@@ -290,11 +290,6 @@ static void set_local_int_value (entity *en, int_types type, int value)
 					if (hud_mode != HUD_MODE_WEAPON)
 						previous_hud_mode = hud_mode;
 					hud_mode = HUD_MODE_WEAPON;
-
-					if (get_global_simple_avionics ())
-					{
-						select_simple_avionics_target_acquisition_system ();
-					}
 				}
 			}
 

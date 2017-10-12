@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_llltv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
-	}
+	select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_llltv_event (event *ev)
 
 static void select_target_acquisition_system_hms_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
-	}
+	select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

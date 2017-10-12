@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_flir_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_kiowa_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
-	}
+	select_kiowa_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_flir_event (event *ev)
 
 static void select_target_acquisition_system_dtv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_kiowa_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
-	}
+	select_kiowa_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -512,7 +512,7 @@ static int get_terrain_los_clear (vec3d *source_position, vec3d *target_position
 
 static int get_hms_valid (void)
 {
-	if (!get_global_simple_avionics ())
+	if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE)
 	{
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_NIGHT)
 		{

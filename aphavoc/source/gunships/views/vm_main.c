@@ -778,7 +778,6 @@ static void leave_view_mode (view_modes mode)
 		{
 			// DVO only available in ORT view
 			if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE
-				&& !get_global_simple_avionics ()
 				&& target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
 			{
 				select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);

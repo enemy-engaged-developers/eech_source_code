@@ -468,7 +468,7 @@ void assign_entity_to_user (entity *en)
 		// set all helicopters in new group to "weapons hold"
 		//
 
-		if (!get_global_simple_avionics ())
+		if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE)
 		{
 			if (group)
 			{

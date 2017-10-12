@@ -660,7 +660,7 @@ static void damage_systems (hind_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (!get_global_simple_avionics ())
+	if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE)
 	{
 		if (damage.head_up_display)
 		{
@@ -681,7 +681,7 @@ static void damage_systems (hind_damage_flags damage)
 
 	////////////////////////////////////////
 
-	if (!get_global_simple_avionics ())
+	if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE)
 	{
 		if (damage.helmet_mounted_sight)
 		{

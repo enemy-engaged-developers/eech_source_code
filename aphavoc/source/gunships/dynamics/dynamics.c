@@ -3230,10 +3230,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT, FALSE);
 				}
-				else if (get_global_simple_avionics ())
-				{
-				}
-				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0))
+				else if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE && current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0))
 				{
 
 					if (!speech)

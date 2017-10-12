@@ -81,10 +81,7 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +90,7 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 
 static void select_target_acquisition_system_air_radar_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,10 +99,7 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 
 static void select_target_acquisition_system_flir_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +108,7 @@ static void select_target_acquisition_system_flir_event (event *ev)
 
 static void select_target_acquisition_system_llltv_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,10 +117,7 @@ static void select_target_acquisition_system_llltv_event (event *ev)
 
 static void select_target_acquisition_system_periscope_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_PERISCOPE);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_PERISCOPE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,10 +126,7 @@ static void select_target_acquisition_system_periscope_event (event *ev)
 
 static void select_target_acquisition_system_hms_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
-	{
-		select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
-	}
+	select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
