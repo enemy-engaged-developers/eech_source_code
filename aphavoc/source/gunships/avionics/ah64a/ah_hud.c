@@ -3068,17 +3068,6 @@ void draw_ah64a_hud (void)
 
 	////////////////////////////////////////
 	//
-	// do not draw damaged HUD
-	//
-	////////////////////////////////////////
-
-	if (ah64a_damage.ihadss || !electrical_system_active())
-	{
-		return;
-	}
-
-	////////////////////////////////////////
-	//
 	// reduce alpha as the HUD interferes with the instrument view (some cards cannot do this)
 	//
 	////////////////////////////////////////
@@ -3230,27 +3219,36 @@ void draw_ah64a_hud (void)
 
 		set_block (0, 0, HUD_VIEWPORT_SIZE - 1, HUD_VIEWPORT_SIZE - 1, clear_hud_colour);
 
-		draw_layout_grid ();
+		////////////////////////////////////////
+		//
+		// do not draw damaged HUD
+		//
+		////////////////////////////////////////
 
-		switch (hud_mode)
-		{
-			case HUD_MODE_TRANSITION:
+		if (!ah64a_damage.ihadss && electrical_system_active()) {
+
+			draw_layout_grid ();
+
+			switch (hud_mode)
 			{
-				draw_transition_mode_hud();
+				case HUD_MODE_TRANSITION:
+				{
+					draw_transition_mode_hud();
 
-				break;
-			}
-			case HUD_MODE_NAVIGATION:
-			{
-				draw_navigation_mode_hud ();
+					break;
+				}
+				case HUD_MODE_NAVIGATION:
+				{
+					draw_navigation_mode_hud ();
 
-				break;
-			}
-			case HUD_MODE_WEAPON:
-			{
-				draw_weapon_mode_hud ();
+					break;
+				}
+				case HUD_MODE_WEAPON:
+				{
+					draw_weapon_mode_hud ();
 
-				break;
+					break;
+				}
 			}
 		}
 

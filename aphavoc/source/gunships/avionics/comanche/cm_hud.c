@@ -1436,7 +1436,7 @@ static void display_weapon_information (void)
 		count = get_local_entity_weapon_count (get_gunship_entity (), weapon_sub_type);
 
 		sprintf (s, "%s %d", weapon_database[weapon_sub_type].hud_name, count);
-		set_2d_mono_font_position (0.5, -0.6);
+		set_2d_mono_font_position (0.35, -0.6);
 		set_mono_font_rel_position (1.0, 0.0);
 
 		print_mono_font_string (s);
@@ -2445,17 +2445,6 @@ char buffer[255];
 */
 	////////////////////////////////////////
 	//
-	// do not draw damaged HUD
-	//
-	////////////////////////////////////////
-
-	if (comanche_damage.hidss || !electrical_system_active())
-	{
-		return;
-	}
-
-	////////////////////////////////////////
-	//
 	// reduce alpha as the HUD interferes with the instrument view (some cards cannot do this)
 	//
 	////////////////////////////////////////
@@ -2603,30 +2592,39 @@ char buffer[255];
 		//clear max block because between two clear size can have changed
 		set_block (0, 0, HUD_VIEWPORT_SIZE - 1, HUD_VIEWPORT_SIZE - 1, clear_hud_colour);
 
-		draw_layout_grid ();
+		////////////////////////////////////////
+		//
+		// do not draw damaged HUD
+		//
+		////////////////////////////////////////
 
-		switch (hud_mode)
+		if (!comanche_damage.hidss && electrical_system_active())
 		{
-			case HUD_MODE_NAVIGATION:
-			{
-				draw_navigation_mode_hud ();
+			draw_layout_grid ();
 
-				break;
-			}
-			case HUD_MODE_TRANSITION:
+			switch (hud_mode)
 			{
-				draw_transition_mode_hud ();
+				case HUD_MODE_NAVIGATION:
+				{
+					draw_navigation_mode_hud ();
 
-				break;
-			}
-			case HUD_MODE_WEAPON:
-			{
-				draw_weapon_mode_hud ();
+					break;
+				}
+				case HUD_MODE_TRANSITION:
+				{
+					draw_transition_mode_hud ();
 
-				break;
+					break;
+				}
+				case HUD_MODE_WEAPON:
+				{
+					draw_weapon_mode_hud ();
+
+					break;
+				}
 			}
 		}
-
+		
 		hud_colour = store_hud_colour;
 
 		unlock_screen (hud_texture_screen);

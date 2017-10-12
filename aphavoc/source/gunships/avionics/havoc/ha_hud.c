@@ -2708,22 +2708,6 @@ void draw_havoc_hms (void)
 
 	////////////////////////////////////////
 	//
-	// do not draw damaged or inactive HMS
-	//
-	////////////////////////////////////////
-
-	if (havoc_damage.helmet_mounted_sight || !electrical_system_active())
-	{
-		return;
-	}
-
-	if (hud_mode != HUD_MODE_WEAPON)
-	{
-		return;
-	}
-
-	////////////////////////////////////////
-	//
 	// reduce alpha as the HUD interferes with the instrument view (some cards cannot do this)
 	//
 	////////////////////////////////////////
@@ -2837,18 +2821,27 @@ void draw_havoc_hms (void)
 
 		set_block (0, 0, HUD_VIEWPORT_LARGE_SIZE - 1, HUD_VIEWPORT_LARGE_SIZE - 1, clear_hud_colour);
 
-		draw_layout_grid ();
+		////////////////////////////////////////
+		//
+		// do not draw damaged or inactive HMS
+		//
+		////////////////////////////////////////
 
-		draw_hms_centre_datum ();
+		if (!havoc_damage.helmet_mounted_sight && electrical_system_active() && hud_mode == HUD_MODE_WEAPON)
+		{
+			draw_layout_grid ();
 
-		draw_target_marker ();
+			draw_hms_centre_datum ();
 
-//		draw_target_range_indicator ();
+			draw_target_marker ();
 
-//		display_weapon_information ();
+	//		draw_target_range_indicator ();
 
-//		display_target_information ();
+	//		display_weapon_information ();
 
+	//		display_target_information ();
+		}
+		
 		hud_colour = store_hud_colour;
 
 		unlock_screen (large_hms_texture_screen);

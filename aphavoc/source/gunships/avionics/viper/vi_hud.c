@@ -2395,18 +2395,6 @@ void draw_viper_hud (void)
 
 	////////////////////////////////////////
 	//
-	// do not draw damaged HUD
-	//
-	////////////////////////////////////////
-
-	if (viper_damage.hidss || !electrical_system_active())
-	{
-		return;
-	}
-
-
-	////////////////////////////////////////
-	//
 	// reduce alpha as the HUD interferes with the instrument view (some cards cannot do this)
 	//
 	////////////////////////////////////////
@@ -2554,30 +2542,39 @@ void draw_viper_hud (void)
 		//clear max block because between two clear size can have changed
 		set_block (0, 0, HUD_VIEWPORT_SIZE - 1, HUD_VIEWPORT_SIZE - 1, clear_hud_colour);
 
-		draw_layout_grid ();
+		////////////////////////////////////////
+		//
+		// do not draw damaged HUD
+		//
+		////////////////////////////////////////
 
-		switch (hud_mode)
+		if (!viper_damage.hidss && electrical_system_active())
 		{
-			case HUD_MODE_NAVIGATION:
-			{
-				draw_navigation_mode_hud ();
+			draw_layout_grid ();
 
-				break;
-			}
-			case HUD_MODE_TRANSITION:
+			switch (hud_mode)
 			{
-				draw_transition_mode_hud ();
+				case HUD_MODE_NAVIGATION:
+				{
+					draw_navigation_mode_hud ();
 
-				break;
-			}
-			case HUD_MODE_WEAPON:
-			{
-				draw_weapon_mode_hud ();
+					break;
+				}
+				case HUD_MODE_TRANSITION:
+				{
+					draw_transition_mode_hud ();
 
-				break;
+					break;
+				}
+				case HUD_MODE_WEAPON:
+				{
+					draw_weapon_mode_hud ();
+
+					break;
+				}
 			}
 		}
-
+		
 		hud_colour = store_hud_colour;
 
 		unlock_screen (hud_texture_screen);
