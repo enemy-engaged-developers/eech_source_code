@@ -210,7 +210,7 @@ void initialise_main_screen (void)
                UI_ATTR_VIRTUAL_POSITION (TITLE_TEXT_POSITION_X, TITLE_TEXT_POSITION_Y),
 					UI_ATTR_VIRTUAL_SIZE (TITLE_TEXT_WIDTH, TITLE_TEXT_HEIGHT),
 					UI_ATTR_TEXT (get_trans ("Main Screen")),
-					UI_ATTR_FONT_TYPE (UI_FONT_IMPACT_22),
+					UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_22),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_BOTTOM),
                UI_ATTR_FONT_COLOUR_START (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 0),
                UI_ATTR_FONT_COLOUR_END (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 255),

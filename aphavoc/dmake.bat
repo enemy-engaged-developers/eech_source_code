@@ -1,5 +1,5 @@
 @echo off
-SET EECH_ROOTDIR=D:\workspace\eech-dev-unchanged-master
+SET EECH_ROOTDIR=D:\eech_1_16_havoc_needles
 
 del project.exe
 

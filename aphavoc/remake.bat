@@ -1,5 +1,5 @@
 @echo off
-SET EECH_ROOTDIR=e:\Work\eech-new
+SET EECH_ROOTDIR=D:\eech_1_16_havoc_needles
 
 	cd %EECH_ROOTDIR%\aphavoc
 

@@ -158,7 +158,7 @@ void initialise_init_screen (void)
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2, y2),
 			UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_16),
-      	UI_ATTR_FONT_COLOUR (ui_init_screen_text_colour.r, ui_init_screen_text_colour.g, ui_init_screen_text_colour.b, 255),
+			UI_ATTR_FONT_COLOUR (ui_init_screen_text_colour.r, ui_init_screen_text_colour.g, ui_init_screen_text_colour.b, 255),
 			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_CENTRE),
 			UI_ATTR_TEXT (""),
 			UI_ATTR_CLEAR (TRUE),
@@ -166,9 +166,9 @@ void initialise_init_screen (void)
 		);
 
 //VJ 030807 added wut file name display for startup screen
-	x1 = 0.800;
-	y1 = 0.87;
-	x2 = 0.3;
+	x1 = 0.975;
+	y1 = 0.065;
+	x2 = 0.0;
 	y2 = 0.0625;
 
 	WUT_text = create_ui_object
@@ -178,8 +178,8 @@ void initialise_init_screen (void)
 			UI_ATTR_VIRTUAL_POSITION (x1, y1),
 			UI_ATTR_VIRTUAL_SIZE (x2, y2),
 			UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_16),
-      	UI_ATTR_FONT_COLOUR (255,255,255,255),
-			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_CENTRE),
+			UI_ATTR_FONT_COLOUR (ui_init_screen_text_colour.r, ui_init_screen_text_colour.g, ui_init_screen_text_colour.b, 255),
+			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 			UI_ATTR_TEXT (""),
 			UI_ATTR_CLEAR (TRUE),
 			UI_ATTR_END
