@@ -134,6 +134,8 @@ extern void select_previous_hokum_mfd (hokum_mfd_locations mfd_location);
 
 extern void toggle_hokum_mfd_on_off (hokum_mfd_locations mfd_location);
 
+extern hokum_mfd_modes get_hokum_mfd_mode (hokum_mfd_locations mfd_location);
+
 extern void select_next_hokum_pilot_tsd_ase_range (void);
 
 extern void select_next_hokum_co_pilot_tsd_ase_range (void);

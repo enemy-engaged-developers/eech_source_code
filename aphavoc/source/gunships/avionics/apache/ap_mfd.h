@@ -112,6 +112,8 @@ extern void toggle_apache_rhs_mfd_on_off (void);
 
 extern void toggle_apache_ort_on_off(void);
 
+extern mfd_modes get_apache_mfd_mode (mfd_locations mfd_location);
+
 extern int get_apache_mfd_has_focus (mfd_locations mfd_location);
 
 extern int get_apache_tads_display_visible (void);

@@ -169,6 +169,8 @@ extern void select_previous_comanche_main_mfd (comanche_main_mfd_locations mfd_l
 
 extern void toggle_comanche_main_mfd_on_off (comanche_main_mfd_locations mfd_location);
 
+extern comanche_main_mfd_modes get_comanche_main_mfd_mode (comanche_main_mfd_locations mfd_location);
+
 extern void toggle_comanche_side_mfd_on_off (comanche_side_mfd_locations mfd_location);
 
 extern void select_next_comanche_pilot_tsd_ase_range (void);

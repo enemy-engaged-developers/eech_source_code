@@ -241,6 +241,22 @@ void initialise_apache_virtual_cockpit (void)
 #if DEBUG_MODULE
 	dx = 0; dy = 0; dz = 0;
 #endif
+	
+	// set up cockpit light
+	
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) != DAY_SEGMENT_TYPE_DAY && !command_line_dynamics_engine_startup)
+		cockpit_light_color_index[0] = 1;
+	else
+		cockpit_light_color_index[0] = 0;
+
+	cockpit_light_color_index[1] = 4;
+
+	cockpit_light_color_array = (cockpit_light_colors *) safe_malloc (sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	memset (cockpit_light_color_array, 0, sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	cockpit_light_color_array[0] = COCKPIT_LIGHT_NONE;
+	cockpit_light_color_array[1] = COCKPIT_LIGHT_YELLOW;
+	cockpit_light_color_array[2] = COCKPIT_LIGHT_BLUE;
+	cockpit_light_color_array[3] = COCKPIT_LIGHT_GREEN;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +310,9 @@ void deinitialise_apache_virtual_cockpit (void)
 	deinitialise_altitude_counter();
 
 	clear_head_movement_data();
+
+	safe_free(cockpit_light_color_array);
+	cockpit_light_color_array = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -903,6 +922,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	{
 //		set_cockpit_lighting (vp.attitude);
 
+/*
 		set_cockpit_white_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
@@ -910,11 +930,69 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
+ */
+		recalculate_3d_environment_settings (main_3d_env);
+		set_3d_active_environment (main_3d_env);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		realise_3d_clip_extents (main_3d_env);
 
 		clear_zbuffer_screen ();
 
 		if (begin_3d_scene ())
 		{
+			light_3d_source
+				*display_backlight,
+				*cockpit_light;
+
+			vec3d
+				direction;
+
+			matrix3x3
+				m1,
+				m2;
+
+			float
+				mfd_light_power = 0.0;
+
+			// set cockpit lights
+
+			if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+				mfd_light_power = (float)(get_apache_mfd_mode(MFD_LOCATION_PILOT_LHS) % 2 + !!get_apache_mfd_mode(MFD_LOCATION_PILOT_LHS) +
+						get_apache_mfd_mode(MFD_LOCATION_PILOT_RHS) % 2 + !!get_apache_mfd_mode(MFD_LOCATION_PILOT_RHS)) / 4.0;
+			else if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
+				mfd_light_power = (float)(get_apache_mfd_mode(MFD_LOCATION_CPG_LHS) % 2 + !!get_apache_mfd_mode(MFD_LOCATION_CPG_LHS) +
+						get_apache_mfd_mode(MFD_LOCATION_CPG_RHS) % 2 + !!get_apache_mfd_mode(MFD_LOCATION_CPG_RHS)) / 4.0;
+
+			ASSERT(mfd_light_power >= 0.0 && mfd_light_power <= 1.0);
+
+			if (mfd_light_power)
+			{
+				get_3d_transformation_matrix (m1, rad (0.0), rad (- 25.0), rad (0.0));
+				multiply_matrix3x3_matrix3x3 (m2, m1, vp.attitude);
+
+				direction.x = m2[2][0];
+				direction.y = m2[2][1];
+				direction.z = m2[2][2];
+
+				display_backlight = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.1627 * mfd_light_power, 0.2039 * mfd_light_power, 0.1392 * mfd_light_power);
+				insert_light_3d_source_into_3d_scene (display_backlight);
+			}
+
+			if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+			{
+				light_colour cockpit_light_color = cockpit_light_color_table[cockpit_light_color_array[cockpit_light_color_index[0]]];
+
+				get_3d_transformation_matrix (m1, rad (180), rad (45), 0.0);
+				multiply_matrix3x3_matrix3x3 (m2, m1, vp.attitude);
+
+				direction.x = m2[2][0];
+				direction.y = m2[2][1];
+				direction.z = m2[2][2];
+
+				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, cockpit_light_color.red, cockpit_light_color.green, cockpit_light_color.blue);
+				insert_light_3d_source_into_3d_scene (cockpit_light);
+			}
+
 			//
 			// virtual cockpit
 			//
@@ -1077,6 +1155,20 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 			print_repairing_status();
 
 			end_3d_scene ();
+
+			// clear cockpit lights
+
+			if (mfd_light_power)
+			{
+				remove_light_3d_source_from_3d_scene (display_backlight);
+				destroy_light_3d_source (display_backlight);
+			}
+
+			if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+			{
+				remove_light_3d_source_from_3d_scene (cockpit_light);
+				destroy_light_3d_source (cockpit_light);
+			}
 		}
 	}
 

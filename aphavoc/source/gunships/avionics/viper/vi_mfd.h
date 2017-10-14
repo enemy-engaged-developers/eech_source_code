@@ -129,6 +129,8 @@ extern void select_previous_viper_mfd (viper_mfd_locations mfd_location);
 
 extern void toggle_viper_mfd_on_off (viper_mfd_locations mfd_location);
 
+extern viper_mfd_modes get_viper_mfd_mode (viper_mfd_locations mfd_location);
+
 extern void select_next_viper_pilot_tsd_ase_range (void);
 
 extern void select_next_viper_co_pilot_tsd_ase_range (void);

@@ -584,6 +584,21 @@ void initialise_hind_3d_cockpit (void)
 
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
 	set_global_wide_cockpit(TRUE);
+
+	// set up cockpit lights
+	
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) != DAY_SEGMENT_TYPE_DAY && !command_line_dynamics_engine_startup)
+		cockpit_light_color_index[0] = 1;
+	else
+		cockpit_light_color_index[0] = 0;
+
+	cockpit_light_color_index[1] = 3;
+
+	cockpit_light_color_array = (cockpit_light_colors *) safe_malloc (sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	memset (cockpit_light_color_array, 0, sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	cockpit_light_color_array[0] = COCKPIT_LIGHT_NONE;
+	cockpit_light_color_array[1] = COCKPIT_LIGHT_YELLOW;
+	cockpit_light_color_array[2] = COCKPIT_LIGHT_RED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -630,6 +645,9 @@ void deinitialise_hind_3d_cockpit (void)
 	deinitialise_common_virtual_cockpit_cameras ();
 
 	clear_head_movement_data();
+
+	safe_free(cockpit_light_color_array);
+	cockpit_light_color_array = NULL;
 }
 
 

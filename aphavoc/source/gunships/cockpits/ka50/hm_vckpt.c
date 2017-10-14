@@ -134,6 +134,21 @@ void initialise_ka50_virtual_cockpit (void)
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read
 	set_global_wide_cockpit (FALSE);
+	
+	// set up cockpit light
+	
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) != DAY_SEGMENT_TYPE_DAY && !command_line_dynamics_engine_startup)
+		cockpit_light_color_index[0] = 1;
+	else
+		cockpit_light_color_index[0] = 0;
+
+	cockpit_light_color_index[1] = 3;
+
+	cockpit_light_color_array = (cockpit_light_colors *) safe_malloc (sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	memset (cockpit_light_color_array, 0, sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	cockpit_light_color_array[0] = COCKPIT_LIGHT_NONE;
+	cockpit_light_color_array[1] = COCKPIT_LIGHT_YELLOW;
+	cockpit_light_color_array[2] = COCKPIT_LIGHT_BLUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +190,9 @@ void deinitialise_ka50_virtual_cockpit (void)
 	deinitialise_common_virtual_cockpit_cameras ();
 	
 	clear_head_movement_data();
+
+	safe_free(cockpit_light_color_array);
+	cockpit_light_color_array = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -670,6 +688,9 @@ void draw_ka50_virtual_cockpit (void)
 			m1,
 			m2;
 
+		float
+			mfd_light_power = 0.0;
+
 //VJ 050131 update on wideview mod, much better movement
 		if (get_global_wide_cockpit () &&
 	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
@@ -697,122 +718,62 @@ void draw_ka50_virtual_cockpit (void)
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
 			get_forces_acting_on_pilot(&virtual_cockpit_inst3d->vp.x, &virtual_cockpit_inst3d->vp.y, &virtual_cockpit_inst3d->vp.z, FALSE, TRUE);
 
-		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
+		// set cockpit lights
+
+		mfd_light_power = (float)(get_ka50_mfd_mode(KA50_MFD_LOCATION_SHKVAL) % NUM_KA50_MFD_LOCATIONS + !!get_ka50_mfd_mode(KA50_MFD_LOCATION_SHKVAL) + 
+					get_ka50_mfd_mode(KA50_MFD_LOCATION_ABRIS) % NUM_KA50_MFD_LOCATIONS + !!get_ka50_mfd_mode(KA50_MFD_LOCATION_ABRIS))
+					/ (float)(NUM_KA50_MFD_LOCATIONS * NUM_KA50_MFD_LOCATIONS);
+		
+		ASSERT(mfd_light_power >= 0.0 && mfd_light_power <= 1.0);
+		
+		if (mfd_light_power)
 		{
-			////////////////////////////////////////
-			//
-			// DAY LIGHTING
-			//
-			////////////////////////////////////////
-
-			if (night_vision_system_active && (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CREW))
-			{
-				//
-				// active night vision system
-				//
-
-				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0), rad (0.0));
-
-				multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
-
-				direction.x = m2[2][0];
-				direction.y = m2[2][1];
-				direction.z = m2[2][2];
-
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.0666, 0.1098, 0.6431);
-
-				insert_light_3d_source_into_3d_scene (cockpit_light);
-
-				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
-
-				draw_3d_scene ();
-
-				print_repairing_status();
-
-				end_3d_scene ();
-
-				remove_light_3d_source_from_3d_scene (cockpit_light);
-
-				destroy_light_3d_source (cockpit_light);
-			}
-			else
-			{
-				//
-				// inactive night vision system
-				//
-
-				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
-
-				draw_3d_scene ();
-
-				print_edit_wide_cockpit ();
-				print_repairing_status();
-
-				end_3d_scene ();
-			}
-		}
-		else
-		{
-			////////////////////////////////////////
-			//
-			// NIGHT LIGHTING
-			//
-			////////////////////////////////////////
-
-			direction.x = virtual_cockpit_inst3d->vp.zv.x;
-			direction.y = virtual_cockpit_inst3d->vp.zv.y;
-			direction.z = virtual_cockpit_inst3d->vp.zv.z;
-
-			display_backlight = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.2500, 0.0980, 0.0000);
-
-			if (night_vision_system_active && (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CREW))
-			{
-				//
-				// active night vision system
-				//
-
-				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0), rad (0.0));
-
-				multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
-
-				direction.x = m2[2][0];
-				direction.y = m2[2][1];
-				direction.z = m2[2][2];
-
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.0666, 0.1098, 0.6431);
-			}
-			else
-			{
-				//
-				// inactive night vision system
-				//
-
-				direction.x = virtual_cockpit_inst3d->vp.yv.x;
-				direction.y = virtual_cockpit_inst3d->vp.yv.y;
-				direction.z = virtual_cockpit_inst3d->vp.yv.z;
-
-				cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.5000, 0.4000, 0.0000);
-			}
-
+			get_3d_transformation_matrix (m1, rad (0.0), rad (- 25.0), rad (0.0));
+			multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
+			
+			direction.x = m2[2][0];
+			direction.y = m2[2][1];
+			direction.z = m2[2][2];
+			
+			display_backlight = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.1627 * mfd_light_power, 0.2039 * mfd_light_power, 0.1392 * mfd_light_power);
 			insert_light_3d_source_into_3d_scene (display_backlight);
+		}
 
+		if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+		{
+			light_colour cockpit_light_color = cockpit_light_color_table[cockpit_light_color_array[cockpit_light_color_index[0]]];
+
+			get_3d_transformation_matrix (m1, rad (180), rad (45), 0.0);
+			multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
+
+			direction.x = m2[2][0];
+			direction.y = m2[2][1];
+			direction.z = m2[2][2];
+
+			cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, cockpit_light_color.red, cockpit_light_color.green, cockpit_light_color.blue);
 			insert_light_3d_source_into_3d_scene (cockpit_light);
+		}
 
-			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
+		insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
 
-			draw_3d_scene ();
+		draw_3d_scene ();
 
-			print_edit_wide_cockpit ();
-			print_repairing_status();
+		print_edit_wide_cockpit ();
+		print_repairing_status();
 
-			end_3d_scene ();
+		end_3d_scene ();
 
+		// clear cockpit lights
+		
+		if (mfd_light_power)
+		{
 			remove_light_3d_source_from_3d_scene (display_backlight);
-
-			remove_light_3d_source_from_3d_scene (cockpit_light);
-
 			destroy_light_3d_source (display_backlight);
+		}
 
+		if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+		{
+			remove_light_3d_source_from_3d_scene (cockpit_light);
 			destroy_light_3d_source (cockpit_light);
 		}
 	}

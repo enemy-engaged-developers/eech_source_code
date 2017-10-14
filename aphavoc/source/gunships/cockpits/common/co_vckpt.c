@@ -95,6 +95,13 @@ cockpit_switch
 static vec3d
 	gunship_periscope_position[NUM_GUNSHIP_TYPES][2];
 
+light_colour
+	cockpit_light_color_table[COCKPIT_LIGHT_LAST];
+int
+	cockpit_light_color_index[2];
+cockpit_light_colors
+	*cockpit_light_color_array;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +131,25 @@ void initialise_common_virtual_cockpit (void)
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].y = -0.020;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].z = 0.175;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].z = 1.00;
+	
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].red = 0.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].green = 0.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].blue = 0.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].red = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].green = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].blue = 0.3;
+	cockpit_light_color_table[COCKPIT_LIGHT_RED].red = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_RED].green = 0.2;
+	cockpit_light_color_table[COCKPIT_LIGHT_RED].blue = 0.2;
+	cockpit_light_color_table[COCKPIT_LIGHT_WHITE].red = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_WHITE].green = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_WHITE].blue = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_BLUE].red = 0.2;
+	cockpit_light_color_table[COCKPIT_LIGHT_BLUE].green = 0.2;
+	cockpit_light_color_table[COCKPIT_LIGHT_BLUE].blue = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_GREEN].red = 0.2;
+	cockpit_light_color_table[COCKPIT_LIGHT_GREEN].green = 1.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_GREEN].blue = 0.2;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,4 +701,21 @@ float move_by_rate(float oldval, float newval, float rate)
 		}
   }
 	return value;
+}
+
+vec3d get_cockpit_backlight_direction(object_3d_instance* virtual_cockpit_inst3d, float mfd_light_power) {
+	vec3d
+		direction;
+	matrix3x3
+		m1,
+		m2;
+
+	get_3d_transformation_matrix (m1, rad (0.0), rad (- 25.0), rad (0.0));
+	multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
+
+	direction.x = m2[2][0];
+	direction.y = m2[2][1];
+	direction.z = m2[2][2];
+
+	return direction;
 }

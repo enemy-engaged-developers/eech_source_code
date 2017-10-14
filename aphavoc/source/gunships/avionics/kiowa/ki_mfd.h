@@ -124,6 +124,7 @@ extern void select_previous_kiowa_main_mfd (kiowa_main_mfd_locations mfd_locatio
 
 extern void toggle_kiowa_main_mfd_on_off (kiowa_main_mfd_locations mfd_location);
 
+extern kiowa_main_mfd_modes get_kiowa_main_mfd_mode (kiowa_main_mfd_locations mfd_location);
 
 extern void select_next_kiowa_pilot_tsd_ase_range (void);
 

@@ -10559,7 +10559,7 @@ static void display_waypoint_information (rgb_colour box_colour)
 
 		waypoint_range = get_2d_range (gunship_position, &waypoint_position);
 
-		if (!comanche_damage.navigation_computer)
+		if (!apache_damage.navigation_computer)
 		{
 			if (waypoint_range < 1000.0)
 			{
@@ -13002,6 +13002,23 @@ void toggle_apache_ort_on_off(void)
 		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_ORT);
 	else
 		select_apache_mfd_mode (get_mfd_mode_for_eo_sensor(), MFD_LOCATION_ORT);
+}
+
+mfd_modes get_apache_mfd_mode (mfd_locations mfd_location)
+{
+	if (mfd_location == MFD_LOCATION_PILOT_LHS)
+		return lhs_mfd_mode;
+	else if (mfd_location == MFD_LOCATION_PILOT_RHS)
+		return  rhs_mfd_mode;
+	else if (mfd_location == MFD_LOCATION_CPG_LHS)
+		return  cpg_lhs_mfd_mode;
+	else if (mfd_location == MFD_LOCATION_CPG_RHS)
+		return  cpg_rhs_mfd_mode;
+	else
+	{
+		ASSERT(!"mfd_location");
+		return FALSE;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

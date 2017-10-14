@@ -122,6 +122,8 @@ extern void select_previous_ka50_mfd (ka50_mfd_locations mfd_location);
 
 extern void toggle_ka50_mfd_on_off (ka50_mfd_locations mfd_location);
 
+extern ka50_mfd_modes get_ka50_mfd_mode (ka50_mfd_locations mfd_location);
+
 extern void select_next_ka50_tsd_ase_range (void);
 
 extern void select_previous_ka50_tsd_ase_range (void);
