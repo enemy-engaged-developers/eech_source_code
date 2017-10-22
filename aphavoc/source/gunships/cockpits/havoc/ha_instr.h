@@ -66,46 +66,9 @@
 
 extern void initialise_havoc_instrument_colours (void);
 
-extern void set_havoc_instrument_colours (void);
-
-extern void draw_havoc_barometric_altimeter (cockpit_panels panel);
-
-extern void draw_havoc_airspeed_indicator (cockpit_panels panel);
-
-extern void draw_havoc_main_rotor_rpm_indicator (cockpit_panels panel);
-
-extern void draw_havoc_g_meter (cockpit_panels panel);
-
-extern void draw_havoc_engine_torque_indicator (cockpit_panels panel);
-
-extern void draw_havoc_engine_temperature_indicator (cockpit_panels panel);
-
-extern void draw_havoc_engine_rpm_indicator (cockpit_panels panel);
-
-extern void draw_havoc_engine_temperature_and_rpm_indicator_ticks (cockpit_panels panel);
-
-extern void draw_havoc_vertical_speed_indicator (cockpit_panels panel);
-
-extern void draw_havoc_clock (cockpit_panels panel);
-
-extern void draw_havoc_radar_altimeter (cockpit_panels panel);
-
-extern void draw_havoc_fuel_gauge (cockpit_panels panel);
-
-extern void draw_havoc_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel);
-
-extern void draw_havoc_fixed_cockpit_hsi_waypoint_identifier (cockpit_panels panel);
-
 extern void get_havoc_virtual_cockpit_adi_angles (matrix3x3 attitude, float *heading, float *pitch, float *roll);
 
 extern void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float *flight_path, float *drift);
-
-// Casm 10SEP05 Havoc Instruments
-extern void initialise_havoc_instruments (void);
-
-extern void deinitialise_havoc_instruments (void);
-
-extern void draw_havoc_virtual_cockpit_instruments_on_texture (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

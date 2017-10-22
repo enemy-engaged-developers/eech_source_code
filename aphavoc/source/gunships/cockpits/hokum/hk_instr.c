@@ -115,7 +115,7 @@ void draw_hokum_virtual_cockpit_instruments (void)
 			result;
 
 		//
-		// get inverse attitude (attiude * inverse attitude = identity) which aligns the ADI with the world axis
+		// get inverse attitude (attitude * inverse attitude = identity) which aligns the ADI with the world axis
 		//
 
 		inverse_attitude[0][0] = (*attitude)[0][0];
