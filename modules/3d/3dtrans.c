@@ -115,6 +115,9 @@ int
 	total_number_of_3d_points_transformed = 0,
 	current_number_of_3d_points_transformed = 0;
 
+int
+	disable_normals_specularity;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -453,7 +456,10 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			result_normals->g = ig;
 			result_normals->b = ib;
 			result_normals->alpha = current_object_3d_dissolve_value;
-			result_normals->specular = specular;
+			if (disable_normals_specularity == TRUE)
+				result_normals->specular = 0;
+			else
+				result_normals->specular = specular;
 
 			normals++;
 

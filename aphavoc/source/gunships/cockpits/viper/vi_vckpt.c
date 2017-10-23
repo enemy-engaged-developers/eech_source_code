@@ -134,20 +134,10 @@ void initialise_viper_virtual_cockpit (void)
 	set_global_wide_cockpit(FALSE);
 	
 	// set up cockpit light
-	
-	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) != DAY_SEGMENT_TYPE_DAY && !command_line_dynamics_engine_startup)
-		cockpit_light_color_index[0] = 1;
-	else
-		cockpit_light_color_index[0] = 0;
-
-	cockpit_light_color_index[1] = 4;
-
-	cockpit_light_color_array = (cockpit_light_colors *) safe_malloc (sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
-	memset (cockpit_light_color_array, 0, sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
-	cockpit_light_color_array[0] = COCKPIT_LIGHT_NONE;
-	cockpit_light_color_array[1] = COCKPIT_LIGHT_YELLOW;
-	cockpit_light_color_array[2] = COCKPIT_LIGHT_BLUE;
-	cockpit_light_color_array[3] = COCKPIT_LIGHT_GREEN;
+	{
+		cockpit_light_colors colors[] = {COCKPIT_LIGHT_NONE, COCKPIT_LIGHT_YELLOW, COCKPIT_LIGHT_BLUE, COCKPIT_LIGHT_GREEN};
+		initialise_cockpit_lights(colors, 4);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,8 +176,8 @@ void deinitialise_viper_virtual_cockpit (void)
 
 	clear_head_movement_data();
 
-	safe_free(cockpit_light_color_array);
-	cockpit_light_color_array = NULL;
+	// remove cockpit lights
+	deinitialise_cockpit_lights();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,10 +449,6 @@ void draw_viper_virtual_cockpit (void)
 		vec3d
 			direction;
 
-		matrix3x3
-			m1,
-			m2;
-
 		float
 			mfd_light_power = 0.0;
 
@@ -523,31 +509,20 @@ void draw_viper_virtual_cockpit (void)
 
 		if (mfd_light_power)
 		{
-			get_3d_transformation_matrix (m1, rad (0.0), rad (- 25.0), rad (0.0));
-			multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
-			
-			direction.x = m2[2][0];
-			direction.y = m2[2][1];
-			direction.z = m2[2][2];
-			
-			display_backlight = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.1627 * mfd_light_power, 0.2039 * mfd_light_power, 0.1392 * mfd_light_power);
+			direction = get_cockpit_backlight_direction();
+			display_backlight = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, 0.244 * mfd_light_power, 0.306 * mfd_light_power, 0.278 * mfd_light_power); 
 			insert_light_3d_source_into_3d_scene (display_backlight);
 		}
 
-		if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+		if (electrical_system_active() || cockpit_light_color_array[cockpit_light_color_index[0]] == COCKPIT_LIGHT_NONE)
 		{
 			light_colour cockpit_light_color = cockpit_light_color_table[cockpit_light_color_array[cockpit_light_color_index[0]]];
-
-			get_3d_transformation_matrix (m1, rad (180), rad (45), 0.0);
-			multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
-
-			direction.x = m2[2][0];
-			direction.y = m2[2][1];
-			direction.z = m2[2][2];
-
+			direction = get_cockpit_light_direction();
 			cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, cockpit_light_color.red, cockpit_light_color.green, cockpit_light_color.blue);
 			insert_light_3d_source_into_3d_scene (cockpit_light);
 		}
+
+		disable_normals_specularity = TRUE;
 
 		insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
 
@@ -558,17 +533,21 @@ void draw_viper_virtual_cockpit (void)
 
 		end_3d_scene ();
 
+		// clear cockpit lights
+		
 		if (mfd_light_power)
 		{
 			remove_light_3d_source_from_3d_scene (display_backlight);
 			destroy_light_3d_source (display_backlight);
 		}
 
-		if (electrical_system_active() && cockpit_light_color_array[cockpit_light_color_index[0]])
+		if (electrical_system_active() || cockpit_light_color_array[cockpit_light_color_index[0]] == COCKPIT_LIGHT_NONE)
 		{
 			remove_light_3d_source_from_3d_scene (cockpit_light);
 			destroy_light_3d_source (cockpit_light);
 		}
+
+		disable_normals_specularity = FALSE;
 	}
 
 	move_edit_wide_cockpit ();

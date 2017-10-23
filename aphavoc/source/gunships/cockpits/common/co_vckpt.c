@@ -101,6 +101,9 @@ int
 	cockpit_light_color_index[2];
 cockpit_light_colors
 	*cockpit_light_color_array;
+light_3d_source
+	*display_backlight,
+	*cockpit_light[2];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,9 +135,9 @@ void initialise_common_virtual_cockpit (void)
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].z = 0.175;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].z = 1.00;
 	
-	cockpit_light_color_table[COCKPIT_LIGHT_NONE].red = 0.0;
-	cockpit_light_color_table[COCKPIT_LIGHT_NONE].green = 0.0;
-	cockpit_light_color_table[COCKPIT_LIGHT_NONE].blue = 0.0;
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].red = 0.25;
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].green = 0.25;
+	cockpit_light_color_table[COCKPIT_LIGHT_NONE].blue = 0.25;
 	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].red = 1.0;
 	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].green = 1.0;
 	cockpit_light_color_table[COCKPIT_LIGHT_YELLOW].blue = 0.3;
@@ -703,7 +706,7 @@ float move_by_rate(float oldval, float newval, float rate)
 	return value;
 }
 
-vec3d get_cockpit_backlight_direction(object_3d_instance* virtual_cockpit_inst3d, float mfd_light_power) {
+vec3d get_cockpit_backlight_direction() {
 	vec3d
 		direction;
 	matrix3x3
@@ -718,4 +721,46 @@ vec3d get_cockpit_backlight_direction(object_3d_instance* virtual_cockpit_inst3d
 	direction.z = m2[2][2];
 
 	return direction;
+}
+
+vec3d get_cockpit_light_direction() {
+	matrix3x3
+		m1,
+		m2;
+	vec3d
+		direction;
+
+	get_3d_transformation_matrix (m1, rad (180), rad (45), 0.0);
+	multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
+
+	direction.x = m2[2][0];
+	direction.y = m2[2][1];
+	direction.z = m2[2][2];
+
+	return direction;
+}
+
+void initialise_cockpit_lights(cockpit_light_colors colors[], int count) {
+	int i;
+	
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) != DAY_SEGMENT_TYPE_DAY && !command_line_dynamics_engine_startup)
+		cockpit_light_color_index[0] = (int) colors[1];
+	else
+		cockpit_light_color_index[0] = (int) colors[0];
+
+	cockpit_light_color_index[1] = count;
+	cockpit_light_color_array = (cockpit_light_colors *) safe_malloc (sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	memset (cockpit_light_color_array, 0, sizeof (cockpit_light_colors) * cockpit_light_color_index[1]);
+	
+	for(i = 0; i < count; i++) {
+		cockpit_light_color_array[i] = colors[i];
+	}
+}
+
+void deinitialise_cockpit_lights() {
+	safe_free(cockpit_light_color_array);
+
+	ASSERT(sizeof(cockpit_light_color_array) != 0);
+
+	cockpit_light_color_array = NULL;
 }
