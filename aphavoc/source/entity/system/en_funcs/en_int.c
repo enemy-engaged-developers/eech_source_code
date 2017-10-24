@@ -671,6 +671,13 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX",
+			INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX,
+			NUM_GUNSHIP_RADAR_TARGET_INDEX_BITS,               			// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,														// fast_track
+		},
+		{
 			"INT_TYPE_HAND_OFF_TARGET_COUNT",           			// name
 			INT_PACK_TYPE_UNSIGNED,                     			// pack_type
 			NUM_HAND_OFF_TARGET_COUNT_BITS,             			// num_pack_bits (including sign bit)
@@ -695,6 +702,13 @@ int_type_data
 			"INT_TYPE_HELICOPTER_DAMAGE_LEVEL",         			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			NUM_HELICOPTER_DAMAGE_LEVEL_BITS,           			// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS",         			// name
+			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
+			NUM_HELICOPTER_DAMAGE_FLAGS_BITS,           			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -1115,6 +1129,13 @@ int_type_data
 			"INT_TYPE_MULTIPLAYER_GROUP",	              			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			NUM_MULTIPLAYER_GROUP_BITS,                 			// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"INT_TYPE_NDB_FREQUENCY",								// name
+			INT_PACK_TYPE_UNSIGNED,                     			// pack_type
+			NUM_NDB_FREQUENCY_BITS,              			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},

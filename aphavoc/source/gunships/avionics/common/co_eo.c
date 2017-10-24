@@ -2600,6 +2600,7 @@ static float evaluate_target(entity* target, float sqr_range)
 		switch (get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE))
 		{
 			case TARGET_TYPE_INVALID:
+			case TARGET_TYPE_HAZZARD:
 				return 0.0;
 
 			case TARGET_TYPE_GROUND:
@@ -2897,6 +2898,8 @@ void cpg_scan_for_eo_targets(void)
 
 			// report target, and add to target list.  Have to retest conditions, since they may have changed since we selected it
 			if (get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID
+				&& get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_MISSILE
+				&& get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_HAZZARD
 				&& !get_local_entity_parent (next_cpg_target_report, LIST_TYPE_GUNSHIP_TARGET)
 				&& get_los_clear(next_cpg_target_report, source_position, target_position))
 			{

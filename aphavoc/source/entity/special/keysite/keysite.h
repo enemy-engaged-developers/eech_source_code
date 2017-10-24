@@ -138,7 +138,8 @@ struct KEYSITE
 		alive									:NUM_ALIVE_BITS,
 		in_use								:NUM_IN_USE_BITS,
 		keysite_usable_state				:NUM_KEYSITE_USABLE_STATE_BITS,
-		side									:NUM_SIDE_BITS;
+		side									:NUM_SIDE_BITS,
+		ndb_frequency						:NUM_NDB_FREQUENCY_BITS;
 };
 
 typedef struct KEYSITE keysite;

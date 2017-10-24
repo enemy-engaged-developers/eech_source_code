@@ -136,6 +136,14 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 				pack_int_value (en, INT_TYPE_VALID, FALSE);
 			}
+
+			if (raw->helicopter_weapon_damage_flags)
+			{
+				pack_int_value (en, INT_TYPE_VALID, TRUE);
+				pack_int_value (en, INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS, raw->helicopter_weapon_damage_flags);
+			}
+			else
+				pack_int_value (en, INT_TYPE_VALID, FALSE);
 			/////////////////////////////////////////////////////////////////
 
 			pack_int_value (en, INT_TYPE_AUTO_PILOT, raw->auto_pilot);
@@ -243,6 +251,14 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 				pack_int_value (en, INT_TYPE_VALID, FALSE);
 			}
+
+			if (raw->helicopter_weapon_damage_flags)
+			{
+				pack_int_value (en, INT_TYPE_VALID, TRUE);
+				pack_int_value (en, INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS, raw->helicopter_weapon_damage_flags);
+			}
+			else
+				pack_int_value (en, INT_TYPE_VALID, FALSE);
 			/////////////////////////////////////////////////////////////////
 
 			if (raw->player == ENTITY_PLAYER_LOCAL)
@@ -396,6 +412,9 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 				raw->helicopter_damage_flags = unpack_int_value (en, INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
 			}
+
+			if (unpack_int_value (en, INT_TYPE_VALID))
+				raw->helicopter_weapon_damage_flags = unpack_int_value (en, INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS);
 			/////////////////////////////////////////////////////////////////
 
 			raw->auto_pilot = unpack_int_value (en, INT_TYPE_AUTO_PILOT);
@@ -563,6 +582,9 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 				raw->helicopter_damage_flags = unpack_int_value (en, INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
 			}
+
+			if (unpack_int_value (en, INT_TYPE_VALID))
+				raw->helicopter_weapon_damage_flags = unpack_int_value (en, INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS);
 			/////////////////////////////////////////////////////////////////
 
 			raw->player = unpack_int_value (en, INT_TYPE_PLAYER);

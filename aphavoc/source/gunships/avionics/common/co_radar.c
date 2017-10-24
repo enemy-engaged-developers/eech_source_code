@@ -780,6 +780,12 @@ static int get_valid_ground_radar_target (entity *target)
 				break;
 			}
 			////////////////////////////////////////
+			case TARGET_TYPE_HAZZARD:
+			////////////////////////////////////////
+			{
+				return TRUE;
+			}
+			////////////////////////////////////////
 			case TARGET_TYPE_GROUND:
 			////////////////////////////////////////
 			{
@@ -862,6 +868,12 @@ int get_gunship_target_valid_for_ground_radar (entity *target)
 			return (FALSE);
 
 			break;
+		}
+		////////////////////////////////////////
+		case TARGET_TYPE_HAZZARD:
+		////////////////////////////////////////
+		{
+			return TRUE;
 		}
 		////////////////////////////////////////
 		case TARGET_TYPE_GROUND:

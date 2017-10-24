@@ -188,7 +188,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_TARGET_SYMBOL_TYPE:
 		////////////////////////////////////////
 		{
-			value = TARGET_SYMBOL_UNKNOWN;
+			value = TARGET_SYMBOL_HAZZARD;
 
 			break;
 		}
@@ -196,7 +196,7 @@ static int get_local_int_value (entity *en, int_types type)
 		case INT_TYPE_TARGET_TYPE:
 		////////////////////////////////////////
 		{
-			value = TARGET_TYPE_INVALID;
+			value = TARGET_TYPE_HAZZARD;
 
 			break;
 		}

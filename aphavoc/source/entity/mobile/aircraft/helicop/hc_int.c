@@ -110,6 +110,14 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS:
+		////////////////////////////////////////
+		{
+			raw->helicopter_weapon_damage_flags = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_INFRA_RED_JAMMER_ON:
 		////////////////////////////////////////
 		{
@@ -408,6 +416,14 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS:
+		////////////////////////////////////////
+		{
+			value = raw->helicopter_weapon_damage_flags;
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_IDENTIFY_HELICOPTER:
 		////////////////////////////////////////
 		{
@@ -655,6 +671,12 @@ void overload_helicopter_int_value_functions (void)
 	fn_set_client_server_entity_int_value	[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_DAMAGE_FLAGS][COMMS_MODEL_SERVER]	= set_server_int_value;
 	fn_set_client_server_entity_int_value	[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_DAMAGE_FLAGS][COMMS_MODEL_CLIENT]	= set_client_int_value;
 	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_DAMAGE_FLAGS]				  				= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value		[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS]								= set_local_int_value;
+	fn_set_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS]								= set_local_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS][COMMS_MODEL_SERVER]	= set_server_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS][COMMS_MODEL_CLIENT]	= set_client_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_HELICOPTER_WEAPON_DAMAGE_FLAGS]				  				= get_local_int_value;
 
 	fn_get_local_entity_int_value				[ENTITY_TYPE_HELICOPTER][INT_TYPE_IDENTIFY_HELICOPTER]		 							= get_local_int_value;
 

@@ -152,6 +152,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->keysite_usable_state = KEYSITE_STATE_USABLE;
 
+		raw->ndb_frequency = 0;
+
 		raw->in_use = FALSE;
 		raw->object_index = OBJECT_3D_INVALID_OBJECT_INDEX;
 
@@ -197,6 +199,10 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		update_keysite_cargo (en, raw->supplies.ammo_supply_level, ENTITY_SUB_TYPE_CARGO_AMMO, CARGO_AMMO_SIZE);
 
 		update_keysite_cargo (en, raw->supplies.fuel_supply_level, ENTITY_SUB_TYPE_CARGO_FUEL, CARGO_FUEL_SIZE);
+
+		if (raw->sub_type == ENTITY_SUB_TYPE_KEYSITE_AIRBASE || raw->sub_type == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE || 
+				raw->sub_type == ENTITY_SUB_TYPE_KEYSITE_FARP || raw->sub_type == ENTITY_SUB_TYPE_KEYSITE_RADIO_TRANSMITTER)
+			raw->ndb_frequency = 100 + rand16() % 1900;
 
 		////////////////////////////////////////
 		//

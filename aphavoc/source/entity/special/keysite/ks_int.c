@@ -149,6 +149,14 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_NDB_FREQUENCY:
+		////////////////////////////////////////
+		{
+			raw->ndb_frequency = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_OBJECT_INDEX:
 		////////////////////////////////////////
 		{
@@ -314,6 +322,14 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_NDB_FREQUENCY:
+		////////////////////////////////////////
+		{
+			value = raw->ndb_frequency;
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_OBJECT_INDEX:
 		////////////////////////////////////////
 		{
@@ -397,6 +413,12 @@ void overload_keysite_int_value_functions (void)
 	fn_get_local_entity_int_value				[ENTITY_TYPE_KEYSITE][INT_TYPE_LANDING_TYPES]								= get_local_int_value;
 
 	fn_get_local_entity_int_value				[ENTITY_TYPE_KEYSITE][INT_TYPE_MAP_ICON]										= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value		[ENTITY_TYPE_KEYSITE][INT_TYPE_NDB_FREQUENCY]								= set_local_int_value;
+	fn_set_local_entity_int_value				[ENTITY_TYPE_KEYSITE][INT_TYPE_NDB_FREQUENCY]								= set_local_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_KEYSITE][INT_TYPE_NDB_FREQUENCY][COMMS_MODEL_SERVER]	= set_server_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_KEYSITE][INT_TYPE_NDB_FREQUENCY][COMMS_MODEL_CLIENT]	= set_client_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_KEYSITE][INT_TYPE_NDB_FREQUENCY]								= get_local_int_value;
 
 	fn_set_local_entity_raw_int_value		[ENTITY_TYPE_KEYSITE][INT_TYPE_OBJECT_INDEX]									= set_local_int_value;
 	fn_set_local_entity_int_value				[ENTITY_TYPE_KEYSITE][INT_TYPE_OBJECT_INDEX]									= set_local_int_value;

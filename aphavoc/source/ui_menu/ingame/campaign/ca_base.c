@@ -84,6 +84,7 @@ static ui_object
 	*base_page_efficiency_box,
 	*base_page_ammo_box,
 	*base_page_fuel_box,
+	*base_page_ndb_freq_box,
 	*page_back_button;
 
 static ui_object
@@ -330,6 +331,22 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 		else
 		{
 			set_ui_object_text (base_page_fuel_box, "");
+		}
+	}
+
+	{
+		int
+			freq = get_local_entity_int_value (base, INT_TYPE_NDB_FREQUENCY);
+
+		if (freq)
+		{
+			sprintf (s, "%i kHz", freq);
+
+			set_ui_object_text (base_page_ndb_freq_box, s);
+		}
+		else
+		{
+			set_ui_object_text (base_page_ndb_freq_box, "");
 		}
 	}
 
@@ -799,6 +816,45 @@ void define_campaign_screen_base_page_objects (void)
 	x2 = 0.5;
 
 	base_page_fuel_box = create_ui_object
+			(
+				UI_TYPE_TEXT,
+				UI_ATTR_PARENT (page),
+				UI_ATTR_VIRTUAL_POSITION (x1, y1),
+				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
+				UI_ATTR_TEXT (""),
+				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+				UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_10),
+				UI_ATTR_FONT_COLOUR (ui_ingame_dead_text_colour.r, ui_ingame_dead_text_colour.g, ui_ingame_dead_text_colour.b, ui_ingame_dead_text_colour.a),
+				UI_ATTR_END
+			);
+	/////////////////////////////////////////////////////////////////
+	// NDB freq
+
+	y1 += ysize;
+	y2 += ysize;
+
+	x1 = 0.18;
+	x2 = 0.2;
+
+	sprintf (output, "%s :", get_trans ("NDB freq"));
+
+	create_ui_object
+			(
+				UI_TYPE_TEXT,
+				UI_ATTR_PARENT (page),
+				UI_ATTR_VIRTUAL_POSITION (x1, y1),
+				UI_ATTR_VIRTUAL_SIZE (x2 - x1, y2 - y1),
+				UI_ATTR_TEXT (output),
+				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+				UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_10),
+				UI_ATTR_FONT_COLOUR (ui_ingame_dead_text_colour.r, ui_ingame_dead_text_colour.g, ui_ingame_dead_text_colour.b, ui_ingame_dead_text_colour.a),
+				UI_ATTR_END
+			);
+
+	x1 = 0.2;
+	x2 = 0.5;
+
+	base_page_ndb_freq_box = create_ui_object
 			(
 				UI_TYPE_TEXT,
 				UI_ATTR_PARENT (page),

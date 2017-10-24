@@ -200,6 +200,8 @@ void pack_local_keysite_data (pack_modes mode)
 
 			pack_int_value (en, INT_TYPE_KEYSITE_USABLE_STATE, raw->keysite_usable_state);
 
+			pack_int_value (en, INT_TYPE_NDB_FREQUENCY, raw->ndb_frequency);
+
 			pack_list_root (en, LIST_TYPE_UNASSIGNED_TASK, &raw->unassigned_task_root);
 			pack_list_root (en, LIST_TYPE_ASSIGNED_TASK, &raw->assigned_task_root);
 			pack_list_root (en, LIST_TYPE_COMPLETED_TASK, &raw->completed_task_root);
@@ -398,6 +400,7 @@ void unpack_local_keysite_data (pack_modes mode)
 			raw->keysite_id = unpack_int_value (en, INT_TYPE_KEYSITE_ID);
 
 			raw->keysite_usable_state = unpack_int_value (en, INT_TYPE_KEYSITE_USABLE_STATE);
+			raw->ndb_frequency = unpack_int_value (en, INT_TYPE_NDB_FREQUENCY);
 
 			if (raw->in_use != in_use)
 			{

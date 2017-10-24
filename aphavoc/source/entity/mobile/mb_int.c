@@ -184,6 +184,14 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX:
+		////////////////////////////////////////
+		{
+			raw->gunship_radar_target_index = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -396,6 +404,14 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX:
+		////////////////////////////////////////
+		{
+			value = raw->gunship_radar_target_index;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -471,6 +487,10 @@ void overload_mobile_int_value_functions (entity_types type)
 	fn_set_local_entity_raw_int_value  		[type][INT_TYPE_UPDATED]											= set_local_int_value;
 	fn_set_local_entity_int_value				[type][INT_TYPE_UPDATED]											= set_local_int_value;
 	fn_get_local_entity_int_value				[type][INT_TYPE_UPDATED]											= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value  			[type][INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX]								= set_local_int_value;
+	fn_set_local_entity_int_value				[type][INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX]								= set_local_int_value;
+	fn_get_local_entity_int_value				[type][INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX]								= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

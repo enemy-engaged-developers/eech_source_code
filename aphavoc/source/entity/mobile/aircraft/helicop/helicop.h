@@ -88,6 +88,7 @@ struct HELICOPTER
 
 	unsigned int
 		helicopter_damage_flags	: NUM_HELICOPTER_DAMAGE_FLAGS_BITS,
+		helicopter_weapon_damage_flags	: NUM_HELICOPTER_DAMAGE_FLAGS_BITS,
 		auto_pilot					: NUM_AUTO_PILOT_BITS,
 		player						: NUM_PLAYER_BITS,
 		main_rotor_damaged		: 1,

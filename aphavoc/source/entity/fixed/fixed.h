@@ -84,6 +84,7 @@ struct FIXED_
 		alive					  				:NUM_ALIVE_BITS,
 		side			 	  					:NUM_SIDE_BITS,
 		gunship_radar_los_clear			:NUM_GUNSHIP_RADAR_LOS_CLEAR_BITS,
+		gunship_radar_target_index		:NUM_GUNSHIP_RADAR_TARGET_INDEX_BITS,
 		object_drawn_once_this_frame	:NUM_OBJECT_DRAWN_ONCE_THIS_FRAME_BITS;
 
 	float

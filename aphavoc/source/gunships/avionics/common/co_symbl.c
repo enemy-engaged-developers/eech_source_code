@@ -1364,6 +1364,65 @@ static const char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+// HAZZARD
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static const char large_display_target_symbol_hazzard_los[] =
+{
+	11,
+	11,
+	-5,
+	-5,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,1,1,1,1,1,0,0,0,
+	0,0,1,1,1,0,1,1,1,0,0,
+	0,1,1,1,0,1,0,1,1,1,0,
+	0,1,1,0,0,1,0,0,1,1,0,
+};
+
+static const char large_display_target_symbol_hazzard_los_mask[] =
+{
+	13,
+	13,
+	-6,
+	-6,
+	0,0,0,0,0,1,1,1,0,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,0,1,0,0,0,1,0,0,0,0,
+	0,0,0,1,0,0,0,0,0,1,0,0,0,
+	0,0,1,0,0,0,1,0,0,0,1,0,0,
+	0,1,0,0,0,1,0,1,0,0,0,1,0,
+	0,1,0,0,1,1,0,1,1,0,0,1,0,
+	0,0,1,1,0,0,1,0,0,1,1,0,0,
+};
+
+#define large_display_target_symbol_hazzard_no_los large_display_target_symbol_hazzard_los
+#define large_display_target_symbol_hazzard_no_los_mask large_display_target_symbol_hazzard_los_mask
+
+#define small_display_target_symbol_hazzard_los large_display_target_symbol_hazzard_los
+#define small_display_target_symbol_hazzard_los_mask large_display_target_symbol_hazzard_los
+
+#define small_display_target_symbol_hazzard_no_los large_display_target_symbol_hazzard_los
+#define small_display_target_symbol_hazzard_no_los_mask large_display_target_symbol_hazzard_los_mask
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
 // SELECTED TARGET
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1543,6 +1602,7 @@ const char
 		large_display_target_symbol_helicopter_los,		  				// TARGET_SYMBOL_HELICOPTER
 		large_display_target_symbol_ship_los,	  			  	 			// TARGET_SYMBOL_SHIP
 		large_display_target_symbol_structure_los,		  	 			// TARGET_SYMBOL_STRUCTURE
+		large_display_target_symbol_hazzard_los,		  	 			// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1556,6 +1616,7 @@ const char
 		large_display_target_symbol_helicopter_los_mask,		  		// TARGET_SYMBOL_HELICOPTER
 		large_display_target_symbol_ship_los_mask,	  			  		// TARGET_SYMBOL_SHIP
 		large_display_target_symbol_structure_los_mask,		  			// TARGET_SYMBOL_STRUCTURE
+		large_display_target_symbol_hazzard_los_mask,		  			// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1569,6 +1630,7 @@ const char
 		large_display_target_symbol_helicopter_no_los,					// TARGET_SYMBOL_HELICOPTER
 		large_display_target_symbol_ship_no_los,		 					// TARGET_SYMBOL_SHIP
 		large_display_target_symbol_structure_no_los,					// TARGET_SYMBOL_STRUCTURE
+		large_display_target_symbol_hazzard_no_los,					// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1582,6 +1644,7 @@ const char
 		large_display_target_symbol_helicopter_no_los_mask,			// TARGET_SYMBOL_HELICOPTER
 		large_display_target_symbol_ship_no_los_mask,		 			// TARGET_SYMBOL_SHIP
 		large_display_target_symbol_structure_no_los_mask,				// TARGET_SYMBOL_STRUCTURE
+		large_display_target_symbol_hazzard_no_los_mask,				// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1595,6 +1658,7 @@ const char
 		small_display_target_symbol_helicopter_los,		  				// TARGET_SYMBOL_HELICOPTER
 		small_display_target_symbol_ship_los,	  			  	 			// TARGET_SYMBOL_SHIP
 		small_display_target_symbol_structure_los,		  	 			// TARGET_SYMBOL_STRUCTURE
+		small_display_target_symbol_hazzard_los,		  	 			// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1608,6 +1672,7 @@ const char
 		small_display_target_symbol_helicopter_los_mask,				// TARGET_SYMBOL_HELICOPTER
 		small_display_target_symbol_ship_los_mask,						// TARGET_SYMBOL_SHIP
 		small_display_target_symbol_structure_los_mask,					// TARGET_SYMBOL_STRUCTURE
+		small_display_target_symbol_hazzard_los_mask,					// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1621,6 +1686,7 @@ const char
 		small_display_target_symbol_helicopter_no_los,					// TARGET_SYMBOL_HELICOPTER
 		small_display_target_symbol_ship_no_los,							// TARGET_SYMBOL_SHIP
 		small_display_target_symbol_structure_no_los,					// TARGET_SYMBOL_STRUCTURE
+		small_display_target_symbol_hazzard_no_los,					// TARGET_SYMBOL_HAZZARD
 	};
 
 const char
@@ -1634,6 +1700,7 @@ const char
 		small_display_target_symbol_helicopter_no_los_mask,			// TARGET_SYMBOL_HELICOPTER
 		small_display_target_symbol_ship_no_los_mask,					// TARGET_SYMBOL_SHIP
 		small_display_target_symbol_structure_no_los_mask,				// TARGET_SYMBOL_STRUCTURE
+		small_display_target_symbol_hazzard_no_los_mask,				// TARGET_SYMBOL_HAZZARD
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
