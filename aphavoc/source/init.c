@@ -565,7 +565,7 @@ void full_initialise_game (void)
 #if ( OEM_3DLABS_VERSION )
 		sprintf ( buffer, "3DLabs Demonstration version" );
 #else
-		sprintf ( buffer, "%s: %d.%d.%02d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
+		sprintf ( buffer, "%s: %d.%d.%d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
 #endif
 
 		set_ui_object_text (version_text, buffer);

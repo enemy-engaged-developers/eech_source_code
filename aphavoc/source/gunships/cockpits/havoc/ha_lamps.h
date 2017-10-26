@@ -99,37 +99,37 @@ struct HAVOC_LAMP_FLAGS
 		// warning panel
 		//
 
-		warning_1	:1,
-		warning_2	:1,
-		warning_3	:1,
-		warning_4	:1,
-		warning_5	:1,
-		warning_6	:1,
-		warning_7	:1,
-		warning_8	:1,
+		l_eng	:1,
+		r_eng	:1,
+		over_trq	:1,
+		rdr_on	:1,
+		auto_pilot	:1,
+		auto_hvr	:1,
+		rdr_jam_on	:1,
+		ir_jam_on	:1,
 
 		//
 		// status panel
 		//
 
-		status_1		:1,
-		status_2		:1,
-		status_3		:1,
-		status_4		:1,
-		status_5		:1,
-		status_6		:1,
-		status_7		:1,
-		status_8		:1,
-		status_9		:1,
-		status_10	:1,
-		status_11	:1,
-		status_12	:1,
-		status_13	:1,
-		status_14	:1,
-		status_15	:1,
-		status_16	:1,
-		status_17	:1,
-		status_18	:1,
+		radar		:1,
+		flir		:1,
+		llltv		:1,
+		lsr		:1,
+		rjam		:1,
+		ijam		:1,
+		nav_comp		:1,
+		comm		:1,
+		rws		:1,
+		hud	:1,
+		hms	:1,
+		tv_disp	:1,
+		tw_disp	:1,
+		nvg	:1,
+		fire_ex	:1,
+		rtr_brk :1,
+		whl_brk	:1,
+		acm	:1,
 
 		//
 		// threat warning display

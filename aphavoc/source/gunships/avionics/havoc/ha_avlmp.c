@@ -853,21 +853,21 @@ static void update_warning_panel_lamps (void)
 
 	en = get_gunship_entity ();
 
-	havoc_lamps.warning_1 = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
+	havoc_lamps.l_eng = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
 
-	havoc_lamps.warning_2 = get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
+	havoc_lamps.r_eng = get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
 
-	havoc_lamps.warning_3 = get_current_flight_dynamics_overtorque ();
+	havoc_lamps.over_trq = get_current_flight_dynamics_overtorque ();
 
-	havoc_lamps.warning_4 = get_local_entity_int_value (en, INT_TYPE_RADAR_ON);
+	havoc_lamps.rdr_on = get_local_entity_int_value (en, INT_TYPE_RADAR_ON);
 
-	havoc_lamps.warning_5 = get_current_flight_dynamics_auto_pilot ();
+	havoc_lamps.auto_pilot = get_current_flight_dynamics_auto_pilot ();
 
-	havoc_lamps.warning_6 = get_current_flight_dynamics_auto_hover ();
+	havoc_lamps.auto_hvr = get_current_flight_dynamics_auto_hover ();
 
-	havoc_lamps.warning_7 = get_local_entity_int_value (en, INT_TYPE_RADAR_JAMMER_ON);
+	havoc_lamps.rdr_jam_on = get_local_entity_int_value (en, INT_TYPE_RADAR_JAMMER_ON);
 
-	havoc_lamps.warning_8 = get_local_entity_int_value (en, INT_TYPE_INFRA_RED_JAMMER_ON);
+	havoc_lamps.ir_jam_on = get_local_entity_int_value (en, INT_TYPE_INFRA_RED_JAMMER_ON);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -882,41 +882,41 @@ static void update_warning_panel_lamps (void)
 
 static void update_status_panel_lamps (void)
 {
-	havoc_lamps.status_1 = havoc_damage.radar;
+	havoc_lamps.radar = havoc_damage.radar;
 
-	havoc_lamps.status_2 = havoc_damage.flir;
+	havoc_lamps.flir = havoc_damage.flir;
 
-	havoc_lamps.status_3 = havoc_damage.llltv;
+	havoc_lamps.llltv = havoc_damage.llltv;
 
-	havoc_lamps.status_4 = havoc_damage.laser_range_finder;
+	havoc_lamps.lsr = havoc_damage.laser_range_finder;
 
-	havoc_lamps.status_5 = havoc_damage.radar_jammer;
+	havoc_lamps.rjam = havoc_damage.radar_jammer;
 
-	havoc_lamps.status_6 = havoc_damage.infra_red_jammer;
+	havoc_lamps.ijam = havoc_damage.infra_red_jammer;
 
-	havoc_lamps.status_7 = havoc_damage.navigation_computer;
+	havoc_lamps.nav_comp = havoc_damage.navigation_computer;
 
-	havoc_lamps.status_8 = havoc_damage.communications;
+	havoc_lamps.comm = havoc_damage.communications;
 
-	havoc_lamps.status_9 = havoc_damage.radar_warning_system;
+	havoc_lamps.rws = havoc_damage.radar_warning_system;
 
-	havoc_lamps.status_10 = havoc_damage.head_up_display;
+	havoc_lamps.hud = havoc_damage.head_up_display;
 
-	havoc_lamps.status_11 = havoc_damage.helmet_mounted_sight;
+	havoc_lamps.hms = havoc_damage.helmet_mounted_sight;
 
-	havoc_lamps.status_12 = havoc_damage.tv_display;
+	havoc_lamps.tv_disp = havoc_damage.tv_display;
 
-	havoc_lamps.status_13 = havoc_damage.threat_warning_display;
+	havoc_lamps.tw_disp = havoc_damage.threat_warning_display;
 
-	havoc_lamps.status_14 = havoc_damage.night_vision_goggles;
+	havoc_lamps.nvg = havoc_damage.night_vision_goggles;
 
-	havoc_lamps.status_15 = fire_extinguisher_used;
+	havoc_lamps.fire_ex = fire_extinguisher_used;
 
-	havoc_lamps.status_16 = get_current_flight_dynamics_rotor_brake ();
+	havoc_lamps.rtr_brk = get_current_flight_dynamics_rotor_brake ();
 
-	havoc_lamps.status_17 = get_current_flight_dynamics_wheel_brake ();
+	havoc_lamps.whl_brk = get_current_flight_dynamics_wheel_brake ();
 
-	havoc_lamps.status_18 = get_global_auto_counter_measures ();
+	havoc_lamps.acm = get_global_auto_counter_measures ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
