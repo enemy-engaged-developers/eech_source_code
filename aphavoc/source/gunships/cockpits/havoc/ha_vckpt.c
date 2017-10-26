@@ -188,10 +188,10 @@ static struct OgreGameObjectSceneElement
 	*rjam_warn_lamp,
 	*ijam_warn_lamp;
 
-
 #ifndef OGRE_EE
 static void update_threat_warning_lights(void);
 #endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,6 +259,39 @@ void initialise_havoc_virtual_cockpit (void)
 	virtual_cockpit_compass_level2_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_COMPASS_LEVEL2);
 
 	virtual_cockpit_instrument_needles_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES);
+
+	rwr_above_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_ABOVE_LIGHT);
+	rwr_airborne_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_AIRBORNE_LIGHT);
+	rwr_below_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_BELOW_LIGHT);
+	rwr_left10_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT10_LIGHT);
+	rwr_left30_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT30_LIGHT);
+	rwr_left50_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT50_LIGHT);
+	rwr_left90_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT90_LIGHT);
+	rwr_left_rear_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT_REAR_LIGHT);
+	rwr_long_range_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LONG_RANGE_LIGHT);
+	rwr_medium_range_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_MEDIUM_RANGE_LIGHT);
+	rwr_missile_launch_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_MISSILE_LAUNCH_LIGHT);
+	rwr_right10_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT10_LIGHT);
+	rwr_right30_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT30_LIGHT);
+	rwr_right50_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT50_LIGHT);
+	rwr_right90_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT90_LIGHT);
+	rwr_right_rear_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT_REAR_LIGHT);
+	rwr_short_range_light = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SHORT_RANGE_LIGHT);
+	rwr_signal_strength1 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH1_LIGHT);
+	rwr_signal_strength10 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH10_LIGHT);
+	rwr_signal_strength11 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH11_LIGHT);
+	rwr_signal_strength12 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH12_LIGHT);
+	rwr_signal_strength13 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH13_LIGHT);
+	rwr_signal_strength14 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH14_LIGHT);
+	rwr_signal_strength15 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH15_LIGHT);
+	rwr_signal_strength2 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH2_LIGHT);
+	rwr_signal_strength3 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH3_LIGHT);
+	rwr_signal_strength4 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH4_LIGHT);
+	rwr_signal_strength5 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH5_LIGHT);
+	rwr_signal_strength6 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH6_LIGHT);
+	rwr_signal_strength7 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH7_LIGHT);
+	rwr_signal_strength8 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH8_LIGHT);
+	rwr_signal_strength9 = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH9_LIGHT);
 
 	// Status Lamps
 	radar_lmp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RDR_LAMP);
@@ -394,8 +427,8 @@ void update_havoc_virtual_cockpit (void)
 {
 	#ifndef OGRE_EE
 	update_threat_warning_lights();
-	update_status_lamps ();
-	update_warning_lamps ();
+	update_status_lamps();
+	update_warning_lamps();
 	#endif
 }
 
@@ -1822,6 +1855,10 @@ static void update_threat_warning_lights(void)
 }
 #endif
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef OGRE_EE
 void update_status_lamps(void)
 {
@@ -1846,6 +1883,10 @@ void update_status_lamps(void)
 }
 #endif
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef OGRE_EE
 void update_warning_lamps(void)
 {
@@ -1859,6 +1900,7 @@ void update_warning_lamps(void)
 	ijam_warn_lamp->visible_object = havoc_lamps.ir_jam_on;
 }
 #endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
