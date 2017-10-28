@@ -75,6 +75,8 @@ extern void update_status_lamps(void);
 
 extern void update_warning_lamps(void);
 
+extern void update_chaff_flare_status_lamps(void);
+
 extern void initialise_havoc_virtual_cockpit (void);
 
 extern void deinitialise_havoc_virtual_cockpit (void);

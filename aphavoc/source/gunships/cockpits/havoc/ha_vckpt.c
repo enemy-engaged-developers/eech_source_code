@@ -119,7 +119,7 @@ static object_3d_instance
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//TODO make Havoc threat lamps
 #ifndef OGRE_EE
 static object_3d_sub_instance
 #else
@@ -186,7 +186,14 @@ static struct OgreGameObjectSceneElement
 	*ap_warn_lamp,
 	*hvr_warn_lamp,
 	*rjam_warn_lamp,
-	*ijam_warn_lamp;
+	*ijam_warn_lamp,
+	*mast_caut_lamp,
+
+	// Weapon Status Lamps
+	*chaff_lamp,
+	*flare_lamp,
+	*chaff_dmg_lamp,
+	*flare_dmg_lamp;
 
 #ifndef OGRE_EE
 static void update_threat_warning_lights(void);
@@ -322,6 +329,13 @@ void initialise_havoc_virtual_cockpit (void)
 	hvr_warn_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_HVR_WARN_LAMP);
 	rjam_warn_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RJAM_WARN_LAMP);
 	ijam_warn_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_IJAM_WARN_LAMP);
+	mast_caut_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_MSTR_CAUT_LAMP);
+
+	// Weapon Status Lamps
+	chaff_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_CHAFF_LAMP);
+	flare_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_FLARE_LAMP);
+	chaff_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_CHAFF_DMG_LAMP);
+	flare_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_FLARE_DMG_LAMP);
 
 	//
 	// wipers and rain
@@ -429,6 +443,7 @@ void update_havoc_virtual_cockpit (void)
 	update_threat_warning_lights();
 	update_status_lamps();
 	update_warning_lamps();
+	update_chaff_flare_status_lamps();
 	#endif
 }
 
@@ -941,6 +956,50 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					rotor_rpm *= rad (360.0) / 120.0;
 
 					search.result_sub_object->relative_roll = -rotor_rpm;
+				}
+
+				////////////////////////////////////////
+				//
+				// LEFT ENGINE NG
+				//
+				////////////////////////////////////////
+
+				search.search_depth = 0;
+				search.search_object = virtual_cockpit_instrument_needles_inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_LEFT_ENG_RPM_NEEDLE;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					float
+						leng_rpm;
+
+					leng_rpm = bound((current_flight_dynamics->left_engine_rpm.value), 0.0, 110.0);
+
+					leng_rpm *= rad (360.0) / 100.0;
+
+					search.result_sub_object->relative_roll = -leng_rpm;
+				}
+
+				////////////////////////////////////////
+				//
+				// RIGHT ENGINE NG
+				//
+				////////////////////////////////////////
+
+				search.search_depth = 0;
+				search.search_object = virtual_cockpit_instrument_needles_inst3d;
+				search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_RIGHT_ENG_RPM_NEEDLE;
+
+				if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				{
+					float
+						reng_rpm;
+
+					reng_rpm = bound((current_flight_dynamics->right_engine_rpm.value), 0.0, 110.0);
+
+					reng_rpm *= rad (360.0) / 100.0;
+
+					search.result_sub_object->relative_roll = -reng_rpm;
 				}
 
 				////////////////////////////////////////
@@ -1898,9 +1957,19 @@ void update_warning_lamps(void)
 	hvr_warn_lamp->visible_object = havoc_lamps.auto_hvr;
 	rjam_warn_lamp->visible_object = havoc_lamps.rdr_jam_on;
 	ijam_warn_lamp->visible_object = havoc_lamps.ir_jam_on;
+	mast_caut_lamp->visible_object = havoc_lamps.master_caution;
 }
 #endif
 
+#ifndef OGRE_EE
+void update_chaff_flare_status_lamps(void)
+{
+	chaff_lamp->visible_object = havoc_lamps.weapons_management_chaff_green;
+	flare_lamp->visible_object = havoc_lamps.weapons_management_flare_green;
+	chaff_dmg_lamp->visible_object = havoc_lamps.weapons_management_chaff_red;
+	flare_dmg_lamp->visible_object = havoc_lamps.weapons_management_flare_red;
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
