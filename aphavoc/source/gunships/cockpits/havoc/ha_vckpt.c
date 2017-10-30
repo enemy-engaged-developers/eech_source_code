@@ -193,7 +193,20 @@ static struct OgreGameObjectSceneElement
 	*chaff_lamp,
 	*flare_lamp,
 	*chaff_dmg_lamp,
-	*flare_dmg_lamp;
+	*flare_dmg_lamp,
+	*he_cann_lamp,
+	*he_cann_dmg_lamp,
+	*ap_cann_lamp,
+	*ap_cann_dmg_lamp,
+	*ro_pylon_lamp,
+	*ro_pylon_dmg_lamp,
+	*ri_pylon_lamp,
+	*ri_pylon_dmg_lamp,
+	*li_pylon_lamp,
+	*li_pylon_dmg_lamp,
+	*lo_pylon_lamp,
+	*lo_pylon_dmg_lamp;
+
 
 #ifndef OGRE_EE
 static void update_threat_warning_lights(void);
@@ -336,6 +349,18 @@ void initialise_havoc_virtual_cockpit (void)
 	flare_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_FLARE_LAMP);
 	chaff_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_CHAFF_DMG_LAMP);
 	flare_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_FLARE_DMG_LAMP);
+	he_cann_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_HE_CANN_LAMP);
+	he_cann_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_HE_CANN_DMG_LAMP);
+	ap_cann_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_AP_CANN_LAMP);
+	ap_cann_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_AP_CANN_DMG_LAMP);
+	ro_pylon_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RO_PYLON_LAMP);
+	ro_pylon_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RO_PYLON_DMG_LAMP);
+	ri_pylon_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RI_PYLON_LAMP);
+	ri_pylon_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_RI_PYLON_DMG_LAMP);
+	li_pylon_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_LI_PYLON_LAMP);
+	li_pylon_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_LI_PYLON_DMG_LAMP);
+	lo_pylon_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_LO_PYLON_LAMP);
+	lo_pylon_dmg_lamp = find_sub_object(virtual_cockpit_instrument_needles_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_LO_PYLON_DMG_LAMP);
 
 	//
 	// wipers and rain
@@ -444,6 +469,7 @@ void update_havoc_virtual_cockpit (void)
 	update_status_lamps();
 	update_warning_lamps();
 	update_chaff_flare_status_lamps();
+	update_weapon_panel_Lamps();
 	#endif
 }
 
@@ -1968,6 +1994,24 @@ void update_chaff_flare_status_lamps(void)
 	flare_lamp->visible_object = havoc_lamps.weapons_management_flare_green;
 	chaff_dmg_lamp->visible_object = havoc_lamps.weapons_management_chaff_red;
 	flare_dmg_lamp->visible_object = havoc_lamps.weapons_management_flare_red;
+}
+#endif
+
+#ifndef OGRE_EE
+void update_weapon_panel_Lamps(void)
+{
+	he_cann_lamp->visible_object = havoc_lamps.weapons_management_high_explosive_cannon_green;
+	he_cann_dmg_lamp->visible_object = havoc_lamps.weapons_management_high_explosive_cannon_red;
+	ap_cann_lamp->visible_object = havoc_lamps.weapons_management_armour_piercing_cannon_green;
+	ap_cann_dmg_lamp->visible_object = havoc_lamps.weapons_management_armour_piercing_cannon_red;
+	ro_pylon_lamp->visible_object = havoc_lamps.weapons_management_rh_outer_pylon_green;
+	ro_pylon_dmg_lamp->visible_object = havoc_lamps.weapons_management_rh_outer_pylon_red;
+	ri_pylon_lamp->visible_object = havoc_lamps.weapons_management_rh_inner_pylon_green;
+	ri_pylon_dmg_lamp->visible_object = havoc_lamps.weapons_management_rh_inner_pylon_red;
+	li_pylon_lamp->visible_object = havoc_lamps.weapons_management_lh_inner_pylon_green;
+	li_pylon_dmg_lamp->visible_object = havoc_lamps.weapons_management_lh_inner_pylon_red;
+	lo_pylon_lamp->visible_object = havoc_lamps.weapons_management_lh_outer_pylon_green;
+	lo_pylon_dmg_lamp->visible_object = havoc_lamps.weapons_management_lh_outer_pylon_red;
 }
 #endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
