@@ -3990,6 +3990,13 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 		heading = scene->scene_link_objects[count].heading;
 
 		object_index = scene->scene_link_objects[count].scene_index;
+		
+		// RED/BLUE LANDING PADS MOD
+		
+		if (side == ENTITY_SIDE_BLUE_FORCE && object_index == OBJECT_3D_FARP_MAT_GREY)
+			object_index = OBJECT_3D_FARP_MAT;
+		else if (side == ENTITY_SIDE_RED_FORCE && object_index == OBJECT_3D_FARP_MAT)
+			object_index = OBJECT_3D_FARP_MAT_GREY;
 
 		regeneration_sub_type = get_object_3d_regeneration_type ( object_index, &landing_sub_type );
 
