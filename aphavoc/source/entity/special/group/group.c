@@ -747,7 +747,7 @@ void assess_group_supplies (entity *en)
 
 				#if DEBUG_MODULE || DEBUG_SUPPLY
 
-				debug_log ("GROUP: SUPPLY_INFO: Air group %s members landed, refuelling group (now ammo = %f, fuel = %f) from keysite %s (%d) (now ammo = %f, fuel = %f)",
+				debug_log ("GROUP: SUPPLY_INFO: Air group %s members landed, refueling group (now ammo = %f, fuel = %f) from keysite %s (%d) (now ammo = %f, fuel = %f)",
 							get_local_entity_string (en, STRING_TYPE_FULL_NAME),
 							get_local_entity_float_value (en, FLOAT_TYPE_AMMO_SUPPLY_LEVEL),
 							get_local_entity_float_value (en, FLOAT_TYPE_FUEL_SUPPLY_LEVEL),

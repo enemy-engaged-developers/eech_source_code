@@ -759,8 +759,5 @@ void initialise_cockpit_lights(cockpit_light_colors colors[], int count) {
 
 void deinitialise_cockpit_lights() {
 	safe_free(cockpit_light_color_array);
-
-	ASSERT(sizeof(cockpit_light_color_array) != 0);
-
 	cockpit_light_color_array = NULL;
 }
