@@ -89,7 +89,7 @@
 #define BUILD_TYPE	""
 
 // used in comms/comm_man.c to make sure client and server use same version
-#define VERSION_NUMBER_INT 11600
+#define VERSION_NUMBER_INT 11610
 
 #define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.16.1"
 

@@ -86,6 +86,8 @@
 
 static void vehicle_target_scan (entity *en);
 
+static float get_scan_floor_difficulty_factor (entity *en);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,9 +630,25 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 						////////////////////////////////////////
 
 						//
+						// Target range
+						//
+						
+						target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+						target_range = get_approx_3d_range (source_position, target_position);
+
+						//
 						// Check target altitude
 						//
 
+						// DECREASE SCAN FLOOR FOR CLOSE TARGETS
+						source_air_scan_floor *= bound(target_range / source_air_scan_range, 0.1, 1.0);
+
+						if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+						{
+							source_air_scan_floor *= get_scan_floor_difficulty_factor (target);
+						}
+						
 						target_radar_altitude = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE);
 
 						if ((target_radar_altitude < source_air_scan_floor) || (target_radar_altitude > source_air_scan_ceiling))
@@ -648,14 +666,6 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 						{
 							continue;
 						}
-
-						//
-						// Target range
-						//
-						
-						target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-						target_range = get_approx_3d_range (source_position, target_position);
 
 						//
 						// adjust range if target is player - each jammer / radar turned off allows player to fly 10% closer
@@ -1080,6 +1090,63 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 	}
 
 	return (best_group);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static struct SCAN_FLOOR_DIFFICULTY_TABLE
+{
+	game_difficulty_settings
+		difficulty;
+
+	float
+		floor_scale;
+
+} scan_floor_difficulty_table [] =
+	{
+		GAME_DIFFICULTY_HARD,		1.0,
+		GAME_DIFFICULTY_MEDIUM,		1.5,
+		GAME_DIFFICULTY_EASY,		2.0,
+		(game_difficulty_settings) -1
+	};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_scan_floor_difficulty_factor (entity *en)
+{
+	int
+		loop;
+
+	entity
+		*pilot_en;
+
+	game_difficulty_settings
+		difficulty;
+
+	ASSERT (en);
+
+	pilot_en = get_local_entity_first_child (en, LIST_TYPE_AIRCREW);
+
+	if (pilot_en)
+	{
+		difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
+
+		loop = 0;
+
+		while (scan_floor_difficulty_table [loop].difficulty >= 0)
+		{
+			if (scan_floor_difficulty_table [loop].difficulty == difficulty)
+			{
+				return scan_floor_difficulty_table [loop].floor_scale;
+			}
+
+			loop ++;
+		}
+	}
+
+	return 1.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

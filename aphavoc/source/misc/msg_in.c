@@ -2179,6 +2179,8 @@ void process_message_request_artillery (entity *en)
 
 								if (weapon_range > 0.0)
 								{
+									debug_log ("MSG_IN: Artillery Weapon Range = %f", weapon_range);
+
 									if (weapon_range > range)
 									{
 										best_range = range;
