@@ -93,8 +93,8 @@
 		#define NUM_FLARES								(20)
 
 		#define CANNON_TURRET_HEADING_RATE			(rad (90.0))
-		#define CANNON_TURRET_MIN_HEADING_LIMIT	(rad (-110.0))
-		#define CANNON_TURRET_MAX_HEADING_LIMIT	(rad (110.0))
+		#define CANNON_TURRET_MIN_HEADING_LIMIT	(rad (-86.0))
+		#define CANNON_TURRET_MAX_HEADING_LIMIT	(rad (86.0))
 		#define CANNON_BARREL_PITCH_RATE				(rad (90.0))
 		#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-60.0))
 		#define CANNON_BARREL_MAX_PITCH_LIMIT		(rad (11.0))

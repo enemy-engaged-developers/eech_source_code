@@ -70,12 +70,22 @@
 		#define RHS_CHAFF_DISPENSER	(1)
 		#define LHS_FLARE_DISPENSER	(0)
 		#define RHS_FLARE_DISPENSER	(1)
+		#define MACHINE_GUN_TURRET	(3)
 
 		#define CHAFF_VECTOR	 		 	(0)
 		#define FLARE_VECTOR	 		 	(0)
+		#define MACHINE_GUN_BARREL			(0)
 
 		#define NUM_CHAFFS				(32)
 		#define NUM_FLARES				(32)
+		#define NUM_MACHNE_GUN_ROUNDS	(200)
+
+		#define CANNON_TURRET_HEADING_RATE			(rad (45.0))
+		#define CANNON_TURRET_MIN_HEADING_LIMIT	(rad (-30.0))
+		#define CANNON_TURRET_MAX_HEADING_LIMIT	(rad (30.0))
+		#define CANNON_BARREL_PITCH_RATE				(rad (45.0))
+		#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-30.0))
+		#define CANNON_BARREL_MAX_PITCH_LIMIT		(rad (10.0))
 
 		////////////////////////////////////////
 		//
@@ -216,7 +226,27 @@
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 7
-			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
+			{
+				ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND,			// sub_type
+				NUM_MACHNE_GUN_ROUNDS,										// number
+				MACHINE_GUN_TURRET,													// heading_depth
+				MACHINE_GUN_BARREL,													// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
+				TRUE,																// rotate
+				1,																	// salvo_size
+				CANNON_TURRET_HEADING_RATE,								// heading_rate
+				CANNON_TURRET_MIN_HEADING_LIMIT,							// min_heading_limit
+				CANNON_TURRET_MAX_HEADING_LIMIT,							// max_heading_limit
+				CANNON_BARREL_PITCH_RATE,									// pitch_rate
+				CANNON_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
+				CANNON_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,														// heading_share_mask
+				0,														// pitch_share_mask
+				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
+			},
 			// WEAPON PACKAGE 8
 			{ENTITY_SUB_TYPE_WEAPON_NO_WEAPON},
 			// WEAPON PACKAGE 9
@@ -273,9 +303,19 @@
 		#undef RHS_CHAFF_DISPENSER
 		#undef LHS_FLARE_DISPENSER
 		#undef RHS_FLARE_DISPENSER
+		#undef MACHINE_GUN_TURRET
 
 		#undef CHAFF_VECTOR
 		#undef FLARE_VECTOR
+		#undef MACHINE_GUN_BARREL
 
 		#undef NUM_CHAFFS
 		#undef NUM_FLARES
+		#undef NUM_MACHNE_GUN_ROUNDS
+
+		#undef CANNON_TURRET_HEADING_RATE
+		#undef CANNON_TURRET_MIN_HEADING_LIMIT
+		#undef CANNON_TURRET_MAX_HEADING_LIMIT
+		#undef CANNON_BARREL_PITCH_RATE
+		#undef CANNON_BARREL_MIN_PITCH_LIMIT
+		#undef CANNON_BARREL_MAX_PITCH_LIMIT

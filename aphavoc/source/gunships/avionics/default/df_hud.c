@@ -2171,6 +2171,7 @@ static void draw_target_symbology (void)
 		{
 			////////////////////////////////////////
 			case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
 				if (target_visible)

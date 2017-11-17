@@ -78,12 +78,14 @@
 		#define B8_POD				(0)
 		#define B5_POD				(1)
 		#define ATAKA_RACK			(2)
+		#define CANNON_POD			(3)
 		#define CHAFF_VECTOR	  	(0)
 		#define FLARE_VECTOR	  	(0)
 
 		#define NUM_ATAKA_MISSILES (4)
 		#define NUM_S5_ROCKETS	(32)
 		#define NUM_S8_ROCKETS	(20)
+		#define NUM_CANNON_POD_ROUNDS	(250)
 		#define NUM_CHAFFS		(32)
 		#define NUM_FLARES		(32)
 
@@ -415,12 +417,12 @@
 			},
 			// WEAPON PACKAGE 5
 			{
-				ENTITY_SUB_TYPE_WEAPON_S5,	  								// sub_type
-				NUM_S5_ROCKETS,												// number
-				LHS_HARDPOINT1,			 									// heading_depth
-				B5_POD,	 	 													// pitch_depth
-				0,						  				 							// muzzle_depth
-				FALSE,				  				 							// make_weapon_system_ready
+				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
+				NUM_CANNON_POD_ROUNDS,										// number
+				LHS_HARDPOINT1,												// heading_depth
+				CANNON_POD,														// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
 				FALSE,															// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
@@ -433,16 +435,16 @@
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
+				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,										// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_S5,	  								// sub_type
-				NUM_S5_ROCKETS,												// number
-				RHS_HARDPOINT1,		 										// heading_depth
-				B5_POD,	 	 													// pitch_depth
-				0,						  				 							// muzzle_depth
-				FALSE,				  				 							// make_weapon_system_ready
+				ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND,				// sub_type
+				NUM_CANNON_POD_ROUNDS,										// number
+				RHS_HARDPOINT1,												// heading_depth
+				CANNON_POD,														// pitch_depth
+				0,																	// muzzle_depth
+				FALSE,															// make_weapon_system_ready
 				FALSE,															// rotate
 				2,																	// salvo_size
 				rad (0.0),														// heading_rate
@@ -455,7 +457,7 @@
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
-				MUZZLE_FLASH_MEDIUM_ROCKET,										// muzzle_flash_type
+				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,										// muzzle_flash_type
 			},
 			// WEAPON PACKAGE 7
 			{
@@ -752,6 +754,7 @@
 		#undef RHS_CHAFF_DISPENSER
 		#undef RHS_FLARE_DISPENSER
 		#undef ATAKA_RACK
+		#undef CANNON_POD
 		#undef NUM_ATAKA_MISSILES
 
 		#undef B8_POD
@@ -761,5 +764,6 @@
 
 		#undef NUM_S5_ROCKETS
 		#undef NUM_S8_ROCKETS
+		#undef NUM_CANNON_POD_ROUNDS
 		#undef NUM_CHAFFS
 		#undef NUM_FLARES

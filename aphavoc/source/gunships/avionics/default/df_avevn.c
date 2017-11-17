@@ -502,6 +502,8 @@ static void select_cannon_event (event *ev)
 	{
 		set_gunship_weapon (ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND);
 	}
+	else if (get_local_entity_weapon_available (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND))
+		set_gunship_weapon (ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

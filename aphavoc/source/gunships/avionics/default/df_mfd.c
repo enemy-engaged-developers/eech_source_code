@@ -3455,6 +3455,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	switch (weapon_sub_type)
 	{
 		case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
+		case ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND:
 			s = "CANNON";
 			break;
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
@@ -5510,7 +5511,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 	//
 	////////////////////////////////////////////////////////////////////////////////
 
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND)
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND || weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND)
 	{
 		if (draw_large_mfd)
 		{

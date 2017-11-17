@@ -958,7 +958,7 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_MI6_HOOK_1,									// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI6_HOOK_1,									// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI6_HOOK_1,									// scout_weapon_config_type
-			ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,		  						// default_weapon_type
+			ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND,		  						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,  											// target_priority_type
 			FORCE_INFO_CATAGORY_UNARMED_HELICOPTER,						// force_info_catagory

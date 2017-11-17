@@ -201,6 +201,7 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 			////////////////////////////////////////
 			case ENTITY_SUB_TYPE_WEAPON_M2HB_12P7MM_ROUND:
 			case ENTITY_SUB_TYPE_WEAPON_YAK_B_12P7MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
 				duration = 0.2;
@@ -236,9 +237,9 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 			}
 		}
 		
-		direction.x = 0;
-		direction.y = 0;
-		direction.z = - 1;
+		direction.x = 0.0;
+		direction.y = 0.0;
+		direction.z = - 1.0;
 		multiply_matrix3x3_vec3d(&direction, vp.attitude, &direction);
 		add_dynamic_weapon_launch_force (&vp.position, &direction, strength, duration);
 		

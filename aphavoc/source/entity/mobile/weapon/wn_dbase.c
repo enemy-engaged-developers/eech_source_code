@@ -1406,15 +1406,15 @@ weapon_data
 		},
 		////////////////////////////////////////
 		//
-		// ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND
+		// ENTITY_SUB_TYPE_WEAPON_NSVT_12P7MM_ROUND // also used as A-12,7
 		//
 		////////////////////////////////////////
 		{
-			"12.7mm Round",		 											// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"12.7 Machine Gun",		 											// full_name
+			"A-12,7",																	// hud_name
+			"A-12,7",																	// mfd_name
+			"A-12,7",																	// weapon_loading_list_name
+			"A-12,7 Machine Gun",																	// weapon_loading_name_text
 
 			OBJECT_3D_CANNON_SHELL,									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type

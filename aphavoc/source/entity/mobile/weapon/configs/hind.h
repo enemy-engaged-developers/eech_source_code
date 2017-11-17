@@ -100,7 +100,7 @@
 		#define CANNON_TURRET_MIN_HEADING_LIMIT	(rad (-60.0))
 		#define CANNON_TURRET_MAX_HEADING_LIMIT	(rad (60.0))
 		#define CANNON_BARREL_PITCH_RATE				(rad (90.0))
-		#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-60.0))
+		#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-40.0))
 		#define CANNON_BARREL_MAX_PITCH_LIMIT		(rad (20.0))
 
 //		sub_type, number, heading_depth, pitch_depth, muzzle_depth, make_weapon_system_ready, rotate, salvo_size, heading_rate, min_heading_limit, max_heading_limit, pitch_rate, min_pitch_limit, max_pitch_limit, muzzle_rotate_rate, rotate_inhibit_velocity, heading_share_mask, pitch_share_mask, muzzle_flash_type
