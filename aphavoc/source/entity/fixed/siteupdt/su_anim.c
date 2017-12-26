@@ -217,7 +217,7 @@ void update_site_radar( entity *en )
 
 	raw = (site_updatable *) get_local_entity_data( en );
 
-	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, 0.16666 );
+	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, (0.9 + 0.2 * frand1()) * 0.16666 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ void update_ground_crew( entity *en )
 
 	raw = (site_updatable *) get_local_entity_data( en );
 
-	update_entity_simple_keyframed_value( en, &raw->ground_crew_animation, 0.016666 );
+	update_entity_simple_keyframed_value( en, &raw->ground_crew_animation, (0.9 + 0.2 * frand1()) * 0.016666 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
