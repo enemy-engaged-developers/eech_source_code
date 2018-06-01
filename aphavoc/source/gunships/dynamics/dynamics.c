@@ -1,3 +1,4 @@
+
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
@@ -2574,20 +2575,22 @@ void flight_dynamics_toggle_altitude_lock (event *ev)
 void flight_dynamics_decrease_altitude_lock (event *ev)
 {
 
-	if (current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
+	if ((current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) || 
+		(current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||			//  Added by Javelin 5/18
+		(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 	{
 
 		if (get_global_gunship_side () == ENTITY_SIDE_BLUE_FORCE)
 		{
 
-			current_flight_dynamics->altitude.max -= ONE_FOOT;
+			current_flight_dynamics->altitude.max -= 10 * ONE_FOOT;  //  Increased by Javelin 5/18
 
 			debug_log ("DYNAMICS: altitude_lock on at %f ft", feet (current_flight_dynamics->altitude.max));
 		}
 		else
 		{
 
-			current_flight_dynamics->altitude.max -= METRE;
+			current_flight_dynamics->altitude.max -= 10 * METRE;	//  Increased by Javelin 5/18
 
 			debug_log ("DYNAMICS: altitude_lock on at %f m", current_flight_dynamics->altitude.max);
 		}
@@ -2601,22 +2604,24 @@ void flight_dynamics_decrease_altitude_lock (event *ev)
 void flight_dynamics_increase_altitude_lock (event *ev)
 {
 
-	if (current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
+	if ((current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) || 
+		(current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||			//  Added by Javelin 5/18
+		(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 	{
 
 		if (get_global_gunship_side () == ENTITY_SIDE_BLUE_FORCE)
 		{
 
-			current_flight_dynamics->altitude.max += ONE_FOOT;
+			current_flight_dynamics->altitude.max += 10 * ONE_FOOT;		//  Increased by Javelin 5/18
 
-			debug_log ("DYNAMICS: altitude_lock on at %f ft", feet (current_flight_dynamics->altitude.max));
+			debug_log ("DYNAMICS: hover height raised to %f ft", feet (current_flight_dynamics->altitude.max));
 		}
 		else
 		{
 
-			current_flight_dynamics->altitude.max += METRE;
+			current_flight_dynamics->altitude.max += 10 * METRE;		//  Increased by Javelin 5/18
 
-			debug_log ("DYNAMICS: altitude_lock on at %f m", current_flight_dynamics->altitude.max);
+			debug_log ("DYNAMICS: hover height lowered to %f m", current_flight_dynamics->altitude.max);
 		}
 	}
 }
@@ -3282,11 +3287,13 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT, FALSE);
 				}
-				else if (get_global_simple_avionics ())
-				{
-				}
+				// else if (get_global_simple_avionics ())
+				// {
+				// }
+				//  else if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE && current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
+
 				//  Altered to allow Hover to engage at up to 40 m/s (it was 20) by Javelin 5/18
-				else if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE && current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
+				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
 				{
 
 					if (!speech)
