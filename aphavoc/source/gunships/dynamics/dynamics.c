@@ -3286,7 +3286,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 				{
 				}
 				//  Altered to allow Hover to engage at up to 40 m/s (it was 20) by Javelin 5/18
-				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
+				else if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE && current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
 				{
 
 					if (!speech)
