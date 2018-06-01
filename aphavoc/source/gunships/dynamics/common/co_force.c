@@ -507,14 +507,14 @@ void resolve_dynamic_forces (void)
    //
 
 	//if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
+	//{
 
 		current_flight_dynamics->angular_heading_acceleration.value = resultant_y_axis;
 
 		current_flight_dynamics->angular_heading_velocity.value -= current_flight_dynamics->angular_heading_acceleration.value * get_model_delta_time ();
 
 		current_flight_dynamics->heading.delta = current_flight_dynamics->angular_heading_velocity.value * get_model_delta_time ();
-	}
+	//}
 
    ////////////////////////////////////////////////////////////////////////
 
@@ -563,60 +563,48 @@ void resolve_dynamic_forces (void)
    ///////////////////////////////////////////////////////////////
 	// Auto hover calculations
    ///////////////////////////////////////////////////////////////
-	{
-
+	
 		switch (current_flight_dynamics->auto_hover)
 		{
-
 			case HOVER_HOLD_NORMAL:
 			case HOVER_HOLD_STABLE:
 			{
 
-				float
-					i = 4.0;
-        
-				//
-				// adjust collective accordingly
-				//
-        
-        //ataribaby 4/1/2009 speedup Hover Hold altitude level
-        if(abs(current_flight_dynamics->velocity_y.value) > 2.0)
-        {
-          if (current_flight_dynamics->velocity_y.value < 0.0)
-  				{
-  				  //ataribaby 4/1/2009 limit torque around 100%
-  				  if (current_flight_dynamics->world_acceleration_vector.y < 2.0 && current_flight_dynamics->combined_engine_torque.value <= 100.0)
-              current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0;
-            else              
-              current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0;
-  				}
-  				else if (current_flight_dynamics->velocity_y.value > 0.0)
-  				{
-  				  //ataribaby 4/1/2009 limit torque around 100%
-  				  if (current_flight_dynamics->world_acceleration_vector.y > -2.0 || current_flight_dynamics->combined_engine_torque.value > 100.0)
-              current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0;
-            else
-              current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0;              
-  				}
-        }
-        else
-        {
-  				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0) && current_flight_dynamics->combined_engine_torque.value <= 100.0)
-  				{
-  					current_flight_dynamics->input_data.collective.value += i * get_model_delta_time();
-  				}
-  				else if ((current_flight_dynamics->velocity_y.value > 0.0) && (resultant_vertically > -1.0))
-  				{
-  					current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time();
-  				}
-        }
-				//
+				float			//  PID hover control loop added by Javelin 5/18
+					alt_error_1,
+					der_error,
+					PID_output,
+					Bias= 90,	//  Bias the center of the PID output
+					Kp = 3.0,	//  PID loop Proportional constant  
+					Kd = 7.0;	//  PID loop Derivative constant,  (handles up to about a 100m height correction smoothly)
+								//  the Ki Integral term is not being used
+				static float
+					alt_error_0 = 0.0;
+
+				const float
+					output_min = 55,	//  Limit the throttle adjustment range to 85% +- 30
+					output_max = 120;	//  Extra lift is needed for moving upwards because of gravity
+
+							//                                                altitude.max = target net altitude
+			alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
+
+			der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
+
+			PID_output = Bias -(Kp * alt_error_1) -(Kd * der_error);
+
+//debug_log ("HOVER:  Altitude: %f Setting: %f PID_out: %f", current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min, current_flight_dynamics->altitude.max, PID_output);
+
+			PID_output = bound (PID_output, output_min, output_max);
+
+		current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
+
+			alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
+
+
 				// wash velocity out to zero
-				//
-
-
 				// level out helicopter
-					// level out pitch/yaw
+				// level out pitch/yaw
+
 				current_flight_dynamics->input_data.cyclic_x.value = bound(-current_flight_dynamics->roll.value / rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_x.min, current_flight_dynamics->input_data.cyclic_x.max);
 				current_flight_dynamics->input_data.cyclic_y.value = bound((current_flight_dynamics->pitch.value - rad(5.0))/ rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_y.min, current_flight_dynamics->input_data.cyclic_y.max);
 
@@ -626,22 +614,65 @@ void resolve_dynamic_forces (void)
 
 				break;
 			}
+
 			case HOVER_HOLD_ALTITUDE_LOCK:
 			{
 
-				//
-				// adjust collective accordingly
-				//
-
-				float
-					i = 4.0,
-					look_ahead_distance,
-					delta_altitude;
+				float			   //  PID hover control loop added by Javelin 5/18
+					alt_error_1,
+					der_error,
+					PID_output,
+					Bias= 90,	   //  Bias the center of the PID output
+					ABias = -3.0,  //  Angle Bias (in % joystick throw) Nose-Up
+					Kp = 6.0,	   //  PID loop Proportional constant  
+					Kd = 10.0,	   //  PID loop Derivative constant,  (handles up to about a 100m height correction smoothly)
+								   //  the Ki Integral term is not being used
+					Angl_output,
+					Ka = 1.2,      //  Nose Angle adjustment constant
+					AAA,
+					look_ahead_distance;
 
 				vec3d
 					look_ahead_position;
 
-				look_ahead_distance = HELICOPTER_TERRAIN_FOLLOW_LOOKAHEAD_TIME * current_flight_dynamics->velocity_z.value;
+				static float
+					alt_error_0 = 0.0;
+
+				const float
+					output_min = 55,	//  Limit the throttle adjustment range to 85% +- 30
+					output_max = 120;	//  Extra lift is needed for moving upwards to counter gravity
+
+				
+			alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
+
+			der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
+
+			PID_output = Bias -(Kp * alt_error_1) -(Kd * der_error);
+
+			PID_output = bound (PID_output, output_min, output_max);
+
+		current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
+
+			alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
+
+			//  Speed control & Nose Angle Control only if below 100 meters
+			if (current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min < 100)
+			{
+				AAA = knots(current_flight_dynamics->velocity_z.value);
+				if (AAA > 100) 
+				{	AAA = (AAA - 100)/125.0 *60.0;  //  Kick up the nose if over 100 knots to slow the helo down (speed control)
+					ABias = -3 -AAA;
+				}
+				else if (AAA<55)
+				{   AAA = (55-AAA)/125.0 *35.0;		//   Push the nose down if under 55 knots to speed it up
+					ABias = -3 +AAA;
+				}
+				else
+					ABias = -3;  //  Approximately Level Flight 
+			
+			////////////////////////////////  Original Razorworks Code  ////////////////////////////////////////////////////////
+
+				look_ahead_distance = 5.0 * current_flight_dynamics->velocity_z.value;  //  5 seconds straight ahead
 
 				look_ahead_position.x = current_flight_dynamics->position.x;
 				look_ahead_position.y = current_flight_dynamics->position.y;
@@ -654,36 +685,29 @@ void resolve_dynamic_forces (void)
 	
 				look_ahead_position.y = get_3d_terrain_elevation (look_ahead_position.x, look_ahead_position.z);
 
-				// take the highest point (either current_pos or look ahead point)
-				look_ahead_position.y = max (look_ahead_position.y, current_flight_dynamics->altitude.min);
+//debug_log ("HOVER: Ground Altitude: %f   1-sec-ahead: %f", current_flight_dynamics->altitude.min, look_ahead_position.y);  
+		
+			////////////////////////////////  End Original Razorworks Code  ////////////////////////////////////////////////////
 
-				// predicted altitude in 1 second
-				delta_altitude = (current_flight_dynamics->altitude.value +
-										(current_flight_dynamics->world_motion_vector.y + current_flight_dynamics->world_acceleration_vector.y)) -
-										look_ahead_position.y;
+				//  Next, Kick the nose up or down to follow the slope of the ground, looking ahead
 
-				// subtract altitude lock
-				delta_altitude -= current_flight_dynamics->altitude.max;
-        
-        //ataribaby 4/1/2009 limit torque around 100%
-				if (delta_altitude < 0.0 && current_flight_dynamics->combined_engine_torque.value <= 100.0)
-				{
+				alt_error_1 = (current_flight_dynamics->altitude.value - look_ahead_position.y) - current_flight_dynamics->altitude.max;  
+			
+				Angl_output = (Ka * alt_error_1)/5.0 + ABias;   //  Must be balanced against the # of seconds look ahead
+				
+				Angl_output = bound (Angl_output, -55, 15);  //   limit the cyclic correction angle: Allow more nose up(-) than down
 
-					i = min (i, -delta_altitude);
-
-					current_flight_dynamics->input_data.collective.value += i * get_model_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
-				}
-				else if (delta_altitude > 0.0)
-				{
-
-					i = min (i, delta_altitude);
-
-					current_flight_dynamics->input_data.collective.value -= i * get_model_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
-				}
-
-	  			// intentional follow through...
+		current_flight_dynamics->input_data.cyclic_y_trim.value = Angl_output;   //  Set the Collective pitch angle
+				//  Trim is being used so the pilot can still over-ride the automated controls
 			}
 
+				current_flight_dynamics->model_acceleration_vector.x = resultant_laterally;
+				current_flight_dynamics->model_acceleration_vector.y = resultant_vertically;
+				current_flight_dynamics->model_acceleration_vector.z = resultant_horizontally;
+
+//debug_log ("HOVER: Altitude: %f Setting: %f PID_out: %f Angl_out: %f", current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min, current_flight_dynamics->altitude.max, PID_output, Angl_output);
+				break;
+			}
 			case HOVER_HOLD_NONE:
 			default:
 			{
@@ -695,22 +719,8 @@ void resolve_dynamic_forces (void)
 				break;
 			}
 		}
-	}
-
-	//debug_log ("current_flight_dynamics->model_acceleration_vector.y %f", current_flight_dynamics->model_acceleration_vector.y);
-
-	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
-
-		//current_flight_dynamics->model_acceleration_vector.y = max (0.0, resultant_vertically);
-	}
-
-   ///////////////////////////////////////////////////////////////
-
-	//debug_log ("CO_FORCE: adding force to joystick");
-	//set_joystick_force_feedback_forces (current_flight_dynamics->input_data.cyclic_joystick_device_index,
-													//resultant_laterally * 1000.0, -resultant_horizontally * 1000.0);
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

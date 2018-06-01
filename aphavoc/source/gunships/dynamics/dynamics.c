@@ -97,6 +97,9 @@ dynamics_type
 int
 	flight_dynamics_lock_position_flag;
 
+static int
+	bobup_status = 1.0;					//   Added by Javelin 5/18
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,6 +340,8 @@ void initialise_flight_dynamics (entity *en)
 			set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT, TRUE);
 
 			set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
+
+			bobup_status = 1.0;  //  Added by Javelin 5/18
 
 			add_flight_path_action (current_flight_dynamics->position.x, current_flight_dynamics->position.z, FLIGHT_PATH_ACTION_AUTOPILOT_NAVIGATING);
 
@@ -2187,6 +2192,10 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 	if (valid_dynamics_autos_on (type))
 	{
 		set_current_flight_dynamics_auto_hover (type);
+
+		// Added in by Javelin 5/18, auto_hover now targets a specific altitude, not a vertical velocity
+		current_flight_dynamics->altitude.max = current_flight_dynamics->radar_altitude.value;
+		// debug_log ("DYNAMICS: hover_hold on at %f meters", current_flight_dynamics->altitude.max);
 	}
 	else
 	{
@@ -2610,6 +2619,49 @@ void flight_dynamics_increase_altitude_lock (event *ev)
 			debug_log ("DYNAMICS: altitude_lock on at %f m", current_flight_dynamics->altitude.max);
 		}
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void flight_dynamics_toggle_bobup (event *ev)			//   Added by Javelin 5/18, uses the R-SHFT-"P" key
+{
+	if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) || (current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
+	{
+		switch (bobup_status)
+		{
+			case 0:
+				{ bobup_status =1 ;  //  Turn BobUp ON
+				// debug_log ("DYNAMICS: Bob-Up ON at %f m", current_flight_dynamics->altitude.max);
+				break;
+				}
+			case 1:
+				{ bobup_status = 2;  //  Bob Up 20 meters
+				current_flight_dynamics->altitude.max += 20.0;
+				// debug_log ("DYNAMICS: Bob-Up status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
+				break;
+				}
+			case 2:
+				{ bobup_status =1;   //  Drop Back Down 20 meters
+				current_flight_dynamics->altitude.max -= 20.0;
+				// debug_log ("DYNAMICS: Bob-Down status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
+				break;
+				}
+		}
+	}
+	else
+	{
+		bobup_status = 0;   //   Turn BobUp OFF		To turn it off, stop hovering and press R-SHFT-"P" or below...
+		debug_log ("DYNAMICS: Bob-Up status OFF.");
+	}						
+}							
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void flight_dynamics_turn_bobup_off (event *ev)			//   Added by Javelin 5/18, uses the R_CTRL-"P" key
+{
+		bobup_status = 0;   //   Turn BobUp OFF when the bob-up display is turned OFF
+		debug_log ("DYNAMICS: Bob-Up & Display OFF.");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3230,7 +3282,11 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT, FALSE);
 				}
-				else if (get_global_avionics_realism_level () > AVIONICS_REALISM_LEVEL_SIMPLE && current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0))
+				else if (get_global_simple_avionics ())
+				{
+				}
+				//  Altered to allow Hover to engage at up to 40 m/s (it was 20) by Javelin 5/18
+				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
 				{
 
 					if (!speech)
@@ -3275,8 +3331,9 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 					joystick_y_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 				}
 
-				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
-					((float) fabs (200.0 * joystick_y_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0))
+						//  Altered to increase the minimum above 10 by Javelin 5/18
+				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 40.0) ||
+					((float) fabs (200.0 * joystick_y_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 40.0))
 				{
 
 					flag = FALSE;

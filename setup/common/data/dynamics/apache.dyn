@@ -30,7 +30,7 @@ tail_rotor_rpm value = 0.000000, min = 0.000000, max = 100.000000, modifier = 1.
 tail_rotor_rps value = 0.000000, min = 0.000000, max = 10.000000, modifier = 1.000000
 tail_rotor_angular_position value = 0.000000, min = 0.000000, max = 6.283185, modifier = 1.000000
 tail_blade_pitch value = 0.000000, min = -0.034907, max = 0.034907, modifier = 1.000000
-tail_boom_length value = 10.590000, min = 0.000000, max = 0.000000, modifier = 1.000000
+tail_boom_length value = 9.180000, min = 0.000000, max = 0.000000, modifier = 1.000000
 cross_coupling_effect value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 power_avaliable value = 0.000000, min = 0.000000, max = 1890.000000, modifier = 1.000000
 power_required value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -47,7 +47,7 @@ acceleration_z value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 world_velocity_x value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 world_velocity_y value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 world_velocity_z value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-air_density value = 1.000000, min = 0.000000, max = 1.000000, modifier = 0.800000
+air_density value = 1.225000, min = 0.000000, max = 1.225000, modifier = 0.800000
 pitch value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 roll value = 0.000000, min = -6.283185, max = 6.283185, modifier = 1.000000
 heading value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -57,7 +57,7 @@ altitude value = 0.000000, min = 0.000000, max = 20000.000000, modifier = 1.0000
 drag_x value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000
 drag_y value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.000000
 drag_z value = 0.000000, min = 0.010000, max = 0.100000, modifier = 0.800000
-heading_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 30.000000
+heading_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 20.000000
 pitch_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 40.000000
 roll_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 30.000000
 heading_moment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 2.000000
@@ -83,5 +83,5 @@ radar_altitude value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 g_force value = 1.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_rpm value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_torque value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-fuel_weight value = 1108.000000, min = 0.000000, max = 1108.000000, modifier = 1.000000, delta = 0.1450
+fuel_weight value = 1008.000000, min = 0.000000, max = 1008.000000, modifier = 1.000000, delta = 0.1450
 centre_of_gravity_x = 0.000000, centre_of_gravity_y = -0.200000, centre_of_gravity_z = -0.012000
