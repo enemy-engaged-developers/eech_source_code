@@ -249,8 +249,7 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_K, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, flight_dynamics_increase_altitude_lock);
 		set_event (DIK_G, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_auto_pilot);
 
-		set_event (DIK_P, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, flight_dynamics_toggle_bobup);	   //  Added by Javelin 5/18
-		set_event (DIK_P, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, flight_dynamics_turn_bobup_off); //  Added by Javelin 5/18
+		set_event (DIK_P, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, flight_dynamics_toggle_bobup);	   //  Added by Javelin 5/18
 
 //		set_event (DIK_TAB, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, load_dynamics_model);
 //		set_event (DIK_TAB, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, save_dynamics_model);
@@ -294,7 +293,7 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_UP, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, increase_debug_var_y);
 		set_event (DIK_DELETE, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, decrease_debug_var_z);
 		set_event (DIK_INSERT, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, increase_debug_var_z);
-#endif
+		#endif
 	}
 }
 

@@ -569,7 +569,6 @@ extern int get_current_flight_dynamics_auto_pilot (void);
 extern void flight_dynamics_toggle_auto_pilot (event *ev);
 
 extern void flight_dynamics_toggle_bobup (event *ev);   //  Added by Javelin 5/18
-extern void flight_dynamics_turn_bobup_off (event *ev); //  Added by Javelin 5/18
 
 extern void set_current_flight_dynamics_rotor_brake (int flag);
 

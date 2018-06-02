@@ -2196,11 +2196,12 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 
 		// Added in by Javelin 5/18, auto_hover now targets a specific altitude, not a vertical velocity
 		current_flight_dynamics->altitude.max = current_flight_dynamics->radar_altitude.value;
-		// debug_log ("DYNAMICS: hover_hold on at %f meters", current_flight_dynamics->altitude.max);
+		debug_log ("DYNAMICS: hover_hold ON at %f meters", current_flight_dynamics->altitude.max);
 	}
 	else
 	{
 		set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
+		debug_log ("DYNAMICS: hover_hold OFF");
 	}
 }
 
@@ -2585,14 +2586,14 @@ void flight_dynamics_decrease_altitude_lock (event *ev)
 
 			current_flight_dynamics->altitude.max -= 10 * ONE_FOOT;  //  Increased by Javelin 5/18
 
-			debug_log ("DYNAMICS: altitude_lock on at %f ft", feet (current_flight_dynamics->altitude.max));
+			debug_log ("DYNAMICS: hover height lowered to %f ft", feet (current_flight_dynamics->altitude.max));
 		}
 		else
 		{
 
 			current_flight_dynamics->altitude.max -= 10 * METRE;	//  Increased by Javelin 5/18
 
-			debug_log ("DYNAMICS: altitude_lock on at %f m", current_flight_dynamics->altitude.max);
+			debug_log ("DYNAMICS: hover height lowered to %f m", current_flight_dynamics->altitude.max);
 		}
 	}
 }
@@ -2632,43 +2633,32 @@ void flight_dynamics_increase_altitude_lock (event *ev)
 
 void flight_dynamics_toggle_bobup (event *ev)			//   Added by Javelin 5/18, uses the R-SHFT-"P" key
 {
+	 debug_log ("DYNAMICS: Bob-Up Command Attempted...");
+
 	if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) || (current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
 	{
 		switch (bobup_status)
 		{
 			case 0:
-				{ bobup_status =1 ;  //  Turn BobUp ON
-				// debug_log ("DYNAMICS: Bob-Up ON at %f m", current_flight_dynamics->altitude.max);
+				{ bobup_status =1 ;  //  Turn BobUp ON if it's ever off
+				 debug_log ("DYNAMICS: Bob-Up ON at %f m", current_flight_dynamics->altitude.max);
 				break;
 				}
 			case 1:
 				{ bobup_status = 2;  //  Bob Up 20 meters
 				current_flight_dynamics->altitude.max += 20.0;
-				// debug_log ("DYNAMICS: Bob-Up status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
+				 debug_log ("DYNAMICS: Bob-Up status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
 				break;
 				}
 			case 2:
 				{ bobup_status =1;   //  Drop Back Down 20 meters
 				current_flight_dynamics->altitude.max -= 20.0;
-				// debug_log ("DYNAMICS: Bob-Down status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
+				 debug_log ("DYNAMICS: Bob-Down status is %f  setting = %f m", bobup_status, current_flight_dynamics->altitude.max);
 				break;
 				}
 		}
 	}
-	else
-	{
-		bobup_status = 0;   //   Turn BobUp OFF		To turn it off, stop hovering and press R-SHFT-"P" or below...
-		debug_log ("DYNAMICS: Bob-Up status OFF.");
-	}						
 }							
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void flight_dynamics_turn_bobup_off (event *ev)			//   Added by Javelin 5/18, uses the R_CTRL-"P" key
-{
-		bobup_status = 0;   //   Turn BobUp OFF when the bob-up display is turned OFF
-		debug_log ("DYNAMICS: Bob-Up & Display OFF.");
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3296,7 +3286,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (40.0))
 				{
 
-					if (!speech)
+					if (!speech)   
 					{
 
 						if (sfrand1 () < 0.0)
