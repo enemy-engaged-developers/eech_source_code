@@ -1162,13 +1162,7 @@ void load_2d_terrain ( const char *path )
 	// Load the contour colours
 	//
 
-	sprintf ( node_file, "%s\\terrain\\2dmapcol.psd", path );
-
-	if ( file_exist ( node_file ) )
-	{
-
-		load_contour_map_colours ( node_file );
-	}
+	load_contour_map_colours();
 
 	//
 	// Load gridpost elevation map
@@ -1776,29 +1770,13 @@ void set_lake_database_extents ( int number_of_triangle_sets, contour_lake *lake
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_contour_map_colours ( const char *filename )
+void load_contour_map_colours ()
 {
-	if ( terrain_2d_contour_colours && terrain_2d_contour_colours != contour_colours)
-	{
-		safe_free ( terrain_2d_contour_colours );
+	if (command_line_campaign_map_palette == 1)
+		terrain_2d_contour_colours = contour_colours;
+	else
+		terrain_2d_contour_colours = contour_paper_colours;
 
-		terrain_2d_contour_colours = NULL;
-	}
-
-	if ( terrain_2d_contour_intensities )
-	{
-		safe_free ( terrain_2d_contour_intensities );
-
-		terrain_2d_contour_intensities = NULL;
-	}
-
-//	if (command_line_campaign_map != 0)
-	{
-		if (command_line_campaign_map_palette == 1)
-			terrain_2d_contour_colours = contour_colours;
-		else
-			terrain_2d_contour_colours = contour_paper_colours;
-	}
 #if 0   // arneh - unused code with new map
 	else
 	{
