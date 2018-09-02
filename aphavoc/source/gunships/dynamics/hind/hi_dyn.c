@@ -218,7 +218,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->right_engine_rpm.modifier = 1.0;
 	current_flight_dynamics->right_engine_torque.modifier = 1.0;
 	current_flight_dynamics->right_engine_temp.modifier = 1.0;
-	current_flight_dynamics->main_rotor_number_of_blades.modifier = 1.0;
+	current_flight_dynamics->main_rotor_number_of_blades.modifier = 1.25;
 	current_flight_dynamics->main_rotor_induced_air.modifier = 0.55;
 	current_flight_dynamics->main_rotor_induced_vortex_air_flow.modifier = 0.3;
 	current_flight_dynamics->main_rotor_diameter.modifier = 1.0;
@@ -484,7 +484,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->tail_rotor_induced_air.min = -1.0;
 	current_flight_dynamics->tail_rotor_induced_air.max = 1.0;
 
-	current_flight_dynamics->tail_boom_length.value = 10.59; // actually the wheelbase (but close enough)
+	current_flight_dynamics->tail_boom_length.value = 10.50; 
 
 	current_flight_dynamics->cross_coupling_effect.value = 0.0;
 
@@ -509,7 +509,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->velocity_z.max = knots_to_metres_per_second (197);
 
 	current_flight_dynamics->power_avaliable.min = 0.0;
-	current_flight_dynamics->power_avaliable.max = 2230.0;
+	current_flight_dynamics->power_avaliable.max = 2200.0;
 
 	current_flight_dynamics->lift.min = -10.0;
 	current_flight_dynamics->lift.max = 20.0;
@@ -540,14 +540,14 @@ void set_dynamics_defaults (entity *en)
 
 	// inertia
 
-	current_flight_dynamics->heading_inertia.value = 5.0;
-	current_flight_dynamics->pitch_inertia.value = 40.0;
-	current_flight_dynamics->roll_inertia.value = 30.0;
+	current_flight_dynamics->heading_inertia.value = 38.2;
+	current_flight_dynamics->pitch_inertia.value = 76.5;
+	current_flight_dynamics->roll_inertia.value = 58.4;
 
 	// mass
 
 	current_flight_dynamics->mass.value = 0.0;
-	current_flight_dynamics->mass.min = 8340.0;
+	current_flight_dynamics->mass.min = 8500.0;
 	current_flight_dynamics->mass.max = 0.0;
 
 	current_flight_dynamics->fuel_weight.value = 1720.0;
@@ -560,8 +560,8 @@ void set_dynamics_defaults (entity *en)
 	// apache at 	0.0, -0.2, -0.012
 
 	centre_of_gravity.x = 0.00;
-	centre_of_gravity.y = -0.05;
-	centre_of_gravity.z = -0.005;
+	centre_of_gravity.y = -0.2;
+	centre_of_gravity.z = -0.022;
 
 	current_flight_dynamics->centre_of_gravity = centre_of_gravity;
 

@@ -117,7 +117,7 @@ static void update_air_density_dynamics (void);
 
 static void update_acceleration_dynamics (void);
 
-static void update_power_dynamics (void);
+//  static void update_power_dynamics (void);	Duplicate Statement Javelin 6/18
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,7 +628,7 @@ void update_kiowa_advanced_dynamics (void)
 	update_main_rotor_thrust_dynamics ();
 	update_tail_rotor_thrust_dynamics ();
 
-	update_power_dynamics ();
+	//  update_power_dynamics ();	Duplicate Statement Javelin 6/18
 
 	update_air_density_dynamics ();
 
@@ -2775,7 +2775,7 @@ void update_acceleration_dynamics (void)
 
 	// calculate total lift provided by main rotor
 
-	current_flight_dynamics->lift.value = current_flight_dynamics->power_surplus.value * 50;
+	current_flight_dynamics->lift.value = current_flight_dynamics->power_surplus.value * 50;  
 
 	current_flight_dynamics->lift.value /= current_flight_dynamics->mass.value;
 

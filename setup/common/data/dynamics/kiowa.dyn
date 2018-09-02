@@ -32,7 +32,7 @@ tail_rotor_angular_position value = 0.000000, min = 0.000000, max = 6.283185, mo
 tail_blade_pitch value = 0.000000, min = -0.034907, max = 0.034907, modifier = 1.000000
 tail_boom_length value = 6.600000, min = 0.000000, max = 0.000000, modifier = 1.000000
 cross_coupling_effect value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-power_avaliable value = 0.000000, min = 0.000000, max = 2000.000000, modifier = 1.000000
+power_avaliable value = 0.000000, min = 0.000000, max = 3001.000000, modifier = 1.000000
 power_required value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 power_induced value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 power_profile value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -56,7 +56,7 @@ translational_lift value = 0.000000, min = 0.600000, max = 1.000000, modifier = 
 altitude value = 0.000000, min = 0.000000, max = 20000.000000, modifier = 1.000000
 drag_x value = 0.000000, min = 0.010000, max = 0.100000, modifier = 1.500000
 drag_y value = 0.000000, min = 0.010000, max = 0.100000, modifier = 1.500000
-drag_z value = 0.000000, min = 0.010000, max = 0.100000, modifier = 2.150000
+drag_z value = 0.000000, min = 0.010000, max = 0.100000, modifier = 1.000000
 heading_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 4.800000
 pitch_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 9.600000
 roll_inertia value = 0.000000, min = 0.000000, max = 0.000000, modifier = 7.400000

@@ -85,4 +85,3 @@ combined_engine_rpm value = 0.000000, min = 0.000000, max = 0.000000, modifier =
 combined_engine_torque value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 fuel_weight value = 6815.000000, min = 0.000000, max = 6815.000000, modifier = 1.000000, delta = 0.29
 centre_of_gravity_x = 0.000000, centre_of_gravity_y = -0.200000, centre_of_gravity_z = -0.012000
-entre_of_gravity_x = 0.000000, centre_of_gravity_y = -0.300000, centre_of_gravity_z = 0.000000

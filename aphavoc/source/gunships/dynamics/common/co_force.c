@@ -642,8 +642,23 @@ void resolve_dynamic_forces (void)
 					output_min = 55,	//  Limit the throttle adjustment range to 85% +- 30
 					output_max = 120;	//  Extra lift is needed for moving upwards to counter gravity
 
-				
-			alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
+
+			if (current_flight_dynamics->altitude.max < 200)  //  Use the radar altitude for Nap-of-the-Earth
+			{
+				alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
+			}
+			else		//  Use the Barometric Altitude (not ground following)
+			{
+				alt_error_1 = (current_flight_dynamics->barometric_altitude.value) - current_flight_dynamics->altitude.max;
+
+				  //  debug_log("Dynamics: Barometric Alt = %f  Target Alt = %f", current_flight_dynamics->barometric_altitude.value, current_flight_dynamics->altitude.max);
+
+				if (current_flight_dynamics->radar_altitude.value < 100)
+				{
+															//  Reset to avoid hitting a mountain
+					current_flight_dynamics->altitude.max = current_flight_dynamics->radar_altitude.value - 50;  
+				}
+			}
 
 			der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
 
@@ -654,10 +669,9 @@ void resolve_dynamic_forces (void)
 		current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
 
 			alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
+			 
 
-			//  Speed control & Nose Angle Control only if below 100 meters
-			if (current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min < 100)
-			{
+				//  Speed Controls using Nose Angle
 				AAA = knots(current_flight_dynamics->velocity_z.value);
 				if (AAA > 100) 
 				{	AAA = (AAA - 100)/125.0 *60.0;  //  Kick up the nose if over 100 knots to slow the helo down (speed control)
@@ -668,11 +682,37 @@ void resolve_dynamic_forces (void)
 					ABias = -3 +AAA;
 				}
 				else
-					ABias = -3;  //  Approximately Level Flight 
+					ABias = -3;  //  Approximately Level Flight
+
+
+				AAA = knots(current_flight_dynamics->velocity_z.value) - 100;
+				if (AAA < 0) AAA = 0.0;
+				else AAA = AAA /125.0 *90.0;  //  Really pull the Nose up if over 100 knots
+         switch (get_global_gunship_type ())
+         {
+			case GUNSHIP_TYPE_VIPER:
+			{
+				ABias += -2 -AAA;  //  Pull the nose up, the AH-1's are all nose heavy
+				break;
+			}
+		 }
+		switch (current_flight_dynamics->sub_type)
+		{
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+			{
+				ABias += -2 -AAA;  //  Pull the nose up
+				break;
+			}
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+			{
+				ABias += -2 -AAA;  //  Pull the nose up
+				break;
+			}
+		}
 			
 			////////////////////////////////  Original Razorworks Code  ////////////////////////////////////////////////////////
 
-				look_ahead_distance = 5.0 * current_flight_dynamics->velocity_z.value;  //  5 seconds straight ahead
+				look_ahead_distance = 10.0 * current_flight_dynamics->velocity_z.value;  //  10 seconds straight ahead
 
 				look_ahead_position.x = current_flight_dynamics->position.x;
 				look_ahead_position.y = current_flight_dynamics->position.y;
@@ -685,21 +725,25 @@ void resolve_dynamic_forces (void)
 	
 				look_ahead_position.y = get_3d_terrain_elevation (look_ahead_position.x, look_ahead_position.z);
 
-//debug_log ("HOVER: Ground Altitude: %f   1-sec-ahead: %f", current_flight_dynamics->altitude.min, look_ahead_position.y);  
+//debug_log ("HOVER: Ground Altitude: %f   10-sec-ahead: %f", current_flight_dynamics->altitude.min, look_ahead_position.y);  
 		
 			////////////////////////////////  End Original Razorworks Code  ////////////////////////////////////////////////////
 
 				//  Next, Kick the nose up or down to follow the slope of the ground, looking ahead
-
-				alt_error_1 = (current_flight_dynamics->altitude.value - look_ahead_position.y) - current_flight_dynamics->altitude.max;  
-			
-				Angl_output = (Ka * alt_error_1)/5.0 + ABias;   //  Must be balanced against the # of seconds look ahead
+				alt_error_1 = (current_flight_dynamics->altitude.value - look_ahead_position.y) - current_flight_dynamics->altitude.max;
+				
+				//  Terrain Following with the Nose only if below 100 meters
+				if (current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min > 100)
+				{
+					alt_error_1 = 0;
+				}
+				Angl_output = (Ka * alt_error_1)/10.0 + ABias;   //  Must be balanced against the # of seconds look ahead
 				
 				Angl_output = bound (Angl_output, -55, 15);  //   limit the cyclic correction angle: Allow more nose up(-) than down
 
-		current_flight_dynamics->input_data.cyclic_y_trim.value = Angl_output;   //  Set the Collective pitch angle
 				//  Trim is being used so the pilot can still over-ride the automated controls
-			}
+		current_flight_dynamics->input_data.cyclic_y_trim.value = Angl_output;   //  Set the Collective pitch angle
+			
 
 				current_flight_dynamics->model_acceleration_vector.x = resultant_laterally;
 				current_flight_dynamics->model_acceleration_vector.y = resultant_vertically;
