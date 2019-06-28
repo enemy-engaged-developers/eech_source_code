@@ -82,6 +82,12 @@ static object_3d_instance
 	*virtual_cockpit_inst3d_detail_level_low_inst3d,
 	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
 
+static object_3d_sub_instance
+	*left_temperature,
+	*left_temperature_small,
+	*right_temperature,
+	*right_temperature_small;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +109,11 @@ void initialise_ka50_virtual_cockpit (void)
 	virtual_cockpit_inst3d = virtual_cockpit_inst3d_detail_level_high_inst3d;
 
 	pilot_head_pitch_datum = get_ka50_pilot_head_pitch_datum ();
+
+	left_temperature = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_ENG1_TEMP_LRG);
+	left_temperature_small = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_ENG1_TEMP_SML);
+	right_temperature = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_ENG2_TEMP_LRG);
+	right_temperature_small = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_ENG2_TEMP_SML);
 
 	//
 	// wipers and rain
@@ -584,6 +595,9 @@ void draw_ka50_virtual_cockpit (void)
 	draw_ka50_virtual_cockpit_lamps ();
 
 	draw_ka50_virtual_cockpit_instruments ();
+
+	get_ka50_temperature_needle_values(current_flight_dynamics->left_engine_temp.value, &left_temperature->relative_roll, &left_temperature_small->relative_roll);
+	get_ka50_temperature_needle_values(current_flight_dynamics->right_engine_temp.value, &right_temperature->relative_roll, &right_temperature_small->relative_roll);
 
 	//
 	// crew animation
