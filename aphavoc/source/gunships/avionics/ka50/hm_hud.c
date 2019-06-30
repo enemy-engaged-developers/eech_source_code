@@ -743,7 +743,7 @@ static void display_true_airspeed (void)
 	char
 		s[20];
 
-	true_airspeed = current_flight_dynamics->velocity_z.value;
+	true_airspeed = current_flight_dynamics->indicated_airspeed.value;
 
 	true_airspeed = kilometres_per_hour (true_airspeed);
 
@@ -835,9 +835,9 @@ static void display_g_scale(void)
 static void display_vertical_velocity(void)
 {
 	char s[20];
-	float vv = kilometres_per_hour(current_flight_dynamics->world_velocity_y.value);
+	float vv = (metres_per_minute((current_flight_dynamics->world_velocity_y.value)) / 60); //convert to metres per second
 
-	sprintf (s, "%02d", abs((int)vv));;
+	sprintf (s, "%02d", abs((int)vv));
 
 	set_2d_mono_font_position (0.6, -0.07);
 	if (draw_large_hud)
