@@ -752,7 +752,8 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
 
 				y = contour_samples;
 
-				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
+				// draw_2d_line (x1, z1, x2, z2, map_contour_colour);		
+				draw_2d_half_thick_line(x1, z1, x2, z2, map_contour_colour);	//  Javelin 6/19
 			}
 
 			y--;
@@ -797,8 +798,8 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
 
 				y = contour_samples;
 
-				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
-
+				// draw_2d_line (x1, z1, x2, z2, map_contour_colour);
+				draw_2d_half_thick_line(x1, z1, x2, z2, map_contour_colour);	//  Javelin 6/19
 			}
 
 			y--;
@@ -848,8 +849,8 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
 
 				y = contour_samples;
 
-				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
-
+				// draw_2d_line (x1, z1, x2, z2, map_contour_colour);
+				draw_2d_half_thick_line(x1, z1, x2, z2, map_contour_colour);	//  Javelin 6/19
 			}
 
 			y--;
@@ -887,7 +888,8 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
 
 				y = contour_samples;
 
-				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
+				// draw_2d_line (x1, z1, x2, z2, map_contour_colour);
+				draw_2d_half_thick_line(x1, z1, x2, z2, map_contour_colour);	//  Javelin 6/19
 			}
 
 			y--;
@@ -1961,7 +1963,8 @@ void draw_tsd_map_grid (vec3d* centre_position, float scale, rgb_colour colour)
 		if ((grid_loop >= wxmin) && (grid_loop <= wxmax))
 		{
 			x1 = (grid_loop - centre_position->x) * scale;
-			draw_2d_line(x1, y1, x1, y2, colour);
+			//  draw_2d_line(x1, y1, x1, y2, colour);
+			draw_2d_half_thick_line(x1, y1, x1, y2, colour);	//  Javelin 6/19
 		}
 	}
 
@@ -1974,12 +1977,13 @@ void draw_tsd_map_grid (vec3d* centre_position, float scale, rgb_colour colour)
 		if ((grid_loop >= wzmin) && (grid_loop <= wzmax))
 		{
 			y1 = (grid_loop - centre_position->z) * scale;
-			draw_2d_line(x1, y1, x2, y1, colour);
+			//  draw_2d_line(x1, y1, x2, y1, colour);
+			draw_2d_half_thick_line(x1, y1, x2, y1, colour);	//  Javelin 6/19
 		}
 	}
 
 	set_mono_font_colour (colour);
-	set_mono_font_type (MONO_FONT_TYPE_6X10);
+	set_mono_font_type (MONO_FONT_TYPE_8X14);
 
 	// map sector labels
 	for (grid_loop = inew_wxmin; grid_loop <= inew_wxmax; grid_loop += grid_spacing)
@@ -1999,7 +2003,7 @@ void draw_tsd_map_grid (vec3d* centre_position, float scale, rgb_colour colour)
 			{
 				sprintf(grid, "%02d", grid_loop / grid_spacing);
 				set_2d_mono_font_position(x2, y1);
-				set_mono_font_rel_position (-6.0, -8.0);
+				set_mono_font_rel_position (-6.0, -14.0);   // (-6.0, -8.0)  Javelin 6/19
 				print_mono_font_string(grid);
 			}
 

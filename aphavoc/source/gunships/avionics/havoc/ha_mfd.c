@@ -79,7 +79,7 @@ static mfd_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[11];
+	mfd_colours[14];					//  Javelin  6/19
 
 #define MFD_COLOUR1 (mfd_colours[0])
 #define MFD_COLOUR2 (mfd_colours[1])
@@ -92,6 +92,10 @@ static rgb_colour
 #define MFD_COLOUR_BLUE (mfd_colours[8])
 #define MFD_COLOUR_LGREY (mfd_colours[9])
 #define MFD_COLOUR_DGREY (mfd_colours[10])
+#define MFD_COLOUR_LIGHT_BLUE	(mfd_colours[11])		//  Javelin  6/19
+#define MFD_COLOUR_YELLOW    	(mfd_colours[12])		//  Javelin  6/19
+#define MFD_COLOUR_BLACK    	(mfd_colours[13])		//  Javelin  6/19
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,9 +112,8 @@ static rgb_colour
 #define MFD_WINDOW_X_MAX				(0.999)
 #define MFD_WINDOW_Y_MAX				(0.999)
 
-#define MFD_VIEWPORT_SMALL_SIZE		(114)
-//#define MFD_VIEWPORT_LARGE_SIZE		(332)
-#define MFD_VIEWPORT_LARGE_SIZE		(256)
+#define MFD_VIEWPORT_SMALL_SIZE			(114)
+#define MFD_VIEWPORT_LARGE_SIZE			(256)
 
 #define MFD_SMALL_TEXTURE_SIZE				(128)
 #define MFD_LARGE_TEXTURE_SIZE				(256)
@@ -135,6 +138,9 @@ static int
 	mfd_viewport_texture_y_org,
 	draw_large_mfd;
 
+static char
+	*main_horizon_mask = NULL;			//  Javelin  6/19
+
 #ifndef OGRE_EE
 static float
 	i_translate_3d,
@@ -146,6 +152,8 @@ static entity
 	*last_target = NULL;
 #endif
 
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,14 +164,79 @@ static screen
 	*mfd_texture_screen,
 	*eo_3d_texture_screen,
 	*eo_3d_texture_screen_over,
-	*overlaid_mfd_texture_screen;
+	*overlaid_mfd_texture_screen,
+	*export_screen,						//  Javelin  6/19
+	*flight_mfd_texture_screen;   		//  Javelin  6/19
 
 static rgb_colour
 	clear_mfd_colour;
 
+////////////////////////////////////////
+//
+// HEADING SCALE						Javelin  6/19
+//
+////////////////////////////////////////
+static char large_command_heading_carat[] =
+{
+	11,
+	6,
+	-5,
+	0,
+	0,0,0,0,0,1,0,0,0,0,0,
+	0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,1,1,1,1,1,0,0,0,
+	0,0,1,1,1,1,1,1,1,0,0,
+	0,1,1,1,1,0,1,1,1,1,0,
+	1,1,1,1,0,0,0,1,1,1,1,
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void initalize_horizon_mask(int width, char** mask)   //  Javelin  6/19
+{
+	int i,j;
+	char *row;
+	char* horizon_mask;
+	int height = width;
+	int circle_width = height * 0.8;
+	int cutoff_width = (height - circle_width) / 2;
+	int radius = (height / 2) - 2;
+	int centre_y = height / 2;
+
+	if (*mask)
+		safe_free(*mask);
+	horizon_mask = (char *) safe_malloc((width * height) + 4);
+	*mask = horizon_mask;
+
+	horizon_mask[0] = width;
+	horizon_mask[1] = height;
+	horizon_mask[2] = -(width / 2);
+	horizon_mask[3] = -(height / 2);
+
+	for (i = 0; i < height; i++)
+	{
+		row = &horizon_mask[4 + (i*width)];
+		for (j = 0; j < width; j++)
+		{
+			{
+				float height_val = fabs(((float)i - centre_y));
+				float x_limit = radius - sqrt((radius * radius) - (height_val * height_val));
+
+				x_limit = max((float) cutoff_width, x_limit);
+
+				if (j < x_limit || j >= (width - x_limit))
+					row[j] = 1;
+				else
+					row[j] = 0;
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void initialise_havoc_mfd (void)
 {
@@ -201,8 +274,8 @@ void initialise_havoc_mfd (void)
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5);
 
 	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
-
 	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	flight_mfd_texture_screen = create_system_texture_screen (MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);		//  Javelin  6/19
 
 	set_rgb_colour (MFD_COLOUR1, 255, 160,   0, 255);
 	set_rgb_colour (MFD_COLOUR2, 200, 130,   0, 255);
@@ -215,6 +288,9 @@ void initialise_havoc_mfd (void)
 	set_rgb_colour (MFD_COLOUR_RED, 128, 44, 49, 255);
 	set_rgb_colour (MFD_COLOUR_LGREY,200, 200, 200, 255);
 	set_rgb_colour (MFD_COLOUR_DGREY,20, 20, 20, 255);
+	set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  192, 192, 255, 255);		//  Javelin  6/19
+	set_rgb_colour (MFD_COLOUR_YELLOW,      220, 220,  20, 255);		//  Javelin  6/19
+	set_rgb_colour (MFD_COLOUR_BLACK ,        0,   0,   0, 255);		//  Javelin  6/19
 
 	if(command_line_export_mfd)
 	{
@@ -224,6 +300,8 @@ void initialise_havoc_mfd (void)
 	{
 		set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
 	}
+
+	initalize_horizon_mask(MFD_VIEWPORT_LARGE_SIZE * 0.55, &main_horizon_mask);   //  Javelin  6/19
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,8 +315,9 @@ void deinitialise_havoc_mfd (void)
 #endif
 
 	destroy_screen (mfd_texture_screen);
-
 	destroy_screen (overlaid_mfd_texture_screen);
+	destroy_screen (export_screen);					//  Javelin  6/19
+	destroy_screen (flight_mfd_texture_screen);		//  Javelin  6/19
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3403,12 +3482,1199 @@ void draw_havoc_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int dra
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// DRAW MFD ON TEXTURE
+// FLIGHT				Javelin  6/19	A lot of what follows is for the Exported FLIGHT MFD
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////
+//
+// HEADING SCALE			
+//
+////////////////////////////////////////
+
+static void draw_heading_scale (float heading, int draw_command_heading)
+{
+	float
+		y_position,
+		mfd_vp_x_min,
+		mfd_vp_x_max,
+		mod_heading_step_10,
+		x,
+		width,
+		i,
+		j;
+
+	int
+		loop,
+		int_heading_step_10;
+
+	char
+		s[20];
+
+	//
+	// adjust 2D environment for heading scale clipping
+	//
+
+	if (draw_large_mfd)
+	{
+		y_position = -0.85;
+	}
+	else
+	{
+		y_position = -0.8375;
+	}
+
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
+
+	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
+
+	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5));
+
+	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
+
+	//
+	// large and small MFD position
+	//
+
+
+	//
+	// draw heading scale line
+	//
+
+//	draw_2d_line (-0.5, y_position, 0.5, y_position, MFD_COLOUR1);
+
+	//
+	// large and small MFD differences
+	//
+
+	get_2d_float_screen_coordinates (0.0, y_position, &i, &j);
+
+	set_mono_font_type (MONO_FONT_TYPE_5X9);
+
+	//
+	// draw command heading carat
+	//
+
+	if (draw_command_heading)
+	{
+		if (!hokum_damage.navigation_computer)
+		{
+			entity
+				*wp;
+
+			wp = get_local_entity_current_waypoint (get_gunship_entity ());
+
+			if (wp)
+			{
+				vec3d
+					*gunship_position,
+					waypoint_position;
+
+				float
+					dx,
+					dz,
+					bearing,
+					command_heading;
+
+				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+
+				get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+
+				dx = waypoint_position.x - gunship_position->x;
+				dz = waypoint_position.z - gunship_position->z;
+
+				bearing = atan2 (dx, dz);
+
+				command_heading = bearing - heading;
+
+				if (command_heading > rad (180.0))
+				{
+					command_heading -= rad (360.0);
+				}
+				else if (command_heading < rad (-180.0))
+				{
+					command_heading += rad (360.0);
+				}
+
+				command_heading = bound (command_heading, rad (-20.0), rad (20.0));
+
+				get_2d_float_screen_coordinates (deg(command_heading) * (0.025), y_position + 0.05, &i, &j);
+
+				draw_mono_sprite (large_command_heading_carat, i, j + 1.0, MFD_COLOUR_LIGHT_BLUE);
+			}
+		}
+	}
+
+	//
+	// sort first major tick position (draw 2 major ticks either side of centre)
+	//
+
+	heading = deg (heading);
+
+	mod_heading_step_10 = fmod (heading, 10.0f);
+
+	int_heading_step_10 = ((int) (heading * 0.1) * 10);
+
+	int_heading_step_10 -= 40;
+
+	if (int_heading_step_10 < 0)
+	{
+		int_heading_step_10 += 360;
+	}
+
+	x = - (40.0 + mod_heading_step_10) * 0.025;
+
+	//
+	// draw heading scale ticks and heading value
+	//
+
+	for (loop = 0; loop < 20; loop++)
+	{
+		//
+		// major tick every 10 degrees
+		//
+
+		draw_2d_line (x, y_position + 0.1, x, y_position + 0.05, MFD_COLOUR_LIGHT_BLUE);
+
+		//
+		// minor tick every 5 degrees
+		//
+
+		draw_2d_line (x + 0.125, y_position + 0.1, x + 0.125, y_position + 0.075, MFD_COLOUR_LIGHT_BLUE);
+
+		//
+		// heading value ('0' displayed as '360')
+		//
+
+		if (int_heading_step_10 != 0)
+		{
+			sprintf (s, "%d", int_heading_step_10);
+		}
+		else
+		{
+			sprintf (s, "360");
+		}
+
+		set_2d_mono_font_position (x, y_position - 0.1);
+
+		width = get_mono_font_string_width (s);
+
+		set_mono_font_rel_position ((-width * 0.5) + 1.0, -10.0);
+
+		print_mono_font_string (s);
+
+		//
+		// next heading value
+		//
+
+		int_heading_step_10 += 10;
+
+		if (int_heading_step_10 == 360)
+		{
+			int_heading_step_10 = 0;
+		}
+
+		x += 0.25;
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+}
+
+
+static void draw_sideslip_scale (void)
+{
+	float
+		sideslip = kilometres_per_hour(current_flight_dynamics->velocity_x.value),
+		y_position,
+		mfd_vp_x_min,
+		mfd_vp_x_max,
+		mod_heading_step_10,
+		x,
+		width,
+		i,
+		j;
+
+	int
+		loop,
+		int_heading_step_10;
+
+	char
+		s[20];
+
+	//
+	// adjust 2D environment for heading scale clipping
+	//
+
+	y_position = -0.65;
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
+
+	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
+
+	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5));
+
+	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
+
+
+	get_2d_float_screen_coordinates (0.0, y_position, &i, &j);
+
+	set_mono_font_type (MONO_FONT_TYPE_5X7);
+
+
+	//
+	// sort first major tick position (draw 2 major ticks either side of centre)
+	//
+
+	mod_heading_step_10 = fmod (sideslip, 10.0f);
+	int_heading_step_10 = ((int) (sideslip * 0.1) * 10);
+	int_heading_step_10 -= 40;
+
+	x = - (40.0 + mod_heading_step_10) * 0.025;
+
+	//
+	// draw heading scale ticks and heading value
+	//
+
+	for (loop = 0; loop < 20; loop++)
+	{
+		//
+		// minor tick every 5 kph
+		//
+
+		draw_2d_line (x + 0.125, y_position + 0.025, x + 0.125, y_position - 0.025, MFD_COLOUR_LIGHT_BLUE);
+
+		sprintf (s, "%d", abs(int_heading_step_10));
+
+		set_2d_mono_font_position (x, y_position);
+		width = get_mono_font_string_width (s);
+		set_mono_font_rel_position ((-width * 0.5) + 1.0, -3.0);
+
+		print_mono_font_string (s);
+
+		//
+		// next heading value
+		//
+
+		int_heading_step_10 += 10;
+
+		if (int_heading_step_10 == 360)
+		{
+			int_heading_step_10 = 0;
+		}
+
+		x += 0.25;
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+}
+
+////////////////////////////////////////
+//
+// pitch ladder
+//
+////////////////////////////////////////
+
+#define PITCH_DATUM_X	((float) 0.0)
+#define PITCH_DATUM_Y	((float) 0.0)
+
+//                   P10 O (+ve)  O  P9
+//                                |
+//                                |
+// P1    P2    P3    P4    P5    P6    P7
+//  O-----O-----O-----O-----O-----O-----O
+//                                |
+//                                |
+//                                |
+//                   P11 O (-ve)  O  P8
+
+#define PITCH_BAR_X1		((float) +0.1000)
+#define PITCH_BAR_Y1		((float) +0.0000)
+#define PITCH_BAR_X2		((float) +0.1375)
+#define PITCH_BAR_Y2		((float) +0.0000)
+#define PITCH_BAR_X3		((float) +0.1750)
+#define PITCH_BAR_Y3		((float) +0.0000)
+#define PITCH_BAR_X4		((float) +0.2125)
+#define PITCH_BAR_Y4		((float) +0.0000)
+#define PITCH_BAR_X5		((float) +0.2500)
+#define PITCH_BAR_Y5		((float) +0.0000)
+#define PITCH_BAR_X6		((float) +0.2875)
+#define PITCH_BAR_Y6		((float) +0.0000)
+#define PITCH_BAR_X7		((float) +0.3250)
+#define PITCH_BAR_Y7		((float) +0.0000)
+#define PITCH_BAR_X8		((float) +0.2875)
+#define PITCH_BAR_Y8		((float) -0.0250)
+#define PITCH_BAR_X9		((float) +0.2875)
+#define PITCH_BAR_Y9		((float) +0.0250)
+#define PITCH_BAR_X10	((float) +0.265)
+#define PITCH_BAR_Y10	((float) +0.050)
+#define PITCH_BAR_X11	((float) +0.265)
+#define PITCH_BAR_Y11	((float) -0.050)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int limit_pitch (int pitch, int *step_direction)
+{
+	if (pitch > 9)
+	{
+		pitch -= 18;
+
+		pitch = -pitch;
+
+		*step_direction = -(*step_direction);
+	}
+	else if (pitch < -9)
+	{
+		pitch += 18;
+
+		pitch = -pitch;
+
+		*step_direction = -(*step_direction);
+	}
+
+	return (pitch);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static void draw_pitch_ladder (void)
+{
+	char
+		s[20];
+
+	int
+		int_pitch,
+		step_direction,
+		loop;
+
+	float
+		y_adjust_above_line,
+		y_adjust_below_line,
+		x_centre,
+		y_centre = 0.0,
+		size,
+		vp_size,
+		pitch,
+		mod_pitch,
+		tan_mod_pitch,
+		pitch_bar_scale,
+		roll,
+		u,
+		v,
+		x,
+		y,
+		left_edge,
+		right_edge,
+		upper_edge,
+		lower_edge,
+		x_scale,
+		y_scale,
+		x_horizon,
+		y_horizon,
+		x_10_deg_step,
+		y_10_deg_step,
+		x_adjust;
+
+	rgb_colour
+		sky_colour,
+		ground_colour;
+
+	if (command_line_colour_mfd)
+	{
+		sky_colour.red = 0;
+		sky_colour.green = 120;
+		sky_colour.blue = 192;
+		sky_colour.alpha = 255;
+
+		ground_colour.red =   0;
+		ground_colour.green =  90;
+		ground_colour.blue =  10;
+		ground_colour.alpha = 255;
+	}
+	else
+	{
+		sky_colour = MFD_COLOUR2;
+		ground_colour = MFD_COLOUR5;
+	}
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_type (MONO_FONT_TYPE_5X9);
+
+		y_adjust_above_line = -3.0;
+		y_adjust_below_line = -3.0;
+	}
+	else
+	{
+		set_mono_font_type (MONO_FONT_TYPE_3X6);
+
+		y_adjust_above_line = -3.0;
+		y_adjust_below_line = -1.0;
+	}
+
+	x_centre = 0.0;
+
+	size = 0.53;			//  0.59
+	pitch_bar_scale = 0.8;
+
+	//
+	//
+
+	get_2d_float_screen_coordinates (PITCH_DATUM_X, PITCH_DATUM_Y, &u, &v);
+	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+
+	//
+	// set 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * size, MFD_WINDOW_Y_MIN * size, MFD_WINDOW_X_MAX * size, MFD_WINDOW_Y_MAX * size);
+
+	vp_size = mfd_viewport_size * size * 0.5;
+	set_2d_viewport (mfd_env, u - (vp_size), v - vp_size, u + (vp_size), v + vp_size);
+
+	upper_edge = 0.5 * size;
+	left_edge = -(size * 0.5);
+	right_edge = (size * 0.5);
+	lower_edge = -0.5 * size;
+
+//	set_2d_viewport (mfd_env, u + left_edge, v + upper_edge, u + right_edge, v + lower_edge);
+
+
+	//
+	// pitch
+	//
+
+	{
+		float
+			x_horizon_abs,
+			y_horizon_abs,
+			tan_pitch;
+
+		int inverted = (roll < -rad(90)) || (roll > rad(90));
+
+		pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+		tan_pitch = -tan(pitch);
+		mod_pitch = fmod (pitch, rad (10.0f));
+		tan_mod_pitch = -tan (mod_pitch);
+		int_pitch = (int) (pitch * (1.0 / rad (10.0)));
+
+		//
+		// get x and y scale factors
+		//
+
+		x_scale = -sin (roll) * 1.5 * pitch_bar_scale;
+		y_scale = cos (roll) * 1.5 * pitch_bar_scale;
+
+		x_horizon = tan_mod_pitch * x_scale;
+		y_horizon = tan_mod_pitch * y_scale;
+
+		x_10_deg_step = tan (rad (10.0)) * x_scale;
+		y_10_deg_step = tan (rad (10.0)) * y_scale;
+
+		x_horizon_abs = tan_pitch * x_scale;
+		y_horizon_abs = tan_pitch * y_scale;
+
+		// draw horizon
+		set_2d_pixel(x_horizon_abs, y_horizon_abs, MFD_COLOUR1);
+		if (roll != -rad(90) && roll != rad(90))
+		{
+			float incline = tan(roll);
+			float left_y, right_y;
+			float start_x = -1.0, end_x = 1.0;
+
+			left_y = (x_horizon_abs - left_edge) * -incline;
+			right_y = (right_edge - x_horizon_abs) * incline;
+
+			if (incline < 0.0)
+			{
+				// find where horizon intersects top and bottom
+				start_x = x_horizon_abs + ((1 - y_horizon_abs) / incline);
+				end_x = x_horizon_abs + ((-2 - y_horizon_abs) / incline);
+			}
+
+			draw_2d_line(left_edge, left_y, right_edge, right_y, sys_col_red);
+
+			left_y = y_horizon_abs + (1.0 + x_horizon_abs) * -incline;
+			right_y = y_horizon_abs + (1.0 - x_horizon_abs) * incline;
+
+			if (inverted)
+			{
+				rgb_colour tmp = sky_colour;
+				sky_colour = ground_colour;
+				ground_colour = tmp;
+			}
+
+			draw_2d_filled_triangle(-1.0, left_y, -1.0, 1.0, 1.0, right_y, sky_colour);
+			draw_2d_filled_triangle(start_x, 1.0, 1.0, 1.0, 1.0, right_y, sky_colour);
+
+			draw_2d_filled_triangle(-1.0, left_y, end_x, -2.0, -1.0, -2.0, ground_colour);
+			draw_2d_filled_triangle(-1.0, left_y, 1.0, right_y, 1.0, -2.0, ground_colour);
+		}
+		else  // 90 degree bank
+		{
+			rgb_colour
+				*left_colour,
+				*right_colour;
+
+			if (roll == rad(90))
+			{
+				left_colour = &ground_colour;
+				right_colour = &sky_colour;
+			}
+			else
+			{
+				left_colour = &sky_colour;
+				right_colour = &ground_colour;
+			}
+
+			draw_2d_filled_triangle(x_horizon_abs, 1.0, 1.0, 1.0, 1.0, -1.0, *right_colour);
+			draw_2d_filled_triangle(1.0, -1.0, x_horizon_abs, -1.0, x_horizon_abs, 1.0, *right_colour);
+
+			draw_2d_filled_triangle(-1.0, 1.0, x_horizon_abs, 1.0, x_horizon_abs, -1.0, *left_colour);
+			draw_2d_filled_triangle(x_horizon_abs, -1.0, -1.0, -1.0, -1.0, 1.0, *left_colour);
+		}
+
+		////////////////////////////////////////
+		//
+		// draw pitch ladder
+		//
+		////////////////////////////////////////
+
+		step_direction = -1;
+
+		int_pitch = limit_pitch (int_pitch + 3, &step_direction);
+
+		x = x_horizon + x_10_deg_step * 3.0;
+		y = y_horizon + y_10_deg_step * 3.0;
+
+		set_2d_instance_rotation (mfd_env, roll);
+
+		for (loop = 0; loop < 7; loop++)
+		{
+			set_2d_instance_position (mfd_env, x, y);
+
+			switch (int_pitch)
+			{
+				////////////////////////////////////////
+				case 0:
+				////////////////////////////////////////
+				{
+					break;
+				}
+				////////////////////////////////////////
+				default:
+				////////////////////////////////////////
+				{
+					draw_2d_line (-PITCH_BAR_X2, PITCH_BAR_Y2, PITCH_BAR_X2, -PITCH_BAR_Y2, MFD_COLOUR_LIGHT_BLUE);
+
+					sprintf (s, "%d0", abs(int_pitch));
+					x_adjust = get_mono_font_string_width (s) * -0.5;
+
+					set_2d_mono_font_position (+PITCH_BAR_X4, +PITCH_BAR_Y4);
+					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
+					print_mono_font_string (s);
+
+					set_2d_mono_font_position (-PITCH_BAR_X4, +PITCH_BAR_Y4);
+					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
+					print_mono_font_string (s);
+
+					break;
+				}
+				////////////////////////////////////////
+				case 9:
+				////////////////////////////////////////
+				{
+					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
+					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
+
+					break;
+				}
+				////////////////////////////////////////
+				case -9:
+				////////////////////////////////////////
+				{
+					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR_LIGHT_BLUE);
+					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR_LIGHT_BLUE);
+
+					draw_2d_line (+PITCH_BAR_X3, +PITCH_BAR_Y3, +PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR_LIGHT_BLUE);
+					draw_2d_line (-PITCH_BAR_X3, +PITCH_BAR_Y3, -PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR_LIGHT_BLUE);
+
+					draw_2d_line (+PITCH_BAR_X5, +PITCH_BAR_Y5, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
+					draw_2d_line (-PITCH_BAR_X5, +PITCH_BAR_Y5, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
+
+					break;
+				}
+			}
+
+			int_pitch = limit_pitch (int_pitch + step_direction, &step_direction);
+
+			x -= x_10_deg_step;
+			y -= y_10_deg_step;
+		}
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	reset_2d_instance (mfd_env);
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+	draw_2d_mono_sprite (main_horizon_mask, x_centre, y_centre, MFD_COLOUR_BLACK);
+
+	//
+	// restore 2D environment
+	//
+
+	reset_2d_instance (mfd_env);
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+}
+
+static void draw_aircraft_datum(void)
+{
+	float y_centre = 0.0;
+
+	draw_2d_half_thick_line(0.15, y_centre, 0.4, y_centre, MFD_COLOUR_YELLOW);
+	draw_2d_half_thick_line(-0.15, y_centre, -0.4, y_centre, MFD_COLOUR_YELLOW);
+
+	draw_2d_half_thick_line(0.15, y_centre, 0.15, y_centre - 0.05, MFD_COLOUR_YELLOW);
+	draw_2d_half_thick_line(-0.15, y_centre, -0.15, y_centre - 0.05, MFD_COLOUR_YELLOW);
+
+	draw_2d_half_thick_line(0.5, y_centre, 0.7, y_centre, MFD_COLOUR_YELLOW);
+	draw_2d_half_thick_line(-0.5, y_centre, -0.7, y_centre, MFD_COLOUR_YELLOW);
+
+	draw_2d_half_thick_line(0.0, y_centre - 0.6, 0.0, y_centre - 0.75, MFD_COLOUR_YELLOW);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_altitude_scale (void)
+{
+	const float
+		y_centre = 0.0,
+		box_start = 0.7,
+		box_end = box_start + 0.25,
+		box_top = y_centre + 0.04,
+		box_bottom = y_centre - 0.04,
+		x1 = box_start,
+		x2 = x1 + 0.03,
+//		x3 = x1 + 0.125,
+		x5 = box_end,
+//		x4 = x5 - 0.03,
+		scale_top = y_centre + 0.6,
+		scale_bottom = y_centre - 0.6,
+		scale_step = 1.0 / 9.0;
+
+	float
+		v,
+		mfd_vp_y_min,
+		mfd_vp_y_max,
+		x_adjust,
+		y_adjust = y_centre,
+		radar_altitude = current_flight_dynamics->radar_altitude.value,
+		barometric_altitude = current_flight_dynamics->barometric_altitude.value,
+		altitude;
+
+
+	char
+		*format,
+		buffer[8];
+
+	int
+		u1, u2, v1, v2,
+		displayed_altitude = (int)((barometric_altitude + 5) / 10);
+
+
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+
+	// draw scale
+	get_2d_float_screen_x_coordinate (-y_centre, &v);
+
+	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
+
+	if (radar_altitude < 250.0)
+	{
+		format = "R%3d";
+		altitude = radar_altitude;
+		displayed_altitude = altitude;
+	}
+	else
+	{
+		format = "%04d";
+		altitude = barometric_altitude;
+		displayed_altitude = (int)((barometric_altitude + 5) / 10) * 10;
+	}
+
+	//
+	// draw scale
+	//
+
+	{
+		float scale_step_5 = altitude * 0.4;
+		int int_scale_step_5 = (int) scale_step_5;
+		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
+
+//		int tick_type = (int_scale_step_5 % 4) == 0;
+		float y = -(8.0 + mod_scale_step_5) * scale_step;
+		int loop;
+
+		int_scale_step_5 -= 8;
+
+		set_mono_font_type (MONO_FONT_TYPE_5X9);
+		y_adjust = -2.0;
+
+		for (loop = 0; loop <= 25; loop++)
+		{
+			if (int_scale_step_5 >= 0)
+			{
+				draw_2d_line (x1, y, x2, y, MFD_COLOUR_LIGHT_BLUE);
+
+				if ((int_scale_step_5 % 4) == 0)
+				{
+					float x_adjust;
+					char buffer[8];
+
+					sprintf(buffer, "%4d", (int_scale_step_5 * 5 / 2));
+					x_adjust = 2.0; //get_mono_font_string_width(buffer) + 2;
+
+					set_2d_mono_font_position (x2, y);
+					set_mono_font_rel_position (x_adjust, y_adjust);
+					print_mono_font_string(buffer);
+				}
+			}
+
+			int_scale_step_5++;
+			y += scale_step;
+		}
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+	// clear background area
+	get_2d_int_screen_coordinates (box_start, box_top, &u1, &v1);
+	get_2d_int_screen_coordinates (box_end, box_bottom, &u2, &v2);
+	set_block(u1, v1, u2, v2, MFD_COLOUR_BLUE);
+
+	// draw surrounding box
+	draw_2d_line(box_start, box_top, box_end, box_top, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_start, box_bottom, box_end, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_start, box_top, box_start, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_end, box_top, box_end, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+
+	// print digital readout
+
+	set_mono_font_type (MONO_FONT_TYPE_6X10);
+	y_adjust = -2.0;
+
+	sprintf(buffer, format, displayed_altitude);
+	x_adjust = -get_mono_font_string_width(buffer) - 1;
+
+	set_2d_mono_font_position (box_end, y_centre);
+	set_mono_font_rel_position (x_adjust, y_adjust);
+	print_mono_font_string(buffer);
+}
+
+static void draw_airspeed_scale (void)
+{
+	const float
+		y_centre = 0.0,
+		box_start = -0.95,
+		box_end = box_start + 0.25,
+		box_top = y_centre + 0.04,
+		box_bottom = y_centre - 0.04,
+		x1 = box_start,
+//		x2 = x1 + 0.03,
+//		x3 = x1 + 0.125,
+		x5 = box_end,
+		x4 = x5 - 0.03,
+		scale_top = y_centre + 0.6,
+		scale_bottom = y_centre - 0.6,
+		scale_step = 1.0 / 9.0;
+
+	float
+		v,
+		mfd_vp_y_min,
+		mfd_vp_y_max,
+		x_adjust,
+		y_adjust = y_centre,
+		airspeed = kilometres_per_hour(current_flight_dynamics->velocity_z.value);
+
+
+	char
+		buffer[8];
+
+	int
+		u1, u2, v1, v2;
+
+
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
+
+	// draw scale
+	get_2d_float_screen_x_coordinate (-y_centre, &v);
+
+	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
+	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
+
+	debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
+
+	//
+	// draw scale
+	//
+
+	{
+		float scale_step_5 = airspeed * 0.4;
+		int int_scale_step_5 = (int) scale_step_5;
+		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
+
+//		int tick_type = (int_scale_step_5 % 4) == 0;
+		float y = -(8.0 + mod_scale_step_5) * scale_step;
+		int loop;
+
+		int_scale_step_5 -= 8;
+
+		set_mono_font_type (MONO_FONT_TYPE_5X9);
+		y_adjust = -2.0;
+
+		for (loop = 0; loop <= 25; loop++)
+		{
+//			if (int_scale_step_5 > 0)
+			{
+				draw_2d_line (x4, y, x5, y, MFD_COLOUR_LIGHT_BLUE);
+
+				if ((int_scale_step_5 % 4) == 0)
+				{
+					float x_adjust;
+					char buffer[8];
+
+					sprintf(buffer, "%4d", (int_scale_step_5 * 5 / 2));
+					x_adjust = get_mono_font_string_width(buffer) + 2;
+
+					set_2d_mono_font_position (x4, y);
+					set_mono_font_rel_position (-x_adjust, y_adjust);
+					print_mono_font_string(buffer);
+				}
+			}
+
+			int_scale_step_5++;
+			y += scale_step;
+		}
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+	// clear background area
+	get_2d_int_screen_coordinates (box_start, box_top, &u1, &v1);
+	get_2d_int_screen_coordinates (box_end, box_bottom, &u2, &v2);
+	set_block(u1, v1, u2, v2, MFD_COLOUR_BLUE);
+
+	// draw surrounding box
+	draw_2d_line(box_start, box_top, box_end, box_top, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_start, box_bottom, box_end, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_start, box_top, box_start, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line(box_end, box_top, box_end, box_bottom, MFD_COLOUR_LIGHT_BLUE);
+
+	// print digital readout
+
+	set_mono_font_type (MONO_FONT_TYPE_6X10);
+	y_adjust = -2.0;
+
+	sprintf(buffer, "%.0f", airspeed);
+	x_adjust = -get_mono_font_string_width(buffer) - 1;
+
+	set_2d_mono_font_position (box_end, y_centre);
+	set_mono_font_rel_position (x_adjust, y_adjust);
+	print_mono_font_string(buffer);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////
+//
+// rate of climb scale
+//
+////////////////////////////////////////
+
+static char large_rate_of_climb_scale_pointer[] =
+{
+	5,
+	9,
+	-5,
+	-4,
+	0,0,0,0,1,
+	0,0,0,1,1,
+	0,0,1,1,1,
+	0,1,1,1,1,
+	1,1,1,1,1,
+	0,1,1,1,1,
+	0,0,1,1,1,
+	0,0,0,1,1,
+	0,0,0,0,1,
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_rate_of_climb_scale (void)
+{
+	float
+		xpos = 0.47,
+		y;
+
+	//
+	// draw scale
+	//
+
+	draw_2d_line (+xpos, +0.500, xpos + 0.050, +0.500, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, +0.400, xpos + 0.025, +0.400, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, +0.300, xpos + 0.025, +0.300, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, +0.200, xpos + 0.025, +0.200, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, +0.100, xpos + 0.025, +0.100, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, +0.000, xpos + 0.050, +0.000, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, -0.100, xpos + 0.025, -0.100, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, -0.200, xpos + 0.025, -0.200, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, -0.300, xpos + 0.025, -0.300, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, -0.400, xpos + 0.025, -0.400, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_line (+xpos, -0.500, xpos + 0.050, -0.500, MFD_COLOUR_LIGHT_BLUE);
+
+	//
+	// get indicator position (fsd +/- 10m/s)
+	//
+
+	y = current_flight_dynamics->world_velocity_y.value;
+
+	y = bound (y, -10.0, 10.0);
+
+	y *= 0.05;
+
+	draw_2d_mono_sprite(large_rate_of_climb_scale_pointer, xpos + 0.05, y, MFD_COLOUR_LIGHT_BLUE);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void display_waypoint_information (void)
+{
+	char
+		buffer[80];
+
+	entity
+		*wp;
+
+	vec3d
+		*gunship_position,
+		waypoint_position;
+
+	float
+		waypoint_range;
+
+	wp = get_local_entity_current_waypoint (get_gunship_entity ());
+
+	if (wp)
+	{
+		if (draw_large_mfd)
+		{
+			set_mono_font_type (MONO_FONT_TYPE_5X9);
+		}
+		else
+		{
+			set_mono_font_type (MONO_FONT_TYPE_5X7);
+		}
+
+		gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+
+		get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+
+		//
+		// waypoint id & range
+		//
+
+		waypoint_range = get_2d_range (gunship_position, &waypoint_position);
+
+		if (!hokum_damage.navigation_computer)
+		{
+			if (waypoint_range < 1000.0)
+			{
+				sprintf (buffer, "%c: %d M", get_local_entity_char_value (wp, CHAR_TYPE_TAG), (int) waypoint_range);
+			}
+			else if (waypoint_range < 100000.0)
+			{
+				int
+					i;
+
+				float
+					f;
+
+				//
+				// this is required to prevent rounding errors around the 100Km mark
+				//
+
+				i = (int) waypoint_range * (1.0 / 100.0);
+
+				f = (float) i * (1.0 / 10.0);
+
+				sprintf (buffer, "%c: %.1f KM", get_local_entity_char_value (wp, CHAR_TYPE_TAG), f);
+			}
+			else
+			{
+				sprintf (buffer, "%c: %d KM", get_local_entity_char_value (wp, CHAR_TYPE_TAG), (int) (waypoint_range * (1.0 / 1000.0)));
+			}
+		}
+		else
+		{
+			sprintf (buffer, "-:--.-");
+		}
+
+		set_2d_mono_font_position (1.0, -0.7);
+
+		set_mono_font_rel_position (-get_mono_font_string_width(buffer) - 4, 0.0);
+
+		print_mono_font_string (buffer);
+
+		//
+		// time to go
+		//
+
+		if ((current_flight_dynamics->velocity_z.value > 0.1) && (!hokum_damage.navigation_computer))
+		{
+			float
+				time_to_go,
+				hours,
+				minutes,
+				seconds;
+
+			time_to_go = waypoint_range / current_flight_dynamics->velocity_z.value;
+
+			get_digital_clock_values (time_to_go, &hours, &minutes, &seconds);
+
+			sprintf (buffer, "%02d:%02d:%02d", (int) hours, (int) minutes, (int) seconds);
+		}
+		else
+		{
+			strcpy (buffer, "--:--:--");
+		}
+
+		set_2d_mono_font_position (1.0, -0.8);
+
+		set_mono_font_rel_position (-get_mono_font_string_width(buffer) - 4, 0.0);
+
+		print_mono_font_string (buffer);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_flight_display_mfd (void)
+{
+	set_mono_font_colour (MFD_COLOUR_LIGHT_BLUE);
+
+	draw_pitch_ladder ();
+
+	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), TRUE);
+
+	draw_airspeed_scale();
+
+	draw_sideslip_scale();
+
+	draw_altitude_scale();
+
+	draw_rate_of_climb_scale ();
+
+	display_waypoint_information ();
+
+	draw_aircraft_datum();
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// DRAW MFD ON TEXTURE
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void draw_flight_mfd (void)			// Javelin 6/19  exported MFD
+{
+#ifndef OGRE_EE
+	set_system_texture_screen (flight_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+
+	//
+	// draw MFD on texture
+	//
+
+	set_active_screen (flight_mfd_texture_screen);
+
+	if (lock_screen (flight_mfd_texture_screen))
+	{
+      		set_block (0, 0, MFD_VIEWPORT_LARGE_SIZE - 1, MFD_VIEWPORT_LARGE_SIZE - 1, clear_mfd_colour);
+
+			draw_mfd_layout_grid ();
+
+		    draw_flight_display_mfd ();
+
+		unlock_screen (flight_mfd_texture_screen);
+	}
+
+	set_active_screen (video_screen);
+
+	export_screen = get_screen_of_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+	copy_export_mfd(export_screen, NULL);
+
+#endif
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void draw_havoc_mfd_on_texture (void)
 {
 #ifndef OGRE_EE
@@ -3602,11 +4868,15 @@ void draw_havoc_mfd_on_texture (void)
 	}
 
 	set_active_screen (video_screen);
+
 	if(command_line_export_mfd)
 	{
 		export_screen = get_screen_of_system_texture (TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
-		copy_export_mfd(export_screen,NULL);
+		copy_export_mfd(NULL, export_screen);				//  Javelin  6/19
+
+		draw_flight_mfd ();		//  Javelin  6/19
 	}
+
 #endif
 }
 

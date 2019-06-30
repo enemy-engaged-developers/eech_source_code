@@ -550,8 +550,6 @@ static void ddraw_flip_surface_export ( void )
 		case GUNSHIP_TYPE_HAVOC:
 		case GUNSHIP_TYPE_KA50:
 		case GUNSHIP_TYPE_HIND:
-			draw_one_mfd ( device, &d3d_export_mfd[0], command_line_export_mfd_single_pos[0], command_line_export_mfd_single_pos[1], command_line_export_mfd_single_pos[2], command_line_export_mfd_single_pos[3] );
-			break;
 		case GUNSHIP_TYPE_COMANCHE:
 		case GUNSHIP_TYPE_HOKUM:
 		case GUNSHIP_TYPE_APACHE:

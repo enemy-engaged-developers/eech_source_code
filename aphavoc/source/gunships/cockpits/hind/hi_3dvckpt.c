@@ -1233,10 +1233,10 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 	draw_hind_hud_on_texture ();
 
-	if (flags & VIRTUAL_COCKPIT_CRT_DISPLAY)
-	{
+	//if (flags & VIRTUAL_COCKPIT_CRT_DISPLAY)
+	//{
 		draw_hind_mfd_on_texture ();
-	}
+	//}
 
 	////////////////////////////////////////
 	//
@@ -1349,6 +1349,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 			animate_weapon_switch(selected_weapon);
 			rocket_salvo_switch->relative_pitch = get_mi24_rocket_salvo_switch_value();
+
 			get_mi24_map_caret_position(&map_scale->relative_position.x, &map_caret->relative_position.z);
 
 			{

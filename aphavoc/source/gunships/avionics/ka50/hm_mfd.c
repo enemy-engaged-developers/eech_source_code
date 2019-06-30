@@ -168,6 +168,7 @@ static rgb_colour
 #define MFD_WINDOW_X_MAX				(0.999)
 #define MFD_WINDOW_Y_MAX				(0.999)
 
+#define MFD_VIEWPORT_SIZE           (512) 
 #define LARGE_MFD_VIEWPORT_SIZE		(256)
 #define SMALL_MFD_VIEWPORT_SIZE		(128)
 
@@ -209,7 +210,8 @@ static screen
 	*small_ekran_display_texture_screen,
 	*eo_3d_texture_screen,
 	*eo_3d_texture_screen_over,
-	*full_mfd_texture_screen;
+	*full_mfd_texture_screen,
+	*export_screen;					//  Javelin  6/19
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7247,14 +7249,20 @@ void draw_ka50_mfd (void)
 	//
 	////////////////////////////////////////
 
-	//draw_mfd (shkval_mfd_texture_screen, &shkval_mfd_mode, KA50_MFD_LOCATION_SHKVAL);
+	draw_mfd (shkval_mfd_texture_screen, &shkval_mfd_mode, KA50_MFD_LOCATION_SHKVAL);
 
 	draw_mfd (abris_mfd_texture_screen, &abris_mfd_mode, KA50_MFD_LOCATION_ABRIS);
 
 	draw_text_display (ekran_display_texture_screen);
 
 	if (command_line_export_mfd)
-		copy_export_mfd(shkval_mfd_texture_screen, abris_mfd_texture_screen);
+	{
+		export_screen = get_screen_of_system_texture (TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_2);
+		copy_export_mfd(export_screen, NULL);  //  shkval
+
+		export_screen = get_screen_of_system_texture (TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
+		copy_export_mfd(NULL, export_screen);  //  abris
+	}
 #endif
 }
 
