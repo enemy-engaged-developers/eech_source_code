@@ -68,6 +68,7 @@ enum KA50_MFD_MODES
 {
 	KA50_MFD_MODE_OFF,
 	KA50_MFD_MODE_DAMAGED,
+	KA50_MFD_MODE_FLIR,			//  Javelin 7/19
 	KA50_MFD_MODE_LLLTV,
 	KA50_MFD_MODE_TSD,
 	KA50_MFD_MODE_ASE,
@@ -136,7 +137,7 @@ extern void toggle_ka50_ase_auto_page (void);
 
 extern void auto_page_ka50_ase_mfd (void);
 
-extern void select_ka50_eo_mfd (void);
+extern void select_ka50_eo_mfd (target_acquisition_systems system);	//  Javelin  7/19
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

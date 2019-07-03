@@ -137,6 +137,10 @@ void fully_repair_ka50_damage (void)
 
 	////////////////////////////////////////
 
+	hokum_damage.flir = FALSE;				//  Javelin  7/19
+
+	////////////////////////////////////////
+
 	ka50_damage.llltv = FALSE;
 
 	////////////////////////////////////////
@@ -243,6 +247,13 @@ void partially_repair_ka50_damage (void)
 	set_ka50_text_display_text ("", "", "");
 
 	fire_extinguisher_used = FALSE;
+
+	////////////////////////////////////////
+
+	if (ka50_damage.flir)					//  Javelin  7/19
+	{
+		ka50_damage.flir = frand1 () > 0.90;
+	}
 
 	////////////////////////////////////////
 
@@ -437,6 +448,29 @@ static void damage_systems (ka50_damage_flags damage)
 		*en;
 
 	en = get_gunship_entity ();
+
+	////////////////////////////////////////		//  Javelin  7/19
+
+	if (damage.flir)
+	{
+		if (!ka50_damage.flir)
+		{
+			activate_ka50_master_caution ();
+
+			ka50_damage.flir = TRUE;
+
+			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_ka50_text_display_text ("FLIR", "FAILURE", "");
+
+			play_client_server_warning_message (en, SPEECH_SYSTEM_FLIR_FAILURE);
+
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			{
+				select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
+			}
+		}
+	}
 
 	////////////////////////////////////////
 

@@ -72,27 +72,29 @@ union KA50_DAMAGE_FLAGS
 	struct
 	{
 		unsigned int
-			llltv						:1,	// 1
+			llltv					:1,	// 1
 			laser_designator		:1,	// 2
 			radar_jammer			:1,	// 3
 			infra_red_jammer		:1,	// 4
-			navigation_computer	:1,	// 5
+			navigation_computer		:1,	// 5
 			communications			:1,	// 6
 			radar_warning_system	:1,	// 7
-			head_up_display		:1,	// 8
+			head_up_display			:1,	// 8
 			helmet_mounted_sight	:1,	// 9
-			shkval_mfd			:1,	// 10
-			abris_mfd			:1,	// 11
+			shkval_mfd				:1,	// 10
+			abris_mfd				:1,	// 11
 			night_vision_goggles	:1,	// 12
 			gun_jammed				:1,	// 13
 			lh_outer_pylon			:1,	// 14
 			lh_inner_pylon			:1,	// 15
 			rh_outer_pylon			:1,	// 16
 			rh_inner_pylon			:1,	// 17
-			lh_chaff_dispensers	:1,	// 18
-			rh_chaff_dispensers	:1,	// 19
-			lh_flare_dispensers	:1,	// 20
-			rh_flare_dispensers	:1;	// 21
+			lh_chaff_dispensers		:1,	// 18
+			rh_chaff_dispensers		:1,	// 19
+			lh_flare_dispensers		:1,	// 20
+			rh_flare_dispensers		:1,	// 21
+			flir					:1;	// 22		//  Javelin  7/19
+
 	};
 };
 

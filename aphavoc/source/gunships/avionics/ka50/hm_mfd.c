@@ -82,6 +82,7 @@ static char
 	{
 		"KA50_MFD_MODE_OFF",
 		"KA50_MFD_MODE_DAMAGED",
+		"KA50_MFD_MODE_FLIR",		//  Javelin 7/19
 		"KA50_MFD_MODE_LLLTV",
 		"KA50_MFD_MODE_TSD",
 		"KA50_MFD_MODE_ASE",
@@ -154,7 +155,7 @@ static rgb_colour
 static rgb_colour
 	text_display_colours[2];
 
-#define TEXT_COLOUR1					(text_display_colours[0])
+#define TEXT_COLOUR1			(text_display_colours[0])
 #define TEXT_BACKGROUND_COLOUR	(text_display_colours[1])
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +169,6 @@ static rgb_colour
 #define MFD_WINDOW_X_MAX				(0.999)
 #define MFD_WINDOW_Y_MAX				(0.999)
 
-#define MFD_VIEWPORT_SIZE           (512) 
 #define LARGE_MFD_VIEWPORT_SIZE		(256)
 #define SMALL_MFD_VIEWPORT_SIZE		(128)
 
@@ -1347,6 +1347,92 @@ static void draw_sideslip_scale (void)
 
 ////////////////////////////////////////
 //
+// FLIR									//  Javelin  7/19
+//
+////////////////////////////////////////
+
+static display_3d_light_levels
+	flir_light_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	{
+		// WEATHERMODE_INVALID
+		{
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_DRY
+		{
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_HIGH,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_LIGHT_RAIN
+		{
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_HEAVY_RAIN
+		{
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_SNOW
+		{
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_LIGHT_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+		},
+	};
+
+static display_3d_noise_levels
+	flir_noise_levels[WEATHERMODE_LAST][NUM_DAY_SEGMENT_TYPES] =
+	{
+		// WEATHERMODE_INVALID
+		{
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_DRY
+		{
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_LIGHT_RAIN
+		{
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_HEAVY_RAIN
+		{
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_MEDIUM,	// DAY_SEGMENT_TYPE_NIGHT
+		},
+		// WEATHERMODE_SNOW
+		{
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAWN
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DAY
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_DUSK
+			DISPLAY_3D_NOISE_LEVEL_LOW,		// DAY_SEGMENT_TYPE_NIGHT
+		},
+	};
+
+////////////////////////////////////////
+//
 // LLLTV
 //
 ////////////////////////////////////////
@@ -1437,6 +1523,11 @@ static display_3d_noise_levels
 
 static int get_undamaged_eo_display_mode (ka50_mfd_modes mode)
 {
+	if ((mode == KA50_MFD_MODE_FLIR) && (!ka50_damage.flir))		//  Javelin  7/19
+	{
+		return (TRUE);
+	}
+
 	if ((mode == KA50_MFD_MODE_LLLTV) && (!ka50_damage.llltv))
 	{
 		return (TRUE);
@@ -1481,23 +1572,31 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	ASSERT (eo_3d_texture_screen);
 
 #ifdef OLD_EO
-	switch (eo->field_of_view)
+	switch (eo->field_of_view)			//  Javelin  7/19
 	{
 		case EO_FOV_NARROW:
 		{
-			zoom = 0.015;
+			zoom = 0.0165;
 
 			break;
 		}
 		case EO_FOV_MEDIUM:
 		{
-			zoom = 0.06;
+			zoom = 0.066;
+
+			break;
+		}
+		case EO_FOV_WIDE:
+		{
+			zoom = 0.3;
 
 			break;
 		}
 		default:
 		{
-			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+			//debug_fatal ("Invalid 3D field of view = %d", eo->field_of_view);
+			eo->field_of_view = EO_FOV_WIDE;
+			zoom = 0.3;
 
 			break;
 		}
@@ -1518,6 +1617,16 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	switch (system)
 	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		{
+			light_level = flir_light_levels[weather_mode][day_segment_type];
+
+			noise_level = flir_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_FLIR;
+
+			break;
+		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
 			light_level = llltv_light_levels[weather_mode][day_segment_type];
@@ -1642,23 +1751,29 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 	ASSERT (eo);
 
 #ifdef OLD_EO
-	switch (eo->field_of_view)
+	switch (eo->field_of_view)			//  Javelin  7/19
 	{
 		case EO_FOV_NARROW:
 		{
-			zoom = 0.015;
+			zoom = 0.0165;
 
 			break;
 		}
 		case EO_FOV_MEDIUM:
 		{
-			zoom = 0.06;
+			zoom = 0.066;
+
+			break;
+		}
+		case EO_FOV_WIDE:
+		{
+			zoom = 0.3;
 
 			break;
 		}
 		default:
 		{
-			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+			debug_fatal ("Invalid full-3D field of view = %d", eo->field_of_view);
 
 			break;
 		}
@@ -1679,6 +1794,14 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 
 	switch (system)
 	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		{
+			light_level = flir_light_levels[weather_mode][day_segment_type];
+
+			noise_level = flir_noise_levels[weather_mode][day_segment_type];
+
+			break;
+		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
 			light_level = llltv_light_levels[weather_mode][day_segment_type];
@@ -1849,6 +1972,12 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	switch (system)
 	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		{
+			print_mono_font_string ("FLIR");
+
+			break;
+		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		{
 			print_mono_font_string ("LLLTV");
@@ -1940,7 +2069,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		float level;
 
 #ifdef OLD_EO
-		switch (eo->field_of_view)
+		switch (eo->field_of_view)			//  Javelin  7/19
 		{
 			case EO_FOV_NARROW:
 			{
@@ -1954,9 +2083,15 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 				break;
 			}
+			case EO_FOV_WIDE:
+			{
+				level = 3;
+
+				break;
+			}
 			default:
 			{
-				debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+				debug_fatal ("Invalid LEVEL field of view = %d", eo->field_of_view);
 
 				break;
 			}
@@ -2508,6 +2643,43 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	draw_2d_line (0.45, 0, 0.45, -0.02, MFD_COLOUR2); // right
 
 	reset_2d_instance (mfd_env);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// FLIR													//  Javelin  7/19
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_3d_flir_mfd (int full_screen)			//  Javelin  7/19
+{
+	if (!ka50_damage.flir)
+	{
+		if (full_screen)
+		{
+			draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_FLIR);
+		}
+		else
+		{
+			draw_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_2d_flir_mfd (int valid_3d)			//  Javelin  7/19
+{
+	if (command_line_advanced_mfd && command_line_colour_mfd && draw_large_mfd)
+		draw_adv_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
+	else
+		draw_2d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, ka50_damage.flir, valid_3d);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3079,6 +3251,12 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 			case TARGET_ACQUISITION_SYSTEM_OFF:
 			{
 				s = "NO ACQ";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+			{
+				s = "EOS FLIR";
 
 				break;
 			}
@@ -4917,6 +5095,8 @@ static void draw_system_display_mfd (void)
 		width_adjust = 1.0;
 	}
 
+	y_adjust = print_mfd_system_message ("FLIR", "FAIL", ka50_damage.flir, y_adjust, width_adjust);  //  Javelin  7/19
+
 	y_adjust = print_mfd_system_message ("LLLTV", "FAIL", ka50_damage.llltv, y_adjust, width_adjust);
 
 	y_adjust = print_mfd_system_message ("LASER DESIGNATOR", "FAIL", ka50_damage.laser_designator, y_adjust, width_adjust);
@@ -6691,6 +6871,14 @@ static void draw_mfd (screen *mfd_screen, ka50_mfd_modes* mode, ka50_mfd_locatio
 				break;
 			}
 			////////////////////////////////////////
+			case KA50_MFD_MODE_FLIR:				//  Javelin  7/19
+			////////////////////////////////////////
+			{
+				draw_2d_flir_mfd (FALSE);
+
+				break;
+			}
+			////////////////////////////////////////
 			case KA50_MFD_MODE_LLLTV:
 			////////////////////////////////////////
 			{
@@ -7209,6 +7397,12 @@ void draw_ka50_mfd (void)
 			{
 				switch (get_mfd_mode_for_eo_sensor ())
 				{
+					case KA50_MFD_MODE_FLIR:			//  Javelin  7/19
+					{
+						draw_3d_flir_mfd (FALSE);
+
+						break;
+					}
 					case KA50_MFD_MODE_LLLTV:
 					{
 						draw_3d_llltv_mfd (FALSE);
@@ -7225,6 +7419,12 @@ void draw_ka50_mfd (void)
 
 					switch (get_mfd_mode_for_eo_sensor ())
 					{
+						case KA50_MFD_MODE_FLIR:			//  Javelin  7/19
+						{
+							draw_2d_flir_mfd (TRUE);
+
+							break;
+						}
 						case KA50_MFD_MODE_LLLTV:
 						{
 							draw_2d_llltv_mfd (TRUE);
@@ -7379,6 +7579,12 @@ void draw_ka50_full_screen_display (void)
 
 	switch (mode)
 	{
+		case KA50_MFD_MODE_FLIR:		//  Javelin  7/19
+		{
+			draw_3d_flir_mfd (TRUE);
+
+			break;
+		}
 		case KA50_MFD_MODE_LLLTV:
 		{
 			draw_3d_llltv_mfd (TRUE);
@@ -7438,6 +7644,12 @@ void draw_ka50_full_screen_display (void)
 
 		switch (mode)
 		{
+			case KA50_MFD_MODE_FLIR:		//  Javelin  7/19
+			{
+				draw_2d_flir_mfd (TRUE);
+
+				break;
+			}
 			case KA50_MFD_MODE_LLLTV:
 			{
 				draw_2d_llltv_mfd (TRUE);
@@ -7768,6 +7980,38 @@ static void draw_overlaid_mfd (screen *mfd_screen, ka50_mfd_modes mode, ka50_mfd
 
 				unlock_screen (mfd_screen);
 			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case KA50_MFD_MODE_FLIR:					//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			if (!ka50_damage.flir)
+			{
+				draw_full_screen_3d_eo_display (&ka50_flir, TARGET_ACQUISITION_SYSTEM_FLIR, DISPLAY_3D_TINT_FLIR);
+			}
+			else
+			{
+				draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
+			}
+
+			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+			set_active_screen (mfd_screen);
+
+			if (lock_screen (mfd_screen))
+			{
+				set_block (0, 0, int_mfd_viewport_size - 1, int_mfd_viewport_size - 1, clear_mfd_colour);
+
+				draw_mfd_layout_grid ();
+
+				draw_2d_flir_mfd (TRUE);
+
+				unlock_screen (mfd_screen);
+			}
+
+			set_pilots_full_screen_params (FALSE);
 
 			break;
 		}
@@ -8220,7 +8464,11 @@ static ka50_mfd_modes get_mfd_mode_for_eo_sensor (void)
 	ka50_mfd_modes
 		mfd_mode;
 
-	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_LLLTV)
+	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)		//  Javelin  7/19
+	{
+		mfd_mode = KA50_MFD_MODE_FLIR;
+	}
+	else if (eo_sensor == TARGET_ACQUISITION_SYSTEM_LLLTV)
 	{
 		mfd_mode = KA50_MFD_MODE_LLLTV;
 	}
@@ -8367,6 +8615,22 @@ static ka50_mfd_modes get_next_mfd_mode (ka50_mfd_modes mfd_mode, ka50_mfd_locat
 			break;
 		}
 		////////////////////////////////////////
+		case KA50_MFD_MODE_FLIR:					//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			next_mfd_mode = KA50_MFD_MODE_LLLTV;
+
+			break;
+		}
+		////////////////////////////////////////
+		case KA50_MFD_MODE_LLLTV:					//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			next_mfd_mode = KA50_MFD_MODE_FLIR;
+
+			break;
+		}
+		////////////////////////////////////////
 		case KA50_MFD_MODE_TSD:
 		////////////////////////////////////////
 		{
@@ -8463,6 +8727,22 @@ static ka50_mfd_modes get_previous_mfd_mode (ka50_mfd_modes mfd_mode, ka50_mfd_l
 		////////////////////////////////////////
 		{
 			previous_mfd_mode = KA50_MFD_MODE_DAMAGED;
+
+			break;
+		}
+		////////////////////////////////////////
+		case KA50_MFD_MODE_FLIR:					//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			previous_mfd_mode = KA50_MFD_MODE_LLLTV;
+
+			break;
+		}
+		////////////////////////////////////////
+		case KA50_MFD_MODE_LLLTV:					//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			previous_mfd_mode = KA50_MFD_MODE_FLIR;
 
 			break;
 		}
@@ -8716,18 +8996,44 @@ void auto_page_ka50_ase_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void select_ka50_eo_mfd (void)
+void select_ka50_eo_mfd (target_acquisition_systems system)		//  Javelin  7/19
 {
-	if (shkval_mfd_mode == KA50_MFD_MODE_LLLTV)
+	switch (system)
 	{
-		return;
-	}
-
-	if ((shkval_mfd_mode == KA50_MFD_MODE_OFF) && (!ka50_damage.shkval_mfd))
-	{
-		select_ka50_mfd_mode (get_mfd_mode_for_eo_sensor (), KA50_MFD_LOCATION_SHKVAL);
-
-		return;
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_OFF:
+		////////////////////////////////////////
+		{
+			select_ka50_mfd_mode (KA50_MFD_MODE_OFF, KA50_MFD_LOCATION_SHKVAL);
+			return;
+		}
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		
+		////////////////////////////////////////
+		{
+			select_ka50_mfd_mode (KA50_MFD_MODE_FLIR, KA50_MFD_LOCATION_SHKVAL);
+			return;
+		}
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+		////////////////////////////////////////
+		{
+			select_ka50_mfd_mode (KA50_MFD_MODE_LLLTV, KA50_MFD_LOCATION_SHKVAL);
+			return;
+		}
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_HMS:
+		////////////////////////////////////////
+		{
+			return;
+		}
+		////////////////////////////////////////
+		default:
+		////////////////////////////////////////
+		{
+			debug_fatal ("Invalid shkval targeting system = %d", system);
+			return;
+		}
 	}
 }
 

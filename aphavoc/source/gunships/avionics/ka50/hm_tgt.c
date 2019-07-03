@@ -113,11 +113,23 @@ static void deselect_ka50_target_acquisition_system (target_acquisition_systems 
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
-
+#ifdef OLD_EO
+			copy_eo_zoom(&ka50_flir, &ka50_llltv);
+#endif
+			break;
+		}
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:		//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			deactivate_common_eo ();
+#ifdef OLD_EO
+			copy_eo_zoom(&ka50_llltv, &ka50_flir);
+#endif
 			break;
 		}
 		////////////////////////////////////////
@@ -180,6 +192,26 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			if (!ka50_damage.flir)
+			{
+				target_acquisition_system = system;	//  above case name
+
+				activate_common_eo ();				//  sets eo_sensor
+
+				//if (command_line_targeting_system_auto_page)
+					select_ka50_eo_mfd (system);			//  Javelin  7/19
+
+				hud_mode = HUD_MODE_WEAPON;
+			}
+
+			damaged = ka50_damage.flir;
+
+			break;
+		}
+		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
@@ -189,8 +221,8 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				if (command_line_targeting_system_auto_page)
-					select_ka50_eo_mfd ();
+				//if (command_line_targeting_system_auto_page)
+					select_ka50_eo_mfd (system);			//  Javelin  7/19
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -261,6 +293,18 @@ void update_ka50_target_acquisition_system (void)
 			slave_common_eo_to_current_target ();
 
 			slave_ka50_eo_to_current_target ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			update_ka50_eo (&ka50_flir);
+
+			update_common_eo ();
+
+			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_FLIR);
 
 			break;
 		}
@@ -339,6 +383,7 @@ void update_ka50_target_acquisition_system (void)
 
 					break;
 				}
+				case TARGET_ACQUISITION_SYSTEM_FLIR:
 				case TARGET_ACQUISITION_SYSTEM_LLLTV:
 				{
 					los_to_target = TRUE;
@@ -380,6 +425,14 @@ void centre_ka50_target_acquisition_system (void)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
+		////////////////////////////////////////
+		{
+			centre_ka50_eo ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
@@ -411,6 +464,7 @@ void toggle_ka50_lock_target (void)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{
@@ -459,6 +513,7 @@ void set_ka50_lock_target (int lock)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:		//  Javelin  7/19
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
 		////////////////////////////////////////
 		{

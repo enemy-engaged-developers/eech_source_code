@@ -68,9 +68,11 @@
 
 #ifdef OLD_EO
 extern eo_params
+	ka50_flir,		//  Javelin  7/19
 	ka50_llltv;
 #else
 extern eo_params_dynamic_move
+	ka50_flir,		//  Javelin  7/19
 	ka50_llltv;
 #endif
 
@@ -102,6 +104,8 @@ extern void slave_ka50_eo_to_current_target (void);
 
 extern void inc_ka50_eo_zoom(void);
 extern void dec_ka50_eo_zoom(void);
+
+extern void toggle_ka50_eo_system(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

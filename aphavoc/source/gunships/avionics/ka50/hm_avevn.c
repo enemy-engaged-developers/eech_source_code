@@ -79,6 +79,15 @@ static void select_target_acquisition_system_off_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void select_target_acquisition_system_flir_event (event *ev)			//  Javelin  7/19
+{
+	select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_FLIR);		
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void select_target_acquisition_system_llltv_event (event *ev)
 {
 	select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_LLLTV);
@@ -547,9 +556,11 @@ void set_ka50_avionics_events (void)
 
 	set_event (DIK_DELETE, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
+	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event); //  Javelin  7/19
 
-	set_event (DIK_PRIOR, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
+	set_event (DIK_END,    MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event); //  Javelin  7/19
+
+	set_event (DIK_PRIOR,  MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
 	//
 	// repeated for programmable joysticks ...
@@ -557,7 +568,9 @@ void set_ka50_avionics_events (void)
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
-	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
+	set_event (DIK_4, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_flir_event); //  Javelin  7/19
+
+	set_event (DIK_5, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event); //  Javelin  7/19
 
 	//
 	// target acquisition system control

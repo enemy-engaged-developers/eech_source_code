@@ -1384,7 +1384,7 @@ void activate_common_eo (void)
 {
 	eo_target_locked = target_locked;
 
-	eo_sensor = target_acquisition_system;
+	eo_sensor = target_acquisition_system;	//  sets the eo_sensor here
 
 	// start full_eo_range by GCsDriver  08-12-2007
 //	if (command_line_eo_full_range)
