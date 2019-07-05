@@ -1516,9 +1516,9 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 					ambient_light.green = 0.0;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.2;		// 0.1  Javelin  7/19
-					main_light.green = 0.2;		// 0.1
-					main_light.blue = 0.2;		// 0.1
+					main_light.red = 0.15;		// 0.1  Javelin  7/19
+					main_light.green = 0.15;	// 0.1
+					main_light.blue = 0.15;		// 0.1
 
 					break;
 				}
@@ -1565,8 +1565,8 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 			main_3d_env->fog_end = min(1.5f * main_3d_env->fog_end, 12500.0f);
 			
-			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 2.5;  //  3  Javelin  7/19
-			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 2.5;  //  3
+			ambient_light.red = ambient_light.green = ambient_light.blue = (main_3d_env->ambient_light.red + main_3d_env->ambient_light.green + main_3d_env->ambient_light.blue) / 2.9;  //  3  Javelin  7/19
+			main_light.red = main_light.green = main_light.blue = (main_3d_env->main_3d_light.colour.red + main_3d_env->main_3d_light.colour.green + main_3d_env->main_3d_light.colour.blue) / 2.9;  //  3
 
 			direction.x = -visual_3d_vp->zv.x;
 			direction.y = -visual_3d_vp->zv.y;
