@@ -694,6 +694,74 @@ void draw_ka50_virtual_cockpit_instruments (void)
 
 	////////////////////////////////////////
 	//
+	// G METER
+	//
+	////////////////////////////////////////
+
+	search.search_depth = 0;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_GMETER_NEEDLE;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		float
+			gforce;
+
+		gforce = bound((current_flight_dynamics->g_force.value), -2.0, 4.0);
+
+		gforce *= rad (360.0) / 7.0;
+
+		search.result_sub_object->relative_roll = -gforce;
+	}
+
+	// Max G
+
+	search.search_depth = 0;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_GMAX_NEEDLE;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		float
+			gforce;
+
+		static float
+			gforce_max;
+
+		gforce = bound((current_flight_dynamics->g_force.value), -2.0, 4.0);
+
+		if (gforce > gforce_max) {
+			gforce_max = gforce;
+
+			search.result_sub_object->relative_roll = -gforce_max;
+		}
+	}
+
+	// Min G
+
+	search.search_depth = 0;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_GMIN_NEEDLE;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		float
+			gforce;
+
+		static float
+			gforce_min = 0.0;
+
+		gforce = bound((current_flight_dynamics->g_force.value), -2.0, 4.0);
+
+		if (gforce < gforce_min) {
+			gforce_min = gforce;
+
+			search.result_sub_object->relative_roll = -gforce_min;
+		}
+	}
+
+	////////////////////////////////////////
+	//
 	// Rotor RPM
 	//
 	////////////////////////////////////////
@@ -794,6 +862,71 @@ void draw_ka50_virtual_cockpit_instruments (void)
 		fuel_value *= rad (320.0) / 100.0;
 
 		search.result_sub_object->relative_roll = -fuel_value;
+	}
+
+	////////////////////////////////////////
+	//
+	// CLOCK
+	//
+	////////////////////////////////////////
+
+	{
+		float
+			tod,
+			hour_hand_value,
+			minute_hand_value,
+			second_hand_value;
+
+		tod = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+		get_analogue_clock_values (tod, &hour_hand_value, &minute_hand_value, &second_hand_value);
+
+		// Hour Hand
+
+		search.search_depth = 0;
+		search.search_object = virtual_cockpit_inst3d;
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_CLOCK_HOUR_NEEDLE;
+
+		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			float
+				hour;
+
+			hour = hour_hand_value * rad (360.0) / 12.0;
+
+			search.result_sub_object->relative_roll = -hour;
+		}
+
+		// Minute Hand
+
+		search.search_depth = 0;
+		search.search_object = virtual_cockpit_inst3d;
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_CLOCK_MINUTE_NEEDLE;
+
+		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			float
+				minute;
+
+			minute = minute_hand_value * rad (360.0) / 60.0;
+
+			search.result_sub_object->relative_roll = -minute;
+		}
+
+		// Second Hand
+
+		search.search_depth = 0;
+		search.search_object = virtual_cockpit_inst3d;
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_CLOCK_SECOND_NEEDLE;
+
+		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			float
+				second;
+
+			second = second_hand_value * rad (360.0) / 60.0;
+
+			search.result_sub_object->relative_roll = -second;
+		}
 	}
 
 }

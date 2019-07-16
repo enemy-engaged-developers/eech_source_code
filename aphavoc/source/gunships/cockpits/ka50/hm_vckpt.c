@@ -235,8 +235,8 @@ void update_ka50_virtual_cockpit (void)
 		}
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY: // TODO these aren't needed
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY: // TODO these aren't needed
 		{
 			cockpit_detail_level = COCKPIT_DETAIL_LEVEL_HIGH;
 
@@ -434,42 +434,6 @@ void update_ka50_virtual_cockpit (void)
 		search.result_sub_object->visible_object = draw_controls;
 	}
 
-	search.search_depth = 0;
-	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_JOYSTICK;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->visible_object = draw_controls;
-	}
-
-	search.search_depth = 0;
-	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_COLLECTIVE;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->visible_object = draw_controls;
-	}
-
-	search.search_depth = 0;
-	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_PEDAL;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->visible_object = draw_controls;
-	}
-
-	search.search_depth = 1;
-	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_PEDAL;
-
-	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		search.result_sub_object->visible_object = draw_controls;
-	}
-
 	////////////////////////////////////////
 	//
 	// update animations
@@ -504,15 +468,6 @@ void update_ka50_virtual_cockpit (void)
 		{
 			search.result_sub_object->visible_object = FALSE;
 		}
-
-		search.search_depth = 0;
-		search.search_object = virtual_cockpit_inst3d;
-		search.sub_object_index = OBJECT_3D_SUB_OBJECT_COCKPIT_WSO_HAND_STATIC;
-
-		if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		{
-			search.result_sub_object->visible_object = FALSE;
-		}
 	}
 }
 
@@ -528,8 +483,8 @@ void pre_render_ka50_virtual_cockpit_displays (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_HUD:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
 		{
 			break;
 		}
@@ -570,8 +525,8 @@ void draw_ka50_virtual_cockpit (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_HUD:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
+//		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
 		{
 			break;
 		}
