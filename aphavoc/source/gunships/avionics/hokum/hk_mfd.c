@@ -273,7 +273,8 @@ static entity
 static char
 	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
 	text_display_line2[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
-	text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH + 1];
+	text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
+	text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH + 1];		//  Javelin  7/19
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8857,6 +8858,9 @@ static void draw_text_display (screen *text_screen)
 			print_mono_font_string (text_display_line3);
 		}
 
+		if (command_line_shared_mem_export != 0)		//  Javelin  7/19
+			update_ekran_shared_mem (text_display_line1, text_display_line2, text_display_line3, text_display_line4);
+
 		unlock_screen (text_screen);
 	}
 
@@ -9477,11 +9481,16 @@ void set_hokum_text_display_text (char *s1, char *s2, char *s3)
 
 	strncpy (text_display_line3, s3, TEXT_DISPLAY_MAX_STRING_LENGTH);
 
+	strncpy (text_display_line4, "          ", TEXT_DISPLAY_MAX_STRING_LENGTH);
+
 	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
 
 	text_display_line2[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
 
 	text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+
+	text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+
 #endif
 }
 

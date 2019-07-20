@@ -195,7 +195,7 @@ void update_default_avionics_shared_mem (void)
 	gPtrSharedMemory->cockpit_lamps.default_lamps = default_lamps;
 }
 
-void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4)
+void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4)  //  L1, letter L then # 1
 {
 	if (gPtrSharedMemory == 0)
 		return;
@@ -251,6 +251,9 @@ void update_dynamics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
 		return;
+
+	gPtrSharedMemory->num_flares = get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_FLARE);		//  Javelin  7/19
+	gPtrSharedMemory->num_chaff = get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_CHAFF);		//  Javelin  7/19
 
 	gPtrSharedMemory->time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 

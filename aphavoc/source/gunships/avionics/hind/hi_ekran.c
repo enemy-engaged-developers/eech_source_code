@@ -286,6 +286,9 @@ void set_hind_ekran_display_text (char *s1, char *s2, char *s3, char *s4)
 
 		line4[MAX_STRING_LENGTH] = '\0';
 	}
+
+	if (command_line_shared_mem_export != 0)
+		update_ekran_shared_mem(s1, s2, s3, s4);	//  Javelin  7/19
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

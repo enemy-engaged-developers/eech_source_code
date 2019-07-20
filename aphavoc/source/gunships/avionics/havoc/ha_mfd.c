@@ -79,7 +79,9 @@ static mfd_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[14];					//  Javelin  6/19
+	mfd_colours[15],					//  Javelin  6/19
+	clear_hud_colour;					//  Javelin  7/19
+
 
 #define MFD_COLOUR1 (mfd_colours[0])
 #define MFD_COLOUR2 (mfd_colours[1])
@@ -95,6 +97,8 @@ static rgb_colour
 #define MFD_COLOUR_LIGHT_BLUE	(mfd_colours[11])		//  Javelin  6/19
 #define MFD_COLOUR_YELLOW    	(mfd_colours[12])		//  Javelin  6/19
 #define MFD_COLOUR_BLACK    	(mfd_colours[13])		//  Javelin  6/19
+#define MFD_COLOUR_ORANGE	  	(mfd_colours[14])		//  Javelin  7/19
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +162,7 @@ static entity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define OVERLAID_MFD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD1)
+#define OVERLAID_MFD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD2)	//  Javelin  7/19  
 
 static screen
 	*mfd_texture_screen,
@@ -166,7 +170,8 @@ static screen
 	*eo_3d_texture_screen_over,
 	*overlaid_mfd_texture_screen,
 	*export_screen,						//  Javelin  6/19
-	*flight_mfd_texture_screen;   		//  Javelin  6/19
+	*flight_mfd_texture_screen,   		//  Javelin  6/19
+	*mfd_engine_screen;					//  Javelin  7/19
 
 static rgb_colour
 	clear_mfd_colour;
@@ -276,6 +281,7 @@ void initialise_havoc_mfd (void)
 	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
 	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	flight_mfd_texture_screen = create_system_texture_screen (MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);		//  Javelin  6/19
+	mfd_engine_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_COMANCHE_MFD2, TEXTURE_TYPE_SINGLEALPHA);
 
 	set_rgb_colour (MFD_COLOUR1, 255, 160,   0, 255);
 	set_rgb_colour (MFD_COLOUR2, 200, 130,   0, 255);
@@ -283,14 +289,17 @@ void initialise_havoc_mfd (void)
 	set_rgb_colour (MFD_COLOUR4, 151, 100,   0, 255);
 	set_rgb_colour (MFD_COLOUR5, 140,  90,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,  80,  62,   8, 255);
-	set_rgb_colour (MFD_COLOUR_GREEN, 65, 165, 92, 255);
-	set_rgb_colour (MFD_COLOUR_BLUE, 14, 22, 59, 255);
-	set_rgb_colour (MFD_COLOUR_RED, 128, 44, 49, 255);
-	set_rgb_colour (MFD_COLOUR_LGREY,200, 200, 200, 255);
-	set_rgb_colour (MFD_COLOUR_DGREY,20, 20, 20, 255);
+	set_rgb_colour (MFD_COLOUR_GREEN,		65, 165, 92, 255);
+	set_rgb_colour (MFD_COLOUR_BLUE,		14, 22, 59, 255);
+	set_rgb_colour (MFD_COLOUR_RED,			128, 44, 49, 255);
+	set_rgb_colour (MFD_COLOUR_LGREY,		200, 200, 200, 255);
+	set_rgb_colour (MFD_COLOUR_DGREY,		20, 20, 20, 255);
 	set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  192, 192, 255, 255);		//  Javelin  6/19
 	set_rgb_colour (MFD_COLOUR_YELLOW,      220, 220,  20, 255);		//  Javelin  6/19
-	set_rgb_colour (MFD_COLOUR_BLACK ,        0,   0,   0, 255);		//  Javelin  6/19
+	set_rgb_colour (MFD_COLOUR_BLACK ,      0,   0,   0, 255);			//  Javelin  6/19
+	set_rgb_colour (clear_hud_colour,		255, 255, 255, 0);			//  Javelin  7/19
+	set_rgb_colour (MFD_COLOUR_ORANGE,      255, 123,  20, 255);		//  Javelin  7/19
+
 
 	if(command_line_export_mfd)
 	{
@@ -318,6 +327,7 @@ void deinitialise_havoc_mfd (void)
 	destroy_screen (overlaid_mfd_texture_screen);
 	destroy_screen (export_screen);					//  Javelin  6/19
 	destroy_screen (flight_mfd_texture_screen);		//  Javelin  6/19
+	destroy_screen (mfd_engine_screen);				//  Javelin  7/19
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5370,3 +5380,66 @@ int get_havoc_eo_display_visible (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_engine_display(void)		//  Javelin 7/19
+{
+	float
+		fvalue;
+
+	fvalue = bound (current_flight_dynamics->left_engine_torque.value, 0.0, 120.0);  //  TQ  L
+	draw_2d_box (-0.96, -0.81, -0.92, -0.81 +fvalue*1.6/120.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+
+	fvalue = bound (current_flight_dynamics->right_engine_torque.value, 0.0, 120.0);  //  TQ  R
+	draw_2d_box (-0.65, -0.81, -0.61, -0.81 +fvalue*1.6/120.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+
+	fvalue = bound (current_flight_dynamics->left_engine_temp.value, 0.0, 1000.0);  //  TG  L
+	if (fvalue<600)
+		draw_2d_box (-0.05, -0.89, -0.01, -0.89 +fvalue*0.92/1000.0, TRUE, FALSE, MFD_COLOUR_ORANGE);
+	else
+		draw_2d_box (-0.05, -0.89, -0.01, -0.89+0.552 +(fvalue-600)*2.75/1000.0, TRUE, FALSE, MFD_COLOUR_ORANGE);
+
+	fvalue = bound (current_flight_dynamics->right_engine_temp.value, 0.0, 1000.0);  //  TG  R
+	if (fvalue<600)
+		draw_2d_box ( 0.49, -0.89,  0.52, -0.89 +fvalue*0.92/1000.0, TRUE, FALSE, MFD_COLOUR_ORANGE);
+	else
+		draw_2d_box ( 0.49, -0.89,  0.52, -0.89+0.552 +(fvalue-600)*2.75/1000.0, TRUE, FALSE, MFD_COLOUR_ORANGE);
+
+	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);  //  NG  L
+	if (fvalue<60)
+		draw_2d_box ( 0.04, -0.89,  0.07, -0.89 +fvalue*1.25/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+	else
+		draw_2d_box ( 0.04, -0.89,  0.07, -0.89+0.375 +(fvalue-60)*3.0/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+
+	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);  //  NG  L
+	if (fvalue<60)
+		draw_2d_box ( 0.38, -0.89,  0.41, -0.89 +fvalue*1.25/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+	else
+		draw_2d_box ( 0.38, -0.89,  0.41, -0.89+0.375 +(fvalue-60)*3.0/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_engine_mfd_on_texture (void)		//  Javelin  7/19
+{
+	set_system_texture_screen (mfd_engine_screen, TEXTURE_INDEX_COMANCHE_MFD1);
+
+		set_active_screen (mfd_engine_screen);
+
+		if (lock_screen (mfd_engine_screen))
+		{
+			set_block (0, 0, mfd_viewport_size - 1, mfd_viewport_size - 1, clear_hud_colour);	//////  Blank out the MFD background, transparent
+
+				draw_engine_display ();
+
+			unlock_screen (mfd_engine_screen);
+		}
+
+		set_active_screen (video_screen);
+
+	//export_screen = get_screen_of_system_texture (TEXTURE_INDEX_COMANCHE_MFD1);  //  for testing only.
+	//copy_export_mfd(export_screen, NULL);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

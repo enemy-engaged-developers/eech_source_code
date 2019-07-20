@@ -21,14 +21,17 @@ typedef struct
  * please increase this number when changing the layout of the data,
  * it makes life so much easier for those using the data
  *******************************************************************/
-#define SHARED_MEM_DATA_VERSION 3
+#define SHARED_MEM_DATA_VERSION 4		//	Javelin 7/19 
 
 typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 {
 //	gunship_types
 	int
 		version,
-		current_gunship;		// this determines which lamp flags are valid in here..
+		current_gunship,		// this determines which lamp flags are valid in here..
+		
+		num_flares,				//  Javelin  7/19
+		num_chaff;				//  Javelin  7/19
 
 	float
 		time_of_day,
@@ -62,8 +65,8 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 
 	union helo_specific_strings	// ufd for blue ac (not comanche), rest for red (not for hokum)
 	{
-		char upfront_display[4][MAX_UFD_STRINGLEN + 1];
-		char ekran_display[4][MAX_EKRAN_STRINGLEN + 1];
+		char upfront_display[4][MAX_UFD_STRINGLEN + 1];  //  14 + 1 = 15
+		char ekran_display[4][MAX_EKRAN_STRINGLEN + 1];  //   9 + 1 = 10
 	} cockpit_strings;
 
 	union helo_specific	// current_gunship tells which it is..
@@ -104,7 +107,7 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 	} cockpit_lamps;
 
 	waypoint_data_t waypoint_data;
-	weapon_load_data_t weapon_load[MAX_WEAPON_LOAD_DATA];
+	weapon_load_data_t weapon_load[MAX_WEAPON_LOAD_DATA];  //  14
 } shared_memory_t;
 
 extern shared_memory_t* gPtrSharedMemory;

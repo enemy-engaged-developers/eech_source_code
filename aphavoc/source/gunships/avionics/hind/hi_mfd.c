@@ -809,6 +809,7 @@ static void draw_map_display(void)
 
 void draw_hind_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw_translucent_background)
 {
+	//  Empty, no Routine at all.
 }
 
 
@@ -824,6 +825,7 @@ void draw_hind_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw
 
 void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 {
+	//  Empty, no Routine at all.
 }
 
 #ifndef OGRE_EE

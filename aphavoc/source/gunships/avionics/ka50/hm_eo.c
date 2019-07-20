@@ -564,6 +564,20 @@ void centre_ka50_eo (void)
 
 void animate_ka50_eo (object_3d_instance *inst3d)
 {
+/*	object_3d_sub_object_search_data
+		search;
+
+	ASSERT (inst3d);
+
+	search.search_depth = 0;
+	search.search_object = inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_KA50_OPTICS;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		search.result_sub_object->relative_heading = eo_azimuth;
+		search.result_sub_object->relative_pitch = -eo_elevation;
+	}*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

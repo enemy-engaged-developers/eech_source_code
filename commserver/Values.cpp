@@ -84,14 +84,14 @@ Value GetHavocSpecificData(int command)
 		case 515: return lamp.weapons_management_flare_green;
 		case 516: return lamp.weapons_management_chaff_red;
 		case 517: return lamp.weapons_management_flare_red;
-		case 518: return lamp.warning_1;
+/*		case 518: return lamp.warning_1;
 		case 519: return lamp.warning_2;
 		case 520: return lamp.warning_3;
 		case 521: return lamp.warning_4;
 		case 522: return lamp.warning_5;
 		case 523: return lamp.warning_6;
 		case 524: return lamp.warning_7;
-		case 525: return lamp.warning_8;
+		case 525: return lamp.warning_8;	
 		case 526: return lamp.status_1;
 		case 527: return lamp.status_2;
 		case 528: return lamp.status_3;
@@ -109,7 +109,7 @@ Value GetHavocSpecificData(int command)
 		case 540: return lamp.status_15;
 		case 541: return lamp.status_16;
 		case 542: return lamp.status_17;
-		case 543: return lamp.status_18;
+		case 543: return lamp.status_18;	*/
 		case 544: return lamp.threat_warning_radar_type_1;
 		case 545: return lamp.threat_warning_radar_type_2;
 		case 546: return lamp.threat_warning_radar_type_3;
@@ -554,6 +554,8 @@ Value GetValue(int command)
 	{
 		switch (command)
 		{
+		case 18: return pMem->num_flares;			//  Javelin  7/19
+		case 19: return pMem->num_chaff;			//  Javelin  7/19
 		case 20: return pMem->time_of_day / 3600.f;
 		case 21: return pMem->time_of_day;
 		case 22: break; // plane string
@@ -582,6 +584,16 @@ Value GetValue(int command)
 		case 67: return pMem->right_engine_n1_rpm;
 		case 72: return pMem->left_engine_temp - 273.f;
 		case 73: return pMem->right_engine_temp - 273.f;
+
+		case 80: return pMem->cockpit_strings.upfront_display[0];		//  Javelin  7/19	14 characters + null
+		case 81: return pMem->cockpit_strings.upfront_display[1];		//  char *	
+		case 82: return pMem->cockpit_strings.upfront_display[2];
+		case 83: return pMem->cockpit_strings.upfront_display[3];
+		case 84: return pMem->cockpit_strings.ekran_display[0];			//  Javelin  7/19	9 or 11 characters + null
+		case 85: return pMem->cockpit_strings.ekran_display[1];			//  char *
+		case 86: return pMem->cockpit_strings.ekran_display[2];
+		case 87: return pMem->cockpit_strings.ekran_display[3];
+
 		case 451: return pMem->radar_altitude;
 		case 452: return pMem->combined_engine_rpm;
 		case 453: return pMem->combined_engine_torque;
