@@ -1160,7 +1160,7 @@ void get_pilot_head_viewpoint (void)
 			case GUNSHIP_TYPE_VIPER:
 			////////////////////////////////////////
 			{
-//VJ#	this does the proper viepoint?
+//VJ#	this does the proper viewpoint?
 				get_viper_crew_viewpoint ();
 
 				break;
@@ -1168,7 +1168,7 @@ void get_pilot_head_viewpoint (void)
 			case GUNSHIP_TYPE_KIOWA:
 			////////////////////////////////////////
 			{
-//VJ#	this does the proper viepoint?
+//VJ#	this does the proper viewpoint?
 				get_kiowa_crew_viewpoint ();
 
 				break;
