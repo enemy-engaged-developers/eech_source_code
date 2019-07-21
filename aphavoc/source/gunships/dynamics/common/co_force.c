@@ -603,7 +603,7 @@ void resolve_dynamic_forces (void)
 
 				// wash velocity out to zero
 				// level out helicopter
-				// level out pitch/yaw
+				// level out pitch/roll
 
 				current_flight_dynamics->input_data.cyclic_x.value = bound(-current_flight_dynamics->roll.value / rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_x.min, current_flight_dynamics->input_data.cyclic_x.max);
 				current_flight_dynamics->input_data.cyclic_y.value = bound((current_flight_dynamics->pitch.value - rad(5.0))/ rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_y.min, current_flight_dynamics->input_data.cyclic_y.max);
@@ -611,6 +611,8 @@ void resolve_dynamic_forces (void)
 				current_flight_dynamics->model_acceleration_vector.x = -(10.0 * get_model_delta_time ()) * current_flight_dynamics->model_motion_vector.x;
 				current_flight_dynamics->model_acceleration_vector.y = resultant_vertically;
 				current_flight_dynamics->model_acceleration_vector.z = -(10.0 * get_model_delta_time ()) * current_flight_dynamics->model_motion_vector.z;
+
+				current_flight_dynamics->angular_heading_velocity.value =-(10.0 * get_model_delta_time ()) * current_flight_dynamics->angular_heading_velocity.value;  //  Javelin  7/19
 
 				break;
 			}

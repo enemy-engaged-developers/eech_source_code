@@ -5406,13 +5406,13 @@ static void draw_engine_display(void)		//  Javelin 7/19
 
 	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);  //  NG  L
 	if (fvalue<60)
-		draw_2d_box ( 0.04, -0.89,  0.07, -0.89 +fvalue*1.25/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+		draw_2d_box ( 0.04, -0.89,  0.07, -0.89 +fvalue*0.688/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
 	else
 		draw_2d_box ( 0.04, -0.89,  0.07, -0.89+0.375 +(fvalue-60)*3.0/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
 
 	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);  //  NG  L
 	if (fvalue<60)
-		draw_2d_box ( 0.38, -0.89,  0.41, -0.89 +fvalue*1.25/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
+		draw_2d_box ( 0.38, -0.89,  0.41, -0.89 +fvalue*0.688/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
 	else
 		draw_2d_box ( 0.38, -0.89,  0.41, -0.89+0.375 +(fvalue-60)*3.0/110.0, TRUE, FALSE, MFD_COLOUR_YELLOW);
 
