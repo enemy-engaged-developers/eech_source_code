@@ -177,7 +177,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT2);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT1);
 
 			break;
 		}
@@ -292,7 +292,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT2);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT1);
 
 			break;
 		}
@@ -520,7 +520,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
 
 			break;
 		}
