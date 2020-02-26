@@ -2660,7 +2660,19 @@ int net_connectToMaster (char *serverName, short port, int servernum)
 {
         int sock;
         u_long ulServerAddr;
+		char *msg = malloc(128);
+		WSADATA wsaData;
+		int iResult;
 
+		// Initialize Winsock
+		iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+		if (iResult != 0) {
+	        #if DEBUG_MODULE
+			snprintf(msg, 128, "WSAStartup failed with error: %d", iResult);
+			debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, msg);
+			#endif
+		}
+	
         if (servernum==1)
         {
             debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: Connecting to primary master");
@@ -2684,7 +2696,14 @@ int net_connectToMaster (char *serverName, short port, int servernum)
             {
                 debug_colour_log (DEBUG_COLOUR_RED, "HEARTBEAT: ERROR connecting to secondary master!");
             }
-            return -1;
+
+	        #if DEBUG_MODULE
+			snprintf(msg, 128, "Socket failed with error: %d", WSAGetLastError());
+			debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, msg);
+			#endif
+			WSACleanup();
+
+			return -1;
         }
         if (servernum==1)
         {
@@ -2732,11 +2751,12 @@ debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: net_heartbeat called");
 
     direct_play_session_capabilities ();
     sprintf(versionBuffer, "%d.%d.%d%s", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
-    sprintf(TempStuff, "%s %s %s %i %i %s", "Z", "127.0.0.1", //The transmitted ip is disregarded anyway...
+    sprintf(TempStuff, "%s %s %s %i %i %s %i", "Z", "127.0.0.1", //The transmitted ip is disregarded anyway...
                                                  localplayer,
                                                  direct_play_session_max_players(),
                                                  direct_play_get_number_of_players(),
-                                                 versionBuffer);
+                                                 versionBuffer,
+												 get_global_current_language());
 
 debug_colour_log (DEBUG_COLOUR_SANDY_BROWN, "HEARTBEAT: sending: %s", TempStuff);
 
@@ -2897,6 +2917,8 @@ void net_uninit_heartbeat(void)
     if (mastersocket2 >= 0)
           closesocket (mastersocket2);
         mastersocket2 = -1;
+
+	WSACleanup();		
 }
 //-- Werewolf
 

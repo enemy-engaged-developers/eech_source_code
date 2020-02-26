@@ -666,7 +666,7 @@ static const struct config_option options[] =
 		SPECSTR(command_line_ip_address, set_ip_address, get_string) },
 	{ "usemaster", "", "Report game to internet masterserver (0 = off/private game, 1 = on, 2 = show only/private) (def = 0, recommended = 1)",
 		INT(command_line_report_to_masterserver) },
-	{ "pss", "primary_server_setting", "primary masterserver internet address (def = eech.dsl-komi.ru)",
+	{ "pss", "primary_server_setting", "primary masterserver internet address (def = eech.online)",
 		STR(command_line_primary_server_setting) },
 	{ "sss", "secondary_server_setting", "secondary masterserver internet address",
 		STR(command_line_secondary_server_setting) },

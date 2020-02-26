@@ -324,8 +324,8 @@ char
 	command_line_game_initialisation_phase_filename [128]		= "\0",
 	command_line_debug_log_name[100]									= "DEBUG.LOG",
 	command_line_ip_address[128]										= "\0",
-	command_line_primary_server_setting[128]						= "eech.dsl-komi.ru",  //VJ for werewolf 030403, default value changed 141107
-	command_line_secondary_server_setting[128]					= "",  //VJ for werewolf 030403, default value changed 141107
+	command_line_primary_server_setting[128]						= "eech.online",
+	command_line_secondary_server_setting[128]					= "",
 	command_line_server_log_filename [128]			= "\0";	// Jabberwock 031119 Server log
 
 
