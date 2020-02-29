@@ -105,6 +105,105 @@ static void update_rotors (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void update_fuel_weight (entity *en)
+{
+	helicopter
+		*raw;
+	float fuel_delta, fuel_economy;
+	
+	if (get_comms_model() != COMMS_MODEL_SERVER || !get_local_entity_int_value (en, INT_TYPE_MOBILE_MOVING) || get_local_entity_int_value (en, INT_TYPE_LANDED))
+		return;
+
+	raw = (helicopter *) get_local_entity_data (en);
+
+	fuel_economy = get_local_entity_float_value (en, FLOAT_TYPE_FUEL_ECONOMY);
+	fuel_delta = fuel_economy / 60.0 * get_delta_time ();
+	fuel_delta *= raw->main_rotor_rpm / 50.0;
+
+	raw->fuel_supply_level -= fuel_delta;
+
+	// OUT OF FUEL, TAKE HELICOPTER DOWN
+	if (raw->fuel_supply_level <= 0.0) {
+		kill_client_server_entity (en);
+
+		#if DEBUG_MODULE || DEBUG_SUPPLY
+		debug_log ("HC_UPDT: %s out of fuel", get_local_entity_string (en, STRING_TYPE_FULL_NAME));
+		#endif
+	}
+	
+	// 20 MINS FUEL RESERVE RETURN HOME
+	else if ((raw->fuel_supply_level / fuel_economy) <= 20.0) {
+		entity
+			*group,
+			*guide,
+			*task,
+			*wp,
+			*current_wp;
+
+		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+
+		if (group) {
+			guide = get_local_group_primary_guide (group);
+			if (guide) {
+				task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
+				if (task) {
+					switch (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE)) {
+						case ENTITY_SUB_TYPE_TASK_NOTHING:
+						case ENTITY_SUB_TYPE_TASK_ADVANCE:
+						case ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE:
+						case ENTITY_SUB_TYPE_TASK_BAI:
+						case ENTITY_SUB_TYPE_TASK_BARCAP:
+						case ENTITY_SUB_TYPE_TASK_BDA:
+						case ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT:
+						case ENTITY_SUB_TYPE_TASK_COASTAL_PATROL:
+						case ENTITY_SUB_TYPE_TASK_COMBAT_AIR_PATROL:
+						//case ENTITY_SUB_TYPE_TASK_ENGAGE:
+						case ENTITY_SUB_TYPE_TASK_ESCORT:
+						case ENTITY_SUB_TYPE_TASK_FREE_FLIGHT:
+						case ENTITY_SUB_TYPE_TASK_GROUND_STRIKE:
+						//case ENTITY_SUB_TYPE_TASK_LANDING:
+						//case ENTITY_SUB_TYPE_TASK_LANDING_HOLDING:
+						case ENTITY_SUB_TYPE_TASK_OCA_STRIKE:
+						case ENTITY_SUB_TYPE_TASK_OCA_SWEEP:
+						case ENTITY_SUB_TYPE_TASK_RECON:
+						case ENTITY_SUB_TYPE_TASK_REPAIR:
+						//case ENTITY_SUB_TYPE_TASK_RETREAT:
+						case ENTITY_SUB_TYPE_TASK_SEAD:
+						case ENTITY_SUB_TYPE_TASK_SUPPLY:
+						//case ENTITY_SUB_TYPE_TASK_TAKEOFF:
+						//case ENTITY_SUB_TYPE_TASK_TAKEOFF_HOLDING:
+						//case ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING:
+						//case ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER:
+						case ENTITY_SUB_TYPE_TASK_TROOP_INSERTION:
+							current_wp = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
+							ASSERT (current_wp);
+							wp = current_wp;
+
+							while (get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT)) {
+								wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
+							}
+
+							// CHECK IF GROUP HEADING HOME ALREADY
+							if (current_wp == wp || !get_local_entity_child_pred (current_wp, LIST_TYPE_WAYPOINT) || get_local_entity_child_pred (current_wp, LIST_TYPE_WAYPOINT) == wp)
+								break;
+
+							#if DEBUG_MODULE
+							debug_log ("HC_UPDT: %s low fuel, task %s cancelled", get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_string (task, STRING_TYPE_FULL_NAME));
+							#endif
+
+							group_return_to_base (group);
+							break;
+					}
+				}
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void update_server (entity *en)
 {
 	entity
@@ -185,6 +284,8 @@ static void update_server (entity *en)
 				{
 					update_rotors (en);
 
+					update_fuel_weight (en);
+					
 					update_aircraft_loading_doors (en);
 
 					update_aircraft_cargo_doors (en);

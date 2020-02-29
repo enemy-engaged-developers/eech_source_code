@@ -447,6 +447,8 @@ void assign_entity_to_user (entity *en)
 		fuel = get_local_entity_float_value (en, FLOAT_TYPE_FUEL_SUPPLY_LEVEL);
 
 		set_current_flight_dynamics_fuel_weight (fuel);
+		
+		current_flight_dynamics->fuel_weight.modifier = ceil(fuel / get_local_entity_float_value (en, FLOAT_TYPE_FUEL_DEFAULT_WEIGHT) * 4.0) / 4.0;
 
 		restore_helicopter_entity (en);
 

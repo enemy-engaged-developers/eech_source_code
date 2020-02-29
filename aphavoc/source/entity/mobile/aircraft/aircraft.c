@@ -325,7 +325,9 @@ void assess_aircraft_damage_level (entity *en, int old_damage_level, int new_dam
 				{
 					task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
+					#if DEBUG_MODULE
 					debug_log("TASK PRIORITY %f", task->task_data->task_priority);
+					#endif
 					if (task->task_data->task_priority <= 5.0)
 						group_return_to_base (group);
 				}
