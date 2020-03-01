@@ -139,7 +139,7 @@ dynamics_damage_type
 			"Left engine fire",
 			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE,
 			0.6,
-			0.05,
+			0.2,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -148,7 +148,7 @@ dynamics_damage_type
 			"Right engine fire",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE,
 			0.6,
-			0.05,
+			0.2,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -157,7 +157,7 @@ dynamics_damage_type
 			"Low Hydraulics pressure",
 			DYNAMICS_DAMAGE_LOW_HYDRAULICS,
 			0.7,
-			0.0,
+			0.05,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -166,7 +166,7 @@ dynamics_damage_type
 			"Stabiliser",
 			DYNAMICS_DAMAGE_STABILISER,
 			0.75,
-			0.1,
+			0.05,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -184,7 +184,7 @@ dynamics_damage_type
 			"Low oil pressure",
 			DYNAMICS_DAMAGE_LOW_OIL_PRESSURE,
 			0.8,
-			0.0,
+			0.05,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -202,7 +202,7 @@ dynamics_damage_type
 			"Avionics",
 			DYNAMICS_DAMAGE_AVIONICS,
 			0.7,
-			0.0,
+			0.05,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -229,7 +229,7 @@ dynamics_damage_type
 			"APU",
 			DYNAMICS_DAMAGE_APU,
 			0.0,
-			0.1,
+			0.05,
 			30.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -247,7 +247,7 @@ dynamics_damage_type
 			"Secondary hydralics",
 			DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS,
 			0.05,
-			0.0,
+			0.05,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -1046,7 +1046,8 @@ int get_current_dynamics_fatal_damage (void)
 {
 
 	float
-		fatal_damage_counter;
+		fatal_damage_counter,
+		fatal_damage_threshold;
 
 	int
 		damage_count,
@@ -1080,6 +1081,13 @@ int get_current_dynamics_fatal_damage (void)
 
 		this_damage = this_damage << 1;
 	}
+	
+	// if both engines damaged or fuel leak while fire
+	if ((damage & DYNAMICS_DAMAGE_LEFT_ENGINE && damage & DYNAMICS_DAMAGE_RIGHT_ENGINE || damage & DYNAMICS_DAMAGE_FUEL_LEAK) && 
+		(damage & DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE || damage & DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE) )
+	{
+		fatal_damage_counter += 0.25;
+	}
 
 	#if DEBUG_MODULE
 
@@ -1087,8 +1095,14 @@ int get_current_dynamics_fatal_damage (void)
 
 	#endif
 
+	if (get_local_entity_int_value (get_gunship_entity(), INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_EASY)
+		fatal_damage_threshold = 1.51;
+	else if (get_local_entity_int_value (get_gunship_entity(), INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_MEDIUM)
+		fatal_damage_threshold = 1.26;
+	else
+		fatal_damage_threshold = 1.01;
 
-	return (fatal_damage_counter >= 1.0) ? TRUE : FALSE;
+	return (fatal_damage_counter >= fatal_damage_threshold) ? TRUE : FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1101,10 +1115,26 @@ void update_dynamics_at_keysite (void)
 	unsigned int
 		model_damage,
 		this_damage;
+	float repair_time;
+	float refueling_rate;
 
 	if (!get_local_entity_int_value (get_gunship_entity(), INT_TYPE_ALIVE))
 		return;
 		
+	if (get_local_entity_int_value (get_gunship_entity(), INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_EASY) {
+		repair_time = 0.5 * dynamics_damage_database [repairing_damage_count].repair_time;
+		refueling_rate = 2.0 * REFUELING_RATE;
+	}
+	else if (get_local_entity_int_value (get_gunship_entity(), INT_TYPE_DIFFICULTY_LEVEL) == GAME_DIFFICULTY_MEDIUM) {
+		repair_time = 0.75 * dynamics_damage_database [repairing_damage_count].repair_time;
+		refueling_rate = 1.5 * REFUELING_RATE;
+	}
+	else {
+		repair_time = dynamics_damage_database [repairing_damage_count].repair_time;
+		refueling_rate = REFUELING_RATE;
+	}
+					
+
 	if (current_flight_dynamics->repairing)
 	{
 		if (current_flight_dynamics->repairing_damage != DYNAMICS_DAMAGE_NONE)
@@ -1153,7 +1183,7 @@ void update_dynamics_at_keysite (void)
 			{
 				if ((model_damage & this_damage) && (dynamics_damage_database [repairing_damage_count].repairable))
 				{
-					current_flight_dynamics->damage_repair_time = damage_repair_time = dynamics_damage_database [repairing_damage_count].repair_time * frand1();
+					current_flight_dynamics->damage_repair_time = damage_repair_time = repair_time * (0.5 + 0.5 * frand1());
 					current_flight_dynamics->repairing_damage = this_damage;
 
 					break;
@@ -1184,14 +1214,14 @@ void update_dynamics_at_keysite (void)
 		{
 			if (!current_fuel_level)
 				current_fuel_level = current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier;
-			current_flight_dynamics->fuel_weight.value -= 10 * REFUELING_RATE * get_delta_time ();
+			current_flight_dynamics->fuel_weight.value -= 10 * refueling_rate * get_delta_time ();
 		}
 		else if (current_flight_dynamics->fuel_weight.value <= 0.99 * current_flight_dynamics->fuel_weight.max * current_flight_dynamics->fuel_weight.modifier && 
 				current_flight_dynamics->fuel_weight.value <= 0.99 * available_fuel)
 		{
 			if (!current_fuel_level)
 				current_fuel_level = current_flight_dynamics->fuel_weight.value;
-			current_flight_dynamics->fuel_weight.value += REFUELING_RATE * get_delta_time ();
+			current_flight_dynamics->fuel_weight.value += refueling_rate * get_delta_time ();
 			debug_log ("DYNAMICS: refueling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, available_fuel);
 		}
 		else
@@ -1588,86 +1618,6 @@ void repair_damage_model (unsigned int damage)
 					break;
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
-
-//					switch (current_flight_dynamics->sub_type)
-//					{
-//
-//						case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
-//						{
-//
-//							apache_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
-//						{
-//
-//							havoc_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
-//						{
-//
-//							comanche_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-//						{
-//
-//							hokum_restore_damage_values ();
-//
-//							break;
-//						}
-//					////Moje 030527 Start
-//
-//						case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
-//						{
-//
-//							blackhawk_restore_damage_values ();
-//
-//							break;
-//						}
-//					////Moje 030527 End
-//					////moje 030612 start
-//						case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
-//						{
-//
-//							hind_restore_damage_values ();
-//
-//							break;
-//						}
-//					////Moje 030612 end
-//					////Moje 030816 Start
-//
-//						case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
-//						{
-//
-//							ah64a_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-//						{
-//							ka50_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
-//						{
-//							viper_restore_damage_values ();
-//
-//							break;
-//						}
-//						case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
-//						{
-//							kiowa_restore_damage_values ();
-//
-//							break;
-//						}
-//					////Moje 030816 end
-//					}
 
 					#if DYNAMICS_DEBUG
 
