@@ -621,13 +621,15 @@ static void set_window_size ( HWND hwnd, int width, int height, int d3d )
 	rc.right = width;
 	rc.bottom = height;
 
+	debug_log("Window size %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
 	AdjustWindowRectEx ( &rc, GetWindowStyle ( hwnd ), GetMenu ( hwnd ) != NULL, GetWindowExStyle ( hwnd ) );
 
 	rc.right += d3d_data.x[d3d] - rc.left;
-	rc.bottom += d3d_data.x[d3d] - rc.top;
+	rc.bottom += d3d_data.y[d3d] - rc.top;
 	rc.left = d3d_data.x[d3d];
 	rc.top = d3d_data.y[d3d];
 
+	debug_log("Window position %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
 	SetWindowPos ( hwnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE );
 
 	if ( hwnd == application_window )
