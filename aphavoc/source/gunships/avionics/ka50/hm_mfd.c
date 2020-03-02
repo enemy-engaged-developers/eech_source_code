@@ -68,6 +68,8 @@
 
 #define OLD_EO
 
+#define DEBUG_MODULE 0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,8 +212,7 @@ static screen
 	*small_ekran_display_texture_screen,
 	*eo_3d_texture_screen,
 	*eo_3d_texture_screen_over,
-	*full_mfd_texture_screen,
-	*export_screen;					//  Javelin  6/19
+	*full_mfd_texture_screen;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5929,7 +5930,9 @@ static void draw_airspeed_scale (void)
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 
-	debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
+	#if DEBUG_MODULE
+		debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
+	#endif
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
 
@@ -7258,6 +7261,7 @@ void draw_ka50_mfd (void)
 	// support for high resolution mfd's
 	int
 		large_mfd;
+	screen *export_screen;						//  Javelin  6/19
 
 	if (!command_line_high_res_mfd)
 	{
