@@ -704,7 +704,8 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 				if (new_weapon_count <= 0)
 				{
 					#if !DEMO_VERSION
-					if (get_local_entity_int_value (get_session_entity (), INT_TYPE_INFINITE_WEAPONS))
+					if (get_local_entity_int_value (get_session_entity (), INT_TYPE_INFINITE_WEAPONS) ||
+							get_global_avionics_realism_level () == AVIONICS_REALISM_LEVEL_SIMPLE && weapon_database[weapon_sub_type].weapon_class & WEAPON_CLASS_DECOY)
 					{
 						weapon_config_types
 							config_type;

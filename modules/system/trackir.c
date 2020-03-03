@@ -180,8 +180,15 @@ int __cdecl query_TIR_active()
 {
 	if (dllLoadedOK == FALSE)
 		return 0;
+	
+	if (!gpfNP_QueryTIRActive())
+		return 0;
+	
+	// ENABLED BUT NOT USED
+	if ((float)gpfNP_GetYaw() == 0.0 && (float)gpfNP_GetPitch() == 0.0)
+		return 0;
 
-	return gpfNP_QueryTIRActive();
+	return 1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

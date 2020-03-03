@@ -66,6 +66,8 @@
 
 #include "project.h"
 
+#define DEBUG_MODULE 0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +171,6 @@ static screen
 	*eo_3d_texture_screen,
 	*eo_3d_texture_screen_over,
 	*overlaid_mfd_texture_screen,
-	*export_screen,						//  Javelin  6/19
 	*flight_mfd_texture_screen,   		//  Javelin  6/19
 	*mfd_engine_screen;					//  Javelin  7/19
 
@@ -325,7 +326,6 @@ void deinitialise_havoc_mfd (void)
 
 	destroy_screen (mfd_texture_screen);
 	destroy_screen (overlaid_mfd_texture_screen);
-	destroy_screen (export_screen);					//  Javelin  6/19
 	destroy_screen (flight_mfd_texture_screen);		//  Javelin  6/19
 	destroy_screen (mfd_engine_screen);				//  Javelin  7/19
 }
@@ -4360,7 +4360,9 @@ static void draw_airspeed_scale (void)
 	mfd_vp_y_min = v - (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 	mfd_vp_y_max = v + (0.5 * mfd_viewport_size * (scale_top - scale_bottom) * 0.5);
 
-	debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
+	#if DEBUG_MODULE
+		debug_log("min: %.02f, max: %.02f", mfd_vp_y_min, mfd_vp_y_max);
+	#endif
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_vp_y_min, mfd_viewport_x_max, mfd_vp_y_max);
 
@@ -4655,6 +4657,7 @@ static void draw_flight_display_mfd (void)
 void draw_flight_mfd (void)			// Javelin 6/19  exported MFD
 {
 #ifndef OGRE_EE
+	screen *export_screen;						//  Javelin  6/19
 	set_system_texture_screen (flight_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 
 	//

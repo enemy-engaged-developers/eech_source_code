@@ -376,6 +376,8 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 		if (get_local_entity_int_value (source, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 		{
+			float max_launch_angle_error;
+
 			weapon_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_VECTOR);
 
 			weapon_to_intercept_point_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR);
@@ -384,7 +386,14 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 			theta = fabs (acos (theta));
 
-			if (theta > weapon_database[selected_weapon_type].max_launch_angle_error)
+			if (get_global_avionics_realism_level() == AVIONICS_REALISM_LEVEL_SIMPLE)
+				max_launch_angle_error = min(0.75 * weapon_database[selected_weapon_type].max_seeker_limit, 2.0 * weapon_database[selected_weapon_type].max_launch_angle_error);
+			else if (get_global_avionics_realism_level() == AVIONICS_REALISM_LEVEL_ADVANCED)
+				max_launch_angle_error = min(0.75 * weapon_database[selected_weapon_type].max_seeker_limit, 1.5 * weapon_database[selected_weapon_type].max_launch_angle_error);
+			else
+				max_launch_angle_error = weapon_database[selected_weapon_type].max_launch_angle_error;
+
+			if (theta > max_launch_angle_error)
 			{
 				weapon_lock_type = WEAPON_LOCK_SEEKER_LIMIT;
 

@@ -978,13 +978,8 @@ int assign_task_to_group_members (entity *group, entity *guide, unsigned int val
 
 			notify_local_entity (ENTITY_MESSAGE_TASK_ASSIGNED, member, task);
 
-			if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_INSERTION)
-			{
-				int troops = group_database[get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].ai_stats.troop_space;
-				
-				ASSERT (troops > 0 && troops <= 12);
-				
-				set_client_server_entity_int_value (member, INT_TYPE_TROOPS_ONBOARD, troops);
+			if (get_local_entity_type (member) == ENTITY_TYPE_HELICOPTER) {
+				prepare_helicopter_for_task(member, task, group, guide);
 			}
 		}
 		
@@ -1310,6 +1305,79 @@ int check_group_members_awake (entity *group)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void prepare_helicopter_for_task(entity *en, entity *task, entity *group, entity *guide) {
+	helicopter
+		*raw;
+	waypoint
+		*wp_object;
+	entity
+		*wp;
+	vec3d
+	   *wp_pos,
+		*last_pos = NULL,
+		temp_pos;
+	float
+		range = 0,
+		time,
+		fuel_amount,
+		fuel_level,
+		fuel_supply;
+		
+	raw = (helicopter *) get_local_entity_data (en);
+			
+	#if DEBUG_MODULE || DEBUG_SUPPLY
+	debug_log ("task assigned to helicopter: %s", get_local_entity_string (task, STRING_TYPE_FULL_NAME));
+	#endif
 
+	// PLACE TROOPS INSIDE HELICOPTER
+	if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_INSERTION)
+	{
+		int troops = group_database[get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].ai_stats.troop_space;
 
+		ASSERT (troops > 0 && troops <= 12);
+
+		set_client_server_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD, troops);
+	}
+	
+	// CALCULATE AMOUNT OF FUEL
+	if (get_local_entity_int_value (en, INT_TYPE_LANDED)) {
+		wp = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
+
+		while (wp) {
+			wp_object = (waypoint *) get_local_entity_data (wp);
+			wp_pos = get_local_entity_vec3d_ptr (wp, VEC3D_TYPE_POSITION);
+			if (wp_object->position_type != POSITION_TYPE_RELATIVE && last_pos) {
+				range += get_point_to_point_distance(&temp_pos, wp_pos, last_pos);
+			}
+			else if (wp_object->position_type == POSITION_TYPE_RELATIVE) {
+				range += get_3d_vector_magnitude (wp_pos);
+			}
+			
+			if (wp_object->position_type != POSITION_TYPE_RELATIVE)
+				last_pos = wp_pos;
+
+			wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
+		}
+		
+		if (range > 10 && range < 999999) {
+			time = range / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY) / 60.0 + 15.0;
+			fuel_amount = time * get_local_entity_float_value (en, FLOAT_TYPE_FUEL_ECONOMY);
+			fuel_level = fuel_amount / get_local_entity_float_value (en, FLOAT_TYPE_FUEL_DEFAULT_WEIGHT);
+			fuel_level = bound(ceil(fuel_level * 4.0) / 4.0, 0.5, 1.0);
+			fuel_supply = fuel_level * get_local_entity_float_value (en, FLOAT_TYPE_FUEL_DEFAULT_WEIGHT);
+			
+			ASSERT(fuel_supply > 1.0);
+			
+			#if DEBUG_SUPPLY || DEBUG_MODULE
+			debug_log ("Required amount of fuel for %s: %f (%f m), fuel level: %f / %f", get_local_entity_string (en, STRING_TYPE_FULL_NAME), fuel_amount, range, fuel_supply, raw->fuel_supply_level);
+			#endif
+
+			raw->fuel_supply_level = fuel_supply;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

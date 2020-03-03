@@ -4,7 +4,7 @@
 // (c) 2003 Playspoon
 // ------------------
 
-#include <sys/time.h>
+#include <time.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +15,6 @@
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <netdb.h>
-#include <sys/wait.h>
 #include <arpa/inet.h>
 
 unsigned addr_len, numbytes = 0;
@@ -23,6 +22,7 @@ typedef struct
 {
     char Address[100];
     char Name[256];
+    int Language;
     int MaxClients;
     int CurClients;
     char Version[256];
@@ -45,18 +45,18 @@ int MaxServerAge = 240; //Servers are removed after 240 seconds of inactivity
 
 #define FALSE 0
 #define TRUE 1
-#define LOG 1
+#define LOG 0
 #define WEB_PAGE 1
 #define GADGET_PAGE 1
 
-const char header1[3000] = {"<HTML><HEAD><TITLE>Enemy Engaged Server List</TITLE><ALKALINE skip> \
+const char header1[3000] = {/*"<HTML><HEAD><TITLE>Enemy Engaged Server List</TITLE><ALKALINE skip> \
 <META content=\"A list of all active EECH multiplayer servers\" \
 name=description> \
-<LINK href=\"eechmaster.css\" rel=stylesheet type=text/css></ALKALINE> \
 <META content=\"skiptext skipmeta\" name=alkaline> \
 <BODY bgColor=#000000 leftMargin=4 text=#000000 topMargin=4 marginheight=4 marginwidth=4> \
-<CENTER><br><img src=\"masterserver.jpg\"><br><br> \
-      <TABLE class=t5 border=1 borderColorDark=#464646 cellPadding=0 cellSpacing=0 width=700> \
+<CENTER><br><img src=\"masterserver.jpg\"><br><br> \*/
+      "<LINK href=\"eechmaster.css\" rel=stylesheet type=text/css></ALKALINE> \
+	  <TABLE class=t5 border=1 borderColorDark=#464646 cellPadding=0 cellSpacing=0 width=700> \
         <TBODY> \
         <TR bgColor=#9090f0> \
           <TD align=middle borderColor=#c0c0c0><FONT face=Arial size=5><B> Server List \
@@ -198,7 +198,7 @@ void WriteServerList(void)
     FILE *f;
 
 #if WEB_PAGE
-	if (f=fopen("//var//www//index.html", "w"))
+	if (f=fopen("//var//www//html//index.html", "w"))
 	{
 		for(i=0; i<=(maxservers+5); i++)
 			if (Servers[i].isUsed != -1)
@@ -221,7 +221,7 @@ void WriteServerList(void)
 				fprintf(f, "%s", step1a);
 				else
 				fprintf(f, "%s", step1b);
-				fprintf(f, "%s", Servers[i].Name);
+				fprintf(f, "%s <img src=\"/flags/%i.png\"/>", Servers[i].Name, Servers[i].Language);
 				fprintf(f, "%s", step2);
 				fprintf(f, "%i", Servers[i].CurClients);
 				fprintf(f, "%s", step3);
@@ -241,7 +241,7 @@ void WriteServerList(void)
 #endif
 	
 #if GADGET_PAGE	
-	if (f=fopen("//var//www//gadget.txt", "w"))
+	if (f=fopen("//var//www//html//gadget.txt", "w"))
 	{
 		for(i=0; i<=(maxservers+5); i++)
 			if (Servers[i].isUsed != -1)
@@ -264,15 +264,14 @@ void WriteServerList(void)
 void WriteLog(const char s1[])
 {
     FILE *f;
-	time_t rawtime;
-	struct tm *info;
+	time_t rawtime;   
 
-	time( &rawtime );
-	info = localtime( &rawtime );
+	time ( &rawtime );
+	struct tm *timeinfo = localtime ( &rawtime );
     
-	if (f=fopen("//var//log//eechlog", "a"))
+	if (f=fopen("//var//www//html//eechlog.txt", "a"))
     {
-        fprintf(f, "%s    %s", asctime(info), s1);
+        fprintf(f, "%s%s\r\n", asctime(timeinfo), s1);
         fclose(f);
     }
 
@@ -314,14 +313,15 @@ void ProcessServerHeartbeat(void)
     int TempMaxClients;
     int TempCurClients;
     char TempVersion[256];
+	int TempLanguage = 0;
     int i;
     int found = FALSE;
 
     if (strlen(ReceiveBuffer) < 10)
 		return;
 
-    sscanf(ReceiveBuffer, "%s %s %s %i %i %s", header,
-	TempAddress, TempName, &TempMaxClients, &TempCurClients, TempVersion);
+    sscanf(ReceiveBuffer, "%s %s %s %i %i %s %i", header,
+	TempAddress, TempName, &TempMaxClients, &TempCurClients, TempVersion, &TempLanguage);
 
     sprintf(TempAddress, "%s", inet_ntoa(from.sin_addr));
 
@@ -345,6 +345,7 @@ void ProcessServerHeartbeat(void)
 			}
 
 			sprintf(Servers[i].Name, "%s", TempName);
+			Servers[i].Language = TempLanguage;
 			Servers[i].MaxClients = TempMaxClients;
 			Servers[i].CurClients = TempCurClients;
 			Servers[i].Age = 0;
@@ -360,6 +361,7 @@ void ProcessServerHeartbeat(void)
 			if (Servers[i].isUsed==-1)
 			{
 				sprintf(Servers[i].Name, "%s", TempName);
+				Servers[i].Language = TempLanguage;
 				sprintf(Servers[i].Address, "%s", TempAddress);
 				Servers[i].MaxClients = TempMaxClients;
 				Servers[i].CurClients = TempCurClients;
@@ -476,6 +478,10 @@ int main(void)
 				{
 					sprintf(SendBuffer, "Unknown Command!");
 					sendto(ServerSocket, SendBuffer ,strlen(SendBuffer),0,(struct sockaddr *)&from, sizeof(struct sockaddr));
+
+					char buf[64];
+					snprintf(buf, 64, "Unknown Command: %d\n", ReceiveBuffer[0]);
+					WriteLog(buf);
 				}
 			}
 		}

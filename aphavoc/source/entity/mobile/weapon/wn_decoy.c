@@ -188,10 +188,40 @@ float get_decoy_timer_restart_value (weapon_decoy_types type)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_weapon_locked_onto_decoy (weapon_decoy_types type)
+int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 {
 	int
 		locked;
+	float coefficient = 1.0;
+	game_difficulty_settings difficulty;
+
+	entity
+		*launcher,
+		*pilot;
+
+	// get game difficulty level (use player's own level)
+
+	launcher = get_local_entity_parent (sender, LIST_TYPE_LAUNCHED_WEAPON);
+
+	if (launcher)
+	{
+		if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+		{
+			pilot = get_local_entity_first_child (launcher, LIST_TYPE_AIRCREW);
+
+			if (pilot)
+			{
+				difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL);
+
+				if (difficulty == GAME_DIFFICULTY_EASY) {
+					coefficient = 0.1;
+				}
+				else if (difficulty == GAME_DIFFICULTY_MEDIUM) {
+					coefficient = 0.5;
+				}
+			}
+		}
+	}
 
 	switch (type)
 	{
@@ -207,15 +237,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_CHAFF:
 		////////////////////////////////////////
 		{
-			#if 0
-
-			locked = frand1 () > 0.9;
-
-			#else
-
-			locked = frand1 () < (0.1 * command_line_chaff_effectiveness);
-
-			#endif
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_chaff_effectiveness);
 
 			break;
 		}
@@ -223,15 +245,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_FLARE:
 		////////////////////////////////////////
 		{
-			#if 0
-
-			locked = frand1 () > 0.9;
-
-			#else
-
-			locked = frand1 () < (0.1 * command_line_flare_effectiveness);
-
-			#endif
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_flare_effectiveness);
 
 			break;
 		}
@@ -239,15 +253,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_SMOKE_GRENADE:
 		////////////////////////////////////////
 		{
-			#if 0
-
-			locked = frand1 () < 0.1;
-
-			#else
-
-			locked = frand1 () < (0.1 * command_line_smoke_effectiveness);
-
-			#endif
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_smoke_effectiveness);
 
 			break;
 		}

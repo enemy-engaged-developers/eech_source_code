@@ -695,23 +695,8 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR))
 	{
-
-		// 0.2 defines the buildup
-		force = sfrand1 () * exp (0.2 * (velocity_z_value - current_flight_dynamics->velocity_z.max));
-
-		// scale on blade pitch.
-		force *= 0.5 + 0.5 * ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) / (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
-
-		if (fabs (force) > 2.0)
+		if (velocity_z_value - current_flight_dynamics->velocity_z.max > 0)
 		{
-			if (frand1() < (fabs (force) - 2.0) * get_delta_time())
-				dynamics_damage_model (DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
-
-			force = bound (force, -2.0, 2.0);
-		}
-		else if (fabs (force) > 1.0)
-		{
-
 			static float
 				time = 0.0;
 
@@ -726,17 +711,28 @@ void update_common_attitude_dynamics (void)
 
 				time = DYNAMICS_EXCEEDING_VNE_SPEECH_TIME;
 			}
+
+			// 1.1 is smooth coefficient
+			force = sfrand1 () * (exp (100 * (velocity_z_value - 1.1 * current_flight_dynamics->velocity_z.max) / current_flight_dynamics->velocity_z.max) - 1);
+
+			// scale on blade pitch.
+			force *= 0.25 + 0.75 * ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) / (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
+
+			if (!get_current_dynamics_options (DYNAMICS_OPTIONS_RETREATING_BLADE_STALL))
+				force = bound(force, -0.5, 0.5);
+			else
+				force = bound(force, -10.0, 10.0);
+
+			position.x = -rotor_radius;
+			position.y = 0.0;
+			position.z = sfrand1() * rotor_radius;
+
+			direction.x = sfrand1() * current_flight_dynamics->rotor_rotation_direction;
+			direction.y = current_flight_dynamics->rotor_rotation_direction;
+			direction.z = sfrand1() * current_flight_dynamics->rotor_rotation_direction;
+
+			add_dynamic_force ("Sonic buildup", force, 0.0, &position, &direction, FALSE);
 		}
-
-		position.x = -rotor_radius;
-		position.y = 0.0;
-		position.z = 0.0;
-
-		direction.x = 0.0;
-		direction.y = current_flight_dynamics->rotor_rotation_direction;
-		direction.z = 0.0;
-
-		add_dynamic_force ("Sonic buildup", force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
 	// main rotor disc torque effect

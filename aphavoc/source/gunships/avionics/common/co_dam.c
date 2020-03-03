@@ -1229,6 +1229,13 @@ void save_gunship_avionics_damage (unsigned gunship_type)
 			break;
 		}
 	}
+	
+	// SAVE FUEL SUPPLY LEVEL
+	if (get_current_flight_dynamics ())
+	{
+		float fuel = get_current_flight_dynamics_fuel_weight ();
+		set_client_server_entity_float_value (get_gunship_entity (), FLOAT_TYPE_FUEL_SUPPLY_LEVEL, fuel);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

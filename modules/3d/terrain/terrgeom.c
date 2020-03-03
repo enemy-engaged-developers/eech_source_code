@@ -845,7 +845,10 @@ void scan_3d_terrain ( void )
 
 								if ( trees->type )
 								{
-
+									// RANDOMIZE RENDERING DISTANCE - FIRST ONE ALWAYS FARTHEST
+									int index = 3 - tree_count % 4;
+									view_range *= 1.0 + 0.1 * (index - 2); 
+									
 									if ( range < view_range * view_range )
 									{
 
