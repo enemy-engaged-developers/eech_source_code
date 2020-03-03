@@ -139,7 +139,7 @@ dynamics_damage_type
 			"Left engine fire",
 			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE,
 			0.6,
-			0.2,
+			0.09,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -148,7 +148,7 @@ dynamics_damage_type
 			"Right engine fire",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE,
 			0.6,
-			0.2,
+			0.09,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -1271,13 +1271,14 @@ void update_dynamics_damage (void)
 					if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_LEFT_ENGINE)
 					{
 
-						current_flight_dynamics->left_engine_temp.value += 10.0 * get_delta_time ();
+						// MOVED TO update_engine_temperature_dynamics()
+						/*current_flight_dynamics->left_engine_temp.value += 10.0 * get_delta_time ();
 
 						if (current_flight_dynamics->left_engine_temp.value > current_flight_dynamics->left_engine_temp.max)
 						{
 
 							dynamics_damage_model (DYNAMICS_DAMAGE_LEFT_ENGINE, FALSE);
-						}
+						}*/
 
 						#if DEBUG_MODULE
 
@@ -1294,13 +1295,14 @@ void update_dynamics_damage (void)
 					if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_RIGHT_ENGINE)
 					{
 
-						current_flight_dynamics->right_engine_temp.value += 10.0 * get_delta_time ();
+						// MOVED TO update_engine_temperature_dynamics()
+						/*current_flight_dynamics->right_engine_temp.value += 10.0 * get_delta_time ();
 
 						if (current_flight_dynamics->right_engine_temp.value > current_flight_dynamics->right_engine_temp.max)
 						{
 
 							dynamics_damage_model (DYNAMICS_DAMAGE_RIGHT_ENGINE, FALSE);
-						}
+						}*/
 
 						#if DEBUG_MODULE
 

@@ -3455,9 +3455,9 @@ void flight_dynamics_start_engine (int engine_number)
 
 	ASSERT (engine_number >= 1 && engine_number <= 2);
 
-	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA && engine_number == 2)
 	{
-		engine_number = 1;	
+		return;
 	}
 
 	if (engine_number == 1)
@@ -3504,9 +3504,9 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 
 	ASSERT (engine_number == 1 || engine_number == 2);
 
-	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA && engine_number == 2)
 	{
-		engine_number = 1;	
+		return;
 	}
 
 	if (engine_number == 1)
@@ -3625,14 +3625,14 @@ void update_apu_rpm_dynamics (void)
 // arneh, july 06 - modelling of engine temperature added
 void update_engine_temperature_dynamics (int engine_number)
 {
-	unsigned int engine_fire;
+	unsigned int engine_fire, engine_damage;
 	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque, *engine_temp;
 
 	ASSERT(engine_number == 1 || engine_number == 2);
 
-	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA && engine_number == 2)
 	{
-		engine_number = 1;
+		return;
 	}
 
 	if (engine_number == 1)
@@ -3641,6 +3641,7 @@ void update_engine_temperature_dynamics (int engine_number)
 		engine_temp = &current_flight_dynamics->left_engine_temp;
 		n2_rpm = &current_flight_dynamics->left_engine_rpm;
 		engine_fire = DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE;
+		engine_damage = DYNAMICS_DAMAGE_LEFT_ENGINE;
 		engine_torque = &current_flight_dynamics->left_engine_torque;
 	}
 	else if (engine_number == 2)
@@ -3649,6 +3650,7 @@ void update_engine_temperature_dynamics (int engine_number)
 		engine_temp = &current_flight_dynamics->right_engine_temp;
 		n2_rpm = &current_flight_dynamics->right_engine_rpm;
 		engine_fire = DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE;
+		engine_damage = DYNAMICS_DAMAGE_RIGHT_ENGINE;
 		engine_torque = &current_flight_dynamics->right_engine_torque;
 	}
 	else
@@ -3688,31 +3690,39 @@ void update_engine_temperature_dynamics (int engine_number)
 
 		engine_temp->min = (1.0 - (0.5 * get_model_delta_time())) * engine_temp->min + 0.5 * get_model_delta_time() * rpm_factor;
 
-		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.5, -20.0, 1000.0);
-
 		// increase temp extra if engine on fire
 		if (current_flight_dynamics->dynamics_damage & engine_fire)
-			engine_temp->delta += 20.0;
+			engine_temp->min += 200.0 * get_model_delta_time();
+
+		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.5, -20.0, 1000.0);
 	}
 
 	engine_temp->value += engine_temp->delta * get_model_delta_time();
 
-	if (current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
+	if (current_flight_dynamics->dynamics_options.dynamics_options_over_torque) {
 		engine_temp->value = bound(engine_temp->value, 0.0, 1500.0);
+
+		// if temp above 810 degrees, randomly damage engine. probability depending on temperature
+		if (engine_temp->value > 0.81 * engine_temp->max)
+		{
+			float probability = (engine_temp->value / engine_temp->max - 0.81) * get_model_delta_time() / 5.0 * (n2_rpm->delta > 0 ? 1.0 + n2_rpm->delta : 1.0);
+
+			#if DEBUG_DYNAMICS
+			debug_log("Engine damage probability %f", probability);
+			#endif
+
+			if ((frand1() < probability / 4.0))
+				dynamics_damage_model (engine_damage, FALSE);
+			else if ((frand1() < probability))
+				dynamics_damage_model (engine_fire, FALSE);
+		}
+	}
 	else
 		engine_temp->value = bound(engine_temp->value, 0.0, 800.0);
-
-	// if temp above 820 degrees, randomly damage engine. probability depending on temperature
-	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
-	{
-		int probability = 5.0 * (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
-		if ((rand16() % (int)probability) == 0)
-			dynamics_damage_model (engine_fire, FALSE);
-	}
 	
 	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA) {
 		current_flight_dynamics->right_engine_n1_rpm = *n1_rpm;
-		current_flight_dynamics->right_engine_temp = *engine_temp;
+		//current_flight_dynamics->right_engine_temp = *engine_temp;
 		current_flight_dynamics->right_engine_rpm = *n2_rpm;
 		current_flight_dynamics->right_engine_torque = *engine_torque;	
 	}
@@ -3778,9 +3788,9 @@ void update_engine_rpm_dynamics (int engine_number)
 
 	ASSERT(engine_number == 1 || engine_number == 2);
 
-	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA)
+	if (get_global_gunship_type() == GUNSHIP_TYPE_KIOWA && engine_number == 2)
 	{
-		engine_number = 1;
+		return;
 	}
 
 	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
