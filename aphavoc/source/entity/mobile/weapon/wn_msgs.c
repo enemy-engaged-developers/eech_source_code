@@ -118,7 +118,7 @@ static int response_to_decoy_active (entity_messages message, entity *receiver, 
 
 	decoy_type = (weapon_decoy_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_DECOY_TYPE);
 
-	if (get_weapon_locked_onto_decoy (decoy_type))
+	if (get_weapon_locked_onto_decoy (decoy_type, sender))
 	{
 		switch (weapon_database[raw->mob.sub_type].guidance_type)
 		{

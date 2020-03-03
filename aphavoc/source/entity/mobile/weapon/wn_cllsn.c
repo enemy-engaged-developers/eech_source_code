@@ -326,8 +326,6 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 			*launcher,
 			*pilot;
 
-		difficulty = get_global_difficulty_level ();
-
 		launcher = get_local_entity_parent (weapon, LIST_TYPE_LAUNCHED_WEAPON);
 
 		if (launcher)
@@ -339,13 +337,13 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 				if (pilot)
 				{
 					difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL);
+
+					if (difficulty == GAME_DIFFICULTY_EASY)
+					{
+						return (0.1);
+					}
 				}
 			}
-		}
-
-		if (difficulty == GAME_DIFFICULTY_EASY)
-		{
-			return (1);
 		}
 	}
 
@@ -379,14 +377,14 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 			front_armor = vehicle_database[sub_type].armour_front;
 			rear_armor = vehicle_database[sub_type].armour_rear;
 			side_armor = vehicle_database[sub_type].armour_side;
-			top_armor = (rear_armor + side_armor) / 3;
+			top_armor = (rear_armor + side_armor) / 3.0;
 		}
 		else
 		{
 			front_armor = 1;
 			rear_armor = 0.25;
 			side_armor = 0.75;
-			top_armor = 0.5;
+			top_armor = 0.33;
 		}
 		
 		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);

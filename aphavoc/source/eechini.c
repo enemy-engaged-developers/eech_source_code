@@ -906,9 +906,9 @@ static const struct config_option options[] =
 
 	{ NULL, "25", "[Gameplay]",
 		NONE },
-	{ "chaff", "", "effectiveness of chaff  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 1.0)",
+	{ "chaff", "", "effectiveness of chaff  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 0.5)",
 		FLOAT(command_line_chaff_effectiveness) },
-	{ "flare", "", "effectiveness of flares (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 1.0)",
+	{ "flare", "", "effectiveness of flares (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 0.5)",
 		FLOAT(command_line_flare_effectiveness) },
 	{ "smoke", "", "effectiveness of smoke  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 1.0)",
 		FLOAT(command_line_smoke_effectiveness) },

@@ -68,7 +68,7 @@ extern float get_decoy_timer_start_value (weapon_decoy_types type);
 
 extern float get_decoy_timer_restart_value (weapon_decoy_types type);
 
-extern int get_weapon_locked_onto_decoy (weapon_decoy_types type);
+extern int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender);
 
 extern void update_decoy (entity *en);
 
