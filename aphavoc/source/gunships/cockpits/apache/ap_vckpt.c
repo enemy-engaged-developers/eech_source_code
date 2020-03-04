@@ -129,22 +129,20 @@ void initialise_apache_virtual_cockpit (void)
 	pilot_head_pitch_datum = rad(wide_cockpit_position[WIDEVIEW_APACHE_PILOT].c.p);
 	co_pilot_head_pitch_datum = rad(wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].c.p);
 
-	{
-		virtual_cockpit_level1_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_COCKPIT);
-		virtual_cockpit_nose_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE);
+	virtual_cockpit_level1_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_COCKPIT);
+	virtual_cockpit_nose_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE);
 
-		virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI);
-		virtual_cockpit_compass_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS);
-		virtual_cockpit_instrument_needles_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
+	virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI);
+	virtual_cockpit_compass_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS);
+	virtual_cockpit_instrument_needles_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
 
-		virtual_cockpit_lights_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+	virtual_cockpit_lights_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
 
-		virtual_cockpit_level2_inst3d = NULL;
-		virtual_cockpit_level3_inst3d = NULL;
-		virtual_cockpit_fillet_level1_inst3d = NULL;
-		virtual_cockpit_fillet_level2_inst3d = NULL;
-		virtual_cockpit_fillet_level3_inst3d = NULL;
-	}
+	virtual_cockpit_level2_inst3d = NULL;
+	virtual_cockpit_level3_inst3d = NULL;
+	virtual_cockpit_fillet_level1_inst3d = NULL;
+	virtual_cockpit_fillet_level2_inst3d = NULL;
+	virtual_cockpit_fillet_level3_inst3d = NULL;
 
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_VCKPT_MAIN_ROTOR);
 
@@ -259,11 +257,9 @@ void deinitialise_apache_virtual_cockpit (void)
 	// 3D instances
 	//
 
-	{
-		destruct_3d_object(virtual_cockpit_level1_inst3d);
-		destruct_3d_object(virtual_cockpit_nose_inst3d);
-		destruct_3d_object(virtual_cockpit_lights_inst3d);
-	}
+	destruct_3d_object(virtual_cockpit_level1_inst3d);
+	destruct_3d_object(virtual_cockpit_nose_inst3d);
+	destruct_3d_object(virtual_cockpit_lights_inst3d);
 
 	destruct_3d_object (virtual_cockpit_main_rotor_inst3d);
 
@@ -405,244 +401,6 @@ int apache_pnvs_active(void)
 
 	return pnvs_in_position;
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#if 0
-static void set_cockpit_lighting (matrix3x3 attitude)
-{
-	matrix3x3
-		directional_light_rotation,
-		result;
-
-	vec3d
-		directional_light_direction;
-
-	light_colour
-		ambient_light_colour,
-		directional_light_colour;
-
-	float
-		directional_light_heading,
-		directional_light_pitch,
-		directional_light_roll;
-
-	switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
-	{
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAWN:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.0;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAY:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 1.0;
-			ambient_light_colour.green		  		= 1.0;
-			ambient_light_colour.blue		  		= 1.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 1.0;
-			directional_light_colour.blue			= 1.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
-			directional_light_roll 					= rad (0.0);
-
-			directional_light_pitch 				= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DUSK:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.0;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_NIGHT:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.0;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-	}
-
-	#if DEMO_VERSION
-
-	ambient_light_colour.red		 		= 0.0;
-	ambient_light_colour.green		  		= 0.0;
-	ambient_light_colour.blue		  		= 0.0;
-
-	directional_light_colour.red			= 1.0;
-	directional_light_colour.green		= 1.0;
-	directional_light_colour.blue			= 1.0;
-
-	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-40.0);
-	directional_light_roll 					= rad (0.0);
-
-	#endif
-
-	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
-
-	get_3d_transformation_matrix (directional_light_rotation, directional_light_heading, directional_light_pitch, directional_light_roll);
-
-	multiply_matrix3x3_matrix3x3 (result, directional_light_rotation, attitude);
-
-	directional_light_direction.x = -result[2][0];
-	directional_light_direction.y = -result[2][1];
-	directional_light_direction.z = -result[2][2];
-
-	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
-}
-#endif
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#if 0
-static void set_cockpit_white_lighting (matrix3x3 attitude)
-{
-	matrix3x3
-		directional_light_rotation,
-		result;
-
-	vec3d
-		directional_light_direction;
-
-	light_colour
-		ambient_light_colour,
-		directional_light_colour;
-
-	float
-		directional_light_heading,
-		directional_light_pitch,
-		directional_light_roll;
-
-	directional_light_colour.red		= 0.3;
-	directional_light_colour.green	= 0.3;
-	directional_light_colour.blue		= 0.3;
-
-	directional_light_heading 			= rad (0.0);
-	directional_light_pitch 			= rad (0.0);
-	directional_light_roll 				= rad (0.0);
-
-	switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
-	{
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAWN:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.70;
-			ambient_light_colour.green		  		= 0.70;
-			ambient_light_colour.blue		  		= 0.70;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAY:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.85;
-			ambient_light_colour.green		  		= 0.85;
-			ambient_light_colour.blue		  		= 0.85;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
-			directional_light_roll 					= rad (0.0);
-
-			directional_light_pitch 				= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DUSK:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.65;
-			ambient_light_colour.green		  		= 0.50;
-			ambient_light_colour.blue		  		= 0.50;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_NIGHT:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.45;
-			ambient_light_colour.green		  		= 0.45;
-			ambient_light_colour.blue		  		= 0.55;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-	}
-
-	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
-
-	get_3d_transformation_matrix (directional_light_rotation, directional_light_heading, directional_light_pitch, directional_light_roll);
-
-	multiply_matrix3x3_matrix3x3 (result, directional_light_rotation, attitude);
-
-	directional_light_direction.x = -result[2][0];
-	directional_light_direction.y = -result[2][1];
-	directional_light_direction.z = -result[2][2];
-
-	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -848,14 +606,14 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	viewpoint
 		vp;
 
-	vec3d
-		vp_cockpit_world_position = { 0, 0, 0 };
+	object_3d_instance
+		*virtual_cockpit_inst3d;
 
 	object_3d_sub_object_search_data
 		search;
 
-	object_3d_instance
-		*virtual_cockpit_inst3d;
+	vec3d
+		vp_cockpit_world_position = { 0, 0, 0 };
 
 	////////////////////////////////////////
 	//
@@ -910,21 +668,13 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 	if (flags & (VIRTUAL_COCKPIT_COCKPIT))
 	{
-//		set_cockpit_lighting (vp.attitude);
+		//set_3d_active_environment (main_3d_env);
 
-/*
-		set_cockpit_white_lighting (vp.attitude);
-
-		set_3d_active_environment (main_3d_single_light_env);
-
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
-
-		realise_3d_clip_extents (main_3d_single_light_env);
- */
-		recalculate_3d_environment_settings (main_3d_env);
-		set_3d_active_environment (main_3d_env);
 		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+
 		realise_3d_clip_extents (main_3d_env);
+
+		recalculate_3d_environment_settings (main_3d_env);
 
 		clear_zbuffer_screen ();
 
@@ -1361,6 +1111,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 			}
 		}
 	}
+#endif
 
 	////////////////////////////////////////
 	//
@@ -1392,7 +1143,6 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 			}
 		}
 	}
-#endif
 
 	////////////////////////////////////////
 	//

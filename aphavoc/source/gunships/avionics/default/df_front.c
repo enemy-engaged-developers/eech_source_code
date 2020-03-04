@@ -198,7 +198,7 @@ void update_default_upfront_display (void)
 
 	sprintf (s1, "%02d:%02d:%02d", (int) hours, (int) minutes, (int) seconds);
 
-	sprintf (s2, "FUEL %04d LBS", (int) (bound (kilograms_to_pounds (current_flight_dynamics->fuel_weight.value), 0.0, 2500.0)));
+	sprintf (s2, "FUEL %04d LBS", (int) (bound (kilograms_to_pounds (current_flight_dynamics->fuel_weight.value), 0.0, 9999.0)));
 
 	set_default_upfront_display_text (NULL, NULL, s1, s2);
 }

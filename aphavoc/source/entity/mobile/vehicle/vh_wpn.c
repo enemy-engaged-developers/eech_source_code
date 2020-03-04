@@ -672,9 +672,9 @@ static struct FIRE_TIMER_DIFFICULTY_TABLE
 
 } fire_timer_difficulty_table [] =
 	{
-		GAME_DIFFICULTY_HARD,		0.66,
-		GAME_DIFFICULTY_MEDIUM,		1.0,
-		GAME_DIFFICULTY_EASY,		1.33,
+		GAME_DIFFICULTY_HARD,		0.5,
+		GAME_DIFFICULTY_MEDIUM,		0.66,
+		GAME_DIFFICULTY_EASY,		1.0,
 		(game_difficulty_settings) -1
 	};
 

@@ -3707,7 +3707,7 @@ void update_engine_temperature_dynamics (int engine_number)
 		{
 			float probability = (engine_temp->value / engine_temp->max - 0.81) * get_model_delta_time() / 5.0 * (n2_rpm->delta > 0 ? 1.0 + n2_rpm->delta : 1.0);
 
-			#if DEBUG_DYNAMICS
+			#if DEBUG_DYNAMICS >= 3
 			debug_log("Engine damage probability %f", probability);
 			#endif
 
