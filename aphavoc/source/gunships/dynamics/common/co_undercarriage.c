@@ -413,7 +413,7 @@ static void update_suspension(void)
 				if (fabs( point->velocity.z ) > 1.0 && raw->ac.mob.velocity > 1.0)
 					point->suspension_compression *= 1.0 + bound( point->velocity.z * sfrand1() / 200.0, 0.0f, point->max_suspension_compression / 3.0 );
 				
-				if (point->can_turn && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
+				if (point->can_turn == 1 && (fabs(point->velocity.x) > 0.1 || fabs(point->velocity.z) > 0.1))
 				{
 					float
 						max_turn_rate = rad(180.0) * get_model_delta_time() * (min( fabs(point->velocity.z) + fabs(point->velocity.x), 2.0) ) * 0.5,
@@ -435,7 +435,9 @@ static void update_suspension(void)
 						new_angle = -90.0;
 
 					modify_angle(&point->turn_angle, new_angle, max_turn_rate);
- 				}
+ 				} else if (point->can_turn == 2) {
+					point->turn_angle = - rad(30.0) * current_flight_dynamics->input_data.pedal.value * 0.01 / max(1.0, fabs(point->velocity.z) / 5.0);
+				}
 			}
 			else if (water_immersion > 0.0) // liquid
 			{
@@ -528,8 +530,11 @@ static void apply_suspension_forces(void)
 					force_diff = (wheight_on_wheel * point->velocity.x + point->resistance_force) / 2.0,
 					max_force_change = get_model_delta_time() * 1000.0;
 
-				if (!point->can_turn || point->water_immersion > 0 )
+				if (point->can_turn != 1 || point->water_immersion > 0 )
 				{
+					if (point->can_turn == 2 && (point->turn_angle > rad(1.0) || point->turn_angle < -rad(1.0))) // POWER STEERING
+						force_diff = (wheight_on_wheel * (point->velocity.x * cos(point->turn_angle) - point->velocity.z * sin(point->turn_angle)) + point->resistance_force) / 2.0;
+
 					point->resistance_force = bound( force_diff, -max_force_change, max_force_change );
 
 					direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
