@@ -159,6 +159,7 @@ void update_view (void)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		////////////////////////////////////////
 		{
 			update_virtual_cockpit_crew_view ();

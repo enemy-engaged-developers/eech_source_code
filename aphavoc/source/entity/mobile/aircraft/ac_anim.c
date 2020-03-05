@@ -611,20 +611,23 @@ void initiate_aircraft_crew_ejection (entity *en)
 			{
 				if (en == get_gunship_entity ())
 				{
-					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-					exit_game (NULL);
-
 					if (select_view_menu_view_players_gunship ())
 					{
-						set_view_menu_display_visible_status (FALSE);
-
-						set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+						if (get_view_mode() != VIEW_MODE_VIRTUAL_COCKPIT_EJECT) {
+							set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_EJECT);
+							return;
+						}
+						else
+							set_view_menu_display_visible_status (FALSE);							
 					}
 					else
 					{
 						debug_fatal ("Cannot view player's gunship");
 					}
+
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+					exit_game (NULL);
 				}
 				else
 				{
@@ -645,20 +648,23 @@ void initiate_aircraft_crew_ejection (entity *en)
 			{
 				if (en == get_gunship_entity ())
 				{
-					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
-
-					exit_game (NULL);
-
 					if (select_view_menu_view_players_gunship ())
 					{
-						set_view_menu_display_visible_status (FALSE);
-
-						set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_CREW);
+						if (get_view_mode() != VIEW_MODE_VIRTUAL_COCKPIT_EJECT) {
+							set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_EJECT);
+							return;
+						}
+						else
+							set_view_menu_display_visible_status (FALSE);							
 					}
 					else
 					{
 						debug_fatal ("Cannot view player's gunship");
 					}
+
+					set_client_server_entity_int_value (en, INT_TYPE_EJECTED, TRUE);
+
+					exit_game (NULL);
 				}
 				else
 				{

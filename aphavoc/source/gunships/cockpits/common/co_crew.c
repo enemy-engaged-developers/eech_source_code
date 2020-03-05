@@ -390,7 +390,7 @@ int get_current_virtual_cockpit_camera (crew_roles role)
 	int
 		current_virtual_cockpit_camera;
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_EJECTED))
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_EJECTED) || get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT_EJECT)
 	{
 		if (role == CREW_ROLE_PILOT)
 		{
@@ -455,7 +455,7 @@ object_3d_camera_index_numbers get_crew_camera_index (crew_roles role)
 	object_3d_camera_index_numbers
 		crew_camera_index;
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_EJECTED))
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_EJECTED) || get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT_EJECT)
 	{
 		if (role == CREW_ROLE_PILOT)
 		{

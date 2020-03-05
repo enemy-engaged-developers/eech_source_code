@@ -418,6 +418,7 @@ static int view_mode_available (view_modes mode)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		////////////////////////////////////////
 		{
 			available = get_gunship_entity () && (get_num_virtual_cockpit_cameras (get_crew_role ()) > 0) && get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE);
@@ -762,6 +763,7 @@ static void leave_view_mode (view_modes mode)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		////////////////////////////////////////
 		{
 			break;
@@ -1022,6 +1024,7 @@ static void enter_view_mode (view_modes mode)
 		case VIEW_MODE_VIRTUAL_COCKPIT:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK:
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
 		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
@@ -1174,6 +1177,7 @@ entity *get_viewed_entity (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PADLOCK:
 		case VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET:
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		case VIEW_MODE_VIRTUAL_COCKPIT_HUD:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:

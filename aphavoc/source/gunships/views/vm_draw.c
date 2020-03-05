@@ -500,6 +500,7 @@ void draw_view (void)
 		}
 		////////////////////////////////////////
 		case VIEW_MODE_VIRTUAL_COCKPIT_CREW:
+		case VIEW_MODE_VIRTUAL_COCKPIT_EJECT:
 		////////////////////////////////////////
 		{
 			draw_virtual_cockpit_3d_crew_view ();
