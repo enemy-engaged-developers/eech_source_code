@@ -210,6 +210,7 @@ extern int
 	command_line_reverse_pedal,									// Retro 17Jul2004
 	command_line_reverse_cyclic_x,								// /thealx/
 	command_line_reverse_cyclic_y,								// /thealx/
+	command_line_unbind_jbuttons,								// /thealx/
 	command_line_forcefeedback,									// /thealx/
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_external_trackir_direction,					// Retro 31Jan2005 (spooky, eh ?)

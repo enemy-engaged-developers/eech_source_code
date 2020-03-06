@@ -67,6 +67,7 @@
 extern void set_common_avionics_events (void);
 extern void toggle_cockpit_doors_event(event* ev);
 extern void toggle_cargo_doors_event(event* ev);
+extern void virtual_cockpit_track_target_event (event *ev);
 #ifdef DEBUG
 extern float debug_var_x, debug_var_y, debug_var_z;
 #endif

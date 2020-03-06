@@ -1017,6 +1017,8 @@ static const struct config_option options[] =
 		INT(command_line_reverse_cyclic_x) },
 	{ "reverse_cyclic_y", "", "reverse cyclic y axis (0 = off, 1 = on) (def = 0)",
 		INT(command_line_reverse_cyclic_y) },
+	{ "unbind_jbuttons", "", "unbind joystick buttons so they configured in external mapping software (0 = no, 1 = yes) (def = 0)",			
+		INT(command_line_unbind_jbuttons) },
 	{ "forcefeedback", "", "joystick force feedback effects and trim function (0 = off, 1 = on) (def = 0)",
 		INT(command_line_forcefeedback) },
 	{ "ffb_dynamics", "", "power of force feedback effects related to dynamic forces (when forcefeedback = 1) (0 = off, 1 = normal gain) (def = 0.5)",

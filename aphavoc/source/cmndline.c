@@ -234,6 +234,7 @@ int
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_reverse_cyclic_x					= 0,	// /thealx/
 	command_line_reverse_cyclic_y					= 0,	// /thealx/
+	command_line_unbind_jbuttons					= 0,	// /thealx/
 	command_line_forcefeedback						= FALSE,	// /thealx/
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005

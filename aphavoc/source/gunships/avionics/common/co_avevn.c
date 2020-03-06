@@ -956,6 +956,26 @@ static void select_next_target_event (event *ev)
 	single_target_acquisition_system_select_next_target_key++;
 }
 
+void virtual_cockpit_track_target_event (event *ev)
+{
+	ASSERT (ev);
+
+	if ((ev->key == DIK_1) || (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET))
+	{
+		if (set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET))
+		{
+			set_ah64a_lock_target (TRUE);
+		}
+	}
+	else
+	{
+		if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET)
+		{
+			select_padlock_view_event (PADLOCK_MODE_NONE);
+		}
+	}
+}
+
 static void select_previous_target_event (event *ev)
 {
 	single_target_acquisition_system_select_previous_target_key++;
@@ -1187,11 +1207,17 @@ void set_common_avionics_events (void)
 	//
 	////////////////////////////////////////
 
-	set_event ((JOYSTICK_BUTTON + 1), MODIFIER_NONE, KEY_STATE_EITHER, launch_weapon_event);
+	if (!command_line_unbind_jbuttons) {
+		
+		set_event ((JOYSTICK_BUTTON + 1), MODIFIER_NONE, KEY_STATE_EITHER, launch_weapon_event);
 
-	set_event ((JOYSTICK_BUTTON + 2), MODIFIER_NONE, KEY_STATE_DOWN, select_next_weapon_event);
+		set_event ((JOYSTICK_BUTTON + 2), MODIFIER_NONE, KEY_STATE_DOWN, select_next_weapon_event);
 
-	set_event ((JOYSTICK_BUTTON + 3), MODIFIER_NONE, KEY_STATE_DOWN, select_next_target_event);
+		set_event ((JOYSTICK_BUTTON + 3), MODIFIER_NONE, KEY_STATE_DOWN, select_next_target_event);
+
+		set_event ((JOYSTICK_BUTTON + 4), MODIFIER_NONE, KEY_STATE_DOWN, virtual_cockpit_track_target_event);
+
+	}
 
 	// Jabberwock 030930 Mouse FLIR control
 
