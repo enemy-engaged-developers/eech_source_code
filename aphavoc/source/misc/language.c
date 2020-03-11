@@ -83,6 +83,8 @@
 
 #define PREPROCESS_DAT_FILES 0
 
+#define POSTPROCESS_DAT_FILES 0
+
 #define DEBUG_LANGUAGES 1
 
 #define NUM_ALPHABET_POINTERS 28
@@ -112,7 +114,28 @@ static int get_next_file_translation (FILE *file_ptr, char *buffer, int size);
 
 	static void preprocess_language_database (void);
 #endif
+	
+char full_filename[256]; // LAST TRANSLATION FILE
 
+#ifdef DEBUG
+#if POSTPROCESS_DAT_FILES
+static void add_missing_translation(const char *buffer);
+static void postprocess_missing_translation();
+static void clean_custom_translation();
+
+struct MISSING_TRANSLATION
+{
+	char name[100];
+	struct MISSING_TRANSLATION
+		*pred,
+		*succ;
+};
+
+typedef struct MISSING_TRANSLATION missing_translation;
+
+static missing_translation *missing_list;
+#endif
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -388,8 +411,7 @@ void initialise_language_database (void)
 		valid_file;
 
 	char
-		directory_search_path[256],
-		full_filename[256];
+		directory_search_path[256];
 	const char
 		*filename;
 
@@ -520,6 +542,12 @@ const char *get_trans (const char *string)
 			debug_filtered_log ("LANGUAGE.C: get_trans() couldn't find: %s", string);
 
 		#endif
+
+		#ifdef DEBUG
+		#if POSTPROCESS_DAT_FILES
+			add_missing_translation(result);
+		#endif
+		#endif
 	}
 
 	return result;
@@ -545,6 +573,12 @@ void deinitialise_language_database (void)
 			delete_translation (temp);
 		}
 	}
+
+	#ifdef DEBUG
+	#if POSTPROCESS_DAT_FILES
+		postprocess_missing_translation();
+	#endif
+	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -861,4 +895,96 @@ font_types get_current_language_font (font_types font)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef DEBUG
+#if POSTPROCESS_DAT_FILES
+static void postprocess_missing_translation() {
+	int i = 0;
+	FILE *fp_out;
 
+	if ( missing_list )
+	{
+		missing_translation
+			*this_string = NULL,
+			*last_string = NULL;
+
+		this_string = missing_list;
+
+		fp_out = safe_fopen (full_filename, "a");
+		
+		while ( this_string )
+		{
+			debug_log("Missing translation: %s", this_string->name);
+
+			if (fp_out != NULL) {
+				fprintf (fp_out, ":TRANSLATION ");
+				fprintf (fp_out, &this_string->name);
+				fprintf (fp_out, "\n");
+
+				for (i = 0; i < 7; i++) {
+					fprintf (fp_out, language_strings[i]);
+					fprintf (fp_out, " ");
+					fprintf (fp_out, &this_string->name);
+					fprintf (fp_out, "\n");		
+				}
+
+				fprintf (fp_out, "\n\n");
+			}
+
+			if (last_string != NULL) {
+				safe_free ( last_string );
+			}
+			last_string = this_string;
+			this_string = this_string->succ;
+		}
+
+		safe_fclose(fp_out);
+	}
+	
+	missing_list = NULL;
+}
+
+static void add_missing_translation(const char *buffer) {
+	missing_translation *string;
+
+	string = ( missing_translation * ) safe_malloc ( sizeof ( missing_translation ) );
+	strncpy(string->name, buffer, 100);
+	//string->name[99] = '\0';
+
+	if ( missing_list )
+	{
+		missing_translation
+			*this_string,
+			*last_string;
+
+		this_string = missing_list;
+
+		while ( this_string )
+		{
+			if (strcmp(this_string->name, string->name) == 0) {
+				safe_free ( string );
+				return;
+			}
+			
+			last_string = this_string;
+			this_string = this_string->succ;
+		}
+
+		string->pred = last_string;
+		string->succ = NULL;
+
+		last_string->succ = string;
+	}
+	else
+	{
+		string->pred = NULL;
+		string->succ = NULL;
+		missing_list = string;
+	}	
+}
+
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
