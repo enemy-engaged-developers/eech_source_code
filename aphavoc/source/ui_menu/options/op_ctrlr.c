@@ -125,6 +125,8 @@ ui_object
 //Retro10Jul2004_dead	*device_graphic_area,
 	*reverse_collective_button,
 	*keyboard_assist_option_button,
+	*autoconfigure_option_background,
+	*autoconfigure_option_button,
 	*eo_pan_x_option_button,	// Retro 10Jul2004
 	*eo_pan_y_option_button,	// Retro 10Jul2004
 	*eo_zoom_option_button,		// Retro 10Jul2004
@@ -221,7 +223,7 @@ ui_object* draw_revers_background_area (ui_object *parent, ui_object *title_chan
 ui_object* draw_revers_text (ui_object *parent, ui_object *change_array, void *function);
 ui_object* draw_axis_area (ui_object *parent, int i);
 ui_object* draw_axis_title_background (ui_object *parent);
-ui_object* draw_axis_title_text (ui_object *parent, const char *text);
+ui_object* draw_axis_title_text (ui_object *parent, const char *text,  void *function);
 void update_axis_test_area (int joystick_index, int joystick_axis, ui_object *test_area, float (*function)(float), int reverse);
 ui_object* draw_nonlinear_background_area (ui_object *parent, ui_object *title_change_array);
 ui_object* draw_nonlinear_text (ui_object *parent, ui_object *change_array, void *function);
@@ -939,11 +941,16 @@ void define_options_screen_controller_page_objects (void)
 
 	// areas and titles
 
+	// autoconfigure
+	autoconfigure_area = draw_axis_area(page, -2);
+	autoconfigure_option_background = draw_axis_title_background(autoconfigure_area);
+	autoconfigure_option_button = draw_axis_title_text(autoconfigure_option_background, get_trans ("Autoconfigure"), notify_autoconfigure_button);
+	
 	// cyclic
 
 	cyclic_x_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(cyclic_x_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Cyclic Roll"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Cyclic Roll"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// cyclic y axis
@@ -952,7 +959,7 @@ void define_options_screen_controller_page_objects (void)
 
 	cyclic_y_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(cyclic_y_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Cyclic Pitch"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Cyclic Pitch"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// collective
@@ -961,7 +968,7 @@ void define_options_screen_controller_page_objects (void)
 
 	collective_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(collective_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("UI_COLLECTIVE"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("UI_COLLECTIVE"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// throttle
@@ -970,7 +977,7 @@ void define_options_screen_controller_page_objects (void)
 
 	throttle_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(throttle_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Engines Throttle"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Engines Throttle"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// pedal area
@@ -979,7 +986,7 @@ void define_options_screen_controller_page_objects (void)
 
 	pedal_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(pedal_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("UI_PEDAL"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("UI_PEDAL"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// eo pan x area
@@ -988,7 +995,7 @@ void define_options_screen_controller_page_objects (void)
 
 	eo_pan_x_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(eo_pan_x_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Pan X"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Pan X"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// eo panning y area
@@ -997,7 +1004,7 @@ void define_options_screen_controller_page_objects (void)
 
 	eo_pan_y_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(eo_pan_y_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Pan Y"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Pan Y"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// eo zoom area
@@ -1006,7 +1013,7 @@ void define_options_screen_controller_page_objects (void)
 
 	eo_zoom_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(eo_zoom_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Zoom"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("EO Zoom"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// joylook x area
@@ -1015,7 +1022,7 @@ void define_options_screen_controller_page_objects (void)
 
 	joylook_x_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(joylook_x_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick Look X"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick Look X"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// joylook y area
@@ -1024,7 +1031,7 @@ void define_options_screen_controller_page_objects (void)
 
 	joylook_y_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(joylook_y_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick Look Y"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick Look Y"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	// joy FOV area
@@ -1033,7 +1040,7 @@ void define_options_screen_controller_page_objects (void)
 
 	joy_fov_area = draw_axis_area(page, i);
 	title_change_array[i] = draw_axis_title_background(joy_fov_area);
-	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick FOV"));
+	check_array[i] = draw_axis_title_text(title_change_array [i], get_trans ("Joystick FOV"), NULL);
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	//mouselook area
@@ -1195,20 +1202,6 @@ void define_options_screen_controller_page_objects (void)
 	);
 
 	// Retro 17Jul2004 end
-
-	// Retro 28Aug2004 - autoconfigure area
-
-	autoconfigure_area = create_ui_object
-	(
-		UI_TYPE_AREA,
-		UI_ATTR_PARENT (page),
-		UI_ATTR_VIRTUAL_POSITION (CONTROLLER_OPTION_TITLE_OFFSET_X, OPTION_TITLE_OFFSET_Y-OPTION_SMALL_AREA_OFFSET_Y),
-		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_LARGE_WIDTH, OPTION_SMALL_AREA_HEIGHT),
-		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
-		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
-		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
-		UI_ATTR_END
-	);
 
 	rows_tile_area = draw_axis_area(page, -1);
 
@@ -1589,26 +1582,6 @@ void define_options_screen_controller_page_objects (void)
 	);
 
 	// Retro 17Jul2004 end
-
-	// Retro 28Aug2004
-	create_ui_object
-	(
-		UI_TYPE_AREA,
-		UI_ATTR_PARENT (autoconfigure_area),
-		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (1.0, 1.0),
-		UI_ATTR_TEXT (get_trans ("Autoconfigure")),
-		UI_ATTR_FUNCTION (notify_autoconfigure_button),
-		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
-	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
-		UI_ATTR_HIGHLIGHTABLE (TRUE),
-		UI_ATTR_CLEAR (TRUE),
-		UI_ATTR_END
-	);
-	// Retro 28Aug2004 end
 
 	// rows titles
 	
@@ -2710,6 +2683,8 @@ static int iDevice = 0;
 	GetGUIDString(iDevice,strGuid);
 #endif
 
+	debug_log("Controller strGuid: %s",strGuid);
+
 	if (!strGuid)
 		return;
 
@@ -2809,6 +2784,26 @@ static int iDevice = 0;
 		command_line_rudder_joystick_index = iDevice;
 		command_line_rudder_joystick_axis = 5;
 	}
+	else if (strcmp("{075C06A3-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+
+		command_line_eo_zoom_joystick_index = iDevice;
+		command_line_eo_zoom_joystick_axis = 6;
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 2;
+		command_line_throttle_joystick_index = iDevice;
+		command_line_throttle_joystick_axis = 3;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
 	else	// no match, we do nothing and return
 	{
 		return;
@@ -2821,6 +2816,8 @@ static int iDevice = 0;
 
 	// redraw the whole screen with the new settings
 	notify_show_controller_page ();
+	
+	set_toggle_button_off (obj);
 }
 
 ui_object* draw_axis_test_area (ui_object *parent, ui_object *title_change_array)
@@ -2986,7 +2983,7 @@ ui_object* draw_axis_title_background (ui_object *parent)
 	);
 }
 
-ui_object* draw_axis_title_text (ui_object *parent, const char *text)
+ui_object* draw_axis_title_text (ui_object *parent, const char *text, void *function)
 {
   return create_ui_object
 	(
@@ -2995,10 +2992,15 @@ ui_object* draw_axis_title_text (ui_object *parent, const char *text)
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
-		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
-		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_VIRTUAL_POSITION (function != NULL ? 1.0 - OPTION_BOX_TEXT_OFFSET_X : OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_VIRTUAL_SIZE (1.0, 1.0),
+		UI_ATTR_TEXT_JUSTIFY (function != NULL ? TEXT_JUSTIFY_CENTRE : TEXT_JUSTIFY_RIGHT_CENTRE),
 //		UI_ATTR_TEXT (get_trans ("UI_CYCLIC")),
 		UI_ATTR_TEXT (text),
+		UI_ATTR_FUNCTION (function != NULL ? function : NULL),
+		UI_ATTR_HIGHLIGHTABLE (function != NULL),
+		UI_ATTR_CLEAR (function != NULL),
+		UI_ATTR_NOTIFY_ON (function != NULL ? NOTIFY_TYPE_BUTTON_UP : NOTIFY_TYPE_NONE),
 		UI_ATTR_END
 	);
 }
