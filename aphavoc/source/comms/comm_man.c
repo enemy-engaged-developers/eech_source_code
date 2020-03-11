@@ -2660,7 +2660,9 @@ int net_connectToMaster (char *serverName, short port, int servernum)
 {
         int sock;
         u_long ulServerAddr;
+        #if DEBUG_MODULE
 		char *msg = malloc(128);
+		#endif
 		WSADATA wsaData;
 		int iResult;
 

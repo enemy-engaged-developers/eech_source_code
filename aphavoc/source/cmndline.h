@@ -271,6 +271,7 @@ extern float
 	command_line_dynamics_tail_rotor_drag,
 	command_line_dynamics_cyclic_dead_zone,
 	command_line_dynamics_yaw_altitude_loss,
+	command_line_dynamics_air_density,
 	command_line_ffb_dynamics,								// /thealx/
 	command_line_ffb_vibrations,							// /thealx/
 	command_line_ffb_recoil,								// /thealx/

@@ -1261,7 +1261,7 @@ void update_main_rotor_thrust_dynamics (void)
 			(x - x_min) / (x_max - x_min));
 
 		current_flight_dynamics->main_rotor_induced_air.value *=
-			pow(current_flight_dynamics->air_density.value, current_flight_dynamics->air_density.modifier);
+			pow(current_flight_dynamics->air_density.value, current_flight_dynamics->air_density.modifier * command_line_dynamics_air_density);
 	}
 
 	current_flight_dynamics->main_rotor_thrust.value =

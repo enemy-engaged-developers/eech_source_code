@@ -134,7 +134,7 @@ float get_weapon_drag(float speed, float alt, float diameter, float drag_coeffic
 		t0 = 288.15, // standard temperature, K
 		area = PI * diameter * diameter / 4, // projectile area, m^2
 		t = t0 - l * alt, // actual temperature, K
-		air_density = get_air_density(alt), // kg/m^3
+		air_density = get_precise_air_density(alt), // kg/m^3
 		mach = speed / (20.046 * sqrt(t)), // velocity, mach
 		cd; // drag coefficient
 

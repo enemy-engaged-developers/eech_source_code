@@ -293,6 +293,7 @@ float
 	command_line_dynamics_tail_rotor_drag					= 1.0,
 	command_line_dynamics_cyclic_dead_zone					= 0.0,
 	command_line_dynamics_yaw_altitude_loss 				= 5.0,
+	command_line_dynamics_air_density						= 1.0,
 	command_line_collective_zone_1_limit					= 0.3,		// arneh 2007-01-14
 	command_line_collective_zone_2_limit					= 0.7,		// arneh 2007-01-14
 	command_line_collective_percentage_at_zone1					= 60.0,		// GCsDriver  08-12-2007
@@ -303,7 +304,7 @@ float
 	command_line_comms_resend_timeout						= 2.0,
 	command_line_comms_packet_resend_timer 				= 5.0,
 	command_line_city_block_approximation_range 			= 500.0,
-	command_line_user_invulnerable_time						= 1.0,
+	command_line_user_invulnerable_time						= 5.0,
 	command_line_object_lod_factor							= 1.0,
 	command_line_fog_of_war_maximum_value 					= DEFAULT_FOG_OF_WAR_MAXIMUM_VALUE,
 	command_line_chaff_effectiveness							= 0.5,
