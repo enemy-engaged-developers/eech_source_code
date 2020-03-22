@@ -461,6 +461,8 @@ Value GetKa50SpecificData(int command)
 		case 524: return lamp.gear_damaged;
 		case 525: return lamp.gear_status;
 		case 526: return lamp.gear_red;
+		case 527: return lamp.leng_overtorque;
+		case 528: return lamp.reng_overtorque;
 		default: break;
 	}
 

@@ -665,6 +665,10 @@ typedef enum DYNAMICS_HOVER_HOLD_TYPES dynamics_hover_hold_types;
 
 #define get_current_flight_dynamics_overtorque() ((!get_current_flight_dynamics_auto_pilot ()) && (current_flight_dynamics->left_overtorque | current_flight_dynamics->right_overtorque))
 
+#define get_current_flight_dynamics_leng_overtorque() ((!get_current_flight_dynamics_auto_pilot ()) && (current_flight_dynamics->left_overtorque))
+
+#define get_current_flight_dynamics_reng_overtorque() ((!get_current_flight_dynamics_auto_pilot ()) && (current_flight_dynamics->right_overtorque))
+
 #define get_current_flight_dynamics_low_rotor_rpm() (((!get_current_flight_dynamics_auto_pilot ()) && (current_flight_dynamics->main_rotor_rpm.value < 90.0)) ? TRUE : FALSE)
 
 #define get_current_flight_dynamics_engine_damage_imminent() ((((current_flight_dynamics->left_engine_temp.value > (current_flight_dynamics->left_engine_temp.max * 0.80)) || (current_flight_dynamics->right_engine_temp.value > (current_flight_dynamics->right_engine_temp.max * 0.80))) ? TRUE : FALSE))
