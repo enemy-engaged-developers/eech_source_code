@@ -100,7 +100,15 @@ static object_3d_sub_instance
 	*gmax_light,
 	*max_isa_light,
 	*fire_light,
-	*master_alarm;
+	*master_alarm,
+	*left_outer_wep_light,
+	*left_inner_wep_light,
+	*right_inner_wep_light,
+	*right_outer_wep_light,
+	*left_outer_wep_store_light,
+	*left_inner_wep_store_light,
+	*right_inner_wep_store_light,
+	*right_outer_wep_store_light;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +151,16 @@ void initialise_ka50_virtual_cockpit (void)
 	gmax_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_G_LIMIT_LAMP);
 	max_isa_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MAX_ISA_LAMP);
 	fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_FIRE_LAMP);
-
 	master_alarm = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MASTER_ALARM_LAMP);
+
+	left_outer_wep_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LO_WEP_LAMP);
+	left_inner_wep_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LI_WEP_LAMP);
+	right_inner_wep_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RI_WEP_LAMP);
+	right_outer_wep_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RO_WEP_LAMP);
+	left_outer_wep_store_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LO_WEP_STORE_LAMP);
+	left_inner_wep_store_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LI_WEP_STORE_LAMP);
+	right_inner_wep_store_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RI_WEP_STORE_LAMP);
+	right_outer_wep_store_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RO_WEP_STORE_LAMP);
 
 //	// Gear lever
 //	gear_lever = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_GEAR_LEVER);
@@ -248,6 +264,10 @@ void update_ka50_virtual_cockpit (void)
 
 	object_3d_sub_object_search_data
 		search;
+
+	update_gear_lamps();
+	update_blackshark_warning_lamps();
+	update_weapon_status_lamps();
 
 	////////////////////////////////////////
 	//
@@ -465,62 +485,6 @@ void update_ka50_virtual_cockpit (void)
 	{
 		search.result_sub_object->visible_object = draw_controls;
 	}
-
-	//
-	// lamps and instruments
-	//
-
-//	draw_ka50_virtual_cockpit_lamps ();
-
-	// Gear lamps
-
-	if (get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
-	{
-		wheels_up_light->visible_object = FALSE;
-
-		left_wheel_down_light->visible_object = left_main_wheel_locked_down();
-		right_wheel_down_light->visible_object = right_main_wheel_locked_down();
-		nose_wheel_down_light->visible_object = nose_wheel_locked_down();
-	}
-	else
-	{
-		wheels_up_light->visible_object = get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_UP;
-		left_wheel_down_light->visible_object = FALSE;
-		right_wheel_down_light->visible_object = FALSE;
-		nose_wheel_down_light->visible_object = FALSE;
-	}
-
-	// Engine RPM warning lamps
-
-		leng_rpm_light->visible_object = ka50_lamps.leng_overtorque;
-		reng_rpm_light->visible_object = ka50_lamps.reng_overtorque;
-
-	// Rotor RPM lamps
-
-		rotor_rpm_light->visible_object = ka50_lamps.rotor_rpm;
-
-	// Max G Warning lamp
-		gmax_light->visible_object = ka50_lamps.max_g;
-
-	// Fire lamp
-
-		fire_light->visible_object = ka50_lamps.left_engine_fire;
-
-		fire_light->visible_object = ka50_lamps.right_engine_fire;
-
-		fire_light->visible_object = ka50_lamps.apu_fire;
-
-	// Max ISA exceeded lamp
-
-		max_isa_light->visible_object = ka50_lamps.max_isa_light;
-
-	// Landing Gear Warning lamp
-
-	// if Landing gear is not down and locked Low level flight with descent and IAS < 30.0 km/h
-
-	// Master Alarm
-
-		master_alarm->visible_object = ka50_lamps.master_caution;
 
 	////////////////////////////////////////
 	//
@@ -1030,3 +994,75 @@ void get_ka50_display_viewpoint (view_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_gear_lamps(void) {
+	// Gear lamps
+
+	if (get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
+	{
+		wheels_up_light->visible_object = FALSE;
+
+		left_wheel_down_light->visible_object = left_main_wheel_locked_down();
+		right_wheel_down_light->visible_object = right_main_wheel_locked_down();
+		nose_wheel_down_light->visible_object = nose_wheel_locked_down();
+	}
+	else
+	{
+		wheels_up_light->visible_object = get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_UP;
+		left_wheel_down_light->visible_object = FALSE;
+		right_wheel_down_light->visible_object = FALSE;
+		nose_wheel_down_light->visible_object = FALSE;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_blackshark_warning_lamps(void) {
+	// Engine RPM warning lamps
+
+		leng_rpm_light->visible_object = ka50_lamps.leng_overtorque;
+		reng_rpm_light->visible_object = ka50_lamps.reng_overtorque;
+
+	// Rotor RPM lamp
+
+		rotor_rpm_light->visible_object = ka50_lamps.rotor_rpm;
+
+	// Max G Warning lamp
+		gmax_light->visible_object = ka50_lamps.max_g;
+
+	// Fire lamp
+
+		fire_light->visible_object = ka50_lamps.left_engine_fire;
+
+		fire_light->visible_object = ka50_lamps.right_engine_fire;
+
+		fire_light->visible_object = ka50_lamps.apu_fire;
+
+	// Max ISA exceeded lamp
+
+		max_isa_light->visible_object = ka50_lamps.max_isa_light;
+
+	// Landing Gear Warning lamp
+
+	// TODO if Landing gear is not down and locked, Low level flight with descent, and IAS < 30.0 km/h
+
+	// Master Alarm
+
+		master_alarm->visible_object = ka50_lamps.master_caution;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_weapon_status_lamps(void) {
+		// Weapon selected lamps
+		left_outer_wep_light->visible_object = ka50_lamps.lo_wep_light;
+		left_inner_wep_light->visible_object = ka50_lamps.li_wep_light;
+		right_inner_wep_light->visible_object = ka50_lamps.ri_wep_light;
+		right_outer_wep_light->visible_object = ka50_lamps.ro_wep_light;
+
+		// Weapon store lamps
+		left_outer_wep_store_light->visible_object = ka50_lamps.lo_wep_store_light;
+		left_inner_wep_store_light->visible_object = ka50_lamps.li_wep_store_light;
+		right_inner_wep_store_light->visible_object = ka50_lamps.ri_wep_store_light;
+		right_outer_wep_store_light->visible_object = ka50_lamps.ro_wep_store_light;
+}
