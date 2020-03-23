@@ -3755,10 +3755,10 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * Ok, here's how the engine dynamics works now.  N1 (or NG) is the gas
 	 * turbine which controls the amount of air/fuel which is combusted in the
 	 * engine, and hence how much power it makes.  N2 (or NP, or in the code
-	 * simply refered to as engine_rpm) is the power turbine which converts
+	 * simply referred to as engine_rpm) is the power turbine which converts
 	 * the combustion energy into shaft rotation.
 	 *
-	 * The N2 tubine is directly connected to the rotor (through a gearbox which
+	 * The N2 turbine is directly connected to the rotor (through a gearbox which
 	 * reduces the real RPM from somewhere around 20,000 RPM to rotor RPM
 	 * of around 300 RPM.  Left to itself the rotor and N2 RPM will drop under load
 	 * and increase with less load.  The engine tries to keep N2 RPM constant at
@@ -3766,17 +3766,17 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * engine).  However, changing turbine speed is not instant, and even
 	 * when N1 speed has changed it might take a little longer before the extra
 	 * energy reaches the N2 turbine and is converted into shaft power.  Hence
-	 * it might not be able to keep N2 speed at exactly 100% at all times, especally
+	 * it might not be able to keep N2 speed at exactly 100% at all times, especially
 	 * initially after sudden changes of rotor drag (i.e. by changing rotor pitch
 	 * suddenly (fast pulling collective), or by sudden heavy rotor load (increase
-	 * in g-force by hard manouvering).
+	 * in g-force by hard manoeuvring).
 	 *
 	 * The values are used as follow:
 	 * *engine_rpm.value : actual RPM
 	 * *engine_n1_rpm.max : max allowed rpm of N1 engine.  Is directly controlled
 	 *    by pilot by use of throttle
 	 * *engine_n1_rpm.min : RPM engine control system has demanded.  Always less then max.
-	 * *rpm_delta : change of RPM in percent per second.  Controled by engine control system
+	 * *rpm_delta : change of RPM in percent per second.  Controlled by engine control system
 	 * apu_rpm.max : APU RPM commanded by pilot (100% when APU on, 0% when off)
 	 */
 

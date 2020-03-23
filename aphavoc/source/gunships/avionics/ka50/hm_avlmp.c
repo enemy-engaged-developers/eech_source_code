@@ -284,6 +284,10 @@ void update_ka50_lamp_avionics (void)
 
 	ka50_lamps.overtorque = get_current_flight_dynamics_overtorque ();
 
+	ka50_lamps.leng_overtorque = get_current_flight_dynamics_leng_overtorque ();
+
+	ka50_lamps.reng_overtorque = get_current_flight_dynamics_reng_overtorque ();
+
 	ka50_lamps.rotor_rpm = get_current_flight_dynamics_low_rotor_rpm ();
 
 	ka50_lamps.fuel_low = current_flight_dynamics->fuel_weight.value < (current_flight_dynamics->fuel_weight.max * 0.25);
@@ -311,6 +315,10 @@ void update_ka50_lamp_avionics (void)
 	ka50_lamps.ase_auto_page = get_global_ase_auto_page ();
 
 	ka50_lamps.gear_damaged = get_dynamics_damage_type (DYNAMICS_DAMAGE_UNDERCARRIAGE);
+
+	ka50_lamps.max_g = current_flight_dynamics->g_force.value >= 3.5;
+
+	ka50_lamps.max_isa_light = kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value > 350.0);
 
 	switch (gear_state)
 	{
