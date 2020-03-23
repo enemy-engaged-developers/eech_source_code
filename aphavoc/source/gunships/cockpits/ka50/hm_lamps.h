@@ -95,7 +95,15 @@ struct KA50_LAMP_FLAGS
 		gear_status					:1,
 		gear_red,					:1,
 		max_g						:1,
-		max_isa_light				:1;
+		max_isa_light				:1,
+		lo_wep_light				:1,
+		li_wep_light				:1,
+		ri_wep_light				:1,
+		ro_wep_light				:1,
+		lo_wep_store_light			:1,
+		li_wep_store_light			:1,
+		ri_wep_store_light			:1,
+		ro_wep_store_light			:1;
 };
 
 typedef struct KA50_LAMP_FLAGS ka50_lamp_flags;

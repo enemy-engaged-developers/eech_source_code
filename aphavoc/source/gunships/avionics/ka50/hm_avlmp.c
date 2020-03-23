@@ -215,6 +215,110 @@ static void update_master_caution (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+static void update_weapon_status_lamps (void)
+{
+	entity
+		*en;
+
+	entity_sub_types
+		selected_weapon,
+		weapon_sub_type;
+
+	int
+		number,
+		damaged;
+
+	ka50_lamps.lo_wep_light			= 0;
+	ka50_lamps.li_wep_light			= 0;
+	ka50_lamps.ri_wep_light			= 0;
+	ka50_lamps.ro_wep_light			= 0;
+	ka50_lamps.lo_wep_store_light	= 0;
+	ka50_lamps.li_wep_store_light	= 0;
+	ka50_lamps.ri_wep_store_light	= 0;
+	ka50_lamps.ro_wep_store_light	= 0;
+
+	////////////////////////////////////////
+
+	en = get_gunship_entity ();
+
+	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+
+	if (get_local_entity_weapon_hardpoint_info (en, KA50_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	{
+		if (number > 0)
+		{
+			ka50_lamps.lo_wep_store_light = 1;
+
+			if (weapon_sub_type == selected_weapon)
+			{
+				ka50_lamps.lo_wep_light = 1;
+			}
+		} else {
+			ka50_lamps.lo_wep_store_light = 0;
+			ka50_lamps.lo_wep_light = 0;
+		}
+	}
+
+	////////////////////////////////////////
+
+	if (get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	{
+		if (number > 0)
+		{
+			ka50_lamps.li_wep_store_light = 1;
+
+			if (weapon_sub_type == selected_weapon)
+			{
+				ka50_lamps.li_wep_light = 1;
+			}
+		} else {
+			ka50_lamps.li_wep_store_light = 0;
+			ka50_lamps.li_wep_light = 0;
+		}
+	}
+
+	////////////////////////////////////////
+
+	if (get_local_entity_weapon_hardpoint_info (en, KA50_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	{
+		if (number > 0)
+		{
+			ka50_lamps.ri_wep_store_light = 1;
+
+			if (weapon_sub_type == selected_weapon)
+			{
+				ka50_lamps.ri_wep_light = 1;
+			}
+		} else {
+			ka50_lamps.ri_wep_store_light = 0;
+			ka50_lamps.ri_wep_light = 0;
+		}
+	}
+
+	////////////////////////////////////////
+
+	if (get_local_entity_weapon_hardpoint_info (en, KA50_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	{
+		if (number > 0)
+		{
+			ka50_lamps.ro_wep_store_light = 1;
+
+			if (weapon_sub_type == selected_weapon)
+			{
+				ka50_lamps.ro_wep_light = 1;
+			}
+		} else {
+			ka50_lamps.ro_wep_store_light = 0;
+			ka50_lamps.ro_wep_light = 0;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //
 // Note that all lamps are extinguished in initialise_ka50_lamps ().
 //
@@ -363,6 +467,8 @@ void update_ka50_lamp_avionics (void)
 			break;
 		}
 	}
+
+	update_weapon_status_lamps ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
