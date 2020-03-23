@@ -83,5 +83,5 @@ radar_altitude value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 g_force value = 1.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_rpm value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_torque value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-fuel_weight value = 1487.000000, min = 0.000000, max = 1487.000000, modifier = 1.000000, delta = 0.1136
-entre_of_gravity_x = 0.000000, centre_of_gravity_y = -0.200000, centre_of_gravity_z = 0.000000
+fuel_weight value = 1600.000000, min = 0.000000, max = 1600.000000, modifier = 1.000000, delta = 0.1850
+centre_of_gravity_x = 0.000000, centre_of_gravity_y = -0.200000, centre_of_gravity_z = 0.000000
