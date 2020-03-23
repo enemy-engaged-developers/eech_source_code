@@ -693,9 +693,9 @@ void define_options_screen_sound_page_objects (void)
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
       UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, no_music ? 127 : 255),
       UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, no_music ? 127 : 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -876,7 +876,7 @@ void notify_music_option_button ( ui_object *obj, void *arg )
 	int
 		selection;
 
-	selection =  ( get_global_sound_music () == GAME_MUSIC_ON ) ? GAME_MUSIC_OFF : GAME_MUSIC_ON;
+	selection =  ( get_global_sound_music () == GAME_MUSIC_ON || no_music ) ? GAME_MUSIC_OFF : GAME_MUSIC_ON;
 
 	if (selection == GAME_MUSIC_ON)
 	{
@@ -884,7 +884,7 @@ void notify_music_option_button ( ui_object *obj, void *arg )
 
 		set_global_sound_music ( GAME_MUSIC_ON );
 
-//		play_cd_music (CD_MUSIC_TYPE_INTRO);
+		play_music (MUSIC_TYPE_INTRO, TRUE);
 	}
 	else
 	{
@@ -892,7 +892,7 @@ void notify_music_option_button ( ui_object *obj, void *arg )
 
 		set_global_sound_music ( GAME_MUSIC_OFF );
 
-		stop_cd_music ();
+		stop_music (0.0);
 	}
 
 	// don't leave text selected

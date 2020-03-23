@@ -273,6 +273,10 @@ const effect_data
       {
          FALSE,															// constructed locally
       },
+      // ENTITY_SUB_TYPE_EFFECT_SOUND_MUSIC
+      {
+         TRUE,															// constructed locally
+      },
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

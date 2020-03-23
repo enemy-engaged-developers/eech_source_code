@@ -253,7 +253,7 @@ void init_function (ui_object *obj, void *arg)
 			else
 			{
 
-				play_cd_music ( CD_MUSIC_TYPE_INTRO );
+				play_music ( MUSIC_TYPE_INTRO, TRUE );
 
 				#if DEMO_VERSION
 					push_ui_screen (advert_screen);

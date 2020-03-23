@@ -80,7 +80,7 @@ void game (void)
 
 	set_mouse_off ();
 
-	stop_cd_music ();
+	stop_music (0.0);
 
 	deinitialise_game ();
 }

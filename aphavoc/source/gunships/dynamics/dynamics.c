@@ -2639,6 +2639,8 @@ void dynamics_takeoff (void)
 	set_client_server_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_SPIN_UP_TIMER, 0.0);
 
 	transmit_entity_comms_message (ENTITY_COMMS_MOBILE_TAKEOFF, get_gunship_entity ());
+	
+	play_music (MUSIC_TYPE_INGAME, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -668,7 +668,7 @@ void player_assigned_new_task (entity *mobile, entity *task)
 	set_client_server_entity_parent (get_pilot_entity (), LIST_TYPE_PLAYER_TASK, task);
 
 	//play ingame music track
-	play_cd_music (CD_MUSIC_TYPE_COCKPIT);
+	//play_music (MUSIC_TYPE_INGAME, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

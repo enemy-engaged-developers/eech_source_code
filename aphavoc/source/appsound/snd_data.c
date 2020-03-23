@@ -78,7 +78,7 @@
 
 #define SOUND_OVERRIDE_DIRECTORY "..\\COHOKUM\\AUDIO"
 
-#define DEBUG_MODILE 0
+#define DEBUG_MODULE 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2416,7 +2416,18 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_CH3_LOCK_ON, 					             ENTITY_SIDE_NEUTRAL,	"ch3_a2a.pcm",		                22050,	80,	    0.0, 0.0, 0.0 },
 		{ SOUND_SAMPLE_INDEX_CH3_MCA, 						             ENTITY_SIDE_NEUTRAL,	"ch3_mca.pcm",		                22050,	100,	0.1, 0.0, 0.0 },
 
-
+		{ SOUND_SAMPLE_INDEX_MUSIC_INVALID, 						     ENTITY_SIDE_NEUTRAL,	"MUSIC_INVALID.wav",		        44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_INVALID2, 						     ENTITY_SIDE_NEUTRAL,	"MUSIC_INVALID2.wav",		        44100,	255,	0.0, 0.0, 0.0 },
+		//{ SOUND_SAMPLE_INDEX_MUSIC_INTRO, 						         ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_INTRO.wav",		            44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_INGAME1, 						     ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_INGAME1.wav",		        44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_INGAME2, 						     ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_INGAME2.wav",		        44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_INGAME3, 						     ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_INGAME3.wav",		        44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_ACTION1,								 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_ACTION1.wav",					44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_ACTION2,								 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_ACTION2.wav",					44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_ACTION3,								 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_ACTION3.wav",					44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE1, 					 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_MISSION_COMPLETE1.wav",		44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE2, 					 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_MISSION_COMPLETE2.wav",		44100,	255,	0.0, 0.0, 0.0 },
+		{ SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3, 					 ENTITY_SIDE_NEUTRAL,	"MUSIC\\MUSIC_MISSION_COMPLETE3.wav",		44100,	255,	0.0, 0.0, 0.0 },
 	};
 
 int
@@ -2424,6 +2435,9 @@ int
 
 sound_effect_information
 	application_sound_effects [NUM_SOUND_SAMPLE_INDICES];
+
+int
+	no_music = FALSE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2591,8 +2605,16 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 
 							if ( application_sound_samples[count].name )
 							{
-
-								sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
+								// SKIP DISABLED MUSIC TYPES TO SAVE MEMORY
+								if (count == SOUND_SAMPLE_INDEX_MUSIC_INTRO && command_line_no_intro_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_INGAME1 && count <= SOUND_SAMPLE_INDEX_MUSIC_INGAME3 && command_line_no_ingame_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_ACTION1 && count <= SOUND_SAMPLE_INDEX_MUSIC_ACTION3 && command_line_no_action_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE1 && count <= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3 && command_line_no_mission_complete_music) {
+									sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[SOUND_SAMPLE_INDEX_MUSIC_INVALID].name );
+								}
+								else {
+									sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
+								}
 
 								sound_block_header_index = get_sound_block_header_index ( filename, sound_sample_index );
 
@@ -2693,8 +2715,19 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 									debug_log ( "SND_DATA: Sound loading from sound.dat: %s", filename );
 									#endif
 
-									fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-									load_from_file ( sound_sample_index, SAMPLE_TYPE_MONO_8BIT, application_sound_effects[sound_sample_index].original_rate, blocked_sound_samples[sound_block_header_index].sound_data_length, block_sound_sample_data_file );
+									// NO MUSIC FILES CHEAT
+									if ( sound_sample_index >= SOUND_SAMPLE_INDEX_MUSIC_INVALID && sound_sample_index <= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3 ) {
+										debug_log ( "SND_DATA: Music file not found, music turned off" );
+										set_global_sound_music ( GAME_MUSIC_OFF );
+										no_music = TRUE;
+										
+										fseek ( block_sound_sample_data_file, blocked_sound_samples[SOUND_SAMPLE_INDEX_APACHE_LOCK_ON].sound_data_offset, SEEK_SET );
+										load_from_file ( sound_sample_index, SAMPLE_TYPE_MONO_8BIT, application_sound_effects[SOUND_SAMPLE_INDEX_APACHE_LOCK_ON].original_rate, blocked_sound_samples[SOUND_SAMPLE_INDEX_APACHE_LOCK_ON].sound_data_length, block_sound_sample_data_file );
+									}
+									else {
+										fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
+										load_from_file ( sound_sample_index, SAMPLE_TYPE_MONO_8BIT, application_sound_effects[sound_sample_index].original_rate, blocked_sound_samples[sound_block_header_index].sound_data_length, block_sound_sample_data_file );
+									}
 								}
 							}
 						}

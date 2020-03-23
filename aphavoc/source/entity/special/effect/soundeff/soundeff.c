@@ -526,13 +526,13 @@ void set_local_sound_effect_sample_indices (entity *en, int count, sound_sample_
 				raw->effect_lifetime += (size / rate);
 			}
 
-			if (raw->effect_lifetime >= 40.0)
+			if (raw->effect_lifetime >= (raw->eff.sub_type != ENTITY_SUB_TYPE_EFFECT_SOUND_MUSIC ? 40.0f : 300.0f))
 			{
-				debug_log ("SOUNDEFF : Sound effect too long ( index = %s)", application_sound_effects [indices [loop]].name);
+				debug_log ("SOUNDEFF : Sound effect too long ( index = %s, %f s )", application_sound_effects [indices [loop]].name, raw->effect_lifetime);
 			}
 		}
 
-		raw->effect_lifetime = min (raw->effect_lifetime, 40.0f);
+		raw->effect_lifetime = min (raw->effect_lifetime, raw->eff.sub_type != ENTITY_SUB_TYPE_EFFECT_SOUND_MUSIC ? 40.0f : 300.0f);
 	}
 }
 

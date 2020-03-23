@@ -198,7 +198,7 @@ void deinitialise_game (void)
 	ogre_ui_clear ();
 #endif
 
-#ifndef OGRE_EE
+#if 0
 	////////////////////////////////////////
 	//
 	// DEINITIALISE CD PLAYER

@@ -780,6 +780,9 @@ int store_session (session_list_data_type *game_session, const char *filename)
 
 	count = -1;
 
+	// STOP MUSIC FIRST
+	stop_music(0.0);
+
 	strncpy (limited_filename, filename, sizeof (limited_filename) - 2);
 	limited_filename [31] = '\0';
 
@@ -1148,6 +1151,9 @@ int store_session (session_list_data_type *game_session, const char *filename)
 
 	// arneh feb 2009 - this call shouldn't be necessary, and it will double initialise things which confuses EECH
 	//	set_current_game_session (game_session);
+
+	// RESUME MUSIC LAST
+	probably_change_cd_music();
 
 	#endif
 
@@ -1739,7 +1745,7 @@ void start_campaign (void)
 		case GUNSHIP_TYPE_COMANCHE:
 		{
 
-			//play_cd_music ( CD_MUSIC_TRACK_INGAME );
+			//play_music ( MUSIC_TRACK_INGAME, FALSE );
 
 			break;
 		}
@@ -1747,7 +1753,7 @@ void start_campaign (void)
 		case GUNSHIP_TYPE_HOKUM:
 		{
 
-			//play_cd_music ( CD_MUSIC_TRACK_INGAME );
+			//play_music ( MUSIC_TRACK_INGAME, FALSE );
 
 			break;
 		}

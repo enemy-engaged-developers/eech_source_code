@@ -712,20 +712,14 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
-#ifndef OGRE_EE
+#if 0
 	capture_cd_audio_device ();
-#endif
 
-#ifdef COMMERCIAL
-#if !DEMO_VERSION
-#if ( LANGUAGE != LANGUAGE_SPANISH )
 //	if ( !check_cd_for_80_minutes () )
 //	{
 //
 //		debug_fatal ("Unable to find the Enemy Engaged RAH66 Comanche Vs KA52 Hokum CD\n\nPlease insert the CD and try again ...");
 //	}
-#endif
-#endif
 #endif
 
 #ifndef OGRE_EE
@@ -850,6 +844,8 @@ void full_initialise_game (void)
 	initialise_comms ();
 
 	initialise_comms_debug ();
+
+	initialise_music ();
 
 	////////////////////////////////////////
 	//

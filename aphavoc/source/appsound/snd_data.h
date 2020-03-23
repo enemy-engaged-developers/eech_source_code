@@ -2326,6 +2326,19 @@ enum //SOUND_SAMPLE_INDICES
 	SOUND_SAMPLE_INDEX_CH3_MCA,
 
 	//Werewolf: end additional sounds
+	
+	SOUND_SAMPLE_INDEX_MUSIC_INVALID,
+	SOUND_SAMPLE_INDEX_MUSIC_INVALID2,
+	SOUND_SAMPLE_INDEX_MUSIC_INTRO,
+	SOUND_SAMPLE_INDEX_MUSIC_INGAME1,
+	SOUND_SAMPLE_INDEX_MUSIC_INGAME2,
+	SOUND_SAMPLE_INDEX_MUSIC_INGAME3,
+	SOUND_SAMPLE_INDEX_MUSIC_ACTION1,
+	SOUND_SAMPLE_INDEX_MUSIC_ACTION2,
+	SOUND_SAMPLE_INDEX_MUSIC_ACTION3,
+	SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE1,
+	SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE2,
+	SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3,
 
 	NUM_SOUND_SAMPLE_INDICES,
 };
@@ -2392,6 +2405,9 @@ extern sound_effect_information
 
 extern int
 	number_of_application_sound_samples;
+
+extern int
+	no_music;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

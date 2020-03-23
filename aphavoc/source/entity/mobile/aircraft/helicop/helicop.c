@@ -113,6 +113,11 @@ void set_gunship_entity (entity *en)
 
 	debug_log("Setting gunship to %s", get_sub_type_name(en));
 
+	if (en == NULL)
+	{
+		stop_music(0.0);
+	}
+
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		assign_entity_to_user (en);
@@ -678,10 +683,7 @@ void notify_gunship_entity_mission_completed (entity *en, entity *task)
 	// Play Mission Complete CD track
 	//
 
-	if (!command_line_no_mission_complete_music)
-	{
-		play_cd_music (CD_MUSIC_TYPE_MISSION_COMPLETE);
-	}
+	play_music (MUSIC_TYPE_MISSION_COMPLETE, TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

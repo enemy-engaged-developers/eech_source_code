@@ -138,6 +138,9 @@ extern int
 	command_line_smoke_optimization,
 	command_line_cloud_puffs,								// Casm 20MAY2012
 	command_line_no_mission_complete_music,
+	command_line_no_intro_music,
+	command_line_no_ingame_music,
+	command_line_no_action_music,
 	command_line_mouse_look,									// Retro 030317
 	command_line_mouse_look_speed,							// Retro 030317
 	command_line_min_fov,										// Retro 030318
