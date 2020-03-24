@@ -1049,6 +1049,10 @@ static motion_data
 static void initialise_pilot_right_arm_and_cyclic_animation (void)
 {
 	read_motion_values ("GRAPHICS\\COCKPITS\\BLACKSHARK\\JOYSTICK.MOT", NUM_RIGHT_ARM_FRAMES, right_arm_joystick_motion);
+
+	read_motion_values ("GRAPHICS\\COCKPITS\\BLACKSHARK\\FOREARM.MOT", NUM_RIGHT_ARM_FRAMES, right_arm_forearm_motion);
+
+	read_motion_values ("GRAPHICS\\COCKPITS\\BLACKSHARK\\SHOULDER.MOT", NUM_RIGHT_ARM_FRAMES, right_arm_shoulder_motion);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
