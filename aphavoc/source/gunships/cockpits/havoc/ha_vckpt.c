@@ -557,7 +557,7 @@ void update_havoc_virtual_cockpit (void)
 	update_status_lamps();
 	update_warning_lamps();
 	update_chaff_flare_status_lamps();
-	update_weapon_panel_Lamps();
+	update_weapon_panel_lamps();
 	#endif
 }
 
@@ -2108,7 +2108,7 @@ void update_chaff_flare_status_lamps(void)
 #endif
 
 #ifndef OGRE_EE
-void update_weapon_panel_Lamps(void)
+void update_weapon_panel_lamps(void)
 {
 	he_cann_lamp->visible_object = havoc_lamps.weapons_management_high_explosive_cannon_green;
 	he_cann_dmg_lamp->visible_object = havoc_lamps.weapons_management_high_explosive_cannon_red;

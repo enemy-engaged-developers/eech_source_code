@@ -267,7 +267,7 @@ void update_ka50_virtual_cockpit (void)
 
 	update_gear_lamps();
 	update_blackshark_warning_lamps();
-	update_weapon_status_lamps();
+	update_ka50_weapon_panel_lamps();
 
 	////////////////////////////////////////
 	//
@@ -1053,7 +1053,7 @@ void update_blackshark_warning_lamps(void) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_weapon_status_lamps(void) {
+void update_ka50_weapon_panel_lamps(void) {
 		// Weapon selected lamps
 		left_outer_wep_light->visible_object = ka50_lamps.lo_wep_light;
 		left_inner_wep_light->visible_object = ka50_lamps.li_wep_light;
