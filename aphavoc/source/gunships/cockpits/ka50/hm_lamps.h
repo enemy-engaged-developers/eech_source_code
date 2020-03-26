@@ -68,8 +68,8 @@ struct KA50_LAMP_FLAGS
 {
 	unsigned int
 		master_caution				:1,
-//		left_engine_fire			:1,
-//		right_engine_fire			:1,
+		left_engine_fire			:1,
+		right_engine_fire			:1,
 		fire						:1,
 		fire_extinguiser			:1,
 		hydraulic_pressure			:1,

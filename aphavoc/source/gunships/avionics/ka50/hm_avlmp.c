@@ -372,9 +372,9 @@ void update_ka50_lamp_avionics (void)
 
 	////////////////////////////////////////
 
-//	ka50_lamps.left_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
+	ka50_lamps.left_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
 
-//	ka50_lamps.right_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
+	ka50_lamps.right_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
 
 	ka50_lamps.fire = (get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE) || get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE));
 

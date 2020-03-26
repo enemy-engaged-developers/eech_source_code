@@ -100,8 +100,8 @@ static object_3d_sub_instance
 	*gmax_light,
 	*max_isa_light,
 	*fire_light,
-//	*leng_fire_light,
-//	*reng_fire_light,
+	*leng_fire_light,
+	*reng_fire_light,
 //	*apu_fire_light,
 	*master_alarm,
 	*left_outer_wep_light,
@@ -154,8 +154,8 @@ void initialise_ka50_virtual_cockpit (void)
 	gmax_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_G_LIMIT_LAMP);
 	max_isa_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MAX_ISA_LAMP);
 	fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_FIRE_LAMP);
-//	leng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LENG_FIRE_LAMP);
-//	reng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RENG_FIRE_LAMP);
+	leng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LENG_FIRE_LAMP);
+	reng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RENG_FIRE_LAMP);
 //	apu_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_APU_FIRE_LAMP);
 	master_alarm = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MASTER_ALARM_LAMP);
 
@@ -1040,9 +1040,9 @@ void update_blackshark_warning_lamps(void) {
 
 		fire_light->visible_object = ka50_lamps.fire;
 
-//		leng_fire_light->visible_object = ka50_lamps.left_engine_fire;
+		leng_fire_light->visible_object = ka50_lamps.left_engine_fire;
 
-//		reng_fire_light->visible_object = ka50_lamps.right_engine_fire;
+		reng_fire_light->visible_object = ka50_lamps.right_engine_fire;
 
 //		apu_fire_light->visible_object = ka50_lamps.apu_fire;
 
