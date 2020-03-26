@@ -118,57 +118,57 @@ void deinitialise_ka50_lamps (void)
 
 void draw_ka50_virtual_cockpit_lamps (void)
 {
-	ASSERT (virtual_cockpit_inst3d);
-
-	draw_lamp (ka50_lamps.master_caution, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__022);
-
-	draw_lamp (ka50_lamps.left_engine_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__019);
-
-	draw_lamp (ka50_lamps.apu_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__020);
-
-	draw_lamp (ka50_lamps.right_engine_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__021);
-
-	draw_lamp (ka50_lamps.fire_extinguiser, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__018);
-
-	draw_lamp (ka50_lamps.hydraulic_pressure, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__003);
-
-	draw_lamp (ka50_lamps.oil_pressure, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__004);
-
-	draw_lamp (ka50_lamps.oil_temperature, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__005);
-
-	draw_lamp (ka50_lamps.overtorque, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__000);
-
-	draw_lamp (ka50_lamps.rotor_rpm, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__001);
-
-	draw_lamp (ka50_lamps.fuel_low, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__002);
-
-	draw_lamp (ka50_lamps.rotor_brake, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__006);
-
-	draw_lamp (ka50_lamps.wheel_brake, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__007);
-
-	draw_lamp (ka50_lamps.navigation_lights, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__008);
-
-	draw_lamp (ka50_lamps.hover_hold, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__009);
-
-	draw_lamp (ka50_lamps.altitude_hold, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__010);
-
-	draw_lamp (ka50_lamps.auto_pilot, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__011);
-
-	draw_lamp (ka50_lamps.laser, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__013);
-
-	draw_lamp (ka50_lamps.radar_jammer, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__014);
-
-	draw_lamp (ka50_lamps.ir_jammer, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__015);
-
-	draw_lamp (ka50_lamps.auto_counter_measures, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__016);
-
-	draw_lamp (ka50_lamps.ase_auto_page, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__017);
-
-	draw_lamp (ka50_lamps.gear_damaged, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__024);
-
-	draw_lamp (ka50_lamps.gear_status, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__023);
-
-	draw_lamp (ka50_lamps.gear_red, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_GEAR__029);
+//	ASSERT (virtual_cockpit_inst3d);
+//
+//	draw_lamp (ka50_lamps.master_caution, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__022);
+//
+//	draw_lamp (ka50_lamps.left_engine_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__019);
+//
+//	draw_lamp (ka50_lamps.apu_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__020);
+//
+//	draw_lamp (ka50_lamps.right_engine_fire, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__021);
+//
+//	draw_lamp (ka50_lamps.fire_extinguiser, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__018);
+//
+//	draw_lamp (ka50_lamps.hydraulic_pressure, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__003);
+//
+//	draw_lamp (ka50_lamps.oil_pressure, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__004);
+//
+//	draw_lamp (ka50_lamps.oil_temperature, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__005);
+//
+//	draw_lamp (ka50_lamps.overtorque, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__000);
+//
+//	draw_lamp (ka50_lamps.rotor_rpm, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__001);
+//
+//	draw_lamp (ka50_lamps.fuel_low, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__002);
+//
+//	draw_lamp (ka50_lamps.rotor_brake, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__006);
+//
+//	draw_lamp (ka50_lamps.wheel_brake, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__007);
+//
+//	draw_lamp (ka50_lamps.navigation_lights, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__008);
+//
+//	draw_lamp (ka50_lamps.hover_hold, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__009);
+//
+//	draw_lamp (ka50_lamps.altitude_hold, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__010);
+//
+//	draw_lamp (ka50_lamps.auto_pilot, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__011);
+//
+//	draw_lamp (ka50_lamps.laser, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__013);
+//
+//	draw_lamp (ka50_lamps.radar_jammer, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__014);
+//
+//	draw_lamp (ka50_lamps.ir_jammer, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__015);
+//
+//	draw_lamp (ka50_lamps.auto_counter_measures, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__016);
+//
+//	draw_lamp (ka50_lamps.ase_auto_page, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__017);
+//
+//	draw_lamp (ka50_lamps.gear_damaged, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__024);
+//
+//	draw_lamp (ka50_lamps.gear_status, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__023);
+//
+//	draw_lamp (ka50_lamps.gear_red, TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_GEAR__029);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

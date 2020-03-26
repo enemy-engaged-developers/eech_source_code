@@ -346,7 +346,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->position.y = position.y;
 	current_flight_dynamics->position.z = position.z;
 
-	// attitutde
+	// attitude
 
 	get_identity_matrix3x3 (current_flight_dynamics->attitude);
 
