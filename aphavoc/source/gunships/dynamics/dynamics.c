@@ -461,13 +461,13 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("barometric altitude 				= %f", MT_FLOAT, &current_flight_dynamics->barometric_altitude.value);
 	debug_watch ("air_density       					= %f", MT_FLOAT, &current_flight_dynamics->air_density.value);
 
-	debug_watch ("power avaliable  		 		= %f", MT_FLOAT, &current_flight_dynamics->power_avaliable.value);
+	debug_watch ("power available  		 		= %f", MT_FLOAT, &current_flight_dynamics->power_avaliable.value);
 	debug_watch ("power required    				= %f", MT_FLOAT, &current_flight_dynamics->power_required.value);
 	debug_watch ("power induced     				= %f", MT_FLOAT, &current_flight_dynamics->power_induced.value);
 	debug_watch ("power profile     				= %f", MT_FLOAT, &current_flight_dynamics->power_profile.value);
 	debug_watch ("power parasite    				= %f", MT_FLOAT, &current_flight_dynamics->power_parasite.value);
 	debug_watch ("power surplus     				= %f", MT_FLOAT, &current_flight_dynamics->power_surplus.value);
-
+	debug_watch ("G force                           = %f", MT_FLOAT, &current_flight_dynamics->g_force.value);
 #endif
 }
 

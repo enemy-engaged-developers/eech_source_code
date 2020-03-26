@@ -100,6 +100,9 @@ static object_3d_sub_instance
 	*gmax_light,
 	*max_isa_light,
 	*fire_light,
+	*leng_fire_light,
+	*reng_fire_light,
+//	*apu_fire_light,
 	*master_alarm,
 	*left_outer_wep_light,
 	*left_inner_wep_light,
@@ -151,6 +154,9 @@ void initialise_ka50_virtual_cockpit (void)
 	gmax_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_G_LIMIT_LAMP);
 	max_isa_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MAX_ISA_LAMP);
 	fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_FIRE_LAMP);
+	leng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LENG_FIRE_LAMP);
+	reng_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_RENG_FIRE_LAMP);
+//	apu_fire_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_APU_FIRE_LAMP);
 	master_alarm = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_MASTER_ALARM_LAMP);
 
 	left_outer_wep_light = find_sub_object(virtual_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_BLACKSHARK_LO_WEP_LAMP);
@@ -267,7 +273,7 @@ void update_ka50_virtual_cockpit (void)
 
 	update_gear_lamps();
 	update_blackshark_warning_lamps();
-	update_ka50_weapon_panel_lamps();
+	update_blackshark_weapon_panel_lamps();
 
 	////////////////////////////////////////
 	//
@@ -1020,8 +1026,8 @@ void update_gear_lamps(void) {
 void update_blackshark_warning_lamps(void) {
 	// Engine RPM warning lamps
 
-		leng_rpm_light->visible_object = ka50_lamps.leng_overtorque;
-		reng_rpm_light->visible_object = ka50_lamps.reng_overtorque;
+		leng_rpm_light->visible_object = ka50_lamps.leng_max_n2_rpm;
+		reng_rpm_light->visible_object = ka50_lamps.reng_max_n2_rpm;
 
 	// Rotor RPM lamp
 
@@ -1032,11 +1038,13 @@ void update_blackshark_warning_lamps(void) {
 
 	// Fire lamp
 
-		fire_light->visible_object = ka50_lamps.left_engine_fire;
+		fire_light->visible_object = ka50_lamps.fire;
 
-		fire_light->visible_object = ka50_lamps.right_engine_fire;
+		leng_fire_light->visible_object = ka50_lamps.left_engine_fire;
 
-		fire_light->visible_object = ka50_lamps.apu_fire;
+		reng_fire_light->visible_object = ka50_lamps.right_engine_fire;
+
+//		apu_fire_light->visible_object = ka50_lamps.apu_fire;
 
 	// Max ISA exceeded lamp
 
@@ -1053,7 +1061,7 @@ void update_blackshark_warning_lamps(void) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_ka50_weapon_panel_lamps(void) {
+void update_blackshark_weapon_panel_lamps(void) {
 		// Weapon selected lamps
 		left_outer_wep_light->visible_object = ka50_lamps.lo_wep_light;
 		left_inner_wep_light->visible_object = ka50_lamps.li_wep_light;

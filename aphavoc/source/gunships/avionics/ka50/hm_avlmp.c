@@ -374,9 +374,9 @@ void update_ka50_lamp_avionics (void)
 
 	ka50_lamps.left_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
 
-	ka50_lamps.apu_fire = 0;
-
 	ka50_lamps.right_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
+
+	ka50_lamps.fire = (get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE) || get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE));
 
 	ka50_lamps.fire_extinguiser = fire_extinguisher_used;
 
@@ -386,11 +386,9 @@ void update_ka50_lamp_avionics (void)
 
 	ka50_lamps.oil_temperature = 0;
 
-	ka50_lamps.overtorque = get_current_flight_dynamics_overtorque ();
+	ka50_lamps.leng_max_n2_rpm = current_flight_dynamics->left_engine_rpm.value > 100.0;
 
-	ka50_lamps.leng_overtorque = get_current_flight_dynamics_leng_overtorque ();
-
-	ka50_lamps.reng_overtorque = get_current_flight_dynamics_reng_overtorque ();
+	ka50_lamps.reng_max_n2_rpm = current_flight_dynamics->right_engine_rpm.value > 100.0;
 
 	ka50_lamps.rotor_rpm = get_current_flight_dynamics_low_rotor_rpm ();
 
@@ -422,7 +420,7 @@ void update_ka50_lamp_avionics (void)
 
 	ka50_lamps.max_g = current_flight_dynamics->g_force.value >= 3.5;
 
-	ka50_lamps.max_isa_light = kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value > 350.0);
+	ka50_lamps.max_isa_light = kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value) > 350.0;
 
 	switch (gear_state)
 	{

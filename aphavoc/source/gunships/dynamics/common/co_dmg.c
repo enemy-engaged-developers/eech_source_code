@@ -518,7 +518,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					//#if DYNAMICS_DEBUG
 
-					debug_log ("DYNAMICS: left engine fire damage");
+					debug_colour_log (DEBUG_COLOUR_DARK_RED, "DYNAMICS: left engine fire damage");
 
 					//#endif
 
@@ -537,7 +537,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					//#if DYNAMICS_DEBUG
 
-					debug_log ("DYNAMICS: right engine fire damage");
+					debug_colour_log (DEBUG_COLOUR_DARK_RED, "DYNAMICS: right engine fire damage");
 
 					//#endif
 
