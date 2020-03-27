@@ -1248,6 +1248,8 @@ void update_avionics (void)
 
 			update_ka50_ekran_display ();
 
+			update_ka50_cannon_rounds_display ();
+
 			if (command_line_shared_mem_export != 0)
 				update_ka50_avionics_shared_mem ();	// Retro 8Mar2005
 
