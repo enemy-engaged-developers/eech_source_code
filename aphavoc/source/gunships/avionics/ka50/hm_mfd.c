@@ -6982,47 +6982,59 @@ static void draw_text_display (screen *text_screen)
 
 		if (draw_large_mfd)
 		{
+			set_mono_font_type (MONO_FONT_TYPE_12X20); //MONO_FONT_TYPE_7X12
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 11.0);
+
+			print_mono_font_string (text_display_line1);
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 29.0);
+
+			print_mono_font_string (text_display_line2);
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 47.0);
+
+			print_mono_font_string (text_display_line3);
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 65.0);
+
+			print_mono_font_string (text_display_line4);
+		}
+		else
+		{
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
 
 			set_2d_mono_font_position (-1.0, 1.0);
 
-			set_mono_font_rel_position (1.0, 11.0);
+			set_mono_font_rel_position (2.0, 11.0);
 
 			print_mono_font_string (text_display_line1);
 
 			set_2d_mono_font_position (-1.0, 1.0);
 
-			set_mono_font_rel_position (1.0, 25.0);
+			set_mono_font_rel_position (2.0, 25.0);
 
 			print_mono_font_string (text_display_line2);
 
 			set_2d_mono_font_position (-1.0, 1.0);
 
-			set_mono_font_rel_position (1.0, 39.0);
+			set_mono_font_rel_position (2.0, 39.0);
 
 			print_mono_font_string (text_display_line3);
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_3X6);
 
 			set_2d_mono_font_position (-1.0, 1.0);
 
-			set_mono_font_rel_position (1.0, 5.0);
+			set_mono_font_rel_position (2.0, 53.0);
 
-			print_mono_font_string (text_display_line1);
-
-			set_2d_mono_font_position (-1.0, 1.0);
-
-			set_mono_font_rel_position (1.0, 12.0);
-
-			print_mono_font_string (text_display_line2);
-
-			set_2d_mono_font_position (-1.0, 1.0);
-
-			set_mono_font_rel_position (1.0, 19.0);
-
-			print_mono_font_string (text_display_line3);
+			print_mono_font_string (text_display_line4);
 		}
 
 		if (command_line_shared_mem_export != 0)		//  Javelin  7/19
@@ -7103,7 +7115,7 @@ void initialise_ka50_mfd (void)
 
 	////////////////////////////////////////
 
-	set_ka50_text_display_text ("", "", "");
+	set_ka50_text_display_text ("", "", "", "");
 
 	////////////////////////////////////////
 
@@ -7169,7 +7181,7 @@ void initialise_ka50_mfd (void)
 	set_rgb_colour (MFD_BACKGROUND_COLOUR,   20,  20,  30, 255);
 	set_rgb_colour (MFD_CLEAR_COLOUR,         0,   0,   0, 255);
 
-	set_rgb_colour (TEXT_COLOUR1,             0, 243,  97, 255);
+	set_rgb_colour (TEXT_COLOUR1,             255, 147, 0, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,   0,  60,  34, 255);
 
     set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
@@ -7478,30 +7490,65 @@ void draw_ka50_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ka50_text_display_text (char *s1, char *s2, char *s3)
+
+void update_ka50_ekran_display (void)
+{
+	char
+		s1[80],
+		s2[80];
+
+	sprintf
+	(
+		s1,
+		"C:%02d F:%02d",
+		get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_CHAFF),
+		get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_FLARE)
+	);
+
+	if (ka50_damage.lh_chaff_dispensers || ka50_damage.rh_chaff_dispensers)
+	{
+		s1[2] = 'X';
+		s1[3] = 'X';
+	}
+
+	if (ka50_damage.lh_flare_dispensers || ka50_damage.rh_flare_dispensers)
+	{
+		s1[7] = 'X';
+		s1[8] = 'X';
+	}
+
+	sprintf (s2, "FUEL %04d", (int) (bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0)));
+
+	set_ka50_text_display_text ("", "", s1, s2);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4)
 {
 #ifndef OGRE_EE
-	ASSERT (s1);
 
-	ASSERT (s2);
+	if(s1 != "") {
+		strncpy (text_display_line1, s1, TEXT_DISPLAY_MAX_STRING_LENGTH);
+		text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
 
-	ASSERT (s3);
+	if(s2 != "") {
+		strncpy (text_display_line2, s2, TEXT_DISPLAY_MAX_STRING_LENGTH);
+		text_display_line2[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
 
-	strncpy (text_display_line1, s1, TEXT_DISPLAY_MAX_STRING_LENGTH);
+	if(s3 != "") {
+		strncpy (text_display_line3, s3, TEXT_DISPLAY_MAX_STRING_LENGTH);
+		text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
 
-	strncpy (text_display_line2, s2, TEXT_DISPLAY_MAX_STRING_LENGTH);
-
-	strncpy (text_display_line3, s3, TEXT_DISPLAY_MAX_STRING_LENGTH);
-
-	strncpy (text_display_line4, "          ", TEXT_DISPLAY_MAX_STRING_LENGTH);
-
-	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
-
-	text_display_line2[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
-
-	text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
-
-	text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	if(s4 != "") {
+		strncpy (text_display_line4, s4, TEXT_DISPLAY_MAX_STRING_LENGTH);
+		text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
 
 #endif
 }
