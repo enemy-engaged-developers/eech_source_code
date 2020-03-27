@@ -111,7 +111,7 @@ extern void draw_ka50_mfd (void);
 
 extern void update_ka50_ekran_display (void);
 
-extern void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4);
+extern void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4, char *s5);
 
 extern void draw_ka50_full_screen_display (void);
 

@@ -224,7 +224,8 @@ static char
 	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
 	text_display_line2[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
 	text_display_line3[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
-	text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH + 1];		//  Javelin  7/19
+	text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
+	text_display_line5[TEXT_DISPLAY_MAX_STRING_LENGTH + 1];		//  Javelin  7/19
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7007,6 +7008,12 @@ static void draw_text_display (screen *text_screen)
 			set_mono_font_rel_position (2.0, 65.0);
 
 			print_mono_font_string (text_display_line4);
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 83.0);
+
+			print_mono_font_string (text_display_line5);
 		}
 		else
 		{
@@ -7035,10 +7042,16 @@ static void draw_text_display (screen *text_screen)
 			set_mono_font_rel_position (2.0, 53.0);
 
 			print_mono_font_string (text_display_line4);
+
+			set_2d_mono_font_position (-1.0, 1.0);
+
+			set_mono_font_rel_position (2.0, 67.0);
+
+			print_mono_font_string (text_display_line5);
 		}
 
 		if (command_line_shared_mem_export != 0)		//  Javelin  7/19
-			update_ekran_shared_mem(text_display_line1, text_display_line2, text_display_line3, text_display_line4);
+			update_ka50_ekran_shared_mem(text_display_line1, text_display_line2, text_display_line3, text_display_line4, text_display_line5);
 
 		unlock_screen (text_screen);
 	}
@@ -7115,7 +7128,7 @@ void initialise_ka50_mfd (void)
 
 	////////////////////////////////////////
 
-	set_ka50_text_display_text ("", "", "", "");
+	set_ka50_text_display_text ("", "", "", "", "");
 
 	////////////////////////////////////////
 
@@ -7490,43 +7503,76 @@ void draw_ka50_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 void update_ka50_ekran_display (void)
 {
 	char
 		s1[80],
-		s2[80];
+		s2[80],
+		s3[80];
 
-	sprintf
-	(
-		s1,
-		"C:%02d F:%02d",
-		get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_CHAFF),
-		get_local_entity_weapon_count (get_gunship_entity (), ENTITY_SUB_TYPE_WEAPON_FLARE)
-	);
+	int
+		lh_chaff,
+		rh_chaff,
+		lh_flare,
+		rh_flare,
+		lh_chaff_number,
+		rh_chaff_number,
+		lh_flare_number,
+		rh_flare_number,
+		damaged;
 
-	if (ka50_damage.lh_chaff_dispensers || ka50_damage.rh_chaff_dispensers)
+	entity
+		*en;
+
+	entity_sub_types
+		weapon_sub_type;
+
+	en = get_gunship_entity ();
+
+	lh_chaff = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, &weapon_sub_type, &lh_chaff_number, &damaged);
+	rh_chaff = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, &weapon_sub_type, &rh_chaff_number, &damaged);
+
+	sprintf	(s1, "C: L%02d R%02d", lh_chaff_number, rh_chaff_number);
+
+	lh_flare = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, &weapon_sub_type, &lh_flare_number, &damaged);
+	rh_flare = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, &weapon_sub_type, &rh_flare_number, &damaged);
+
+	sprintf	(s2, "F: L%02d R%02d", lh_flare_number, rh_flare_number);
+
+	if (ka50_damage.lh_chaff_dispensers)
 	{
-		s1[2] = 'X';
-		s1[3] = 'X';
+		s1[4] = 'X';
+		s1[5] = 'X';
 	}
 
-	if (ka50_damage.lh_flare_dispensers || ka50_damage.rh_flare_dispensers)
+	if (ka50_damage.rh_chaff_dispensers)
 	{
-		s1[7] = 'X';
 		s1[8] = 'X';
+		s1[9] = 'X';
 	}
 
-	sprintf (s2, "FUEL %04d", (int) (bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0)));
+	if (ka50_damage.lh_flare_dispensers)
+	{
+		s2[4] = 'X';
+		s2[5] = 'X';
+	}
 
-	set_ka50_text_display_text ("", "", s1, s2);
+	if (ka50_damage.rh_flare_dispensers)
+	{
+		s2[8] = 'X';
+		s2[9] = 'X';
+	}
+
+	sprintf (s3, "FUEL %04d", (int) (bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0)));
+
+	set_ka50_text_display_text ("", "", s1, s2, s3);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4)
+void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4, char *s5)
 {
 #ifndef OGRE_EE
 
@@ -7548,6 +7594,11 @@ void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4)
 	if(s4 != "") {
 		strncpy (text_display_line4, s4, TEXT_DISPLAY_MAX_STRING_LENGTH);
 		text_display_line4[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
+
+	if(s5 != "") {
+		strncpy (text_display_line5, s5, TEXT_DISPLAY_MAX_STRING_LENGTH);
+		text_display_line5[TEXT_DISPLAY_MAX_STRING_LENGTH] = '\0';
 	}
 
 #endif

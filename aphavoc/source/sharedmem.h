@@ -124,6 +124,7 @@ void update_kiowa_avionics_shared_mem (void);
 
 void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4);
 void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4);
+void update_ka50_ekran_shared_mem (char *l1, char *l2, char *l3, char *l4, char *l5);
 
 void update_havoc_avionics_shared_mem (void);
 void update_hind_avionics_shared_mem (void);

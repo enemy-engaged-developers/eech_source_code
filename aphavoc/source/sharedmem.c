@@ -247,6 +247,37 @@ void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	}
 }
 
+void update_ka50_ekran_shared_mem (char *l1, char *l2, char *l3, char *l4, char *l5)
+{
+	if (gPtrSharedMemory == 0)
+		return;
+
+	if (l1)
+	{
+		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[0], l1, MAX_EKRAN_STRINGLEN);
+	}
+
+	if (l2)
+	{
+		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[1], l2, MAX_EKRAN_STRINGLEN);
+	}
+
+	if (l3)
+	{
+		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[2], l3, MAX_EKRAN_STRINGLEN);
+	}
+
+	if (l4)
+	{
+		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[3], l4, MAX_EKRAN_STRINGLEN);
+	}
+
+	if (l5)
+	{
+		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[4], l5, MAX_EKRAN_STRINGLEN);
+	}
+}
+
 void update_dynamics_shared_mem (void)
 {
 	if (gPtrSharedMemory == 0)
