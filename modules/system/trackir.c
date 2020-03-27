@@ -16,6 +16,7 @@
 //					about here.. so do not play the hero.. )
 //*********************************************************************/
 #include "system.h"
+#include "cmndline.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +186,7 @@ int __cdecl query_TIR_active()
 		return 0;
 	
 	// ENABLED BUT NOT USED
-	if ((float)gpfNP_GetYaw() == 0.0 && (float)gpfNP_GetPitch() == 0.0)
+	if (command_line_TIR_idle && (float)gpfNP_GetYaw() == 0.0 && (float)gpfNP_GetPitch() == 0.0)
 		return 0;
 
 	return 1;

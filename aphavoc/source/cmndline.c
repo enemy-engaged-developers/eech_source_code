@@ -245,6 +245,7 @@ int
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_eo_quality							= 2,	// /thealx/
 	command_line_TIR_6DOF							= 0,	// Retro 6Feb2005
+	command_line_TIR_idle							= 0,
 	command_line_mouse_tsd_target_select            = TRUE,
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	command_line_shared_mem_export					= 0,	// Retro 14Aug2006

@@ -1033,6 +1033,8 @@ static const struct config_option options[] =
 		INT(command_line_mouse_look_speed) },
 	{ "TIR_6DOF", "", "6 DoF support for TrackIR (0 = off, 1 = on) (def = 0)",
 		INT(command_line_TIR_6DOF) },
+	{ "TIR_idle", "", "TrackIR idle while connected but disabled (0 = off, 1 = on) (def = 0)",
+		INT(command_line_TIR_idle) },
 	{ "external_trackir", "", "(only when msl=1) external cameras controlled by TrackIR (0 = off, 1 = on) (def = 0)",
 		INT(command_line_external_trackir) },
 	{ "external_trackir_dir", "external_trackir_direction", "(only when external_trackir=1) invert external cameras view direction (0 = off, 1 = on) (def = 0)",
