@@ -7163,6 +7163,7 @@ void initialise_ka50_mfd (void)
 	////////////////////////////////////////
 
 	set_ka50_text_display_text ("", "", "", "", "");
+	set_ka50_cannon_rounds_display_text ("");
 
 	////////////////////////////////////////
 
@@ -7713,6 +7714,7 @@ void set_ka50_cannon_rounds_display_text (char *c1)
 
 	if(c1 != "") {
 		strncpy (cannon_rounds, c1, CANNON_DISPLAY_MAX_STRING_LENGTH);
+		cannon_rounds[CANNON_DISPLAY_MAX_STRING_LENGTH] = '\0';
 	}
 
 #endif
