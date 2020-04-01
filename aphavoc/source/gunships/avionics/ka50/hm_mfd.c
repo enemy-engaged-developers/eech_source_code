@@ -7080,7 +7080,7 @@ void draw_cannon_rounds_display(screen *text_screen)
 
 		set_mono_font_colour (MFD_COLOUR_GREEN);
 
-		set_mono_font_type (MONO_FONT_TYPE_17X26);
+		set_mono_font_type (MONO_FONT_TYPE_17X26_DIGITAL);
 
 		set_2d_mono_font_position (-1.0, 1.0);
 
