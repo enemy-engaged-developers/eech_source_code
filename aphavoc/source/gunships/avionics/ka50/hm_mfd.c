@@ -7686,7 +7686,7 @@ void update_ka50_cannon_rounds_display (void)
 	{
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%03d", ap_rounds_number);
+				sprintf	(c1, "%02d", (ap_rounds_number/10));
 			}
 		}
 	}
@@ -7695,7 +7695,7 @@ void update_ka50_cannon_rounds_display (void)
 	{
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%03d", he_rounds_number);
+				sprintf	(c1, "%02d", (he_rounds_number/10));
 			}
 		}
 	}
