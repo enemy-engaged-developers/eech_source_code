@@ -221,7 +221,7 @@ static screen
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define TEXT_DISPLAY_MAX_STRING_LENGTH	 (10)
-#define CANNON_DISPLAY_MAX_STRING_LENGTH (2)
+#define CANNON_DISPLAY_MAX_STRING_LENGTH (3)
 
 static char
 	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
@@ -7074,7 +7074,7 @@ void draw_cannon_rounds_display(screen *text_screen)
 
 	if (lock_screen (text_screen))
 	{
-		set_block (0, 0, 70 - 1, 70 - 1, TEXT_BACKGROUND_COLOUR);
+		set_block (0, 0, 128 - 1, 128 - 1, TEXT_BACKGROUND_COLOUR);
 
 		draw_mfd_layout_grid ();
 
@@ -7084,7 +7084,7 @@ void draw_cannon_rounds_display(screen *text_screen)
 
 		set_2d_mono_font_position (-1.0, 1.0);
 
-		set_mono_font_rel_position (1.0, 5.0);
+		set_mono_font_rel_position (2.0, 11.0);
 
 		print_mono_font_string (cannon_rounds);
 
@@ -7182,7 +7182,7 @@ void initialise_ka50_mfd (void)
 	large_shkval_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	large_abris_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	large_ekran_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
-	cannon_rounds_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
+	cannon_rounds_display_screen = create_user_texture_screen (128, 128, TEXTURE_TYPE_SINGLEALPHA, 1);
 
 	small_shkval_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	small_abris_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
@@ -7664,7 +7664,7 @@ void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4, char *s
 void update_ka50_cannon_rounds_display (void)
 {
 	char
-		c1[3];
+		c1[80];
 
 	int
 		ap_rounds_number,
@@ -7686,7 +7686,7 @@ void update_ka50_cannon_rounds_display (void)
 	{
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%02d", ap_rounds_number);
+				sprintf	(c1, "%03d", ap_rounds_number);
 			}
 		}
 	}
@@ -7695,7 +7695,7 @@ void update_ka50_cannon_rounds_display (void)
 	{
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%02d", he_rounds_number);
+				sprintf	(c1, "%03d", he_rounds_number);
 			}
 		}
 	}
