@@ -141,6 +141,7 @@ weapon_data
 			"No Weapon",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"None",																// weapon_loading_list_name
 			"None",																// weapon_loading_name_text
 
@@ -220,6 +221,7 @@ weapon_data
 			"M16A2 5.56mm Round",		 											// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -293,6 +295,7 @@ weapon_data
 			"M60E4 7.62mm Round",		 											// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -366,6 +369,7 @@ weapon_data
 			"M2HB 12.7mm Round",		 											// full_name
 			"M2HB 12.7mm",																	// hud_name
 			"M2HB 12.7mm",																	// mfd_name
+			"?",																// name abbreviation
 			"M2HB 12.7mm",																	// weapon_loading_list_name
 			"M2HB 12.7mm",																	// weapon_loading_name_text
 
@@ -439,6 +443,7 @@ weapon_data
 			"M61A1 20mm Round",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -515,6 +520,7 @@ weapon_data
 			"M61A1 CIWS 20mm Round",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -591,6 +597,7 @@ weapon_data
 			"M197 20mm Round",												// full_name
 			"GUN",																// hud_name
 			"GUN",																// mfd_name
+			"?",																// name abbreviation
 			"M197",																// weapon_loading_list_name
 			"M197 20mm Cannon",												// weapon_loading_name_text
 
@@ -665,6 +672,7 @@ weapon_data
 			"GAU-12/U 25mm Round", 			  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -739,6 +747,7 @@ weapon_data
 			"M242 25mm Round", 				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -813,6 +822,7 @@ weapon_data
 			"GAU-8/A 30mm Round",				  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -887,6 +897,7 @@ weapon_data
 			"M230 30mm Round",				  								// full_name
 			"GUN",																// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"M230",																// weapon_loading_list_name
 			"M230 30mm Chain Gun",											// weapon_loading_name_text
 
@@ -965,6 +976,7 @@ weapon_data
 			"M75 76mm Round",													// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1042,6 +1054,7 @@ weapon_data
 			"M256 120mm Round",				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1115,6 +1128,7 @@ weapon_data
 			"M284 155mm Round",				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1192,6 +1206,7 @@ weapon_data
 			"M26A1 227mm Rocket",				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1265,6 +1280,7 @@ weapon_data
 			"AK-47 7.62mm Round",		 											// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1339,6 +1355,7 @@ weapon_data
 			"PKM 7.62mm Round",		 											// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1413,6 +1430,7 @@ weapon_data
 			"12.7 Machine Gun",		 											// full_name
 			"A-12,7",																	// hud_name
 			"A-12,7",																	// mfd_name
+			"?",																// name abbreviation
 			"A-12,7",																	// weapon_loading_list_name
 			"A-12,7 Machine Gun",																	// weapon_loading_name_text
 
@@ -1487,6 +1505,7 @@ weapon_data
 			"Yak-B",				  							// full_name
 			"YAK-B",																	// hud_name
 			"YAK-B",																	// mfd_name
+			"?",																// name abbreviation
 			"Yak-B",																	// weapon_loading_list_name
 			"Yak-B 12.7mm Gatling Gun",													// weapon_loading_name_text
 
@@ -1561,6 +1580,7 @@ weapon_data
 			"14.5mm Round",	  					  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1635,6 +1655,7 @@ weapon_data
 			"UPK-23",						  								// full_name
 			"UPK-23",															// hud_name
 			"UPK-23",		 													// mfd_name
+			"?",																// name abbreviation
 			"UPK-23", 															// weapon_loading_list_name
 			"UPK-23-250 23mm Cannon Pod",										// weapon_loading_name_text
 
@@ -1709,6 +1730,7 @@ weapon_data
 			"GSh-301 30mm Round",				  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1783,6 +1805,7 @@ weapon_data
 			"2A38M 30mm Round",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1856,6 +1879,7 @@ weapon_data
 			"2A42 30mm Round",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -1930,6 +1954,7 @@ weapon_data
 			"2A42 30mm HE Round",	  		  								// full_name
 			"Gun(HE)",															// hud_name
 			"?",																	// mfd_name
+			"HE",																// name abbreviation
 			"2A42 (HE)",	  													// weapon_loading_list_name
 			"2A42 30mm Cannon",												// weapon_loading_name_text
 
@@ -2004,6 +2029,7 @@ weapon_data
 			"2A42 30mm AP Round",	  		  								// full_name
 			"Gun(AP)",															// hud_name
 			"?",																	// mfd_name
+			"AP",																// name abbreviation
 			"2A42 (AP)",	  													// weapon_loading_list_name
 			"2A42 30mm Cannon",												// weapon_loading_name_text
 
@@ -2078,6 +2104,7 @@ weapon_data
 			"2A72 30mm Round",  		  		  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2152,6 +2179,7 @@ weapon_data
 			"AO-17A 30mm Round",	  	  		  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2226,6 +2254,7 @@ weapon_data
 			"ADMG-630 30mm Round",											// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2299,6 +2328,7 @@ weapon_data
 			"76mm Round",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2372,6 +2402,7 @@ weapon_data
 			"100mm Round",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2445,6 +2476,7 @@ weapon_data
 			"2K23 100mm Round",	  	  		  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2522,6 +2554,7 @@ weapon_data
 			"BM-21 122mm Rocket",	  	  		  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2599,6 +2632,7 @@ weapon_data
 			"2A46M1 125mm Round",	  	  		  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2672,6 +2706,7 @@ weapon_data
 			"2A65 152mm Round",	 	 	  		  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -2752,6 +2787,7 @@ weapon_data
 			"Hydra 70 M255",					  								// full_name
 			"RKT(HE)",	 		 												// hud_name
 			"RKT(HE)",															// mfd_name
+			"?",																// name abbreviation
 			"M255",																// weapon_loading_list_name
 			"Hydra 70 M255",													// weapon_loading_name_text
 
@@ -2825,6 +2861,7 @@ weapon_data
 			"Hydra 70 M261",			 		  								// full_name
 			"RKT(MP)",															// hud_name
 			"RKT(MP)",															// mfd_name
+			"?",																// name abbreviation
 			"M261",	 		 													// weapon_loading_list_name
 			"Hydra 70 M261",		 											// weapon_loading_name_text
 
@@ -2898,6 +2935,7 @@ weapon_data
 			"M73 HE submunition",			 		  								// full_name
 			"?",															// hud_name
 			"?",															// mfd_name
+			"?",																// name abbreviation
 			"?",	 		 													// weapon_loading_list_name
 			"?",		 											// weapon_loading_name_text
 
@@ -2971,6 +3009,7 @@ weapon_data
 			"LAU-69/A",	  						  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -3044,6 +3083,7 @@ weapon_data
 			"S-5",	  							  								// full_name
 			"S-5",																	// hud_name
 			"S-5",																	// mfd_name
+			"?",																// name abbreviation
 			"S-5",																	// weapon_loading_list_name
 			"S-5",																	// weapon_loading_name_text
 
@@ -3117,6 +3157,7 @@ weapon_data
 			"S-8",								  								// full_name
 			"S-8",																// hud_name
 			"S-8",  																// mfd_name
+			"S8",																// name abbreviation
 			"S-8",					  											// weapon_loading_list_name
 			"S-8",					  											// weapon_loading_name_text
 
@@ -3190,6 +3231,7 @@ weapon_data
 			"S-13",	  							  								// full_name
 			"S-13", 																// hud_name
 			"S-13",			 													// mfd_name
+			"S13",																// name abbreviation
 			"S-13",					  											// weapon_loading_list_name
 			"S-13",					  											// weapon_loading_name_text
 
@@ -3270,6 +3312,7 @@ weapon_data
 			"AIM-92A Stinger",					  								// full_name
 			"AAM",		 														// hud_name
 			"AAM",																// mfd_name
+			"?",																// name abbreviation
 			"AIM-92",	  														// weapon_loading_list_name
 			"AIM-92 Stinger",	  												// weapon_loading_name_text
 
@@ -3343,6 +3386,7 @@ weapon_data
 			"AIM-9M Sidewinder",					  							// full_name
 			"AIM-9",																	// hud_name
 			"AIM-9",																	// mfd_name
+			"?",																// name abbreviation
 			"AIM-9 SIDEWINDER",																	// weapon_loading_list_name
 			"AIM-9 SIDEWINDER",																	// weapon_loading_name_text
 
@@ -3416,6 +3460,7 @@ weapon_data
 			"AIM-120C AMRAAM",		 				  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -3489,6 +3534,7 @@ weapon_data
 			"9K38 Igla-V",			  				  								// full_name
 			"Igla-V",		 													// hud_name
 			"IGLA-V",  															// mfd_name
+			"IG",																// name abbreviation
 			"Igla",											  					// weapon_loading_list_name
 			"9K38 Igla-V",										  					// weapon_loading_name_text
 
@@ -3562,6 +3608,7 @@ weapon_data
 			"R-60",						  								// full_name
 			"R-60",																	// hud_name
 			"R-60",																	// mfd_name
+			"?",																// name abbreviation
 			"R-60",																	// weapon_loading_list_name
 			"R-60",																	// weapon_loading_name_text
 
@@ -3635,6 +3682,7 @@ weapon_data
 			"R-60M",						  								// full_name
 			"R-60M",																	// hud_name
 			"R-60M",																	// mfd_name
+			"?",																// name abbreviation
 			"R-60M",																	// weapon_loading_list_name
 			"R-60M",																	// weapon_loading_name_text
 
@@ -3708,6 +3756,7 @@ weapon_data
 			"R-27R",						  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -3781,6 +3830,7 @@ weapon_data
 			"R-27T",						  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -3854,6 +3904,7 @@ weapon_data
 			"R-73",																// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -3934,6 +3985,7 @@ weapon_data
 			"AGM-114L Longbow Hellfire", 									// full_name
 			"AGM(RDR)",			 												// hud_name
 			"AGM(RDR)",															// mfd_name
+			"?",																// name abbreviation
 			"AGM-114L",								  							// weapon_loading_list_name
 			"AGM-114L Longbow Hellfire",		  							// weapon_loading_name_text
 
@@ -4007,6 +4059,7 @@ weapon_data
 			"AGM-114K Hellfire II",											// full_name
 			"AGM(LSR)",	 				 										// hud_name
 			"AGM(LSR)",															// mfd_name
+			"?",																// name abbreviation
 			"AGM-114K",								  							// weapon_loading_list_name
 			"AGM-114K Hellfire II",				  							// weapon_loading_name_text
 
@@ -4080,6 +4133,7 @@ weapon_data
 			"AGM-114R Hellfire II",											// full_name
 			"AGM(LSR)",	 				 										// hud_name
 			"AGM(LSR)",															// mfd_name
+			"?",																// name abbreviation
 			"AGM-114R",								  							// weapon_loading_list_name
 			"AGM-114R Hellfire II",				  							// weapon_loading_name_text
 
@@ -4153,6 +4207,7 @@ weapon_data
 			"AGM-65D Maverick", 												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4226,6 +4281,7 @@ weapon_data
 			"AGM-65F Maverick", 												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4299,6 +4355,7 @@ weapon_data
 			"9M120 Ataka-V",				 				 								// full_name
 			"ATAKA",	  															// hud_name
 			"ATAKA",																	// mfd_name
+			"AK",																// name abbreviation
 			"Ataka",													 			// weapon_loading_list_name
 			"9M120 Ataka-V",													 			// weapon_loading_name_text
 
@@ -4372,6 +4429,7 @@ weapon_data
 			"9K121 Vikhr",				 				 								// full_name
 			"VIKHR",				  												// hud_name
 			"VIKHR",																// mfd_name
+			"VK",																// name abbreviation
 			"Vikhr",				  												// weapon_loading_list_name
 			"9K121 Vikhr",				  												// weapon_loading_name_text
 
@@ -4445,6 +4503,7 @@ weapon_data
 			"9K114 Shturm",				 				 						// full_name
 			"SHTURM",																	// hud_name
 			"SHTURM",																	// mfd_name
+			"SH",																// name abbreviation
 			"Shturm",																	// weapon_loading_list_name
 			"9K114 Shturm",																	// weapon_loading_name_text
 
@@ -4518,6 +4577,7 @@ weapon_data
 			"Kh-25MT",						 				 						// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4591,6 +4651,7 @@ weapon_data
 			"Kh-29L",						 				 						// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4671,6 +4732,7 @@ weapon_data
 			"MIM-72G Chaparral",						  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4744,6 +4806,7 @@ weapon_data
 			"FIM-92A Stinger",				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4817,6 +4880,7 @@ weapon_data
 			"SM-1MR Standard",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4890,6 +4954,7 @@ weapon_data
 			"RIM-7P Sea Sparrow",													// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -4963,6 +5028,7 @@ weapon_data
 			"9K32 Strela 2",		  				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5036,6 +5102,7 @@ weapon_data
 			"9M333",						 			  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5109,6 +5176,7 @@ weapon_data
 			"9M311",					 			  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5182,6 +5250,7 @@ weapon_data
 			"M-11 Shtorm",															// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5255,6 +5324,7 @@ weapon_data
 			"9K33M",																// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5335,6 +5405,7 @@ weapon_data
 			"BGM-71D TOW-2", 														// full_name
 			"TOW-2",																// hud_name
 			"TOW-2",																// mfd_name
+			"?",																// name abbreviation
 			"BGM-71D TOW-2",														// weapon_loading_list_name
 			"BGM-71D TOW-2",														// weapon_loading_name_text
 
@@ -5408,6 +5479,7 @@ weapon_data
 			"9M113 Konkurs",	 	 												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5481,6 +5553,7 @@ weapon_data
 			"9M117 Bastion",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5554,6 +5627,7 @@ weapon_data
 			"9M119 Svir",		 	 		 										// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5634,6 +5708,7 @@ weapon_data
 			"CHAFF",	  							  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5707,6 +5782,7 @@ weapon_data
 			"FLARE",	  							  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5780,6 +5856,7 @@ weapon_data
 			"SMOKE GRENADE",					  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5860,6 +5937,7 @@ weapon_data
 			"CRATE",																// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -5940,6 +6018,7 @@ weapon_data
 			"Rotor Blade",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -6013,6 +6092,7 @@ weapon_data
 			"Ejected Pilot",													// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -6086,6 +6166,7 @@ weapon_data
 			"Ejected Co-pilot",												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -6159,6 +6240,7 @@ weapon_data
 			"Crew Door",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -6232,6 +6314,7 @@ weapon_data
 			"Crew Door",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
+			"?",																// name abbreviation
 			"?",																	// weapon_loading_list_name
 			"?",																	// weapon_loading_name_text
 
@@ -6318,6 +6401,8 @@ void validate_weapon_database (void)
 		debug_assert (weapon_database[sub_type].hud_name);
 
 		debug_assert (weapon_database[sub_type].mfd_name);
+
+		debug_assert (weapon_database[sub_type].abbrev);
 
 		debug_assert (weapon_database[sub_type].weapon_loading_list_name);
 
