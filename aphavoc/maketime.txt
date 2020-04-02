@@ -1,7 +1,0 @@
-################### Make Timings ####################### 
-The current time is: 16:30:44.27
-Enter the new time: @echo off
-The system cannot accept the time entered.
-Enter the new time: SET EECH_ROOTDIR=D:\eech_1_16_blackshark
-The system cannot accept the time entered.
-Enter the new time: 
