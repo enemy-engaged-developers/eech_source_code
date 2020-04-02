@@ -235,7 +235,8 @@ static char
 
 static char
 	cannon_rounds[CANNON_DISPLAY_MAX_STRING_LENGTH +1],
-	weapon_rounds[WEAPON_DISPLAY_MAX_STRING_LENGTH +1];
+	weapon_rounds[WEAPON_DISPLAY_MAX_STRING_LENGTH +1],
+	outer_pylon_rounds[WEAPON_DISPLAY_MAX_STRING_LENGTH +1];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7770,11 +7771,16 @@ void update_ka50_weapon_rounds_display (void)
 		w1[80] = "";
 
 	int
-		lhs_number,
-		rhs_number,
-		total_rnds,
-		lhs_pylon,
-		rhs_pylon,
+		inner_lhs_number,
+		inner_rhs_number,
+		inner_total_rnds,
+		inner_lhs_pylon,
+		inner_rhs_pylon,
+		outer_lhs_number,
+		outer_rhs_number,
+		outer_total_rnds,
+		outer_lhs_pylon,
+		outer_rhs_pylon,
 		damaged;
 
 	entity
@@ -7782,22 +7788,36 @@ void update_ka50_weapon_rounds_display (void)
 
 	entity_sub_types
 		selected_weapon,
-		weapon_sub_type;
+		inner_weapon_sub_type,
+		outer_weapon_sub_type;
 
 	en = get_gunship_entity ();
 
 	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
-	lhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &lhs_number, &damaged);
-	rhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &rhs_number, &damaged);
+	inner_lhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &inner_weapon_sub_type, &inner_lhs_number, &damaged);
+	inner_rhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &inner_weapon_sub_type, &inner_rhs_number, &damaged);
 
-	total_rnds = lhs_number + rhs_number;
+	outer_lhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &outer_weapon_sub_type, &outer_lhs_number, &damaged);
+	outer_rhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &outer_weapon_sub_type, &outer_rhs_number, &damaged);
 
-	if (lhs_pylon || rhs_pylon)
+	inner_total_rnds = inner_lhs_number + inner_rhs_number;
+	outer_total_rnds = outer_lhs_number + outer_rhs_number;
+
+	if (inner_lhs_pylon || inner_rhs_pylon)
 	{
 		if (!damaged) {
-			if (weapon_sub_type == selected_weapon) {
-				sprintf	(w1, "%02d", total_rnds);
+			if (inner_weapon_sub_type == selected_weapon) {
+				sprintf	(w1, "%02d", inner_total_rnds);
+			}
+		}
+	}
+
+	if (outer_lhs_pylon || outer_rhs_pylon)
+	{
+		if (!damaged) {
+			if (outer_weapon_sub_type == selected_weapon) {
+				sprintf	(w1, "%02d", outer_total_rnds);
 			}
 		}
 	}
