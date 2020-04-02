@@ -205,6 +205,7 @@ static screen
 	*abris_mfd_texture_screen,
 	*ekran_display_texture_screen,
 	*cannon_rounds_display_screen,
+	*weapon_rounds_display_screen,
 	*large_shkval_mfd_texture_screen,
 	*large_abris_mfd_texture_screen,
 	*large_ekran_display_texture_screen,
@@ -212,6 +213,7 @@ static screen
 	*small_abris_mfd_texture_screen,
 	*small_ekran_display_texture_screen,
 	*cannon_rounds_display_texture_screen,
+	*weapon_rounds_display_texture_screen,
 	*eo_3d_texture_screen,
 	*eo_3d_texture_screen_over,
 	*full_mfd_texture_screen;
@@ -222,6 +224,7 @@ static screen
 
 #define TEXT_DISPLAY_MAX_STRING_LENGTH	 (10)
 #define CANNON_DISPLAY_MAX_STRING_LENGTH (3)
+#define WEAPON_DISPLAY_MAX_STRING_LENGTH (3)
 
 static char
 	text_display_line1[TEXT_DISPLAY_MAX_STRING_LENGTH + 1],
@@ -231,7 +234,8 @@ static char
 	text_display_line5[TEXT_DISPLAY_MAX_STRING_LENGTH + 1];
 
 static char
-	cannon_rounds[CANNON_DISPLAY_MAX_STRING_LENGTH +1];
+	cannon_rounds[CANNON_DISPLAY_MAX_STRING_LENGTH +1],
+	weapon_rounds[WEAPON_DISPLAY_MAX_STRING_LENGTH +1];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7093,6 +7097,34 @@ void draw_cannon_rounds_display(screen *text_screen)
 
 	set_active_screen (video_screen);
 }
+
+void draw_weapon_rounds_display(screen *text_screen)
+{
+	ASSERT (text_screen);
+
+	set_active_screen (text_screen);
+
+	if (lock_screen (text_screen))
+	{
+		set_block (0, 0, 70 - 1, 70 - 1, TEXT_BACKGROUND_COLOUR);
+
+		draw_mfd_layout_grid ();
+
+		set_mono_font_colour (MFD_COLOUR_GREEN);
+
+		set_mono_font_type (MONO_FONT_TYPE_17X26_DIGITAL);
+
+		set_2d_mono_font_position (-1.0, 1.0);
+
+		set_mono_font_rel_position (0.0, 5.0);
+
+		print_mono_font_string (weapon_rounds);
+
+		unlock_screen (text_screen);
+	}
+
+	set_active_screen (video_screen);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7164,6 +7196,7 @@ void initialise_ka50_mfd (void)
 
 	set_ka50_text_display_text ("", "", "", "", "");
 	set_ka50_cannon_rounds_display_text ("");
+	set_ka50_weapon_rounds_display_text ("");
 
 	////////////////////////////////////////
 
@@ -7184,6 +7217,7 @@ void initialise_ka50_mfd (void)
 	large_abris_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	large_ekran_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	cannon_rounds_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
+	weapon_rounds_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
 
 	small_shkval_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	small_abris_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
@@ -7288,7 +7322,8 @@ void deinitialise_ka50_mfd (void)
 	destroy_screen (large_shkval_mfd_texture_screen);
 	destroy_screen (large_abris_mfd_texture_screen);
 	destroy_screen (large_ekran_display_texture_screen);
-	destroy_screen (cannon_rounds_display_texture_screen);
+	destroy_screen (cannon_rounds_display_screen);
+	destroy_screen (weapon_rounds_display_screen);
 
 	destroy_screen (small_shkval_mfd_texture_screen);
 	destroy_screen (small_abris_mfd_texture_screen);
@@ -7365,6 +7400,7 @@ void draw_ka50_mfd (void)
 		abris_mfd_texture_screen = large_abris_mfd_texture_screen;
 		ekran_display_texture_screen = large_ekran_display_texture_screen;
 		cannon_rounds_display_texture_screen = cannon_rounds_display_screen;
+		weapon_rounds_display_texture_screen = weapon_rounds_display_screen;
 
 		eo_3d_texture_screen = large_eo_3d_texture_screen;
 		eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
@@ -7377,6 +7413,7 @@ void draw_ka50_mfd (void)
 		abris_mfd_texture_screen = small_abris_mfd_texture_screen;
 		ekran_display_texture_screen = small_ekran_display_texture_screen;
 		cannon_rounds_display_texture_screen = cannon_rounds_display_screen;
+		weapon_rounds_display_texture_screen = weapon_rounds_display_screen;
 
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
 		eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
@@ -7386,6 +7423,7 @@ void draw_ka50_mfd (void)
 	set_system_texture_screen (abris_mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
 	set_system_texture_screen (ekran_display_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_EKRAN);
 	set_system_texture_screen (cannon_rounds_display_texture_screen, TEXTURE_INDEX_COMANCHE_MFD1);
+	set_system_texture_screen (weapon_rounds_display_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
 
 	////////////////////////////////////////
 	//
@@ -7529,6 +7567,7 @@ void draw_ka50_mfd (void)
 	draw_text_display (ekran_display_texture_screen);
 
 	draw_cannon_rounds_display (cannon_rounds_display_texture_screen);
+	draw_weapon_rounds_display (weapon_rounds_display_texture_screen);
 
 	if (command_line_export_mfd)
 	{
@@ -7715,6 +7754,65 @@ void set_ka50_cannon_rounds_display_text (char *c1)
 	if(c1 != "") {
 		strncpy (cannon_rounds, c1, CANNON_DISPLAY_MAX_STRING_LENGTH);
 		cannon_rounds[CANNON_DISPLAY_MAX_STRING_LENGTH] = '\0';
+	}
+
+#endif
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_ka50_weapon_rounds_display (void)
+{
+	char
+		w1[80] = "";
+
+	int
+		wp_lhs_number,
+		wp_rhs_number,
+		total_rnds,
+		damaged;
+
+	entity
+		*en;
+
+	entity_sub_types
+		selected_weapon,
+		weapon_sub_type;
+
+	en = get_gunship_entity ();
+
+	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+
+//	result = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged);
+
+	if (get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &wp_lhs_number, &damaged))
+	{
+//		total_rnds = wp_lhs_number + wp_lhs_number;
+
+		if (!damaged) {
+			if (weapon_sub_type == selected_weapon) {
+				sprintf	(w1, "%02d", wp_lhs_number);
+			}
+		}
+	}
+
+	set_ka50_weapon_rounds_display_text (w1);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void set_ka50_weapon_rounds_display_text (char *w1)
+{
+#ifndef OGRE_EE
+
+	if(w1 != "") {
+		strncpy (weapon_rounds, w1, WEAPON_DISPLAY_MAX_STRING_LENGTH);
+		weapon_rounds[WEAPON_DISPLAY_MAX_STRING_LENGTH] = '\0';
 	}
 
 #endif
@@ -8602,6 +8700,7 @@ void draw_overlaid_ka50_mfd (void)
 		abris_mfd_texture_screen = large_abris_mfd_texture_screen;
 		ekran_display_texture_screen = large_ekran_display_texture_screen;
 		cannon_rounds_display_texture_screen = cannon_rounds_display_screen;
+		weapon_rounds_display_texture_screen = weapon_rounds_display_screen;
 
 		eo_3d_texture_screen = large_eo_3d_texture_screen;
 		eo_3d_texture_screen_over = large_eo_3d_texture_screen_over;
@@ -8614,6 +8713,7 @@ void draw_overlaid_ka50_mfd (void)
 		abris_mfd_texture_screen = small_abris_mfd_texture_screen;
 		ekran_display_texture_screen = small_ekran_display_texture_screen;
 		cannon_rounds_display_texture_screen = cannon_rounds_display_screen;
+		weapon_rounds_display_texture_screen = weapon_rounds_display_screen;
 
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
 		eo_3d_texture_screen_over = small_eo_3d_texture_screen_over;
@@ -8623,6 +8723,7 @@ void draw_overlaid_ka50_mfd (void)
 	set_system_texture_screen (abris_mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_1);
 	set_system_texture_screen (ekran_display_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_EKRAN);
 	set_system_texture_screen (cannon_rounds_display_texture_screen, TEXTURE_INDEX_COMANCHE_MFD1);
+	set_system_texture_screen (weapon_rounds_display_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
 
 	////////////////////////////////////////
 	//

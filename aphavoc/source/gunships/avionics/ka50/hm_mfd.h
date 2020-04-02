@@ -117,6 +117,10 @@ extern void update_ka50_cannon_rounds_display (void);
 
 extern void set_ka50_cannon_rounds_display_text (char *c1);
 
+extern void update_ka50_weapon_rounds_display (void);
+
+extern void set_ka50_weapon_rounds_display_text (char *w1);
+
 extern void draw_ka50_full_screen_display (void);
 
 extern void draw_overlaid_ka50_mfd (void);
