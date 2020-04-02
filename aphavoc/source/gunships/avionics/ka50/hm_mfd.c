@@ -7704,7 +7704,7 @@ void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4, char *s
 void update_ka50_cannon_rounds_display (void)
 {
 	char
-		c1[80];
+		c1[80] = "";
 
 	int
 		ap_rounds_number,
@@ -7770,9 +7770,10 @@ void update_ka50_weapon_rounds_display (void)
 		w1[80] = "";
 
 	int
-		wp_lhs_number,
+		lhs_number,
 		wp_rhs_number,
 		total_rnds,
+		lhs_pylon,
 		damaged;
 
 	entity
@@ -7786,15 +7787,15 @@ void update_ka50_weapon_rounds_display (void)
 
 	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
-//	result = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged);
+	lhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &lhs_number, &damaged);
 
-	if (get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &wp_lhs_number, &damaged))
+	if (lhs_pylon)
 	{
 //		total_rnds = wp_lhs_number + wp_lhs_number;
 
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(w1, "%02d", wp_lhs_number);
+				sprintf	(w1, "%02d", lhs_number);
 			}
 		}
 	}
