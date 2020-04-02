@@ -7771,9 +7771,10 @@ void update_ka50_weapon_rounds_display (void)
 
 	int
 		lhs_number,
-		wp_rhs_number,
+		rhs_number,
 		total_rnds,
 		lhs_pylon,
+		rhs_pylon,
 		damaged;
 
 	entity
@@ -7788,14 +7789,15 @@ void update_ka50_weapon_rounds_display (void)
 	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
 	lhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &lhs_number, &damaged);
+	rhs_pylon = get_local_entity_weapon_hardpoint_info (en, KA50_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &rhs_number, &damaged);
 
-	if (lhs_pylon)
+	total_rnds = lhs_number + rhs_number;
+
+	if (lhs_pylon || rhs_pylon)
 	{
-//		total_rnds = wp_lhs_number + wp_lhs_number;
-
 		if (!damaged) {
 			if (weapon_sub_type == selected_weapon) {
-				sprintf	(w1, "%02d", lhs_number);
+				sprintf	(w1, "%02d", total_rnds);
 			}
 		}
 	}
