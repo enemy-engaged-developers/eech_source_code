@@ -547,8 +547,12 @@ static void apply_suspension_forces(void)
 
 			// wheel longitudinal resistance/brakes
 
-				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0)
-					wheight_on_wheel *= 0.005;  // general rolling resistance
+				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0) { // general rolling resistance
+					if (point->can_turn == 1)
+						wheight_on_wheel *= 0.1;
+					else
+						wheight_on_wheel *= 0.005;
+				}
 
 				force_diff = (wheight_on_wheel * point->velocity.z + point->brake_force) / 2.0;
 				point->brake_force = bound(force_diff, - max_force_change * 0.1, max_force_change * 0.1);

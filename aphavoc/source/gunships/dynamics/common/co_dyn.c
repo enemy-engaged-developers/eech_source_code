@@ -73,8 +73,7 @@ static float
 	right_g_e_force = 0.0,
 	left_g_e_force = 0.0,
 	back_g_e_force = 0.0,
-	front_g_e_force = 0.0,
-	this_reaction_force = 0.0;
+	front_g_e_force = 0.0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +220,6 @@ void initialise_common_dynamics(void)
 	left_g_e_force = 0.0,
 	back_g_e_force = 0.0,
 	front_g_e_force = 0.0,
-	this_reaction_force = 0.0;
 	trim_button_held = FALSE;
 }
 
@@ -897,24 +895,17 @@ void update_common_attitude_dynamics (void)
 		{
 
 			vec3d
-				unnormalised_direction;
+				normalised_vector;
 
-			direction = model_motion_vector;
+			normalised_vector = model_motion_vector;
 
-			invert_3d_vector (&direction);
-
-			unnormalised_direction = direction;
+			normalise_any_3d_vector (&normalised_vector);
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = heading_inertia_modifier * 0.00001 * (horizontal_velocity * horizontal_velocity) * (0.25 * current_flight_dynamics->tail_boom_length.value + current_flight_dynamics->tail_rotor_diameter.value * current_flight_dynamics->tail_rotor_diameter.value);
-//			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
+			force = heading_inertia_modifier * normalised_vector.x * 0.00001 * pow(horizontal_velocity, 2.0) * 
+					(0.25 * current_flight_dynamics->tail_boom_length.value + pow(current_flight_dynamics->tail_rotor_diameter.value, 2.0));
 
-			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
-
-			this_reaction_force = bound (this_reaction_force, -100.0, 100.0);
-
-			normalise_any_3d_vector (&direction);
-
+			direction.x *= - sign(force);
 			direction.y = 0.0;
 			direction.z = 0.0;
 
@@ -922,7 +913,7 @@ void update_common_attitude_dynamics (void)
 			position.y = 0.0;
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
-			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
+			add_dynamic_force ("Realign force (Y axis)", fabs(force), 0.0, &position, &direction, FALSE);
 		}
 	}
 
@@ -984,7 +975,7 @@ void update_common_attitude_dynamics (void)
 			direction.y = - motion_vector.y;
 			direction.z = - motion_vector.z;
 
-			add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, TRUE);
+			add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
 		}
 	}
 	////////////////////////////////////////////
@@ -1386,6 +1377,8 @@ void update_common_attitude_dynamics (void)
 		position.z = current_flight_dynamics->rotation_origin.z;
 
 		multiply_transpose_matrix3x3_vec3d (&direction, attitude, &direction);
+
+		normalise_any_3d_vector (&direction);
 
 		force += (desired_force - force) * get_model_delta_time ();
 
