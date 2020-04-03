@@ -7136,9 +7136,17 @@ void draw_weapon_name_display(screen *text_screen)
 
 	if (lock_screen (text_screen))
 	{
-		set_block (0, 0, 70 - 1, 70 - 1, TEXT_BACKGROUND_COLOUR);
+		set_block (0, 0, 36 - 1, 36 - 1, TEXT_BACKGROUND_COLOUR);
 
 		draw_mfd_layout_grid ();
+
+		set_mono_font_colour (MFD_COLOUR_GREEN);
+
+		set_mono_font_type (MONO_FONT_TYPE_17X26_DIGITAL);
+
+		set_2d_mono_font_position (-1.0, 1.0);
+
+		set_mono_font_rel_position (0.0, 5.0);
 
 		update_ka50_weapon_name_display ();
 
@@ -7241,7 +7249,7 @@ void initialise_ka50_mfd (void)
 	large_ekran_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	cannon_rounds_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
 	weapon_rounds_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
-	weapon_name_display_screen = create_user_texture_screen (70, 70, TEXTURE_TYPE_SINGLEALPHA, 1);
+	weapon_name_display_screen = create_user_texture_screen (36, 36, TEXTURE_TYPE_SINGLEALPHA, 1);
 
 	small_shkval_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
 	small_abris_mfd_texture_screen = create_user_texture_screen (SMALL_MFD_VIEWPORT_SIZE, SMALL_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 1);
@@ -7896,14 +7904,6 @@ void update_ka50_weapon_name_display (void)
 
 	if (inner_pylons && weapon_sub_type == selected_weapon)
 	{
-		set_mono_font_colour (MFD_COLOUR_GREEN);
-
-		set_mono_font_type (MONO_FONT_TYPE_17X26_DIGITAL);
-
-		set_2d_mono_font_position (-1.0, 1.0);
-
-		set_mono_font_rel_position (0.0, 5.0);
-
 		print_mono_font_string (weapon_database[weapon_sub_type].abbrev);
 	}
 
@@ -7911,14 +7911,6 @@ void update_ka50_weapon_name_display (void)
 
 	if (outer_pylons && weapon_sub_type == selected_weapon)
 	{
-		set_mono_font_colour (MFD_COLOUR_GREEN);
-
-		set_mono_font_type (MONO_FONT_TYPE_17X26_DIGITAL);
-
-		set_2d_mono_font_position (-1.0, 1.0);
-
-		set_mono_font_rel_position (0.0, 5.0);
-
 		print_mono_font_string (weapon_database[weapon_sub_type].abbrev);
 	}
 }

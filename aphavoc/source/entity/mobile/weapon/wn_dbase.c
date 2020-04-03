@@ -1655,7 +1655,7 @@ weapon_data
 			"UPK-23",						  								// full_name
 			"UPK-23",															// hud_name
 			"UPK-23",		 													// mfd_name
-			"?",																// name abbreviation
+			"CP",																// name abbreviation
 			"UPK-23", 															// weapon_loading_list_name
 			"UPK-23-250 23mm Cannon Pod",										// weapon_loading_name_text
 
@@ -3157,7 +3157,7 @@ weapon_data
 			"S-8",								  								// full_name
 			"S-8",																// hud_name
 			"S-8",  																// mfd_name
-			"S8",																// name abbreviation
+			"RK",																// name abbreviation
 			"S-8",					  											// weapon_loading_list_name
 			"S-8",					  											// weapon_loading_name_text
 
@@ -3231,7 +3231,7 @@ weapon_data
 			"S-13",	  							  								// full_name
 			"S-13", 																// hud_name
 			"S-13",			 													// mfd_name
-			"S13",																// name abbreviation
+			"RK",																// name abbreviation
 			"S-13",					  											// weapon_loading_list_name
 			"S-13",					  											// weapon_loading_name_text
 
