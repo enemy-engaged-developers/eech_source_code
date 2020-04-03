@@ -2289,7 +2289,8 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 				temp_vec;
 			float
 					heading,
-					pitch;
+					pitch,
+					distance;
 
 			//
 			// Set up the object drawing global variables
@@ -2330,6 +2331,13 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 				temp_vec.x = visual_3d_vp->position.x - surface->vp.position.x;
 				temp_vec.y = visual_3d_vp->position.y - surface->vp.position.y;
 				temp_vec.z = visual_3d_vp->position.z - surface->vp.position.z;
+
+				distance = get_3d_vector_magnitude(&temp_vec);
+				if (distance < 255.0) {
+					current_object_3d_dissolve_value *= pow(distance / 255.0, 2.0);
+					current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
+					current_object_3d_dissolve_factor /= 255.0;
+				}
 
 				normalise_any_3d_vector(&temp_vec);
 				get_heading_and_pitch_from_3d_unit_vector(&temp_vec, &heading, &pitch);
