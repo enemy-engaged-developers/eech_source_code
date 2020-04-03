@@ -7886,6 +7886,8 @@ void update_ka50_weapon_name_display (void)
 	int
 		inner_pylons,
 		outer_pylons,
+		cannon_ap,
+		cannon_he,
 		number,
 		damaged;
 
@@ -7899,6 +7901,20 @@ void update_ka50_weapon_name_display (void)
 	en = get_gunship_entity ();
 
 	selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
+
+	cannon_ap = get_local_entity_weapon_hardpoint_info (en, KA50_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND, &weapon_sub_type, &number, &damaged);
+
+	if (cannon_ap && weapon_sub_type == selected_weapon)
+	{
+		print_mono_font_string (weapon_database[weapon_sub_type].abbrev);
+	}
+
+	cannon_he = get_local_entity_weapon_hardpoint_info (en, KA50_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, &weapon_sub_type, &number, &damaged);
+
+	if (cannon_he && weapon_sub_type == selected_weapon)
+	{
+		print_mono_font_string (weapon_database[weapon_sub_type].abbrev);
+	}
 
 	inner_pylons = get_local_entity_weapon_hardpoint_info (en, KA50_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged);
 
