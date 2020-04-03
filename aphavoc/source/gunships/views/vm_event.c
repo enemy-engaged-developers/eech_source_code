@@ -2421,7 +2421,7 @@ void set_gunship_view_mode_events (void)
 */
 	}
 
-	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50)
+	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50 && get_global_gunship_type () != GUNSHIP_TYPE_HIND)
 	{
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
 	}
