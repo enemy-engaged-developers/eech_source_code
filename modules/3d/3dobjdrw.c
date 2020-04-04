@@ -2333,8 +2333,8 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 				temp_vec.z = visual_3d_vp->position.z - surface->vp.position.z;
 
 				distance = get_3d_vector_magnitude(&temp_vec);
-				if (distance < 255.0) {
-					current_object_3d_dissolve_value *= pow(distance / 255.0, 2.0);
+				if (distance < 1000.0) {
+					current_object_3d_dissolve_value *= max(0.0, (distance - 500.0) / 500.0);
 					current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 					current_object_3d_dissolve_factor /= 255.0;
 				}
