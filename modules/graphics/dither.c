@@ -113,9 +113,9 @@ void compute_dithered_rgb_image ( int width, int height, psd_rgb *image, rgb_pac
 		memset_width;
 
 	dither_errors
-		*this_line_errors,
-		*next_line_errors,
-		*tmp_errors_ptr;
+		*this_line_errors = nullptr,
+		*next_line_errors = nullptr,
+		*tmp_errors_ptr = nullptr;
 
 	ASSERT ( image );
 
@@ -273,9 +273,9 @@ void compute_dithered_rgba_image ( int width, int height, psd_rgba *image, rgb_p
 		y;
 
 	dither_errors
-		*this_line_errors,
-		*next_line_errors,
-		*tmp_errors_ptr;
+		*this_line_errors = nullptr,
+		*next_line_errors = nullptr,
+		*tmp_errors_ptr = nullptr;
 
 	ASSERT ( image );
 

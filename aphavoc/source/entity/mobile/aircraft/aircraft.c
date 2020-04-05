@@ -79,7 +79,7 @@ aircraft_damage_types aircraft_critically_damaged (entity *en)
 {
 
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		percent_damaged;
@@ -311,9 +311,9 @@ void assess_aircraft_damage_level (entity *en, int old_damage_level, int new_dam
 		if (get_comms_model() == COMMS_MODEL_SERVER && new_damage_level > 10) // return group home
 		{
 			entity
-				*group,
-				*guide,
-				*task;
+				*group = nullptr,
+				*guide = nullptr,
+				*task = nullptr;
 			
 			group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -390,7 +390,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 		val,
 		array_type,
 		speech_index,
-		*last_index;
+		*last_index = nullptr;
 
 	ASSERT (victim);
 

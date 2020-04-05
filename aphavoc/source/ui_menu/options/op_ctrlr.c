@@ -77,73 +77,73 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*controller_area,
-	*controller_text_area;
+	*controller_area = nullptr,
+	*controller_text_area = nullptr;
 
 ui_object
-	*cyclic_x_area,
-	*cyclic_x_test_area,
-	*cyclic_y_area,		// Retro 10Jul2004
-	*cyclic_y_test_area,
-	*collective_area,
-	*collective_test_area,
-	*throttle_area,
-	*throttle_test_area,
-	*pedal_area,
-	*pedal_test_area,
+	*cyclic_x_area = nullptr,
+	*cyclic_x_test_area = nullptr,
+	*cyclic_y_area = nullptr,		// Retro 10Jul2004
+	*cyclic_y_test_area = nullptr,
+	*collective_area = nullptr,
+	*collective_test_area = nullptr,
+	*throttle_area = nullptr,
+	*throttle_test_area = nullptr,
+	*pedal_area = nullptr,
+	*pedal_test_area = nullptr,
 //Retro10Jul2004_dead	*device_area,
-	*keyboard_assist_area,
-	*eo_pan_x_area,		// Retro 10Jul2004
-	*eo_pan_x_test_area,
-	*eo_pan_y_area,		// Retro 10Jul2004
-	*eo_pan_y_test_area,
-	*eo_zoom_area,		// Retro 10Jul2004
-	*eo_zoom_test_area,
-	*joylook_x_area,	// Retro 10Jul2004
-	*joylook_x_test_area,
-	*joylook_y_area,	// Retro 10Jul2004
-	*joylook_y_test_area,
-	*joy_fov_area,
-	*joy_fov_test_area,
-	*mouselook_area,	// Retro 10Jul2004
-	*forcefeedback_area,
-	*trackir_area,		// Retro 10Jul2004
-	*mouselook_sensitivity_area,// Retro 17Jul2004 - this is for mouse if mouselook is enabled, POV else - check the eech.ini
-	*joylook_sensitivity_area,	// Retro 17Jul2004
-	*cyclic_option_button,
-	*reverse_cyclic_x_button,
-	*nonlinear_cyclic_button,
-	*cyclic_y_option_button,	// Retro 10Jul2004
-	*reverse_cyclic_y_button,
-	*collective_option_button,
-	*nonlinear_collective_button,
-	*throttle_option_button,
-	*reverse_throttle_button,
-	*pedal_option_button,
-	*nonlinear_pedal_button,
+	*keyboard_assist_area = nullptr,
+	*eo_pan_x_area = nullptr,		// Retro 10Jul2004
+	*eo_pan_x_test_area = nullptr,
+	*eo_pan_y_area = nullptr,		// Retro 10Jul2004
+	*eo_pan_y_test_area = nullptr,
+	*eo_zoom_area = nullptr,		// Retro 10Jul2004
+	*eo_zoom_test_area = nullptr,
+	*joylook_x_area = nullptr,	// Retro 10Jul2004
+	*joylook_x_test_area = nullptr,
+	*joylook_y_area = nullptr,	// Retro 10Jul2004
+	*joylook_y_test_area = nullptr,
+	*joy_fov_area = nullptr,
+	*joy_fov_test_area = nullptr,
+	*mouselook_area = nullptr,	// Retro 10Jul2004
+	*forcefeedback_area = nullptr,
+	*trackir_area = nullptr,		// Retro 10Jul2004
+	*mouselook_sensitivity_area = nullptr,// Retro 17Jul2004 - this is for mouse if mouselook is enabled, POV else - check the eech.ini
+	*joylook_sensitivity_area = nullptr,	// Retro 17Jul2004
+	*cyclic_option_button = nullptr,
+	*reverse_cyclic_x_button = nullptr,
+	*nonlinear_cyclic_button = nullptr,
+	*cyclic_y_option_button = nullptr,	// Retro 10Jul2004
+	*reverse_cyclic_y_button = nullptr,
+	*collective_option_button = nullptr,
+	*nonlinear_collective_button = nullptr,
+	*throttle_option_button = nullptr,
+	*reverse_throttle_button = nullptr,
+	*pedal_option_button = nullptr,
+	*nonlinear_pedal_button = nullptr,
 //Retro10Jul2004_dead	*device_option_button,
 //Retro10Jul2004_dead	*device_graphic_area,
-	*reverse_collective_button,
-	*keyboard_assist_option_button,
-	*autoconfigure_option_background,
-	*autoconfigure_option_button,
-	*eo_pan_x_option_button,	// Retro 10Jul2004
-	*eo_pan_y_option_button,	// Retro 10Jul2004
-	*eo_zoom_option_button,		// Retro 10Jul2004
-	*joylook_x_option_button,	// Retro 10Jul2004
-	*joylook_y_option_button,	// Retro 10Jul2004
-	*joy_fov_option_button,
-	*mouselook_option_button,	// Retro 10Jul2004
-	*forcefeedback_option_button,
-	*trackir_option_button,		// Retro 10Jul2004
-	*reverse_pedal_option_button,		// Retro 17Jul2004
-	*mouselook_sensitivity_up_button,	// Retro 17Jul2004
-	*mouselook_sensitivity_down_button,	// Retro 17Jul2004
-	*joylook_sensitivity_up_button,		// Retro 17Jul2004
-	*joylook_sensitivity_down_button,	// Retro 17Jul2004
-	*autoconfigure_area,	// Retro 28Jul2004
-	*rows_tile_area,
-	*autoconfigure_button;	// Retro 28Jul2004
+	*reverse_collective_button = nullptr,
+	*keyboard_assist_option_button = nullptr,
+	*autoconfigure_option_background = nullptr,
+	*autoconfigure_option_button = nullptr,
+	*eo_pan_x_option_button = nullptr,	// Retro 10Jul2004
+	*eo_pan_y_option_button = nullptr,	// Retro 10Jul2004
+	*eo_zoom_option_button = nullptr,		// Retro 10Jul2004
+	*joylook_x_option_button = nullptr,	// Retro 10Jul2004
+	*joylook_y_option_button = nullptr,	// Retro 10Jul2004
+	*joy_fov_option_button = nullptr,
+	*mouselook_option_button = nullptr,	// Retro 10Jul2004
+	*forcefeedback_option_button = nullptr,
+	*trackir_option_button = nullptr,		// Retro 10Jul2004
+	*reverse_pedal_option_button = nullptr,		// Retro 17Jul2004
+	*mouselook_sensitivity_up_button = nullptr,	// Retro 17Jul2004
+	*mouselook_sensitivity_down_button = nullptr,	// Retro 17Jul2004
+	*joylook_sensitivity_up_button = nullptr,		// Retro 17Jul2004
+	*joylook_sensitivity_down_button = nullptr,	// Retro 17Jul2004
+	*autoconfigure_area = nullptr,	// Retro 28Jul2004
+	*rows_tile_area = nullptr,
+	*autoconfigure_button = nullptr;	// Retro 28Jul2004
 
 static const char
 	*option_joystick_text[2],
@@ -152,7 +152,7 @@ static const char
 	*option_boolean_text[2],
 	*option_mouselook_text[MOUSELOOK_MAX],	// Retro 27Nov2004
 	*option_forcefeedback_text[3],
-	*no_joystick_text;
+	*no_joystick_text = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -882,7 +882,7 @@ void define_options_screen_controller_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	ui_object
 		*title_change_array[15],

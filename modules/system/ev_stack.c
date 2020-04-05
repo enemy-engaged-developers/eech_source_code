@@ -77,8 +77,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 event_stack
-	*event_stack_head,
-	*event_stack_tail;
+	*event_stack_head = nullptr,
+	*event_stack_tail = nullptr;
 
 static int
 	event_id;
@@ -115,7 +115,7 @@ void deinitialise_event_stack (void)
 {
 
 	event_stack
-		*this_event;
+		*this_event = nullptr;
 
 	this_event = event_stack_head;
 
@@ -145,8 +145,8 @@ void push_event (void ((*this_function) (void)), const char *name)
 {
 
 	event_stack
-		*stack_search,
-		*new_stack_item;
+		*stack_search = nullptr,
+		*new_stack_item = nullptr;
 
 	// check if already on stack
 
@@ -313,7 +313,7 @@ void push_event_overlay_with_stack_item(void ((*this_function) (void)), const ch
 {
 
 	event_stack
-		*stack_search;
+		*stack_search = nullptr;
 
 	// check if already on stack
 
@@ -448,7 +448,7 @@ void push_event_stop (void)
 {
 
 	event_stack
-		*new_stack_item;
+		*new_stack_item = nullptr;
 
 	// malloc new event
 
@@ -520,8 +520,8 @@ void pop_event_delete(void ((*function) (void)), int delete_stack_item)
 {
 
 	event_stack
-		*event,
-		*popped_event;
+		*event = nullptr,
+		*popped_event = nullptr;
 
 	// store event to pop and unlink it and destroy it.
 
@@ -646,7 +646,7 @@ void pop_to_event_stop (void)
 {
 
 	event_stack
-		*popped_event;
+		*popped_event = nullptr;
 
 	// pop down to 'stop' and then one more
 
@@ -714,7 +714,7 @@ void display_event_stack (void)
 {
 
 	event_stack
-		*ev;
+		*ev = nullptr;
 
 	// pop down to 'stop' and then one more
 

@@ -77,13 +77,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*message_area,
-	*message_list,
-	*page_back_button;
+	*message_area = nullptr,
+	*message_list = nullptr,
+	*page_back_button = nullptr;
 
 static ui_object
-	*page_map_area, 
-	*page_3d_area; 
+	*page_map_area = nullptr, 
+	*page_3d_area = nullptr; 
 
 static map_dimension_type
 	page_map_dimensions;
@@ -144,16 +144,16 @@ void add_message_to_campaign_log (int index)
 		seconds;
 
 	char
-		*s;
+		*s = nullptr;
 
 	message_log_type
-		*message;
+		*message = nullptr;
 
 	rgb_colour
 		*col = NULL;
 
 	ui_object
-		*new_object;
+		*new_object = nullptr;
 
 	message = get_message_log (index);
 
@@ -221,7 +221,7 @@ void initialise_campaign_screen_log_page_objects (void)
 static void notify_message_list (ui_object *obj, void *arg)
 {
 	message_log_type
-		*message;
+		*message = nullptr;
 
 	current_index = get_ui_object_item_number (obj);
 
@@ -310,7 +310,7 @@ void define_campaign_screen_log_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	/////////////////////////////////////////////////////////////////
 	// Main Page Area
@@ -475,7 +475,7 @@ static int response_to_force_update (campaign_screen_messages message, entity *s
 static int response_to_new_message (campaign_screen_messages message, entity *sender)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	if (sender)
 	{

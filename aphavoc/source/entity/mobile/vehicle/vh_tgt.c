@@ -95,7 +95,7 @@ static float get_scan_floor_difficulty_factor (entity *en);
 static int check_vehicle_target_scan_valid (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	//
 	// Is entity allowed to scan for targets
@@ -155,14 +155,14 @@ void update_vehicle_target_scan (entity *en)
 void vehicle_target_scan (entity *en)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*task,
-		*guide,
-		*group,
-		*target_group,
-		*current_target;
+		*task = nullptr,
+		*guide = nullptr,
+		*group = nullptr,
+		*target_group = nullptr,
+		*current_target = nullptr;
 
 	int
 		target_count,
@@ -172,7 +172,7 @@ void vehicle_target_scan (entity *en)
 		target_source;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 #ifdef DEBUG
 	debug = DEBUG_MODULE && en == get_external_view_entity ();
@@ -458,19 +458,19 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 		debug = FALSE;
 
 	entity
-		*group,
-		*target,
-		*member,
-		*sec,
-		*best_group,
-		*best_target;
+		*group = nullptr,
+		*target = nullptr,
+		*member = nullptr,
+		*sec = nullptr,
+		*best_group = nullptr,
+		*best_target = nullptr;
 
 	entity_sides
 		source_side;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		source_air_scan_range,
@@ -821,19 +821,19 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 		debug = FALSE;
 
 	entity
-		*group,
-		*target,
-		*member,
-		*sec,
-		*best_group,
-		*best_target;
+		*group = nullptr,
+		*target = nullptr,
+		*member = nullptr,
+		*sec = nullptr,
+		*best_group = nullptr,
+		*best_target = nullptr;
 
 	entity_sides
 		source_side;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		source_surface_scan_range,
@@ -1120,7 +1120,7 @@ float get_scan_floor_difficulty_factor (entity *en)
 		loop;
 
 	entity
-		*pilot_en;
+		*pilot_en = nullptr;
 
 	game_difficulty_settings
 		difficulty;

@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	regen
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

@@ -79,7 +79,7 @@
 void store_reverse_tactical_camera_values (void)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_camera_entity ());
 
@@ -99,7 +99,7 @@ void store_reverse_tactical_camera_values (void)
 void restore_reverse_tactical_camera_values (void)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_camera_entity ());
 
@@ -119,7 +119,7 @@ void restore_reverse_tactical_camera_values (void)
 void set_reverse_tactical_camera_values (entity *source, entity *target)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	int
 		airborne;
@@ -128,7 +128,7 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 		object_3d_index;
 
 	object_3d_bounds
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	float
 		length,

@@ -80,7 +80,7 @@ static void destroy_local (entity *en)
 {
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -268,10 +268,10 @@ static void kill_local (entity *en)
 		sub_type;
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force;
+		*force = nullptr;
 
 	list_types
 		list_type;

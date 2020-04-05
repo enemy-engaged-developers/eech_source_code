@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	city
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

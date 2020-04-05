@@ -81,7 +81,7 @@
 static void destroy_local (entity *en)
 {
 	force
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -129,7 +129,7 @@ static void destroy_local (entity *en)
 	{
 
 		campaign_criteria_type
-			*destroy_campaign_criteria;
+			*destroy_campaign_criteria = nullptr;
 
 		while (raw->campaign_criteria)
 		{

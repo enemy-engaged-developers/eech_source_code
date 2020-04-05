@@ -161,14 +161,14 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 {
 
 	entity
-		*task,
-		*group,
-		*landing_en,
-		*end_keysite,
-		*end_landing;
+		*task = nullptr,
+		*group = nullptr,
+		*landing_en = nullptr,
+		*end_keysite = nullptr,
+		*end_landing = nullptr;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	int
 		task_type;
@@ -200,8 +200,8 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 	if (task_type == ENTITY_SUB_TYPE_TASK_ENGAGE)
 	{
 		entity
-			*guide,
-			*target;
+			*guide = nullptr,
+			*target = nullptr;
 
 		target = get_local_entity_parent (sender, LIST_TYPE_TASK_DEPENDENT);
 
@@ -517,18 +517,18 @@ static int response_to_waypoint_attack_action (entity_messages message, entity *
 {
 
 	entity
-		*group,
-		*objective,
-		*task;
+		*group = nullptr,
+		*objective = nullptr,
+		*task = nullptr;
 
 	entity_sides
 		side;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*objective_pos;
+		*objective_pos = nullptr;
 
 	unsigned int
 		task_target_type;
@@ -681,13 +681,13 @@ static int response_to_waypoint_convoy_reached (entity_messages message, entity 
 {
 
 	entity
-		*mb,
-		*group,
-		*wp;
+		*mb = nullptr,
+		*group = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*mb_pos,
-		*wp_pos,
+		*mb_pos = nullptr,
+		*wp_pos = nullptr,
 		vec;
 
 	float
@@ -698,7 +698,7 @@ static int response_to_waypoint_convoy_reached (entity_messages message, entity 
 		group_count;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (sender);
 
@@ -784,15 +784,15 @@ static int response_to_waypoint_defend_reached (entity_messages message, entity 
 		fuel;
 
 	entity
-		*group,
-		*member,
-		*task;
+		*group = nullptr,
+		*member = nullptr,
+		*task = nullptr;
 
 	vec3d
 		new_pos;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (sender);
 
@@ -909,8 +909,8 @@ static int response_to_waypoint_drop_off_reached (entity_messages message, entit
 	entity
 		//*mb,
 		//*group,
-		*requester,
-		*cargo;
+		*requester = nullptr,
+		*cargo = nullptr;
 
 	ASSERT (sender);
 
@@ -1097,7 +1097,7 @@ static int response_to_waypoint_finish_drop_off_reached (entity_messages message
 {
 
 	entity
-		*task;
+		*task = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -1122,17 +1122,17 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 {
 
 	entity
-		*mb,
-		*task,
-		*group,
-		*keysite,
-		*landing,
-		*new_task,
-		*new_keysite,
-		*new_landing;
+		*mb = nullptr,
+		*task = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*landing = nullptr,
+		*new_task = nullptr,
+		*new_keysite = nullptr,
+		*new_landing = nullptr;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (sender);
 
@@ -1314,15 +1314,15 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 		//ammo;
 
 	entity
-		*task,
-		*group,
-		*guide,
-		*keysite,
-		*landing_en,
-		*donar_group;
+		*task = nullptr,
+		*group = nullptr,
+		*guide = nullptr,
+		*keysite = nullptr,
+		*landing_en = nullptr,
+		*donar_group = nullptr;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (sender);
 
@@ -1570,9 +1570,9 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 static int response_to_waypoint_loop_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*wp,
-		*task,
-		*guide;
+		*wp = nullptr,
+		*task = nullptr,
+		*guide = nullptr;
 
 	ASSERT (sender);
 
@@ -1675,12 +1675,12 @@ static int response_to_waypoint_sub_route_navigation_reached (entity_messages me
 		to_node;
 
 	node_link_data
-		*sub_route_node;
+		*sub_route_node = nullptr;
 
 	entity
-		*mb,
-		*group,
-		*succ_wp;
+		*mb = nullptr,
+		*group = nullptr,
+		*succ_wp = nullptr;
 
 	ASSERT (sender);
 
@@ -1755,7 +1755,7 @@ static int response_to_waypoint_sub_route_navigation_reached (entity_messages me
 			{
 
 				routed_vehicle
-					*raw;
+					*raw = nullptr;
 
 				raw = (routed_vehicle *) get_local_entity_data (mb);
 
@@ -1798,8 +1798,8 @@ static int response_to_waypoint_sub_route_navigation_reached (entity_messages me
 static int response_to_waypoint_prepare_for_drop_off_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*mb,
-		*group;
+		*mb = nullptr,
+		*group = nullptr;
 
 	ASSERT (sender);
 
@@ -1857,8 +1857,8 @@ static int response_to_waypoint_prepare_for_drop_off_reached (entity_messages me
 static int response_to_waypoint_pick_up_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*keysite,
-		*cargo;
+		*keysite = nullptr,
+		*cargo = nullptr;
 
 	ASSERT (sender);
 
@@ -1986,7 +1986,7 @@ static int response_to_waypoint_recon_reached (entity_messages message, entity *
 		side;
 
 	entity
-		*task;
+		*task = nullptr;
 
 	ASSERT (sender);
 
@@ -2050,8 +2050,8 @@ static int response_to_waypoint_recon_reached (entity_messages message, entity *
 static int response_to_waypoint_repair_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*task,
-		*objective;
+		*task = nullptr,
+		*objective = nullptr;
 
 	ASSERT (sender);
 
@@ -2099,12 +2099,12 @@ static int response_to_waypoint_repair_reached (entity_messages message, entity 
 static int response_to_waypoint_taken_off_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*landing_en,
-		*member,
-		*group;
+		*landing_en = nullptr,
+		*member = nullptr,
+		*group = nullptr;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (sender);
 
@@ -2218,9 +2218,9 @@ static int response_to_waypoint_taxi_reached (entity_messages message, entity *r
 static int response_to_waypoint_troop_capture_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*task,
-		*group,
-		*destination_keysite;
+		*task = nullptr,
+		*group = nullptr,
+		*destination_keysite = nullptr;
 
 	int
 		keysite_type;
@@ -2333,9 +2333,9 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 static int response_to_waypoint_troop_defend_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*task,
-		*group,
-		*keysite;
+		*task = nullptr,
+		*group = nullptr,
+		*keysite = nullptr;
 
 	ASSERT (sender);
 
@@ -2373,14 +2373,14 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 		start_pos;
 
 	entity
-		*group,
-		*keysite,
-		*new_task,
-		*insert_task,
-		*home_keysite,
-		*member,
-		*infantry_group,
-		*division;
+		*group = nullptr,
+		*keysite = nullptr,
+		*new_task = nullptr,
+		*insert_task = nullptr,
+		*home_keysite = nullptr,
+		*member = nullptr,
+		*infantry_group = nullptr,
+		*division = nullptr;
 
 	entity_sides
 		side;
@@ -2486,7 +2486,7 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 					else
 					{
 						entity
-							*mb;
+							*mb = nullptr;
 
 						float
 							sleep;
@@ -2526,10 +2526,10 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 static int response_to_waypoint_troop_putdown_point_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*group,
-		*task,
-		*insert_task,
-		*destination_keysite;
+		*group = nullptr,
+		*task = nullptr,
+		*insert_task = nullptr,
+		*destination_keysite = nullptr;
 
 	entity_sides
 		side;
@@ -2570,8 +2570,8 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 	if (insert_task)
 	{
 		entity
-			*guide,
-			*member;
+			*guide = nullptr,
+			*member = nullptr;
 
 		guide = get_local_entity_first_child (insert_task, LIST_TYPE_GUIDE);
 
@@ -2618,12 +2618,12 @@ static int response_to_waypoint_troop_pickup_point_end_reached (entity_messages 
 		count;
 
 	entity
-		*mb,
-		*task,
-		*guide,
-		*group,
-		*destroy_mb,
-		*extract_task;
+		*mb = nullptr,
+		*task = nullptr,
+		*guide = nullptr,
+		*group = nullptr,
+		*destroy_mb = nullptr,
+		*extract_task = nullptr;
 
 	ASSERT (sender);
 
@@ -2696,8 +2696,8 @@ static int response_to_waypoint_troop_pickup_point_end_reached (entity_messages 
 static int response_to_waypoint_troop_pickup_point_start_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*group,
-		*mb;
+		*group = nullptr,
+		*mb = nullptr;
 
 	float
 		sleep;
@@ -2737,8 +2737,8 @@ static int response_to_waypoint_troop_pickup_point_start_reached (entity_message
 static int response_to_waypoint_prepare_for_insertion_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*mb,
-		*group;
+		*mb = nullptr,
+		*group = nullptr;
 
 	ASSERT (sender);
 

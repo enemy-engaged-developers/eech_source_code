@@ -79,8 +79,8 @@
 float get_local_entity_target_bearing (entity *source, entity *target, float *range)
 {
 	vec3d
-		*source_pos,
-		*target_pos;
+		*source_pos = nullptr,
+		*target_pos = nullptr;
 
 	float
 		dx,
@@ -120,8 +120,8 @@ float get_local_entity_target_bearing (entity *source, entity *target, float *ra
 float get_local_entity_target_relative_bearing (entity *source, entity *target)
 {
 	vec3d
-		*source_pos,
-		*target_pos;
+		*source_pos = nullptr,
+		*target_pos = nullptr;
 
 	float
 		dx,
@@ -166,7 +166,7 @@ float get_local_entity_target_relative_bearing (entity *source, entity *target)
 void get_local_entity_target_point (entity *en, vec3d *target_point)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

@@ -494,7 +494,7 @@ void destroy_source_sound_sample ( int sample_index )
 void load_source_sound_sample ( int sample_index, void *data )
 {
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT ( sample_index >= 0 );
 	ASSERT ( sample_index < number_of_source_sound_samples );
@@ -517,7 +517,7 @@ void load_source_sound_sample ( int sample_index, void *data )
 system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data, int context )
 {
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	if ( !sound_system_initialised )
 	{
@@ -590,7 +590,7 @@ system_sound_effect * create_sequenced_system_sound_effect ( int number_of_sampl
 {
 
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	if ( !sound_system_initialised )
 	{
@@ -729,7 +729,7 @@ void update_system_sound_effect_system ( void )
 		count;
 
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	if ( sound_system_initialised )
 	{

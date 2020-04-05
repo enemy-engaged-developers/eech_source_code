@@ -877,7 +877,7 @@ vec3d_types unpack_vec3d_type (void)
 float get_local_entity_vec3d_magnitude (entity *en, vec3d_types type)
 {
 	vec3d
-		*v;
+		*v = nullptr;
 
 	float
 		m;

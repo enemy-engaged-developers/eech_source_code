@@ -141,7 +141,7 @@ void render_3d_terrain_short_byte_fan ( int num_points, terrain_3d_point_byte_re
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -252,7 +252,7 @@ void render_3d_terrain_short_byte_strip ( int num_points, terrain_3d_point_byte_
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -298,7 +298,7 @@ void render_3d_terrain_short_texture_xy_word_strip ( int num_points, terrain_3d_
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -351,7 +351,7 @@ void render_3d_terrain_short_texture_xy_byte_strip ( int num_points, terrain_3d_
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -404,7 +404,7 @@ void render_3d_terrain_short_texture_zy_word_strip ( int num_points, terrain_3d_
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -457,7 +457,7 @@ void render_3d_terrain_short_texture_zy_byte_strip ( int num_points, terrain_3d_
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -510,7 +510,7 @@ void render_3d_terrain_short_texture_xy_word_colour_strip ( int num_points, terr
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -576,7 +576,7 @@ void render_3d_terrain_short_texture_xy_byte_colour_strip ( int num_points, terr
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -642,7 +642,7 @@ void render_3d_terrain_short_texture_zy_word_colour_strip ( int num_points, terr
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -708,7 +708,7 @@ void render_3d_terrain_short_texture_zy_byte_colour_strip ( int num_points, terr
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
@@ -838,7 +838,7 @@ void render_3d_terrain_water_short_byte_fan ( int num_points, terrain_3d_point_b
 		this_point;
 
 	short_vertex
-		*vert;
+		*vert = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;

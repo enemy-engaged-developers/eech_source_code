@@ -191,14 +191,14 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		cross_product;
 
 	entity
-		*en,
-		*wp,
-		*prev_wp;
+		*en = nullptr,
+		*wp = nullptr,
+		*prev_wp = nullptr;
 
 	vec3d
-		*motion_vector,
+		*motion_vector = nullptr,
 		wind_vector,
-		*en_position,
+		*en_position = nullptr,
 		wp_position,
 		prev_wp_position;
 

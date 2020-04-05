@@ -79,7 +79,7 @@
 static void set_local_float_value (entity *en, float_types type, float value)
 {
 	sprite
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -207,7 +207,7 @@ static void set_client_float_value (entity *en, float_types type, float value)
 static float get_local_float_value (entity *en, float_types type)
 {
 	sprite
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;

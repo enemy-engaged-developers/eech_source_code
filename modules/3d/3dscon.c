@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +88,7 @@ int outcode_3d_object_polygon ( int num_points, point_3d_short_reference *points
 	unsigned char
 		outcode,
 		outcode2,
-		*outcode_list;
+		*outcode_list = nullptr;
 
 	outcode_list = transformed_3d_point_outcodes + base_point;
 
@@ -126,7 +121,7 @@ int outcode_3d_object_surface_polygon ( int num_points, int base_point, int *pol
 	unsigned char
 		outcode,
 		outcode2,
-		*outcode_list;
+		*outcode_list = nullptr;
 
 	outcode_list = transformed_3d_point_outcodes + base_point;
 
@@ -260,8 +255,8 @@ vertex * construct_3d_surface_gouraud_triangle_fan ( int triangle_index, float s
 		outcode2;
 
 	object_3d_transformed_point_normal
-		*normals_base,
-		*this_normal;
+		*normals_base = nullptr,
+		*this_normal = nullptr;
 
 	int
 		ispecular,
@@ -343,8 +338,8 @@ vertex * construct_3d_surface_unclipped_gouraud_triangle_fan ( int triangle_inde
 {
 
 	object_3d_transformed_point_normal
-		*normals_base,
-		*this_normal;
+		*normals_base = nullptr,
+		*this_normal = nullptr;
 
 	int
 		ispecular,
@@ -484,8 +479,8 @@ vertex * construct_3d_surface_gouraud_textured_triangle_fan ( int triangle_index
 		outcode2;
 
 	object_3d_transformed_point_normal
-		*normals_base,
-		*this_normal;
+		*normals_base = nullptr,
+		*this_normal = nullptr;
 
 	int
 		ispecular,
@@ -664,8 +659,8 @@ vertex * construct_3d_surface_gouraud_dual_textured_triangle_fan ( int triangle_
 		outcode2;
 
 	object_3d_transformed_point_normal
-		*normals_base,
-		*this_normal;
+		*normals_base = nullptr,
+		*this_normal = nullptr;
 
 	int
 		ispecular,
@@ -1066,7 +1061,7 @@ vertex * construct_3d_surface_gouraud_reflective_triangle_fan ( int triangle_ind
 		normal;
 
 	object_3d_heading_pitch_normal
-		*point_normal;
+		*point_normal = nullptr;
 
 	int
 		object_index,
@@ -1196,4 +1191,3 @@ vertex * construct_3d_surface_gouraud_reflective_triangle_fan ( int triangle_ind
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

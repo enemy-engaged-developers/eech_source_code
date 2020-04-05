@@ -237,7 +237,7 @@ static void display_eject_message (void)
 		display_message;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	float
 		x,
@@ -289,7 +289,7 @@ static void display_eject_message (void)
 static void display_time_acceleration (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[80];
 
@@ -337,7 +337,7 @@ static void update_field_of_view(void)
 	float
 		max_fov = get_max_fov ();
 	camera
-		*raw;
+		*raw = nullptr;
 
 	raw = (camera *) get_local_entity_data (get_camera_entity ());
 

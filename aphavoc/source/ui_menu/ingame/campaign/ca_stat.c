@@ -73,35 +73,36 @@
 
 #define DEBUG_MODULE 0
 
-#define BPOWER_SIDE_AREA_YMIN				0.0
-#define BPOWER_SIDE_AREA_YMAX				0.123
+const float BPOWER_SIDE_AREA_YMIN      = 0.0f;
+const float BPOWER_SIDE_AREA_YMAX      = 0.123f;
 
-#define BPOWER_MAIN_AREA_YMIN				0.171
-#define BPOWER_MAIN_AREA_YMAX				1.0
-#define BPOWER_MAIN_AREA_XMIN				0.136
-#define BPOWER_MAIN_AREA_XMAX				1.0
-#define BPOWER_MAIN_AREA_TEXT_XMIN		0.16
-#define BPOWER_MAIN_AREA_TEXT_XMAX		0.974
-#define BPOWER_MAIN_AREA_ITEM_COUNT		7
+const float BPOWER_MAIN_AREA_YMIN      = 0.171f;
+const float BPOWER_MAIN_AREA_YMAX      = 1.0f;
+const float BPOWER_MAIN_AREA_XMIN      = 0.136f;
+const float BPOWER_MAIN_AREA_XMAX      = 1.0f;
+const float BPOWER_MAIN_AREA_TEXT_XMIN = 0.16f;
+const float BPOWER_MAIN_AREA_TEXT_XMAX = 0.974f;
+
+const int BPOWER_MAIN_AREA_ITEM_COUNT	 = 7;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*page_balance_area,
-	*page_balance_overlay,
+	*page_balance_area = nullptr,
+	*page_balance_overlay = nullptr,
 	*page_balance_sector_side_text_object [2],
 	*page_balance_text_object [2][BPOWER_MAIN_AREA_ITEM_COUNT],
 
-	*page_objective_area,
-	*page_objective_name_list,
-	*page_objective_status_list,
+	*page_objective_area = nullptr,
+	*page_objective_name_list = nullptr,
+	*page_objective_status_list = nullptr,
 
-	*page_objective_description_area,
-	*page_objective_description_list,
+	*page_objective_description_area = nullptr,
+	*page_objective_description_list = nullptr,
 
-	*page_back_button;
+	*page_back_button = nullptr;
 
 static texture_graphic
 	*solid_bar_graphic = NULL,
@@ -121,18 +122,18 @@ static void notify_page_objective_highlight_function (ui_object *obj, void *arg)
 static void show_stats_objectives_page (void)
 {
 	entity
-		*en,
-		*objective;
+		*en = nullptr,
+		*objective = nullptr;
 
 	int
 		side,
 		sub_type;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	char
 		s [128];
@@ -369,7 +370,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 		s [16];
 
 	texture_graphic
-		*graphic;
+		*graphic = nullptr;
 
 	ASSERT (obj);
 
@@ -464,7 +465,7 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 		s [16];
 
 	texture_graphic
-		*graphic;
+		*graphic = nullptr;
 
 	ASSERT (obj);
 
@@ -546,8 +547,8 @@ static void update_stats_page_objects (ui_object *obj, void *arg)
 static void update_stats_page_balance_of_power_objects (ui_object *obj, void *arg)
 {
 	entity
-		*this_force,
-		*enemy_force;
+		*this_force = nullptr,
+		*enemy_force = nullptr;
 
 	entity_sides
 		this_side,
@@ -738,7 +739,7 @@ static void update_stats_page_balance_of_power_objects (ui_object *obj, void *ar
 void notify_page_objective_highlight_function (ui_object *obj, void *arg)
 {
 	entity
-		*objective;
+		*objective = nullptr;
 
 	entity_sub_types
 		keysite_type;
@@ -783,7 +784,7 @@ void notify_page_objective_highlight_function (ui_object *obj, void *arg)
 static void notify_page_objective_select_function (ui_object *obj, void *arg)
 {
 	entity
-		*objective;
+		*objective = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -818,7 +819,7 @@ void define_campaign_screen_stats_page_objects (void)
 		dy;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		string [256];

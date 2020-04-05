@@ -112,7 +112,7 @@ void set_update_entity (entity *en)
 void update_client_server_entities (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	float
 		delta_time;

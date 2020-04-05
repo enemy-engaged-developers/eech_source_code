@@ -180,7 +180,7 @@ void deinitialise_system_ui_objects (void)
 {
 
    ui_object
-      *this_object;
+      *this_object = nullptr;
 
    this_object = first_used_ui_object;
 
@@ -217,7 +217,7 @@ ui_object *get_free_ui_object (void)
 {
 
    ui_object
-      *new_;
+      *new_ = nullptr;
 
 /*
 	{
@@ -333,7 +333,7 @@ static void repaint_ui_system (int activate)
 {
 
    ui_object
-      *screen_stack;
+      *screen_stack = nullptr;
 
 	if (activate)
 	{

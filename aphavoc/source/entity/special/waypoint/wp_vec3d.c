@@ -79,7 +79,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -120,7 +120,7 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -217,7 +217,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -236,10 +236,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 				case POSITION_TYPE_VIRTUAL:
 				{
 					entity
-						*position_entity;
+						*position_entity = nullptr;
 
 					vec3d
-						*pos;
+						*pos = nullptr;
 
 					position_entity = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
 
@@ -289,10 +289,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (waypoint *) get_local_entity_data (en);
 
@@ -310,7 +310,7 @@ static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 				{
 
 					entity
-						*position_entity;
+						*position_entity = nullptr;
 
 					position_entity = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
 

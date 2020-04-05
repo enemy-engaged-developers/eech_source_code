@@ -163,7 +163,7 @@ int get_3d_object_updateable_flag ( int object )
 	{
 
 		object_3d_instance
-			*object_instance;
+			*object_instance = nullptr;
 
 		object_3d_sub_object_search_data
 			search;
@@ -226,7 +226,7 @@ enum ENTITY_SUB_TYPE_REGEN get_object_3d_regeneration_type ( object_3d_index_num
 	{
 
 		object_3d_instance
-			*object_instance;
+			*object_instance = nullptr;
 
 		object_3d_sub_object_search_data
 			search;

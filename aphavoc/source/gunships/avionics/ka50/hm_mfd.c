@@ -175,7 +175,7 @@ static rgb_colour
 #define SMALL_MFD_VIEWPORT_SIZE		(128)
 
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 
 static int
 	int_mfd_viewport_size;
@@ -201,18 +201,18 @@ static int
 	draw_large_mfd;
 
 static screen
-	*shkval_mfd_texture_screen,
-	*abris_mfd_texture_screen,
-	*ekran_display_texture_screen,
-	*large_shkval_mfd_texture_screen,
-	*large_abris_mfd_texture_screen,
-	*large_ekran_display_texture_screen,
-	*small_shkval_mfd_texture_screen,
-	*small_abris_mfd_texture_screen,
-	*small_ekran_display_texture_screen,
-	*eo_3d_texture_screen,
-	*eo_3d_texture_screen_over,
-	*full_mfd_texture_screen;
+	*shkval_mfd_texture_screen = nullptr,
+	*abris_mfd_texture_screen = nullptr,
+	*ekran_display_texture_screen = nullptr,
+	*large_shkval_mfd_texture_screen = nullptr,
+	*large_abris_mfd_texture_screen = nullptr,
+	*large_ekran_display_texture_screen = nullptr,
+	*small_shkval_mfd_texture_screen = nullptr,
+	*small_abris_mfd_texture_screen = nullptr,
+	*small_ekran_display_texture_screen = nullptr,
+	*eo_3d_texture_screen = nullptr,
+	*eo_3d_texture_screen_over = nullptr,
+	*full_mfd_texture_screen = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,14 +266,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	entity_sides
 		source_side;
 	entity
-		*source;
+		*source = nullptr;
 
 	float
 		dx,
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1116,14 +1116,14 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		if (!ka50_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -1559,7 +1559,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -1743,7 +1743,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -1893,7 +1893,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 #endif
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -1913,11 +1913,11 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_point;
 
 	viewpoint
@@ -2469,11 +2469,11 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		y_adjust;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (eo);
 
@@ -2745,7 +2745,7 @@ static void draw_2d_llltv_mfd (int valid_3d)
 static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
@@ -2762,11 +2762,11 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 		source_heading;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (ka50_mfd_location_valid (mfd_location));
 
@@ -2865,8 +2865,8 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !ka50_damage.navigation_computer)
 	{
 		entity
-			*wp1,
-			*wp2;
+			*wp1 = nullptr,
+			*wp2 = nullptr;
 
 		vec3d
 			wp1_rel_position,
@@ -2974,11 +2974,11 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 
 	{
 		entity
-			*target,
-			*launched_weapon;
+			*target = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*target_position;
+			*target_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -3341,7 +3341,7 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 	if (!ka50_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		vec3d
 			waypoint_position;
@@ -3476,8 +3476,8 @@ static void draw_tactical_situation_display_mfd (ka50_mfd_locations mfd_location
 static entity *get_closest_missile (entity *source, vec3d *source_position, threat_types threat_type, float *closest_missile_time_to_impact)
 {
 	entity
-		*threat,
-		*closest_missile;
+		*threat = nullptr,
+		*closest_missile = nullptr;
 
 	int
 		overshot;
@@ -3490,11 +3490,11 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 		cos_error;
 
 	vec3d
-		*threat_position,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	ASSERT (source);
 
@@ -3579,7 +3579,7 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 static void draw_aircraft_survivability_equipment_display_mfd (ka50_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
@@ -3592,11 +3592,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (ka50_mfd_location
 		source_heading;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (ka50_mfd_location_valid (mfd_location));
 
@@ -3620,11 +3620,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (ka50_mfd_location
 
 	{
 		entity
-			*threat,
-			*launched_weapon;
+			*threat = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*threat_position;
+			*threat_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -3842,7 +3842,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (ka50_mfd_location
 
 	{
 		entity
-			*closest_missile;
+			*closest_missile = nullptr;
 
 		float
 			time_to_impact;
@@ -4206,7 +4206,7 @@ static int
 	num_weapon_line_points;
 
 static vec3d
-	*weapon_line_points;
+	*weapon_line_points = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4228,7 +4228,7 @@ static void draw_weapon_display_mfd (void)
 		y_adjust;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type,
@@ -5028,7 +5028,7 @@ static void draw_weapon_display_mfd (void)
 static float print_mfd_system_message (char *equipment, char *warning, int fail, float y_adjust, float width_adjust)
 {
 	char
-		*status;
+		*status = nullptr;
 
 	float
 		width;
@@ -5613,8 +5613,8 @@ static void draw_pitch_ladder (void)
 		else  // 90 degree bank
 		{
 			rgb_colour
-				*left_colour,
-				*right_colour;
+				*left_colour = nullptr,
+				*right_colour = nullptr;
 
 			if (roll == rad(90))
 			{
@@ -5783,7 +5783,7 @@ static void draw_altitude_scale (void)
 
 
 	char
-		*format,
+		*format = nullptr,
 		buffer[8];
 
 	int
@@ -6087,10 +6087,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float
@@ -6243,11 +6243,11 @@ static void print_mono_font_max_length_string (char *s)
 static char *get_player_rank_and_name (entity *en, char *buffer)
 {
 	const char
-		*rank,
-		*name;
+		*rank = nullptr,
+		*name = nullptr;
 
 	entity
-		*aircrew;
+		*aircrew = nullptr;
 
 	ASSERT (en);
 
@@ -6303,7 +6303,7 @@ static void print_target_position (entity *source, entity *target)
 		range;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	ASSERT (source);
 
@@ -6366,13 +6366,13 @@ static void draw_mission_display_mfd (void)
 		estimated_time;
 
 	entity
-		*en,
-		*group,
-		*company,
-		*member,
-		*task,
-		*keysite,
-		*objective;
+		*en = nullptr,
+		*group = nullptr,
+		*company = nullptr,
+		*member = nullptr,
+		*task = nullptr,
+		*keysite = nullptr,
+		*objective = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -7522,7 +7522,7 @@ void update_ka50_ekran_display (void)
 		damaged;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -8668,7 +8668,7 @@ static int get_mfd_damage (ka50_mfd_locations mfd_location)
 void select_ka50_mfd_mode (ka50_mfd_modes mfd_mode, ka50_mfd_locations mfd_location)
 {
 	ka50_mfd_modes
-		*mfd_mode_ptr1;
+		*mfd_mode_ptr1 = nullptr;
 
 	ASSERT (ka50_mfd_mode_valid (mfd_mode));
 
@@ -8933,7 +8933,7 @@ static ka50_mfd_modes get_previous_mfd_mode (ka50_mfd_modes mfd_mode, ka50_mfd_l
 void select_next_ka50_mfd (ka50_mfd_locations mfd_location)
 {
 	ka50_mfd_modes
-		*mfd_mode_ptr1,
+		*mfd_mode_ptr1 = nullptr,
 		next_mfd_mode;
 
 	ASSERT (ka50_mfd_location_valid (mfd_location));
@@ -8952,7 +8952,7 @@ void select_next_ka50_mfd (ka50_mfd_locations mfd_location)
 void select_previous_ka50_mfd (ka50_mfd_locations mfd_location)
 {
 	ka50_mfd_modes
-		*mfd_mode_ptr1,
+		*mfd_mode_ptr1 = nullptr,
 		previous_mfd_mode;
 
 	ASSERT (ka50_mfd_location_valid (mfd_location));

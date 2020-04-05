@@ -94,7 +94,7 @@ static void display_target_information (void);
 #define HUD_VIEWPORT_SMALL_SIZE		(128)
 
 static env_2d
-	*hud_env;
+	*hud_env = nullptr;
 
 static float
 	hud_viewport_size,
@@ -124,8 +124,8 @@ static float
 #define LARGE_HMS_TEXTURE_INDEX (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD)
 
 static screen
-	*hud_texture_screen,
-	*large_hms_texture_screen;
+	*hud_texture_screen = nullptr,
+	*large_hms_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour;
@@ -548,14 +548,14 @@ static void draw_heading_scale (void)
 	if (!havoc_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 		if (wp)
 		{
 			vec3d
-				*gunship_position,
+				*gunship_position = nullptr,
 				waypoint_position;
 
 			float
@@ -1352,11 +1352,11 @@ static void display_flight_path_marker_and_waypoint_information (int draw_on_vir
 		relative_heading;
 
 	entity
-		*en,
-		*wp;
+		*en = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*en_position,
+		*en_position = nullptr,
 		wp_position;
 
 	object_3d_visibility
@@ -1495,11 +1495,11 @@ static void display_waypoint_information (void)
 		width;
 
 	entity
-		*en,
-		*wp;
+		*en = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*en_position,
+		*en_position = nullptr,
 		wp_position;
 
 	en = get_gunship_entity ();
@@ -1561,8 +1561,8 @@ static void draw_bob_up_overlay (void)
 		dzt;
 
 	vec3d
-		*position,
-		*motion_vector;
+		*position = nullptr,
+		*motion_vector = nullptr;
 
 	if (hud_bob_up_overlay)
 	{
@@ -2362,11 +2362,11 @@ static void draw_target_marker (void)
 		target_range;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_position,
 		intercept_point;
 
@@ -2536,7 +2536,7 @@ static void display_weapon_information (void)
 static void display_target_information (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -2544,8 +2544,8 @@ static void display_target_information (void)
 		width;
 
 	entity
-		*target,
-		*source;
+		*target = nullptr,
+		*source = nullptr;
 
 	rangefinding_system
 		range_finder = get_range_finder();

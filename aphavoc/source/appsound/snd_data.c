@@ -107,7 +107,7 @@ struct SOUND_BLOCK_DATA_HEADER
 		hash;
 
 	char
-		*filename;
+		*filename = nullptr;
 };
 
 typedef struct SOUND_BLOCK_DATA_HEADER sound_block_data_header;
@@ -120,10 +120,10 @@ int
 	number_of_blocked_sound_samples;
 
 sound_block_data_header
-	*blocked_sound_samples;
+	*blocked_sound_samples = nullptr;
 
 FILE
-	*block_sound_sample_data_file;
+	*block_sound_sample_data_file = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2476,7 +2476,7 @@ void load_application_sound_samples ( void )
 static void load_from_file ( int sound_sample_index, int type, int rate, int size, FILE* fp )
 {
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 	application_sound_effects[sound_sample_index].rate = rate * ( type == SAMPLE_TYPE_MONO_16BIT ? 2 : 1 );
 	application_sound_effects[sound_sample_index].size = size;
@@ -2648,7 +2648,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 										};
 
 										FILE
-											*fp;
+											*fp = nullptr;
 										struct WAVEHEADER
 											wh;
 
@@ -2688,7 +2688,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 									int
 										size;
 									FILE
-										*fp;
+										*fp = nullptr;
 
 									#if DEBUG_MODULE
 									if ( sound_block_header_index == SOUND_SAMPLE_NOT_FOUND )
@@ -2751,7 +2751,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 						current_blocked_sample;
 
 					FILE
-						*fp;
+						*fp = nullptr;
 
 					char
 						filename[256];
@@ -2805,7 +2805,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 						{
 
 							char
-								*temp_memory;
+								*temp_memory = nullptr;
 
 							sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
 
@@ -2917,7 +2917,7 @@ int open_application_sound_file_system ( char *directory )
 	{
 
 		FILE
-			*fp;
+			*fp = nullptr;
 
 		int
 			count;
@@ -2938,7 +2938,7 @@ int open_application_sound_file_system ( char *directory )
 				hash;
 
 			char
-				*ptr;
+				*ptr = nullptr;
 
 			fread ( &blocked_sound_samples[count].sound_sample_index, sizeof ( int ), 1, fp );
 			fread ( &blocked_sound_samples[count].sound_data_offset, sizeof ( int ), 1, fp );
@@ -3030,7 +3030,7 @@ int get_sound_block_header_index ( char *filename, int sample_index )
 		hash;
 
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT ( filename );
 
@@ -3085,7 +3085,7 @@ void destroy_application_sound_samples ( void )
 void initialise_application_sound_effects ( void )
 {
 	sound_effect_information
-		*item;
+		*item = nullptr;
 	int
 		count;
 

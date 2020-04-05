@@ -99,7 +99,7 @@ static void display_weapon_information (void);
 #define SIN60 0.8660254
 
 static env_2d
-	*hud_env;
+	*hud_env = nullptr;
 
 static float
 	hud_viewport_size,
@@ -154,7 +154,7 @@ rgb_colour
 #define LARGE_HMS_TEXTURE_INDEX (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD)
 
 static screen
-	*hud_texture_screen;
+	*hud_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour;
@@ -749,7 +749,7 @@ static void display_weapon_information (void)
 			{
 				vec3d
 					target_position,
-					*source_position;
+					*source_position = nullptr;
 
 				float
 					elevation,
@@ -780,7 +780,7 @@ static void display_weapon_information (void)
 static void display_target_information (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 

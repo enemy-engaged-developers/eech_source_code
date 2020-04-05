@@ -95,22 +95,22 @@ int
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 entity
-	*parser_keysite,
-	*parser_force,
-	*parser_landing,
-	*parser_route,
-	*parser_waypoint,
-	*parser_member,
-	*parser_object;
+	*parser_keysite = nullptr,
+	*parser_force = nullptr,
+	*parser_landing = nullptr,
+	*parser_route = nullptr,
+	*parser_waypoint = nullptr,
+	*parser_member = nullptr,
+	*parser_object = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 char
-	*campaign_population_filename,
-	*population_placement_filename,
-	*side_data_filename;
+	*campaign_population_filename = nullptr,
+	*population_placement_filename = nullptr,
+	*side_data_filename = nullptr;
 
 int
 	parser_flight_dynamics_options;
@@ -120,13 +120,13 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 campaign_trigger_type
-	*campaign_trigger_head;
+	*campaign_trigger_head = nullptr;
 
 campaign_event_type
-	*campaign_event_head;
+	*campaign_event_head = nullptr;
 
 campaign_while_loop_type
-	*campaign_while_loop_head;
+	*campaign_while_loop_head = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ void deinitialise_parser (void)
 	while ( campaign_event_head )
 	{
 		campaign_event_type
-			*next;
+			*next = nullptr;
 
 		next = campaign_event_head->next;
 		if ( campaign_event_head->name )
@@ -201,7 +201,7 @@ void deinitialise_parser (void)
 	while ( campaign_trigger_head )
 	{
 		campaign_trigger_type
-			*next;
+			*next = nullptr;
 
 		next = campaign_trigger_head->next;
 		if ( campaign_trigger_head->event_name )
@@ -262,10 +262,10 @@ int parser_campaign_file (const char *filename, int *offset)
 		operator_name [64];
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	int
 		end_wp,
@@ -531,7 +531,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				int
-					*parser_variable;
+					*parser_variable = nullptr;
 
 				parser_variable = (int *) malloc (sizeof (int));
 
@@ -590,7 +590,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					file_offset;
 
 				campaign_event_type
-					*event;
+					*event = nullptr;
 
 				get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
@@ -845,7 +845,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				campaign_event_type
-					*event;
+					*event = nullptr;
 
 				get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
@@ -873,7 +873,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				int
-					*variable_ptr;
+					*variable_ptr = nullptr;
 
 				get_next_file_word (file_ptr, variable_name, sizeof (variable_name));
 
@@ -906,7 +906,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				int
-					*variable;
+					*variable = nullptr;
 
 				get_next_file_word (file_ptr, variable_name, sizeof (variable_name));
 
@@ -1193,7 +1193,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				if (!get_session_entity ())
 				{
 					entity
-						*en;
+						*en = nullptr;
 
 					en = create_local_entity
 					(
@@ -1368,7 +1368,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						this_type;
 
 					force
-						*raw;
+						*raw = nullptr;
 
 					raw = (force *) get_local_entity_data (get_parser_force ());
 
@@ -1404,7 +1404,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					count;
 
 				force
-					*force_raw;
+					*force_raw = nullptr;
 
 				ASSERT (get_parser_force ());
 
@@ -1589,7 +1589,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					value;
 
 				entity
-					*keysite;
+					*keysite = nullptr;
 
 				value = get_next_file_int (file_ptr);
 
@@ -1729,8 +1729,8 @@ int parser_campaign_file (const char *filename, int *offset)
 					count;
 
 				entity
-					*group,
-					*member;
+					*group = nullptr,
+					*member = nullptr;
 
 				member = NULL;
 
@@ -1879,7 +1879,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					formation_component_type;
 
 				entity
-					*group;
+					*group = nullptr;
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
@@ -1968,32 +1968,32 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				vec3d
-					*wp_nodes;
+					*wp_nodes = nullptr;
 
 				movement_types
 					movement_type;
 
 				entity
-					*wp,
-					*group_en,
-					*new_task;
+					*wp = nullptr,
+					*group_en = nullptr,
+					*new_task = nullptr;
 
 				entity_sub_types
 					task_type,
-					*wp_types;
+					*wp_types = nullptr;
 
 				entity_sides
 					side;
 
 				float
-					*wp_radius,
+					*wp_radius = nullptr,
 					start_time,
 					stop_time,
 					expire_time;
 
 				int
 //					*wp_criteria,
-					*wp_delta_time,
+					*wp_delta_time = nullptr,
 					count,
 					wp_count;
 
@@ -2215,11 +2215,11 @@ int parser_campaign_file (const char *filename, int *offset)
 					campaign_size;
 
 				FILE
-					*saved_file_ptr;
+					*saved_file_ptr = nullptr;
 
 				unsigned char
-					*load_ptr,
-					*campaign_buffer;
+					*load_ptr = nullptr,
+					*campaign_buffer = nullptr;
 				char
 					filename [128];
 
@@ -2320,7 +2320,7 @@ void add_campaign_trigger (campaign_trigger type, int value1, int value2, int va
 {
 
 	campaign_trigger_type
-		*new_campaign_trigger;
+		*new_campaign_trigger = nullptr;
 
 	new_campaign_trigger = (campaign_trigger_type *) malloc (sizeof (campaign_trigger_type));
 
@@ -2357,7 +2357,7 @@ campaign_event_type *add_campaign_event (char *name, const char *filename, int f
 {
 
 	campaign_event_type
-		*new_event;
+		*new_event = nullptr;
 
 	if (get_campaign_event (name))
 	{
@@ -2400,10 +2400,10 @@ int update_script_triggers (campaign_trigger trigger)
 		return_value;
 
 	campaign_trigger_type
-		*this_campaign_trigger;
+		*this_campaign_trigger = nullptr;
 
 	campaign_event_type
-		*event;
+		*event = nullptr;
 
 	return_value = 0;
 
@@ -2461,10 +2461,10 @@ void generate_key_bound_triggers (void)
 		modifier;
 
 	campaign_trigger_type
-		*this_campaign_trigger;
+		*this_campaign_trigger = nullptr;
 
 	campaign_event_type
-		*event;
+		*event = nullptr;
 
 	this_campaign_trigger = campaign_trigger_head;
 
@@ -2510,10 +2510,10 @@ void key_bound_trigger_function (event *ev)
 		offset;
 
 	campaign_trigger_type
-		*this_campaign_trigger;
+		*this_campaign_trigger = nullptr;
 
 	campaign_event_type
-		*event;
+		*event = nullptr;
 
 	this_campaign_trigger = campaign_trigger_head;
 
@@ -2562,7 +2562,7 @@ void key_bound_trigger_function (event *ev)
 campaign_event_type *get_campaign_event (char *name)
 {
 	campaign_event_type
-		*this_campaign_event;
+		*this_campaign_event = nullptr;
 
 	this_campaign_event = campaign_event_head;
 
@@ -2592,7 +2592,7 @@ static int trigger_triggered (campaign_trigger_type *this_campaign_trigger)
 		return_value;
 
 	const char
-		*variable_name;
+		*variable_name = nullptr;
 	char
 		operator_name;
 
@@ -2719,7 +2719,7 @@ campaign_while_loop_type *add_while_loop (const char *filename, int file_offset)
 {
 
 	campaign_while_loop_type
-		*new_while_loop;
+		*new_while_loop = nullptr;
 
 	new_while_loop = (campaign_while_loop_type *) malloc (sizeof (campaign_while_loop_type));
 
@@ -2745,7 +2745,7 @@ void destroy_while_loop_head (void)
 {
 
 	campaign_while_loop_type
-		*destroy_while_loop;
+		*destroy_while_loop = nullptr;
 
 	destroy_while_loop = campaign_while_loop_head;
 
@@ -3131,7 +3131,7 @@ void debug_parser_message (int tag, FILE *file_ptr)
 				result;
 
 			campaign_event_type
-				*event;
+				*event = nullptr;
 
 			get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
@@ -3296,7 +3296,7 @@ void parser_debug_log (char *msg, ...)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	static char
 		buffer [1000];
@@ -3333,7 +3333,7 @@ void parser_debug_fatal (char *msg, ...)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	static char
 		buffer [1000];

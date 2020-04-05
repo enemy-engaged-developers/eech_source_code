@@ -82,7 +82,7 @@ static void destroy_local (entity *en)
 {
 
 	person
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -294,15 +294,15 @@ static void kill_local (entity *en)
 {
 
 	person
-		*raw;
+		*raw = nullptr;
 
 	int
 		losses;
 
 	entity
-		*task,
-		*destroy_task,
-		*group;
+		*task = nullptr,
+		*destroy_task = nullptr,
+		*group = nullptr;
 
 	////////////////////////////////////////
 	//

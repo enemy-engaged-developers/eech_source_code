@@ -101,7 +101,7 @@
 void animate_aircraft_loading_doors( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the doors on the 3d objects
@@ -126,7 +126,7 @@ void animate_aircraft_loading_doors( entity *en )
 void update_aircraft_loading_doors( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		door_state;
@@ -190,7 +190,7 @@ void update_aircraft_loading_doors( entity *en )
 void animate_aircraft_cargo_doors( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the doors on the 3d objects
@@ -215,7 +215,7 @@ void animate_aircraft_cargo_doors( entity *en )
 void update_aircraft_cargo_doors( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		door_state;
@@ -267,7 +267,7 @@ void update_aircraft_cargo_doors( entity *en )
 void animate_aircraft_rudder( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the rudder on aircraft
@@ -293,7 +293,7 @@ void animate_aircraft_rudder( entity *en )
 void update_aircraft_rudder( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// updates the rudder on an aircraft
@@ -331,7 +331,7 @@ void update_aircraft_rudder( entity *en )
 void animate_aircraft_undercarriage( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the landing gear on the 3d objects
@@ -357,7 +357,7 @@ void animate_aircraft_undercarriage( entity *en )
 void update_aircraft_undercarriage( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		old_uc_state,
@@ -478,7 +478,7 @@ void update_aircraft_undercarriage( entity *en )
 void animate_aircraft_weapon_system_ready( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the "weapon system readies" on the 3d objects
@@ -503,7 +503,7 @@ void animate_aircraft_weapon_system_ready( entity *en )
 void update_aircraft_weapon_system_ready( entity *en )
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		wsr_state;
@@ -549,7 +549,7 @@ void update_aircraft_weapon_system_ready( entity *en )
 void animate_aircraft_shadow (entity *en)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

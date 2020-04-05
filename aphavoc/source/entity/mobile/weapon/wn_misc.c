@@ -79,7 +79,7 @@
 void get_local_entity_weapon_load(entity* en, weapon_count weapon_load[], unsigned max_num_weapons)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	unsigned next_free = 0;
 
@@ -139,7 +139,7 @@ float get_local_entity_weapon_load_weight (entity *en)
 		package_weight;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -174,9 +174,9 @@ float get_local_entity_weapon_load_weight (entity *en)
 	
 	{
 		entity
-			*group,
-			*guide,
-			*task;
+			*group = nullptr,
+			*guide = nullptr,
+			*task = nullptr;
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 		
@@ -219,7 +219,7 @@ int get_local_entity_weapon_count (entity *en, entity_sub_types weapon_sub_type)
 		package;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -310,7 +310,7 @@ void set_local_entity_weapon_damage (entity *en, int heading_depth, entity_sub_t
 		package;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -417,7 +417,7 @@ int get_local_entity_weapon_hardpoint_info
 		result;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -495,13 +495,13 @@ int get_local_entity_weapon_hardpoint_info
 void set_comanche_stub_wing_visibility (entity *en)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		package,
@@ -564,7 +564,7 @@ void set_comanche_stub_wing_visibility (entity *en)
 int get_comanche_stub_wings_attached (entity *en)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;

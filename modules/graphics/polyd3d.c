@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,8 +80,8 @@ void draw_wbuffered_plain_line ( vertex *line, real_colour colour )
 {
 
 	vertex
-		*point1,
-		*point2;
+		*point1 = nullptr,
+		*point2 = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -126,8 +121,8 @@ void draw_wbuffered_flat_shaded_textured_line ( vertex *line, screen *texture, r
 {
 
 	vertex
-		*point1,
-		*point2;
+		*point1 = nullptr,
+		*point2 = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -181,8 +176,8 @@ void draw_wbuffered_gouraud_shaded_line ( vertex *line, float red, float green, 
 		fb;
 
 	vertex
-		*point1,
-		*point2;
+		*point1 = nullptr,
+		*point2 = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -241,8 +236,8 @@ void draw_wbuffered_gouraud_shaded_textured_line ( vertex *line, screen *texture
 {
 
 	vertex
-		*point1,
-		*point2;
+		*point1 = nullptr,
+		*point2 = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -296,7 +291,7 @@ void draw_wbuffered_plain_polygon ( vertex *polygon, real_colour colour, real_co
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -340,7 +335,7 @@ void draw_wbuffered_gouraud_shaded_polygon ( vertex *polygon, float red, float g
 		b;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -409,7 +404,7 @@ void draw_wbuffered_flat_shaded_textured_polygon ( vertex *polygon, struct REAL_
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -451,7 +446,7 @@ void draw_wbuffered_gouraud_shaded_textured_polygon ( vertex *polygon )
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -503,7 +498,7 @@ void draw_wbuffered_gouraud_coloured_distance_fogged_textured_polygon ( vertex *
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -546,7 +541,7 @@ void draw_wbuffered_shadow_polygon ( vertex *polygon, float r, float g, float b 
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -596,7 +591,7 @@ void draw_wbuffered_shadow_textured_polygon ( vertex *polygon, screen *texture )
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	LPTLVERTEX
 		vertices,
@@ -681,4 +676,3 @@ void set_d3d_shadow_zbias ( float bias )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

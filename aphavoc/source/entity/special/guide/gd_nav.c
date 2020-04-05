@@ -79,7 +79,7 @@
 void navigation_guide_waypoint_reached (entity *en)
 {
 	entity
-		*current_wp;
+		*current_wp = nullptr;
 
 	//
 	// set next waypoint (actual set function is called from within wp_msgs)

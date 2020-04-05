@@ -172,7 +172,7 @@ static void default_set_entity_ptr_value (entity *en, ptr_types type, void *ptr)
 static void *default_get_entity_ptr_value (entity *en, ptr_types type)
 {
 	entity
-		*ptr;
+		*ptr = nullptr;
 
 	switch (type)
 	{

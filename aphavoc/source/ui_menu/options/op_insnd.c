@@ -221,10 +221,10 @@ void define_options_screen_ingame_sound_page_objects (void)
 		y2;
 
 	ui_object
-		*page,
-		*text_area,
-		*channel_area,
-		*volume_area;
+		*page = nullptr,
+		*text_area = nullptr,
+		*channel_area = nullptr,
+		*volume_area = nullptr;
 
 	/////////////////////////////////////////////////////////////////
 	// sound Area

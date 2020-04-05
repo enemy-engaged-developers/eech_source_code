@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	person
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop,
@@ -173,7 +173,7 @@ static void update_client (entity *en)
 		loop;
 
 	person
-		*raw;
+		*raw = nullptr;
 
 	raw = (person *) get_local_entity_data (en);
 

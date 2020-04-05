@@ -79,18 +79,18 @@
 #define NUMBER_OF_UI_OBJECTS 6
 
 static ui_object
-	*sound_device_area,
-	*sound_device_speech_area,
-	*sound_effect_area,
-	*music_area,
-	*speech_area,
-	*co_pilot_speech_area,
-	*sound_device_option_button,
-	*sound_device_speech_option_button,
-	*sound_effect_option_button,
-	*music_option_button,
-	*speech_option_button,
-	*co_pilot_speech_option_button;
+	*sound_device_area = nullptr,
+	*sound_device_speech_area = nullptr,
+	*sound_effect_area = nullptr,
+	*music_area = nullptr,
+	*speech_area = nullptr,
+	*co_pilot_speech_area = nullptr,
+	*sound_device_option_button = nullptr,
+	*sound_device_speech_option_button = nullptr,
+	*sound_effect_option_button = nullptr,
+	*music_option_button = nullptr,
+	*speech_option_button = nullptr,
+	*co_pilot_speech_option_button = nullptr;
 
 static const char
 	*option_boolean_text[2];
@@ -170,7 +170,7 @@ void define_options_screen_sound_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	ui_object
 		*title_change_array [NUMBER_OF_UI_OBJECTS],
@@ -186,8 +186,8 @@ void define_options_screen_sound_page_objects (void)
 	if ( !devices_array )
 	{
 		const char
-			*default_device,
-			*default_device_speech,
+			*default_device = nullptr,
+			*default_device_speech = nullptr,
 			**device;
 
 		if ( get_sound_system_devices ( &devices_array, &default_device ) )

@@ -82,10 +82,10 @@ void ui_object_autosize (ui_object *obj)
 {
 /*
 	ui_object
-		*child;
+		*child = nullptr;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		x2 = 0.0,
@@ -410,7 +410,7 @@ void reset_time_values (ui_object *obj)
 {
 
 	ui_object
-		*child;
+		*child = nullptr;
 
 	int
 		time_offset;
@@ -438,8 +438,8 @@ void internal_reset_time_values (ui_object *obj)
 {
 
 	ui_object
-		*child,
-		*next;
+		*child = nullptr,
+		*next = nullptr;
 
 	int
 		time_offset;
@@ -475,7 +475,7 @@ void recursively_set_object_time (ui_object *obj, int time, int offset)
 {
 
 	ui_object
-		*child;
+		*child = nullptr;
 
 	// set variables
 
@@ -502,8 +502,8 @@ void internal_recursively_set_object_time (ui_object *obj, int time, int offset)
 {
 
 	ui_object
-		*child,
-		*next;
+		*child = nullptr,
+		*next = nullptr;
 
 	// set variables
 

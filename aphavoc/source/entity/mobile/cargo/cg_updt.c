@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;
@@ -121,7 +121,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;

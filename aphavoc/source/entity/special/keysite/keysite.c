@@ -93,12 +93,12 @@ entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *po
 		range;
 
 	vec3d
-		*keysite_pos;
+		*keysite_pos = nullptr;
 
 	entity
-		*force,
+		*force = nullptr,
 		*closest_keysite = NULL,
-		*current_keysite;
+		*current_keysite = nullptr;
 
 	ASSERT(min_range > 0.0 || outside_of_range);
 	
@@ -254,8 +254,8 @@ int get_keysite_takenoff_position (entity *keysite, vec3d *pos, entity_sub_types
 {
 
 	entity
-		*landing_en,
-		*wp;
+		*landing_en = nullptr,
+		*wp = nullptr;
 
 	landing_en = get_local_entity_landing_entity (keysite, landing_type);
 
@@ -294,8 +294,8 @@ int get_keysite_start_landing_position (entity *keysite, vec3d *pos, entity_sub_
 {
 
 	entity
-		*landing_en,
-		*wp;
+		*landing_en = nullptr,
+		*wp = nullptr;
 
 	landing_en = get_local_entity_landing_entity (keysite, landing_type);
 
@@ -313,7 +313,7 @@ int get_keysite_start_landing_position (entity *keysite, vec3d *pos, entity_sub_
 int get_keysite_landing_sites_available (entity *en, int landing_type)
 {
 	entity
-		*landing;
+		*landing = nullptr;
 		
 	landing = get_local_entity_first_child (en, LIST_TYPE_LANDING_SITE);
 		
@@ -341,18 +341,18 @@ void update_keysite_cargo (entity *en, float cargo_level, entity_sub_types sub_t
 		temp_cargo_level;
 
 	entity
-		*force,
-		*cargo,
-		*destroy_cargo;
+		*force = nullptr,
+		*cargo = nullptr,
+		*destroy_cargo = nullptr;
 
 	struct OBJECT_3D_BOUNDS
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	vec3d
 		position;
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	//
 	// Get cargo position
@@ -507,14 +507,14 @@ void update_keysite_cargo (entity *en, float cargo_level, entity_sub_types sub_t
 void initialise_keysite_farp_enable (entity *force)
 {
 	vec3d
-		*keysite_pos;
+		*keysite_pos = nullptr;
 
 	entity_sides
 		force_side;
 
 	entity
-		*sector,
-		*keysite;
+		*sector = nullptr,
+		*keysite = nullptr;
 
 	if (get_comms_model () != COMMS_MODEL_SERVER)
 	{
@@ -574,8 +574,8 @@ void initialise_keysite_farp_enable (entity *force)
 entity *get_fixed_structure_keysite_entity (entity *structure)
 {
 	entity
-		*group,
-		*keysite;
+		*group = nullptr,
+		*keysite = nullptr;
 
 	ASSERT (structure);
 
@@ -619,8 +619,8 @@ int get_local_keysite_member_count (entity *keysite)
 {
 
 	entity
-		*group,
-		*member;
+		*group = nullptr,
+		*member = nullptr;
 
 	int
 		count;
@@ -656,7 +656,7 @@ int add_local_entity_importance_to_keysite (entity *en, entity *keysite_en)
 		value;
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -700,7 +700,7 @@ int restore_local_entity_importance_to_keysite (entity *en, entity *keysite_en)
 		value;
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -739,12 +739,12 @@ int restore_local_entity_importance_to_keysite (entity *en, entity *keysite_en)
 void subtract_local_entity_importance_from_keysite (entity *en)
 {
 	entity
-		*task,
-		*next,
-		*keysite_en;
+		*task = nullptr,
+		*next = nullptr,
+		*keysite_en = nullptr;
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	int
 		object_index;
@@ -854,8 +854,8 @@ void subtract_local_entity_importance_from_keysite (entity *en)
 void notify_keysite_structure_under_attack (entity *structure, entity *aggressor)
 {
 	entity
-		*force,
-		*keysite;
+		*force = nullptr,
+		*keysite = nullptr;
 
 	entity_sides
 		side;
@@ -945,15 +945,15 @@ void notify_keysite_structure_under_attack (entity *structure, entity *aggressor
 void destroy_keysite (entity *en, entity_sides side)
 {
 	entity
-		*task,
-		*group,
-		*member,
-		*landing,
-		*next,
-		*next_group;
+		*task = nullptr,
+		*group = nullptr,
+		*member = nullptr,
+		*landing = nullptr,
+		*next = nullptr,
+		*next_group = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (en);
 
@@ -1289,10 +1289,10 @@ void destroy_keysite (entity *en, entity_sides side)
 void capture_keysite (entity *en, entity_sides new_side)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force;
+		*force = nullptr;
 
 	entity_sides
 		side;
@@ -1301,7 +1301,7 @@ void capture_keysite (entity *en, entity_sides new_side)
 		keysite_type;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		loop;
@@ -1358,9 +1358,9 @@ void capture_keysite (entity *en, entity_sides new_side)
 
 	{
 		entity
-			*group,
-			*current_group,
-			*member;
+			*group = nullptr,
+			*current_group = nullptr,
+			*member = nullptr;
 
 		group = get_local_entity_first_child (en, LIST_TYPE_KEYSITE_GROUP);
 	
@@ -1524,8 +1524,8 @@ void capture_keysite (entity *en, entity_sides new_side)
 void change_local_keysite_building_sides (entity *en, entity_sides new_side)
 {
 	entity
-		*group,
-		*member;
+		*group = nullptr,
+		*member = nullptr;
 
 	ASSERT (en);
 
@@ -1581,12 +1581,12 @@ void change_local_keysite_building_sides (entity *en, entity_sides new_side)
 int repair_client_server_entity_keysite (entity *en)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*group,
-		*building,
-		*regen;
+		*group = nullptr,
+		*building = nullptr,
+		*regen = nullptr;
 
 	float
 		importance;
@@ -1705,8 +1705,8 @@ int repair_client_server_entity_keysite (entity *en)
 int get_keysite_suitable_for_player (entity *keysite, entity *pilot)
 {
 	entity
-		*group,
-		*member;
+		*group = nullptr,
+		*member = nullptr;
 
 	ASSERT (keysite);
 
@@ -1748,16 +1748,16 @@ void dump_keysite_info (void)
 		seconds;
 
 	entity
-		*ks,
+		*ks = nullptr,
 //		*mb,
-		*ts,
-		*force;
+		*ts = nullptr,
+		*force = nullptr;
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	char
 		buffer [32];
@@ -1883,13 +1883,13 @@ void validate_keysite_landing_site_heights (entity *keysite)
 {
 
 	entity
-		*landing,
-		*task,
-		*waypoint;
+		*landing = nullptr,
+		*task = nullptr,
+		*waypoint = nullptr;
 
 	vec3d
-		*keysite_position,
-		*waypoint_position;
+		*keysite_position = nullptr,
+		*waypoint_position = nullptr;
 
 	float
 		terrain_elevation,
@@ -1951,7 +1951,7 @@ void validate_keysite_landing_site_heights (entity *keysite)
 void play_keysite_under_attack_speech (entity *en, entity *aggressor)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 

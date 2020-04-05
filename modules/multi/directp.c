@@ -66,6 +66,8 @@
 
 #include "multi.h"
 
+#ifdef MULTIPLAYER
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,10 +122,10 @@ static LPDIRECTPLAYLOBBY3A
 	direct_play_lobby3 = NULL;
 
 static DPLCONNECTION
-	*direct_play_lobby3_connection_data;
+	*direct_play_lobby3_connection_data = nullptr;
 
 static LPVOID
-	*modem_address_data;
+	*modem_address_data = nullptr;
 
 static DWORD
 	modem_address_datasize;
@@ -161,6 +163,8 @@ static void write_comms_data (int flag, const char *data, int size);
 
 #endif
 
+#endif//MULTIPLAYER
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +174,8 @@ direct_play_comms_mode_types
 
 modem_names
 	*modem_name_list = NULL;
+
+#ifdef MULTIPLAYER
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -485,7 +491,8 @@ void direct_play_register_application ( const char *app_name, const char *filena
 		if ( ret != DP_OK )
 		{
 
-			debug_fatal ( "Unable to register to DirectPlay %s : %s", app_name, get_dplay_error_message ( ret ) );
+			//debug_fatal ( "Unable to register to DirectPlay %s : %s", app_name, get_dplay_error_message ( ret ) );
+			debug_log ( "Unable to register to DirectPlay %s : %s", app_name, get_dplay_error_message ( ret ) );
 		}
 
 		IDirectPlayLobby_Release ( dp_lobby3 );
@@ -500,7 +507,7 @@ void direct_play_deinitialise_system ( void )
 {
 
 	service_provider_table_type
-		*destroy_service_provider;
+		*destroy_service_provider = nullptr;
 
 	//
 	// Free up memory
@@ -582,8 +589,8 @@ int direct_play_enumerate_service_providers ( void )
 		hr;
 
 	service_provider_table_type
-		*destroy_provider,
-		*current_service_provider;
+		*destroy_provider = nullptr,
+		*current_service_provider = nullptr;
 
 #if DIRECT_PLAY_DEBUG
 
@@ -650,9 +657,9 @@ int direct_play_enumerate_service_providers ( void )
 		{
 	
 			service_provider_table_type
-				*new_sp_list,
-				*this_sp,
-				*next_sp;
+				*new_sp_list = nullptr,
+				*this_sp = nullptr,
+				*next_sp = nullptr;
 
 			new_sp_list = NULL;
 	
@@ -778,7 +785,7 @@ int direct_play_enumerate_service_providers ( void )
 		//
 
 		service_provider_table_type
-			*new_service_provider;
+			*new_service_provider = nullptr;
 	
 		new_service_provider = ( service_provider_table_type * ) safe_malloc ( sizeof ( service_provider_table_type ) );
 	
@@ -817,7 +824,7 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 	{
 
 		const char
-			*string;
+			*string = nullptr;
 
 		string = ( const char * ) data;
 	
@@ -825,7 +832,7 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 		{
 	
 			modem_names
-				*modem_name;
+				*modem_name = nullptr;
 	
 			//
 			// Add this modem to the list
@@ -867,7 +874,7 @@ BOOL FAR PASCAL direct_play_enumerate_connections ( LPGUID lpSPGuid, LPVOID lpCo
 {
 
 	service_provider_table_type
-		*new_service_provider;
+		*new_service_provider = nullptr;
 
 	//
 	// Create an entry in the linked list of service providers
@@ -1063,8 +1070,8 @@ int direct_play_enumerate_sessions (void)
 		sessionDesc;
 
 	session_table_type
-		*current_session,
-		*destroy_session;
+		*current_session = nullptr,
+		*destroy_session = nullptr;
 
 	#if DIRECT_PLAY_DEBUG
 
@@ -1158,7 +1165,7 @@ int direct_play_enumerate_sessions (void)
 		{
 	
 			session_table_type
-				*new_session;
+				*new_session = nullptr;
 	
 			debug_log ( "Creating lobby session" );
 	
@@ -1244,8 +1251,8 @@ int direct_play_refresh_modem_session ( void )
 		hr;
 
 	session_table_type
-		*current_session,
-		*destroy_session;
+		*current_session = nullptr,
+		*destroy_session = nullptr;
 
 	//
 	// clear the current session table
@@ -1289,7 +1296,7 @@ int direct_play_refresh_modem_session ( void )
 	{
 
 		session_table_type
-			*new_session;
+			*new_session = nullptr;
 
 		int
 			size;
@@ -1399,8 +1406,8 @@ int direct_play_dial_modem ( const char *modem, const char *phone_number )
 		number_of_elements;
 
 	session_table_type
-		*current_session,
-		*destroy_session;
+		*current_session = nullptr,
+		*destroy_session = nullptr;
 
 	ASSERT ( modem );
 	ASSERT ( phone_number );
@@ -1807,7 +1814,7 @@ int internal_direct_play_answer_modem ( void *data )
 		ret;
 
 	int
-		*user_data;
+		*user_data = nullptr;
 
 	user_data = ( int * ) data;
 
@@ -1931,7 +1938,7 @@ BOOL FAR PASCAL direct_play_enumerate_sessions_callback (LPDPSESSIONDESC2 lpThis
 {
 
 	session_table_type
-		*new_session;
+		*new_session = nullptr;
 
 	if ( dwFlags & DPESC_TIMEDOUT )
 	{
@@ -2376,7 +2383,7 @@ BOOL WINAPI direct_play_enumerate_groups_callback (DPID dpId, DWORD dwPlayerType
 {
 
 	group_table_type
-		*new_group;
+		*new_group = nullptr;
 
 	if (dwPlayerType == DPPLAYERTYPE_GROUP)
 	{
@@ -2601,15 +2608,15 @@ int direct_play_remove_player_from_group (DPID id)
 		
 				#endif
 		
-	 			hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, id );
+				hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, id );
 		
 				if ( hr != DP_OK )
 				{
 		
 					debug_log ( "DIRECTP: DirectPlay::DeletePlayerFromGroup: %s", get_dplay_error_message ( hr ) );
-                                ////Moje 040624 Removed next line. We know that this fails most of the time, but despite that
-                                ////            cvc manages to clear the client-data and the server survives
-	 			////	server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
+								////Moje 040624 Removed next line. We know that this fails most of the time, but despite that
+								////            cvc manages to clear the client-data and the server survives
+				////	server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
 		
 					return FALSE;
 				}
@@ -3169,10 +3176,10 @@ const char *direct_play_get_player_name (DPID player_id)
 		hr;
 
 	void
-		*data;
+		*data = nullptr;
 
 	char
-		*name;
+		*name = nullptr;
 
 	LPDPNAME
 		dp_name;
@@ -3612,9 +3619,9 @@ void direct_play_sort_session_list (void)
 {
 
 	session_table_type
-		*prev_session,
-		*next_session,
-		*current_session;
+		*prev_session = nullptr,
+		*next_session = nullptr,
+		*current_session = nullptr;
 
 	current_session = session_table;
 
@@ -3964,7 +3971,7 @@ struct DPLAY_ERROR_MESSAGE
 		error;
 
 	char
-		*error_string;
+		*error_string = nullptr;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4086,7 +4093,7 @@ void write_comms_data (int flag, const char *data, int size)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	if (flag)
 	{
@@ -4133,3 +4140,123 @@ int direct_play_get_send_queue_number_of_bytes (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#else //MULTIPLAYER
+
+int
+	direct_play_use_guaranteed_packets = TRUE;
+
+void create_direct_play_interface(void) { }
+
+int direct_play_initialise_system(void) { return NULL; }
+
+void direct_play_deinitialise_system(void) { }
+int direct_play_close_session(void) { return NULL; }
+int direct_play_create_interface(service_provider_table_type* this_service) { return NULL; }
+int direct_play_destroy_interface(void) { return NULL; }
+int direct_play_enumerate_service_providers() { return NULL; }
+int direct_play_interface_capabilities(void) { return NULL; }
+DPCAPS* direct_play_get_interface_capabilities(void) { return NULL; }
+int direct_play_get_lobbied(void) { return NULL; }
+
+void direct_play_register_application(const char* app_name, const char* filename) { }
+
+int direct_play_enumerate_sessions(void) { return NULL; }
+int direct_play_create_session(int value) { return NULL; }
+int direct_play_join_session(void) { return NULL; }
+int direct_play_session_capabilities(void) { return NULL; }
+int direct_play_session_players(void) { return NULL; }
+LPDPSESSIONDESC2 direct_play_get_session_capabilities(void) { return NULL; }
+
+int direct_play_enumerate_groups(void) { return NULL; }
+int direct_play_create_group(void) { return NULL; }
+int direct_play_destroy_group(void) { return NULL; }
+int direct_play_join_group(void) { return NULL; }
+int direct_play_leave_group(void) { return NULL; }
+int direct_play_create_player(void) { return NULL; }
+int direct_play_create_server_player(void) { return NULL; }
+int direct_play_destroy_player(void) { return NULL; }
+
+int direct_play_send_data(DPID to_id, void* data, int size) { return NULL; }
+int direct_play_receive_data(void* data, int size) { return NULL; }
+
+struct SERVICE_PROVIDER_TABLE_TYPE* direct_play_get_service_provider_table(void) { return NULL; }
+struct SESSION_TABLE_TYPE* direct_play_get_session_table(void) { return NULL; }
+struct GROUP_TABLE_TYPE* direct_play_get_group_table(void) { return NULL; }
+
+void direct_play_set_group_name(const char* name) { }
+
+void direct_play_set_session_name(const char* name) { }
+
+void direct_play_set_player_name(const char* name) { }
+
+const char* direct_play_get_session_name(void) { return NULL; }
+const char* direct_play_get_group_name(void) { return NULL; }
+const char* direct_play_get_player_name(DPID player_id) { return NULL; }
+
+void direct_play_set_group_id(int id) { }
+int direct_play_get_group_id(void) { return NULL; }
+
+void direct_play_set_player_id(int id) { }
+int direct_play_get_player_id(void) { return NULL; }
+int direct_play_get_number_of_players(void) { return NULL; }
+
+
+void direct_play_set_service_provider(LPGUID this_service) { }
+
+void direct_play_set_interface(LPDIRECTPLAY2A this_interface) { }
+
+void direct_play_set_session(LPDPSESSIONDESC2 this_session) { }
+
+void direct_play_set_group(DPID this_group) { }
+
+service_provider_table_type* direct_play_get_service_provider(void) { return NULL; }
+LPDIRECTPLAY2A direct_play_get_interface(void) { return NULL; }
+session_table_type* direct_play_get_session(void) { return NULL; }
+connection_data_type* direct_play_get_connection_data(void) { return NULL; }
+
+int direct_play_remove_player_from_group(DPID id) { return NULL; }
+int direct_play_get_connection_baudrate(void) { return NULL; }
+int direct_play_session_max_players(void) { return NULL; }
+
+int direct_play_refresh_modem_session(void) { return NULL; }
+
+
+void direct_play_set_session_type_and_name(int value) { }
+
+
+void direct_play_destroy_modem(void) { }
+
+int direct_play_dial_modem(const char* modem, const char* phone_number) { return NULL; }
+HRESULT direct_play_dial_modem_status(void) { return NULL; }
+
+int direct_play_answer_modem(const char* modem, int user_data) { return NULL; }
+HRESULT direct_play_answer_modem_status(void) { return NULL; }
+
+
+void set_direct_play_inet_address(const char* address) { }
+
+void set_direct_play_serial_address(int com_port, int baud_rate, int stop_bits, int parity, int flow) { }
+
+int direct_play_get_send_queue_number_of_packets(void) { return NULL; }
+int direct_play_get_send_queue_number_of_bytes(void) { return NULL; }
+
+void direct_play_get_message_queue(void) {}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// debug funtions
+void direct_play_error(HRESULT hr) { }
+void direct_play_enumerate_session_error(HRESULT hr) { }
+void direct_play_session_error(HRESULT hr) { }
+void direct_play_create_player_error(HRESULT hr) { }
+void direct_play_system_error(LPDPMSG_GENERIC type) { }
+void direct_play_receive_error(HRESULT hr) { }
+void direct_play_group_error(int type) { }
+void direct_play_join_group_error(int type) { }
+void print_connection_data(void) { }
+
+
+#endif//MULTIPLAYER

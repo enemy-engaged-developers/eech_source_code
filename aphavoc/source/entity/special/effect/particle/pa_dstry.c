@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	particle
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;

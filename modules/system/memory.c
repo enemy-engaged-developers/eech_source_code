@@ -219,7 +219,7 @@ void walk_memory_heap ( void )
 		memory_allocated;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	fp = fopen ( "heap.log", "w" );
 

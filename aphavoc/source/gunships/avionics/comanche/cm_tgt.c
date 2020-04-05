@@ -494,8 +494,8 @@ void update_comanche_target_acquisition_system (void)
 
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		int
 			radar_on,

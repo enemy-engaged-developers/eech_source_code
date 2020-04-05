@@ -106,7 +106,7 @@ int guidance_type_can_use_point_lock(weapon_guidance_types type)
 void load_local_entity_weapon_config (entity *en)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -236,7 +236,7 @@ static int get_viewpoint_from_weapon(weapon_config_types config_type,
 int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon_sub_type)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -321,7 +321,7 @@ int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types c
 void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int burst_size, viewpoint *vp)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -332,7 +332,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 		found_package_number;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -1122,7 +1122,7 @@ static int get_pitch_device_to_target_vector
 		time_of_flight;
 
 	vec3d
-		*target_position,
+		*target_position = nullptr,
 		intercept_point_position;
 
 	matrix3x3
@@ -1257,19 +1257,19 @@ static int get_pitch_device_to_target_vector
 void update_entity_weapon_systems (entity *source)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	entity_sub_types
 		selected_weapon;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2022,7 +2022,7 @@ void update_entity_weapon_systems (entity *source)
 void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -2038,8 +2038,8 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 		muzzle_rotation_angle;
 
 	object_3d_instance
-		*entity_inst3d,
-		*effect_inst3d;
+		*entity_inst3d = nullptr,
+		*effect_inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2213,7 +2213,7 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -2227,7 +2227,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 		found_package_number;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2237,14 +2237,14 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 		vp;
 
 	vec3d
-		*weapon_vector_ptr,
-		*weapon_to_target_vector_ptr,
-		*weapon_to_intercept_point_vector_ptr;
+		*weapon_vector_ptr = nullptr,
+		*weapon_to_target_vector_ptr = nullptr,
+		*weapon_to_intercept_point_vector_ptr = nullptr;
 
 	float weapon_to_intercept_point_range;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	ASSERT (launcher);
 	ASSERT(launcher->type != ENTITY_TYPE_WEAPON);
@@ -2390,7 +2390,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float *heading_offset, float *pitch_offset)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -2409,7 +2409,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 		weapon_to_intercept_point_range;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2424,7 +2424,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 		offset_vector;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	ASSERT (launcher);
 
@@ -2529,7 +2529,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -2544,7 +2544,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 		found_package_number;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2638,7 +2638,7 @@ void get_target_intercept_point (entity *source, entity *target, entity_sub_type
 		weapon_velocity;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (source);
 
@@ -2674,7 +2674,7 @@ void get_target_intercept_point (entity *source, entity *target, entity_sub_type
 int get_local_entity_weapon_ammunition_available (entity *launcher)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -2742,7 +2742,7 @@ int get_local_entity_weapon_ammunition_available (entity *launcher)
 int get_local_entity_weapon_salvo_size (entity *launcher, entity_sub_types weapon_sub_type)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -2827,7 +2827,7 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 		target_position;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -2837,7 +2837,7 @@ void suppress_ineffective_ship_weapons (entity *source, entity *target)
 		selected_weapon;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -3095,7 +3095,7 @@ void create_weapon_launched_sound_effects (entity *launcher, entity_sub_types we
 		launch_sound_effect;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	position = get_local_entity_vec3d_ptr (launcher, VEC3D_TYPE_POSITION);
 

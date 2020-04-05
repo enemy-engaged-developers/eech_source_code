@@ -87,7 +87,7 @@
 void reset_static_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,

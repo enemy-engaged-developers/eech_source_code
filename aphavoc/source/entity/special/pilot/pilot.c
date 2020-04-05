@@ -271,8 +271,8 @@ void send_pilot_quit_message (entity *en)
 entity *create_new_pilot_entity (const char *name, entity_sides side, int rank, entity_sub_types sub_type, int unique_id, int difficulty)
 {
 	entity
-		*en,
-		*force;
+		*en = nullptr,
+		*force = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -308,7 +308,7 @@ entity *create_new_pilot_entity (const char *name, entity_sides side, int rank, 
 void create_server_pilot (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -368,8 +368,8 @@ void create_client_pilot (void)
 int get_session_pilot_count (void)
 {
 	entity
-		*force,
-		*pilot;
+		*force = nullptr,
+		*pilot = nullptr;
 
 	int
 		count;
@@ -435,11 +435,11 @@ int update_pilot_high_score_table (void)
 		num_pilots;
 
 	entity
-		*force_en,
-		*pilot_en;
+		*force_en = nullptr,
+		*pilot_en = nullptr;
 
 	pilot_score_type
-		*full_table;
+		*full_table = nullptr;
 
 	//
 	// clear table
@@ -587,10 +587,10 @@ void draw_high_score_table (void)
 		length;
 
 	screen
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	pilot_score_type
-		*item;
+		*item = nullptr;
 
 	old_active_screen = get_active_screen ();
 
@@ -657,13 +657,13 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 		loop;
 
 	pilot_score_type
-		*item;
+		*item = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ui_object
-		*list;
+		*list = nullptr;
 
 	for (loop = 0; loop < NUM_TABLE_ENTRIES; loop ++)
 	{
@@ -698,7 +698,7 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 const char *get_high_score_table_entry (int index, int *side, int *kills)
 {
 	pilot_score_type
-		*item;
+		*item = nullptr;
 
 	ASSERT (side);
 
@@ -729,7 +729,7 @@ const char *get_high_score_table_entry (int index, int *side, int *kills)
 const char *get_high_score_table_first_name (void)
 {
 	pilot_score_type
-		*item;
+		*item = nullptr;
 
 	item = &pilot_high_score_table [0];
 

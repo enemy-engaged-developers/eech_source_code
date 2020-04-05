@@ -89,8 +89,8 @@ ui_object *locate_next_slider (ui_object *obj)
 {
 
 	ui_object
-		*current_object,
-		*parent;
+		*current_object = nullptr,
+		*parent = nullptr;
 
 	// search through all next objects, starting with the first.
 	// if not parent then start from current position.

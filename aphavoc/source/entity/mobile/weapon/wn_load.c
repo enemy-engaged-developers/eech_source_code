@@ -89,7 +89,7 @@ struct WEAPON_LOADING_HARDPOINT_TYPE
 		sub_object_depth2;
 
 	entity_sub_types
-		*valid_weapon_types;
+		*valid_weapon_types = nullptr;
 };
 
 typedef struct WEAPON_LOADING_HARDPOINT_TYPE weapon_loading_hardpoint_type;
@@ -128,10 +128,10 @@ static void weapon_loading_set_current_hardpoint_weapon (gunship_types gunship_t
 void initialise_weapon_loading_gunship_database (void)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	int
 		loop;
@@ -1068,10 +1068,10 @@ void initialise_weapon_loading_gunship_database (void)
 void deinitialise_weapon_loading_gunship_database (void)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	int
 		gunship,
@@ -1104,7 +1104,7 @@ void deinitialise_weapon_loading_gunship_database (void)
 void deactivate_weapon_payload_markers (entity *en)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 
@@ -1156,17 +1156,17 @@ void deactivate_weapon_payload_markers (entity *en)
 static weapon_config_types get_weapon_config (gunship_types gunship_type, const entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES])
 {
 	const aircraft_data
-		*ac_data;
+		*ac_data = nullptr;
 
 	weapon_config_types
 		min_weapon_config_type,
 		max_weapon_config_type;
 
 	const weapon_loading_gunship_type
-		*wlgt;
+		*wlgt = nullptr;
 
 	const weapon_loading_hardpoint_type
-		*wlht;
+		*wlht = nullptr;
 
 	int
 		weapon_config_package,
@@ -1225,7 +1225,7 @@ static void get_weapons_from_weapon_config (gunship_types gunship_type, weapon_c
 #ifdef DEBUG
 
 	const aircraft_data
-		*ac_data;
+		*ac_data = nullptr;
 
 	weapon_config_types
 		min_weapon_config_type,
@@ -1234,10 +1234,10 @@ static void get_weapons_from_weapon_config (gunship_types gunship_type, weapon_c
 #endif
 
 	const weapon_loading_gunship_type
-		*wlgt;
+		*wlgt = nullptr;
 
 	const weapon_loading_hardpoint_type
-		*wlht;
+		*wlht = nullptr;
 
 	int
 		package,
@@ -1309,10 +1309,10 @@ static void get_weapons_from_weapon_config (gunship_types gunship_type, weapon_c
 static void set_hardpoint_weapons (gunship_types gunship_type, const entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES] )
 {
 	const weapon_loading_gunship_type
-		*wlgt;
+		*wlgt = nullptr;
 
 	const weapon_loading_hardpoint_type
-		*wlht;
+		*wlht = nullptr;
 
 	int
 		hardpoint;
@@ -1341,10 +1341,10 @@ static void set_hardpoint_weapons (gunship_types gunship_type, const entity_sub_
 static void get_current_hardpoint_weapon (gunship_types gunship_type, entity_sub_types current_weapon[NUM_WEAPON_LOADING_HARDPOINT_TYPES] )
 {
 	const weapon_loading_gunship_type
-		*wlgt;
+		*wlgt = nullptr;
 
 	const weapon_loading_hardpoint_type
-		*wlht;
+		*wlht = nullptr;
 
 	int
 		hardpoint;
@@ -1374,10 +1374,10 @@ static void get_current_hardpoint_weapon (gunship_types gunship_type, entity_sub
 void weapon_loading_set_current_hardpoint_weapon (gunship_types gunship_type, weapon_loading_hardpoint_types hardpoint, entity_sub_types weapon_type)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	int
 		loop;
@@ -1416,10 +1416,10 @@ void weapon_loading_set_current_hardpoint_weapon (gunship_types gunship_type, we
 entity_sub_types weapon_loading_get_current_hardpoint_weapon (gunship_types gunship_type, weapon_loading_hardpoint_types hardpoint)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	gunship_data = &weapon_loading_gunship_database [gunship_type];
 
@@ -1439,10 +1439,10 @@ entity_sub_types weapon_loading_get_current_hardpoint_weapon (gunship_types guns
 void weapon_loading_select_next_weapon (entity *en, weapon_loading_hardpoint_types hardpoint)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	gunship_types
 		gunship_type;
@@ -1492,10 +1492,10 @@ void weapon_loading_select_next_weapon (entity *en, weapon_loading_hardpoint_typ
 int weapon_loading_get_valid_weapon_count (entity *en, weapon_loading_hardpoint_types hardpoint)
 {
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	gunship_types
 		gunship_type;
@@ -1633,10 +1633,10 @@ int get_weapon_loading_hardpoint_weapon_count (entity *en, weapon_loading_hardpo
 		damaged;
 
 	weapon_loading_gunship_type
-		*gunship_data;
+		*gunship_data = nullptr;
 
 	weapon_loading_hardpoint_type
-		*hardpoint_data;
+		*hardpoint_data = nullptr;
 
 	gunship_types
 		gunship_type;

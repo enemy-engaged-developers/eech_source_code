@@ -442,7 +442,7 @@ static int accurate_stationary_bounding_box_collision_test
 		heading;
 
 	vec3d
-		*position,
+		*position = nullptr,
 		terrain_face_normal,
 		p[8];
 
@@ -701,7 +701,7 @@ static int accurate_moving_bounding_box_collision_test
 		target_mid_position;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	ASSERT (target);
 
@@ -1165,16 +1165,16 @@ entity *get_line_of_sight_collision_entity
 		sqr_velocity;
 
 	entity
-		*sector,
-		*target,
-		*target_succ,
-		*building;
+		*sector = nullptr,
+		*target = nullptr,
+		*target_succ = nullptr,
+		*building = nullptr;
 
 	vec3d
 		source_min_position,
 		source_max_position,
-		*target_position,
-		*target_motion_vector,
+		*target_position = nullptr,
+		*target_motion_vector = nullptr,
 		target_old_position,
 		target_new_position,
 		target_min_position,
@@ -1184,7 +1184,7 @@ entity *get_line_of_sight_collision_entity
 		object_3d_index;
 
 	object_3d_bounds
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	ASSERT (source_old_position);
 
@@ -1800,7 +1800,7 @@ int get_line_of_sight_collision_tree
 		p[8];
 
 	terrain_3d_tree_data
-		*tree;
+		*tree = nullptr;
 
 	matrix3x3 attitude;
 

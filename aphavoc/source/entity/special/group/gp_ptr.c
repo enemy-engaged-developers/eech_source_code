@@ -79,7 +79,7 @@
 static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -96,7 +96,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		////////////////////////////////////////
 		{
 			entity
-				*member;
+				*member = nullptr;
 				
 			//
 			// make an entity group leader by removing it from the member list, and inserting it at the front
@@ -132,10 +132,10 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 static void *get_local_ptr_value (entity *en, ptr_types type)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	raw = (group *) get_local_entity_data (en);
 

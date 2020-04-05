@@ -254,8 +254,8 @@ void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_weapon)
 void update_weapon_lock_type (target_acquisition_systems system)
 {
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	entity_sub_types
 		selected_weapon_type;
@@ -267,10 +267,10 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		weapon_max_range;
 
 	vec3d
-		*source_position,
-		*target_position,
-		*weapon_vector,
-		*weapon_to_intercept_point_vector;
+		*source_position = nullptr,
+		*target_position = nullptr,
+		*weapon_vector = nullptr,
+		*weapon_to_intercept_point_vector = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -690,7 +690,7 @@ void decrease_rocket_salvo_size (void)
 void set_gunship_weapon (entity_sub_types weapon_sub_type)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (entity_sub_type_weapon_valid (weapon_sub_type));
 
@@ -941,13 +941,13 @@ float get_missile_flight_time (void)
 		weapon_sub_type;
 
 	entity
-		*en,
-		*weapon,
-		*target;
+		*en = nullptr,
+		*weapon = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*weapon_position,
-		*target_position;
+		*weapon_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		flight_time,

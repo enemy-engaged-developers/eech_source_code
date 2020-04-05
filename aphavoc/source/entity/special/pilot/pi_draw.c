@@ -80,7 +80,7 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	pilot
-		*raw;
+		*raw = nullptr;
 
 	float
 		y = 0;

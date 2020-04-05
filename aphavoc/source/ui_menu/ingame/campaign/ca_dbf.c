@@ -73,21 +73,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*debriefing_text_area,
-	*debriefing_text_list,
-	*debriefing_page_title,
-	*debriefing_page_type,
-	*debriefing_page_result_box,
+	*debriefing_text_area = nullptr,
+	*debriefing_text_list = nullptr,
+	*debriefing_page_title = nullptr,
+	*debriefing_page_type = nullptr,
+	*debriefing_page_result_box = nullptr,
 	#ifdef DEBUG
-	*debriefing_page_points_box,
+	*debriefing_page_points_box = nullptr,
 	#endif
-	*debriefing_page_kills_area,
-	*debriefing_page_kills_box;
+	*debriefing_page_kills_area = nullptr,
+	*debriefing_page_kills_box = nullptr;
 
 static ui_object
-	*page_map_view_area,
-	*page_map_area,
-	*page_back_button;
+	*page_map_view_area = nullptr,
+	*page_map_area = nullptr,
+	*page_back_button = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -107,16 +107,16 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 		awarded_promotion;
 
 	entity
-		*base,
-		*previous;
+		*base = nullptr,
+		*previous = nullptr;
 
 	static char
 		s [128];
 
 	char
 		medal_text [1024],
-		*debrief,
-		*ff_debrief;
+		*debrief = nullptr,
+		*ff_debrief = nullptr;
 
 	ASSERT (mission);
 
@@ -256,9 +256,9 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 		vec3d
 			min_pos,
 			max_pos,
-			*pos,
-			*base_pos,
-			*route_nodes;
+			*pos = nullptr,
+			*base_pos = nullptr,
+			*route_nodes = nullptr;
 
 		int
 			loop,
@@ -351,7 +351,7 @@ static void update_debriefing_page_objects (ui_object *obj, void *arg)
 		s [128];
 
 	entity
-		*mission;
+		*mission = nullptr;
 
 	//
 	// N.B. Some of this stuff could be moved into "show_debriefing_page" as it doesn't need to be updated EVERY frame....
@@ -407,10 +407,10 @@ static void update_debriefing_page_objects (ui_object *obj, void *arg)
   	{
 
 		task
-			*task_raw;
+			*task_raw = nullptr;
 
 		task_kill_loss_data
-			*kill;
+			*kill = nullptr;
 
 		int
 			loop;
@@ -540,7 +540,7 @@ static void update_debriefing_page_objects (ui_object *obj, void *arg)
 static void draw_page_map (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_DEBRIEFING]));
 
@@ -567,7 +567,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 		yinc;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		output [128];

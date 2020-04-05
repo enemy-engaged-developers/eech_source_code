@@ -79,9 +79,9 @@
 static int load_local_pylon_entities (const char *name)
 {
 	entity
-		*last_entity,
-		*last_last_entity,
-		*new_entity;
+		*last_entity = nullptr,
+		*last_last_entity = nullptr,
+		*new_entity = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -89,7 +89,7 @@ static int load_local_pylon_entities (const char *name)
 	int
 		type,
 		node_count,
-		*node_link_count,
+		*node_link_count = nullptr,
 		path_count,
 		node_loop,
 		path_loop,
@@ -99,18 +99,18 @@ static int load_local_pylon_entities (const char *name)
 		link_loop;
 
 	vec3d
-		*node_positions,
+		*node_positions = nullptr,
 		pos;
 
 	FILE
-		*pylon_node_file_ptr,
-		*pylon_link_file_ptr;
+		*pylon_node_file_ptr = nullptr,
+		*pylon_link_file_ptr = nullptr;
 
 	char
 		filename [1024];
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	//
 	// Create "Node" Pylons
@@ -263,10 +263,10 @@ void create_local_pylon_entities (pack_modes pack_mode)
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	pylon
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
  	//

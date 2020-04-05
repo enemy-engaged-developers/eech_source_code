@@ -79,7 +79,7 @@
 void update_fixed_wing_weapon_fire (entity *en)
 {
    fixed_wing
-      *raw;
+      *raw = nullptr;
 
 	ASSERT (en);
 

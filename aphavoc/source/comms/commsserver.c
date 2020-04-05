@@ -87,7 +87,7 @@ connection_list_type *register_connection (DPID connection_id)
 {
 
 	connection_list_type
-		*new_connection;
+		*new_connection = nullptr;
 
 	//
 	// stop pause or time acceleration if game is not single player
@@ -174,8 +174,8 @@ void unregister_connection (DPID connection_id)
 {
 
 	connection_list_type
-		*prev_connection,
-		*new_connection;
+		*prev_connection = nullptr,
+		*new_connection = nullptr;
 
 	new_connection = connection_list_head;
 
@@ -243,7 +243,7 @@ connection_list_type *get_connection_list_item (DPID connection_id)
 {
 
 	connection_list_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	current_connection = connection_list_head;
 
@@ -280,8 +280,8 @@ void validate_connections (void)
 {
 
 	connection_list_type
-		*destroy_connection,
-		*this_connection;
+		*destroy_connection = nullptr,
+		*this_connection = nullptr;
 	unsigned int
 		timeout_limit;
 
@@ -315,7 +315,7 @@ void validate_connections (void)
 /*                                 	if (destroy_connection->pilot_entity)
 					{
  					     entity
- 						*gunship;
+ 						*gunship = nullptr;
       						gunship = get_local_entity_parent (destroy_connection->pilot_entity, LIST_TYPE_AIRCREW);
 
 						if (gunship)
@@ -390,7 +390,7 @@ int server_create_session (void)
 		connection_created;
 
    connection_data_type
-      *comms_connection;
+      *comms_connection = nullptr;
 
 	comms_connection = direct_play_get_connection_data ();
 
@@ -448,7 +448,7 @@ connection_list_type *get_gunships_connection_list_item (entity *en)
 {
 
 	connection_list_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	this_connection = connection_list_head;
 

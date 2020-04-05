@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +188,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 		normal;
 
 	object_3d_transformed_point_normal
-		*result_normals;
+		*result_normals = nullptr;
 
 	ASSERT ( ( number_of_normals + points_base ) < MAX_POINTS );
 
@@ -364,7 +359,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 				ib;
 
 			light_3d_source
-				*this_light;
+				*this_light = nullptr;
 
 			//
 			// Set the light levels
@@ -485,10 +480,10 @@ void calculate_object_normal_factors ( object_3d_heading_pitch_normal *normals, 
 		ymax,
 		zmin,
 		zmax,
-		*result_factors;
+		*result_factors = nullptr;
 
 	unsigned char
-		*result_visibilities;
+		*result_visibilities = nullptr;
 
 	vec3d
 		normalised_camera;
@@ -600,19 +595,19 @@ void transform_3d_object ( object_3d *object, vec3d *pos, light_3d_source *light
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points,
-		*last_transformed_point,
+		*result_2d_points = nullptr,
+		*last_transformed_point = nullptr,
 		temp_last_transformed_point;
 
 	unsigned char
-		*result_outcode,
-		*last_transformed_point_outcode,
+		*result_outcode = nullptr,
+		*last_transformed_point_outcode = nullptr,
 		temp_last_transformed_point_outcode;
 
 	float
@@ -800,19 +795,19 @@ void transform_flat_3d_object ( object_3d *object, vec3d *pos, light_3d_source *
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points,
-		*last_transformed_point,
+		*result_2d_points = nullptr,
+		*last_transformed_point = nullptr,
 		temp_last_transformed_point;
 
 	unsigned char
-		*result_outcode,
-		*last_transformed_point_outcode,
+		*result_outcode = nullptr,
+		*last_transformed_point_outcode = nullptr,
 		temp_last_transformed_point_outcode;
 
 	float
@@ -978,10 +973,10 @@ void transform_unclipped_3d_object ( object_3d *object, vec3d *pos, light_3d_sou
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	float
 		xmax,
@@ -1092,10 +1087,10 @@ void transform_unclipped_flat_3d_object ( object_3d *object, vec3d *pos, light_3
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	float
 		pos_x,
@@ -1190,13 +1185,13 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 		count;
 
 	object_3d_transformed_point_normal
-		*result_normals;
+		*result_normals = nullptr;
 
 	point_3d_plain_reference
-		*point_list;
+		*point_list = nullptr;
 
 	object_3d_heading_pitch_normal
-		*normals;
+		*normals = nullptr;
 
 	vec3d
 		normal;
@@ -1369,7 +1364,7 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 					ib;
 
 				light_3d_source
-					*this_light;
+					*this_light = nullptr;
 
 				//
 				// Set the light levels
@@ -1602,7 +1597,7 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 					ib;
 
 				light_3d_source
-					*this_light;
+					*this_light = nullptr;
 
 				//
 				// Set the light levels
@@ -1695,19 +1690,19 @@ void transform_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sourc
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points,
-		*last_transformed_point,
+		*result_2d_points = nullptr,
+		*last_transformed_point = nullptr,
 		temp_last_transformed_point;
 
 	unsigned char
-		*result_outcode,
-		*last_transformed_point_outcode,
+		*result_outcode = nullptr,
+		*last_transformed_point_outcode = nullptr,
 		temp_last_transformed_point_outcode;
 
 	float
@@ -1729,7 +1724,7 @@ void transform_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sourc
 		iymin;
 
 	point_3d_plain_reference
-		*point_list;
+		*point_list = nullptr;
 
 	point_list = current_object_3d_surface_point_list;
 
@@ -1889,13 +1884,13 @@ void transform_unclipped_3d_object_surface ( object_3d *object, vec3d *pos, ligh
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	float
 		pos_x,
@@ -1906,7 +1901,7 @@ void transform_unclipped_3d_object_surface ( object_3d *object, vec3d *pos, ligh
 		zmax;
 
 	point_3d_plain_reference
-		*point_list;
+		*point_list = nullptr;
 
 	point_list = current_object_3d_surface_point_list;
 
@@ -1996,6 +1991,3 @@ void transform_unclipped_3d_object_surface ( object_3d *object, vec3d *pos, ligh
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

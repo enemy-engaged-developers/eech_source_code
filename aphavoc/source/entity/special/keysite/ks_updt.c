@@ -82,13 +82,13 @@
 static void update_server (entity *en)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	entity_sides
 		side;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	raw = (keysite *) get_local_entity_data (en);
 

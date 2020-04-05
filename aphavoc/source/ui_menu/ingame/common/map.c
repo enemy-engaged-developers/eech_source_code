@@ -101,8 +101,8 @@ struct MAP_EVENT_TYPE
 		lifetime;
 
 	struct MAP_EVENT_TYPE
-		*next,
-		*prev;
+		*next = nullptr,
+		*prev = nullptr;
 };
 
 typedef struct MAP_EVENT_TYPE map_event_type;
@@ -246,10 +246,10 @@ struct LAYER_CONTROL_BUTTON_TYPE
 		object_type;
 
 	void
-		*function;
+		*function = nullptr;
 
 	const char
-		*graphic_filename;
+		*graphic_filename = nullptr;
 };
 
 typedef struct LAYER_CONTROL_BUTTON_TYPE layer_control_button_type;
@@ -345,14 +345,14 @@ void draw_2d_map (ui_object *obj, void *arg)
 		enemy_side;
 
 	entity
-		*en,
-		*track_entity;
+		*en = nullptr,
+		*track_entity = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	map_dimension_type
-		*map_dimensions,
+		*map_dimensions = nullptr,
 		store_map_data;
 
 	x1 = get_ui_object_x (obj);
@@ -563,10 +563,10 @@ void draw_2d_map (ui_object *obj, void *arg)
 void map_draw_waypoint_routes (ui_object *obj, entity_sides side)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -620,8 +620,8 @@ void map_draw_waypoint_routes (ui_object *obj, entity_sides side)
 void draw_task_waypoint_routes (ui_object *obj, entity *en)
 {
 	entity
-		*wp1,
-		*wp2;
+		*wp1 = nullptr,
+		*wp2 = nullptr;
 
 	vec3d
 		wpos1,
@@ -778,7 +778,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 			{
 
 				flight_path_data
-					*flight_path;
+					*flight_path = nullptr;
 
 				flight_path = get_current_flight_dynamics_flight_path ();
 
@@ -834,14 +834,14 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 	else
 	{
 		route_node
-			*route,
-			*temp_route;
+			*route = nullptr,
+			*temp_route = nullptr;
 
 		entity
-			*target;
+			*target = nullptr;
 
 		vec3d
-			*target_pos;
+			*target_pos = nullptr;
 
 		//
 		// Could be coded with a static ptr for "route" so the route is only generated with the task "en" changes...
@@ -909,7 +909,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 void draw_group_waypoint_routes (ui_object *obj, entity *en)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	if (en)
 	{
@@ -1200,7 +1200,7 @@ void deinitialise_map_data (void)
 	while ( map_events )
 	{
 		map_event_type
-			*next;
+			*next = nullptr;
 
 		next = map_events->next;
 		free_mem ( map_events );
@@ -1271,10 +1271,10 @@ entity *get_map_mouse_over_entity (map_dimension_type *data)
 void update_layer_control_objects (int layer)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*data;
+		*data = nullptr;
 
 	data = map_data_list;
 
@@ -1338,16 +1338,16 @@ static void player_map_updated(entity* changed_task)
 static int check_visible_entity (ui_object *obj, entity *en)
 {
 	entity
-		*sector;
+		*sector = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		side;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (en);
 
@@ -1411,11 +1411,11 @@ void map_centralise_function (ui_object *obj, void *arg)
 	//	pos;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	int
 		side;
@@ -1486,7 +1486,7 @@ void map_centralise_function (ui_object *obj, void *arg)
 void map_zoom_in_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1506,7 +1506,7 @@ void map_zoom_in_function (ui_object *obj, void *arg)
 void map_zoom_out_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1527,7 +1527,7 @@ void map_wheel_centralise (ui_object *obj)
 		pos;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 		ASSERT (obj);
 
@@ -1552,10 +1552,10 @@ void map_wheel_zoom_in_event (event *ev)
 {
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ui_object
-			*obj;
+			*obj = nullptr;
 
 #ifndef OGRE_EE
 	float
@@ -1622,7 +1622,7 @@ void map_wheel_zoom_in_event (event *ev)
 void map_add_waypoint (entity *wp1, vec3d *pos)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1658,8 +1658,8 @@ void map_add_waypoint (entity *wp1, vec3d *pos)
 void map_delete_waypoint_event ()
 {
 	entity
-		*en,
-		*task;
+		*en = nullptr,
+		*task = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -1723,16 +1723,16 @@ void map_delete_waypoint_event ()
 int map_insert_waypoint_function (ui_object *obj)
 {
 	map_dimension_type
-		*data;
+		*data = nullptr;
 
 	entity
-		*wp1,
-		*wp2;
+		*wp1 = nullptr,
+		*wp2 = nullptr;
 
 	vec3d
 		pos,
-		*wp1_pos,
-		*wp2_pos;
+		*wp1_pos = nullptr,
+		*wp2_pos = nullptr;
 
 	data = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1782,7 +1782,7 @@ int map_insert_waypoint_function (ui_object *obj)
 static void draw_full_screen_toggle_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1817,10 +1817,10 @@ static void draw_full_screen_toggle_function (ui_object *obj, void *arg)
 void toggle_full_screen_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ui_object
-		*info_area;
+		*info_area = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1878,7 +1878,7 @@ void toggle_full_screen_function (ui_object *obj, void *arg)
 static void draw_goto_toggle_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1901,7 +1901,7 @@ static void draw_goto_toggle_function (ui_object *obj, void *arg)
 static void toggle_map_goto_function (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1917,8 +1917,8 @@ static void toggle_map_goto_function (ui_object *obj, void *arg)
 static void minimize_full_screen_function (map_dimension_type *map_dimensions)
 {
 	ui_object
-		*parent,
-		*info_area;
+		*parent = nullptr,
+		*info_area = nullptr;
 
 	ASSERT (map_dimensions);
 
@@ -1961,7 +1961,7 @@ static void minimize_full_screen_function (map_dimension_type *map_dimensions)
 void minimize_full_screen_map_object (ui_object *obj, void *arg)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -1977,7 +1977,7 @@ void minimize_full_screen_map_object (ui_object *obj, void *arg)
 void minimize_all_map_objects (void)
 {
 	map_dimension_type
-		*data;
+		*data = nullptr;
 
 	data = map_data_list;
 
@@ -2002,7 +2002,7 @@ void map_goto_function (ui_object *obj)
 		altitude;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (get_session_entity ());
 
@@ -2077,10 +2077,10 @@ void map_pop_move_waypoint_events (event *ev)
 {
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (active_map_object);
 
@@ -2100,7 +2100,7 @@ void map_pop_move_waypoint_events (event *ev)
 		{
 
 			entity
-				*member;
+				*member = nullptr;
 
 			set_client_server_entity_vec3d (map_dimensions->selected_entity, VEC3D_TYPE_POSITION, pos);
 
@@ -2117,18 +2117,18 @@ void map_pop_move_waypoint_events (event *ev)
 		{
 
 			entity
-				*task,
-				*group,
-				*guide,
-				*member,
-				*last_wp;
+				*task = nullptr,
+				*group = nullptr,
+				*guide = nullptr,
+				*member = nullptr,
+				*last_wp = nullptr;
 
 			float
 				range,
 				flight_time;
 
 			vec3d
-				*last_waypoint_position;
+				*last_waypoint_position = nullptr;
 
 			last_wp = get_local_entity_child_pred (map_dimensions->selected_entity, LIST_TYPE_WAYPOINT);
 
@@ -2182,7 +2182,7 @@ void map_move_waypoint_position (event *ev)
 		pos;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (active_map_object);
 
@@ -2414,13 +2414,13 @@ void force_map_layer_control_object (map_layer_control_types index, int state)
 static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_side_count)
 {
 	vec3d
-		*pos,
+		*pos = nullptr,
 		pos2,
 		spos1,
 		spos2;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sides
 		side;
@@ -2539,14 +2539,14 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 void map_draw_threat_circles (ui_object *obj, entity_sides side)
 {
 	entity
-		*force,
-		*group;
+		*force = nullptr,
+		*group = nullptr;
 
 	entity_sub_types
 		group_type;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d,
@@ -2629,7 +2629,7 @@ void map_draw_threat_circles (ui_object *obj, entity_sides side)
 static void map_draw_group (ui_object *obj, entity *en)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity_sub_types
 		group_type;
@@ -2638,18 +2638,18 @@ static void map_draw_group (ui_object *obj, entity *en)
 		icon;
 
 	const char
-		*name;
+		*name = nullptr;
 
 	entity_sides
 		side;
 
 	entity
-		*member,
-		*player_group,
-		*current_page_group;
+		*member = nullptr,
+		*player_group = nullptr,
+		*current_page_group = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	int
 		is_friendly;
@@ -2762,15 +2762,15 @@ static void map_draw_group (ui_object *obj, entity *en)
 void map_draw_groups (ui_object *obj, entity_sides side)
 {
 	entity
-		*force,
-		*group,
-		*current_page_group;
+		*force = nullptr,
+		*group = nullptr,
+		*current_page_group = nullptr;
 
 	entity_sub_types
 		group_type;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -2852,10 +2852,10 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_icon)
 {
 	entity
-		*pilot_force;
+		*pilot_force = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -2865,12 +2865,12 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 		pilot_side;
 
 	const char
-		*name;
+		*name = nullptr;
 	char
 		id [5];
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_icon_type
 		icon;
@@ -2974,8 +2974,8 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 void map_draw_keysites (ui_object *obj, entity_sides side)
 {
 	entity
-		*force,
-		*keysite;
+		*force = nullptr,
+		*keysite = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -3015,13 +3015,13 @@ void map_draw_towns (ui_object *obj)
 		pos;
 
 	population_name_database_type
-		*item;
+		*item = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	col = &ui_colour_white;
 
@@ -3062,18 +3062,18 @@ void map_draw_towns (ui_object *obj)
 void map_draw_pilots (ui_object *obj, entity_sides side)
 {
 	entity
-		*force,
-		*pilot,
-		*gunship;
+		*force = nullptr,
+		*pilot = nullptr,
+		*gunship = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	const char
-		*name;
+		*name = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -3120,16 +3120,16 @@ void map_draw_pilots (ui_object *obj, entity_sides side)
 void map_draw_missions (ui_object *obj, entity_sides side)
 {
 	entity
-		*force,
-		*keysite,
-		*mission,
-		*objective;
+		*force = nullptr,
+		*keysite = nullptr,
+		*mission = nullptr,
+		*objective = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	map_icon_type
 		icon;
@@ -3303,7 +3303,7 @@ static void map_draw_icon (ui_object *obj, vec3d *pos, int icon, int side, float
 		screen_pos;
 
 	texture_graphic
-		*icon_graphic;
+		*icon_graphic = nullptr;
 
 	int
 		width,
@@ -3390,7 +3390,7 @@ static void map_draw_icon (ui_object *obj, vec3d *pos, int icon, int side, float
 void map_draw_entity_icon (ui_object *obj, entity *en, vec3d *pos, int icon, int side, float scale)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		distance;
@@ -3439,7 +3439,7 @@ void map_draw_insert_waypoint_icon (ui_object *obj, entity *wp, vec3d *pos, int 
 		icon;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (obj);
 
@@ -3507,14 +3507,14 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 		side;
 
 	vec3d
-		*en_pos,
-		*mission_pos,
+		*en_pos = nullptr,
+		*mission_pos = nullptr,
 		pos1,
 		pos2;
 
 	entity
-		*mission,
-		*objective;
+		*mission = nullptr,
+		*objective = nullptr;
 
 	ASSERT (obj);
 
@@ -3619,17 +3619,17 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 		side;
 
 	vec3d
-		*mission_pos,
-		*group_pos,
-		*base_pos,
+		*mission_pos = nullptr,
+		*group_pos = nullptr,
+		*base_pos = nullptr,
 		pos1,
 		pos2;
 
 	entity
-		*base,
-		*group,
-		*guide,
-		*objective;
+		*base = nullptr,
+		*group = nullptr,
+		*guide = nullptr,
+		*objective = nullptr;
 
 	ASSERT (obj);
 
@@ -3778,20 +3778,20 @@ static void map_draw_highlighted_base (ui_object *obj, entity *en, int overlay_i
 static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overlay_icon, rgb_colour *col, float scale)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		icon,
 		waypoint_overlay_icon;
 
 	entity
-		*task;
+		*task = nullptr;
 
 	entity_sides
 		side;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (obj);
 
@@ -3959,7 +3959,7 @@ void map_draw_mouse_over_entity (ui_object *obj, entity *en)
 void map_draw_subject_entity (ui_object *obj)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (obj);
 
@@ -4016,7 +4016,7 @@ void bound_map_extents (ui_object *obj, float *w, float *h)
 		y_size;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	ASSERT (obj);
 
@@ -4093,7 +4093,7 @@ void bound_map_extents (ui_object *obj, float *w, float *h)
 void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float width, float height)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	real_colour
 		colour,
@@ -4255,7 +4255,7 @@ static void create_fog_of_war_texture_overlay (void)
 		col;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	ASSERT (map_overlay);
 	ASSERT (get_pilot_entity());
@@ -4372,7 +4372,7 @@ static void create_sector_side_texture_overlay (void)
 		col;
 
 	const map_side_band_type
-		*band_data;
+		*band_data = nullptr;
 
 	ASSERT (map_overlay);
 
@@ -4494,7 +4494,7 @@ void create_2d_terrain_texture_overlays (void)
 {
 #ifndef OGRE_EE
 	screen
-		*old_screen;
+		*old_screen = nullptr;
 
 	ASSERT (map_overlay);
 
@@ -4546,7 +4546,7 @@ void update_map_overlays (void)
 void add_map_event (int type, float x, float z, float lifetime)
 {
 	map_event_type
-		*new_event;
+		*new_event = nullptr;
 
 	new_event = (map_event_type *) malloc_fast_mem (sizeof (map_event_type));
 
@@ -4574,8 +4574,8 @@ void add_map_event (int type, float x, float z, float lifetime)
 static void remove_map_event (map_event_type *event)
 {
 	map_event_type
-		*prev,
-		*next;
+		*prev = nullptr,
+		*next = nullptr;
 
 	ASSERT (event);
 
@@ -4610,8 +4610,8 @@ static void remove_map_event (map_event_type *event)
 void update_map_events (void)
 {
 	map_event_type
-		*event,
-		*next;
+		*event = nullptr,
+		*next = nullptr;
 
 	event = map_events;
 
@@ -4649,7 +4649,7 @@ void update_map_animations (void)
 void map_draw_events (ui_object *obj)
 {
 	map_event_type
-		*event;
+		*event = nullptr;
 
 	vec3d
 		pos;
@@ -4883,7 +4883,7 @@ void map_draw_grid (ui_object *obj)
 void map_draw_track_entity (ui_object *obj, entity *en)
 {
 	const char
-		*name;
+		*name = nullptr;
 	char
 		text [64];
 
@@ -4900,8 +4900,8 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 		pos;
 
 	entity
-		*pilot,
-		*group;
+		*pilot = nullptr,
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -4965,7 +4965,7 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 void toggle_current_map_maximise_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	obj = last_drawn_map_object;
 
@@ -4982,10 +4982,10 @@ void toggle_current_map_maximise_event (event *ev)
 void shift_current_map_up_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5013,10 +5013,10 @@ void shift_current_map_up_event (event *ev)
 void shift_current_map_down_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5044,10 +5044,10 @@ void shift_current_map_down_event (event *ev)
 void shift_current_map_left_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5075,10 +5075,10 @@ void shift_current_map_left_event (event *ev)
 void shift_current_map_right_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5104,10 +5104,10 @@ void shift_current_map_right_event (event *ev)
 void fine_current_map_up_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5131,10 +5131,10 @@ void fine_current_map_up_event (event *ev)
 void fine_current_map_down_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5158,10 +5158,10 @@ void fine_current_map_down_event (event *ev)
 void fine_current_map_left_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5185,10 +5185,10 @@ void fine_current_map_left_event (event *ev)
 void fine_current_map_right_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	float
 		d;
@@ -5217,7 +5217,7 @@ void fine_current_map_right_event (event *ev)
 void zoom_in_current_map_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	obj = last_drawn_map_object;
 
@@ -5235,7 +5235,7 @@ void zoom_in_current_map_event (event *ev)
 void zoom_out_current_map_event (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	obj = last_drawn_map_object;
 
@@ -5253,16 +5253,16 @@ void zoom_out_current_map_event (event *ev)
 void centre_current_map_on_player (event *ev)
 {
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	obj = last_drawn_map_object;
 
@@ -5300,9 +5300,9 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 		y_inc;
 
 	ui_object
-		*map_area,
-		*map_window,
-		*map_controls_area;
+		*map_area = nullptr,
+		*map_window = nullptr,
+		*map_controls_area = nullptr;
 
 	ASSERT (parent);
 
@@ -5523,15 +5523,15 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 void switch_to_satellite_event (event *ev)
 {
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	entity
-		*key,
-		*en,
-		*objective;
+		*key = nullptr,
+		*en = nullptr,
+		*objective = nullptr;
 
 	ui_object
-			*obj;
+			*obj = nullptr;
 
 	obj = last_drawn_map_object;
 

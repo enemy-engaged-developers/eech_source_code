@@ -101,7 +101,7 @@
 void animate_site_loading_doors( entity *en, object_3d_instance *inst3d )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the doors on the 3d objects
@@ -126,7 +126,7 @@ void animate_site_loading_doors( entity *en, object_3d_instance *inst3d )
 void update_site_loading_doors( entity *en )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	int
 		door_state;
@@ -182,7 +182,7 @@ void update_site_loading_doors( entity *en )
 void animate_site_radar( entity *en, object_3d_instance *inst3d )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the radar on the 3d objects
@@ -207,7 +207,7 @@ void animate_site_radar( entity *en, object_3d_instance *inst3d )
 void update_site_radar( entity *en )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	//
 	// updates the radar rotation ( regardless of whether the site is drawn or not )
@@ -227,7 +227,7 @@ void update_site_radar( entity *en )
 void animate_ground_crew( entity *en, object_3d_instance *inst3d )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -248,7 +248,7 @@ void animate_ground_crew( entity *en, object_3d_instance *inst3d )
 void update_ground_crew( entity *en )
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	ASSERT( en );
 

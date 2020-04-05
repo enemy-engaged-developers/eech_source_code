@@ -79,7 +79,7 @@
 static void set_local_attitude_matrix (entity *en, matrix3x3 attitude)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (attitude);
 
@@ -101,7 +101,7 @@ static void set_local_attitude_matrix (entity *en, matrix3x3 attitude)
 static void get_local_attitude_matrix (entity *en, matrix3x3 attitude)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (attitude);
 
@@ -117,7 +117,7 @@ static void get_local_attitude_matrix (entity *en, matrix3x3 attitude)
 static matrix3x3 *get_local_attitude_matrix_ptr (entity *en)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	raw = (camera *) get_local_entity_data (en);
 
@@ -131,7 +131,7 @@ static matrix3x3 *get_local_attitude_matrix_ptr (entity *en)
 static void set_local_attitude_angles (entity *en, float heading, float pitch, float roll)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -151,7 +151,7 @@ static void set_local_attitude_angles (entity *en, float heading, float pitch, f
 static void get_local_attitude_angles (entity *en, float *heading, float *pitch, float *roll)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (heading);
 
@@ -175,7 +175,7 @@ static void get_local_attitude_angles (entity *en, float *heading, float *pitch,
 static float get_local_float_value (entity *en, float_types type)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;

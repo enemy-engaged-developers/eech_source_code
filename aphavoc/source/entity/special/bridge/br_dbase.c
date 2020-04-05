@@ -86,7 +86,7 @@ bridge_data
 void initialise_bridge_database()
 {
 	bridge_data
-		*bridge_info;
+		*bridge_info = nullptr;
 
 	int
 		loop;
@@ -398,7 +398,7 @@ void initialise_bridge_database()
 void deinitialise_bridge_database()
 {
 	bridge_data
-		*bridge_info;
+		*bridge_info = nullptr;
 
 	//
 

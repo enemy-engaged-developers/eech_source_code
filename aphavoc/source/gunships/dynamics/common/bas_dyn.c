@@ -111,7 +111,7 @@ void initialise_basic_dynamics (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	current_flight_dynamics = &basic_flight_dynamics;
 
@@ -1020,8 +1020,8 @@ void update_basic_altitude_dynamics (void)
 
 	vec3d
 		position,
-		*old_z,
-		*face_normal;
+		*old_z = nullptr,
+		*face_normal = nullptr;
 
 	centre_of_gravity_to_ground_distance = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
 

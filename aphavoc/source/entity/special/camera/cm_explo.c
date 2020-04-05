@@ -92,7 +92,7 @@ void reset_weapon_explosion_camera (camera *raw)
 void reset_weapon_explosion_camera_position (vec3d *position)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		uvec_direction;

@@ -101,20 +101,20 @@ void scan_local_entity_sounds (viewpoint *vp)
 		z_sec;
 
 	entity
-		*sctr,
-		*en,
-		*parent;
+		*sctr = nullptr,
+		*en = nullptr,
+		*parent = nullptr;
 
 	vec3d
 		scan_origin,
-		*position;
+		*position = nullptr;
 
 	float
 		range,
 		max_range;
 
 	struct SYSTEM_SOUND_EFFECT
-		*snd_eff;
+		*snd_eff = nullptr;
 
 	ASSERT (vp);
 
@@ -305,10 +305,10 @@ void scan_local_entity_sounds (viewpoint *vp)
 void stop_local_entity_sounds ()
 {
 	struct SYSTEM_SOUND_EFFECT
-		*snd_eff;
+		*snd_eff = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	//
 	// stop all sounds (not in the 3d visual)

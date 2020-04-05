@@ -82,7 +82,7 @@ static void update_server (entity *en)
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop,
@@ -115,7 +115,7 @@ static void update_server (entity *en)
 	{
 
 		entity
-			*group;
+			*group = nullptr;
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -135,7 +135,7 @@ static void update_server (entity *en)
 						{
 
 							entity
-								*task;
+								*task = nullptr;
 
 							task = get_local_entity_current_task (en);
 
@@ -244,7 +244,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;

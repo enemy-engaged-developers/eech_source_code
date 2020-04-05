@@ -170,10 +170,10 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position,
+		*position = nullptr,
 		wp_position,
 		delta_position,
-		*parent_position;
+		*parent_position = nullptr;
 
 	float
 		cos_heading,
@@ -181,7 +181,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 		heading;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	raw = (waypoint *) get_local_entity_data (receiver);
 	
@@ -235,10 +235,10 @@ static int response_to_waypoint_action (entity_messages message, entity *receive
 		msg;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*member;
+		*member = nullptr;
 
 	#if DEBUG_MODULE >= 3
 
@@ -291,12 +291,12 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 		set_next_waypoint;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*group,
-		*member;
+		*force = nullptr,
+		*group = nullptr,
+		*member = nullptr;
 
 	#if DEBUG_MODULE >= 3
 
@@ -359,8 +359,8 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 			//
 
 			entity
-				*wp,
-				*task;
+				*wp = nullptr,
+				*task = nullptr;
 
 			task = get_local_entity_parent (receiver, LIST_TYPE_WAYPOINT);
 

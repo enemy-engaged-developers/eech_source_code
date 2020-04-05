@@ -81,10 +81,10 @@
 static void destroy_local (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 	entity
-		*task,
-		*destroy_task;
+		*task = nullptr,
+		*destroy_task = nullptr;
 
 	////////////////////////////////////////
 	//

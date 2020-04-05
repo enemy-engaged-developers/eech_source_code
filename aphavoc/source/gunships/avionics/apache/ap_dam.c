@@ -86,7 +86,7 @@ apache_damage_flags
 void set_apache_weapon_damage_status (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -488,7 +488,7 @@ void repair_apache_weapon_damage (void)
 static void damage_systems (apache_damage_flags damage)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 

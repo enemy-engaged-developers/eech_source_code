@@ -80,17 +80,17 @@ void draw_debug_guide_entity (entity *en)
 {
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*member,
-		*this_waypoint;
+		*member = nullptr,
+		*this_waypoint = nullptr;
 
 	vec3d
 		direction,
 		guide_pos,
-		*member_pos,
-		*this_waypoint_position;
+		*member_pos = nullptr,
+		*this_waypoint_position = nullptr;
 
 	float
 		length;

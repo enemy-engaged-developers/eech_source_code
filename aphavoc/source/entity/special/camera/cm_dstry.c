@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

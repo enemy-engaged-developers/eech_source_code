@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,18 +156,18 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		count;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	viewpoint
 		real_object_position;
 
 	light_3d_source
-		*prev_light,
-		*light_ptr,
-		*light;
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		shadow_world_position,
 		terrain_normal,
 		current_sun_object_view_vector,
@@ -560,7 +555,7 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		{
 			face_surface_description
-				*surface;
+				*surface = nullptr;
 
 			int
 				number_of_surface_points,
@@ -611,7 +606,7 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 								face_normal;
 
 							object_short_3d_point
-								*points;
+								*points = nullptr;
 
 							int
 								point0,
@@ -916,11 +911,11 @@ void transform_3d_object_shadow ( object_3d *object, vec3d *object_3d_scale, vie
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	vertex
-		*last_transformed_point,
-		*result_points,
+		*last_transformed_point = nullptr,
+		*result_points = nullptr,
 		tmp_vertex;
 
 	float
@@ -1125,11 +1120,11 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 		real_object_position;
 
 	object_3d_point
-		*object_points,
+		*object_points = nullptr,
 		object_box[8];
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		terrain_normal,
 		current_sun_object_view_vector;
 
@@ -1138,7 +1133,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 		projection_constant;
 
 	viewpoint
-		*vp;
+		*vp = nullptr;
 
 	//
 	// Have to project the corner points of the object onto the landscape to ensure we aren't doing tons more work than we have to.
@@ -1370,10 +1365,10 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 	{
 
 		object_3d_point
-			*points;
+			*points = nullptr;
 
 		vertex
-			*result_points;
+			*result_points = nullptr;
 
 		float
 			pos_x,
@@ -1522,4 +1517,3 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

@@ -90,11 +90,11 @@ static void update_mslider_ui_object (ui_object *obj)
 		y2;
 
 	ui_object
-		*object_to_slide,
-		*parent;
+		*object_to_slide = nullptr,
+		*parent = nullptr;
 
    area_ui_object
-      *area;
+      *area = nullptr;
 
 	float
 		old_viewport_x1,

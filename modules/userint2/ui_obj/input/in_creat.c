@@ -74,7 +74,7 @@ static void create_input_ui_object (ui_object *obj, ui_object_types type, va_lis
 {
 
    input_ui_object
-      *new_object;
+      *new_object = nullptr;
 
 	increase_ui_object_counter ();
 

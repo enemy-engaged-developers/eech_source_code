@@ -3,16 +3,16 @@
 #include "3d/3dsubobj.h"
 
 static object_3d_instance
-	*wiper_inst3d;
+	*wiper_inst3d = nullptr;
 
 #ifndef OGRE_EE
 static object_3d_sub_instance
 #else
 static struct OgreGameObjectSceneElement
 #endif
-	*wiper_arm_object,
-	*wiper_rod_object,
-	*wiper_blade_object;
+	*wiper_arm_object = nullptr,
+	*wiper_rod_object = nullptr,
+	*wiper_blade_object = nullptr;
 
 void initialise_hind_3d_cockpit_wiper(void)
 {

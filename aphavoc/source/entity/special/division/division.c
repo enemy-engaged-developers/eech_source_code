@@ -82,7 +82,7 @@ struct DIVISION_ID_DATA
 		valid,
 		count,
 		next,
-		*number_list;
+		*number_list = nullptr;
 };
 
 typedef struct DIVISION_ID_DATA division_id_data;
@@ -101,7 +101,7 @@ static division_id_data
 entity *create_new_division (entity_sub_types type, entity_sides side, entity *parent, entity *hq, int local_only)
 {
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	int
 		id;
@@ -160,13 +160,13 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 		main_division_type;
 
 	entity
-		*en,
-		*force,
-		*keysite,
-		*division;
+		*en = nullptr,
+		*force = nullptr,
+		*keysite = nullptr,
+		*division = nullptr;
 
 	vec3d
-		*group_pos;
+		*group_pos = nullptr;
 		
 	ASSERT (group);
 
@@ -325,7 +325,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 			//
 	
 			entity
-				*main_division;
+				*main_division = nullptr;
 	
 			max_count = division_database [division_type].maximum_groups_per_division;
 	
@@ -464,7 +464,7 @@ int set_local_division_name (entity *en, char *s)
 		id_string [10];
 
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -546,8 +546,8 @@ int set_local_division_name (entity *en, char *s)
 			case PLATOON_ID_KEYSITE:
 			{
 				entity
-					*keysite,
-					*division;
+					*keysite = nullptr,
+					*division = nullptr;
 
 				if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 				{

@@ -58,7 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-
+#pragma once
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -513,9 +513,9 @@ struct OBJECT_3D
 	struct POINT_3D_PLAIN_REFERENCE
 		*surface_point_normals;
 
-    /* 26JUL06 Casm Import of 3D objects */
-    int
-        custom;
+	/* 26JUL06 Casm Import of 3D objects */
+	int
+		custom;
 };
 
 typedef struct OBJECT_3D object_3d;
@@ -526,8 +526,6 @@ typedef struct OBJECT_3D object_3d;
 
 struct OBJECT_3D_INSTANCE // 92 bytes
 {
-#ifndef OGRE_EE
-
 	//
 	// Parent pointer - this is ALWAYS NULL and *has* to be at the start of the structure to tie in with OBJECT_3D_SUB_INSTANCE
 	//
@@ -581,26 +579,18 @@ struct OBJECT_3D_INSTANCE // 92 bytes
 	int
 		*texture_animations;
 
-  	/* array with all subobjects an object of this type has (not just immediate
-  	 * sub objects,but also  children's children etc.).
-  	 * Array has length of 
-  	 * objects_3d_scene_database[object_number].total_number_of_sub_objects 
-  	 * and is malloced individually for each object_3d_instance */
+	/* array with all subobjects an object of this type has (not just immediate
+	 * sub objects,but also  children's children etc.).
+	 * Array has length of 
+	 * objects_3d_scene_database[object_number].total_number_of_sub_objects 
+	 * and is malloced individually for each object_3d_instance */
 	struct OBJECT_3D_SUB_INSTANCE
 		*sub_objects;
-#else
-	struct OgreGameObjectScene
-		vp;
-	struct VEC3D
-		relative_scale;
-	int
-		object_number;
-	int
-		temporary;
-#endif
 };
 
 typedef struct OBJECT_3D_INSTANCE object_3d_instance;
+
+static object_3d_instance * exclusive_3d_instance;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -640,7 +630,6 @@ struct OBJECT_3D_SUB_INSTANCE // 48 bytes long
 
 typedef struct OBJECT_3D_SUB_INSTANCE object_3d_sub_instance;
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -784,7 +773,6 @@ struct TRANSLUCENT_OBJECT_SURFACE
 };
 
 typedef struct TRANSLUCENT_OBJECT_SURFACE translucent_object_surface;
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

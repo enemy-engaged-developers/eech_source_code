@@ -79,7 +79,7 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	raw = (anti_aircraft *) get_local_entity_data (en);
 

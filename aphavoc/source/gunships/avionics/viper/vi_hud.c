@@ -87,7 +87,7 @@
 #define LENS_HUD_VIEWPORT_SIZE	(64)
 
 static env_2d
-	*hud_env;
+	*hud_env = nullptr;
 
 static float
 	hud_viewport_size,
@@ -118,9 +118,9 @@ static float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static screen
-	*hud_texture_screen,
-	*lens_hud_texture_screen,
-	*lens_outer_texture_screen;
+	*hud_texture_screen = nullptr,
+	*lens_hud_texture_screen = nullptr,
+	*lens_outer_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour,
@@ -786,14 +786,14 @@ static void draw_steerpoint_tadpole(void)
 		float heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
 
 		entity
-			*wp;
+			*wp = nullptr;
 
 		wp = get_local_entity_current_waypoint(get_gunship_entity());
 
 		if (wp)
 		{
 			vec3d
-				*gunship_position,
+				*gunship_position = nullptr,
 				waypoint_position;
 
 			float
@@ -1307,10 +1307,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float
@@ -1827,8 +1827,8 @@ static void draw_target_symbology (void)
 		pitch_offset;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
 		target_position,
@@ -2023,7 +2023,7 @@ static void draw_target_symbology (void)
 static void display_target_information (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -2032,7 +2032,7 @@ static void display_target_information (void)
 		target_range;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	int
 		has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;

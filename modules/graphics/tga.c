@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 
 #include "misc.h"
@@ -124,10 +119,10 @@ void *load_tga_file (const char *filename, short int *width, short int *height, 
 		size;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	void
-		*image_data;
+		*image_data = nullptr;
 
 	tga_image
 		image;
@@ -231,16 +226,16 @@ void *memory_map_tga_file (const char *filename, unsigned char **memory_mapped_f
 {
 
 	void
-		*image_data;
+		*image_data = nullptr;
 
 	unsigned char
-		*memory_ptr;
+		*memory_ptr = nullptr;
 
 	tga_image
 		image;
 
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 	memory_ptr = ( unsigned char * ) mopen ( filename );
 
@@ -345,7 +340,7 @@ void save_tga_screen (const char *filename)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	tga_image
 		tga;
@@ -360,8 +355,8 @@ void save_tga_screen (const char *filename)
 		loop_y;
 
 	unsigned char
-		*image_ptr,
-		*image;
+		*image_ptr = nullptr,
+		*image = nullptr;
 
 	width = get_screen_width ( active_screen );
 
@@ -455,7 +450,7 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	tga_image
 		tga;
@@ -471,12 +466,12 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 		source_pitch;
 
 	unsigned char
-		*tga_image,
-		*image_ptr;
+		*tga_image = nullptr,
+		*image_ptr = nullptr;
 
 	unsigned int
-		*source_ptr,
-		*source_line;
+		*source_ptr = nullptr,
+		*source_line = nullptr;
 
 	source_ptr = get_screen_data ( video_screen );
 
@@ -495,7 +490,7 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 	for ( loop_y = 0; loop_y < height; loop_y++ )
 	{
 		unsigned int
-			*source_line_data;
+			*source_line_data = nullptr;
 
 		source_line_data = source_line;
 
@@ -591,7 +586,7 @@ void save_tga_image (const char *filename, int width, int height, const unsigned
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	tga_image
 		tga;
@@ -698,7 +693,7 @@ void save_tga_greyscale_image (const char *filename, int width, int height, cons
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	tga_image
 		tga;
@@ -800,4 +795,3 @@ void save_tga_greyscale_image (const char *filename, int width, int height, cons
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

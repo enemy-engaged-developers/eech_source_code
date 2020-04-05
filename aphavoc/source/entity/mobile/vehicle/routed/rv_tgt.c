@@ -79,11 +79,11 @@
 void update_routed_vehicle_target_scan (entity *en)
 {
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*target;
+		*force = nullptr,
+		*target = nullptr;
 
 	ASSERT (en);
 

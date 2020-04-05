@@ -92,10 +92,10 @@ static float
 void animate_routed_vehicle_wheels (entity *en)
 {
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	float
 		speed,
@@ -326,7 +326,7 @@ int set_initial_rotation_angle_of_routed_vehicle_wheels (object_3d_instance *ins
 void damage_routed_vehicle_3d_object (entity *en)
 {
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -362,7 +362,7 @@ void damage_routed_vehicle_3d_object (entity *en)
 void set_routed_vehicle_id_number (entity *en)
 {
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

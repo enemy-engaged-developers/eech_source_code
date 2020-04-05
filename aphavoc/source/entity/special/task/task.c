@@ -97,7 +97,7 @@ task_completed_types assess_task_completeness (entity *en, task_terminated_types
 		sub_type;
 
 	entity
-		*objective;
+		*objective = nullptr;
 
 	float
 		partial,
@@ -561,7 +561,7 @@ int award_points_for_task_completion (entity *en)
 list_types get_local_task_list_type (entity *task_en)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (task_en);
 
@@ -595,7 +595,7 @@ list_types get_local_task_list_type (entity *task_en)
 entity *get_local_entity_current_task (entity *member)
 {
 	entity
-		*guide;
+		*guide = nullptr;
 
 	ASSERT (member);
 
@@ -619,7 +619,7 @@ int entity_is_object_of_task (entity *en, entity_sub_types task_type, entity_sid
 {
 
 	entity
-		*this_task;
+		*this_task = nullptr;
 
 	int
 		count;
@@ -664,7 +664,7 @@ int entity_is_object_of_task (entity *en, entity_sub_types task_type, entity_sid
 int assess_task_locality_factor (entity *task_en, vec3d *pos1, float cruise_speed, float *return_distance)
 {
 	vec3d
-		*pos2;
+		*pos2 = nullptr;
 
 	float
 		distance;
@@ -736,14 +736,14 @@ int assess_task_difficulty (entity *task_en, int *route_air_threat, int *route_e
 		difficulty_level;
 
 	task
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*last_pos,
-		*this_pos;
+		*last_pos = nullptr,
+		*this_pos = nullptr;
 
 	entity
-		*start_keysite;
+		*start_keysite = nullptr;
 
 	ASSERT (task_en);
 
@@ -916,7 +916,7 @@ int assess_task_difficulty (entity *task_en, int *route_air_threat, int *route_e
 void assess_task_sector_difficulty (entity *task_en, int x, int z, int *air_threats, int *enemy_sectors)
 {
 	entity
-		*sector_en;
+		*sector_en = nullptr;
 
 	entity_sides
 		side;
@@ -947,9 +947,9 @@ void assess_task_sector_difficulty (entity *task_en, int x, int z, int *air_thre
 entity *get_local_group_primary_task (entity *en)
 {
 	entity
-		*guide,
-		*task,
-		*primary_task;
+		*guide = nullptr,
+		*task = nullptr,
+		*primary_task = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -997,7 +997,7 @@ entity *get_local_group_primary_task (entity *en)
 entity *get_local_entity_primary_task (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -1042,18 +1042,18 @@ entity *find_most_suitable_keysite_for_task (entity_sub_types task_type, entity_
 		range;
 
 	entity
-		*force,
-		*best_keysite,
-		*ts,
-		*group,
-		*keysite;
+		*force = nullptr,
+		*best_keysite = nullptr,
+		*ts = nullptr,
+		*group = nullptr,
+		*keysite = nullptr;
 
 	entity_sub_types
 		group_type,
 		keysite_type;
 
 	vec3d
-		*keysite_pos;
+		*keysite_pos = nullptr;
 
 	ASSERT (pos);
 
@@ -1288,7 +1288,7 @@ void validate_task_entity (entity *en)
 	entity_sub_types
 		task_type;
 	task
-		*raw;
+		*raw = nullptr;
 	
 	ASSERT (en);
 
@@ -1348,10 +1348,10 @@ void add_kill_to_task (entity *task_en, entity *victim, entity *aggressor)
 {
 
 	task
-		*task_raw;
+		*task_raw = nullptr;
 
 	task_kill_loss_data
-		*new_kill;
+		*new_kill = nullptr;
 
 	task_raw = (task *) get_local_entity_data (task_en);
 
@@ -1389,10 +1389,10 @@ void add_loss_to_task (entity *task_en, entity *victim, entity *aggressor)
 {
 
 	task
-		*task_raw;
+		*task_raw = nullptr;
 
 	task_kill_loss_data
-		*new_loss;
+		*new_loss = nullptr;
 
 	task_raw = (task *) get_local_entity_data (task_en);
 
@@ -1430,7 +1430,7 @@ float get_task_estimated_route_duration (entity *task)
 {
 
 	entity
-		*waypoint;
+		*waypoint = nullptr;
 
 	float
 		flight_time;
@@ -1475,8 +1475,8 @@ float get_completed_task_expire_time (void)
 const char *get_task_objective_string (entity *en)
 {
 	entity
-		*objective,
-		*sector;
+		*objective = nullptr,
+		*sector = nullptr;
 
 	entity_sub_types
 		task_type;
@@ -1488,7 +1488,7 @@ const char *get_task_objective_string (entity *en)
 		info;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (en);
 
@@ -1557,8 +1557,8 @@ const char *get_task_objective_string (entity *en)
 void get_task_objective_mfd_display_string (entity *en, char *s)
 {
 	entity
-		*objective,
-		*sector;
+		*objective = nullptr,
+		*sector = nullptr;
 
 	entity_sub_types
 		task_type;
@@ -1570,7 +1570,7 @@ void get_task_objective_mfd_display_string (entity *en, char *s)
 		info;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (s);
 
@@ -1642,10 +1642,10 @@ int get_task_friendly_fire_incidents (entity *task_en)
 {
 
 	task
-		*task_raw;
+		*task_raw = nullptr;
 
 	task_kill_loss_data
-		*item;
+		*item = nullptr;
 
 	task_raw = (task *) get_local_entity_data (task_en);
 

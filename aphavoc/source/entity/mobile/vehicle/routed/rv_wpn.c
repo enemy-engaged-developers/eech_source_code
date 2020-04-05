@@ -79,7 +79,7 @@
 void update_routed_vehicle_weapon_fire (entity *en)
 {
    routed_vehicle
-      *raw;
+      *raw = nullptr;
 
 	int
 		continue_burst_fire;
@@ -88,8 +88,8 @@ void update_routed_vehicle_weapon_fire (entity *en)
 		launch_angle_error;
 
 	vec3d
-		*weapon_vector,
-		*weapon_to_intercept_point_vector;
+		*weapon_vector = nullptr,
+		*weapon_to_intercept_point_vector = nullptr;
 
 	ASSERT (en);
 

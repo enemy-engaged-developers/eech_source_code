@@ -1949,7 +1949,7 @@ static void update_pilot_head_animation (void)
 static void update_pilot_rest_animation (int head_anim_only)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	//
 	// cancel any animation while the player is the pilot (to stop the head moving around)
@@ -2388,7 +2388,7 @@ static void update_pilot_hands_off_controls (void)
 static void update_pilot_taking_controls (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT))
 	{
@@ -2422,7 +2422,7 @@ static void update_pilot_taking_controls (void)
 static void update_pilot_moving_controls_from_centre1 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	anim_data = &pilot_main_anim_mode_moving_controls_from_centre1_anim_data;
 
@@ -2440,7 +2440,7 @@ static void update_pilot_moving_controls_from_centre1 (void)
 static void update_pilot_moving_controls_from_centre2 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	anim_data = &pilot_main_anim_mode_moving_controls_from_centre2_anim_data;
 
@@ -2466,7 +2466,7 @@ static void update_pilot_moving_controls_from_centre2 (void)
 static void update_pilot_hands_on_controls (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT))
 	{
@@ -2528,7 +2528,7 @@ static void update_pilot_hands_on_controls (void)
 static void update_pilot_moving_controls_to_centre1 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	anim_data = &pilot_main_anim_mode_moving_controls_to_centre1_anim_data;
 
@@ -2554,7 +2554,7 @@ static void update_pilot_moving_controls_to_centre1 (void)
 static void update_pilot_moving_controls_to_centre2 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	anim_data = &pilot_main_anim_mode_moving_controls_to_centre2_anim_data;
 
@@ -2572,7 +2572,7 @@ static void update_pilot_moving_controls_to_centre2 (void)
 static void update_pilot_releasing_controls (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT))
 	{
@@ -2606,7 +2606,7 @@ static void update_pilot_releasing_controls (void)
 static void update_pilot_left_hand_to_nvg (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_pilot_viewpoint_virtual_cockpit ())
 	{
@@ -2670,7 +2670,7 @@ static void update_pilot_left_hand_to_nvg (void)
 static void update_pilot_collective_to_centre1 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_pilot_viewpoint_virtual_cockpit ())
 	{
@@ -2705,7 +2705,7 @@ static void update_pilot_collective_to_centre1 (void)
 static void update_pilot_collective_to_centre2 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_pilot_viewpoint_virtual_cockpit ())
 	{
@@ -2738,7 +2738,7 @@ static void update_pilot_collective_to_centre2 (void)
 static void update_pilot_collective_from_centre1 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_pilot_viewpoint_virtual_cockpit ())
 	{
@@ -2771,7 +2771,7 @@ static void update_pilot_collective_from_centre1 (void)
 static void update_pilot_collective_from_centre2 (void)
 {
 	pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	if (get_pilot_viewpoint_virtual_cockpit ())
 	{

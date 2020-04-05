@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E532C860-4F7E-4B9B-A70D-9E4E5A7AFBB5}</ProjectGuid>
+    <RootNamespace>Modules3d</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.29904.37</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>3d.h</PrecompiledHeaderFile>
+      <AssemblerOutput>All</AssemblerOutput>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>3d.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <SDLCheck>true</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="modules\3d\3danim.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="modules\3d\3dclip.c" />
+    <ClCompile Include="modules\3d\3dconfig.c" />
+    <ClCompile Include="modules\3d\3dconstr.c" />
+    <ClCompile Include="modules\3d\3ddisp.c" />
+    <ClCompile Include="modules\3d\3denvget.c" />
+    <ClCompile Include="modules\3d\3denvset.c" />
+    <ClCompile Include="modules\3d\3dexplos.c" />
+    <ClCompile Include="modules\3d\3dfaces.c" />
+    <ClCompile Include="modules\3d\3dfclip.c" />
+    <ClCompile Include="modules\3d\3dhoriz.c" />
+    <ClCompile Include="modules\3d\3dkeyfr.c" />
+    <ClCompile Include="modules\3d\3dlight.c" />
+    <ClCompile Include="modules\3d\3dline.c" />
+    <ClCompile Include="modules\3d\3dmoon.c" />
+    <ClCompile Include="modules\3d\3dobjbuf.c" />
+    <ClCompile Include="modules\3d\3dobjdb.c" />
+    <ClCompile Include="modules\3d\3dobjdrh.c" />
+    <ClCompile Include="modules\3d\3dobjdrw.c" />
+    <ClCompile Include="modules\3d\3dobjdrz.c" />
+    <ClCompile Include="modules\3d\3dobject.c" />
+    <ClCompile Include="modules\3d\3dobjid.c" />
+    <ClCompile Include="modules\3d\3dobjvb.c" />
+    <ClCompile Include="modules\3d\3dobjvis.c" />
+    <ClCompile Include="modules\3d\3dobjzdr.c" />
+    <ClCompile Include="modules\3d\3dpixel.c" />
+    <ClCompile Include="modules\3d\3drain.c" />
+    <ClCompile Include="modules\3d\3dscene.c" />
+    <ClCompile Include="modules\3d\3dscon.c" />
+    <ClCompile Include="modules\3d\3dshadow.c" />
+    <ClCompile Include="modules\3d\3dsprite.c" />
+    <ClCompile Include="modules\3d\3dstars.c" />
+    <ClCompile Include="modules\3d\3dstrail.c" />
+    <ClCompile Include="modules\3d\3dstrike.c" />
+    <ClCompile Include="modules\3d\3dsubobj.c" />
+    <ClCompile Include="modules\3d\3dsun.c" />
+    <ClCompile Include="modules\3d\3dtemp.c" />
+    <ClCompile Include="modules\3d\3dtrans.c" />
+    <ClCompile Include="modules\3d\3dview.c" />
+    <ClCompile Include="modules\3d\3dwface1.c" />
+    <ClCompile Include="modules\3d\3dwface2.c" />
+    <ClCompile Include="modules\3d\clouds\3dclouds.c" />
+    <ClCompile Include="modules\3d\clouds\3dtrump.c" />
+    <ClCompile Include="modules\3d\clouds\clouds.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modules\3d.h" />
+    <ClInclude Include="modules\3d\3danim.h" />
+    <ClInclude Include="modules\3d\3dclip.h" />
+    <ClInclude Include="modules\3d\3dconfig.h" />
+    <ClInclude Include="modules\3d\3dconstr.h" />
+    <ClInclude Include="modules\3d\3ddisp.h" />
+    <ClInclude Include="modules\3d\3denvstr.h" />
+    <ClInclude Include="modules\3d\3dexplos.h" />
+    <ClInclude Include="modules\3d\3dfaces.h" />
+    <ClInclude Include="modules\3d\3dfclip.h" />
+    <ClInclude Include="modules\3d\3dhoriz.h" />
+    <ClInclude Include="modules\3d\3dkeyfr.h" />
+    <ClInclude Include="modules\3d\3dlight.h" />
+    <ClInclude Include="modules\3d\3dline.h" />
+    <ClInclude Include="modules\3d\3dmoon.h" />
+    <ClInclude Include="modules\3d\3dobjbuf.h" />
+    <ClInclude Include="modules\3d\3dobjdb.h" />
+    <ClInclude Include="modules\3d\3dobjdrh.h" />
+    <ClInclude Include="modules\3d\3dobjdrw.h" />
+    <ClInclude Include="modules\3d\3dobjdrz.h" />
+    <ClInclude Include="modules\3d\3dobject.h" />
+    <ClInclude Include="modules\3d\3dobjid.h" />
+    <ClInclude Include="modules\3d\3dobjvb.h" />
+    <ClInclude Include="modules\3d\3dobjvis.h" />
+    <ClInclude Include="modules\3d\3dobjzdr.h" />
+    <ClInclude Include="modules\3d\3dpixel.h" />
+    <ClInclude Include="modules\3d\3drain.h" />
+    <ClInclude Include="modules\3d\3dscene.h" />
+    <ClInclude Include="modules\3d\3dscon.h" />
+    <ClInclude Include="modules\3d\3dshadow.h" />
+    <ClInclude Include="modules\3d\3dsprite.h" />
+    <ClInclude Include="modules\3d\3dstars.h" />
+    <ClInclude Include="modules\3d\3dstrail.h" />
+    <ClInclude Include="modules\3d\3dstrike.h" />
+    <ClInclude Include="modules\3d\3dsubobj.h" />
+    <ClInclude Include="modules\3d\3dsun.h" />
+    <ClInclude Include="modules\3d\3dtemp.h" />
+    <ClInclude Include="modules\3d\3dtrans.h" />
+    <ClInclude Include="modules\3d\3dview.h" />
+    <ClInclude Include="modules\3d\clouds\3dclouds.h" />
+    <ClInclude Include="modules\3d\clouds\3dtrump.h" />
+    <ClInclude Include="modules\3d\clouds\clouds.h" />
+    <ClInclude Include="modules\3d\objects.h" />
+    <ClInclude Include="modules\graphics.h" />
+    <ClInclude Include="modules\system.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -83,11 +83,11 @@ void leave_mission (void)
 		index_number;
 
 	connection_list_type
-		*destroy_connection,
-		*connection;
+		*destroy_connection = nullptr,
+		*connection = nullptr;
 
    connection_data_type
-      *comms_connection;
+      *comms_connection = nullptr;
 
 	#if DEBUG_MODULE
 

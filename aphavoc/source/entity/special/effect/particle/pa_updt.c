@@ -107,7 +107,7 @@ int update_particle( entity *en )
 {
 
 	particle
-		*raw;
+		*raw = nullptr;
 
 	int
 		alive_count,
@@ -120,12 +120,12 @@ int update_particle( entity *en )
 		dr;
 
 	vec3d
-		*pos,
-		*mv;
+		*pos = nullptr,
+		*mv = nullptr;
 		
 	entity
-		*next,
-		*special_effect;
+		*next = nullptr,
+		*special_effect = nullptr;
 
 	matrix3x3
 		m,

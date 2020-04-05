@@ -217,7 +217,7 @@ static int
 #define SMALL_MFD_VIEWPORT_SIZE		(128)
 
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 
 static int
 	int_mfd_viewport_size;
@@ -244,24 +244,24 @@ static int
 	draw_large_mfd;
 
 static screen
-	*pilot_lhs_mfd_texture_screen,
-	*pilot_rhs_mfd_texture_screen,
-	*co_pilot_lhs_mfd_texture_screen,
-	*co_pilot_rhs_mfd_texture_screen,
-	*ekran_display_texture_screen,
-	*large_pilot_lhs_mfd_texture_screen,
-	*large_pilot_rhs_mfd_texture_screen,
-	*large_co_pilot_lhs_mfd_texture_screen,
-	*large_co_pilot_rhs_mfd_texture_screen,
-	*large_ekran_display_texture_screen,
-	*small_pilot_lhs_mfd_texture_screen,
-	*small_pilot_rhs_mfd_texture_screen,
-	*small_co_pilot_lhs_mfd_texture_screen,
-	*small_co_pilot_rhs_mfd_texture_screen,
-	*small_ekran_display_texture_screen,
-	*eo_3d_texture_screen,
-	*eo_3d_texture_screen_over,
-	*full_mfd_texture_screen;
+	*pilot_lhs_mfd_texture_screen = nullptr,
+	*pilot_rhs_mfd_texture_screen = nullptr,
+	*co_pilot_lhs_mfd_texture_screen = nullptr,
+	*co_pilot_rhs_mfd_texture_screen = nullptr,
+	*ekran_display_texture_screen = nullptr,
+	*large_pilot_lhs_mfd_texture_screen = nullptr,
+	*large_pilot_rhs_mfd_texture_screen = nullptr,
+	*large_co_pilot_lhs_mfd_texture_screen = nullptr,
+	*large_co_pilot_rhs_mfd_texture_screen = nullptr,
+	*large_ekran_display_texture_screen = nullptr,
+	*small_pilot_lhs_mfd_texture_screen = nullptr,
+	*small_pilot_rhs_mfd_texture_screen = nullptr,
+	*small_co_pilot_lhs_mfd_texture_screen = nullptr,
+	*small_co_pilot_rhs_mfd_texture_screen = nullptr,
+	*small_ekran_display_texture_screen = nullptr,
+	*eo_3d_texture_screen = nullptr,
+	*eo_3d_texture_screen_over = nullptr,
+	*full_mfd_texture_screen = nullptr;
 
 static entity
 	*last_target = NULL;
@@ -1024,14 +1024,14 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		if (!hokum_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -1325,7 +1325,7 @@ static void display_radar_scan_range (float scan_range)
 static void display_radar_target_details (entity *target, float target_range, radar_params *radar)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -1557,14 +1557,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	entity_sides
 		source_side;
 	entity
-		*source;
+		*source = nullptr;
 
 	float
 		dx,
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1723,7 +1723,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1825,9 +1825,9 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 		radius;
 
 	vec3d
-		*target_position,
-		*bounding_box_min,
-		*bounding_box_max;
+		*target_position = nullptr,
+		*bounding_box_min = nullptr,
+		*bounding_box_max = nullptr;
 
 	ASSERT (target);
 
@@ -1935,12 +1935,12 @@ static void draw_ground_radar_mfd (void)
 		target_range;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -2212,12 +2212,12 @@ static void draw_air_radar_mfd (void)
 		y_adjust;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -2761,7 +2761,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2941,7 +2941,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -3100,7 +3100,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 #endif
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -3120,11 +3120,11 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_point;
 
 	viewpoint
@@ -3721,11 +3721,11 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 		f;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (eo);
 
@@ -4447,11 +4447,11 @@ static void draw_2d_periscope_mfd (int valid_3d)
 static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	int
-		*tsd_draw_threat_line_status;
+		*tsd_draw_threat_line_status = nullptr;
 
 	entity_sides
 		source_side;
@@ -4469,14 +4469,14 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		y_adjust,
 		source_heading,
 		tsd_ase_range,
-		*tsd_threat_line_flash_timer;
+		*tsd_threat_line_flash_timer = nullptr;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (hokum_mfd_location_valid (mfd_location));
 
@@ -4619,8 +4619,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !hokum_damage.navigation_computer)
 	{
 		entity
-			*wp1,
-			*wp2;
+			*wp1 = nullptr,
+			*wp2 = nullptr;
 
 		vec3d
 			wp1_rel_position,
@@ -4728,11 +4728,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 	{
 		entity
-			*target,
-			*launched_weapon;
+			*target = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*target_position;
+			*target_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -5113,7 +5113,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	if (!hokum_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		vec3d
 			waypoint_position;
@@ -5248,8 +5248,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 static entity *get_closest_missile (entity *source, vec3d *source_position, threat_types threat_type, float *closest_missile_time_to_impact)
 {
 	entity
-		*threat,
-		*closest_missile;
+		*threat = nullptr,
+		*closest_missile = nullptr;
 
 	int
 		overshot;
@@ -5262,11 +5262,11 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 		cos_error;
 
 	vec3d
-		*threat_position,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	ASSERT (source);
 
@@ -5351,14 +5351,14 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
 		source_side;
 
 	int
-		*ase_draw_threat_line_status;
+		*ase_draw_threat_line_status = nullptr;
 
 	float
 		scale,
@@ -5366,14 +5366,14 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 		y_adjust,
 		source_heading,
 		tsd_ase_range,
-		*ase_threat_line_flash_timer;
+		*ase_threat_line_flash_timer = nullptr;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (hokum_mfd_location_valid (mfd_location));
 
@@ -5423,11 +5423,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 
 	{
 		entity
-			*threat,
-			*launched_weapon;
+			*threat = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*threat_position;
+			*threat_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -5645,7 +5645,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 
 	{
 		entity
-			*closest_missile;
+			*closest_missile = nullptr;
 
 		float
 			time_to_impact;
@@ -6009,7 +6009,7 @@ static int
 	num_weapon_line_points;
 
 static vec3d
-	*weapon_line_points;
+	*weapon_line_points = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6031,7 +6031,7 @@ static void draw_weapon_display_mfd (void)
 		y_adjust;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type,
@@ -6831,7 +6831,7 @@ static void draw_weapon_display_mfd (void)
 static float print_mfd_system_message (char *equipment, char *warning, int fail, float y_adjust, float width_adjust)
 {
 	char
-		*status;
+		*status = nullptr;
 
 	float
 		width;
@@ -7420,8 +7420,8 @@ static void draw_pitch_ladder (void)
 		else  // 90 degree bank
 		{
 			rgb_colour
-				*left_colour,
-				*right_colour;
+				*left_colour = nullptr,
+				*right_colour = nullptr;
 
 			if (roll == rad(90))
 			{
@@ -7590,7 +7590,7 @@ static void draw_altitude_scale (void)
 
 
 	char
-		*format,
+		*format = nullptr,
 		buffer[8];
 
 	int
@@ -7894,10 +7894,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float
@@ -8050,11 +8050,11 @@ static void print_mono_font_max_length_string (char *s)
 static char *get_player_rank_and_name (entity *en, char *buffer)
 {
 	const char
-		*rank,
-		*name;
+		*rank = nullptr,
+		*name = nullptr;
 
 	entity
-		*aircrew;
+		*aircrew = nullptr;
 
 	ASSERT (en);
 
@@ -8110,7 +8110,7 @@ static void print_target_position (entity *source, entity *target)
 		range;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	ASSERT (source);
 
@@ -8173,13 +8173,13 @@ static void draw_mission_display_mfd (void)
 		estimated_time;
 
 	entity
-		*en,
-		*group,
-		*company,
-		*member,
-		*task,
-		*keysite,
-		*objective;
+		*en = nullptr,
+		*group = nullptr,
+		*company = nullptr,
+		*member = nullptr,
+		*task = nullptr,
+		*keysite = nullptr,
+		*objective = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -11015,8 +11015,8 @@ static int get_mfd_damage (hokum_mfd_locations mfd_location)
 void select_hokum_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mfd_locations mfd_location)
 {
 	hokum_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		default_mfd_mode;
 
 	ASSERT (hokum_mfd_mode_valid (mfd_mode));
@@ -11302,8 +11302,8 @@ static hokum_mfd_modes get_previous_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mf
 void select_next_hokum_mfd (hokum_mfd_locations mfd_location)
 {
 	hokum_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		next_mfd_mode;
 
 	ASSERT (hokum_mfd_location_valid (mfd_location));
@@ -11334,8 +11334,8 @@ void select_next_hokum_mfd (hokum_mfd_locations mfd_location)
 void select_previous_hokum_mfd (hokum_mfd_locations mfd_location)
 {
 	hokum_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		previous_mfd_mode;
 
 	ASSERT (hokum_mfd_location_valid (mfd_location));

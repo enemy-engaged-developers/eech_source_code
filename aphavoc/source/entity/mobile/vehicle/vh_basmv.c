@@ -79,13 +79,13 @@
 void basic_vehicle_movement (entity *en)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*wp_pos,
+		*wp_pos = nullptr,
 		wp_vec,
 		new_pos,
 		face_normal;

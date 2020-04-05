@@ -95,8 +95,8 @@
 struct PLAYER_MEDAL_INFO
 {
 	const char
-		*name,
-		*info;
+		*name = nullptr,
+		*info = nullptr;
 
 	float
 		x1,
@@ -129,13 +129,13 @@ typedef struct PLAYER_MEDAL_CRITERIA player_medal_criteria;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*player_medals_screen,
-	*medals_title_text,
-	*medals_text_name,
-	*medals_text_info,
-	*us_area,
-	*russian_area,
-	*exit_button;
+	*player_medals_screen = nullptr,
+	*medals_title_text = nullptr,
+	*medals_text_name = nullptr,
+	*medals_text_info = nullptr,
+	*us_area = nullptr,
+	*russian_area = nullptr,
+	*exit_button = nullptr;
 
 static ui_object
 	*russian_medal_objects [NUMBER_OF_MEDAL_GRAPHICS],
@@ -290,11 +290,11 @@ int query_award_medal (player_log_type *log, int *medals, player_medal_criteria 
 void set_medal_states (ui_object *medal_objects[])
 {
 	int
-		*medals,
+		*medals = nullptr,
 		i;
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	player = get_current_player_log ();
 
@@ -343,7 +343,7 @@ void notify_medals_screen (ui_object *obj)
 	int
 		i;
 	texture_graphic
-		*medals_screen_texture;
+		*medals_screen_texture = nullptr;
 
 	if ( get_ui_object_drawable (obj) )
 	{
@@ -406,8 +406,8 @@ void notify_medals_screen (ui_object *obj)
 void define_medals_page_objects (void)
 {
 	ui_object
-		*temp_obj,
-		*option_bdrop;
+		*temp_obj = nullptr,
+		*option_bdrop = nullptr;
 
 	float
 		x1,
@@ -826,7 +826,7 @@ void highlight_us_medal_info (ui_object *obj, void *arg)
 {
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	char
 		name_text [128],
@@ -878,7 +878,7 @@ void highlight_russian_medal_info (ui_object *obj, void *arg)
 {
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	char
 		name_text [128],
@@ -933,10 +933,10 @@ void highlight_russian_medal_info (ui_object *obj, void *arg)
 void notify_award_clicked_medal (ui_object *obj, void *arg)
 {
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
-		*medals,
+		*medals = nullptr,
 		medal_number,
 		graphic_number;
 
@@ -997,10 +997,10 @@ void notify_award_clicked_medal (ui_object *obj, void *arg)
 int award_aviator_wings (int side)
 {
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
-		*medals,
+		*medals = nullptr,
 		medal_type,
 		award_medal;
 
@@ -1063,10 +1063,10 @@ void award_campaign_medal (int side, int medal)
 {
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
-		*medals;
+		*medals = nullptr;
 
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
@@ -1180,13 +1180,13 @@ int award_valour_medal (int side, int points)
 {
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	player_medal_criteria
-		*criteria;
+		*criteria = nullptr;
 
 	int
-		*medals,
+		*medals = nullptr,
 		award,
 		i;
 
@@ -1245,10 +1245,10 @@ int award_valour_medal (int side, int points)
 int award_purple_heart_medal (int side)
 {
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
-		*medals,
+		*medals = nullptr,
 		damage;
 
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
@@ -1304,10 +1304,10 @@ int award_purple_heart_medal (int side)
 int award_air_medal_medal (int side, int success)
 {
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
-		*medals;
+		*medals = nullptr;
 
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
@@ -1365,7 +1365,7 @@ int award_air_medal_medal (int side, int success)
 int award_player_rank (int side)
 {
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	int
 		new_rank;

@@ -163,13 +163,13 @@ void load_ui_font (unsigned char *font_data, int font_id)
 		last_non_blank_column;
 
 	unsigned char
-		*current_alpha;
+		*current_alpha = nullptr;
 
 	unsigned short int
-		*current_char;
+		*current_char = nullptr;
 
 	ui_font_type
-		*new_font;
+		*new_font = nullptr;
 
 	font_loop = 0;
 
@@ -323,7 +323,7 @@ void deinitialise_ui_font (void)
 {
 
 	ui_font_type
-		*destroy_font;
+		*destroy_font = nullptr;
 
 	while (font_list)
 	{
@@ -464,12 +464,12 @@ float ui_display_text (char *text, float x, float y)
 		char_height;
 
 	unsigned char
-		*this_alpha_ptr,
-		*text_ptr;
+		*this_alpha_ptr = nullptr,
+		*text_ptr = nullptr;
 
 	unsigned short int
-		*this_char_ptr,
-		*screen_ptr;
+		*this_char_ptr = nullptr,
+		*screen_ptr = nullptr;
 
 	if (!text)
 	{
@@ -623,7 +623,7 @@ float ui_display_text (char *text, float x, float y)
 				loop_width;
 
 			unsigned short int
-				*line_ptr;
+				*line_ptr = nullptr;
 
 			line_ptr = (unsigned short int *) screen_ptr + int_x;
 
@@ -728,7 +728,7 @@ float ui_get_string_length (char *string)
 		index;
 
 	char
-		*current_char;
+		*current_char = nullptr;
 
 	if (!string)
 	{
@@ -843,13 +843,13 @@ float ui_display_highlighted_text (char *text, float x, float y)
 		char_height;
 
 	char
-		*text_ptr;
+		*text_ptr = nullptr;
 
 	unsigned short int
-		*this_char_ptr;
+		*this_char_ptr = nullptr;
 
 	unsigned char
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	unsigned short int
 		colour_value;
@@ -962,7 +962,7 @@ float ui_display_highlighted_text (char *text, float x, float y)
 				loop_width;
 
 			unsigned short int
-				*line_ptr;
+				*line_ptr = nullptr;
 
 			line_ptr = (unsigned short int *) screen_ptr + int_x;
 
@@ -1011,7 +1011,7 @@ void set_ui_font (int font_id)
 {
 /*
 	ui_font_type
-		*this_font;
+		*this_font = nullptr;
 
 	this_font = font_list;
 

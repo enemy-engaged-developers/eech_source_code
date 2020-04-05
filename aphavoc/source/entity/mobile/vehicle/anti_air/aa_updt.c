@@ -82,7 +82,7 @@ static void update_server (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 	int
 		damage_level = get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL),
 		explosive_quality = get_local_entity_int_value (en, INT_TYPE_EXPLOSIVE_QUALITY);
@@ -165,7 +165,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	raw = (anti_aircraft *) get_local_entity_data (en);
 

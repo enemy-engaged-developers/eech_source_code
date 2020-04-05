@@ -71,13 +71,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*main_area,
-	*main_screen,
-	*pilots_button,
-	*credits_button,
-	*modcredits_button,
-	*ghost_pilots_button,
-	*ghost_credits_button;
+	*main_area = nullptr,
+	*main_screen = nullptr,
+	*pilots_button = nullptr,
+	*credits_button = nullptr,
+	*modcredits_button = nullptr,
+	*ghost_pilots_button = nullptr,
+	*ghost_credits_button = nullptr;
 
 texture_graphic
 	*options_box_small = NULL,
@@ -131,9 +131,9 @@ void set_frontend_slider_graphics (ui_object *parent);
 void initialise_main_screen (void)
 {
 	ui_object
-		*option_bdrop,
-		*change_obj,
-		*registered_to_message;
+		*option_bdrop = nullptr,
+		*change_obj = nullptr,
+		*registered_to_message = nullptr;
 
 	float
 		x1,
@@ -716,8 +716,8 @@ void deinitialise_main_screen (void)
 void set_frontend_slider_graphics (ui_object *parent)
 {
 	ui_object
-		*temp,
-		*slider;
+		*temp = nullptr,
+		*slider = nullptr;
 
 	slider = get_ui_object_vslider (parent);
 
@@ -818,7 +818,7 @@ void draw_main_screen_background ( ui_object *obj, void *data )
 {
 /*
 	object_3d_instance
-		*apache;
+		*apache = nullptr;
 
 	static float
 		heading = 0,
@@ -906,7 +906,7 @@ void animate_screen_scene ( float t, object_3d_instance *object )
 {
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	int
 		count;

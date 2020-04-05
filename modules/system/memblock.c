@@ -156,16 +156,16 @@ struct MEMBLOCK
 		size;
 
 	memarray
-		*array;
+		*array = nullptr;
 
 	memblock
-		*succ,
-		*pred;
+		*succ = nullptr,
+		*pred = nullptr;
 
 	#if DEBUG_MEMBLOCK_MODULE
 
 	char
-		*create_location;
+		*create_location = nullptr;
 
 	#endif
 };
@@ -198,13 +198,13 @@ struct MEMARRAY
 		num_blocks;
 
 	memarray
-		*succ,
-		*pred;
+		*succ = nullptr,
+		*pred = nullptr;
 
 	memblock
-		*base,
-		*first_free_block,
-		*first_used_block;
+		*base = nullptr,
+		*first_free_block = nullptr,
+		*first_used_block = nullptr;
 
 	//
 	// STATISTICS
@@ -288,7 +288,7 @@ static int
 void initialise_memory_block_system (void)
 {
 	memarray
-		*array;
+		*array = nullptr;
 
 	//
 	// initialise heap memory array
@@ -344,12 +344,12 @@ void initialise_memory_block_system (void)
 void deinitialise_memory_block_system (void)
 {
 	memarray
-		*array,
-		*array_succ;
+		*array = nullptr,
+		*array_succ = nullptr;
 
 	memblock
-		*block,
-		*block_succ;
+		*block = nullptr,
+		*block_succ = nullptr;
 
 	array = memory_block_arrays;
 
@@ -458,11 +458,11 @@ void create_memory_blocks (int block_size, int num_blocks)
 		i;
 
 	memblock
-		*block;
+		*block = nullptr;
 
 	memarray
-		*new_array,
-		*array;
+		*new_array = nullptr,
+		*array = nullptr;
 
 	ASSERT (block_size > 0);
 
@@ -597,10 +597,10 @@ void *malloc_fast_memory (size_t size)
 #endif
 {
 	memblock
-		*block;
+		*block = nullptr;
 
 	memarray
-		*array;
+		*array = nullptr;
 
 	ASSERT (size > 0);
 
@@ -676,7 +676,7 @@ void *malloc_heap_memory (size_t size)
 #endif
 {
 	memblock
-		*block;
+		*block = nullptr;
 
 	ASSERT (size > 0);
 
@@ -739,10 +739,10 @@ void *malloc_heap_memory (size_t size)
 void free_mem (void *ptr)
 {
 	memblock
-		*block;
+		*block = nullptr;
 
 	memarray
-		*array;
+		*array = nullptr;
 
 	ASSERT (ptr);
 
@@ -845,7 +845,7 @@ void free_mem (void *ptr)
 memblock *get_memory_block (memarray *array, int size)
 {
 	memblock
-		*block;
+		*block = nullptr;
 
 	if (array->type == MEM_TYPE_FAST)
 	{
@@ -957,10 +957,10 @@ memblock *get_memory_block (memarray *array, int size)
 void check_memory_block_system_integrity (void)
 {
 	memarray
-		*array;
+		*array = nullptr;
 
 	memblock
-		*block;
+		*block = nullptr;
 
 	array = memory_block_arrays;
 
@@ -1078,7 +1078,7 @@ void update_array_statistics_free (memarray *array, memblock *block)
 void display_memory_block_system_statistics (void)
 {
 	memarray
-		*array;
+		*array = nullptr;
 
 	float
 		block_usage,

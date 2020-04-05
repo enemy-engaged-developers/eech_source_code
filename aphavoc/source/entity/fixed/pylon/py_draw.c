@@ -80,15 +80,15 @@ static void draw_local_3d_object (entity *en, float range)
 {
 #ifndef OGRE_EE
 	pylon
-		*raw,
-		*succ;
+		*raw = nullptr,
+		*succ = nullptr;
 #else
 	pylon
-		*raw;
+		*raw = nullptr;
 #endif
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 #ifndef OGRE_EE
 	float
@@ -360,7 +360,7 @@ static void draw_local_3d_object (entity *en, float range)
 {
 #ifndef OGRE_EE
 	pylon
-		*raw;
+		*raw = nullptr;
 
 	raw = (pylon *) get_local_entity_data (en);
 

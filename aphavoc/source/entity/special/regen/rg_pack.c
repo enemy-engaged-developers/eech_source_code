@@ -106,10 +106,10 @@ void overload_regen_pack_functions (void)
 void pack_local_regen_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
  	regen
-      *raw;
+      *raw = nullptr;
 
 	int
 		i,
@@ -173,10 +173,10 @@ void pack_local_regen_data (pack_modes mode)
 void unpack_local_regen_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
    regen
-      *raw;
+      *raw = nullptr;
 
 	int
 		i,

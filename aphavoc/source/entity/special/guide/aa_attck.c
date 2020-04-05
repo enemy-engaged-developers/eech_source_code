@@ -115,9 +115,9 @@ void initialise_air_to_air_attack_guide (entity *en, entity *aggressor, entity *
 void attack_guide_move_six_reached (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -162,9 +162,9 @@ void attack_guide_move_six_reached (entity *en)
 void attack_guide_move_circle_reached (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -209,13 +209,13 @@ void attack_guide_move_circle_reached (entity *en)
 void attack_guide_fire_intercept_reached (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos;
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr;
 		
 	ASSERT(en);
 	
@@ -328,16 +328,16 @@ void set_attack_guide_move_six_position (entity *en)
 		rand_value;
 
 	vec3d
-		*target_pos,
-		*aggressor_position,
-		*target_zv,
+		*target_pos = nullptr,
+		*aggressor_position = nullptr,
+		*target_zv = nullptr,
 		position;
 
 	entity
-		*wp,
-		*task,
-		*aggressor,
-		*target;
+		*wp = nullptr,
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	entity_sub_types
 		selected_weapon;
@@ -417,18 +417,18 @@ void set_attack_guide_move_circle_position (entity *en)
 		distance;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
-		*target_mv,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
+		*target_mv = nullptr,
 		position;
 
 	vec2d		
 		direction;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -516,13 +516,13 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	vec3d
 		position,
-		*target_pos,
-		*aggressor_pos;
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr;
 		
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	

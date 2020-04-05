@@ -103,20 +103,20 @@ struct MESSAGE_ACTION_TYPE
 
 	message_type
 		message,
-		*actions;
+		*actions = nullptr;
 
 	char
-		*title,
+		*title = nullptr,
 		**action_text;
 
 	int
-		*keycodes;
+		*keycodes = nullptr;
 
 	void
 		((*function) (message_type message));
 
 	struct MESSAGE_ACTION_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct MESSAGE_ACTION_TYPE message_action_type;
@@ -130,7 +130,7 @@ static message_type
 	message_destination;
 
 static message_action_type
-	*message_database;
+	*message_database = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ static struct WINGMAN_MESSAGE_TEXT_TABLE
 		message_type;
 
 	const char
-		*text;
+		*text = nullptr;
 
 } wingman_message_text_table[] =
 	{
@@ -249,8 +249,8 @@ void deinitialise_messages (void)
 {
 
 	message_action_type
-		*destroy_message_action,
-		*message_action;
+		*destroy_message_action = nullptr,
+		*message_action = nullptr;
 
 	message_action = message_database;
 
@@ -364,7 +364,7 @@ message_action_type *get_message_action (message_type message)
 {
 
 	message_action_type
-		*message_action;
+		*message_action = nullptr;
 
 	ASSERT (message_database);
 
@@ -405,8 +405,8 @@ void message_function (event *ev)
 		loop;
 
 	message_action_type
-		*message_action,
-		*message_action2;
+		*message_action = nullptr,
+		*message_action2 = nullptr;
 
 	message_action = get_message_action (message_destination);
 
@@ -457,9 +457,9 @@ void set_message_events (void)
 static void request_wingmen_status (message_type message)
 {
 	entity
-		*en,
-		*group,
-		*member;
+		*en = nullptr,
+		*group = nullptr,
+		*member = nullptr;
 
 	en = get_pilot_entity ();
 	group = get_local_entity_safe_ptr (message.value);
@@ -576,8 +576,8 @@ void initialise_message_database (void)
 		index;
 
 	message_action_type
-		*new_item,
-		*sub_item;
+		*new_item = nullptr,
+		*sub_item = nullptr;
 
 	message_categories
 		message;
@@ -605,8 +605,8 @@ void initialise_message_database (void)
 	/////////////////////////////////////////////////////////////////
 	{
 		entity
-			*group,
-			*member;
+			*group = nullptr,
+			*member = nullptr;
 
 		int
 			leader_flag,
@@ -748,7 +748,7 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 							if (leader_flag)
 							{
 								entity
-									*guide;
+									*guide = nullptr;
 
 								guide = get_local_entity_parent (member, LIST_TYPE_FOLLOWER);
 
@@ -891,7 +891,7 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 					if (leader_flag)
 					{
 						entity
-							*guide;
+							*guide = nullptr;
 
 						member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
@@ -1003,9 +1003,9 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 			recon_flag;
 
 		entity
-			*guide;
+			*guide = nullptr;
 		entity
-			*group;
+			*group = nullptr;
 
 		recon_flag = FALSE;
 
@@ -1061,8 +1061,8 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 	/////////////////////////////////////////////////////////////////
 	{
 		entity
-			*force_en,
-			*pilot_en;
+			*force_en = nullptr,
+			*pilot_en = nullptr;
 
 		int
 			list_count,
@@ -1204,7 +1204,7 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 	{
 
 		entity
-			*group;
+			*group = nullptr;
 
 		if (get_gunship_entity ())
 		{
@@ -1264,10 +1264,10 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 message_action_type *create_message_database_list (message_categories type, int value, void ((*function) (message_type message)), int number_of_actions, const char *title)
 {
 	message_action_type
-		*new_message_action;
+		*new_message_action = nullptr;
 
 	const char
-		*text;
+		*text = nullptr;
 
 	new_message_action = (message_action_type *) malloc_fast_mem (sizeof (message_action_type));
 
@@ -1319,7 +1319,7 @@ void create_leaf_message_action (message_categories type, int value, void ((*fun
 {
 
 	message_action_type
-		*new_message_action;
+		*new_message_action = nullptr;
 
 	new_message_action = (message_action_type *) malloc_fast_mem (sizeof (message_action_type));
 
@@ -1344,7 +1344,7 @@ void create_leaf_message_action (message_categories type, int value, void ((*fun
 void add_message_action_to_database (message_action_type *parent, int index, message_categories type, int value, int keycode, const char *text)
 {
 	const char
-		*translated_text;
+		*translated_text = nullptr;
 
 	ASSERT (parent);
 
@@ -1473,7 +1473,7 @@ void message_pilot_input_end (int key_code)
 void message_wingman_input_end (int key_code)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	member = get_local_entity_safe_ptr (current_message.value);
 
@@ -1509,10 +1509,10 @@ void message_set_input_events (void)
 void send_text_message (entity *sender, entity *target, message_text_types type, const char *text)
 {
 	const char
-		*kb;
+		*kb = nullptr;
 	char
-		*pm,
-		*parsed_message;
+		*pm = nullptr,
+		*parsed_message = nullptr;
 
 	int
 		length;
@@ -1598,8 +1598,8 @@ void send_text_message (entity *sender, entity *target, message_text_types type,
 void send_wingman_message (message_type message)
 {
 	entity
-		*wingman,
-		*en;
+		*wingman = nullptr,
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 	wingman = get_local_entity_safe_ptr (message.value);
@@ -1676,9 +1676,9 @@ void send_wingman_message (message_type message)
 void send_group_message (message_type message)
 {
 	entity
-		*en,
-		*group,
-		*member;
+		*en = nullptr,
+		*group = nullptr,
+		*member = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -1720,7 +1720,7 @@ void send_group_message (message_type message)
 void send_local_base_message (message_type message)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -1743,7 +1743,7 @@ void send_local_base_message (message_type message)
 void send_simple_message (message_type message)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -1759,7 +1759,7 @@ void send_simple_message (message_type message)
 void send_wingman_message_to_human_player (entity *sender, message_categories message_type, entity *wingman)
 {
 	const char
-		*text;
+		*text = nullptr;
 
 	ASSERT (sender);
 
@@ -1790,8 +1790,8 @@ void comms_shortcut_attack_my_target (event *ev)
 		message;
 
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -1816,7 +1816,7 @@ const char *get_wingman_message_text (message_categories message_type)
 		loop;
 
 	const char
-		*text;
+		*text = nullptr;
 
 	loop = 0;
 
@@ -1844,12 +1844,12 @@ const char *get_wingman_message_text (message_categories message_type)
 const char *get_wingman_attack_my_target_text (entity *sender, entity *wingman)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	vec3d
 		target_vec,
-		*target_pos,
-		*wingman_pos;
+		*target_pos = nullptr,
+		*wingman_pos = nullptr;
 
 	float
 		range,
@@ -1859,7 +1859,7 @@ const char *get_wingman_attack_my_target_text (entity *sender, entity *wingman)
 		int_heading;
 
 	const char
-		*target_description;
+		*target_description = nullptr;
 
 	ASSERT (sender);
 	ASSERT (wingman);
@@ -1969,7 +1969,7 @@ void display_in_flight_outgoing_messages (void)
 	char
 		s [200],
 		pilot_name [STRING_TYPE_PLAYERS_NAME_MAX_LENGTH + 10],
-		*message_name;
+		*message_name = nullptr;
 
 	static float
 		flash_timer = 0.0;
@@ -2017,7 +2017,7 @@ void display_in_flight_outgoing_messages (void)
 		{
 
 			message_action_type
-				*message_action;
+				*message_action = nullptr;
 
 			//
 			// show predefined messages
@@ -2066,9 +2066,9 @@ void display_in_flight_outgoing_messages (void)
 					{
 
 						entity
-							*group,
-							*pilot,
-							*wingman;
+							*group = nullptr,
+							*pilot = nullptr,
+							*wingman = nullptr;
 
 						int
 							wingman_index;
@@ -2112,7 +2112,7 @@ void display_in_flight_outgoing_messages (void)
 					case MESSAGE_PILOT_KEYBOARD:
 					{
 						entity
-							*pilot;
+							*pilot = nullptr;
 
 						int
 							pilot_id;
@@ -2193,7 +2193,7 @@ void send_channel_message (message_type message)
 	int channel;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 

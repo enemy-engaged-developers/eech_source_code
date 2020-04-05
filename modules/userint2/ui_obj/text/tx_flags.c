@@ -74,11 +74,11 @@ static void set_text_ui_object_state (ui_object *obj, int flag)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*next,
-		*parent;
+		*next = nullptr,
+		*parent = nullptr;
 
 	area = (area_ui_object *) obj->data;
 

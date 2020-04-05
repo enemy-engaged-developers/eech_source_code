@@ -201,10 +201,10 @@ static int response_to_waypoint_drop_off_reached (entity_messages message, entit
 {
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*cargo;
+		*cargo = nullptr;
 
 	raw = (keysite *) get_local_entity_data (receiver);
 
@@ -252,10 +252,10 @@ static int response_to_waypoint_pick_up_reached (entity_messages message, entity
 {
 
 	entity
-		*cargo;
+		*cargo = nullptr;
 
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	raw = (keysite *) get_local_entity_data (receiver);
 
@@ -307,10 +307,10 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 		heading;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	entity
-		*landing_en;
+		*landing_en = nullptr;
 
 	position = va_arg (pargs, vec3d *);
 

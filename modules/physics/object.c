@@ -107,7 +107,7 @@ void deinitialise_object_system (void)
 {
 
 	object
-		*destroy_object;
+		*destroy_object = nullptr;
 
 	while (object_list_head)
 	{
@@ -142,7 +142,7 @@ object *create_object (char *name, int object_number, double_vec3d *position)
 {
 
 	object
-		*new_object;
+		*new_object = nullptr;
 
 	new_object = (object *) malloc_heap_mem (sizeof (object));
 
@@ -193,7 +193,7 @@ void update_objects (void)
 {
 
 	object
-		*current_object;
+		*current_object = nullptr;
 
 	current_object = object_list_head;
 
@@ -222,7 +222,7 @@ void draw_objects (void)
 {
 
 	object
-		*current_object;
+		*current_object = nullptr;
 
 	current_object = object_list_head;
 

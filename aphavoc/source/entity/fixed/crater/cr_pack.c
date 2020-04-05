@@ -89,7 +89,7 @@ static void pack_local_data (entity *en, pack_modes mode)
       ////////////////////////////////////////
       {
 			crater
-				*raw;
+				*raw = nullptr;
 
 			raw = (crater *) get_local_entity_data (en);
 
@@ -150,7 +150,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			crater
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity

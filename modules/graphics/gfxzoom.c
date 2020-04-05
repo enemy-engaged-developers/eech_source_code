@@ -74,8 +74,8 @@ zoomable_graphic * load_zoomable_graphic ( const char *filename )
 {
 
 	unsigned char
-		*memory_mapped_file,
-		*data;
+		*memory_mapped_file = nullptr,
+		*data = nullptr;
 
 	short int
 		width,
@@ -85,7 +85,7 @@ zoomable_graphic * load_zoomable_graphic ( const char *filename )
 		bits;
 
 	zoomable_graphic
-		*graphic;
+		*graphic = nullptr;
 
 	data = ( unsigned char * ) memory_map_tga_file ( filename, &memory_mapped_file, &width, &height, &bits );
 
@@ -201,11 +201,11 @@ void draw_zoomable_graphic ( zoomable_graphic *graphic, int x, int y, int screen
 		graphic_y_increment;
 
 	unsigned char
-		*screen_data,
-		*graphic_data_line;
+		*screen_data = nullptr,
+		*graphic_data_line = nullptr;
 
 	unsigned short int
-		*screen_line_ptr;
+		*screen_line_ptr = nullptr;
 
 	screen_width = get_screen_width ( active_screen );
 	screen_height = get_screen_height ( active_screen );

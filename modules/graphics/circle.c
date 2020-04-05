@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +114,7 @@ void draw_arc (const float x, const float y, const float r, unsigned part, const
       decision;
 
 	unsigned
-		*screen_data;
+		*screen_data = nullptr;
 
 	ASSERT (active_screen);
 	ASSERT (get_screen_locked (active_screen));
@@ -252,7 +247,7 @@ void draw_circle (const float x, const float y, const float r, const rgb_colour 
       decision;
 
 	unsigned int
-		*screen_data;
+		*screen_data = nullptr;
 
 	ASSERT (active_screen);
 	ASSERT (get_screen_locked (active_screen));
@@ -386,7 +381,7 @@ void draw_hatched_filled_circle ( const float x, const float y, const float r, c
 		decision;
 
 	unsigned int
-		*screen_data;
+		*screen_data = nullptr;
 
 	ASSERT ( active_screen );
 	ASSERT ( get_screen_locked ( active_screen ) );
@@ -446,7 +441,7 @@ void draw_hatched_filled_circle ( const float x, const float y, const float r, c
 					y;
 
 				ULONG
-					*line_ptr;
+					*line_ptr = nullptr;
 
 				xmin = x_centre - x_offset;
 				xmax = x_centre + x_offset;
@@ -555,7 +550,7 @@ void draw_hatched_filled_circle ( const float x, const float y, const float r, c
 					y;
 
 				ULONG
-					*line_ptr;
+					*line_ptr = nullptr;
 
 				xmin = x_centre - x_offset;
 				xmax = x_centre + x_offset;
@@ -687,7 +682,7 @@ void draw_filled_circle ( float x, float y, float radius, int steps, rgb_colour 
 		x2, y2;
 
 	vertex
-		*poly,
+		*poly = nullptr,
 		points[3];
 
 	rgb_colour
@@ -813,7 +808,7 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 		x2, y2;
 
 	vertex
-		*poly,
+		*poly = nullptr,
 		points[2];
 
 	rgb_colour
@@ -912,8 +907,8 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 					vertices;
 
 				vertex
-					*point1,
-					*point2;
+					*point1 = nullptr,
+					*point2 = nullptr;
 
 				vertices = get_d3d_line_vertices_points_address ();
 
@@ -943,4 +938,3 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

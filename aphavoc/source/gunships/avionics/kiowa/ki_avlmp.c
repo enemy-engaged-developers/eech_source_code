@@ -228,7 +228,7 @@ void deinitialise_kiowa_lamp_avionics (void)
 void update_kiowa_lamp_avionics (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 

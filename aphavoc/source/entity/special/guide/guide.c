@@ -115,11 +115,11 @@ const int
 entity *create_client_server_guide_entity (entity *task_en, entity *first_waypoint, unsigned int valid_members)
 {
 	entity
-		*en,
-		*wp;
+		*en = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		guide_type,
@@ -208,7 +208,7 @@ entity *create_client_server_guide_entity (entity *task_en, entity *first_waypoi
 int validate_local_guide_entity (entity *en)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	//
 	// guide should always have a task and a group
@@ -260,9 +260,9 @@ int validate_local_guide_entity (entity *en)
 int check_guide_reached_waypoint (entity *en)
 {
 	entity
-		*leader,
-		*member,
-		*group;
+		*leader = nullptr,
+		*member = nullptr,
+		*group = nullptr;
 
 	int
 		member_number,
@@ -345,8 +345,8 @@ int check_guide_waypoint_action_reached (entity *en)
 		range;
 
 	entity
-		*wp,
-		*leader;
+		*wp = nullptr,
+		*leader = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -401,16 +401,16 @@ int check_guide_waypoint_action_reached (entity *en)
 int set_guide_new_waypoint (entity *en, entity *wp)
 {
 	entity
-		*task,
-		*group,
-		*leader,
-		*member,
-		*objective,
-		*current_wp;
+		*task = nullptr,
+		*group = nullptr,
+		*leader = nullptr,
+		*member = nullptr,
+		*objective = nullptr,
+		*current_wp = nullptr;
 
 	vec3d
 		new_pos,
-		*leader_pos;
+		*leader_pos = nullptr;
 
 	float
 		range,
@@ -547,8 +547,8 @@ int set_guide_new_waypoint (entity *en, entity *wp)
 int set_guide_next_waypoint (entity *en)
 {
 	entity
-		*current_wp,
-		*next_wp;
+		*current_wp = nullptr,
+		*next_wp = nullptr;
 
 	current_wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 
@@ -571,8 +571,8 @@ int set_guide_next_waypoint (entity *en)
 int set_guide_prev_waypoint (entity *en)
 {
 	entity
-		*current_wp,
-		*prev_wp;
+		*current_wp = nullptr,
+		*prev_wp = nullptr;
 
 	current_wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 
@@ -595,7 +595,7 @@ int set_guide_prev_waypoint (entity *en)
 void get_local_guide_position (entity *en, vec3d *pos)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -615,7 +615,7 @@ void get_local_guide_position (entity *en, vec3d *pos)
 		case GUIDE_POSITION_WAYPOINT:
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 
@@ -629,11 +629,11 @@ void get_local_guide_position (entity *en, vec3d *pos)
 		case GUIDE_POSITION_RELATIVE_WORLD_SPACE:
 		{
 			vec3d
-				*rel_pos,
-				*target_pos;
+				*rel_pos = nullptr,
+				*target_pos = nullptr;
 
 			entity
-				*target;
+				*target = nullptr;
 
 			rel_pos = &raw->position;
 
@@ -653,11 +653,11 @@ void get_local_guide_position (entity *en, vec3d *pos)
 		case GUIDE_POSITION_RELATIVE_OBJECT_SPACE:
 		{
 			vec3d
-				*rel_pos,
-				*target_pos;
+				*rel_pos = nullptr,
+				*target_pos = nullptr;
 
 			entity
-				*target;
+				*target = nullptr;
 
 			matrix3x3
 				m;
@@ -689,14 +689,14 @@ void get_local_guide_position (entity *en, vec3d *pos)
 		case GUIDE_POSITION_RELATIVE_CIRCULAR:
 		{
 			vec3d
-				*rel_pos,
-				*target_pos,
-				*aggressor_pos,
+				*rel_pos = nullptr,
+				*target_pos = nullptr,
+				*aggressor_pos = nullptr,
 				target_vec;
 
 			entity
-				*target,
-				*aggressor;
+				*target = nullptr,
+				*aggressor = nullptr;
 
 			float
 				distance;
@@ -833,8 +833,8 @@ void attach_group_to_guide_entity (entity *group, entity *guide)
 	//
 	{
 		entity
-			*wp,
-			*member;
+			*wp = nullptr,
+			*member = nullptr;
 
 		float
 			velocity;
@@ -899,7 +899,7 @@ void delete_group_member_from_guide_entity (entity *member, entity *guide)
 	if (!valid_members)
 	{
 		entity
-			*task;
+			*task = nullptr;
 
 		task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
@@ -931,8 +931,8 @@ void delete_group_member_from_guide_entity (entity *member, entity *guide)
 void delete_group_member_from_engage_guide (entity *member, entity *guide, int engage_enemy)
 {
 	entity
-		*task,
-		*group;
+		*task = nullptr,
+		*group = nullptr;
 
 	unsigned int
 		valid_members,
@@ -1033,9 +1033,9 @@ void set_client_server_guide_entity_new_position (entity *en, vec3d *position, e
 entity *get_local_group_primary_guide (entity *en)
 {
 	entity
-		*guide,
-		*task,
-		*primary_guide;
+		*guide = nullptr,
+		*task = nullptr,
+		*primary_guide = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -1083,7 +1083,7 @@ entity *get_local_group_primary_guide (entity *en)
 entity *get_local_entity_primary_guide (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -1106,10 +1106,10 @@ entity *get_local_entity_primary_guide (entity *en)
 void get_local_guide_entity_pointers (entity *en, entity **aggressor, entity **waypoint, entity **task, entity **objective)
 {
 	entity
-		*agg,
-		*wp,
-		*ts,
-		*obj;
+		*agg = nullptr,
+		*wp = nullptr,
+		*ts = nullptr,
+		*obj = nullptr;
 
 	ASSERT (en);
 
@@ -1156,9 +1156,9 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 	if (get_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING))
 	{
 		entity
-			*current_waypoint,
-			*task,
-			*target;
+			*current_waypoint = nullptr,
+			*task = nullptr,
+			*target = nullptr;
 
 		current_waypoint = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 	
@@ -1171,8 +1171,8 @@ int get_guide_required_heading (entity *en, entity *mobile, float *heading)
 			//
 		
 			vec3d
-				*current_pos,
-				*target_pos,
+				*current_pos = nullptr,
+				*target_pos = nullptr,
 				target_vec;
 	
 			task = get_local_entity_parent (en, LIST_TYPE_GUIDE);
@@ -1321,8 +1321,8 @@ int get_guide_required_pitch (entity *en, entity *mobile, float *pitch)
 			selected_weapon;
 
 		vec3d
-			*weapon_vector,
-			*weapon_to_intercept_point_vector;
+			*weapon_vector = nullptr,
+			*weapon_to_intercept_point_vector = nullptr;
 
 		float
 			angle1,
@@ -1371,7 +1371,7 @@ int get_guide_required_pitch (entity *en, entity *mobile, float *pitch)
 int get_guide_criteria_valid (entity *en, guide_criteria_types type)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1389,7 +1389,7 @@ int get_guide_criteria_valid (entity *en, guide_criteria_types type)
 float get_guide_criteria_value (entity *en, guide_criteria_types type)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1407,7 +1407,7 @@ float get_guide_criteria_value (entity *en, guide_criteria_types type)
 void set_client_server_guide_criteria_valid (entity *en, guide_criteria_types type, int valid, float value)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1434,7 +1434,7 @@ void set_client_server_guide_criteria_valid (entity *en, guide_criteria_types ty
 void set_local_guide_criteria_valid (entity *en, guide_criteria_types type, int valid, float value)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1453,8 +1453,8 @@ void set_local_guide_criteria_valid (entity *en, guide_criteria_types type, int 
 void initialise_guide_criteria (entity *en)
 {
 	entity
-		*current_wp,
-		*group;
+		*current_wp = nullptr,
+		*group = nullptr;
 
 	entity_sub_types
 		waypoint_type,

@@ -90,7 +90,7 @@ entity *get_local_force_entity (entity_sides side)
 {
 
 	entity
-		*force;
+		*force = nullptr;
 
 	if (!get_session_entity ())
 	{
@@ -126,10 +126,10 @@ void add_force_campaign_critiera (entity *force_en, campaign_trigger criteria_ty
 {
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	campaign_trigger_type
-		*new_campaign_trigger;
+		*new_campaign_trigger = nullptr;
 
 	force_raw = (force *) get_local_entity_data (force_en);
 
@@ -175,10 +175,10 @@ campaign_criteria_type *get_force_campaign_criteria (entity *force_en, campaign_
 {
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 		
 	campaign_criteria_type
-		*this_criteria;
+		*this_criteria = nullptr;
 
 	force_raw = (force *) get_local_entity_data (force_en);
 
@@ -212,7 +212,7 @@ void add_to_force_info (entity *force_en, entity *new_en)
 {
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	int
 		index;
@@ -250,7 +250,7 @@ void remove_from_force_info (entity *force_en, entity *new_en)
 {
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	int
 		index;
@@ -279,7 +279,7 @@ void replace_into_force_info (entity *force_en, entity *new_en)
 {
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	int
 		index;
@@ -307,13 +307,13 @@ void replace_into_force_info (entity *force_en, entity *new_en)
 void add_mobile_to_force_kills_stats (entity *en, entity *victim)
 {
 	force
-		*raw;
+		*raw = nullptr;
 
 	int
 		sub_type;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -337,13 +337,13 @@ void add_mobile_to_force_kills_stats (entity *en, entity *victim)
 void add_mobile_to_force_losses_stats (entity *en, entity *victim)
 {
 	force
-		*raw;
+		*raw = nullptr;
 
 	int
 		sub_type;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -367,7 +367,7 @@ void add_mobile_to_force_losses_stats (entity *en, entity *victim)
 void add_group_type_to_force_info (entity *en, entity_sub_types group_type)
 {
 	force
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (en);
 
@@ -383,7 +383,7 @@ void add_group_type_to_force_info (entity *en, entity_sub_types group_type)
 void remove_group_type_from_force_info (entity *en, entity_sub_types group_type)
 {
 	force
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (en);
 
@@ -401,7 +401,7 @@ void remove_group_type_from_force_info (entity *en, entity_sub_types group_type)
 int get_local_force_entity_group_count (entity *en, entity_sub_types group_type)
 {
 	force
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (en);
 
@@ -418,10 +418,10 @@ void display_campaign_criteria_time_remaining (void)
 {
 #if 0
 	entity
-		*force_en;
+		*force_en = nullptr;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	//session
 		//*session_raw;

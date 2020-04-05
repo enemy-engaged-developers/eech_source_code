@@ -88,7 +88,7 @@ object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 rigid_body_dynamics
-	*rigid_body_list_head;
+	*rigid_body_list_head = nullptr;
 
 int
 	rigid_body_simulation_frequency = 50;
@@ -148,7 +148,7 @@ void deinitialise_rigid_body_system (void)
 {
 
 	rigid_body_dynamics
-		*destroy_rb;
+		*destroy_rb = nullptr;
 
 	while (rigid_body_list_head)
 	{
@@ -195,7 +195,7 @@ rigid_body_dynamics *create_rigid_body (struct OBJECT *obj, char *name, int obje
 {
 
 	struct OBJECT_3D_BOUNDS
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	double
 		xmax,
@@ -209,7 +209,7 @@ rigid_body_dynamics *create_rigid_body (struct OBJECT *obj, char *name, int obje
 		dz;
 
 	rigid_body_dynamics
-		*new_rb;
+		*new_rb = nullptr;
 
 	//
 	// Create new Rigid body
@@ -482,8 +482,8 @@ void reset_rigid_body (rigid_body_dynamics *rb, double_vec3d *position)
 		loop;
 
 	dynamic_forces
-		*force,
-		*destroy_force;
+		*force = nullptr,
+		*destroy_force = nullptr;
 
 	get_identity_double_matrix3x3 (rb->attitude);
 
@@ -536,11 +536,11 @@ void update_rigid_bodies (void)
 		relative_velocity;
 
 	dynamic_forces
-		*force,
-		*destroy_force;
+		*force = nullptr,
+		*destroy_force = nullptr;
 
 	rigid_body_dynamics
-		*current_rb;
+		*current_rb = nullptr;
 
 	#if DEBUG_MODULE
 				
@@ -823,7 +823,7 @@ void add_dynamic_force (dynamic_forces **force_list, double_vec3d *position, dou
 {
 
 	dynamic_forces
-		*new_force;
+		*new_force = nullptr;
 
 	// all in world space (except position, thats in object space)
 
@@ -894,7 +894,7 @@ void resolve_forces (rigid_body_dynamics *rb, int index)
 		cross;
 
 	dynamic_forces
-		*force;
+		*force = nullptr;
 
 	// all in world space
 
@@ -1104,7 +1104,7 @@ void integrate_quantities (integrator_types integrator)
 		{
 
 			rigid_body_dynamics
-				*current_rb;
+				*current_rb = nullptr;
 
 			//
 			// Euler Integrator
@@ -1131,7 +1131,7 @@ void integrate_quantities (integrator_types integrator)
 			//
 
 			rigid_body_dynamics
-				*current_rb;
+				*current_rb = nullptr;
 
 			double
 				half_delta_time;
@@ -1278,15 +1278,15 @@ void integrate_quantities (integrator_types integrator)
 			rb->acceleration_cm [target_index].z = rb->linear_force [source_index].z * rb->inverse_mass;
 		
 			object
-				*current_object;
+				*current_object = nullptr;
 
 			rigid_body_dynamics
-				*source,
-				*target,
-				*accum1,
-				*accum2,
-				*accum3,
-				*accum4;
+				*source = nullptr,
+				*target = nullptr,
+				*accum1 = nullptr,
+				*accum2 = nullptr,
+				*accum3 = nullptr,
+				*accum4 = nullptr;
 
 			double
 				half_delta_time,
@@ -1348,8 +1348,8 @@ void integrate_quantities (integrator_types integrator)
 					{
 
 						dynamic_forces
-							*force,
-							*destroy_force;
+							*force = nullptr,
+							*destroy_force = nullptr;
 				
 						force = current_object->rigid_body [loop].forces;
 				
@@ -1455,8 +1455,8 @@ void integrate_quantities (integrator_types integrator)
 					{
 
 						dynamic_forces
-							*force,
-							*destroy_force;
+							*force = nullptr,
+							*destroy_force = nullptr;
 				
 						force = current_object->rigid_body [loop].forces;
 				
@@ -1562,8 +1562,8 @@ void integrate_quantities (integrator_types integrator)
 					{
 
 						dynamic_forces
-							*force,
-							*destroy_force;
+							*force = nullptr,
+							*destroy_force = nullptr;
 				
 						force = current_object->rigid_body [loop].forces;
 				
@@ -1659,8 +1659,8 @@ void integrate_quantities (integrator_types integrator)
 					{
 
 						dynamic_forces
-							*force,
-							*destroy_force;
+							*force = nullptr,
+							*destroy_force = nullptr;
 				
 						force = current_object->rigid_body [loop].forces;
 				
@@ -2173,7 +2173,7 @@ int get_object_object_bounding_collision_point (object *obj1, object *obj2, doub
 		p [8];
 
 	struct OBJECT_3D_BOUNDS
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	int
 		return_flag,
@@ -2386,13 +2386,13 @@ void save_rigid_body_system (void)
 {
 
 	dynamic_forces
-		*force;
+		*force = nullptr;
 
 	rigid_body_dynamics
-		*current_rb;
+		*current_rb = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	int
 		count,
@@ -2498,15 +2498,15 @@ void load_rigid_body_system (void)
 {
 
 	dynamic_forces
-		*force,
-		*last_force;
+		*force = nullptr,
+		*last_force = nullptr;
 
 	rigid_body_dynamics
-		*current_rb,
-		*last_current_rb;
+		*current_rb = nullptr,
+		*last_current_rb = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	int
 		loop,
@@ -2624,7 +2624,7 @@ void create_vectored_debug_3d_object (double_vec3d *position, double_vec3d *dire
 {
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	double_vec3d
 		dir;
@@ -2673,7 +2673,7 @@ struct ARROW_TYPE
 		lifetime;
 
 	struct ARROW_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct ARROW_TYPE arrow_type;
@@ -2689,7 +2689,7 @@ void create_arrow (char *name, double_vec3d *position, double_vec3d *direction, 
 {
 
 	arrow_type
-		*new_arrow;
+		*new_arrow = nullptr;
 
 	int
 		object;
@@ -2727,9 +2727,9 @@ void draw_arrows (void)
 {
 
 	arrow_type
-		*this_arrow,
-		*prev_arrow,
-		*arrow;
+		*this_arrow = nullptr,
+		*prev_arrow = nullptr,
+		*arrow = nullptr;
 
 	arrow = arrow_list_head;
 
@@ -2788,7 +2788,7 @@ struct LINE_TYPE
 		lifetime;
 
 	struct LINE_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct LINE_TYPE line_type;
@@ -2804,7 +2804,7 @@ void create_line (double_vec3d *position1, double_vec3d *position2)
 {
 
 	line_type
-		*new_line;
+		*new_line = nullptr;
 
 	new_line = (line_type *) malloc_heap_mem (sizeof (line_type));
 
@@ -2827,9 +2827,9 @@ void draw_lines (void)
 {
 
 	line_type
-		*this_line,
-		*prev_line,
-		*line;
+		*this_line = nullptr,
+		*prev_line = nullptr,
+		*line = nullptr;
 
 	vec3d
 		points [2];
@@ -2927,7 +2927,7 @@ double get_total_rigid_body_energies (void)
 		total_energy;
 
 	rigid_body_dynamics
-		*current_rb;
+		*current_rb = nullptr;
 
 	//ke = 0.5mv^2
 	//pe = mgh
@@ -2974,7 +2974,7 @@ double get_object_total_mass (rigid_body_dynamics *rb)
 		mass;
 
 	rigid_body_dynamics
-		*this_rb;
+		*this_rb = nullptr;
 
 	mass = 0.0;
 

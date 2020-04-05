@@ -115,13 +115,13 @@ static smoke_trail_data
 	*trail_data[ TRAIL_RIBBONS ];
 
 static vec3d
-	*trail_points;
+	*trail_points = nullptr;
 
 static float
-	*trail_lifetimes;
+	*trail_lifetimes = nullptr;
 
 static float
-	*trail_radius;
+	*trail_radius = nullptr;
 
 #ifdef OGRE_EE
 static struct OgreVector3
@@ -136,7 +136,7 @@ static void draw_local_3d_object (entity *en, float range)
 {
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	raw = (smoke_list *) get_local_entity_data (en);
 
@@ -158,7 +158,7 @@ static void draw_smoke_sprites( entity *en )
 {
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	object_3d_sprite
 		spr;
@@ -174,10 +174,10 @@ static void draw_smoke_sprites( entity *en )
 		number_of_slots;
 
 	vec3d
-		*smoke_pos;
+		*smoke_pos = nullptr;
 
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 
 	raw = (smoke_list *) get_local_entity_data( en );
 
@@ -261,7 +261,7 @@ static void draw_smoke_sprites( entity *en )
 static void draw_smoke_trails (entity *en)
 {
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	int
 		start,
@@ -353,7 +353,7 @@ static void draw_smoke_trails (entity *en)
 static void draw_smoke_trail( entity *en, int start, int end, int number_of_slots )
 {
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	float
 		lifetime,
@@ -373,15 +373,15 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 		trail = 0;
 
 	vec3d
-		*smoke_pos;
+		*smoke_pos = nullptr;
 
 #ifndef OGRE_EE
 	screen
-		*trail_texture;
+		*trail_texture = nullptr;
 #endif
 
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 
 #ifdef OGRE_EE
 	struct OgreParticle
@@ -390,7 +390,7 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 		count,
 		total = 0;
 	smoke_trail_data
-		*each_trail_data;
+		*each_trail_data = nullptr;
 #endif
 
 	raw = (smoke_list *) get_local_entity_data( en );
@@ -556,7 +556,7 @@ static void calculate_smoke_trail_points( entity *en, int start, int end, int nu
 		num_points;
 	
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	ASSERT( start != end );
 
@@ -584,9 +584,9 @@ static void calculate_smoke_trail_points( entity *en, int start, int end, int nu
 static void calculate_trail_point_vector( entity *en, int last_point, int this_point, int next_point, int num_points )
 {
 	vec3d
-		*last_pos,
-		*next_pos,
-		*this_pos,
+		*last_pos = nullptr,
+		*next_pos = nullptr,
+		*this_pos = nullptr,
 		v,
 		dl,
 		dn,
@@ -604,10 +604,10 @@ static void calculate_trail_point_vector( entity *en, int last_point, int this_p
 		radius;
 
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 
 	smoke_list
-			*raw;
+			*raw = nullptr;
 	
 	int trail = 0;
 
@@ -785,7 +785,7 @@ static float calculate_trail_point_rotation_angle( smoke_list *raw, int point_in
 		angle;
 
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 	
 	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 

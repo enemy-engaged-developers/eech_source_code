@@ -91,8 +91,8 @@ struct BUFFERED_TREE
 		depth;
 
 	struct BUFFERED_TREE
-		*pred,
-		*succ;
+		*pred = nullptr,
+		*succ = nullptr;
 };
 
 typedef struct BUFFERED_TREE buffered_tree;
@@ -102,7 +102,7 @@ typedef struct BUFFERED_TREE buffered_tree;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 terrain_tree_data
-	*terrain_tree_database;
+	*terrain_tree_database = nullptr;
 
 terrain_tree_info
 	**terrain_tree_sectors;
@@ -111,8 +111,8 @@ buffered_tree
 	buffered_tree_array[MAXIMUM_BUFFERED_TREES];
 
 object_3d_instance
-	*terrain_3d_tree_object,
-	*terrain_3d_side_tree_object;
+	*terrain_3d_tree_object = nullptr,
+	*terrain_3d_side_tree_object = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,14 +162,14 @@ void load_terrain_3d_tree_database ( char *sector_filename, char *data_filename 
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		x_sector,
 		z_sector;
 
 	terrain_tree_data
-		*tree_data;
+		*tree_data = nullptr;
 
 	//
 	// Memory map the tree data file
@@ -257,10 +257,10 @@ void draw_3d_terrain_tree_sector ( scene_slot_drawing_list *slot )
 {
 
 	terrain_tree_info
-		*current_tree_sector;
+		*current_tree_sector = nullptr;
 
 	terrain_tree_data
-		*tree_data;
+		*tree_data = nullptr;
 
 	int
 		count;
@@ -339,9 +339,9 @@ int
 	number_of_buffered_trees;
 
 buffered_tree
-	*buffered_sorted_tree_head,
-	*buffered_sorted_tree_tail,
-	*buffered_sorted_tree_insert;
+	*buffered_sorted_tree_head = nullptr,
+	*buffered_sorted_tree_tail = nullptr,
+	*buffered_sorted_tree_insert = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,8 +387,8 @@ void add_buffered_tree ( int index )
 	{
 
 		buffered_tree
-			*previous_tree,
-			*this_tree;
+			*previous_tree = nullptr,
+			*this_tree = nullptr;
 
 		this_tree = buffered_sorted_tree_insert;
 
@@ -586,7 +586,7 @@ void draw_buffered_sorted_terrain_trees ( void )
 {
 
 	buffered_tree
-		*tree;
+		*tree = nullptr;
 
 	tree = buffered_sorted_tree_tail;
 
@@ -669,16 +669,16 @@ void draw_3d_terrain_tree ( object_3d_instance *obj )
 		object_number;
 
 	object_3d_info
-		*this_object_3d_info;
+		*this_object_3d_info = nullptr;
 
 	light_3d_source
-		*this_light,
-		*prev_light,
-		*light_ptr,
-		*light;
+		*this_light = nullptr,
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	vec3d
 		object_camera_position,
@@ -1045,7 +1045,7 @@ void draw_3d_terrain_tree_clipped_faces ( int object_number, object_3d_info *thi
 {
 /*
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	int
 		count;
@@ -1167,7 +1167,7 @@ void draw_3d_terrain_tree_unclipped_faces ( int object_number, object_3d_info *t
 {
 /*
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	int
 		count;
@@ -1258,10 +1258,10 @@ void render_clipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_fac
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	texture_map
-		*texture;
+		*texture = nullptr;
 
 	texture = &system_textures[current_object_3d_surface->texture_index];
 
@@ -1359,10 +1359,10 @@ void render_clipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( objec
 		outcode;
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	texture_map
-		*texture;
+		*texture = nullptr;
 
 	texture = &system_textures[current_object_3d_surface->texture_index];
 
@@ -1436,7 +1436,7 @@ void render_unclipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_f
 {
 
 	texture_map
-		*texture;
+		*texture = nullptr;
 
 	real_colour
 		colour;
@@ -1453,14 +1453,14 @@ void render_unclipped_3d_terrain_tree_textured_diffuse_lit_polygon ( object_3d_f
 		blue;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
 
 	object_3d_short_textured_point
-		*texture_list;
+		*texture_list = nullptr;
 
 	texture = &system_textures[current_object_3d_surface->texture_index];
 
@@ -1529,23 +1529,23 @@ void render_unclipped_3d_terrain_tree_gouraud_textured_diffuse_lit_polygon ( obj
 {
 
 	texture_map
-		*texture;
+		*texture = nullptr;
 
 	int
 		count;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
 
 	object_3d_short_textured_point
-		*texture_list;
+		*texture_list = nullptr;
 
 	point_3d_plain_reference
-		*gouraud_list;
+		*gouraud_list = nullptr;
 
 	texture = &system_textures[current_object_3d_surface->texture_index];
 

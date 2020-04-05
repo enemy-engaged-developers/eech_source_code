@@ -91,7 +91,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 				loop;
 
 			task
-				*raw;
+				*raw = nullptr;
 
 			raw = (task *) get_local_entity_data (en);
 
@@ -253,7 +253,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			{
 
 				task_kill_loss_data
-					*kill;
+					*kill = nullptr;
 
 				// kills
 					
@@ -361,7 +361,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 				loop;
 
 			task
-				*raw;
+				*raw = nullptr;
 
 			raw = (task *) get_local_entity_data (en);
 
@@ -513,7 +513,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			{
 
 				task_kill_loss_data
-					*kill;
+					*kill = nullptr;
 					
 				kill = raw->task_kills;
 
@@ -644,7 +644,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			task
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -790,8 +790,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			{
 
 				task_kill_loss_data
-					*last_kill,
-					*kill;
+					*last_kill = nullptr,
+					*kill = nullptr;
 
 				// kills
 
@@ -913,7 +913,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			task
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -1055,8 +1055,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			{
 
 				task_kill_loss_data
-					*last_kill,
-					*kill;
+					*last_kill = nullptr,
+					*kill = nullptr;
 
 				// kills
 

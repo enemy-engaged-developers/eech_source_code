@@ -24,3 +24,12 @@ mt.dep
 *.exe
 *.xml
 *.bat
+/.vs
+/Debug
+/Release
+/*.filters
+/*.user
+/EECH.srctrlbm
+/EECH.srctrldb
+/EECH.srctrlprj
+/compile_commands.json

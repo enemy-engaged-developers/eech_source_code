@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	object
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -211,7 +211,7 @@ static void destroy_client (entity *en)
 static void kill_local (entity *en)
 {
 	object
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		pos;

@@ -131,28 +131,28 @@ static rgb_alpha_masked_sprite_data
 #define LAMP1_VIEWPORT_TEXTURE_Y_ORG	(LAMP1_TEXTURE_SIZE / 2)
 
 static object_3d_instance
-	*virtual_cockpit_level1_inst3d,
-	*virtual_cockpit_level2_inst3d,
-	*virtual_cockpit_level3_inst3d,
-	*virtual_cockpit_fillet_level1_inst3d,
-	*virtual_cockpit_fillet_level2_inst3d,
-	*virtual_cockpit_fillet_level3_inst3d,
-	*virtual_cockpit_main_rotor_inst3d,
-	*virtual_cockpit_adi_inst3d,
-	*virtual_cockpit_large_adi_inst3d,
-	*virtual_cockpit_compass_inst3d,
-	*virtual_cockpit_instrument_needles_inst3d,
-	*virtual_cockpit_instrument_large_needles_inst3d,
-	*virtual_cockpit_upfront_display_inst3d,
-	*virtual_cockpit_lhs_mfd_inst3d,
-	*virtual_cockpit_rhs_mfd_inst3d,
-	*virtual_cockpit_display_view_mfd_inst3d;
+	*virtual_cockpit_level1_inst3d = nullptr,
+	*virtual_cockpit_level2_inst3d = nullptr,
+	*virtual_cockpit_level3_inst3d = nullptr,
+	*virtual_cockpit_fillet_level1_inst3d = nullptr,
+	*virtual_cockpit_fillet_level2_inst3d = nullptr,
+	*virtual_cockpit_fillet_level3_inst3d = nullptr,
+	*virtual_cockpit_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_adi_inst3d = nullptr,
+	*virtual_cockpit_large_adi_inst3d = nullptr,
+	*virtual_cockpit_compass_inst3d = nullptr,
+	*virtual_cockpit_instrument_needles_inst3d = nullptr,
+	*virtual_cockpit_instrument_large_needles_inst3d = nullptr,
+	*virtual_cockpit_upfront_display_inst3d = nullptr,
+	*virtual_cockpit_lhs_mfd_inst3d = nullptr,
+	*virtual_cockpit_rhs_mfd_inst3d = nullptr,
+	*virtual_cockpit_display_view_mfd_inst3d = nullptr;
 
 static env_2d
-	*lamp1_env;
+	*lamp1_env = nullptr;
 
 static screen
-	*lamp1_texture_screen;//,	*Lamp1_overlaid_texture_screen;
+	*lamp1_texture_screen = nullptr;//,	*Lamp1_overlaid_texture_screen;
 
 #if 0
 static float
@@ -443,7 +443,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 		search;
 
 	object_3d_instance
-		*virtual_cockpit_inst3d;
+		*virtual_cockpit_inst3d = nullptr;
 
 
 //#ifndef DEBUG_WIDEVIEW
@@ -1080,7 +1080,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 		search;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1424,8 +1424,8 @@ void get_apache_crew_viewpoint (int index, object_3d_instance   *virtual_cockpit
 void draw_apache_indicator_lamps_3d (void)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	int X_ORG;
 	int Y_ORG;
@@ -1523,7 +1523,7 @@ void deinitialise_apache_lamp_screen (void)
 void draw_apache_lamp_on_texture (void)
 {
 	screen
-		*lamp_texture_screen;
+		*lamp_texture_screen = nullptr;
 
 	lamp_texture_screen = lamp1_texture_screen;
 

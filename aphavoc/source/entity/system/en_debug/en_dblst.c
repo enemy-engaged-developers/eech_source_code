@@ -79,7 +79,7 @@
 static void debug_log_entity_list (entity *parent, list_types type, int indent_level)
 {
 	char
-		*prefix,
+		*prefix = nullptr,
 		s1[400],
 		s2[400];
 
@@ -88,7 +88,7 @@ static void debug_log_entity_list (entity *parent, list_types type, int indent_l
 		child;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (parent);
 
@@ -176,8 +176,8 @@ static void debug_log_entity_group (entity *grp, int indent_level)
 static void debug_log_entity_force (entity *frc)
 {
 	entity
-		*grp,
-		*keysite;
+		*grp = nullptr,
+		*keysite = nullptr;
 
 	int
 		indent;
@@ -214,7 +214,7 @@ static void debug_log_entity_force (entity *frc)
 void debug_log_entity_session (entity *ssn, char *title)
 {
 	entity
-		*frc;
+		*frc = nullptr;
 
 	ASSERT (ssn);
 

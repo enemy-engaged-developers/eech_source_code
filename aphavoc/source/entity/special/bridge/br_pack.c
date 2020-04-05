@@ -159,10 +159,10 @@ void overload_bridge_pack_functions (void)
 void pack_local_bridge_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
    bridge
-      *raw;
+      *raw = nullptr;
 
 	int
 		alive,
@@ -239,10 +239,10 @@ void pack_local_bridge_data (pack_modes mode)
 void unpack_local_bridge_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
    bridge
-      *raw;
+      *raw = nullptr;
 
 	int
 		dead_bridge_count,

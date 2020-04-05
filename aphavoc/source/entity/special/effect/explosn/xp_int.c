@@ -79,7 +79,7 @@
 void set_local_int_value (entity *en, int_types type, int value)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -199,7 +199,7 @@ void set_client_int_value (entity *en, int_types type, int value)
 int get_local_int_value (entity *en, int_types type)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;

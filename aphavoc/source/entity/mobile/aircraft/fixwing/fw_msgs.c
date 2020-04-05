@@ -146,9 +146,9 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 {
 
 	entity
-		*force,
-		*enemy_force,
-		*aggressor;
+		*force = nullptr,
+		*enemy_force = nullptr,
+		*aggressor = nullptr;
 
 	int
 		total_damage_level;
@@ -347,7 +347,7 @@ static int response_to_waypoint_touch_down_reached (entity_messages message, ent
 		//
 		{
 			vec3d
-				*position;
+				*position = nullptr;
 
 			sound_sample_indices
 				sound_sample_index;
@@ -394,10 +394,10 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		velocity;
 
 	vec3d
-		*pos1,
+		*pos1 = nullptr,
 		pos2,
 		guide_pos,
-		*mv;
+		*mv = nullptr;
 
 	ASSERT (sender);
 
@@ -480,8 +480,8 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 			selected_weapon;
 
 		vec3d
-			*weapon_vector,
-			*weapon_to_intercept_point_vector;
+			*weapon_vector = nullptr,
+			*weapon_to_intercept_point_vector = nullptr;
 
 		float
 			launch_angle_error;

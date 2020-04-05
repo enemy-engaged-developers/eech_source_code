@@ -79,7 +79,7 @@
 void set_next_waypoint (void)
 {
 	entity
-		*guide;
+		*guide = nullptr;
 
 	//
 	// Can only change your current waypoint if you have a gunship, and you are leader of your current task
@@ -112,7 +112,7 @@ void set_next_waypoint (void)
 void set_prev_waypoint (void)
 {
 	entity
-		*guide;
+		*guide = nullptr;
 
 	//
 	// Can only change your current waypoint if you have a gunship, and you are leader of your current task

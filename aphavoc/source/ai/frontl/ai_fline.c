@@ -86,7 +86,7 @@ struct FRONTLINE_ARRANGEMENTS
 		z;
 
 	entity
-		*sector;
+		*sector = nullptr;
 
 	unsigned char
 		adjacent_count,
@@ -103,7 +103,7 @@ int
 	number_of_frontline_arrangement_slots_used;
 
 entity
-	*frontline_sectors_arrangements_force;
+	*frontline_sectors_arrangements_force = nullptr;
 
 frontline_arrangements
 	frontline_sectors_arrangements[128*128];
@@ -129,7 +129,7 @@ void create_frontline (entity *force)
 		side;
 
 	entity
-		*sector_en;
+		*sector_en = nullptr;
 
 	int
 		loop_x,
@@ -178,7 +178,7 @@ frontline_sector_types check_sector_frontline (entity_sides side, int x, int z)
 {
 
 	entity
-		*sector;
+		*sector = nullptr;
 
 	int
 		loop_x,
@@ -225,7 +225,7 @@ int add_sector_to_frontline (entity *force, entity *sector_en)
 {
 
 	sector
-		*sector_raw;
+		*sector_raw = nullptr;
 
 	sector_raw = get_local_entity_data (sector_en);
 
@@ -384,7 +384,7 @@ void recreate_frontline (int x, int z)
 {
 
 	entity
-		*force;
+		*force = nullptr;
 
 	force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 

@@ -108,7 +108,6 @@ static int
 	mouse_update_flag = 0,
 	mouse_on;
 
-#ifndef OGRE_EE
 static POINT
 	windows_cursor_position;
 
@@ -128,7 +127,7 @@ static void ( *remove_mouse_graphic_function ) ( const int x, const int y );
 
 static void ( *draw_mouse_graphic_function ) ( const int x, const int y );
 
-void draw_mouse_graphic ( const int x, const int y );
+//void draw_mouse_graphic ( const int x, const int y );
 
 void mouse_activation_routine ( int activate );
 
@@ -150,24 +149,15 @@ static long windows_middle_button_down_routine ( HWND hWnd, UINT message, WPARAM
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void initialise_mouse ( void )
 {
-#ifndef OGRE_EE
-
 	HRESULT
 		ret;
 
 	DIPROPDWORD
 		di_buffer_data;
-#endif
 
-	mouse_position_x = 0;
-
-	mouse_position_y = 0;
-
-#ifndef OGRE_EE
 	mouse_on = FALSE;
 
 	remove_mouse_graphic_function = NULL;
@@ -198,9 +188,9 @@ void initialise_mouse ( void )
 		// VJ 030430 Double mouse problem, Changed last param to NONEXCLUSIVE
 		// exclusive for windowed mode - lock coursor into the window /thealx/
 		
-		if (command_line_full_screen)
+		/*if (command_line_full_screen)
 			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
-		else
+		else*/
 			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
 
 		if ( ret != DI_OK )
@@ -244,10 +234,10 @@ void initialise_mouse ( void )
 		register_pre_activate_message_function ( mouse_activation_routine );
 
 		ret = IDirectInputDevice7_Acquire ( direct_input_mouse );
-
+		/*
 		if (command_line_full_screen)
 			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
-		else
+		else*/
 			ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
 	}
 	else
@@ -268,10 +258,8 @@ void initialise_mouse ( void )
 		register_system_message_function ( WM_MBUTTONUP, windows_middle_button_up_routine ); // Jabberwock 031016 Middle button
 
 	}
-#endif
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -493,7 +481,7 @@ void generate_mouse_events ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
+
 
 int process_mouse_event (event *ev)
 {
@@ -884,7 +872,6 @@ void set_absolute_mouse_y ( const int pos )
 	abs_mouse_y = pos;
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1035,4 +1022,4 @@ static long windows_middle_button_down_routine ( HWND hWnd, UINT message, WPARAM
 
 	return ( 0 );
 }
-#endif
+

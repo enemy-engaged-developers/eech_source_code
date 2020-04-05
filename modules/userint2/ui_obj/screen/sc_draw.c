@@ -83,10 +83,10 @@ static void draw_screen_ui_object (ui_object *obj)
 		y_size;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	texture_graphic
-		*graphic;
+		*graphic = nullptr;
 
 	if (get_ui_object_redraw (obj))
 	{

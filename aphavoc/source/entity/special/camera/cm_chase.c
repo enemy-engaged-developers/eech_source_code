@@ -143,7 +143,7 @@ void reset_chase_camera_position (camera *raw)
 void update_chase_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	float
 		combined_heading,
@@ -325,14 +325,14 @@ void update_chase_camera (camera *raw)
 void set_chase_camera_view_target_to_source (entity *source, entity *target)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	float
 		length;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		direction;
 
 	ASSERT (source);

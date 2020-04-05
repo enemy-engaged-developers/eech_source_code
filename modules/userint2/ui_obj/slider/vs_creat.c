@@ -78,11 +78,11 @@ static void create_vslider_ui_object (ui_object *obj, ui_object_types type, va_l
 		py_size;
 
 	ui_object
-		*slider,
-		*parent;
+		*slider = nullptr,
+		*parent = nullptr;
 
    slider_ui_object
-      *new_vslider;
+      *new_vslider = nullptr;
 
 	increase_ui_object_counter ();
 

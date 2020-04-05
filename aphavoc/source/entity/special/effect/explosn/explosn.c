@@ -111,7 +111,7 @@ int create_meta_explosion( meta_explosion_types type, vec3d *position, entity *p
 		create_stack_attributes;
 
 	meta_explosion_component
-		*explosion_component;
+		*explosion_component = nullptr;
 
 	ASSERT (type >= 0);
 
@@ -219,7 +219,7 @@ int create_meta_explosion_sprites( meta_explosion_component *explosion_component
 		loop;
 
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	//
 	// determine constants
@@ -250,7 +250,7 @@ int create_meta_explosion_sprites( meta_explosion_component *explosion_component
 	{
 
 		struct OBJECT_3D_BOUNDS
-			*bounding_box;
+			*bounding_box = nullptr;
 
 		vec3d
 			d;
@@ -377,7 +377,7 @@ int create_meta_explosion_objects( meta_explosion_component *explosion_component
 		loop;
 
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	//
 	// determine constants
@@ -486,7 +486,7 @@ int create_meta_explosion_objects( meta_explosion_component *explosion_component
 int create_meta_explosion_particles( meta_explosion_component *explosion_component, vec3d *position, int *entity_index_list )
 {
 	entity
-		*particle_entity;
+		*particle_entity = nullptr;
 
 	int
 		loop,
@@ -494,7 +494,7 @@ int create_meta_explosion_particles( meta_explosion_component *explosion_compone
 		trail_type;
 
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 
 	count = explosion_component->particle_count;
@@ -590,11 +590,11 @@ int create_meta_explosion_smoke_trails( meta_explosion_component *explosion_comp
 		trail_type;
 
 	entity
-		*new_entity,
-		*effect_list_parent;
+		*new_entity = nullptr,
+		*effect_list_parent = nullptr;
 
 	vec3d
-		*iv;
+		*iv = nullptr;
 
 	count = explosion_component->trail_count;
 
@@ -668,7 +668,7 @@ int create_meta_explosion_smoke_trails( meta_explosion_component *explosion_comp
 int create_meta_explosion_sound_effect( meta_explosion_component *explosion_component, vec3d *position, int *entity_index_list )
 {
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 	int sampleToUse;
 
 	#if DEBUG_MODULE >= 2
@@ -749,7 +749,7 @@ int count_entities_in_meta_explosion( meta_explosion_types type )
 		num_components;
 
 	meta_explosion_component
-		*explosion_component;
+		*explosion_component = nullptr;
 
 	ASSERT (type >= 0);
 
@@ -815,7 +815,7 @@ int count_entities_in_meta_explosion( meta_explosion_types type )
 void create_client_server_weapon_killed_explosion_effect (entity *en)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	meta_explosion_types
 		explosion_type,
@@ -923,7 +923,7 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 		case WEAPON_KILL_CODE_HIT_TARGET:
 		{
 			entity
-				*target;
+				*target = nullptr;
 
 			target = get_local_entity_parent (en, LIST_TYPE_TARGET);
 
@@ -989,12 +989,12 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target)
 		damage_capability;
 
 	vec3d
-		*explosion_position,
-		*object_position;
+		*explosion_position = nullptr,
+		*object_position = nullptr;
 
 	entity
-		*sect,
-		*object;
+		*sect = nullptr,
+		*object = nullptr;
 	weapon_warhead_types
 		warhead_type;
 
@@ -1358,7 +1358,7 @@ void create_client_server_explosion_effect (meta_explosion_types type, vec3d *po
 	int
 		loop,
 		count,
-		*entity_index_list;
+		*entity_index_list = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 

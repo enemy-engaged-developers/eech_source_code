@@ -110,7 +110,7 @@ debug_3d_object *create_debug_3d_object (viewpoint *vp, object_3d_index_numbers 
 		relative_scale_vector;
 
 	debug_3d_object
-		*new_;
+		*new_ = nullptr;
 
 	ASSERT (vp);
 
@@ -153,7 +153,7 @@ debug_3d_object *create_debug_3d_object (viewpoint *vp, object_3d_index_numbers 
 debug_3d_object *create_rotated_debug_3d_object (vec3d *position, float heading, float pitch, float roll, object_3d_index_numbers object_3d_shape, float lifetime, float relative_scale)
 {
 	debug_3d_object
-		*new_;
+		*new_ = nullptr;
 
 	viewpoint
 		vp;
@@ -180,7 +180,7 @@ debug_3d_object *create_rotated_debug_3d_object (vec3d *position, float heading,
 debug_3d_object *create_vectored_debug_3d_object (vec3d *position, vec3d *vector, object_3d_index_numbers object_3d_shape, float lifetime, float relative_scale)
 {
 	debug_3d_object
-		*new_;
+		*new_ = nullptr;
 
 	viewpoint
 		vp;
@@ -263,11 +263,11 @@ void draw_debug_3d_objects (viewpoint *vp, float visual_range)
 {
 #ifndef OGRE_EE
 	debug_3d_object
-		*object,
-		*succ;
+		*object = nullptr,
+		*succ = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (vp);
 
@@ -337,7 +337,7 @@ void deinitialise_debug_3d_lines (void)
 debug_3d_line *create_debug_3d_line (vec3d *point1, vec3d *point2, rgb_colour colour, float lifetime)
 {
 	debug_3d_line
-		*new_;
+		*new_ = nullptr;
 
 	ASSERT (point1);
 
@@ -414,8 +414,8 @@ void draw_debug_3d_lines (viewpoint *vp, float visual_range)
 {
 #ifndef OGRE_EE
 	debug_3d_line
-		*line,
-		*succ;
+		*line = nullptr,
+		*succ = nullptr;
 
 	ASSERT (vp);
 

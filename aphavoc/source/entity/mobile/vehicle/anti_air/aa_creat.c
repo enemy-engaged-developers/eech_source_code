@@ -81,10 +81,10 @@
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	entity_sub_types
 		group_sub_type;
@@ -93,7 +93,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		heading;
 
 	vec3d
-		*face_normal;
+		*face_normal = nullptr;
 
 	////////////////////////////////////////
   	//
@@ -367,7 +367,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -390,7 +390,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{
@@ -428,7 +428,7 @@ void overload_anti_aircraft_create_functions (void)
 entity *create_client_server_entity_anti_aircraft (int index, entity_sub_types sub_type, entity *group, vec3d *position)
 {
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	ASSERT (get_comms_model() == COMMS_MODEL_SERVER);
 
@@ -466,7 +466,7 @@ entity *create_client_server_entity_anti_aircraft (int index, entity_sub_types s
 entity *create_local_entity_anti_aircraft (int index, entity_sub_types sub_type, entity *group, vec3d *position)
 {
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	ASSERT (get_comms_model() == COMMS_MODEL_SERVER);
 

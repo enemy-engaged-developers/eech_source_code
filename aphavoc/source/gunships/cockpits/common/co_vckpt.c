@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 object_3d_instance
-	*virtual_cockpit_inst3d;
+	*virtual_cockpit_inst3d = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,9 +88,9 @@ float
 	co_pilot_head_pitch_datum;
 
 cockpit_switch
-	*engine_start_switch_animation_object,
-	*apu_start_switch_animation_object,
-	*apu_stop_switch_animation_object;
+	*engine_start_switch_animation_object = nullptr,
+	*apu_start_switch_animation_object = nullptr,
+	*apu_stop_switch_animation_object = nullptr;
 
 static vec3d
 	gunship_periscope_position[NUM_GUNSHIP_TYPES][2];
@@ -100,9 +100,9 @@ light_colour
 int
 	cockpit_light_color_index[2];
 cockpit_light_colors
-	*cockpit_light_color_array;
+	*cockpit_light_color_array = nullptr;
 light_3d_source
-	*display_backlight,
+	*display_backlight = nullptr,
 	*cockpit_light[2];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

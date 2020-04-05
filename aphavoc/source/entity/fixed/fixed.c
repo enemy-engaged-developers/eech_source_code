@@ -150,7 +150,7 @@ void restore_local_fixed_entity (entity *en)
 		object_index;
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	ASSERT (en);
 

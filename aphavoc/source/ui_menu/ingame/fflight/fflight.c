@@ -75,11 +75,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*free_flight_screen;
+	*free_flight_screen = nullptr;
 
 static ui_object
-	*free_flight_dialog_area,
-	*free_flight_quit_campaign_area;
+	*free_flight_dialog_area = nullptr,
+	*free_flight_quit_campaign_area = nullptr;
 
 //gunship_types free_flight_gunship_type = GUNSHIP_TYPE_APACHE;
 gunship_types free_flight_gunship_type = GUNSHIP_TYPE_HOKUM;
@@ -379,15 +379,15 @@ void initialise_free_flight_screen (void)
 entity *free_flight_auto_assign_gunship (void)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*force,
-		*new_task,
-		*group,
-		*member,
+		*force = nullptr,
+		*new_task = nullptr,
+		*group = nullptr,
+		*member = nullptr,
 		**gunship_list,
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		sub_type;

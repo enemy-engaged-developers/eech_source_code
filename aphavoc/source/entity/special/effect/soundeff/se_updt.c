@@ -80,7 +80,7 @@ static void update_server (entity *en)
 {
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	raw = (sound_effect *) get_local_entity_data (en);
 
@@ -165,7 +165,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	raw = (sound_effect *) get_local_entity_data (en);
 

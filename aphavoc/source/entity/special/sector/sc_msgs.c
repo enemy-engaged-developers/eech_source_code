@@ -80,11 +80,11 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 {
 
 	entity
-		*enemy_force,
-		*allied_force;
+		*enemy_force = nullptr,
+		*allied_force = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	entity_sides
 		side;
@@ -113,13 +113,13 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 			height;
 
 		vec3d
-			*position;
+			*position = nullptr;
 
 		object_3d_index_numbers
 			object_3d_index;
 
 		object_3d_bounds
-			*bounding_box;
+			*bounding_box = nullptr;
 
 		//
 		// check for tallest fixed structure

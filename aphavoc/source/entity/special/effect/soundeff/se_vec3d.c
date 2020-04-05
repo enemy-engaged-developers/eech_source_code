@@ -79,7 +79,7 @@
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 

@@ -189,7 +189,7 @@ static rgb_colour
 #define SMALL_MFD_VIEWPORT_SIZE		(128)
 
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 
 static int
 	int_mfd_viewport_size;
@@ -216,18 +216,18 @@ static int
 	draw_main_display;
 
 static screen
-	*co_pilot_main_mfd_texture_screen,
-	*pilot_main_mfd_texture_screen,
-	*center_mfd_texture_screen,
-	*large_co_pilot_main_mfd_texture_screen,
-	*large_pilot_main_mfd_texture_screen,
-	*large_center_mfd_texture_screen,
-	*small_co_pilot_main_mfd_texture_screen,
-	*small_pilot_main_mfd_texture_screen,
-	*small_center_mfd_texture_screen,
-	*eo_3d_texture_screen,
-	*eo_3d_texture_screen_over,
-	*full_mfd_texture_screen;
+	*co_pilot_main_mfd_texture_screen = nullptr,
+	*pilot_main_mfd_texture_screen = nullptr,
+	*center_mfd_texture_screen = nullptr,
+	*large_co_pilot_main_mfd_texture_screen = nullptr,
+	*large_pilot_main_mfd_texture_screen = nullptr,
+	*large_center_mfd_texture_screen = nullptr,
+	*small_co_pilot_main_mfd_texture_screen = nullptr,
+	*small_pilot_main_mfd_texture_screen = nullptr,
+	*small_center_mfd_texture_screen = nullptr,
+	*eo_3d_texture_screen = nullptr,
+	*eo_3d_texture_screen_over = nullptr,
+	*full_mfd_texture_screen = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1183,14 +1183,14 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		if (!kiowa_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -1356,7 +1356,7 @@ static void display_navigation_info(void)
 		mid_y = -0.88;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
 		*gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
@@ -1711,14 +1711,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	entity_sides
 		source_side;
 	entity
-		*source;
+		*source = nullptr;
 
 	float
 		dx,
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1902,7 +1902,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2065,7 +2065,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2215,7 +2215,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system, int damaged, int valid_3d)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -2229,12 +2229,12 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		target_point;
 
 	viewpoint
@@ -2856,14 +2856,14 @@ static void draw_heading_scale_tsd (float heading, int draw_command_heading)
 		if (!kiowa_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -3041,11 +3041,11 @@ static void draw_heading_scale_tsd (float heading, int draw_command_heading)
 static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	int
-		*tsd_draw_threat_line_status;
+		*tsd_draw_threat_line_status = nullptr;
 
 	entity_sides
 		source_side;
@@ -3063,14 +3063,14 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 		y_adjust,
 		source_heading,
 		tsd_ase_range,
-		*tsd_threat_line_flash_timer;
+		*tsd_threat_line_flash_timer = nullptr;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (kiowa_main_mfd_location_valid (mfd_location));
 
@@ -3175,8 +3175,8 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !kiowa_damage.navigation_computer)
 	{
 		entity
-			*wp1,
-			*wp2;
+			*wp1 = nullptr,
+			*wp2 = nullptr;
 
 		vec3d
 			wp1_rel_position,
@@ -3298,11 +3298,11 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 
 	{
 		entity
-			*target,
-			*launched_weapon;
+			*target = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*target_position;
+			*target_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -3694,7 +3694,7 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 		if (source_target)
 		{
 			vec3d
-				*target_position;
+				*target_position = nullptr;
 
 			float
 				target_range;
@@ -3742,7 +3742,7 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !kiowa_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		vec3d
 			waypoint_position;
@@ -3875,8 +3875,8 @@ static void draw_tactical_situation_display_mfd (kiowa_main_mfd_locations mfd_lo
 static entity *get_closest_missile (entity *source, vec3d *source_position, threat_types threat_type, float *closest_missile_time_to_impact)
 {
 	entity
-		*threat,
-		*closest_missile;
+		*threat = nullptr,
+		*closest_missile = nullptr;
 
 	int
 		overshot;
@@ -3889,11 +3889,11 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 		cos_error;
 
 	vec3d
-		*threat_position,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	ASSERT (source);
 
@@ -3978,14 +3978,14 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 static void draw_aircraft_survivability_equipment_display_mfd (kiowa_main_mfd_locations mfd_location)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
 		source_side;
 
 	int
-		*ase_draw_threat_line_status;
+		*ase_draw_threat_line_status = nullptr;
 
 	float
 		scale,
@@ -3993,14 +3993,14 @@ static void draw_aircraft_survivability_equipment_display_mfd (kiowa_main_mfd_lo
 		y_adjust,
 		source_heading,
 		tsd_ase_range,
-		*ase_threat_line_flash_timer;
+		*ase_threat_line_flash_timer = nullptr;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (kiowa_main_mfd_location_valid (mfd_location));
 
@@ -4049,11 +4049,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (kiowa_main_mfd_lo
 
 	{
 		entity
-			*threat,
-			*launched_weapon;
+			*threat = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*threat_position;
+			*threat_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -4271,7 +4271,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (kiowa_main_mfd_lo
 
 	{
 		entity
-			*closest_missile;
+			*closest_missile = nullptr;
 
 		float
 			time_to_impact;
@@ -4608,7 +4608,7 @@ static void draw_weapon_display_mfd (void)
 		y_adjust;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type,
@@ -5025,7 +5025,7 @@ static void draw_weapon_display_mfd (void)
 static float print_main_mfd_system_message (char *equipment, char *warning, int fail, float y_adjust)
 {
 	char
-		*status;
+		*status = nullptr;
 
 	float
 		width;
@@ -6003,8 +6003,8 @@ static void draw_pitch_ladder (void)
 		else  // 90 degree bank
 		{
 			rgb_colour
-				*left_colour,
-				*right_colour;
+				*left_colour = nullptr,
+				*right_colour = nullptr;
 
 			if (roll == rad(90))
 			{
@@ -6313,11 +6313,11 @@ static void print_mono_font_max_length_string (char *s)
 static char *get_player_rank_and_name (entity *en, char *buffer)
 {
 	const char
-		*rank,
-		*name;
+		*rank = nullptr,
+		*name = nullptr;
 
 	entity
-		*aircrew;
+		*aircrew = nullptr;
 
 	ASSERT (en);
 
@@ -6373,7 +6373,7 @@ static void print_target_position (entity *source, entity *target)
 		range;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	ASSERT (source);
 
@@ -6436,13 +6436,13 @@ static void draw_mission_display_mfd (void)
 		estimated_time;
 
 	entity
-		*en,
-		*group,
-		*company,
-		*member,
-		*task,
-		*keysite,
-		*objective;
+		*en = nullptr,
+		*group = nullptr,
+		*company = nullptr,
+		*member = nullptr,
+		*task = nullptr,
+		*keysite = nullptr,
+		*objective = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -8605,8 +8605,8 @@ static int get_main_mfd_damage (kiowa_main_mfd_locations mfd_location)
 void select_kiowa_main_mfd_mode (kiowa_main_mfd_modes mfd_mode, kiowa_main_mfd_locations mfd_location)
 {
 	kiowa_main_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		default_mfd_mode;
 
 	ASSERT (kiowa_main_mfd_mode_valid (mfd_mode));
@@ -8866,8 +8866,8 @@ static kiowa_main_mfd_modes get_previous_main_mfd_mode (kiowa_main_mfd_modes mfd
 void select_next_kiowa_main_mfd (kiowa_main_mfd_locations mfd_location)
 {
 	kiowa_main_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		next_mfd_mode;
 
 	ASSERT (kiowa_main_mfd_location_valid (mfd_location));
@@ -8898,8 +8898,8 @@ void select_next_kiowa_main_mfd (kiowa_main_mfd_locations mfd_location)
 void select_previous_kiowa_main_mfd (kiowa_main_mfd_locations mfd_location)
 {
 	kiowa_main_mfd_modes
-		*mfd_mode_ptr1,
-		*mfd_mode_ptr2,
+		*mfd_mode_ptr1 = nullptr,
+		*mfd_mode_ptr2 = nullptr,
 		previous_mfd_mode;
 
 	ASSERT (kiowa_main_mfd_location_valid (mfd_location));

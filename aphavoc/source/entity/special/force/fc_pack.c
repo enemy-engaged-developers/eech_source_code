@@ -157,10 +157,10 @@ void pack_local_force_data (entity *en, pack_modes mode)
 		loop;
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	campaign_criteria_type
-		*campaign_criteria;
+		*campaign_criteria = nullptr;
 
 	ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 
@@ -419,11 +419,11 @@ void unpack_local_force_data (entity *en, pack_modes mode)
 		loop;
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	campaign_criteria_type
-		*last_campaign_criteria,
-		*campaign_criteria;
+		*last_campaign_criteria = nullptr,
+		*campaign_criteria = nullptr;
 
 	ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 

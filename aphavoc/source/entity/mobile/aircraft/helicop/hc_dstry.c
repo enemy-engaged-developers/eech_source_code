@@ -84,7 +84,7 @@ static void destroy_local (entity *en)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -320,13 +320,13 @@ static void kill_local (entity *en)
 		losses;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*task,
-		*group,
-		*member,
-		*destroy_task;
+		*task = nullptr,
+		*group = nullptr,
+		*member = nullptr,
+		*destroy_task = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -630,7 +630,7 @@ static void kill_local (entity *en)
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		entity
-			*force;
+			*force = nullptr;
 
 		force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 
@@ -653,7 +653,7 @@ static void kill_local (entity *en)
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		vec3d
-			*position;
+			*position = nullptr;
 
 		sound_sample_indices
 			sound_sample_index;

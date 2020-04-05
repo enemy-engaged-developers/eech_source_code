@@ -121,7 +121,7 @@ void vslider_move_function (event *ev)
 		inc;
 
 	ui_object
-		*slider;
+		*slider = nullptr;
 
 	if (*captured_object)
 	{
@@ -182,8 +182,8 @@ void ui_object_vslider_decrease_function (ui_object *obj, void *ev)
 		inc;
 
 	ui_object
-		*slider,
-		*slider_object;
+		*slider = nullptr,
+		*slider_object = nullptr;
 
 	slider = get_ui_object_association (obj);
 
@@ -216,8 +216,8 @@ void ui_object_vslider_increase_function (ui_object *obj, void *ev)
 		inc;
 
 	ui_object
-		*slider,
-		*slider_object;
+		*slider = nullptr,
+		*slider_object = nullptr;
 
 	slider = get_ui_object_association (obj);
 
@@ -245,7 +245,7 @@ void scroll_slider (ui_object *slider_object, float min, float max, float inc)
 {
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	float
 		pos;
@@ -287,9 +287,9 @@ void recalculate_slider_size (ui_object *slider_object)
 {
 
 	ui_object
-		*parent,
-		*slider_area,
-		*object_to_slide;
+		*parent = nullptr,
+		*slider_area = nullptr,
+		*object_to_slide = nullptr;
 
 	float
 		overhang,
@@ -406,9 +406,9 @@ void recalculate_slider_origin (ui_object *slider_object)
 {
 
 	ui_object
-		*parent,
-		*slider_area,
-		*object_to_slide;
+		*parent = nullptr,
+		*slider_area = nullptr,
+		*object_to_slide = nullptr;
 
 	float
 		object_y,
@@ -522,7 +522,7 @@ ui_object *get_ui_object_vslider (ui_object *obj)
 {
 
 	ui_object
-		*this_obj;
+		*this_obj = nullptr;
 
 	this_obj = get_ui_object_child (obj);
 	
@@ -553,7 +553,7 @@ void set_ui_object_vslider_position (ui_object *obj, float pos)
 		max;
 
 	ui_object
-		*slider;
+		*slider = nullptr;
 
 	slider = get_ui_object_association (obj);
 
@@ -578,7 +578,7 @@ void set_ui_object_vslider_virtual_position (ui_object *obj, float pos)
 		py_size;
 
 	ui_object
-		*slider;
+		*slider = nullptr;
 
 	slider = get_ui_object_association (obj);
 

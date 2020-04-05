@@ -128,8 +128,8 @@ void initialise_havoc_lamps (void)
 void draw_havoc_weapons_management_panel_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -399,8 +399,8 @@ void draw_havoc_weapons_management_panel_lamps (cockpit_panels panel)
 void draw_havoc_status_panel_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -644,8 +644,8 @@ void draw_havoc_status_panel_lamps (cockpit_panels panel)
 void draw_havoc_threat_warning_display (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -1272,8 +1272,8 @@ void draw_havoc_threat_warning_display (cockpit_panels panel)
 void draw_havoc_master_caution_lamp (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -1391,8 +1391,8 @@ void draw_havoc_master_caution_lamp (cockpit_panels panel)
 void draw_havoc_warning_panel_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -1588,8 +1588,8 @@ void draw_havoc_warning_panel_lamps (cockpit_panels panel)
 void draw_havoc_radio_lamp (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -1679,8 +1679,8 @@ void draw_havoc_radio_lamp (cockpit_panels panel)
 void draw_havoc_oil_gauges (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
 
@@ -1868,8 +1868,8 @@ void draw_havoc_oil_gauges (cockpit_panels panel)
 void draw_overlaid_threat_warning_display (int x_org, int y_org)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	if (application_video_colourdepth != 16)
 	{

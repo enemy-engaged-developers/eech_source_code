@@ -157,7 +157,7 @@ static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NU
 //#define MFD_VIEWPORT_TEXTURE_Y_ORG	(MFD_TEXTURE_SIZE / 2)
 
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 
 static float
 	mfd_viewport_size,
@@ -187,16 +187,16 @@ static float
 #define RHS_OVERLAID_MFD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD4)
 
 static screen
-	*lhs_mfd_texture_screen,
-	*rhs_mfd_texture_screen,
-	*cpg_lhs_mfd_texture_screen,
-	*cpg_rhs_mfd_texture_screen,
-	*ort_texture_screen,
-	*lhs_overlaid_mfd_texture_screen,
-	*rhs_overlaid_mfd_texture_screen,
-	*alnum_display_screen,
-	*eo_3d_texture_screen,
-	*eo_3d_texture_screen_over;
+	*lhs_mfd_texture_screen = nullptr,
+	*rhs_mfd_texture_screen = nullptr,
+	*cpg_lhs_mfd_texture_screen = nullptr,
+	*cpg_rhs_mfd_texture_screen = nullptr,
+	*ort_texture_screen = nullptr,
+	*lhs_overlaid_mfd_texture_screen = nullptr,
+	*rhs_overlaid_mfd_texture_screen = nullptr,
+	*alnum_display_screen = nullptr,
+	*eo_3d_texture_screen = nullptr,
+	*eo_3d_texture_screen_over = nullptr;
 
 static rgb_colour
 	off_mfd_colour,
@@ -883,14 +883,14 @@ static void draw_heading_scale (float heading)
 	if (!apache_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 		if (wp)
 		{
 			vec3d
-				*gunship_position,
+				*gunship_position = nullptr,
 				waypoint_position;
 
 			float
@@ -1160,7 +1160,7 @@ static void display_radar_scan_range (float scan_range, int ground_radar)
 static void display_radar_target_details (entity *target, float target_range, radar_params *radar)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -1345,14 +1345,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	entity_sides
 		source_side;
 	entity
-		*source;
+		*source = nullptr;
 
 	float
 		dx,
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1483,9 +1483,9 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 		radius;
 
 	vec3d
-		*target_position,
-		*bounding_box_min,
-		*bounding_box_max;
+		*target_position = nullptr,
+		*bounding_box_min = nullptr,
+		*bounding_box_max = nullptr;
 
 	ASSERT (target);
 
@@ -1536,12 +1536,12 @@ static void draw_ground_radar_mfd (void)
 		scale;
 
 	entity
-		*source,
-		*target,
-		*selected_target;
+		*source = nullptr,
+		*target = nullptr,
+		*selected_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -1817,12 +1817,12 @@ static void draw_air_radar_mfd (void)
 		y_adjust;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -2360,7 +2360,7 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2513,7 +2513,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2661,7 +2661,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		tint;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2960,7 +2960,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d, int scaled_3d)
 {
 	const char
-		*s;
+		*s = nullptr;
 
 	float
 		width,
@@ -2971,8 +2971,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
 		target_point;
@@ -3318,7 +3318,7 @@ static void draw_2d_dvo_mfd (int valid_3d, int scaled_3d)
 void apache_select_clicked_target()
 {
 	entity
-		*target,
+		*target = nullptr,
 		*best_target = NULL;
 
 	matrix3x3
@@ -3398,7 +3398,7 @@ void apache_select_clicked_target()
 static void draw_tactical_situation_display_mfd (void)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
@@ -3416,11 +3416,11 @@ static void draw_tactical_situation_display_mfd (void)
 		source_heading;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	int
 		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
@@ -3548,8 +3548,8 @@ static void draw_tactical_situation_display_mfd (void)
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !apache_damage.navigation_computer)
 	{
 		entity
-			*wp1,
-			*wp2;
+			*wp1 = nullptr,
+			*wp2 = nullptr;
 
 		vec3d
 			wp1_rel_position,
@@ -3647,11 +3647,11 @@ static void draw_tactical_situation_display_mfd (void)
 
 	{
 		entity
-			*target,
-			*launched_weapon;
+			*target = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*target_position;
+			*target_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -4083,8 +4083,8 @@ static void draw_tactical_situation_display_mfd (void)
 static entity *get_closest_missile (entity *source, vec3d *source_position, threat_types threat_type, float *closest_missile_time_to_impact)
 {
 	entity
-		*threat,
-		*closest_missile;
+		*threat = nullptr,
+		*closest_missile = nullptr;
 
 	int
 		overshot;
@@ -4097,11 +4097,11 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 		cos_error;
 
 	vec3d
-		*threat_position,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	ASSERT (source);
 
@@ -4186,7 +4186,7 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 static void draw_aircraft_survivability_equipment_display_mfd (void)
 {
 	char
-		*s,
+		*s = nullptr,
 		buffer[200];
 
 	entity_sides
@@ -4200,11 +4200,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 		source_heading;
 
 	entity
-		*source,
-		*source_target;
+		*source = nullptr,
+		*source_target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	rgb_colour
 		fg_colour,
@@ -4235,11 +4235,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 
 	{
 		entity
-			*threat,
-			*launched_weapon;
+			*threat = nullptr,
+			*launched_weapon = nullptr;
 
 		vec3d
-			*threat_position;
+			*threat_position = nullptr;
 
 		threat_types
 			threat_type;
@@ -4448,7 +4448,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 
 	{
 		entity
-			*closest_missile;
+			*closest_missile = nullptr;
 
 		float
 			time_to_impact;
@@ -4690,8 +4690,8 @@ static rgb_alpha_masked_sprite_data
 	weapon_sprite;
 
 static unsigned char
-	*weapon_sprite_data,
-	*weapon_mask_data;
+	*weapon_sprite_data = nullptr,
+	*weapon_mask_data = nullptr;
 
 static int
 	weapon_x_offset,
@@ -7759,7 +7759,7 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 static float print_system_message (char *equipment, char *warning, int fail, float y_adjust)
 {
 	char
-		*status;
+		*status = nullptr;
 
 	float
 		width;
@@ -8567,7 +8567,7 @@ static void draw_engine_display_mfd (void)
 void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw_translucent_background, mfd_locations location)
 {
 	mfd_modes
-		*mfd_mode;
+		*mfd_mode = nullptr;
 
 	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
 			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS));
@@ -9524,10 +9524,10 @@ static void display_waypoint_information (rgb_colour box_colour)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float
@@ -10115,11 +10115,11 @@ int apache_mfd_has_more_sub_pages(mfd_locations location)
 void draw_apache_mfd_on_texture (mfd_locations location)
 {
 	mfd_modes
-		*mfd_mode;
+		*mfd_mode = nullptr;
 
 	screen
-		*mfd_texture_screen,
-		*export_screen;
+		*mfd_texture_screen = nullptr,
+		*export_screen = nullptr;
 
 	int
 		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
@@ -10717,10 +10717,10 @@ static void draw_translucent_mfd_background (float x_min, float y_min, float x_m
 void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locations location)
 {
 	mfd_modes
-		*mfd_mode;
+		*mfd_mode = nullptr;
 
 	screen
-		*mfd_texture_screen;
+		*mfd_texture_screen = nullptr;
 
 	texture_index_numbers
 		texture_index;

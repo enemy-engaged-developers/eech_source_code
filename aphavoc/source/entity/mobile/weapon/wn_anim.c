@@ -79,13 +79,13 @@
 void reset_entity_weapon_config_animation (entity *en)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,
@@ -240,7 +240,7 @@ void reset_entity_weapon_config_animation (entity *en)
 void update_weapon_animation (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -273,13 +273,13 @@ void update_weapon_animation (entity *en)
 void update_infantry_weapons (entity *en, entity_sub_types weapon_sub_type)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_weapon_system_heading,

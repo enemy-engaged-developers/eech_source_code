@@ -75,7 +75,7 @@ light_3d_source
 	light_3d_array[MAX_3D_LIGHTS];
 
 light_3d_source
-	*saved_current_3d_lights,
+	*saved_current_3d_lights = nullptr,
 	recoloured_light_array[MAX_TEMPORARY_3D_LIGHTS];
 
 light_3d_source
@@ -139,7 +139,7 @@ light_3d_source * create_light_3d_source ( enum LIGHT_3D_TYPE type, int specular
 {
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	light = ( light_3d_source * ) safe_malloc ( sizeof ( light_3d_source ) );
 
@@ -251,8 +251,8 @@ void insert_light_3d_source_into_3d_scene ( light_3d_source *light )
 	{
 
 		light_3d_source
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		//
 		// Insert at the end of the light list
@@ -330,7 +330,7 @@ void remove_light_3d_source_from_3d_scene ( light_3d_source *light )
 {
 
 	light_3d_source
-		*this_light;
+		*this_light = nullptr;
 
 	ASSERT ( light );
 
@@ -443,7 +443,7 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 	if ( current_3d_lights )
 	{
 		light_3d_source
-			*lights;
+			*lights = nullptr;
 	
 		int
 			current_recoloured_light_index;
@@ -478,7 +478,7 @@ void restore_uncoloured_current_3d_lights ( void )
 	if ( current_3d_lights )
 	{
 		light_3d_source
-			*lights;
+			*lights = nullptr;
 	
 		int
 			current_recoloured_light_index;

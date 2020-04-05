@@ -62,7 +62,7 @@
 
 #include "unix_startup.c"
 
-#else
+#else //WIN32
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,6 @@
 #include "project.h"
 #include "version.h"
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,21 +87,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 extern void application_main ( int argc, char **argv );
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct system_message_struct
 {
-    int
-        parameter;
+	int
+		parameter;
 
-    long ( * function ) ( HWND, UINT, WPARAM, LPARAM );
+	long ( * function ) ( HWND, UINT, WPARAM, LPARAM );
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,10 +108,10 @@ struct system_message_struct
 
 struct user_message_struct
 {
-    int
-        parameter;
+	int
+		parameter;
 
-    long ( * function ) ( void * );
+	long ( * function ) ( void * );
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,21 +120,19 @@ struct user_message_struct
 
 struct exit_struct
 {
-    int
-        called;
+	int
+		called;
 
-    void ( * function ) ( void );
+	void ( * function ) ( void );
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 HWND
 	application_window;
 
-#ifndef OGRE_EE
 HINSTANCE
 	application_instance,
 	previous_application_instance;
@@ -163,10 +158,9 @@ HANDLE
 
 CRITICAL_SECTION
 	application_critical_section;
-#endif
 
 char
-	*main_command_line;
+	*main_command_line = nullptr;
 
 char
 	application_current_directory[1024];
@@ -174,7 +168,6 @@ char
 char
 	application_debug_fatal_string[256];
 
-#ifndef OGRE_EE
 int
 	number_system_message_functions = 0,
 	number_user_message_functions = 0,
@@ -199,7 +192,6 @@ struct exit_struct
 
 int
 	exit_message_id;
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,13 +199,10 @@ int
 
 static DWORD WINAPI start_application ( LPVOID data );
 
-#ifndef OGRE_EE
 static void initialise_application_exception_handler ( void );
-#endif
 
 static void set_application_current_directory ( void );
 
-#ifndef OGRE_EE
 BOOL register_user_message_function ( int parm, long ( * fn ) ( void * ) );
 
 BOOL register_system_messsage_function ( int parm, long ( * fn ) ( HWND, UINT, WPARAM, LPARAM ) );
@@ -255,52 +244,9 @@ static void do_registered_exits ( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#else
-volatile int system_ticks;
-void OGREEE_CALL ee_key_func(unsigned key)
-{
-	create_key_event (key & 0xFF, key & 0x100 ? KEY_STATE_UP : KEY_STATE_DOWN);
-}
-void OGREEE_CALL ee_mouse_func(unsigned buttons, int dx, int dy, int dz)
-{
-	static const enum DEVICE_EVENTS array_buttons[] = { MOUSE_LEFT_BUTTON, MOUSE_RIGHT_BUTTON, MOUSE_MIDDLE_BUTTON };
-	unsigned
-		b;
-
-	for (b = 0; b < ARRAYSIZE(array_buttons); b++)
-	{
-		if (buttons & (1 << (b * 2)))
-		{
-			create_mouse_button_event (array_buttons[b], BUTTON_STATE_DOWN);
-		}
-		else if (buttons & (2 << (b * 2)))
-		{
-			create_mouse_button_event (array_buttons[b], BUTTON_STATE_UP);
-		}
-	}
-	if (dx || dy || dz)
-	{
-		if (abs (dx) > 4 || abs (dy) > 4)
-		{
-			dx *= 2;
-			dy *= 2;
-		}
-		create_mouse_move_event (dx, dy, dz);
-	}
-	move_mouse (dx, dy);
-}
-void OGREEE_CALL ee_resolution(unsigned width, unsigned height)
-{
-	application_video_width = width;
-	application_video_height = height;
-	// FIXME application_window =..
-}
-#endif
 
 int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-#ifndef OGRE_EE
-
 	MSG
 		msg;
 
@@ -318,7 +264,6 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	//
 
 	initialise_application_exception_handler ();
-#endif
 
 	//
 	// Set the current directory to where the executable is located
@@ -332,13 +277,11 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	unlink ( "debug.log" );
 
-#ifndef OGRE_EE
 	system_thread_id = GetCurrentThreadId ();
 
 	application_debug_fatal = FALSE;
 
 	application_active = TRUE;
-#endif
 
 #if 0
 	//
@@ -348,10 +291,8 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	initialise_memory_totals ();
 #endif
 
-#ifndef OGRE_EE
 	if ( !initialise_windows ( hInstance, nCmdShow ) )
 	{
-
 		deinitialise_windows ();
 
 		return ( FALSE );
@@ -396,19 +337,15 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	set_fpu_rounding_mode_zero ();
 
 	set_fpu_exceptions ();
-#endif
 
 	initialise_event_system ();
 
-#ifndef OGRE_EE
 	initialise_timers_system ();
-#endif
 
 	initialise_file_system ();
 
 	main_command_line = lpCmdLine;
 
-#ifndef OGRE_EE
 	terminated = FALSE;
 
 	application_thread_handle = CreateThread
@@ -420,11 +357,9 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		0,
 		&application_thread_id
 	);
-#endif
 
 	SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_ABOVE_NORMAL );
 
-#ifndef OGRE_EE
 	while ( !terminated )
 	{
 
@@ -499,22 +434,6 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	CoUninitialize ();
 
 	return ( msg.wParam );
-
-#else
-
-	{
-		struct OgreRun run = { start_application, 0, ee_key_func, ee_mouse_func, ee_resolution };
-		ogre_run(&run);
-
-		if (*application_debug_fatal_string)
-		{
-			MessageBoxA(NULL, application_debug_fatal_string, "Fatal error", MB_OK);
-		}
-	}
-
-	return 0;
-
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -524,10 +443,10 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 void set_application_current_directory ( void )
 {
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	// Casm 17JUN05 Using directory from Registry while debugging.
-#if defined(DEBUG) || defined(OGRE_EE)
+#ifdef DEBUG
 
 	HKEY key;
 
@@ -541,13 +460,14 @@ void set_application_current_directory ( void )
 		type = REG_SZ;
 		RegQueryValueEx ( key, "Installation Path", NULL, &type, ( LPBYTE ) root, ( LPDWORD ) &string_length );
 		strcat ( root, "\\COHOKUM" );
-   		SetCurrentDirectory ( root );
+		SetCurrentDirectory ( root );
 		GetCurrentDirectory ( sizeof ( application_current_directory ), application_current_directory );
 		RegCloseKey ( key );
 		return;
 	}
 
-#endif
+#endif//DEBUG
+
 	// Casm 17JUN05 Using directory from Registry while debugging.
 
 	GetModuleFileName ( NULL, application_current_directory, sizeof ( application_current_directory ) );
@@ -572,7 +492,6 @@ void set_application_current_directory ( void )
 
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,23 +505,17 @@ long FAR PASCAL application_window_proc ( HWND hWnd, UINT message, WPARAM wParam
 
 	if ( !bExiting )
 	{
-
 		for ( count = 0; count < number_system_message_functions; count++ )
 		{
-
 			if ( system_message_functions[count].parameter == message )
 			{
-
 				if ( !bExiting )
 				{
-
 					return ( system_message_functions[count].function ( hWnd, message, wParam, lParam ) );
 				}
 				else
 				{
-
 					return ( FALSE );
-
 //					return DefWindowProc(hWnd, message, wParam, lParam);
 				}
 			}
@@ -624,15 +537,15 @@ void deinitialise_windows ( void )
 	if ( application_debug_fatal )
 	{
 
-		#ifdef COMMERCIAL
+#ifdef COMMERCIAL
 
 		MessageBox ( application_window, application_debug_fatal_string, "ERROR", MB_OK );
 
-		#else
+#else//COMMERCIAL
 
 		MessageBox ( application_window, application_debug_fatal_string, "DEBUG FATAL", MB_OK );
 
-		#endif
+#endif//COMMERCIAL
 	}
 }
 
@@ -644,33 +557,26 @@ void deinitialise_windows ( void )
 BOOL initialise_windows ( HINSTANCE hInstance, int nCmdShow )
 {
 
-    if ( !create_application_window ( hInstance, nCmdShow ) )
-    {
+	if ( !create_application_window ( hInstance, nCmdShow ) )
+	{
 
-        return ( FALSE );
-    }
+		return ( FALSE );
+	}
 
-    return ( TRUE );
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void end_application ( void )
 {
-#ifndef OGRE_EE
 	SendMessage ( application_window, WM_USER, exit_message_id, 0 );
 
 	Sleep ( INFINITE );
-#else
-	ogre_quit();
-	ExitThread(0);
-#endif
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -740,7 +646,6 @@ BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 DWORD WINAPI start_application ( LPVOID data )
 {
@@ -753,7 +658,7 @@ DWORD WINAPI start_application ( LPVOID data )
 	char
 		strings[32][64],
 		*argv[32],
-		*ptr;
+		*ptr = nullptr;
 
 
 	SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_NORMAL );
@@ -808,7 +713,6 @@ DWORD WINAPI start_application ( LPVOID data )
 	return 0;
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -816,34 +720,34 @@ DWORD WINAPI start_application ( LPVOID data )
 BOOL register_system_message_function ( int parm, long ( * fn ) ( HWND, UINT, WPARAM, LPARAM ) )
 {
 
-    int
-        count;
+	int
+		count;
 
-    //
-    // Check to see if we already have registered this message.
-    //
+	//
+	// Check to see if we already have registered this message.
+	//
 
-    for ( count=0; count<number_system_message_functions; count++ )
-    {
+	for ( count=0; count<number_system_message_functions; count++ )
+	{
 
-        if ( system_message_functions[count].parameter == parm )
-        {
+		if ( system_message_functions[count].parameter == parm )
+		{
 
-            return ( FALSE );
-        }
-    }
+			return ( FALSE );
+		}
+	}
 
-    //
-    // Insert the function into the table
-    //
+	//
+	// Insert the function into the table
+	//
 
-    system_message_functions[number_system_message_functions].parameter = parm;
+	system_message_functions[number_system_message_functions].parameter = parm;
 
-    system_message_functions[number_system_message_functions].function = fn;
+	system_message_functions[number_system_message_functions].function = fn;
 
-    number_system_message_functions ++;
+	number_system_message_functions ++;
 
-    return ( TRUE );
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -853,34 +757,34 @@ BOOL register_system_message_function ( int parm, long ( * fn ) ( HWND, UINT, WP
 BOOL register_user_message_function ( int parm, long ( * fn ) ( void * ) )
 {
 
-    int
-        count;
+	int
+		count;
 
-    //
-    // Check to see if we already have registered this message.
-    //
+	//
+	// Check to see if we already have registered this message.
+	//
 
-    for ( count=0; count<number_user_message_functions; count++ )
-    {
+	for ( count=0; count<number_user_message_functions; count++ )
+	{
 
-        if ( user_message_functions[count].parameter == parm )
-        {
+		if ( user_message_functions[count].parameter == parm )
+		{
 
-            return ( FALSE );
-        }
-    }
+			return ( FALSE );
+		}
+	}
 
-    //
+	//
    // Insert the function into the table
-    //
+	//
 
-    user_message_functions[number_user_message_functions].parameter = parm;
+	user_message_functions[number_user_message_functions].parameter = parm;
 
-    user_message_functions[number_user_message_functions].function = fn;
+	user_message_functions[number_user_message_functions].function = fn;
 
-    number_user_message_functions ++;
+	number_user_message_functions ++;
 
-    return ( TRUE );
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -960,32 +864,32 @@ BOOL register_post_activate_message_function ( void ( ( *fn ) ( int ) ) )
 void register_exit_function ( void ( * fn ) ( void ) )
 {
 
-    int
-        count;
+	int
+		count;
 
-    //
-    // Check to see if we already have registered this message.
-    //
+	//
+	// Check to see if we already have registered this message.
+	//
 
-    for ( count=0; count<number_exit_functions; count++ )
-    {
+	for ( count=0; count<number_exit_functions; count++ )
+	{
 
-        if ( exit_functions[count].function == fn )
-        {
+		if ( exit_functions[count].function == fn )
+		{
 
-            return;
-        }
-    }
+			return;
+		}
+	}
 
-    //
-    // Insert the function into the table
-    //
+	//
+	// Insert the function into the table
+	//
 
-    exit_functions[number_exit_functions].function = fn;
+	exit_functions[number_exit_functions].function = fn;
 
-    exit_functions[number_exit_functions].called = FALSE;
+	exit_functions[number_exit_functions].called = FALSE;
 
-    number_exit_functions ++;
+	number_exit_functions ++;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -995,22 +899,22 @@ void register_exit_function ( void ( * fn ) ( void ) )
 long call_user_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 
-    int
-        count;
+	int
+		count;
 
-    for ( count=0; count<number_user_message_functions; count++ )
-    {
+	for ( count=0; count<number_user_message_functions; count++ )
+	{
 
-        if ( user_message_functions[count].parameter == wParam )
-        {
+		if ( user_message_functions[count].parameter == wParam )
+		{
 
-            return ( user_message_functions[count].function ( ( void * ) lParam ) );
-        }
-    }
+			return ( user_message_functions[count].function ( ( void * ) lParam ) );
+		}
+	}
 
 
 
-    return ( FALSE );
+	return ( FALSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1020,9 +924,11 @@ long call_user_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM
 long windows_cursor_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 
-    SetCursor ( NULL );
+	SetCursor ( NULL );
 
-    return ( TRUE );
+
+
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1298,12 +1204,10 @@ void initialise_application_exception_handler ( void )
 
 struct EXCEPTION_DETAILS
 {
-
-	int
+	unsigned int 
 		code;
-
-	char
-		*reason;
+	char 
+		*reason = nullptr;
 };
 
 typedef struct EXCEPTION_DETAILS exception_details;
@@ -1314,52 +1218,50 @@ typedef struct EXCEPTION_DETAILS exception_details;
 
 exception_details
 	exception_codes[] =
-	{
-
-		{ EXCEPTION_ACCESS_VIOLATION,				"Access violation" },
-		{ EXCEPTION_ARRAY_BOUNDS_EXCEEDED,		"Array bounds exceeded" },
-		{ EXCEPTION_BREAKPOINT,						"Breakpoint" },
-		{ EXCEPTION_DATATYPE_MISALIGNMENT,		"Datatype misalignment" },
-		{ EXCEPTION_FLT_DENORMAL_OPERAND,		"Float: Denormal operand" },
-		{ EXCEPTION_FLT_DIVIDE_BY_ZERO,			"Float: Divide by zero" },
-		{ EXCEPTION_FLT_INEXACT_RESULT,			"Float: Inexact result" },
-		{ EXCEPTION_FLT_INVALID_OPERATION,		"Float: Invalid operation" },
-		{ EXCEPTION_FLT_OVERFLOW,					"Float: Overflow" },
-		{ EXCEPTION_FLT_STACK_CHECK,				"Float: Stack check" },
-		{ EXCEPTION_FLT_UNDERFLOW,					"Float: Underflow" },
-		{ EXCEPTION_ILLEGAL_INSTRUCTION,			"Illegal instruction" },
-		{ EXCEPTION_IN_PAGE_ERROR,					"In page error" },
-		{ EXCEPTION_INT_DIVIDE_BY_ZERO,			"Integer: Divide by zero" },
-		{ EXCEPTION_INT_OVERFLOW,					"Integer: Overflow" },
-		{ EXCEPTION_INVALID_DISPOSITION,			"Invalid disposition" },
-		{ EXCEPTION_NONCONTINUABLE_EXCEPTION,	"Non-continuable exception" },
-		{ EXCEPTION_PRIV_INSTRUCTION,				"Privilaged instruction" },
-		{ EXCEPTION_SINGLE_STEP,					"Single step" },
-		{ EXCEPTION_STACK_OVERFLOW,				"Stack overflow" },
+		{
+		{ EXCEPTION_ACCESS_VIOLATION         , "Access violation"          } ,
+		{ EXCEPTION_ARRAY_BOUNDS_EXCEEDED    , "Array bounds exceeded"     } ,
+		{ EXCEPTION_BREAKPOINT               , "Breakpoint"                } ,
+		{ EXCEPTION_DATATYPE_MISALIGNMENT    , "Datatype misalignment"     } ,
+		{ EXCEPTION_FLT_DENORMAL_OPERAND     , "Float: Denormal operand"   } ,
+		{ EXCEPTION_FLT_DIVIDE_BY_ZERO       , "Float: Divide by zero"     } ,
+		{ EXCEPTION_FLT_INEXACT_RESULT       , "Float: Inexact result"     } ,
+		{ EXCEPTION_FLT_INVALID_OPERATION    , "Float: Invalid operation"  } ,
+		{ EXCEPTION_FLT_OVERFLOW             , "Float: Overflow"           } ,
+		{ EXCEPTION_FLT_STACK_CHECK          , "Float: Stack check"        } ,
+		{ EXCEPTION_FLT_UNDERFLOW            , "Float: Underflow"          } ,
+		{ EXCEPTION_ILLEGAL_INSTRUCTION      , "Illegal instruction"       } ,
+		{ EXCEPTION_IN_PAGE_ERROR            , "In page error"             } ,
+		{ EXCEPTION_INT_DIVIDE_BY_ZERO       , "Integer: Divide by zero"   } ,
+		{ EXCEPTION_INT_OVERFLOW             , "Integer: Overflow"         } ,
+		{ EXCEPTION_INVALID_DISPOSITION      , "Invalid disposition"       } ,
+		{ EXCEPTION_NONCONTINUABLE_EXCEPTION , "Non-continuable exception" } ,
+		{ EXCEPTION_PRIV_INSTRUCTION         , "Privilaged instruction"    } ,
+		{ EXCEPTION_SINGLE_STEP              , "Single step"               } ,
+		{ EXCEPTION_STACK_OVERFLOW           , "Stack overflow"            } ,
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if 0
 LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData )
 {
 
 	EXCEPTION_RECORD
-		*exception_record;
+		*exception_record = nullptr;
 
 	CONTEXT
-		*context_record;
+		*context_record = nullptr;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		count;
 
 	DWORD
-		*memory;
+		*memory = nullptr;
 
 	fp = fopen ( "crash.log", "w" );
 
@@ -1375,7 +1277,7 @@ LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData
 
 		context_record = lpExceptionData->ContextRecord;
 
-		fprintf ( fp, "Location: %08x\n", exception_record->ExceptionAddress );
+		fprintf ( fp, "Location: %08x\n", (unsigned int)(exception_record->ExceptionAddress) );
 
 		for ( count = 0; count < ( sizeof ( exception_codes ) / sizeof ( exception_details ) ); count++ )
 		{
@@ -1473,7 +1375,6 @@ LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData
 			}
 			else
 			{
-
 				fprintf ( fp, "Invalid\n" );
 			}
 
@@ -1491,10 +1392,8 @@ LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData
 
 	return ( EXCEPTION_CONTINUE_SEARCH );
 }
-#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
-#endif
+#endif//WIN32

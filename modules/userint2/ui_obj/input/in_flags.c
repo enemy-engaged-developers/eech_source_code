@@ -74,7 +74,7 @@ static void set_input_ui_object_state (ui_object *obj, int flag)
 {
 	
 	input_ui_object
-		*input;
+		*input = nullptr;
 
 	input = (input_ui_object *) obj->data;
 

@@ -88,7 +88,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			smoke_list
-				*raw;
+				*raw = nullptr;
 
 			raw = (smoke_list *) get_local_entity_data (en);
 
@@ -195,7 +195,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				number_of_slots;
 
 			smoke_list
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity

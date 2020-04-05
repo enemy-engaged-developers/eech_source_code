@@ -79,7 +79,7 @@
 static void set_local_float_value (entity *en, float_types type, float value)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -159,7 +159,7 @@ static void set_client_float_value (entity *en, float_types type, float value)
 static float get_local_float_value (entity *en, float_types type)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;
@@ -177,7 +177,7 @@ static float get_local_float_value (entity *en, float_types type)
 				length;
 
 			object_3d_bounds
-				*bounding_box;
+				*bounding_box = nullptr;
 
 			bounding_box = get_object_3d_bounding_box_without_lines (raw->vh.object_3d_shape);
 
@@ -192,7 +192,7 @@ static float get_local_float_value (entity *en, float_types type)
 		////////////////////////////////////////
 		{
 			object_3d_bounds
-				*bounding_box;
+				*bounding_box = nullptr;
 
 			bounding_box = get_object_3d_bounding_box_without_lines (raw->vh.object_3d_shape);
 

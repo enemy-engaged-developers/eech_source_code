@@ -79,7 +79,7 @@
 static float get_local_float_value (entity *en, float_types type)
 {
 	pylon
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;

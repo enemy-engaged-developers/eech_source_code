@@ -100,10 +100,10 @@ static terrain_3d_point_data
 	system_point_data;
 
 static terrain_3d_point_word_reference
-	*terrain_elevation_point_word_references;
+	*terrain_elevation_point_word_references = nullptr;
 
 static terrain_3d_point_byte_reference
-	*terrain_elevation_point_byte_references;
+	*terrain_elevation_point_byte_references = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,10 +162,10 @@ static int point_inside_terrain_word_fan ( const float x_offset, const float z_o
 		internal_triangle_offset;
 
 	terrain_3d_point_word_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -287,10 +287,10 @@ static int point_inside_terrain_byte_fan ( const float x_offset, const float z_o
 		internal_triangle_offset;
 
 	terrain_3d_point_byte_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -413,10 +413,10 @@ static int point_inside_terrain_word_strip ( const float x_offset, const float z
 		internal_triangle_offset;
 
 	terrain_3d_point_word_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -581,10 +581,10 @@ static int point_inside_terrain_byte_strip ( const float x_offset, const float z
 		internal_triangle_offset;
 
 	terrain_3d_point_byte_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -741,10 +741,10 @@ int point_inside_terrain_fan_word_triangle ( const float x_offset, const float z
 		cyclic;
 
 	terrain_3d_point_word_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -848,10 +848,10 @@ int point_inside_terrain_fan_byte_triangle ( const float x_offset, const float z
 		cyclic;
 
 	terrain_3d_point_byte_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -955,10 +955,10 @@ int point_inside_terrain_strip_word_triangle ( const float x_offset, const float
 		cyclic;
 
 	terrain_3d_point_word_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -1084,10 +1084,10 @@ int point_inside_terrain_strip_byte_triangle ( const float x_offset, const float
 		cyclic;
 
 	terrain_3d_point_byte_reference
-		*point_ref;
+		*point_ref = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 #if DEBUG_MODULE
 
@@ -1230,28 +1230,28 @@ float get_3d_terrain_point_data ( float x, float z, terrain_3d_point_data *point
 		terrain_elevation;
 
 	terrain_3d_sector
-		*terrain_sector;
+		*terrain_sector = nullptr;
 
 	terrain_3d_face
-		*terrain_face;
+		*terrain_face = nullptr;
 
 	terrain_3d_point_xz
-		*point;
+		*point = nullptr;
 
 	terrain_3d_point_y
-		*point_y;
+		*point_y = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_types
 		terrain_type;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 #if DEBUG_MODULE
 	num_elevation_tests++;
@@ -1754,14 +1754,14 @@ float get_3d_terrain_point_data ( float x, float z, terrain_3d_point_data *point
 					normal;
 
 				terrain_3d_point_xz
-					*point0xz,
-					*point1xz,
-					*point2xz;
+					*point0xz = nullptr,
+					*point1xz = nullptr,
+					*point2xz = nullptr;
 
 				terrain_3d_point_y
-					*point0y,
-					*point1y,
-					*point2y;
+					*point0y = nullptr,
+					*point1y = nullptr,
+					*point2y = nullptr;
 
 				float
 					y0,

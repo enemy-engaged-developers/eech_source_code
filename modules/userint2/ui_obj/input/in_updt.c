@@ -86,11 +86,11 @@ static void update_input_ui_object (ui_object *obj)
       grand_parent_y_origin = 0.0;
 
    ui_object
-      *grand_parent,
-      *parent;
+      *grand_parent = nullptr,
+      *parent = nullptr;
 
    input_ui_object
-      *input;
+      *input = nullptr;
 
 	float
 		old_viewport_x1,

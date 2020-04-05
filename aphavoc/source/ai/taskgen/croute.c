@@ -166,14 +166,14 @@ route_biasing_database_type
 	};
 
 float
-	*best_point_terrain_elevations;
+	*best_point_terrain_elevations = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 route_node
-	*fast_route;
+	*fast_route = nullptr;
 
 static route_node *create_route (vec3d *start, vec3d *end, entity_sides side, movement_types movement_type);
 
@@ -201,11 +201,11 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 {
 
 	route_node
-		*new_node,
-		*new_route,
-		*specified_route,
-		*specified_route_ptr,
-		*last_specified_node;
+		*new_node = nullptr,
+		*new_route = nullptr,
+		*specified_route = nullptr,
+		*specified_route_ptr = nullptr,
+		*last_specified_node = nullptr;
 
 	movement_types
 		movement_type;
@@ -219,10 +219,10 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	vec3d
 		stop,
 		start,
-		*stop_ptr,
-		*start_ptr,
-		*waypoint_pos,
-		*route_points_ptr;
+		*stop_ptr = nullptr,
+		*start_ptr = nullptr,
+		*waypoint_pos = nullptr,
+		*route_points_ptr = nullptr;
 
 	int
 		loop,
@@ -237,7 +237,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	
 	entity_sides
 		side;
-  	
+	
 	float
 		mb_vel,
 		height,
@@ -245,16 +245,16 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 		terrain_elevation;
 
 	entity
-		*wp,
-		*member,
-		*last_wp,
+		*wp = nullptr,
+		*member = nullptr,
+		*last_wp = nullptr,
 		**route_dependents_ptr;
 
 	entity_sub_types
-		*route_waypoint_types_ptr;
+		*route_waypoint_types_ptr = nullptr;
 
 	formation_types
-		*route_formation_types_ptr;
+		*route_formation_types_ptr = nullptr;
 
 	ASSERT (group);
 
@@ -474,9 +474,9 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 
 			stop_ptr = &stop;
 	
-  			//
+			//
 			// add land waypoint
-  			//
+			//
 
 			new_node = (route_node *) malloc_fast_mem (sizeof (route_node));
 
@@ -577,7 +577,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	{
 
 		route_node
-			*route;
+			*route = nullptr;
 
 		//ASSERT (check_sum == get_local_entity_int_value (task_en, INT_TYPE_ROUTE_CHECK_SUM));
 		if (check_sum != get_local_entity_int_value (task_en, INT_TYPE_ROUTE_CHECK_SUM))
@@ -647,7 +647,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 				range;
 
 			vec3d
-				*last_waypoint_pos;
+				*last_waypoint_pos = nullptr;
 
 			last_waypoint_pos = get_local_entity_vec3d_ptr (last_wp, VEC3D_TYPE_POSITION);
 
@@ -748,10 +748,10 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	{
 
 		vec3d
-			*pos;
+			*pos = nullptr;
 
 		entity
-			*wp;
+			*wp = nullptr;
 
 		debug_log ("CROUTE: -----------------------------------------------------------------------------------");
 
@@ -839,16 +839,16 @@ void parser_task_waypoint_route (entity *group, entity *task)
 
 	vec3d
 		new_pos,
-		*next_next_pos,
-		*last_pos,
-		*this_pos,
-		*next_pos;
+		*next_next_pos = nullptr,
+		*last_pos = nullptr,
+		*this_pos = nullptr,
+		*next_pos = nullptr;
 
 	entity
-		*next_next_wp,
-		*last_wp,
-		*next_wp,
-		*this_wp;
+		*next_next_wp = nullptr,
+		*last_wp = nullptr,
+		*next_wp = nullptr,
+		*this_wp = nullptr;
 
 	ASSERT (task->type == ENTITY_TYPE_TASK);
 
@@ -1110,7 +1110,7 @@ void initialise_route_generator (void)
 {
 
 	route_node
-		*destroy_node;
+		*destroy_node = nullptr;
 
 	destroy_node = fast_route;
 
@@ -1136,10 +1136,10 @@ int generate_biased_vec3d_route (route_node *points, route_node **route, int sid
 		node_count;
 
 	route_node
-		*route_start,
-		*route_end,
-		*this_node,
-		*next_node;
+		*route_start = nullptr,
+		*route_end = nullptr,
+		*this_node = nullptr,
+		*next_node = nullptr;
 
 	route_start = NULL;
 
@@ -1166,7 +1166,7 @@ int generate_biased_vec3d_route (route_node *points, route_node **route, int sid
 		{
 
 			route_node
-				*destroy_node;
+				*destroy_node = nullptr;
 	
 			destroy_node = fast_route;
 			fast_route = fast_route->next;
@@ -1243,8 +1243,8 @@ route_node *create_route (vec3d *start, vec3d *end, entity_sides side, movement_
 {
 
 	route_node
-		*start_node,
-		*end_node;
+		*start_node = nullptr,
+		*end_node = nullptr;
 
 	start_node = (route_node *) malloc_fast_mem (sizeof (route_node));
 	memset (start_node, 0, sizeof (route_node));
@@ -1276,7 +1276,7 @@ int generate_best_mid_point (route_node *start_node, route_node *end_node, entit
 {
 
 	route_node
-		*new_node;
+		*new_node = nullptr;
 
 	vec3d
 		best_point;
@@ -1397,7 +1397,7 @@ int get_best_point (vec3d *start, vec3d *end, vec3d *best_point, entity_sides si
 			}
 		}
 	
-  		// test point start
+		// test point start
 		test_point.x = ceil (start_point.x);
 		test_point.y = 0.0;
 		test_point.z = ceil (start_point.z);
@@ -1407,18 +1407,18 @@ int get_best_point (vec3d *start, vec3d *end, vec3d *best_point, entity_sides si
 		memcpy (best_point, &test_point, sizeof (vec3d));
 		best_loop = 0.0;
 	
-  		// test points along perpendicular line
+		// test points along perpendicular line
 		for (loop = 1.0; loop < route_biasing_database [movement_type].num_route_samples; loop ++)
 		{
 	
-  			// next test point
+			// next test point
 			test_point.x += test_direction_x_inc;
 			test_point.z += test_direction_z_inc;
 	
 			test_point.x = bound (ceil (test_point.x), MIN_MAP_X, MAX_MAP_X);
 			test_point.z = bound (ceil (test_point.z), MIN_MAP_Z, MAX_MAP_Z);
 	
-  			// best so far
+			// best so far
 			point_rating = get_route_point_rating (loop + 1.0, &test_point, side, movement_type);
 
 			#if DEBUG_MODULE
@@ -1432,7 +1432,7 @@ int get_best_point (vec3d *start, vec3d *end, vec3d *best_point, entity_sides si
 			if (point_rating < best_point_rating)
 			{
 	
-  				best_loop = loop;
+				best_loop = loop;
 				best_point_rating = point_rating;
 				memcpy (best_point, &test_point, sizeof (vec3d));
 			}
@@ -1468,9 +1468,9 @@ void second_past_route (route_node *route, entity_sides side, movement_types mov
 		best_point;
 
 	route_node
-		*prev_node,
-		*node,
-		*next_node;
+		*prev_node = nullptr,
+		*node = nullptr,
+		*next_node = nullptr;
 
 	prev_node = route;
 
@@ -1510,7 +1510,7 @@ float get_route_point_rating (float sample_number, vec3d *test_point, entity_sid
 		rating;
 
 	entity
-		*sector_en;
+		*sector_en = nullptr;
 
 	entity_sides
 		sector_side;
@@ -1560,8 +1560,8 @@ void optimise_route (route_node *node, movement_types movement_type)
 {
 
 	route_node
-		*prev_node,
-		*next_node;
+		*prev_node = nullptr,
+		*next_node = nullptr;
 
 	int
 		remove_node;
@@ -1676,7 +1676,7 @@ void destroy_fast_route (route_node *route)
 {
 
 	route_node
-		*destroy_node;
+		*destroy_node = nullptr;
 		
 	while (route)
 	{
@@ -1697,12 +1697,12 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 {
 
 	route_node
-		*new_node,
-		*new_route,
+		*new_node = nullptr,
+		*new_route = nullptr,
 		//*temp_new_route,
-		*specified_route,
+		*specified_route = nullptr,
 		//*specified_route_ptr,
-		*last_specified_node;
+		*last_specified_node = nullptr;
 
 	movement_types
 		movement_type;
@@ -1711,10 +1711,10 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 		landing_type;
 
 	vec3d
-		*stop,
-		*start,
+		*stop = nullptr,
+		*start = nullptr,
 		//*waypoint_pos,
-		*route_points_ptr;
+		*route_points_ptr = nullptr;
 
 	int
 		loop,
@@ -1725,20 +1725,20 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 	
 	entity_sides
 		side;
-  	
+	
 	float
 		mb_vel,
 		height;
 
 	entity
-		*landing_entity,
+		*landing_entity = nullptr,
 		**route_dependents_ptr;
 
 	entity_sub_types
-		*route_waypoint_types_ptr;
+		*route_waypoint_types_ptr = nullptr;
 
 	formation_types
-		*route_formation_types_ptr;
+		*route_formation_types_ptr = nullptr;
 
 	ASSERT (task_en);
 
@@ -1884,7 +1884,7 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 	{
 
 		entity
-			*start_keysite;
+			*start_keysite = nullptr;
 
 		//
 		// Add start waypoint
@@ -1932,9 +1932,9 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 	
 			landing_entity = get_local_entity_landing_entity (return_keysite, landing_type);
 	
-  			//
+			//
 			// add land waypoint
-  			//
+			//
 
 			new_node = (route_node *) malloc_fast_mem (sizeof (route_node));
 

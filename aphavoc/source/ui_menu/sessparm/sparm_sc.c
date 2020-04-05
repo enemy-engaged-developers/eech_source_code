@@ -91,27 +91,27 @@ enum
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*session_parameters_area,
+	*session_parameters_area = nullptr,
 //VJ 051011 add season summer/winter/desert button
-	*season_area,
-	*season_button,
-	*time_of_day_area,
-	*time_of_day_button,
-	*weather_area,
-	*weather_button,
+	*season_area = nullptr,
+	*season_button = nullptr,
+	*time_of_day_area = nullptr,
+	*time_of_day_button = nullptr,
+	*weather_area = nullptr,
+	*weather_button = nullptr,
 
-	*realism_inf_weapons_area,
-	*realism_inf_weapons_title,
-	*realism_inf_weapons_button,
-	*realism_inf_fuel_area,
-	*realism_inf_fuel_title,
-	*realism_inf_fuel_button,
-	*realism_collisions_area,
-	*realism_collisions_button,
-	*realism_weapons_damage_area,
-	*realism_weapons_damage_button,
-	*realism_suppress_ai_fire_area,
-	*realism_suppress_ai_fire_button;
+	*realism_inf_weapons_area = nullptr,
+	*realism_inf_weapons_title = nullptr,
+	*realism_inf_weapons_button = nullptr,
+	*realism_inf_fuel_area = nullptr,
+	*realism_inf_fuel_title = nullptr,
+	*realism_inf_fuel_button = nullptr,
+	*realism_collisions_area = nullptr,
+	*realism_collisions_button = nullptr,
+	*realism_weapons_damage_area = nullptr,
+	*realism_weapons_damage_button = nullptr,
+	*realism_suppress_ai_fire_area = nullptr,
+	*realism_suppress_ai_fire_button = nullptr;
 
 static const char
 	*boolean_text[2],
@@ -315,9 +315,9 @@ void notify_clear_all_session_parameters (void)
 void define_session_parameter_objects (void)
 {
 	ui_object
-		*title_box_obj,
-		*title_text_obj,
-		*button_box_obj;
+		*title_box_obj = nullptr,
+		*title_text_obj = nullptr,
+		*button_box_obj = nullptr;
 
 	float
 		x1,
@@ -1319,10 +1319,10 @@ void session_parameters_text_input_function ( ui_object *obj, void *arg )
 {
 
 	const char
-		*text;
+		*text = nullptr;
 
 	ui_object
-		*text_object;
+		*text_object = nullptr;
 
 	int
 		value;
@@ -1413,7 +1413,7 @@ void session_parameters_text_input_function ( ui_object *obj, void *arg )
 static void session_parameters_bounded_input_function ( ui_object *obj, void *arg, int minimum, int maximum )
 {
 	const char
-		*text;
+		*text = nullptr;
 	char
 		buffer[ 8 ];
 

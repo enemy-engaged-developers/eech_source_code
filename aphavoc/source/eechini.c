@@ -154,7 +154,7 @@ static void set_hud_code ( const struct config_option *option, const char *value
 	int
 		i, j;
 	const char
-		*cur;
+		*cur = nullptr;
 
 	if ( *value != 'A' )
 	{
@@ -168,7 +168,7 @@ static void set_hud_code ( const struct config_option *option, const char *value
 		for ( j = 0; j < sizeof ( *hud_code ) / sizeof ( **hud_code ) ; j++ )
 		{
 			const char
-				*next;
+				*next = nullptr;
 			for ( next = cur + 1; isdigit ( *next ); next++ );
 			if ( *next == ';' )
 			{
@@ -207,7 +207,7 @@ static void set_canopy_amp ( const struct config_option *option, const char *val
 	int
 		i, j;
 	const char
-		*cur;
+		*cur = nullptr;
 
 	cur = value;
 	for ( i = 0; i < ARRAY_LENGTH ( canopy_sound_amp ); i++ )
@@ -215,7 +215,7 @@ static void set_canopy_amp ( const struct config_option *option, const char *val
 		for ( j = 0; j < ARRAY_LENGTH ( *canopy_sound_amp ); j++ )
 		{
 			const char
-				*next;
+				*next = nullptr;
 			for ( next = cur + 1; isdigit ( *next ); next++ );
 			if ( !sscanf ( cur, "%d", &canopy_sound_amp[i][j] ) || !*next )
 			{
@@ -285,7 +285,7 @@ static void set_sound_device ( const struct config_option *option, const char *v
 			j;
 		const char
 			**device,
-			*default_device;
+			*default_device = nullptr;
 
 		for ( i = j = 0; ; i++, j++ )
 		{
@@ -436,7 +436,7 @@ static void set_cloud_puffs_colours ( const struct config_option *option, const 
 	int
 		new_number_of_cloud_puffs_colours;
 	real_colour
-		*new_cloud_puffs_colours;
+		*new_cloud_puffs_colours = nullptr;
 	int
 		count,
 		cloud_puff_colour;
@@ -521,7 +521,7 @@ static void set_themes ( const struct config_option *option, const char *themes 
 		nthemes;
 	char
 		allthemes[1024],
-		*ptr,
+		*ptr = nullptr,
 		*ptrs[64];
 
 	if (themes[0] == '\0' || strlen(themes) >= sizeof(command_line_themes))

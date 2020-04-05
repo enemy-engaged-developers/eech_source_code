@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 smoke_list_data
-	*smoke_list_database;
+	*smoke_list_database = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,11 +175,11 @@ int get_smoke_type_by_name ( const char *name )
 static void export_smoke_list_database (void)
 {
 	FILE
-		*file;
+		*file = nullptr;
 	int
 		count;
 	const smoke_list_data
-		*smoke;
+		*smoke = nullptr;
 
 	file = safe_fopen (SMOKE_LIST_DATABASE_FILENAME, "w");
 	fprintf (file, "SMOKE;2\n");
@@ -255,16 +255,16 @@ static void export_smoke_list_database (void)
 static void import_smoke_list_database (void)
 {
 	FILE
-		*file;
+		*file = nullptr;
 	char
 		buf[2048],
-		*ptr,
-		*smoke_list_type_name,
-		*texture_animation;
+		*ptr = nullptr,
+		*smoke_list_type_name = nullptr,
+		*texture_animation = nullptr;
 	int
 		count;
 	smoke_list_data
-		*smoke;
+		*smoke = nullptr;
 	int
 		red_start,
 		green_start,
@@ -424,7 +424,7 @@ static void import_smoke_list_database (void)
 void initialise_smoke_list_database (void)
 {
 	smoke_list_data
-		*item;
+		*item = nullptr;
 
 	total_number_of_smoke_list_types = NUM_SMOKE_LIST_TYPES;
 	smoke_list_types_available = 50;

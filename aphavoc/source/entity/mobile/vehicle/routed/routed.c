@@ -164,7 +164,7 @@ void attach_routed_vehicle_meta_smoke_lists (entity *en)
 void pack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		item,
@@ -174,7 +174,7 @@ void pack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 		packed_indices;
 
 	entity
-		*special_effect;
+		*special_effect = nullptr;
 
 	object_3d_sub_object_index_numbers
 		attachment_point;
@@ -290,14 +290,14 @@ void pack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 void unpack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		item,
 		loop,
 		count,
 		point,
-		*entity_index_list;
+		*entity_index_list = nullptr;
 
 	meta_smoke_list_types
 		type;
@@ -386,10 +386,10 @@ void unpack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 void stop_vehicles_on_route (int start_node, int end_node)
 {
 	entity
-		*task,
-		*force,
-		*group,
-		*member;
+		*task = nullptr,
+		*force = nullptr,
+		*group = nullptr,
+		*member = nullptr;
 
 	int
 		index1,
@@ -433,7 +433,7 @@ void stop_vehicles_on_route (int start_node, int end_node)
 
 					{
 						entity
-							*mb;
+							*mb = nullptr;
 
 						mb = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 

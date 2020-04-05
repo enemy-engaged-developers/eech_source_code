@@ -77,23 +77,23 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*base_page_title,
-	*base_page_type_box,
-	*base_page_sector_box,
-	*base_page_status_box,
-	*base_page_efficiency_box,
-	*base_page_ammo_box,
-	*base_page_fuel_box,
-	*base_page_ndb_freq_box,
-	*page_back_button;
+	*base_page_title = nullptr,
+	*base_page_type_box = nullptr,
+	*base_page_sector_box = nullptr,
+	*base_page_status_box = nullptr,
+	*base_page_efficiency_box = nullptr,
+	*base_page_ammo_box = nullptr,
+	*base_page_fuel_box = nullptr,
+	*base_page_ndb_freq_box = nullptr,
+	*page_back_button = nullptr;
 
 static ui_object
-	*page_3d_area,
-	*page_map_area,
-	*page_map_view_area,
-	*page_map_view_mode_area,
-	*page_map_toggle,
-	*page_3d_toggle;
+	*page_3d_area = nullptr,
+	*page_map_area = nullptr,
+	*page_map_view_area = nullptr,
+	*page_map_view_mode_area = nullptr,
+	*page_map_toggle = nullptr,
+	*page_3d_toggle = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -110,10 +110,10 @@ static float
 void show_base_page (entity *base, int force_update)
 {
 	entity
-		*previous;
+		*previous = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x, z;
@@ -229,7 +229,7 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 		s [128];
 
 	entity
-		*base;
+		*base = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -386,7 +386,7 @@ static void notify_page_show_3d (ui_object *obj, void *arg)
 static void draw_page_map (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BASE]));
 
@@ -402,13 +402,13 @@ static void draw_page_map (ui_object *obj, void *arg)
 static void draw_page_3d_scene (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	viewpoint
 		vp;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		vec;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
@@ -491,7 +491,7 @@ void zoom_base_page_3d_scene (int zoom)
 static void notify_base_destroy_button (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sides
 		side,
@@ -542,7 +542,7 @@ void define_campaign_screen_base_page_objects (void)
 		ysize;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		output [128];

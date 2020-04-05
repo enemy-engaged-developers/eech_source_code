@@ -191,7 +191,7 @@ static void toggle_infinite_weapons_event (event *ev)
 static void launch_weapon_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -215,7 +215,7 @@ static void launch_weapon_event (event *ev)
 static void launch_chaff_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -239,7 +239,7 @@ static void launch_chaff_event (event *ev)
 static void launch_flare_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -263,7 +263,7 @@ static void launch_flare_event (event *ev)
 static void launch_smoke_grenade_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -287,7 +287,7 @@ static void launch_smoke_grenade_event (event *ev)
 static void launch_crate_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -311,8 +311,8 @@ static void launch_crate_event (event *ev)
 static void launch_persuer_weapon_event (event *ev)
 {
 	entity
-		*en,
-		*persuer;
+		*en = nullptr,
+		*persuer = nullptr;
 
 	entity_sub_types
 		weapon_type;
@@ -359,7 +359,7 @@ static void launch_persuer_weapon_event (event *ev)
 static void select_next_weapon_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -398,7 +398,7 @@ static void select_next_weapon_event (event *ev)
 static void select_previous_weapon_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -437,7 +437,7 @@ static void select_previous_weapon_event (event *ev)
 static void select_invalid_weapon_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -492,7 +492,7 @@ static void decrease_drag_z_event(event *ev)
 static void select_next_weapon_config_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -535,7 +535,7 @@ static void select_next_weapon_config_event (event *ev)
 static void select_previous_weapon_config_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -578,7 +578,7 @@ static void select_previous_weapon_config_event (event *ev)
 static void reload_weapon_config_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -612,7 +612,7 @@ static void reload_weapon_config_event (event *ev)
 static void unarm_weapon_config_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -722,7 +722,7 @@ static void toggle_virtual_cockpit_needles_event (event *ev)
 static void light_damage_gunship_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -747,7 +747,7 @@ static void light_damage_gunship_event (event *ev)
 static void medium_damage_gunship_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -771,7 +771,7 @@ static void medium_damage_gunship_event (event *ev)
 static void heavy_damage_gunship_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -1164,8 +1164,8 @@ static void toggle_ai_invulnerable_event (event *ev)
 static void set_entity_group_leader_event (event *ev)
 {
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1426,7 +1426,7 @@ static void recognition_guide_3d_view_event (event *ev)
 static void transmit_external_view_entity_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_external_view_entity ();
 
@@ -1469,7 +1469,7 @@ static void view_wingmen_event (event *ev)
 static void kill_external_view_entity_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1493,7 +1493,7 @@ static void kill_external_view_entity_event (event *ev)
 static void damage_external_view_entity_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		damage_level;
@@ -1524,7 +1524,7 @@ static void damage_external_view_entity_event (event *ev)
 static void damage_external_view_entity_main_rotors_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1548,7 +1548,7 @@ static void damage_external_view_entity_main_rotors_event (event *ev)
 static void restore_external_view_entity_main_rotors_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1572,12 +1572,12 @@ static void restore_external_view_entity_main_rotors_event (event *ev)
 static void create_dummy_task_event (event *ev)
 {
 	entity
-		*en,
-		*task,
-		*last,
-		*group,
-		*keysite,
-		*landing;
+		*en = nullptr,
+		*task = nullptr,
+		*last = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*landing = nullptr;
 
 	if (get_comms_model () != COMMS_MODEL_SERVER) return;
 
@@ -1668,13 +1668,13 @@ static void create_dummy_task_event (event *ev)
 static void create_debug_engage_task (int target_type)
 {
 	entity
-		*en,
-		*task,
-		*guide,
-		*group;
+		*en = nullptr,
+		*task = nullptr,
+		*guide = nullptr,
+		*group = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	if (get_comms_model () != COMMS_MODEL_SERVER)
 	{
@@ -1764,9 +1764,9 @@ static void create_air_engage_task_event (event *ev)
 static void debug_entity_task_abort (event *ev)
 {
 	entity
-		*en,
-		*task,
-		*guide;
+		*en = nullptr,
+		*task = nullptr,
+		*guide = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1795,8 +1795,8 @@ static void debug_entity_task_abort (event *ev)
 static void debug_entity_primary_task_abort (event *ev)
 {
 	entity
-		*en,
-		*task;
+		*en = nullptr,
+		*task = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1823,9 +1823,9 @@ static void debug_entity_primary_task_abort (event *ev)
 static void debug_capture_keysite_event (event *ev)
 {
 	entity
-		*en,
-		*group,
-		*keysite;
+		*en = nullptr,
+		*group = nullptr,
+		*keysite = nullptr;
 
 	int
 		side,
@@ -1866,10 +1866,10 @@ static void debug_capture_keysite_event (event *ev)
 static void debug_create_troop_insert_event (event *ev)
 {
 	entity
-		*en,
-		*group,
-		*keysite,
-		*new_task;
+		*en = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*new_task = nullptr;
 
 	int
 		sub_type,
@@ -1966,8 +1966,8 @@ static void debug_set_current_language (event *ev)
 static void debug_set_entity_group_formation (event *ev)
 {
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	ASSERT (ev);
 
@@ -2049,8 +2049,8 @@ static void debug_set_entity_group_formation (event *ev)
 static void set_external_view_entity_next_waypoint (event *ev)
 {
 	entity
-		*en,
-		*guide;
+		*en = nullptr,
+		*guide = nullptr;
 
 	en = get_external_view_entity ();
 
@@ -2081,7 +2081,7 @@ static void output_influence_maps_event (event *ev)
 static void eject_external_view_entity_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -2105,7 +2105,7 @@ static void eject_external_view_entity_event (event *ev)
 static void uneject_external_view_entity_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (in_cockpit)
 	{
@@ -2138,8 +2138,8 @@ static void dump_aircraft_and_vehicle_count_event (event *ev)
 static void create_debug_advance_task (event *ev)
 {
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -2155,7 +2155,7 @@ static void create_debug_advance_task (event *ev)
 		to_node;
 
 	vec3d
-		*node_pos;
+		*node_pos = nullptr;
 
 	en = get_external_view_entity ();
 

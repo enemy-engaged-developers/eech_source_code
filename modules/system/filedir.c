@@ -78,7 +78,7 @@ directory_file_list *get_first_directory_file ( const char *path )
 {
 
 	directory_file_list
-		*first_file;
+		*first_file = nullptr;
 
 #if 0
 	ASSERT ( get_memory_block_system_installed () );
@@ -205,7 +205,7 @@ enum DIRECTORY_FILE_TYPES get_directory_file_type ( directory_file_list *list )
 int file_extension ( const char *filename, const char *extension )
 {
 	const char
-		*ptr;
+		*ptr = nullptr;
 
 	//
 	// Search for the "."

@@ -126,10 +126,10 @@ int
 	send_group_frame_id = 0;
 
 stub_packet_type
-	*rerequest_packet_list,
-	*resend_packet_list,
-	*received_group_packets,
-	*received_personal_packets;
+	*rerequest_packet_list = nullptr,
+	*resend_packet_list = nullptr,
+	*received_group_packets = nullptr,
+	*received_personal_packets = nullptr;
 
 static packet_header_type
 	*new_receive_packet = NULL;
@@ -276,7 +276,7 @@ void reset_comms_data (void)
 {
 	
 	stub_packet_type
-		*packet;
+		*packet = nullptr;
 	
 	int i;
 
@@ -506,10 +506,10 @@ void send_packet (DPID player_id, packet_types type, unsigned char *data, int si
 		number_of_packets;
 
 	stub_packet_type
-		*stub_packet;
+		*stub_packet = nullptr;
 
 	connection_list_type
-		*connection;
+		*connection = nullptr;
 
 	static packet_header_type
 		*new_packet = NULL;
@@ -724,11 +724,11 @@ void receive_packets (void)
 		send_type;
 
 	connection_list_type
-		*connection;
+		*connection = nullptr;
 
 	stub_packet_type
-		*rerequest_packet,
-		*stub_packet;
+		*rerequest_packet = nullptr,
+		*stub_packet = nullptr;
 
 	//
 	// Receive all packets present
@@ -845,7 +845,7 @@ void receive_packets (void)
 		{
 
 			packet_header_type
-				*temp_packet;
+				*temp_packet = nullptr;
 
 			temp_packet = (packet_header_type *) new_receive_packet_data;
 
@@ -862,7 +862,7 @@ void receive_packets (void)
 						count;
 
 					FILE
-						*fp;
+						*fp = nullptr;
 
 					count = 0;
 
@@ -941,7 +941,7 @@ void receive_packets (void)
 			{
 /*
 				FILE
-					*fp;
+					*fp = nullptr;
 
 				char
 					filename [32];
@@ -1029,21 +1029,21 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 	int
 		loop,
 		frame_id,
-		*frame_ptr,
+		*frame_ptr = nullptr,
 		closest_time,
 		received_flag,
 		predicted_size,
 		data_ptr_offset;
 
 	unsigned char
-		*temp_char,
-		*new_buffer;
+		*temp_char = nullptr,
+		*new_buffer = nullptr;
 
 	stub_packet_type
 		*closest_packet = NULL,
-		*packet,
+		*packet = nullptr,
 		**packet_list,
-		*this_packet;
+		*this_packet = nullptr;
 
 	if (send_type == SEND_TYPE_GROUP)
 	{
@@ -1120,7 +1120,7 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 
 				debug_log ("COMMS: WAITING FOR %s FRAME %d, closest packet (%d %d) arrived %f seconds ago (None have arrived)",
 								send_type_names [send_type],
-								*frame_ptr,
+								*frame_ptr = nullptr,
 								closest_packet->packet->frame_id,
 								closest_packet->packet->packet_id,
 								(float) (get_system_time () - closest_packet->received_time) / TIME_1_SECOND);
@@ -1342,7 +1342,7 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 
 						debug_log ("COMMS: WAITING FOR %s FRAME %d packet %d, closest packet (%d %d) arrived %f seconds ago (Some have arrived)",
 										send_type_names [send_type],
-										*frame_ptr,
+										*frame_ptr = nullptr,
 										loop,
 										closest_packet->packet->frame_id,
 										closest_packet->packet->packet_id,
@@ -1403,8 +1403,8 @@ stub_packet_type *get_stub_packet_for_frame (send_types send_type, DPID player_i
 #if DEBUG_MODULE >= 4
 
 	stub_packet_type
-		*the_packet,
-		*packet_list;
+		*the_packet = nullptr,
+		*packet_list = nullptr;
 
 	if (send_type == SEND_TYPE_GROUP)
 	{
@@ -1458,7 +1458,7 @@ stub_packet_type *get_stub_packet_for_frame (send_types send_type, DPID player_i
 #else
 
 	stub_packet_type
-		*packet_list;
+		*packet_list = nullptr;
 
 	if (send_type == SEND_TYPE_GROUP)
 	{
@@ -1504,13 +1504,13 @@ void request_resend_packet (connection_list_type *connection, int frame_id, int 
 {
 
 	stub_packet_type
-		*new_stub_packet;
+		*new_stub_packet = nullptr;
 
 	int
 		buffer [3];
 
 	unsigned char
-		*buffer_ptr;
+		*buffer_ptr = nullptr;
 
 	//
 	// Add packet to rerequest list
@@ -1626,7 +1626,7 @@ stub_packet_type *resend_packet (DPID player_id, int frame_id, int packet_id, se
 		index_number;
 
 	stub_packet_type
-		*stub_packet;
+		*stub_packet = nullptr;
 
 	#if COMMS_DEBUG_BAD_CONNECTION
 
@@ -1736,8 +1736,8 @@ void free_connection_packets (DPID connection_id)
 {
 
 	stub_packet_type
-		*destroy_packet,
-		*packet;
+		*destroy_packet = nullptr,
+		*packet = nullptr;
 
 	#if DEBUG_MODULE >= 2
 
@@ -1839,7 +1839,7 @@ void add_stub_packet_to_list (stub_packet_type **list, stub_packet_type *packet)
 	{
 
 		stub_packet_type
-			*current_packet;
+			*current_packet = nullptr;
 
 		int
 			count = 0;
@@ -1868,8 +1868,8 @@ void remove_stub_packet_from_list (stub_packet_type **list, stub_packet_type *pa
 {
 
 	stub_packet_type
-		*next,
-		*prev;
+		*next = nullptr,
+		*prev = nullptr;
 
 	next = packet->next;
 
@@ -1929,7 +1929,7 @@ int count_packets_for_frame (stub_packet_type *packet_list, int player_id, int f
 	#endif
 
 	stub_packet_type
-		*stub_packet;
+		*stub_packet = nullptr;
 
 	int
 		packet_count = 0;
@@ -2041,8 +2041,8 @@ void update_resend_packet_list (int packet_limit)
 		count;
 
 	stub_packet_type
-		*destroy_packet,
-		*packet;
+		*destroy_packet = nullptr,
+		*packet = nullptr;
 
 	if (resend_packet_list_counter >= packet_limit)
 	{
@@ -2122,10 +2122,10 @@ void debug_comms_stats (void)
 {
 
 	connection_list_type
-		*connection;
+		*connection = nullptr;
 
 	stub_packet_type
-		*stub_packet;
+		*stub_packet = nullptr;
 
 	delta_time = get_system_time () - last_time;
 
@@ -2303,7 +2303,7 @@ void reset_receive_packet_list_time_stamps (void)
 {
 
 	stub_packet_type
-		*packet;
+		*packet = nullptr;
 
 	packet = received_group_packets;
 

@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	bridge
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

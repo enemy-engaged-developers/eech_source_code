@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -219,7 +219,7 @@ static void kill_local (entity *en)
 {
 	
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 

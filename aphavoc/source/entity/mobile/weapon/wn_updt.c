@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	raw = (weapon *) get_local_entity_data (en);
 
@@ -114,7 +114,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	raw = (weapon *) get_local_entity_data (en);
 

@@ -78,7 +78,7 @@ static void create_close_ui_object (ui_object *obj, ui_object_types type, va_lis
 		py_size;
 
    close_ui_object
-      *new_close;
+      *new_close = nullptr;
 
 	increase_ui_object_counter ();
 

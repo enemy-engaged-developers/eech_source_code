@@ -93,8 +93,8 @@ typedef enum MOTION_STATES motion_states;
 static entity *find_matching_entity (camera *raw, entity_forces force, entity_sides side, motion_states state)
 {
 	entity
-		*this_entity,
-		*best_entity;
+		*this_entity = nullptr,
+		*best_entity = nullptr;
 
 	float
 		this_score,
@@ -182,7 +182,7 @@ static entity *find_matching_entity (camera *raw, entity_forces force, entity_si
 static entity *get_best_view_entity (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_forces
 		force;
@@ -290,7 +290,7 @@ static entity *get_best_view_entity (camera *raw)
 entity *switch_auto_edit_entity (camera *raw)
 {
 	entity
-		*new_;
+		*new_ = nullptr;
 
 	ASSERT (raw);
 

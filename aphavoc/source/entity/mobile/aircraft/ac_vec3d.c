@@ -81,7 +81,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    aircraft
-      *raw;
+      *raw = nullptr;
 
    ASSERT (v);
 
@@ -121,7 +121,7 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    aircraft
-      *raw;
+      *raw = nullptr;
 
    ASSERT (v);
 
@@ -152,10 +152,10 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
             heading;
 
          entity
-				*dependent,
-				*special_effect,
-				*old_sector,
-				*new_sector;
+				*dependent = nullptr,
+				*special_effect = nullptr,
+				*old_sector = nullptr,
+				*new_sector = nullptr;
 
 			//
 			// notify dependents of move, must be done before set_vec3d so children can work out delta positions
@@ -336,7 +336,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    aircraft
-      *raw;
+      *raw = nullptr;
 
    ASSERT (v);
 
@@ -402,10 +402,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (aircraft *) get_local_entity_data (en);
 

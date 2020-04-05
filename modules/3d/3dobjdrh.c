@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +101,7 @@ static D3DMATRIX
 	d3d_matrix;
 
 object_3d_surface_info
-	*current_object_3d_surface_info;
+	*current_object_3d_surface_info = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +114,7 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 		object_number;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	vec3d
 		object_camera_position,
@@ -128,7 +123,7 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 		object_unit_pos;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	// DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
 	//
@@ -496,7 +491,7 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 		{
 
 			scene_slot_drawing_list
-				*buffer;
+				*buffer = nullptr;
 
 			//
 			// Insert surface list into renderer
@@ -600,7 +595,7 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 		sub_pos,
 		relative_position,
 		relative_scale,
-		*old_current_object_3d_relative_position;
+		*old_current_object_3d_relative_position = nullptr;
 
 	float
 		relative_heading,
@@ -608,7 +603,7 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 		relative_roll;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	viewpoint
 		vp;
@@ -1041,7 +1036,7 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 		object_unit_pos;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	viewpoint
 		old_object_vp;
@@ -1411,7 +1406,7 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 		{
 
 			scene_slot_drawing_list
-				*buffer;
+				*buffer = nullptr;
 
 			//
 			// Insert surface list into renderer
@@ -1508,7 +1503,7 @@ static void draw_zbuffered_sub_object ( object_3d_sub_instance *obj, object_3d_d
 		sub_pos,
 		relative_position,
 		relative_scale,
-		*old_current_object_3d_relative_position;
+		*old_current_object_3d_relative_position = nullptr;
 
 	float
 		relative_heading,
@@ -2094,7 +2089,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 						count;
 
 					NTVERTEX
-						*vertices;
+						*vertices = nullptr;
 
 					float
 						xmax,
@@ -2218,7 +2213,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 						count;
 
 					NTVERTEX
-						*vertices;
+						*vertices = nullptr;
 
 					float
 						xmax,
@@ -2502,7 +2497,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 						count;
 
 					NTVERTEX
-						*vertices;
+						*vertices = nullptr;
 
 					float
 						xmax,
@@ -2643,7 +2638,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 						count;
 
 					NTVERTEX
-						*vertices;
+						*vertices = nullptr;
 
 					float
 						xmax,
@@ -2849,7 +2844,7 @@ void draw_3d_hardware_translucent_object ( translucent_object_surface *transluce
 		object_camera_direction;
 
 	translucent_object_surface
-		*surface;
+		*surface = nullptr;
 
 	surface = translucent_surfaces;
 
@@ -3038,7 +3033,7 @@ void draw_3d_hardware_zbuffered_translucent_object ( translucent_object_surface 
 		object_camera_direction;
 
 	translucent_object_surface
-		*surface;
+		*surface = nullptr;
 
 	surface = translucent_surfaces;
 
@@ -3461,4 +3456,3 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

@@ -71,19 +71,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*gunships_screen,
-	*gunships_area,
-	*gunship_screen_back_button,
-	*gunship_screen_next_button,
-	*gunship_screen_button_title_area,
-	*gunship_screen_button_area,
-	*gunship_screen_gunship_type_button,
-	*gunship_screen_gunship_text,
-	*gunship_screen_gunship_text_area,
-	*gunship_screen_gunship_type_area,
-	*side_selected_area,
-	*gunship_screen_waiting_area,
-	*gunship_screen_waiting_area_text;
+	*gunships_screen = nullptr,
+	*gunships_area = nullptr,
+	*gunship_screen_back_button = nullptr,
+	*gunship_screen_next_button = nullptr,
+	*gunship_screen_button_title_area = nullptr,
+	*gunship_screen_button_area = nullptr,
+	*gunship_screen_gunship_type_button = nullptr,
+	*gunship_screen_gunship_text = nullptr,
+	*gunship_screen_gunship_text_area = nullptr,
+	*gunship_screen_gunship_type_area = nullptr,
+	*side_selected_area = nullptr,
+	*gunship_screen_waiting_area = nullptr,
+	*gunship_screen_waiting_area_text = nullptr;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ void initialise_gunships_screen (void)
 		y2;
 
 	ui_object
-		*option_bdrop;
+		*option_bdrop = nullptr;
 
 
 	// Casm 11JUN05 Preselect side if requested
@@ -815,10 +815,8 @@ void set_gunship_screen_progress_message (int message)
 
 void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 {
-#ifndef OGRE_EE
-
 	object_3d_instance
-		*apache;
+		*apache = nullptr;
 
 	static float
 		heading = 0,
@@ -990,7 +988,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		while ( find_object_3d_sub_object ( &result_sub_obj ) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
 		{
 			object_3d_sub_instance
-				*visible;
+				*visible = nullptr;
 			object_3d_sub_object_search_data
 				pitch;
 
@@ -1127,7 +1125,6 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	//
 	// DO NOT DESTRUCT THE TEMPORARY INSTANCE - IT WILL CAUSE A PAGE FAULT
 	//
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

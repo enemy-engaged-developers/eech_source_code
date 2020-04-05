@@ -71,23 +71,23 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-   *session_screen_next_bdrop,
-   *session_screen_back_button,
-   *session_screen_next_button,
-   *session_screen_continue_button, // Jabberwock 031118 Server side settings
-   *session_screen_continue_bdrop,
-   *session_screen_delete_button,
-   *session_screen_rename_button,
-   *session_info_list,
-   *session_list_bdrop,
-   *session_list_area,
-   *session_list,
-   *session_briefing_overlay,
-   *session_briefing_area,
-   *session_name_entry_area,
-   *session_name_input,
-   *session_screen,
-   *session_screen_connection_indicator;
+   *session_screen_next_bdrop = nullptr,
+   *session_screen_back_button = nullptr,
+   *session_screen_next_button = nullptr,
+   *session_screen_continue_button = nullptr, // Jabberwock 031118 Server side settings
+   *session_screen_continue_bdrop = nullptr,
+   *session_screen_delete_button = nullptr,
+   *session_screen_rename_button = nullptr,
+   *session_info_list = nullptr,
+   *session_list_bdrop = nullptr,
+   *session_list_area = nullptr,
+   *session_list = nullptr,
+   *session_briefing_overlay = nullptr,
+   *session_briefing_area = nullptr,
+   *session_name_entry_area = nullptr,
+   *session_name_input = nullptr,
+   *session_screen = nullptr,
+   *session_screen_connection_indicator = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ void initialise_session_screen (void)
 {
 
    ui_object
-		*option_bdrop;
+		*option_bdrop = nullptr;
 
 	float
 		x1,

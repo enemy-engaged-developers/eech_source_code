@@ -188,7 +188,7 @@ char psd_theme[128];
 int
 	number_of_cloud_puffs_colours;
 real_colour
-	*cloud_puffs_colours;
+	*cloud_puffs_colours = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -517,7 +517,7 @@ void save_global_options_data (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	if (!(file_ptr = fopen (global_options_filename, "wb")))
 	{
@@ -542,7 +542,7 @@ void load_global_options_data (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	int
 		size;

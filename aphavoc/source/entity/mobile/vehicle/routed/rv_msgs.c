@@ -84,9 +84,9 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 {
 
 	entity
-		*force,
-		*aggressor,
-		*enemy_force;
+		*force = nullptr,
+		*aggressor = nullptr,
+		*enemy_force = nullptr;
 
 	int
 		old_damage_state,
@@ -248,14 +248,14 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		velocity,
 		heading;
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (routed_vehicle *) get_local_entity_data (receiver);
 
@@ -282,7 +282,7 @@ static int response_to_waypoint_reverse_convoy_reached (entity_messages message,
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (routed_vehicle *) get_local_entity_data (receiver);
 
@@ -302,7 +302,7 @@ static int response_to_waypoint_reverse_convoy_reached (entity_messages message,
 	{
 
 		entity
-			*group;
+			*group = nullptr;
 
 		group = raw->vh.member_link.parent;
 
@@ -310,7 +310,7 @@ static int response_to_waypoint_reverse_convoy_reached (entity_messages message,
 		{
 
 			entity
-				*member;
+				*member = nullptr;
 
 			int
 				max_formation_position;

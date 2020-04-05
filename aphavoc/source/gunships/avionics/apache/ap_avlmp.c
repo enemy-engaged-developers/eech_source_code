@@ -201,7 +201,7 @@ static void update_engine_fire_lamps (void)
 static void update_indicator_lamps (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 

@@ -103,7 +103,7 @@ void flight (void)
 {
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	int
 		count;

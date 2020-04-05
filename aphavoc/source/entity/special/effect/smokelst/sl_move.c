@@ -79,7 +79,7 @@
 void smoke_list_movement( entity *en )
 {
 	smoke_list
-		*raw;
+		*raw = nullptr;
 		
 	float
 		dt,
@@ -88,8 +88,8 @@ void smoke_list_movement( entity *en )
 		delta_speed;
 
 	vec3d
-		*smoke_pos,
-		*smoke_mv,
+		*smoke_pos = nullptr,
+		*smoke_mv = nullptr,
 		wind_velocity;
 
 	int
@@ -98,7 +98,7 @@ void smoke_list_movement( entity *en )
 		number_of_slots;
 
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 
 	raw = (smoke_list *) get_local_entity_data (en);
 

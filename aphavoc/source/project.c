@@ -236,7 +236,6 @@ void application_main (int argc, char **argv)
 
 	#endif
 
-#ifndef OGRE_EE
 	//
 	// setup input system
 	//
@@ -475,18 +474,7 @@ void application_main (int argc, char **argv)
 	clear_screen ();
 
 	ddraw_flip_surface ();
-#else
-	initialise_graphics_colours ();
 
-	set_global_3d_visual_screen_width (application_video_width);
-	set_global_3d_visual_screen_height (application_video_height);
-
-	// ddraw_set_display_resolution ()
-	set_viewport (0, 0, application_video_width, application_video_height);
-
-	// initialise_input_system ()
-	initialise_mouse ();
-#endif
 
 	//
 	// Test the avis

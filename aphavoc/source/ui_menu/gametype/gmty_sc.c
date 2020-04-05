@@ -71,12 +71,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*game_type_selection_buttons,
-   *game_type_screen,
-	*campaign_button,
-	*ghost_campaign_button,
-	*skirmish_button,
-	*ghost_skirmish_button;
+	*game_type_selection_buttons = nullptr,
+   *game_type_screen = nullptr,
+	*campaign_button = nullptr,
+	*ghost_campaign_button = nullptr,
+	*skirmish_button = nullptr,
+	*ghost_skirmish_button = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,8 +104,8 @@ void initialise_game_type_screen (void)
       y_size;
 
 	ui_object
-		*option_bdrop,
-		*change_obj;
+		*option_bdrop = nullptr,
+		*change_obj = nullptr;
 
    game_type_screen = create_ui_object
             (
@@ -513,10 +513,10 @@ void game_type_button_function (ui_object *obj, void *arg)
 					warzone;
 
 				session_list_data_type
-					*session;
+					*session = nullptr;
 
 				ui_object
-					*item;
+					*item = nullptr;
 
 				//
 				// If we're in demo mode, hack it in!
@@ -667,7 +667,7 @@ void game_type_hilight_selection (ui_object *choice)
 {
 
 	ui_object
-		*next;
+		*next = nullptr;
 
 	next = get_ui_object_child (game_type_screen);
 

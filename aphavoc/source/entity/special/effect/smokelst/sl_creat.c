@@ -79,10 +79,10 @@
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop,
@@ -264,11 +264,11 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		if (command_line_smoke_optimization && raw->eff.special_effect_link.parent && (raw->smoke_type == SMOKE_LIST_TYPE_FIRE || raw->smoke_type == SMOKE_LIST_TYPE_SMALL_FIRE)) // kill neighbor fire smoke source 
 		{
 			entity 
-				*smoke,
-				*parent;
+				*smoke = nullptr,
+				*parent = nullptr;
 			vec3d
-				*parent_pos1,
-				*parent_pos2;
+				*parent_pos1 = nullptr,
+				*parent_pos2 = nullptr;
 					
 			parent_pos1 = get_local_entity_vec3d_ptr(raw->eff.special_effect_link.parent, VEC3D_TYPE_POSITION);
 			smoke = get_local_entity_first_child (get_update_entity (), LIST_TYPE_UPDATE);
@@ -324,7 +324,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -347,7 +347,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{

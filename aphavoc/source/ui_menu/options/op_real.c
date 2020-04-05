@@ -77,17 +77,17 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*realism_area,
-	*co_pilot_target_area,
-	*co_pilot_ecm_area,
-	*avionics_area,
-	*difficulty_area,
-	*cpg_report_targets_area,
-	*co_pilot_target_option_button,
-	*co_pilot_ecm_option_button,
-	*avionics_option_button,
-	*difficulty_option_button,
-	*cpg_report_targets_button;
+	*realism_area = nullptr,
+	*co_pilot_target_area = nullptr,
+	*co_pilot_ecm_area = nullptr,
+	*avionics_area = nullptr,
+	*difficulty_area = nullptr,
+	*cpg_report_targets_area = nullptr,
+	*co_pilot_target_option_button = nullptr,
+	*co_pilot_ecm_option_button = nullptr,
+	*avionics_option_button = nullptr,
+	*difficulty_option_button = nullptr,
+	*cpg_report_targets_button = nullptr;
 
 static const char
 	*option_boolean_text[2],
@@ -164,7 +164,7 @@ void define_options_screen_realism_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	ui_object
 		*title_change_array [5],

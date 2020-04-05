@@ -79,13 +79,13 @@ int run_length_encode_data ( const unsigned char *source_data, unsigned char *re
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned short int
-	*red_channel_line_lengths,
-	*green_channel_line_lengths,
-	*blue_channel_line_lengths;
+	*red_channel_line_lengths = nullptr,
+	*green_channel_line_lengths = nullptr,
+	*blue_channel_line_lengths = nullptr;
 
 unsigned char
-	*channel_compressed_data,
-	*channel_line_data;
+	*channel_compressed_data = nullptr,
+	*channel_line_data = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ void write_psd_screen_file ( const char *filename, int width, int height, int pi
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		reserved_bytes[6];
@@ -124,8 +124,8 @@ void write_psd_screen_file ( const char *filename, int width, int height, int pi
 		y;
 
 	const unsigned int
-		*graphic_data,
-		*source_line;
+		*graphic_data = nullptr,
+		*source_line = nullptr;
 
 	fp = safe_fopen ( filename, "wb" );
 
@@ -375,7 +375,7 @@ void write_psd_rgb_file ( const char *filename, int width, int height, int pitch
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		reserved_bytes[6];
@@ -388,8 +388,8 @@ void write_psd_rgb_file ( const char *filename, int width, int height, int pitch
 		y;
 
 	const unsigned char
-		*graphic_data,
-		*source_line;
+		*graphic_data = nullptr,
+		*source_line = nullptr;
 
 	fp = safe_fopen ( filename, "wb" );
 
@@ -630,7 +630,7 @@ void write_psd_greyscale ( const char *filename, int width, int height, int pitc
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		reserved_bytes[6];
@@ -799,7 +799,7 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		reserved_bytes[6];
@@ -812,7 +812,7 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 		y;
 
 	const unsigned char
-		*graphic_data;
+		*graphic_data = nullptr;
 
 	fp = safe_fopen ( filename, "wb" );
 
@@ -938,7 +938,7 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 	{
 
 		const unsigned char
-			*source_line;
+			*source_line = nullptr;
 
 		source_line = graphic_data;
 
@@ -973,7 +973,7 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 	{
 
 		const unsigned char
-			*source_line;
+			*source_line = nullptr;
 
 		source_line = graphic_data;
 

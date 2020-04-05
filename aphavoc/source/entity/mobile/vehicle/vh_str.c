@@ -89,7 +89,7 @@
 static void set_local_string (entity *en, string_types type, char *s)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (s);
 
@@ -193,10 +193,10 @@ static void set_client_string (entity *en, string_types type, char *s)
 static const char *get_local_string (entity *en, string_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 

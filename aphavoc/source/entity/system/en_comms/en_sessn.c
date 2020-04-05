@@ -82,7 +82,7 @@ struct COMMS_ENTITY_SMOKE_LIST_CREATION_TYPE
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	meta_smoke_list_types
 		meta_smoke_type;
@@ -92,10 +92,10 @@ struct COMMS_ENTITY_SMOKE_LIST_CREATION_TYPE
 
 	int
 		count,
-		*entity_index_list;
+		*entity_index_list = nullptr;
 
 	struct COMMS_ENTITY_SMOKE_LIST_CREATION_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct COMMS_ENTITY_SMOKE_LIST_CREATION_TYPE comms_entity_smoke_list_creation_type;
@@ -108,7 +108,7 @@ struct COMMS_ENTITY_SOUND_EFFECT_CREATION_TYPE
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -120,7 +120,7 @@ struct COMMS_ENTITY_SOUND_EFFECT_CREATION_TYPE
 		sample_index;
 
 	struct COMMS_ENTITY_SOUND_EFFECT_CREATION_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct COMMS_ENTITY_SOUND_EFFECT_CREATION_TYPE comms_entity_sound_effect_creation_type;
@@ -133,13 +133,13 @@ struct COMMS_ENTITY_LIST_VALIDATION_TYPE
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	list_types
 		list_type;
 
 	struct COMMS_ENTITY_LIST_VALIDATION_TYPE
-		*next;
+		*next = nullptr;
 };
 
 typedef struct COMMS_ENTITY_LIST_VALIDATION_TYPE comms_entity_list_validation_type;
@@ -149,14 +149,14 @@ typedef struct COMMS_ENTITY_LIST_VALIDATION_TYPE comms_entity_list_validation_ty
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 comms_entity_smoke_list_creation_type
-	*entity_smoke_list_creation;
+	*entity_smoke_list_creation = nullptr;
 
 comms_entity_sound_effect_creation_type
-	*entity_sound_effect_creation;
+	*entity_sound_effect_creation = nullptr;
 
 comms_entity_list_validation_type
-	*entity_list_link_validation,
-	*entity_list_root_validation;
+	*entity_list_link_validation = nullptr,
+	*entity_list_root_validation = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +197,7 @@ static void process_entity_sound_effect_creation (void);
 int pack_session (unsigned char *buffer, int *buffer_size, pack_modes mode)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		packed_data_size,
@@ -497,7 +497,7 @@ int pack_session (unsigned char *buffer, int *buffer_size, pack_modes mode)
 int unpack_session (unsigned char *buffer, int buffer_size, pack_modes mode)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_types
 		type;
@@ -751,13 +751,13 @@ void initialise_entity_list_validation (void)
 {
 
 	comms_entity_smoke_list_creation_type
-		*destroy_smoke_list;
+		*destroy_smoke_list = nullptr;
 
 	comms_entity_sound_effect_creation_type
-		*destroy_sound_effect;
+		*destroy_sound_effect = nullptr;
 
 	comms_entity_list_validation_type
-		*destroy_entity_list;
+		*destroy_entity_list = nullptr;
 
 	//
 	// list links
@@ -832,7 +832,7 @@ int register_entity_list_link_for_post_unpack_validation (struct ENTITY *en, int
 {
 
 	comms_entity_list_validation_type
-		*new_entity_list;
+		*new_entity_list = nullptr;
 
 	new_entity_list = (comms_entity_list_validation_type *) malloc_heap_mem (sizeof (comms_entity_list_validation_type));
 
@@ -848,7 +848,7 @@ int register_entity_list_link_for_post_unpack_validation (struct ENTITY *en, int
 	{
 
 		entity
-			*parent;
+			*parent = nullptr;
 
 		debug_log ("EN_SESSN: registering entity %s (%d) for link list %s validation", get_local_entity_type_name (en), get_local_entity_index (en), get_list_type_name (list_type));
 
@@ -868,7 +868,7 @@ int register_entity_list_root_for_post_unpack_validation (struct ENTITY *en, int
 {
 
 	comms_entity_list_validation_type
-		*new_entity_list;
+		*new_entity_list = nullptr;
 
 	new_entity_list = (comms_entity_list_validation_type *) malloc_heap_mem (sizeof (comms_entity_list_validation_type));
 
@@ -884,7 +884,7 @@ int register_entity_list_root_for_post_unpack_validation (struct ENTITY *en, int
 	{
 
 		entity
-			*first_child;
+			*first_child = nullptr;
 
 		debug_log ("EN_SESSN: registering entity %s (%d) for list root %s validation", get_local_entity_type_name (en), get_local_entity_index (en), get_list_type_name (list_type));
 
@@ -912,14 +912,14 @@ void process_entity_list_link_validation (void)
 {
 
 	entity
-		*en,
-		*succ,
-		*pred,
-		*parent,
-		*last_en;
+		*en = nullptr,
+		*succ = nullptr,
+		*pred = nullptr,
+		*parent = nullptr,
+		*last_en = nullptr;
 
 	comms_entity_list_validation_type
-		*this_entity_list;
+		*this_entity_list = nullptr;
 
 	dump_entities ();
 
@@ -1067,11 +1067,11 @@ void process_entity_list_root_validation (void)
 {
 
 	entity
-		*en,
-		*first_child;
+		*en = nullptr,
+		*first_child = nullptr;
 
 	comms_entity_list_validation_type
-		*this_entity_list;
+		*this_entity_list = nullptr;
 
 	while (entity_list_root_validation)
 	{
@@ -1140,12 +1140,12 @@ void repair_landing_entity_locks (pack_modes mode)
 {
 
 	entity
-		*en,
-		*guide,
-		*group,
-		*keysite,
-		*landing,
-		*task;
+		*en = nullptr,
+		*guide = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*landing = nullptr,
+		*task = nullptr;
 
 	int
 		landing_flag;
@@ -1310,7 +1310,7 @@ void register_attach_meta_smoke_list_to_object (entity *en, int type, object_3d_
 {
 
 	comms_entity_smoke_list_creation_type
-		*new_smoke_list_creation;
+		*new_smoke_list_creation = nullptr;
 
 	new_smoke_list_creation = (comms_entity_smoke_list_creation_type *) malloc_heap_mem (sizeof (comms_entity_smoke_list_creation_type));
 
@@ -1339,7 +1339,7 @@ void register_attach_sound_effect_to_object (entity *en, int index, entity_sides
 {
 
 	comms_entity_sound_effect_creation_type
-		*new_sound_effect_creation;
+		*new_sound_effect_creation = nullptr;
 
 	new_sound_effect_creation = (comms_entity_sound_effect_creation_type *) malloc_heap_mem (sizeof (comms_entity_sound_effect_creation_type));
 
@@ -1368,7 +1368,7 @@ void process_entity_smoke_list_creation (void)
 {
 	
 	comms_entity_smoke_list_creation_type
-		*this_smoke_list_creation;
+		*this_smoke_list_creation = nullptr;
 
 	while (entity_smoke_list_creation)
 	{
@@ -1410,7 +1410,7 @@ void process_entity_sound_effect_creation (void)
 {
 	
 	comms_entity_sound_effect_creation_type
-		*this_sound_effect_creation;
+		*this_sound_effect_creation = nullptr;
 
 	int
 		sample_index;
@@ -1490,8 +1490,8 @@ void kill_entities_awaiting_update (void)
 {
 
 	entity
-		*destroy_en,
-		*en;
+		*destroy_en = nullptr,
+		*en = nullptr;
 
 	en = get_local_entity_list ();
 

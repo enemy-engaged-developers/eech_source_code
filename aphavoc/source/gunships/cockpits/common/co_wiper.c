@@ -122,8 +122,8 @@ typedef enum RAIN_FALL_TYPES rain_fall_types;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 screen
-	*pilot_wiped_rain_texture_screen,
-	*co_pilot_wiped_rain_texture_screen;
+	*pilot_wiped_rain_texture_screen = nullptr,
+	*co_pilot_wiped_rain_texture_screen = nullptr;
 
 int
 	wiper_on,
@@ -149,10 +149,10 @@ rain_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static screen
-	*rain_texture_screen,
-	*composite_rain_texture_screen,
-	*composite_pilot_wiped_rain_texture_screen,
-	*composite_co_pilot_wiped_rain_texture_screen;
+	*rain_texture_screen = nullptr,
+	*composite_rain_texture_screen = nullptr,
+	*composite_pilot_wiped_rain_texture_screen = nullptr,
+	*composite_co_pilot_wiped_rain_texture_screen = nullptr;
 
 static float
 	wipe_interval,
@@ -612,7 +612,7 @@ rain_fall_types get_rain_fall_type (void)
 		weather_mode;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		altitude;
@@ -703,8 +703,8 @@ rain_fall_types get_rain_fall_type (void)
 void clear_full_rain_effect (screen *composite_rain_texture_screen)
 {
 	unsigned
-		*composite_rain_texture_screen_data,
-		*dst;
+		*composite_rain_texture_screen_data = nullptr,
+		*dst = nullptr;
 
 	int
 		composite_rain_texture_screen_pitch,
@@ -737,8 +737,8 @@ void clear_full_rain_effect (screen *composite_rain_texture_screen)
 void clear_rain_effect (screen *composite_rain_texture_screen)
 {
 	unsigned
-		*composite_rain_texture_screen_data,
-		*dst;
+		*composite_rain_texture_screen_data = nullptr,
+		*dst = nullptr;
 
 	int
 		composite_rain_texture_screen_pitch,
@@ -865,10 +865,10 @@ void apply_rain_effect (screen *composite_rain_texture_screen, int light_rate, i
 void wipe_rain_effect (screen *wiped_rain_texture_screen, screen *composite_wiped_rain_texture_screen, wipe_types wipe_type)
 {
 	unsigned
-		*wiped_rain_texture_screen_data,
-		*composite_wiped_rain_texture_screen_data,
-		*src,
-		*dst;
+		*wiped_rain_texture_screen_data = nullptr,
+		*composite_wiped_rain_texture_screen_data = nullptr,
+		*src = nullptr,
+		*dst = nullptr;
 
 	int
 		wiped_rain_texture_screen_pitch,

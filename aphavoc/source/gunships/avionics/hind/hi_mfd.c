@@ -97,7 +97,7 @@ static mfd_modes
 #define EO_VIEWPORT_SIZE   			(256)
 
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 
 static float
 	mfd_viewport_size,
@@ -145,9 +145,9 @@ static object_3d_short_textured_point
 #define OVERLAID_MFD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD1)
 
 static screen
-	*eo_texture_screen,
-	*mfd_texture_screen,
-	*flight_mfd_texture_screen;   				//  Javelin  6/19
+	*eo_texture_screen = nullptr,
+	*mfd_texture_screen = nullptr,
+	*flight_mfd_texture_screen = nullptr;   				//  Javelin  6/19
 #endif
 
 static vec3d
@@ -650,11 +650,11 @@ static void draw_map_display(void)
 		scale;
 
 	entity
-		*source;
+		*source = nullptr;
 
 	vec3d
-		*source_position,
-		*position;				//  Javelin  6/19
+		*source_position = nullptr,
+		*position = nullptr;				//  Javelin  6/19
 
 	source = get_gunship_entity ();
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
@@ -704,8 +704,8 @@ static void draw_map_display(void)
 
 	{
 		entity
-			*wp1,
-			*wp2;
+			*wp1 = nullptr,
+			*wp2 = nullptr;
 
 		vec3d
 			wp1_rel_position,
@@ -879,7 +879,7 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -932,7 +932,7 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -951,11 +951,11 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_point;
 
 	viewpoint
@@ -1503,7 +1503,7 @@ void get_mi24_map_caret_position(float *x, float *z)
 	if (!hind_damage.navigation_computer)
 	{
 		vec3d
-			*position;
+			*position = nullptr;
 		float
 			nx,
 			nz;
@@ -1589,14 +1589,14 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		if (!hind_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -2046,8 +2046,8 @@ static void draw_pitch_ladder (void)
 		else  // 90 degree bank
 		{
 			rgb_colour
-				*left_colour,
-				*right_colour;
+				*left_colour = nullptr,
+				*right_colour = nullptr;
 
 			if (roll == rad(90))
 			{
@@ -2215,7 +2215,7 @@ static void draw_altitude_scale (void)
 
 
 	char
-		*format,
+		*format = nullptr,
 		buffer[8];
 
 	int
@@ -2519,10 +2519,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float

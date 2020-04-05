@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

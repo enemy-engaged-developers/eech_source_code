@@ -79,7 +79,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 update_function_data_type
-	*update_function_list;
+	*update_function_list = nullptr;
 
 int
 	update_counter;
@@ -156,8 +156,8 @@ int add_update_function (void ((*function) (void)), float sleep_time, float offs
 {
 
 	update_function_data_type
-		*list_ptr,
-		*new_update_function;
+		*list_ptr = nullptr,
+		*new_update_function = nullptr;
 
 	int
 		unique_in_list_flag = TRUE;
@@ -223,8 +223,8 @@ int remove_update_function (void ((*function) (void)))
 {
 
 	update_function_data_type
-		*prev_update_function,
-		*update_function;
+		*prev_update_function = nullptr,
+		*update_function = nullptr;
 
 	if (!function)
 	{
@@ -282,7 +282,7 @@ void update_update_functions (void)
 {
 
 	update_function_data_type
-		*update_function;
+		*update_function = nullptr;
 
 	update_function = update_function_list;
 

@@ -74,7 +74,7 @@ static void draw_input_ui_object (ui_object *obj)
 {
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
    float
       cursor_width,
@@ -87,11 +87,11 @@ static void draw_input_ui_object (ui_object *obj)
       y1;
 
    input_ui_object
-      *input_obj;
+      *input_obj = nullptr;
 
 	ui_object
-		*parent,
-		*temp_obj;
+		*parent = nullptr,
+		*temp_obj = nullptr;
 
 	temp_obj = obj;
 

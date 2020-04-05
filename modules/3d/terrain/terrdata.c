@@ -80,16 +80,16 @@
 
 terrain_3d_sector
 	**terrain_sectors,
-	*terrain_sector_memory,
+	*terrain_sector_memory = nullptr,
 	*terrain_sector_approximations = NULL;
 
 terrain_3d_tree_sector
 	**terrain_tree_sectors;
 
 static unsigned char
-	*terrain_3d_geometry_data,
-	*terrain_3d_colour_data,
-	*terrain_3d_trees_data;
+	*terrain_3d_geometry_data = nullptr,
+	*terrain_3d_colour_data = nullptr,
+	*terrain_3d_trees_data = nullptr;
 
 static int
 	terrain_initialised = FALSE;
@@ -187,10 +187,10 @@ int load_3d_terrain ( const char *path )
 		int_map_number;
 
 	unsigned char
-		*terrain_3d_local_data,
-		*terrain_3d_sector_data;
+		*terrain_3d_local_data = nullptr,
+		*terrain_3d_sector_data = nullptr;
 	const char
-		*map_number;
+		*map_number = nullptr;
 
 	char
 		free_form_polygon_file[1024],
@@ -200,7 +200,7 @@ int load_3d_terrain ( const char *path )
 		tree_data_file[1024];
 
 	terrain_3d_sector
-		*terrain_sector_ptr;
+		*terrain_sector_ptr = nullptr;
 
 #ifndef OGRE_EE
 	memset(white_col, 255, sizeof(white_col));
@@ -830,7 +830,7 @@ int load_3d_terrain ( const char *path )
 				int
 					number_of_cloud_puffs;
 				terrain_3d_cloud_puff_data
-					*cloud_puffs;
+					*cloud_puffs = nullptr;
 
 				float
 					center_x,
@@ -920,7 +920,7 @@ void unload_3d_terrain ( void )
 			{
 
 				terrain_3d_object
-					*object;
+					*object = nullptr;
 
 				object = terrain_sectors[z][x].objects;
 
@@ -1199,13 +1199,13 @@ void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename )
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		id[8];
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	int
 		count,
@@ -1214,13 +1214,13 @@ void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename )
 		number_of_point_references;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	fp = safe_fopen ( filename, "wb" );
 
@@ -1357,7 +1357,7 @@ void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename )
 			points_offset;
 
 		terrain_3d_surface
-			*surface;
+			*surface = nullptr;
 
 		fwrite ( "POLS", 4, 1, fp );
 
@@ -1754,13 +1754,13 @@ int get_terrain_3d_types_in_sector ( float x, float z )
 		z_sec;
 
 	struct TERRAIN_3D_FACE
-		*polygon;
+		*polygon = nullptr;
 
 	struct TERRAIN_3D_SURFACE
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	get_terrain_3d_sector ( x, z, &x_sec, &z_sec );
 
@@ -1809,13 +1809,13 @@ int get_terrain_3d_number_of_type_triangles_in_sector ( float x, float z, terrai
 		z_sec;
 
 	struct TERRAIN_3D_FACE
-		*polygon;
+		*polygon = nullptr;
 
 	struct TERRAIN_3D_SURFACE
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	get_terrain_3d_sector ( x, z, &x_sec, &z_sec );
 
@@ -1871,22 +1871,22 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 		sector_z_offset;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	terrain_3d_triangle
-		*triangle;
+		*triangle = nullptr;
 
 	get_terrain_3d_sector ( x, z, &x_sec, &z_sec );
 

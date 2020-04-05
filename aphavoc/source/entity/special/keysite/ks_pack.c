@@ -150,14 +150,14 @@ void overload_keysite_pack_functions (void)
 void pack_local_keysite_data (pack_modes mode)
 {
    entity
-      *en,
-		*landing_en;
+      *en = nullptr,
+		*landing_en = nullptr;
 
 	landing
-		*landing_raw;
+		*landing_raw = nullptr;
 
    keysite
-      *raw;
+      *raw = nullptr;
 
    ASSERT (mode != PACK_MODE_UPDATE_ENTITY);
 
@@ -284,14 +284,14 @@ void pack_local_keysite_data (pack_modes mode)
 void unpack_local_keysite_data (pack_modes mode)
 {
    entity
-      *en,
-		*landing_en;
+      *en = nullptr,
+		*landing_en = nullptr;
 
 	landing
-		*landing_raw;
+		*landing_raw = nullptr;
 
    keysite
-      *raw;
+      *raw = nullptr;
 
 	int
 		side,

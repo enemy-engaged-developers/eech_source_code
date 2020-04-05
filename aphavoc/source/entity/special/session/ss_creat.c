@@ -81,10 +81,10 @@
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
   	//
@@ -264,7 +264,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -287,7 +287,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{

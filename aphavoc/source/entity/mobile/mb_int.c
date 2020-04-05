@@ -79,7 +79,7 @@
 static void set_local_int_value (entity *en, int_types type, int value)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -259,7 +259,7 @@ static void set_client_int_value (entity *en, int_types type, int value)
 static int get_local_int_value (entity *en, int_types type)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;
@@ -301,7 +301,7 @@ static int get_local_int_value (entity *en, int_types type)
 			if (get_local_entity_int_value (en, INT_TYPE_LANDED))
 			{
 				entity
-					*landing;
+					*landing = nullptr;
 
 				int
 					formation_position;

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A5FB423F-DAD7-4281-B3A1-72174917712A}</ProjectGuid>
+    <RootNamespace>ModulesUserInt2</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.29904.37</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderFile>userint2.h</PrecompiledHeaderFile>
+      <AssemblerOutput>All</AssemblerOutput>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <AdditionalOptions> </AdditionalOptions>
+      <PrecompiledHeaderFile>userint2.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <SDLCheck>true</SDLCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="modules\userint2\ui_draw\uiarea.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uibutton.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uiclip.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uicolour.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uifont.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uigraph.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uihilght.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uiorigin.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uiscreen.c" />
+    <ClCompile Include="modules\userint2\ui_draw\uiwindow.c" />
+    <ClCompile Include="modules\userint2\ui_man.c">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AssemblyAndSourceCode</AssemblerOutput>
+    </ClCompile>
+    <ClCompile Include="modules\userint2\ui_obj\area\area.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_col.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_fns.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_graph.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_links.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_notif.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_org.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_pos.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_ptr.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_size.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_slid.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_txt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\area\ar_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\button\bu_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\button\bu_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\button\bu_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\close\close.c" />
+    <ClCompile Include="modules\userint2\ui_obj\close\cl_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\close\cl_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\close\cl_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\input.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\in_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\in_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\in_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\in_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\input\in_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\list.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_size.c" />
+    <ClCompile Include="modules\userint2\ui_obj\list\li_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\menu\menu.c" />
+    <ClCompile Include="modules\userint2\ui_obj\menu\me_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\menu\me_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\menu\me_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\menu\me_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\number.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_fns.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\number\nu_txt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\radio\radio.c" />
+    <ClCompile Include="modules\userint2\ui_obj\radio\ra_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\radio\ra_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\radio\ra_fns.c" />
+    <ClCompile Include="modules\userint2\ui_obj\radio\ra_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\screen\screen.c" />
+    <ClCompile Include="modules\userint2\ui_obj\screen\sc_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\screen\sc_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\screen\sc_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\screen\sc_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\mslider.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\ms_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\ms_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\ms_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\ms_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\ms_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\slider.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\sl_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\sl_slid.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\vslider.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\vs_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\vs_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\vs_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\slider\vs_updt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_col.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_creat.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_draw.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_fns.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\text\tx_txt.c" />
+    <ClCompile Include="modules\userint2\ui_obj\toggle\toggle.c" />
+    <ClCompile Include="modules\userint2\ui_obj\toggle\to_flags.c" />
+    <ClCompile Include="modules\userint2\ui_obj\toggle\to_fns.c" />
+    <ClCompile Include="modules\userint2\ui_obj\toggle\to_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_obj\ui_obj.c" />
+    <ClCompile Include="modules\userint2\ui_paint.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_attrs\ui_attrs.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_color.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_creat.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_draw.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_flags.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_fns.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_funcs.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_graph.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_links.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_notif.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_org.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_pos.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_ptr.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_size.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_slid.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_txt.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_funcs\ui_updt.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_sys.c" />
+    <ClCompile Include="modules\userint2\ui_sys\ui_types\ui_types.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modules\userint.h" />
+    <ClInclude Include="modules\userint2.h" />
+    <ClInclude Include="modules\userint2\oaidl.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uiarea.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uibutton.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uiclip.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uicolour.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uifont.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uigraph.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uihilght.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uiorigin.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uiscreen.h" />
+    <ClInclude Include="modules\userint2\ui_draw\uiwindow.h" />
+    <ClInclude Include="modules\userint2\ui_man.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\area.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_col.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_fns.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_graph.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_links.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_notif.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_org.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_pos.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_ptr.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_size.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_slid.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_txt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\area\ar_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\button\button.h" />
+    <ClInclude Include="modules\userint2\ui_obj\button\bu_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\button\bu_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\button\bu_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\close\close.h" />
+    <ClInclude Include="modules\userint2\ui_obj\close\cl_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\close\cl_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\close\cl_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\input.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\in_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\in_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\in_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\in_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\input\in_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\list.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_size.h" />
+    <ClInclude Include="modules\userint2\ui_obj\list\li_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\menu\menu.h" />
+    <ClInclude Include="modules\userint2\ui_obj\menu\me_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\menu\me_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\menu\me_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\menu\me_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\number.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_fns.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\number\nu_txt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\radio\radio.h" />
+    <ClInclude Include="modules\userint2\ui_obj\radio\ra_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\radio\ra_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\radio\ra_fns.h" />
+    <ClInclude Include="modules\userint2\ui_obj\radio\ra_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\screen\screen.h" />
+    <ClInclude Include="modules\userint2\ui_obj\screen\sc_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\screen\sc_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\screen\sc_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\screen\sc_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\mslider.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\ms_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\ms_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\ms_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\ms_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\ms_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\slider.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\sl_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\sl_slid.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\vslider.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\vs_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\vs_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\vs_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\slider\vs_updt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\text.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_col.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_creat.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_draw.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_fns.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\text\tx_txt.h" />
+    <ClInclude Include="modules\userint2\ui_obj\toggle\toggle.h" />
+    <ClInclude Include="modules\userint2\ui_obj\toggle\to_flags.h" />
+    <ClInclude Include="modules\userint2\ui_obj\toggle\to_fns.h" />
+    <ClInclude Include="modules\userint2\ui_obj\toggle\to_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_obj\ui_obj.h" />
+    <ClInclude Include="modules\userint2\ui_paint.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_attrs\ui_attrs.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_color.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_creat.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_draw.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_flags.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_fns.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_funcs.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_graph.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_links.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_notif.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_org.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_pos.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_ptr.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_size.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_slid.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_txt.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_funcs\ui_updt.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_sys.h" />
+    <ClInclude Include="modules\userint2\ui_sys\ui_types\ui_types.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

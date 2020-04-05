@@ -79,10 +79,10 @@
 void reset_cinematic_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		num_moving_cameras,
@@ -310,7 +310,7 @@ void update_cinematic_camera (camera *raw)
 		case OBJECT_3D_CAMERA_SCENIC_STATIC:
 		{
 			object_3d_instance
-				*inst3d;
+				*inst3d = nullptr;
 
 			inst3d = (object_3d_instance *) get_local_entity_ptr_value (raw->external_view_entity, PTR_TYPE_INSTANCE_3D_OBJECT);
 
@@ -371,10 +371,10 @@ void update_cinematic_camera (camera *raw)
 void update_cinematic_camera_continued (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	viewpoint
 		vp;

@@ -103,8 +103,8 @@ void update_apache_weapon_systems (void)
 		inhibit_launch;
 
 	entity
-		*en,
-		*target;
+		*en = nullptr,
+		*target = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;

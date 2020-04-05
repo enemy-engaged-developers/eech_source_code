@@ -186,7 +186,7 @@ int get_local_group_member_count (entity *group)
 {
 
 	entity
-		*member;
+		*member = nullptr;
 
 	int
 		count;
@@ -214,7 +214,7 @@ int get_local_group_member_max_formation_position (entity *group)
 {
 
 	entity
-		*member;
+		*member = nullptr;
 
 	int
 		max_formation_position;
@@ -245,12 +245,12 @@ int get_local_group_member_max_formation_position (entity *group)
 int assess_group_task_locality_factor (entity *group_en, entity *task_en, float *return_distance)
 {
 	entity
-		*keysite,
-		*member;
+		*keysite = nullptr,
+		*member = nullptr;
 
 	vec3d
-		*pos1,
-		*pos2;
+		*pos1 = nullptr,
+		*pos2 = nullptr;
 
 	float
 		eta,
@@ -342,8 +342,8 @@ int assess_group_task_locality_factor (entity *group_en, entity *task_en, float 
 entity *get_group_at_road_node (int node)
 {
 	entity
-		*force,
-		*group;
+		*force = nullptr,
+		*group = nullptr;
 
 	force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 
@@ -382,8 +382,8 @@ int amalgamate_groups (entity *receiving_group, entity *donating_group)
 {
 
 	entity
-		*this_member,
-		*member;
+		*this_member = nullptr,
+		*member = nullptr;
 
 	int
 		group_type,
@@ -512,8 +512,8 @@ int amalgamate_groups (entity *receiving_group, entity *donating_group)
 		{
 
 			vec3d
-				*pos1,
-				*test_pos;
+				*pos1 = nullptr,
+				*test_pos = nullptr;
 
 			float
 				amalgamate_max_range = 10 * KILOMETRE;
@@ -562,7 +562,7 @@ void set_group_verbose_operational_state (entity *en, int state)
 {
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_CLIENT)
 	{
@@ -588,7 +588,7 @@ void set_group_verbose_operational_state (entity *en, int state)
 int get_group_suitable_for_player (entity *group, entity *pilot)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	ASSERT (group);
 
@@ -620,11 +620,11 @@ void assess_group_supplies (entity *en)
 {
 
 	entity
-		*keysite,
-		*force;
+		*keysite = nullptr,
+		*force = nullptr;
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	float
 		required,
@@ -772,7 +772,7 @@ void set_group_member_numbers (entity *en)
 		number;
 
 	entity
-		*member;
+		*member = nullptr;
 
 	ASSERT (en);
 
@@ -799,7 +799,7 @@ void set_group_member_numbers (entity *en)
 void set_group_formation_positions (entity *en)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	ASSERT (en);
 
@@ -823,17 +823,17 @@ void group_return_to_base (entity *en)
 {
 
 	entity
-		*wp,
-		*guide,
-		*last_wp,
-		*best_wp,
-		*obj_wp,
-		*current_wp;
+		*wp = nullptr,
+		*guide = nullptr,
+		*last_wp = nullptr,
+		*best_wp = nullptr,
+		*obj_wp = nullptr,
+		*current_wp = nullptr;
 
 	vec3d
-		*pos,
-		*wp_pos,
-		*last_pos,
+		*pos = nullptr,
+		*wp_pos = nullptr,
+		*last_pos = nullptr,
 		normal;
 
 	float
@@ -977,8 +977,8 @@ void group_return_to_base (entity *en)
 void group_terminate_all_tasks (entity *en)
 {
 	entity
-		*task,
-		*guide;
+		*task = nullptr,
+		*guide = nullptr;
 
 	int
 		task_type;
@@ -1021,8 +1021,8 @@ void group_terminate_all_tasks (entity *en)
 void group_kill_all_members (entity *en)
 {
 	entity
-		*next,
-		*member;
+		*next = nullptr,
+		*member = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1045,8 +1045,8 @@ void group_kill_all_members (entity *en)
 void group_destroy_all_members (entity *en)
 {
 	entity
-		*next,
-		*member;
+		*next = nullptr,
+		*member = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1079,9 +1079,9 @@ void group_destroy_all_members (entity *en)
 void kill_client_server_group_entity (entity *en)
 {
 	entity
-		*guide,
-		*task,
-		*next;
+		*guide = nullptr,
+		*task = nullptr,
+		*next = nullptr;
 
 	ASSERT (en);
 
@@ -1130,9 +1130,9 @@ void kill_client_server_group_entity (entity *en)
 int create_group_emergency_transfer_task (entity *en)
 {
 	entity
-		*landing,
-		*new_keysite,
-		*new_task;
+		*landing = nullptr,
+		*new_keysite = nullptr,
+		*new_task = nullptr;
 
 	int
 		side,
@@ -1140,7 +1140,7 @@ int create_group_emergency_transfer_task (entity *en)
 		sites_required;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (en);
 
@@ -1218,8 +1218,8 @@ int check_group_task_type (entity *group, entity_sub_types task_type)
 {
 
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	guide = get_local_entity_first_child (group, LIST_TYPE_GUIDE_STACK);
 
@@ -1247,8 +1247,8 @@ int check_group_task_type (entity *group, entity_sub_types task_type)
 int check_group_task_type_valid_members (entity *group, entity_sub_types task_type)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	guide = get_local_entity_first_child (group, LIST_TYPE_GUIDE_STACK);
 
@@ -1277,8 +1277,8 @@ int check_group_task_type_valid_members (entity *group, entity_sub_types task_ty
 int group_task_specific_retaliation_checks (entity *group, entity *aggressor, int assisted)
 {
 	entity
-		*task,
-		*objective;
+		*task = nullptr,
+		*objective = nullptr;
 
 	task_roe_types
 		roe;
@@ -1287,9 +1287,9 @@ int group_task_specific_retaliation_checks (entity *group, entity *aggressor, in
 		side;
 
 	vec3d
-		*group_pos,
-		*objective_pos,
-		*aggressor_pos;
+		*group_pos = nullptr,
+		*objective_pos = nullptr,
+		*aggressor_pos = nullptr;
 
 	int
 		sx,

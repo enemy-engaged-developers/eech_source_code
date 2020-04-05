@@ -77,7 +77,7 @@ static void call_number_ui_object_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	number_ui_object
-		*number;
+		*number = nullptr;
 
 	number = (number_ui_object *) obj->data;
 
@@ -125,7 +125,7 @@ static void call_number_ui_object_right_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	number_ui_object
-		*number;
+		*number = nullptr;
 
 	number = (number_ui_object *) obj->data;
 

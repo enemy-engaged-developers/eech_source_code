@@ -71,7 +71,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*current_menu;
+	*current_menu = nullptr;
 
 static int
 	menu_stack_size = 0;
@@ -84,8 +84,8 @@ void push_ui_menu (ui_object *this_stack, ui_object *obj)
 {
 
 	ui_object
-		*stack_head,
-		*stack_search;
+		*stack_head = nullptr,
+		*stack_search = nullptr;
 
 	ASSERT (this_stack->type == UI_TYPE_MENU_STACK);
 
@@ -170,7 +170,7 @@ int pop_ui_menu (ui_object *this_stack)
 {
 
 	ui_object
-		*stack_head;
+		*stack_head = nullptr;
 
 	// store menu to pop and unlink it and destroy it.
 

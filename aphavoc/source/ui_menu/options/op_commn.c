@@ -71,9 +71,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*option_page_ok_button,
-	*ghost_sound_option_button,
-	*ghost_multiplayer_option_button;
+	*option_page_ok_button = nullptr,
+	*ghost_sound_option_button = nullptr,
+	*ghost_multiplayer_option_button = nullptr;
 
 int
 	option_page_ok_button_reasons;
@@ -99,7 +99,7 @@ static void notify_options_page_button (ui_object *obj, void *arg)
 void define_options_screen_common_objects (void)
 {
 	ui_object
-		*option_bdrop;
+		*option_bdrop = nullptr;
 
 	float
 		x1,

@@ -74,7 +74,7 @@ static void create_list_ui_object (ui_object *obj, ui_object_types type, va_list
 {
 
    list_ui_object
-      *new_list;
+      *new_list = nullptr;
 
 	increase_ui_object_counter ();
 

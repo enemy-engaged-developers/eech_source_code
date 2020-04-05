@@ -74,7 +74,7 @@ static void set_area_ui_object_x (ui_object *obj, float x)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -95,14 +95,14 @@ static float get_area_ui_object_x (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		px = 0;
 
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	parent = get_ui_object_parent (obj);
 
@@ -125,7 +125,7 @@ static void set_area_ui_object_y (ui_object *obj, float y)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -146,14 +146,14 @@ static float get_area_ui_object_y (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		py = 0;
 
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	parent = get_ui_object_parent (obj);
 
@@ -176,7 +176,7 @@ static void set_area_ui_object_cx (ui_object *obj, float cx)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 	
@@ -191,7 +191,7 @@ static float get_area_ui_object_cx (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -206,7 +206,7 @@ static void set_area_ui_object_cy (ui_object *obj, float cy)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -221,7 +221,7 @@ static float get_area_ui_object_cy (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

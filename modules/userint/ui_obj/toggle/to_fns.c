@@ -77,7 +77,7 @@ static void call_toggle_ui_object_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	toggle_ui_object
-		*toggle;
+		*toggle = nullptr;
 
 	toggle = obj->data;
 
@@ -113,7 +113,7 @@ static void call_toggle_ui_object_right_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	toggle_ui_object
-		*toggle;
+		*toggle = nullptr;
 
 	toggle = obj->data;
 

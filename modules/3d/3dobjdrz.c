@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +96,7 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		object_number;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	vec3d
 		object_camera_position,
@@ -109,10 +104,10 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		object_unit_pos;
 
 	polygon_buffer
-		*translucent_sorted_buffer;
+		*translucent_sorted_buffer = nullptr;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	viewpoint
 		old_object_vp;
@@ -500,7 +495,7 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		{
 
 			scene_slot_drawing_list
-				*buffer;
+				*buffer = nullptr;
 
 			//
 			// Insert surface list into renderer
@@ -553,7 +548,7 @@ void draw_zbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		{
 
 			scene_slot_drawing_list
-				*buffer;
+				*buffer = nullptr;
 
 			//
 			// There were translucencies there, insert this buffer into the scene list
@@ -651,7 +646,7 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 		sub_pos,
 		relative_position,
 		relative_scale,
-		*old_current_object_3d_relative_position;
+		*old_current_object_3d_relative_position = nullptr;
 
 	float
 		relative_heading,
@@ -659,7 +654,7 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 		relative_roll;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	viewpoint
 		vp;
@@ -1080,4 +1075,3 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

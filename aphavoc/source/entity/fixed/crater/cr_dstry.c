@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	crater
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

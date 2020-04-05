@@ -93,8 +93,8 @@ void draw_software_plain_polygon ( vertex *polygon, unsigned int colour, float r
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -142,8 +142,8 @@ void draw_software_gouraud_shaded_polygon ( vertex *polygon, unsigned int colour
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
@@ -191,8 +191,8 @@ void draw_software_plain_textured_polygon ( vertex *polygon, struct TEXTURE_MAP 
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -239,8 +239,8 @@ void draw_software_flat_shaded_textured_polygon ( vertex *polygon, struct TEXTUR
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -288,8 +288,8 @@ void draw_software_gouraud_shaded_textured_polygon ( vertex *polygon, struct TEX
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -337,8 +337,8 @@ void draw_software_plain_textured_anchored_polygon ( vertex *polygon, struct TEX
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -385,8 +385,8 @@ void draw_software_flat_shaded_textured_anchored_polygon ( vertex *polygon, stru
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -433,8 +433,8 @@ void draw_software_gouraud_shaded_textured_anchored_polygon ( vertex *polygon, s
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -481,8 +481,8 @@ void draw_software_plain_textured_perspective_polygon ( vertex *polygon, struct 
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -529,8 +529,8 @@ void draw_software_flat_shaded_textured_perspective_polygon ( vertex *polygon, s
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -577,8 +577,8 @@ void draw_software_gouraud_shaded_textured_perspective_polygon ( vertex *polygon
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -625,8 +625,8 @@ void draw_software_plain_wrapped_textured_polygon ( vertex *polygon, struct TEXT
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -673,8 +673,8 @@ void draw_software_flat_shaded_wrapped_textured_polygon ( vertex *polygon, struc
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -721,8 +721,8 @@ void draw_software_gouraud_shaded_wrapped_textured_polygon ( vertex *polygon, st
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -769,8 +769,8 @@ void draw_software_plain_wrapped_textured_anchored_polygon ( vertex *polygon, st
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -817,8 +817,8 @@ void draw_software_flat_shaded_wrapped_textured_anchored_polygon ( vertex *polyg
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -865,8 +865,8 @@ void draw_software_gouraud_shaded_wrapped_textured_anchored_polygon ( vertex *po
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -913,8 +913,8 @@ void draw_software_plain_wrapped_textured_perspective_polygon ( vertex *polygon,
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -961,8 +961,8 @@ void draw_software_flat_shaded_wrapped_textured_perspective_polygon ( vertex *po
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 
@@ -1009,8 +1009,8 @@ void draw_software_gouraud_shaded_wrapped_textured_perspective_polygon ( vertex 
 {
 
 	vertex
-		*this_point,
-		*last_point;
+		*this_point = nullptr,
+		*last_point = nullptr;
 
 	convert_float_to_int ( polygon->j, &y_min );							// Initialise the fill buffers size
 

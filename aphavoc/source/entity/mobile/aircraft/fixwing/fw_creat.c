@@ -81,10 +81,10 @@
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity_sub_types
 		group_sub_type;
@@ -358,7 +358,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -381,7 +381,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{
@@ -419,10 +419,10 @@ void overload_fixed_wing_create_functions (void)
 entity *create_client_server_entity_fixed_wing (int index, entity_sub_types sub_type, entity *group, vec3d *position)
 {
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_comms_model() == COMMS_MODEL_SERVER);
 

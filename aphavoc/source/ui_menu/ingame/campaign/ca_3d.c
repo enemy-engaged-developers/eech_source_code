@@ -210,10 +210,10 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 void draw_campaign_screen_entity_3d_scene (ui_object *obj, float distance, vec3d *direction)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		temp;
 
 	viewpoint

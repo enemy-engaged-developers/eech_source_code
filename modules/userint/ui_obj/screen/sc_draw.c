@@ -80,13 +80,13 @@ static void draw_screen_ui_object (ui_object *obj)
 		y2;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	unsigned short int
-		*graphic;
+		*graphic = nullptr;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	int
 		x_size,

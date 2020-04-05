@@ -75,15 +75,15 @@ session_list_types
 	session_filter [NUM_GAME_TYPES];
 
 session_list_data_type
-	*session_child_head,
-	*current_game_session,
-	*session_list_head;
+	*session_child_head = nullptr,
+	*current_game_session = nullptr,
+	*session_list_head = nullptr;
 
 static int
 	list_id = 0;
 
 entity
-	*players_group;
+	*players_group = nullptr;
 
 char // Jabberwock 031210 Session filter
 	session_filter_value [256] = "root";
@@ -143,9 +143,9 @@ void destroy_session_list (session_list_data_type **list)
 {
 
 	session_list_data_type
-		*child,
-		*destroy_child,
-		*destroy_session;
+		*child = nullptr,
+		*destroy_child = nullptr,
+		*destroy_session = nullptr;
 
 	while (*list)
 	{
@@ -226,17 +226,17 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 {
 
 	char
-		*ptr,
-		*filename_ptr;
+		*ptr = nullptr,
+		*filename_ptr = nullptr;
 
 	int
 		unique_session;
 
 	session_list_data_type
-		*child,
-		*session_item,
-		*insert_position,
-		*new_session;
+		*child = nullptr,
+		*session_item = nullptr,
+		*insert_position = nullptr,
+		*new_session = nullptr;
 
 	new_session = (session_list_data_type *) malloc_heap_mem (sizeof (session_list_data_type));
 
@@ -394,8 +394,8 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 	{
 
 		char
-			*ptr,
-			*last_ptr,
+			*ptr = nullptr,
+			*last_ptr = nullptr,
 			path [512];
 
 		strcpy (path, new_session->data_path);
@@ -483,7 +483,7 @@ void compile_single_session_list (session_list_data_type **list)
 {
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	this_connection = direct_play_get_connection_data ();
 
@@ -524,10 +524,10 @@ void compile_multi_session_list (session_list_data_type **list)
 		session_number = 0;
 
 	session_table_type
-		*this_session;
+		*this_session = nullptr;
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	char
 		text [128];
@@ -621,13 +621,13 @@ void get_first_multi_session (session_list_data_type **list)
 	int session_number = 0;
 
 	session_table_type
-		*this_session;
+		*this_session = nullptr;
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	session_list_data_type
-		*this_session_list;
+		*this_session_list = nullptr;
 
 	char
 		text [128];
@@ -700,7 +700,7 @@ void compile_restore_session_list (session_list_data_type **list)
 		extension [5];
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	this_connection = direct_play_get_connection_data ();
 
@@ -754,7 +754,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 	#if !DEMO_VERSION
 
 	entity
-		*force;
+		*force = nullptr;
 
 	int
 		count;
@@ -772,11 +772,11 @@ int store_session (session_list_data_type *game_session, const char *filename)
 		current_count[5];
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	directory_file_list
-		*saves_listing,
-		*scripts_listing;
+		*saves_listing = nullptr,
+		*scripts_listing = nullptr;
 
 	count = -1;
 
@@ -1079,8 +1079,8 @@ int store_session (session_list_data_type *game_session, const char *filename)
 	{
 
 		unsigned char
-			*save_ptr,
-			*buffer;
+			*save_ptr = nullptr,
+			*buffer = nullptr;
 
 		int
 			extra_data,
@@ -1171,8 +1171,8 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		session_type;
 
 	directory_file_list
-		*warzone_file,
-		*directory_listing;
+		*warzone_file = nullptr,
+		*directory_listing = nullptr;
 
 	unsigned int
 		i,
@@ -1187,7 +1187,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		operator_ [64],
 		variable [64],
 		temp_warzone_name [128],
-		*warzone_name,
+		*warzone_name = nullptr,
 		warzone_path [1024],
 		directory_search_path [1024];
 
@@ -1268,7 +1268,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 			{
 
 				FILE
-					*file_ptr;
+					*file_ptr = nullptr;
 
 				file_tags
 					tag;
@@ -1277,8 +1277,8 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 					end_flag;
 
 				static char
-					*ptr,
-					*last_ptr,
+					*ptr = nullptr,
+					*last_ptr = nullptr,
 					path [1024],
 					full_filename [1024],
 					campaign_title [1024],
@@ -1521,7 +1521,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 							{
 								// 15JUN09 Casm retrieving season earlier
 								const char
-									*title;
+									*title = nullptr;
 								// if host get the Translated campaign name
 								// not hosted game so just use the name
 								title = session_type == SESSION_LIST_TYPE_HOST ? get_trans (campaign_title) :  campaign_title;

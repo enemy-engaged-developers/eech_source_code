@@ -77,7 +77,7 @@ void server_log (const char *msg, ...)
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 		
 	int
 		hours,

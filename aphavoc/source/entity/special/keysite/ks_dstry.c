@@ -81,7 +81,7 @@
 static void destroy_local (entity *en)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -358,7 +358,7 @@ static void kill_local (entity *en)
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		entity
-			*force;
+			*force = nullptr;
 
 		force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 

@@ -79,7 +79,7 @@
 struct SPEECH_SYSTEM_QUEUE_TYPE
 {
 	entity
-		*parent;
+		*parent = nullptr;
 
 	entity_sub_types
 		sub_type;
@@ -106,11 +106,11 @@ struct SPEECH_SYSTEM_QUEUE_TYPE
 		sample_count;
 
 	sound_sample_indices
-		*sample_list;
+		*sample_list = nullptr;
 
 	struct SPEECH_SYSTEM_QUEUE_TYPE
-		*next,
-		*prev;
+		*next = nullptr,
+		*prev = nullptr;
 };
 
 typedef struct SPEECH_SYSTEM_QUEUE_TYPE speech_system_queue_type;
@@ -146,7 +146,7 @@ typedef struct SPEECH_SYSTEM_CURRENT_TYPE speech_system_current_type;
 struct SPEECH_SYSTEM_TYPE
 {
 	speech_system_queue_type
-		*queue;
+		*queue = nullptr;
 
 	speech_system_exclude_type
 		exclude_list [NUM_SPEECH_CATEGORY_TYPES];
@@ -202,7 +202,7 @@ static sound_channel_types get_speech_originator_sound_channel (speech_originato
 static entity *create_client_server_speech_entity (entity *parent, entity_sides side, entity_sub_types sub_type, sound_channel_types channel, sound_locality_types locality, vec3d *pos, int count, sound_sample_indices *sample_list)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -253,8 +253,8 @@ static int add_speech_to_list
 					)
 {
 	speech_system_queue_type
-		*queue,
-		*new_item;
+		*queue = nullptr,
+		*new_item = nullptr;
 
 	int
 		count;
@@ -352,11 +352,11 @@ static int add_speech_to_list
 static void remove_speech_from_list (entity_sides side, speech_originator_types originator, speech_system_queue_type *item)
 {
 	speech_system_type
-		*buffer;
+		*buffer = nullptr;
 
 	speech_system_queue_type
-		*next,
-		*prev;
+		*next = nullptr,
+		*prev = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -397,17 +397,17 @@ static void remove_speech_from_list (entity_sides side, speech_originator_types 
 static entity *play_buffered_speech (entity_sides side, speech_originator_types originator)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	speech_system_type
-		*buffer;
+		*buffer = nullptr;
 
 	speech_system_queue_type
-		*item,
-		*best;
+		*item = nullptr,
+		*best = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -512,11 +512,11 @@ void update_speech_buffers (void)
 		category;
 
 	speech_system_type
-		*buffer;
+		*buffer = nullptr;
 
 	speech_system_queue_type
-		*item,
-		*next;
+		*item = nullptr,
+		*next = nullptr;
 
 	if (get_comms_model () != COMMS_MODEL_SERVER)
 	{
@@ -605,11 +605,11 @@ void update_speech_buffers (void)
 void remove_speech_category_from_buffers (entity_sides side, speech_originator_types originator, speech_category_types category)
 {
 	speech_system_type
-		*buffer;
+		*buffer = nullptr;
 
 	speech_system_queue_type
-		*item,
-		*next;
+		*item = nullptr,
+		*next = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -666,8 +666,8 @@ void deinitialise_speech_buffers (void)
 		side;
 
 	speech_system_queue_type
-		*item,
-		*next;
+		*item = nullptr,
+		*next = nullptr;
 
 	for (side = 0; side < NUM_ENTITY_SIDES; side ++)
 	{
@@ -709,11 +709,11 @@ void notify_speech_buffers_entity_killed (entity *en)
 		originator;
 
 	speech_system_type
-		*buffer;
+		*buffer = nullptr;
 
 	speech_system_queue_type
-		*item,
-		*next;
+		*item = nullptr,
+		*next = nullptr;
 
 	ASSERT (en);
 
@@ -774,7 +774,7 @@ int play_client_server_speech
 		speech_index;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	sound_sample_indices
 		sample_list [MAX_SEQUENCED_SAMPLES];
@@ -902,8 +902,8 @@ void initialise_speech_index_table (void)
 void initialise_sample_index_array (speech_array_types array_type, speech_originator_types originator, int max_items)
 {
 	speech_index_list_type
-		*blue_force_entry,
-		*red_force_entry;
+		*blue_force_entry = nullptr,
+		*red_force_entry = nullptr;
 
 	ASSERT ((array_type >= 0) && (array_type < NUM_SPEECH_ARRAY_TYPES));
 	ASSERT ((originator >= 0) && (originator < NUM_SPEECH_ORIGINATOR_TYPES));
@@ -931,8 +931,8 @@ void initialise_sample_index_array (speech_array_types array_type, speech_origin
 void initialise_speech_data (speech_array_types array_type, speech_originator_types originator, int speech_index, sound_sample_indices blue_force_sample_index, sound_sample_indices red_force_sample_index)
 {
 	speech_index_list_type
-		*blue_force_entry,
-		*red_force_entry;
+		*blue_force_entry = nullptr,
+		*red_force_entry = nullptr;
 
 	ASSERT ((array_type >= 0) && (array_type < NUM_SPEECH_ARRAY_TYPES));
 	ASSERT ((originator >= 0) && (originator < NUM_SPEECH_ORIGINATOR_TYPES));
@@ -998,7 +998,7 @@ void deinitialise_speech_index_table (void)
 void check_speech_index_table (void)
 {
 	int
-		*sample_info,
+		*sample_info = nullptr,
 		array_loop,
 		originator_loop,
 		side_loop,
@@ -1006,7 +1006,7 @@ void check_speech_index_table (void)
 		sample_index;
 
 	speech_index_list_type
-		*sample_list;
+		*sample_list = nullptr;
 
 	sample_info = malloc_heap_mem (sizeof (int) * NUM_SOUND_SAMPLE_INDICES);
 
@@ -1188,7 +1188,7 @@ int play_client_server_radio_message
 )
 {
 	entity
-		*group_en;
+		*group_en = nullptr;
 
 	int
 		result,
@@ -1464,7 +1464,7 @@ speech_originator_types get_wingman_speech_originator (entity *en)
 speech_originator_types get_wingman_speech_originator (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 		
 	int
 		group_index,
@@ -1537,7 +1537,7 @@ int play_client_server_wingman_message
 int *get_speech_sector_coordinates (vec3d *pos)
 {
 	entity
-		*sec;
+		*sec = nullptr;
 
 	int
 		sx,
@@ -1668,8 +1668,8 @@ speech_distance_types get_speech_distance_type (entity *source, entity *target)
 		type;
 
 	vec3d
-		*source_pos,
-		*target_pos;
+		*source_pos = nullptr,
+		*target_pos = nullptr;
 
 	float
 		dx,
@@ -1750,7 +1750,7 @@ speech_distance_types get_speech_distance_type (entity *source, entity *target)
 speech_atc_message_types get_speech_atc_wind_speed (entity *en)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		speed;

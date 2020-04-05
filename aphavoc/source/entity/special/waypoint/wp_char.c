@@ -98,7 +98,7 @@ void reset_waypoint_tags (void)
 void update_local_entity_waypoint_list_tags (entity *parent)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	char
 		letter;
@@ -131,7 +131,7 @@ void update_local_entity_waypoint_list_tags (entity *parent)
 void update_client_server_entity_waypoint_list_tags (entity *parent)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	char
 		letter;
@@ -240,7 +240,7 @@ char get_waypoint_sub_type_tag (entity_sub_types sub_type)
 static void set_local_char_value (entity *en, char_types type, char value)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -328,7 +328,7 @@ static void set_client_char_value (entity *en, char_types type, char value)
 static char get_local_char_value (entity *en, char_types type)
 {
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	char
 		value;

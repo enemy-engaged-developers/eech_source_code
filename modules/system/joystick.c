@@ -100,7 +100,7 @@ int
 	number_of_joystick_devices;
 
 joystick_device_info
-	*joystick_devices;
+	*joystick_devices = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,7 +351,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		constant_force;
 
 	directory_file_list
-		*directory_listing;
+		*directory_listing = nullptr;
 	
 	int
 		valid_file;
@@ -862,7 +862,7 @@ void read_joystick_values (int joystick_device_index)
 		di_err;
 
 	joystick_device_info
-		*joystick;
+		*joystick = nullptr;
 
 	int
 		button_count;

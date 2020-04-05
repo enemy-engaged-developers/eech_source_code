@@ -79,7 +79,7 @@
 static void set_local_string (entity *en, string_types type, const char *s)
 {
 	force
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (s);
 
@@ -175,10 +175,10 @@ static void set_client_string (entity *en, string_types type, const char *s)
 static const char *get_local_string (entity *en, string_types type)
 {
 	force
-		*raw;
+		*raw = nullptr;
 
 	char
-		*s;
+		*s = nullptr;
 
 	raw = (force *) get_local_entity_data (en);
 

@@ -59,12 +59,6 @@
 //
 
 
-
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,26 +82,26 @@ void draw_z_sorted_3d_object ( object_3d_instance *obj )
 		num_faces;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	light_3d_source
-		*this_light,
-		*prev_light,
-		*light_ptr,
-		*light;
+		*this_light = nullptr,
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	vec3d
 		object_pos,
 		object_unit_pos;
 
 	polygon_buffer
-		*translucent_buffer;
+		*translucent_buffer = nullptr;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	//
 	// Set the scene pointer
@@ -420,13 +414,13 @@ void draw_z_sorted_3d_object ( object_3d_instance *obj )
 	if ( objects_3d_data[object_number].number_of_points )
 	{
 		object_short_3d_point
-			*object_points;
+			*object_points = nullptr;
 
 		point_3d_plain_reference
-			*plain_point_list;
+			*plain_point_list = nullptr;
 
 		face_surface_description
-			*surfaces;
+			*surfaces = nullptr;
 
 		int
 			surface,
@@ -468,7 +462,7 @@ void draw_z_sorted_3d_object ( object_3d_instance *obj )
 
 				{
 					point_3d_plain_reference
-						*point_list;
+						*point_list = nullptr;
 
 					point_list = &plain_point_list[point_reference_index];
 
@@ -516,7 +510,7 @@ void draw_z_sorted_3d_object ( object_3d_instance *obj )
 					tmp;
 
 				point_3d_plain_reference
-					*point_list;
+					*point_list = nullptr;
 
 				point_list = &plain_point_list[faces->point_reference_index];
 
@@ -638,10 +632,10 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 		temp;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	matrix3x3
 		temp_matrix;
@@ -652,13 +646,13 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 		object_pos,
 		object_unit_pos,
 		sub_pos,
-		*rel;
+		*rel = nullptr;
 
 	light_3d_source
-		*this_light,
-		*prev_light,
-		*light_ptr,
-		*light;
+		*this_light = nullptr,
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	viewpoint
 		vp;
@@ -927,13 +921,13 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 
 		{
 			object_short_3d_point
-				*object_points;
+				*object_points = nullptr;
 
 			point_3d_plain_reference
-				*plain_point_list;
+				*plain_point_list = nullptr;
 
 			face_surface_description
-				*surfaces;
+				*surfaces = nullptr;
 
 			int
 				surface,
@@ -976,7 +970,7 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 
 					{
 						point_3d_plain_reference
-							*point_list;
+							*point_list = nullptr;
 
 						point_list = &plain_point_list[point_reference_index];
 
@@ -1025,7 +1019,7 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 						tmp;
 
 					point_3d_plain_reference
-						*point_list;
+						*point_list = nullptr;
 
 					point_list = &plain_point_list[faces->point_reference_index];
 
@@ -1122,5 +1116,4 @@ void draw_z_sorted_sub_object ( object_3d_sub_instance *obj, object_3d_database_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif
-#endif
+#endif//0

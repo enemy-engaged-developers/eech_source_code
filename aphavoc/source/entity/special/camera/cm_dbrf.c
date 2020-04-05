@@ -117,7 +117,7 @@ void reset_debriefing_camera (camera *raw)
 void update_debriefing_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		rel_camera_position;

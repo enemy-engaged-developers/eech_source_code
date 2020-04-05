@@ -79,7 +79,7 @@
 static void set_local_attitude_matrix (entity *en, matrix3x3 attitude)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (attitude);
 
@@ -157,7 +157,7 @@ static void set_client_attitude_matrix (entity *en, matrix3x3 attitude)
 static void get_local_attitude_matrix (entity *en, matrix3x3 attitude)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (attitude);
 
@@ -173,7 +173,7 @@ static void get_local_attitude_matrix (entity *en, matrix3x3 attitude)
 static matrix3x3 *get_local_attitude_matrix_ptr (entity *en)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	raw = (mobile *) get_local_entity_data (en);
 
@@ -187,7 +187,7 @@ static matrix3x3 *get_local_attitude_matrix_ptr (entity *en)
 static void set_local_attitude_angles (entity *en, float heading, float pitch, float roll)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -257,7 +257,7 @@ static void set_client_attitude_angles (entity *en, float heading, float pitch, 
 static void get_local_attitude_angles (entity *en, float *heading, float *pitch, float *roll)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (heading);
 
@@ -281,7 +281,7 @@ static void get_local_attitude_angles (entity *en, float *heading, float *pitch,
 static float get_local_float_value (entity *en, float_types type)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;

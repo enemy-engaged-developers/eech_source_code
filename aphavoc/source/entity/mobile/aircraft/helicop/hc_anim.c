@@ -95,7 +95,7 @@ int
 void animate_helicopter_controls ( entity *en )
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))
 		return;
@@ -118,10 +118,10 @@ void animate_helicopter_controls ( entity *en )
 void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search_main_rotor_shaft,
@@ -600,10 +600,10 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 void animate_helicopter_tail_rotor (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -793,7 +793,7 @@ void animate_helicopter_tail_rotor (entity *en)
 void animate_helicopter_wipers (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -869,7 +869,7 @@ void animate_helicopter_wipers (entity *en)
 void animate_helicopter_eo (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -955,7 +955,7 @@ void animate_helicopter_eo (entity *en)
 void animate_helicopter_wheels (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 	ASSERT (en == get_gunship_entity());
@@ -984,7 +984,7 @@ void animate_helicopter_wheels (entity *en)
 void damage_helicopter_3d_object (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1028,9 +1028,9 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 		main_rotor_direction;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
@@ -1215,10 +1215,10 @@ int damage_helicopter_main_rotors (entity *en, int blade_number)
 void damage_helicopter_tail_rotors (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -1415,10 +1415,10 @@ int restore_helicopter_main_rotors (entity *en)
 		collision_point;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
@@ -1533,10 +1533,10 @@ int restore_helicopter_main_rotors (entity *en)
 int restore_helicopter_tail_rotors (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -1832,7 +1832,7 @@ void set_rotation_angle_of_helicopter_tail_rotor (object_3d_instance *inst3d, fl
 void set_helicopter_id_number (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

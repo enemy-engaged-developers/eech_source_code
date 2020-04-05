@@ -228,7 +228,7 @@ void deinitialise_viper_lamp_avionics (void)
 void update_viper_lamp_avionics (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 

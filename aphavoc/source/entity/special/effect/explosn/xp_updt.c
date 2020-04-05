@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	raw = (explosion *) get_local_entity_data (en);
 
@@ -98,7 +98,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	raw = (explosion *) get_local_entity_data (en);
 

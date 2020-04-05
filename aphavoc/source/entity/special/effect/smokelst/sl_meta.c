@@ -77,47 +77,47 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 meta_smoke_list_data
-	meta_smoke_list_database[NUM_META_SMOKE_LIST_TYPES];
+meta_smoke_list_database[NUM_META_SMOKE_LIST_TYPES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_component, entity *parent, vec3d *relative_position, int *entity_index_list );
+static int create_meta_smoke_list_sprites(meta_smoke_list_component* smoke_list_component, entity* parent, vec3d* relative_position, int* entity_index_list);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_client_server_meta_smoke_list_sub_object_offset (meta_smoke_list_types type, entity *parent, object_3d_sub_object_index_numbers sub_object_type, int sub_object_depth)
+int create_client_server_meta_smoke_list_sub_object_offset(meta_smoke_list_types type, entity* parent, object_3d_sub_object_index_numbers sub_object_type, int sub_object_depth)
 {
 	int
 		loop,
 		count,
-		*entity_index_list;
+		* entity_index_list = nullptr;
 
-	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
+	ASSERT(get_comms_model() == COMMS_MODEL_SERVER);
 
 	//
 	// create an array of entity index numbers and fill them all with ENTITY_INDEX_DONT_CARE
 	//
 
-	count = count_entities_in_meta_smoke_list (type);
+	count = count_entities_in_meta_smoke_list(type);
 
-	ASSERT (count);
+	ASSERT(count);
 
-	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int*)malloc_fast_mem(sizeof(int) * count);
 
-	for ( loop = 0 ; loop < count ; loop ++ )
+	for (loop = 0; loop < count; loop++)
 	{
-		entity_index_list [loop] = ENTITY_INDEX_DONT_CARE;
+		entity_index_list[loop] = ENTITY_INDEX_DONT_CARE;
 	}
 
 	//
 	// call the create function which will create the entities on the server, and also fill in the entity index list
 	//
 
-	create_meta_smoke_list_sub_object_offset (type, parent, sub_object_type, sub_object_depth, entity_index_list);
+	create_meta_smoke_list_sub_object_offset(type, parent, sub_object_type, sub_object_depth, entity_index_list);
 
 	//
 	// now notify the clients to create same smoke list and pass them the list of indices to use
@@ -138,7 +138,7 @@ int create_client_server_meta_smoke_list_sub_object_offset (meta_smoke_list_type
 	//
 	//
 
-	free_mem (entity_index_list);
+	free_mem(entity_index_list);
 
 	return count;
 }
@@ -147,7 +147,7 @@ int create_client_server_meta_smoke_list_sub_object_offset (meta_smoke_list_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity *parent, object_3d_sub_object_index_numbers sub_object_type, int sub_object_depth, int *entity_index_list)
+int create_meta_smoke_list_sub_object_offset(meta_smoke_list_types type, entity* parent, object_3d_sub_object_index_numbers sub_object_type, int sub_object_depth, int* entity_index_list)
 {
 	int
 		comp,
@@ -163,11 +163,11 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 		width_adjustment;
 
 	meta_smoke_list_component
-		*smoke_list_component;
+		* smoke_list_component = nullptr;
 
-	ASSERT (type > META_SMOKE_LIST_TYPE_NONE);
+	ASSERT(type > META_SMOKE_LIST_TYPE_NONE);
 
-	ASSERT (type < NUM_META_SMOKE_LIST_TYPES );
+	ASSERT(type < NUM_META_SMOKE_LIST_TYPES);
 
 	index_counter = 0;
 
@@ -175,15 +175,15 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 
 	save_attr = force_local_entity_create_stack_attributes;
 
-	if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
+	if (get_comms_data_flow() == COMMS_DATA_FLOW_RX)
 	{
-		set_force_local_entity_create_stack_attributes (TRUE);
+		set_force_local_entity_create_stack_attributes(TRUE);
 	}
 	else
 	{
-		if (get_comms_model () == COMMS_MODEL_CLIENT)
+		if (get_comms_model() == COMMS_MODEL_CLIENT)
 		{
-			debug_fatal ("CREATE META SMOKE LIST : CLIENT creating in t/x mode");
+			debug_fatal("CREATE META SMOKE LIST : CLIENT creating in t/x mode");
 		}
 	}
 
@@ -198,13 +198,13 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 	if ((parent) && (sub_object_type != OBJECT_3D_INVALID_SUB_OBJECT_INDEX))
 	{
 		object_3d_instance
-			*inst3d;
+			* inst3d = nullptr;
 
 		object_3d_sub_object_search_data
 			effect_position_search,
 			effect_width_search;
 
-		inst3d = (object_3d_instance *) get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance*)get_local_entity_ptr_value(parent, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -212,7 +212,7 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 			// locate attachment position on parent entity
 			//
 
-			if (get_sub_object_relative_position (inst3d, sub_object_type, sub_object_depth, &relative_position, &effect_position_search))
+			if (get_sub_object_relative_position(inst3d, sub_object_type, sub_object_depth, &relative_position, &effect_position_search))
 			{
 				//
 				// search from attachment position to find a width position, and add it to the smoke
@@ -221,19 +221,19 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 				effect_width_search.search_depth = 0;
 				effect_width_search.sub_object_index = OBJECT_3D_SUB_OBJECT_EFFECT_WIDTH_POSITION;
 
-				if (find_object_3d_sub_object_from_sub_object ( &effect_position_search, &effect_width_search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				if (find_object_3d_sub_object_from_sub_object(&effect_position_search, &effect_width_search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				{
 					width_position.x = effect_width_search.result_sub_object->relative_position.x;
 					width_position.y = effect_width_search.result_sub_object->relative_position.y;
 					width_position.z = effect_width_search.result_sub_object->relative_position.z;
 
-					width_adjustment = get_3d_vector_magnitude( &width_position );
+					width_adjustment = get_3d_vector_magnitude(&width_position);
 
-					#if DEBUG_MODULE
+#if DEBUG_MODULE
 
 					debug_log("SL_META : Found effect width at depth %d : width_adjustment = %f", sub_object_depth, width_adjustment);
 
-					#endif
+#endif
 				}
 			}
 		}
@@ -245,39 +245,39 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 		}
 	}
 
-	num_components = meta_smoke_list_database[ type ].number_of_components;
+	num_components = meta_smoke_list_database[type].number_of_components;
 
-	for ( comp = 0 ; comp < num_components ; comp ++ )
+	for (comp = 0; comp < num_components; comp++)
 	{
 
-		smoke_list_component = &(meta_smoke_list_database[ type ].component[ comp ]);
+		smoke_list_component = &(meta_smoke_list_database[type].component[comp]);
 
-		switch ( smoke_list_component->type )
+		switch (smoke_list_component->type)
 		{
-			case SMOKE_LIST_NONE:
-			{
-				break;
-			}
-			case SMOKE_LIST_SPRITES:
-			{
-				index_counter += create_meta_smoke_list_sprites( smoke_list_component, parent, &relative_position, &entity_index_list[ index_counter ] );
+		case SMOKE_LIST_NONE:
+		{
+			break;
+		}
+		case SMOKE_LIST_SPRITES:
+		{
+			index_counter += create_meta_smoke_list_sprites(smoke_list_component, parent, &relative_position, &entity_index_list[index_counter]);
 
-				break;
-			}
-			case SMOKE_LIST_TRAILS:
-			{
-				index_counter += create_meta_smoke_list_trails( smoke_list_component, parent, &relative_position, width_adjustment, &entity_index_list[ index_counter ] );
+			break;
+		}
+		case SMOKE_LIST_TRAILS:
+		{
+			index_counter += create_meta_smoke_list_trails(smoke_list_component, parent, &relative_position, width_adjustment, &entity_index_list[index_counter]);
 
-				break;
-			}
-			default:
-			{
-				debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type );
-			}
+			break;
+		}
+		default:
+		{
+			debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type);
+		}
 		}
 	}
 
-	set_force_local_entity_create_stack_attributes (save_attr);
+	set_force_local_entity_create_stack_attributes(save_attr);
 
 	return index_counter;
 }
@@ -286,39 +286,39 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_client_server_meta_smoke_list_specified_offset (meta_smoke_list_types type, entity *parent, vec3d *relative_offset)
+int create_client_server_meta_smoke_list_specified_offset(meta_smoke_list_types type, entity* parent, vec3d* relative_offset)
 {
 	int
 		loop,
 		count,
-		*entity_index_list;
+		* entity_index_list = nullptr;
 
 	//
 	// N.B. if parent is NULL then relative offset is taken to be the absolute position
 	//
 
-	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
+	ASSERT(get_comms_model() == COMMS_MODEL_SERVER);
 
 	//
 	// create an array of entity index numbers and fill them all with ENTITY_INDEX_DONT_CARE
 	//
 
-	count = count_entities_in_meta_smoke_list (type);
+	count = count_entities_in_meta_smoke_list(type);
 
-	ASSERT (count);
+	ASSERT(count);
 
-	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int*)malloc_fast_mem(sizeof(int) * count);
 
-	for ( loop = 0 ; loop < count ; loop ++ )
+	for (loop = 0; loop < count; loop++)
 	{
-		entity_index_list [loop] = ENTITY_INDEX_DONT_CARE;
+		entity_index_list[loop] = ENTITY_INDEX_DONT_CARE;
 	}
 
 	//
 	// call the create function which will create the entities on the server, and also fill in the entity index list
 	//
 
-	create_meta_smoke_list_specified_offset (type, parent, relative_offset, entity_index_list);
+	create_meta_smoke_list_specified_offset(type, parent, relative_offset, entity_index_list);
 
 	//
 	// now notify the clients to create same smoke list and pass them the list of indices to use
@@ -338,7 +338,7 @@ int create_client_server_meta_smoke_list_specified_offset (meta_smoke_list_types
 	//
 	//
 
-	free_mem (entity_index_list);
+	free_mem(entity_index_list);
 
 	return count;
 }
@@ -347,7 +347,7 @@ int create_client_server_meta_smoke_list_specified_offset (meta_smoke_list_types
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_meta_smoke_list_specified_offset( meta_smoke_list_types type, entity *parent, vec3d *relative_offset, int *entity_index_list)
+int create_meta_smoke_list_specified_offset(meta_smoke_list_types type, entity* parent, vec3d* relative_offset, int* entity_index_list)
 {
 	int
 		comp,
@@ -356,28 +356,28 @@ int create_meta_smoke_list_specified_offset( meta_smoke_list_types type, entity 
 		num_components;
 
 	meta_smoke_list_component
-		*smoke_list_component;
+		* smoke_list_component = nullptr;
 
 	vec3d
 		relative_position;
 
-	ASSERT (type > META_SMOKE_LIST_TYPE_NONE);
+	ASSERT(type > META_SMOKE_LIST_TYPE_NONE);
 
-	ASSERT (type < NUM_META_SMOKE_LIST_TYPES );
+	ASSERT(type < NUM_META_SMOKE_LIST_TYPES);
 
 	index_counter = 0;
 
 	save_attr = force_local_entity_create_stack_attributes;
 
-	if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
+	if (get_comms_data_flow() == COMMS_DATA_FLOW_RX)
 	{
-		set_force_local_entity_create_stack_attributes (TRUE);
+		set_force_local_entity_create_stack_attributes(TRUE);
 	}
 	else
 	{
-		if (get_comms_model () == COMMS_MODEL_CLIENT)
+		if (get_comms_model() == COMMS_MODEL_CLIENT)
 		{
-			debug_fatal ("CREATE META SMOKE LIST : CLIENT creating in t/x mode");
+			debug_fatal("CREATE META SMOKE LIST : CLIENT creating in t/x mode");
 		}
 	}
 
@@ -393,46 +393,46 @@ int create_meta_smoke_list_specified_offset( meta_smoke_list_types type, entity 
 		// shouldn't have no parent and no position
 		//
 
-		ASSERT (parent);
+		ASSERT(parent);
 
 		relative_position.x = 0.0;
 		relative_position.y = 0.0;
 		relative_position.z = 0.0;
 	}
 
-	num_components = meta_smoke_list_database[ type ].number_of_components;
+	num_components = meta_smoke_list_database[type].number_of_components;
 
-	for ( comp = 0 ; comp < num_components ; comp ++ )
+	for (comp = 0; comp < num_components; comp++)
 	{
 
-		smoke_list_component = &(meta_smoke_list_database[ type ].component[ comp ]);
+		smoke_list_component = &(meta_smoke_list_database[type].component[comp]);
 
-		switch ( smoke_list_component->type )
+		switch (smoke_list_component->type)
 		{
-			case SMOKE_LIST_NONE:
-			{
-				break;
-			}
-			case SMOKE_LIST_SPRITES:
-			{
-				index_counter += create_meta_smoke_list_sprites( smoke_list_component, parent, &relative_position, &entity_index_list[ index_counter ] );
+		case SMOKE_LIST_NONE:
+		{
+			break;
+		}
+		case SMOKE_LIST_SPRITES:
+		{
+			index_counter += create_meta_smoke_list_sprites(smoke_list_component, parent, &relative_position, &entity_index_list[index_counter]);
 
-				break;
-			}
-			case SMOKE_LIST_TRAILS:
-			{
-				index_counter += create_meta_smoke_list_trails( smoke_list_component, parent, &relative_position, 0.0, &entity_index_list[ index_counter ] );
+			break;
+		}
+		case SMOKE_LIST_TRAILS:
+		{
+			index_counter += create_meta_smoke_list_trails(smoke_list_component, parent, &relative_position, 0.0, &entity_index_list[index_counter]);
 
-				break;
-			}
-			default:
-			{
-				debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type );
-			}
+			break;
+		}
+		default:
+		{
+			debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type);
+		}
 		}
 	}
 
-	set_force_local_entity_create_stack_attributes (save_attr);
+	set_force_local_entity_create_stack_attributes(save_attr);
 
 	return index_counter;
 }
@@ -441,10 +441,10 @@ int create_meta_smoke_list_specified_offset( meta_smoke_list_types type, entity 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_component, entity *parent, vec3d *relative_position, int *entity_index_list )
+int create_meta_smoke_list_sprites(meta_smoke_list_component* smoke_list_component, entity* parent, vec3d* relative_position, int* entity_index_list)
 {
 	vec3d
-		*pos;
+		* pos = nullptr;
 
 	float
 		animation_frequency,
@@ -459,9 +459,9 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 		loop;
 
 	entity
-		*new_entity;
+		* new_entity = nullptr;
 
-	ASSERT (parent);
+	ASSERT(parent);
 
 	//
 	// determine constants
@@ -471,7 +471,7 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 
 	count = smoke_list_component->sprite_count;
 
-	if ( count < 1 )
+	if (count < 1)
 	{
 		return 0;
 	}
@@ -482,37 +482,37 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 
 	animation_frequency = smoke_list_component->animation_frequency;
 
-	for ( loop = 0 ; loop < count ; loop ++ )
+	for (loop = 0; loop < count; loop++)
 	{
 		//
 		// create each individual element
 		//
 
-		pos = get_local_entity_vec3d_ptr( parent, VEC3D_TYPE_POSITION );
+		pos = get_local_entity_vec3d_ptr(parent, VEC3D_TYPE_POSITION);
 
 		new_entity = create_local_entity
 		(
 			ENTITY_TYPE_SPRITE,
-			entity_index_list[ loop ],
-			ENTITY_ATTR_PARENT (LIST_TYPE_SPECIAL_EFFECT, parent),
-			ENTITY_ATTR_CHILD_PRED (LIST_TYPE_UPDATE, parent),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_ANIMATED_TEXTURE, texture),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_RED, smoke_list_component->red),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_GREEN, smoke_list_component->green),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_BLUE, smoke_list_component->blue),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_ALPHA, smoke_list_component->alpha),
-			ENTITY_ATTR_INT_VALUE (INT_TYPE_ADDITIVE, smoke_list_component->additive),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_MAX_TURN_RATE, smoke_list_component->rotation_rate),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_START_SCALE, scale),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_END_SCALE, scale),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SPRITE_LIFETIME, lifetime),
-			ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_ANIMATION_FREQUENCY, animation_frequency),
-			ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, pos->x, pos->y, pos->z),
-			ENTITY_ATTR_VEC3D (VEC3D_TYPE_RELATIVE_POSITION, relative_position->x, relative_position->y, relative_position->z),
+			entity_index_list[loop],
+			ENTITY_ATTR_PARENT(LIST_TYPE_SPECIAL_EFFECT, parent),
+			ENTITY_ATTR_CHILD_PRED(LIST_TYPE_UPDATE, parent),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_ANIMATED_TEXTURE, texture),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_COLOUR_RED, smoke_list_component->red),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_COLOUR_GREEN, smoke_list_component->green),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_COLOUR_BLUE, smoke_list_component->blue),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_COLOUR_ALPHA, smoke_list_component->alpha),
+			ENTITY_ATTR_INT_VALUE(INT_TYPE_ADDITIVE, smoke_list_component->additive),
+			ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_MAX_TURN_RATE, smoke_list_component->rotation_rate),
+			ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_START_SCALE, scale),
+			ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_END_SCALE, scale),
+			ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_SPRITE_LIFETIME, lifetime),
+			ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_ANIMATION_FREQUENCY, animation_frequency),
+			ENTITY_ATTR_VEC3D(VEC3D_TYPE_POSITION, pos->x, pos->y, pos->z),
+			ENTITY_ATTR_VEC3D(VEC3D_TYPE_RELATIVE_POSITION, relative_position->x, relative_position->y, relative_position->z),
 			ENTITY_ATTR_END
 		);
 
-		entity_index_list[ loop ] = get_local_entity_index( new_entity );
+		entity_index_list[loop] = get_local_entity_index(new_entity);
 
 	}
 
@@ -523,24 +523,24 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_component, entity *parent, vec3d *relative_position, float width_adjustment, int *entity_index_list )
+int create_meta_smoke_list_trails(meta_smoke_list_component* smoke_list_component, entity* parent, vec3d* relative_position, float width_adjustment, int* entity_index_list)
 {
 	float
 		lifetime = 0.0;
 
 	entity
-		*new_entity,
-		*effect_list_parent;
+		* new_entity = nullptr,
+		* effect_list_parent = nullptr;
 
 	vec3d
-		*pos;
+		* pos = nullptr;
 
-	if ( smoke_list_component->trail_count < 1 )
+	if (smoke_list_component->trail_count < 1)
 	{
 		return 0;
 	}
 
-	ASSERT (smoke_list_component->trail_count == 1 );
+	ASSERT(smoke_list_component->trail_count == 1);
 
 	//
 	// create trail entity
@@ -548,7 +548,7 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 
 	if (parent)
 	{
-		pos = get_local_entity_vec3d_ptr( parent, VEC3D_TYPE_POSITION );
+		pos = get_local_entity_vec3d_ptr(parent, VEC3D_TYPE_POSITION);
 	}
 	else
 	{
@@ -558,19 +558,19 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 
 		pos = relative_position;
 
-		ASSERT (pos);
+		ASSERT(pos);
 	}
 
 	if (width_adjustment != 0.0)
 	{
-		width_adjustment -= smoke_list_database [smoke_list_component->trail_type].radius_start;
+		width_adjustment -= smoke_list_database[smoke_list_component->trail_type].radius_start;
 	}
 
 	//
 	// some smoke lists should not be linked to a parent, even though a parent entity is passed across ( for position ref etc.. )
 	//
 
-	if (smoke_list_database [smoke_list_component->trail_type].lock_to_parent)
+	if (smoke_list_database[smoke_list_component->trail_type].lock_to_parent)
 	{
 		effect_list_parent = parent;
 	}
@@ -581,9 +581,9 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 
 	// arneh - let rockets generate smoke only as long as the rocket engine burns
 	if (parent)
-		if(parent->type == ENTITY_TYPE_WEAPON)
+		if (parent->type == ENTITY_TYPE_WEAPON)
 		{
-			weapon* raw = (weapon *) get_local_entity_data (parent);
+			weapon* raw = (weapon*)get_local_entity_data(parent);
 			lifetime = weapon_database[raw->mob.sub_type].boost_time + weapon_database[raw->mob.sub_type].sustain_time;
 		}
 
@@ -597,28 +597,28 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 	new_entity = create_local_entity
 	(
 		ENTITY_TYPE_SMOKE_LIST,
-		entity_index_list[ 0 ],
-		ENTITY_ATTR_PARENT (LIST_TYPE_SPECIAL_EFFECT, effect_list_parent),
-		ENTITY_ATTR_CHILD_PRED (LIST_TYPE_UPDATE, effect_list_parent),
-     	ENTITY_ATTR_INT_VALUE (INT_TYPE_SMOKE_TYPE, smoke_list_component->trail_type),
-     	ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, smoke_list_component->entity_sub_type),
-		ENTITY_ATTR_INT_VALUE (INT_TYPE_INFINITE_GENERATOR, smoke_list_component->infinite),
-     	ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, lifetime),
-		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, smoke_list_component->frequency),
-		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, smoke_list_component->smoke_lifetime),
-		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_WIDTH_ADJUSTMENT, width_adjustment),
-		ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, pos->x, pos->y, pos->z),
+		entity_index_list[0],
+		ENTITY_ATTR_PARENT(LIST_TYPE_SPECIAL_EFFECT, effect_list_parent),
+		ENTITY_ATTR_CHILD_PRED(LIST_TYPE_UPDATE, effect_list_parent),
+		ENTITY_ATTR_INT_VALUE(INT_TYPE_SMOKE_TYPE, smoke_list_component->trail_type),
+		ENTITY_ATTR_INT_VALUE(INT_TYPE_ENTITY_SUB_TYPE, smoke_list_component->entity_sub_type),
+		ENTITY_ATTR_INT_VALUE(INT_TYPE_INFINITE_GENERATOR, smoke_list_component->infinite),
+		ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_GENERATOR_LIFETIME, lifetime),
+		ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_FREQUENCY, smoke_list_component->frequency),
+		ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_SMOKE_LIFETIME, smoke_list_component->smoke_lifetime),
+		ENTITY_ATTR_FLOAT_VALUE(FLOAT_TYPE_WIDTH_ADJUSTMENT, width_adjustment),
+		ENTITY_ATTR_VEC3D(VEC3D_TYPE_POSITION, pos->x, pos->y, pos->z),
 		ENTITY_ATTR_END
 	);
 
 	if (parent && relative_position)
 	{
-		set_local_entity_vec3d (new_entity, VEC3D_TYPE_RELATIVE_POSITION, relative_position);
+		set_local_entity_vec3d(new_entity, VEC3D_TYPE_RELATIVE_POSITION, relative_position);
 	}
 
-	entity_index_list[ 0 ] = get_local_entity_index( new_entity );
+	entity_index_list[0] = get_local_entity_index(new_entity);
 
-	update_client_server_entity( new_entity );
+	update_client_server_entity(new_entity);
 
 	return 1;
 }
@@ -627,7 +627,7 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int count_entities_in_meta_smoke_list( meta_smoke_list_types type )
+int count_entities_in_meta_smoke_list(meta_smoke_list_types type)
 {
 	int
 		comp,
@@ -635,44 +635,44 @@ int count_entities_in_meta_smoke_list( meta_smoke_list_types type )
 		num_components;
 
 	meta_smoke_list_component
-		*smoke_list_component;
+		* smoke_list_component = nullptr;
 
 
-	ASSERT (type > META_SMOKE_LIST_TYPE_NONE);
+	ASSERT(type > META_SMOKE_LIST_TYPE_NONE);
 
-	ASSERT (type < NUM_META_SMOKE_LIST_TYPES );
+	ASSERT(type < NUM_META_SMOKE_LIST_TYPES);
 
 	index_counter = 0;
 
-	num_components = meta_smoke_list_database[ type ].number_of_components;
+	num_components = meta_smoke_list_database[type].number_of_components;
 
-	for ( comp = 0 ; comp < num_components ; comp ++ )
+	for (comp = 0; comp < num_components; comp++)
 	{
 
-		smoke_list_component = &(meta_smoke_list_database[ type ].component[ comp ]);
+		smoke_list_component = &(meta_smoke_list_database[type].component[comp]);
 
-		switch ( smoke_list_component->type )
+		switch (smoke_list_component->type)
 		{
-			case SMOKE_LIST_NONE:
-			{
-				break;
-			}
-			case SMOKE_LIST_SPRITES:
-			{
-				index_counter += smoke_list_component->sprite_count;
+		case SMOKE_LIST_NONE:
+		{
+			break;
+		}
+		case SMOKE_LIST_SPRITES:
+		{
+			index_counter += smoke_list_component->sprite_count;
 
-				break;
-			}
-			case SMOKE_LIST_TRAILS:
-			{
-				index_counter += smoke_list_component->trail_count;
+			break;
+		}
+		case SMOKE_LIST_TRAILS:
+		{
+			index_counter += smoke_list_component->trail_count;
 
-				break;
-			}
-			default:
-			{
-				debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type );
-			}
+			break;
+		}
+		default:
+		{
+			debug_fatal("META SMOKE LIST : Unknown component type %d", smoke_list_component->type);
+		}
 		}
 	}
 
@@ -701,14 +701,14 @@ const char* meta_smoke_list_names[] =
 #undef META_SMOKE_LIST
 #undef META_SMOKE_LIST_
 
-int get_meta_smoke_type_by_name ( const char *name )
+int get_meta_smoke_type_by_name(const char* name)
 {
 	int
 		count;
 
-	for ( count = 0; meta_smoke_list_names[count]; count++ )
+	for (count = 0; meta_smoke_list_names[count]; count++)
 	{
-		if ( !stricmp ( name, meta_smoke_list_names[count] ) )
+		if (!stricmp(name, meta_smoke_list_names[count]))
 		{
 			return count;
 		}
@@ -723,31 +723,31 @@ int get_meta_smoke_type_by_name ( const char *name )
 
 #define META_SMOKE_LIST_DATABASE_FILENAME "METASMOK.CSV"
 
-static void export_meta_smoke_list_database (void)
+static void export_meta_smoke_list_database(void)
 {
 	FILE
-		*file;
+		* file = nullptr;
 	int
 		count1,
 		count2;
 	const meta_smoke_list_data
-		*meta_smoke;
+		* meta_smoke = nullptr;
 	const meta_smoke_list_component
-		*co;
+		* co = nullptr;
 
-	file = safe_fopen (META_SMOKE_LIST_DATABASE_FILENAME, "w");
-	fprintf (file, "META_SMOKE;3\n");
-	fprintf (file,
+	file = safe_fopen(META_SMOKE_LIST_DATABASE_FILENAME, "w");
+	fprintf(file, "META_SMOKE;3\n");
+	fprintf(file,
 		"#Meta Smoke index;Meta Smoke name\n"
 		"#SPRITES;Animated texture;Sprite count;"
-			"Color (red;green;blue;alpha);"
-			"Animation frequency;Lifetime;Scale;Rotation rate;"
-			"Additive\n"
+		"Color (red;green;blue;alpha);"
+		"Animation frequency;Lifetime;Scale;Rotation rate;"
+		"Additive\n"
 		"#TRAILS;Trail type;"
-			"Effect;"
-			"Trail count;Infinite;"
-			"Generator lifetime;Frequency;Smoke lifetime\n"
-		);
+		"Effect;"
+		"Trail count;Infinite;"
+		"Generator lifetime;Frequency;Smoke lifetime\n"
+	);
 	for (count1 = 1; count1 < NUM_META_SMOKE_LIST_TYPES; count1++)
 	{
 		meta_smoke = &meta_smoke_list_database[count1];
@@ -760,7 +760,7 @@ static void export_meta_smoke_list_database (void)
 			switch (co->type)
 			{
 			case SMOKE_LIST_SPRITES:
-				fprintf (file,
+				fprintf(file,
 					"SPRITES;%s;%i;"
 					"%i;%i;%i;%i;"
 					"%f;%f;%f;%f;"
@@ -771,7 +771,7 @@ static void export_meta_smoke_list_database (void)
 					co->additive);
 				break;
 			case SMOKE_LIST_TRAILS:
-				fprintf (file,
+				fprintf(file,
 					"TRAILS;%s;"
 					"%s;"
 					"%i;%i;"
@@ -786,25 +786,25 @@ static void export_meta_smoke_list_database (void)
 			}
 		}
 	}
-	safe_fclose (file);
+	safe_fclose(file);
 }
 
-static void import_meta_smoke_list_database (void)
+static void import_meta_smoke_list_database(void)
 {
 	FILE
-		*file;
+		* file = nullptr;
 	char
 		buf[2048],
-		*ptr,
-		*name,
-		*effect;
+		* ptr = nullptr,
+		* name = nullptr,
+		* effect = nullptr;
 	int
 		count,
 		type;
 	meta_smoke_list_data
-		*meta_smoke;
+		* meta_smoke = nullptr;
 	meta_smoke_list_component
-		*co;
+		* co = nullptr;
 	int
 		red,
 		green,
@@ -813,10 +813,10 @@ static void import_meta_smoke_list_database (void)
 		additive;
 
 	file = safe_fopen(META_SMOKE_LIST_DATABASE_FILENAME, "r");
-	fgets(buf, sizeof (buf), file);
+	fgets(buf, sizeof(buf), file);
 	if (!strcmp(buf, "META_SMOKE;3\n"))
 	{
-		while (fgets(buf, sizeof (buf), file))
+		while (fgets(buf, sizeof(buf), file))
 		{
 			ptr = strchr(buf, '#');
 			if (ptr)
@@ -865,79 +865,79 @@ static void import_meta_smoke_list_database (void)
 				}
 				*ptr = 0;
 
-				ASSERT (meta_smoke->number_of_components < MAX_COMPONENTS_PER_META_SMOKE_LIST);
+				ASSERT(meta_smoke->number_of_components < MAX_COMPONENTS_PER_META_SMOKE_LIST);
 				co = &meta_smoke->component[meta_smoke->number_of_components];
 				switch (type)
 				{
 				case SMOKE_LIST_SPRITES:
+				{
+					if (sscanf(ptr + 1,
+						"%i;"
+						"%i;%i;%i;%i;"
+						"%f;%f;%f;%f;"
+						"%i",
+						&co->sprite_count,
+						&red, &green, &blue, &alpha,
+						&co->animation_frequency, &co->lifetime, &co->scale, &co->rotation_rate,
+						&additive) != 9)
 					{
-						if (sscanf(ptr + 1,
-							"%i;"
-							"%i;%i;%i;%i;"
-							"%f;%f;%f;%f;"
-							"%i",
-							&co->sprite_count,
-							&red, &green, &blue, &alpha,
-							&co->animation_frequency, &co->lifetime, &co->scale, &co->rotation_rate,
-							&additive) != 9)
-						{
-							continue;
-						}
-						co->animated_texture = (texture_animation_indices)add_new_animation(name);
-						co->red = (unsigned char)bound (red, 0, 255);
-						co->green = (unsigned char)bound (green, 0, 255);
-						co->blue = (unsigned char)bound (blue, 0, 255);
-						co->alpha = (unsigned char)bound (alpha, 0, 255);
-						co->additive = additive != 0;
-						meta_smoke->number_of_components++;
-						break;
+						continue;
 					}
+					co->animated_texture = (texture_animation_indices)add_new_animation(name);
+					co->red = (unsigned char)bound(red, 0, 255);
+					co->green = (unsigned char)bound(green, 0, 255);
+					co->blue = (unsigned char)bound(blue, 0, 255);
+					co->alpha = (unsigned char)bound(alpha, 0, 255);
+					co->additive = additive != 0;
+					meta_smoke->number_of_components++;
+					break;
+				}
 				case SMOKE_LIST_TRAILS:
+				{
+					effect = ptr + 1;
+					ptr = strchr(effect, ';');
+					if (!ptr)
 					{
-						effect = ptr + 1;
-						ptr = strchr(effect, ';');
-						if (!ptr)
-						{
-							continue;
-						}
-						*ptr = '\0';
-						count = get_smoke_type_by_name(name);
-						if (count < 0)
-						{
-							continue;
-						}
-						co->trail_type = (smoke_list_types)count;
-						co->entity_sub_type = -1;
-						for (count = ENTITY_SUB_TYPE_EFFECT_PARTICLE; count < NUM_ENTITY_SUB_TYPE_EFFECTS; count++)
-						{
-							if (!strcmp(effect, entity_sub_type_effect_names[count]))
-							{
-								co->entity_sub_type = count;
-								break;
-							}
-						}
-						if (co->entity_sub_type < 0)
-						{
-							continue;
-						}
-						if (sscanf(ptr + 1,
-							"%i;%i;"
-							"%f;%f;%f",
-							&co->trail_count, &co->infinite,
-							&co->generator_lifetime, &co->frequency, &co->smoke_lifetime) != 5)
-						{
-							continue;
-						}
-						meta_smoke->number_of_components++;
-						break;
+						continue;
 					}
+					*ptr = '\0';
+					count = get_smoke_type_by_name(name);
+					if (count < 0)
+					{
+						continue;
+					}
+					co->trail_type = (smoke_list_types)count;
+					co->entity_sub_type = -1;
+					for (count = ENTITY_SUB_TYPE_EFFECT_PARTICLE; count < NUM_ENTITY_SUB_TYPE_EFFECTS; count++)
+					{
+						if (!strcmp(effect, entity_sub_type_effect_names[count]))
+						{
+							co->entity_sub_type = count;
+							break;
+						}
+					}
+					if (co->entity_sub_type < 0)
+					{
+						continue;
+					}
+					if (sscanf(ptr + 1,
+						"%i;%i;"
+						"%f;%f;%f",
+						&co->trail_count, &co->infinite,
+						&co->generator_lifetime, &co->frequency, &co->smoke_lifetime) != 5)
+					{
+						continue;
+					}
+					meta_smoke->number_of_components++;
+					break;
+				}
 				default:
 					ASSERT(FALSE);
 				};
 			}
 		}
 	}
-	safe_fclose (file);
+	safe_fclose(file);
 }
 // 23OCT11 Casm Meta Smoke database import/export end
 
@@ -949,7 +949,7 @@ void initialise_meta_smoke_list_database(void)
 {
 
 	meta_smoke_list_component
-		*smoke_list_info;
+		* smoke_list_info = nullptr;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -957,47 +957,47 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL ].number_of_components = 2;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL].number_of_components = 2;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GREY_TRAIL_SPRITES;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GREY_TRAIL_SPRITES;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	0.0;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	10.0;
+	smoke_list_info->generator_lifetime = 0.0;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 10.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GREY_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GREY_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	0.0;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	10.0;
+	smoke_list_info->generator_lifetime = 0.0;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 10.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1005,67 +1005,67 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].number_of_components = 3;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL].number_of_components = 3;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_WHITE_TRAIL_SPRITES;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_WHITE_TRAIL_SPRITES;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	0.0;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	15.0;
+	smoke_list_info->generator_lifetime = 0.0;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 15.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_WHITE_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_WHITE_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	0.0;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	15.0;
+	smoke_list_info->generator_lifetime = 0.0;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 15.0;
 
 	//
 	// component 2
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL ].component[ 2 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_ROCKET_TRAIL].component[2]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_ADDITIVE_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_ADDITIVE_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	0.0;
-	smoke_list_info->frequency 				=	0.01;
-	smoke_list_info->smoke_lifetime 			=	0.1;
+	smoke_list_info->generator_lifetime = 0.0;
+	smoke_list_info->frequency = 0.01;
+	smoke_list_info->smoke_lifetime = 0.1;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1073,74 +1073,74 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL ].number_of_components = 3;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL].number_of_components = 3;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FLARE_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FLARE_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	4.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	4.0;
+	smoke_list_info->generator_lifetime = 4.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 4.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_LARGE_ADDITIVE_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_LARGE_ADDITIVE_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_MISSILE_TRAIL;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	3.5;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	3.0;
+	smoke_list_info->generator_lifetime = 3.5;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 3.0;
 
 	//
 	// component 2
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL ].component[ 2 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_DECOY_FLARE_TRAIL].component[2]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_SPRITES;
+	smoke_list_info->type = SMOKE_LIST_SPRITES;
 
-	smoke_list_info->animated_texture		=	TEXTURE_ANIMATION_INDEX_FLARE;
+	smoke_list_info->animated_texture = TEXTURE_ANIMATION_INDEX_FLARE;
 
-	smoke_list_info->sprite_count	 			=	1;
+	smoke_list_info->sprite_count = 1;
 
-	smoke_list_info->red 						=	255;
-	smoke_list_info->green 						=	255;
-	smoke_list_info->blue 						=	255;
-	smoke_list_info->alpha 						=	255;
+	smoke_list_info->red = 255;
+	smoke_list_info->green = 255;
+	smoke_list_info->blue = 255;
+	smoke_list_info->alpha = 255;
 
-	smoke_list_info->animation_frequency 	=	0.1;
+	smoke_list_info->animation_frequency = 0.1;
 
-	smoke_list_info->lifetime 					=	5.0;
+	smoke_list_info->lifetime = 5.0;
 
-	smoke_list_info->scale 						=	5.0;
+	smoke_list_info->scale = 5.0;
 
-	smoke_list_info->rotation_rate 	=	1.0;
+	smoke_list_info->rotation_rate = 1.0;
 
-	smoke_list_info->additive 					=	TRUE;
+	smoke_list_info->additive = TRUE;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1148,27 +1148,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_INFINITE_FIRE ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_INFINITE_FIRE].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_INFINITE_FIRE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_INFINITE_FIRE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FIRE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FIRE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_ON;
-	smoke_list_info->frequency 				=	1.0;
-	smoke_list_info->smoke_lifetime 			=	100.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_ON;
+	smoke_list_info->frequency = 1.0;
+	smoke_list_info->smoke_lifetime = 100.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1176,27 +1176,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_FIRE_SHORT_DURATION ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_FIRE_SHORT_DURATION].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_FIRE_SHORT_DURATION ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_FIRE_SHORT_DURATION].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FIRE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FIRE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	180.0;
-	smoke_list_info->frequency 				=	1.0;
-	smoke_list_info->smoke_lifetime 			=	100.0;
+	smoke_list_info->generator_lifetime = 180.0;
+	smoke_list_info->frequency = 1.0;
+	smoke_list_info->smoke_lifetime = 100.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1204,27 +1204,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_FIRE_SHORT_DURATION ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_FIRE_SHORT_DURATION].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_FIRE_SHORT_DURATION ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_FIRE_SHORT_DURATION].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_SMALL_FIRE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_SMALL_FIRE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_FIRE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	60.0;
-	smoke_list_info->frequency 				=	1.0;
-	smoke_list_info->smoke_lifetime 			=	50.0;
+	smoke_list_info->generator_lifetime = 60.0;
+	smoke_list_info->frequency = 1.0;
+	smoke_list_info->smoke_lifetime = 50.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1232,27 +1232,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_VEHICLE_DUST_TRAIL ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_VEHICLE_DUST_TRAIL].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_VEHICLE_DUST_TRAIL ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_VEHICLE_DUST_TRAIL].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_DUST_TRAIL_1;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_DUST_TRAIL_1;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.2;
-	smoke_list_info->smoke_lifetime 			=	5.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.2;
+	smoke_list_info->smoke_lifetime = 5.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1260,27 +1260,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_REAR_SHIP_WAKE ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_REAR_SHIP_WAKE].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_REAR_SHIP_WAKE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_REAR_SHIP_WAKE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_REAR_SHIP_WAKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_REAR_SHIP_WAKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	2.0;
-	smoke_list_info->smoke_lifetime 			=	35.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 2.0;
+	smoke_list_info->smoke_lifetime = 35.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1288,27 +1288,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_FRONT_SHIP_WAKE ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_FRONT_SHIP_WAKE].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_FRONT_SHIP_WAKE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_FRONT_SHIP_WAKE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FRONT_SHIP_WAKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FRONT_SHIP_WAKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	2.0;
-	smoke_list_info->smoke_lifetime 			=	20.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 2.0;
+	smoke_list_info->smoke_lifetime = 20.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1316,27 +1316,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_MOVING_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_MOVING;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	2.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 2.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1344,47 +1344,47 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].number_of_components = 2;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING].number_of_components = 2;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	10.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 10.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_MOVING].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FLAME_2;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FLAME_2;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_MOVING;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.01;
-	smoke_list_info->smoke_lifetime 			=	0.2;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.01;
+	smoke_list_info->smoke_lifetime = 0.2;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1392,27 +1392,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_AIRCRAFT_LIGHT_DAMAGE_STATIC_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_LIGHT_DAMAGE_STATIC;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.05;
-	smoke_list_info->smoke_lifetime 			=	5.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.05;
+	smoke_list_info->smoke_lifetime = 5.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1420,47 +1420,47 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].number_of_components = 2;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC].number_of_components = 2;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC_TRAIL;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.05;
-	smoke_list_info->smoke_lifetime 			=	10.0;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.05;
+	smoke_list_info->smoke_lifetime = 10.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_AIRCRAFT_HEAVY_DAMAGE_STATIC].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_FLAME_2;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_FLAME_2;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_HEAVY_DAMAGE_STATIC;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	TRUE;
+	smoke_list_info->infinite = TRUE;
 
-	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.1;
-	smoke_list_info->smoke_lifetime 			=	0.5;
+	smoke_list_info->generator_lifetime = INFINITE_SMOKE_OFF;
+	smoke_list_info->frequency = 0.1;
+	smoke_list_info->smoke_lifetime = 0.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1468,27 +1468,27 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE ].number_of_components = 1;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE].number_of_components = 1;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_SMALL_GUN_SMOKE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	4.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 4.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1496,67 +1496,67 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].number_of_components = 3;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE].number_of_components = 3;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	4.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 4.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	5.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 5.0;
 
 	//
 	// component 2
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE ].component[ 2 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_MEDIUM_GUN_SMOKE].component[2]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	6.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 6.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1564,76 +1564,76 @@ void initialise_meta_smoke_list_database(void)
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].number_of_components = 3;
+	meta_smoke_list_database[META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE].number_of_components = 3;
 
 	//
 	// component 0
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 0 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE].component[0]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE_2;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	4.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 4.0;
 
 	//
 	// component 1
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 1 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE].component[1]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE_2;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	6.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 6.0;
 
 	//
 	// component 2
 	//
 
-	smoke_list_info = &(meta_smoke_list_database[ META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE ].component[ 2 ]);
+	smoke_list_info = &(meta_smoke_list_database[META_SMOKE_LIST_TYPE_LARGE_GUN_SMOKE].component[2]);
 
-	smoke_list_info->type 						=	SMOKE_LIST_TRAILS;
+	smoke_list_info->type = SMOKE_LIST_TRAILS;
 
-	smoke_list_info->trail_type	 			=	SMOKE_LIST_TYPE_GUN_SMOKE_2;
+	smoke_list_info->trail_type = SMOKE_LIST_TYPE_GUN_SMOKE_2;
 
-	smoke_list_info->entity_sub_type			=	ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
+	smoke_list_info->entity_sub_type = ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_GUN_SMOKE;
 
-	smoke_list_info->trail_count	 			=	1;
+	smoke_list_info->trail_count = 1;
 
-	smoke_list_info->infinite 					=	FALSE;
+	smoke_list_info->infinite = FALSE;
 
-	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.025;
-	smoke_list_info->smoke_lifetime 			=	8.0;
+	smoke_list_info->generator_lifetime = 1.0;
+	smoke_list_info->frequency = 0.025;
+	smoke_list_info->smoke_lifetime = 8.0;
 
 	// 23OCT11 Casm Meta Smoke database import/export
-	if (file_exist (META_SMOKE_LIST_DATABASE_FILENAME))
+	if (file_exist(META_SMOKE_LIST_DATABASE_FILENAME))
 	{
-		import_meta_smoke_list_database ();
+		import_meta_smoke_list_database();
 	}
 	else
 	{
-		export_meta_smoke_list_database ();
+		export_meta_smoke_list_database();
 	}
 }
 

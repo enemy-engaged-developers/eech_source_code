@@ -70,7 +70,7 @@ typedef struct {
 		num_gear_points;
 
 	landing_gear_point
-		*gear_points;
+		*gear_points = nullptr;
 	landing_gear_point
 		*gear_points_types[LGPT_LAST];
 } landing_gear_system;
@@ -84,7 +84,7 @@ static landing_gear_system
 	landing_gears[NUM_ENTITY_SUB_TYPE_AIRCRAFT + 1];
 
 static landing_gear_system
-	*current_landing_gear;
+	*current_landing_gear = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ static landing_gear_system
 static const struct LANDING_GEAR_INFO
 {
 	const char
-		*name;
+		*name = nullptr;
 	landing_gear_point_type
 		type;
 	object_3d_sub_object_index_numbers
@@ -275,7 +275,7 @@ static void update_gear_world_position(landing_gear_point* point, matrix3x3 atti
 static void update_ai_gear_world_position(landing_gear_point* point, vec3d* position, matrix3x3 attitude, entity* en)
 {
 	vec3d
-		*ac_position,	
+		*ac_position = nullptr,	
 		gear_position;
 
 	ASSERT (en);
@@ -304,9 +304,9 @@ static void update_suspension(void)
 	double
 		inv_delta_time = 1.0 / get_model_delta_time();
 	helicopter
-		*raw;
+		*raw = nullptr;
 	entity
-		*keysite;
+		*keysite = nullptr;
 	terrain_classes
 		terrain_class;
 
@@ -547,12 +547,8 @@ static void apply_suspension_forces(void)
 
 			// wheel longitudinal resistance/brakes
 
-				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0) { // general rolling resistance
-					if (point->can_turn == 1)
-						wheight_on_wheel *= 0.1;
-					else
-						wheight_on_wheel *= 0.005;
-				}
+				if ((!point->has_brakes || !current_flight_dynamics->wheel_brake) && point->suspension_compression > 0)
+					wheight_on_wheel *= 0.005;  // general rolling resistance
 
 				force_diff = (wheight_on_wheel * point->velocity.z + point->brake_force) / 2.0;
 				point->brake_force = bound(force_diff, - max_force_change * 0.1, max_force_change * 0.1);
@@ -732,7 +728,7 @@ void update_undercarriage_dynamics(void)
 void animate_aircraft_suspension(entity* en)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 	matrix3x3
 		attitude,
 		inv_attitude;
@@ -750,16 +746,16 @@ void animate_aircraft_suspension(entity* en)
 	unsigned int
 		i;
 	landing_gear_point
-		*third,
-		*left,
-		*left_secondary,
-		*right,
-		*right_secondary;
+		*third = nullptr,
+		*left = nullptr,
+		*left_secondary = nullptr,
+		*right = nullptr,
+		*right_secondary = nullptr;
 	vec3d
 		point_world_position[5];
 	
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 	if (!get_local_entity_int_value (en, INT_TYPE_ALIVE))

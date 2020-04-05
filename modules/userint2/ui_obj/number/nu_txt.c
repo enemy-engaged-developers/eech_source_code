@@ -80,10 +80,10 @@ static void set_number_ui_object_text (ui_object *obj, const char *text)
 		pixel_length;
 
 	number_ui_object
-		*number;
+		*number = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	number = (number_ui_object *) obj->data;
 

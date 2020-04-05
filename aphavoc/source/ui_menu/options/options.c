@@ -79,7 +79,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*options_screen,
+	*options_screen = nullptr,
 	*options_page [NUM_OPTIONS_PAGES],
 	*options_page_buttons [NUM_OPTIONS_PAGES];
 
@@ -87,7 +87,7 @@ static int
 	current_options_page = OPTIONS_PAGE_GRAPHICS;
 
 display_device
-	*old_graphics_card_selection;
+	*old_graphics_card_selection = nullptr;
 
 int
 	old_graphics_card_automatic_selection;

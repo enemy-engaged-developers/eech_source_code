@@ -94,7 +94,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned char
-    *tx_pack_buffer;
+    *tx_pack_buffer = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ unsigned char
 
 static unsigned char
     session_data,
-    *data_record;
+    *data_record = nullptr;
 
 int
     data_record_size,
@@ -227,7 +227,7 @@ void comms_record_data (unsigned char *data, int size)
 {
 
     unsigned char
-        *new_data_record;
+        *new_data_record = nullptr;
 
     //
     // Check data_record is big enough
@@ -311,7 +311,7 @@ void comms_record_data (unsigned char *data, int size)
 static int get_number_of_connected_players (void)
 {
     connection_list_type
-        *temp_connection;
+        *temp_connection = nullptr;
 
     int
         player_count;
@@ -341,7 +341,7 @@ void data_exchange (void)
         packet_data_size;
 
     connection_data_type
-        *this_connection;
+        *this_connection = nullptr;
 
     this_connection = direct_play_get_connection_data ();
 
@@ -430,7 +430,7 @@ void receive_comms_data (void)
 {
 
     connection_data_type
-        *this_connection;
+        *this_connection = nullptr;
 
     this_connection = direct_play_get_connection_data ();
 
@@ -563,7 +563,7 @@ static void group_database_cpy ( group_data * dst, const group_data * src )
 	int
 		elems;
 	const char
-		*tmp;
+		*tmp = nullptr;
 
 	for ( elems = NUM_ENTITY_SUB_TYPE_GROUPS; elems > 0; elems--)
 	{
@@ -584,14 +584,14 @@ void comms_process_data (void)
 {
 
     session_list_data_type
-        *current_session;
+        *current_session = nullptr;
 
     connection_list_type
-        *this_connection,
-        *connection;
+        *this_connection = nullptr,
+        *connection = nullptr;
 
     unsigned char
-        *received_data;
+        *received_data = nullptr;
 
     int
         planner_event,
@@ -604,7 +604,7 @@ void comms_process_data (void)
         received_id = 0;
 
     entity
-        *member;
+        *member = nullptr;
 
     send_types
         send_type;
@@ -714,7 +714,7 @@ void comms_process_data (void)
                     {
 
                         char
-                            *ptr;
+                            *ptr = nullptr;
 
                         int
                             server_version_number,
@@ -722,7 +722,7 @@ void comms_process_data (void)
                             size;
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         if (get_comms_model () == COMMS_MODEL_SERVER)
                         {
@@ -923,7 +923,7 @@ void comms_process_data (void)
                                 {
 
                                     FILE
-                                        *test_ptr;
+                                        *test_ptr = nullptr;
 
                                     test_ptr = fopen ("out.txt", "wb");
 
@@ -949,16 +949,16 @@ void comms_process_data (void)
 					{
                         char
                         	buf [256],
-                            *ptr;
+                            *ptr = nullptr;
 
                         int
                             size;
 
                         FILE
-                     		*fp;
+                     		*fp = nullptr;
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
 						if (get_comms_model () == COMMS_MODEL_SERVER)
 						{
@@ -1195,7 +1195,7 @@ void comms_process_data (void)
                             size;
 
                         char
-                            *ptr,
+                            *ptr = nullptr,
                             motd [256],
                             buffer [256],
                             temp_wut_filename[128];
@@ -1514,7 +1514,7 @@ void comms_process_data (void)
                     {
 
                         connection_list_type
-                            *connection;
+                            *connection = nullptr;
 
                         connection = get_connection_list_item (received_id);
 
@@ -1531,8 +1531,8 @@ void comms_process_data (void)
                     {
 
                         entity
-                            *force,
-                            *pilot;
+                            *force = nullptr,
+                            *pilot = nullptr;
 
                         int
                             client_version_number,
@@ -1547,7 +1547,7 @@ void comms_process_data (void)
                             loop;
 
                         char
-                            *ptr,
+                            *ptr = nullptr,
                             warzone_ffp_filename [256],
                             temp_campaign_population_filename [256],
                             temp_population_placement_filename [256],
@@ -1887,13 +1887,13 @@ void comms_process_data (void)
                     {
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         client_pilot_request_data
                             pilot_data;
 
                         entity
-                            *new_pilot;
+                            *new_pilot = nullptr;
 
                         int
                             index;
@@ -1939,7 +1939,7 @@ void comms_process_data (void)
                     {
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         client_gunship_request_data
                             pilot_data;
@@ -2028,7 +2028,7 @@ void comms_process_data (void)
                     {
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         int
                             index_number;
@@ -2132,10 +2132,10 @@ void comms_process_data (void)
                             index_number;
 
                         stub_packet_type
-                            *stub_packet;
+                            *stub_packet = nullptr;
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         index_number = get_list_item (received_data, int);
 
@@ -2202,7 +2202,7 @@ void comms_process_data (void)
                     {
 
                         entity
-                            *gunship;
+                            *gunship = nullptr;
 
                         int
                             index_number;
@@ -2343,7 +2343,7 @@ void comms_process_data (void)
                                 index_number;
 
                             connection_list_type
-                                *new_connection;
+                                *new_connection = nullptr;
 
                             received_data += received_size - 4;
                             index_number = get_list_item (received_data, int);
@@ -2375,7 +2375,7 @@ void comms_process_data (void)
                             index_number;
 
                         connection_list_type
-                            *new_connection;
+                            *new_connection = nullptr;
 
                         index_number = get_list_item (received_data, int);
 
@@ -2872,7 +2872,7 @@ void net_init_heartbeat(void)
 void net_handle_heartbeat(void)
 {
     connection_data_type
-        *this_connection;
+        *this_connection = nullptr;
 
     if (command_line_report_to_masterserver != 1) // send heartbeat only if it's allowed
     	return;

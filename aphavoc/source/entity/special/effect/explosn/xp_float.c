@@ -79,7 +79,7 @@
 void set_local_float_value (entity *en, float_types type, float value)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -183,7 +183,7 @@ void set_client_float_value (entity *en, float_types type, float value)
 float get_local_float_value (entity *en, float_types type)
 {
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;

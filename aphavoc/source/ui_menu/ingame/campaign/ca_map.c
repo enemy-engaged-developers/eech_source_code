@@ -78,8 +78,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*page_map_area,
-	*page_back_button;
+	*page_map_area = nullptr,
+	*page_back_button = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -149,11 +149,11 @@ static void update_map_page_objects (ui_object *obj, void *arg)
 void campaign_map_left_click_function (ui_object *obj, void *arg)
 {
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	entity_sides
 		side;
@@ -309,7 +309,7 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 void set_campaign_map_origin (entity *en)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		max_size;
@@ -347,7 +347,7 @@ void define_campaign_screen_map_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	/////////////////////////////////////////////////////////////////
 	// Main Page Area

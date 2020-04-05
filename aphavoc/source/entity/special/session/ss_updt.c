@@ -79,7 +79,7 @@
 static void update_time_of_day (entity *en)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	float
 		time_of_day;
@@ -126,7 +126,7 @@ static void update_time_of_day (entity *en)
 static void update_time_of_day_resync (entity *en)
 {
 	session
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (en);
 
@@ -160,7 +160,7 @@ void update_lightning_effect (entity *en)
 {
 #ifndef OGRE_EE
 	session
-		*raw;
+		*raw = nullptr;
 
 	int
 		lightning_flag = FALSE;
@@ -221,7 +221,7 @@ void update_lightning_effect (entity *en)
 		//
 
 		env_3d
-			*current_3d_env;
+			*current_3d_env = nullptr;
 
 		current_3d_env = get_3d_active_environment ();
 
@@ -303,10 +303,10 @@ void update_lightning_effect (entity *en)
 void update_transitional_weather (entity *en)
 {
 	vec3d
-		*camera_pos;
+		*camera_pos = nullptr;
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -536,13 +536,13 @@ void update_transitional_weather (entity *en)
 void update_session_sound_effects (entity *en)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*spec;
+		*spec = nullptr;
 
 	vec3d
-		*camera_pos;
+		*camera_pos = nullptr;
 
 #ifndef OGRE_EE
 	weathermodes

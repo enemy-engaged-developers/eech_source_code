@@ -81,10 +81,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned char
-	*terrain_3d_simple_elevation_memory_map;
+	*terrain_3d_simple_elevation_memory_map = nullptr;
 
 float
-	*terrain_3d_simple_elevation_grid;
+	*terrain_3d_simple_elevation_grid = nullptr;
 
 int
 	terrain_3d_simple_elevation_memory_mapped;
@@ -180,7 +180,7 @@ int load_terrain_simple_elevation ( const char *filename )
 {
 	
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 	
 	unload_terrain_simple_elevation_grid ();
 	
@@ -343,7 +343,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 	{
 		
 		float
-			*elevations;
+			*elevations = nullptr;
 		
 		elevations = terrain_3d_simple_elevation_grid + ( z_grid * x_size );
 		
@@ -594,7 +594,7 @@ void save_terrain_simple_elevation ( const char *filename )
 {
 	
 	FILE
-		*fp;
+		*fp = nullptr;
 	
 	fp = safe_fopen ( filename, "wb" );
 	

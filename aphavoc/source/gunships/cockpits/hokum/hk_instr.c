@@ -79,7 +79,7 @@
 void draw_hokum_virtual_cockpit_instruments (void)
 {
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

@@ -74,7 +74,7 @@ static void create_area_ui_object (ui_object *obj, ui_object_types type, va_list
 {
 
 	area_ui_object
-		*new_object;
+		*new_object = nullptr;
 
 	increase_ui_object_counter ();
 
@@ -194,17 +194,17 @@ static void destroy_area_ui_object (ui_object *obj)
 {
 
 	ui_object
-		*parent,
-		*next,
-		*prev,
-		*succ,
-		*pred,
-		*stack_next,
-		*stack_prev;
+		*parent = nullptr,
+		*next = nullptr,
+		*prev = nullptr,
+		*succ = nullptr,
+		*pred = nullptr,
+		*stack_next = nullptr,
+		*stack_prev = nullptr;
 
 	area_ui_object
-		*parent_area,
-		*area;
+		*parent_area = nullptr,
+		*area = nullptr;
 
 	////////////////////////////////////////
 	//

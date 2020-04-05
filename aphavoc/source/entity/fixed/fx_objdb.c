@@ -187,7 +187,7 @@ void report_non_entries_in_fixed_3d_object_database (void)
 		loop;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	for (loop = OBJECT_3D_INVALID_OBJECT_INDEX + 1; loop < OBJECT_3D_LAST; loop ++)
 	{

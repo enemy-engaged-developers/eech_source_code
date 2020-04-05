@@ -672,7 +672,7 @@ int_type_data
 		},
 		{
 			"INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX",
-			INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX,
+			INT_PACK_TYPE_UNSIGNED,
 			NUM_GUNSHIP_RADAR_TARGET_INDEX_BITS,               			// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,														// fast_track

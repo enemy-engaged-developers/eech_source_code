@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 
 #include "3d.h"
@@ -242,7 +237,7 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 
 	vertex
 		points[3],
-		*polygon;
+		*polygon = nullptr;
 
 	float
 		oxmax,
@@ -318,9 +313,9 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 			triangle_colour;
 
 		vertex
-			*fan_centre,
-			*point1,
-			*point2;
+			*fan_centre = nullptr,
+			*point1 = nullptr,
+			*point2 = nullptr;
 
 		polygon = points;
 
@@ -454,11 +449,11 @@ void fill_software_plain_polygon ( unsigned int colour )
 		y2;
 
 	triangle_edge_data
-		*left_edge,
-		*right_edge;
+		*left_edge = nullptr,
+		*right_edge = nullptr;
 
 	unsigned int
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	//
 	// This routine only accepts TRIANGLES at the moment.
@@ -545,7 +540,7 @@ void fill_software_plain_polygon ( unsigned int colour )
 			width;
 
 		unsigned int
-			*word_ptr;
+			*word_ptr = nullptr;
 
 		word_ptr = screen_ptr;
 
@@ -592,7 +587,7 @@ void fill_software_plain_polygon ( unsigned int colour )
 			width;
 
 		unsigned int
-			*word_ptr;
+			*word_ptr = nullptr;
 
 		word_ptr = screen_ptr;
 
@@ -619,4 +614,3 @@ void fill_software_plain_polygon ( unsigned int colour )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

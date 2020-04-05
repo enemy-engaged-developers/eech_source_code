@@ -79,15 +79,15 @@
 static void update_server (entity *en)
 {
 	entity
-		*parent,
-		*next_segment,
-		*prev_segment;
+		*parent = nullptr,
+		*next_segment = nullptr,
+		*prev_segment = nullptr;
 
 	entity_sub_types
 		sub_type;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		terrain_height;

@@ -268,7 +268,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 				offset;
 
 			object_3d_database_entry
-				*sub_object;
+				*sub_object = nullptr;
 
 			index = objects_3d_scene_database[scene_index].scene_sub_object_indices_array[count].sub_object_index;
 
@@ -735,7 +735,7 @@ void populate_table_with_named_sub_objects ( object_3d_database_entry *object )
 			offset;
 
 		object_3d_database_entry
-			*sub_object;
+			*sub_object = nullptr;
 
 		index = object->sub_object_indices[count].sub_object_index;
 
@@ -828,10 +828,10 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OBJECT_3D
 #ifndef OGRE_EE
 
 	object_3d_sub_instance
-		*result;
+		*result = nullptr;
 
 	object_3d_database_entry
-		*scene_result;
+		*scene_result = nullptr;
 
 	int
 		table_index,
@@ -841,7 +841,7 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OBJECT_3D
 		search_index;
 
 	object_3d_scene_sub_object_table_entry   // table of the named sub objects (from scene)
-		*table;
+		*table = nullptr;
 
 #if REPORT_SUB_OBJECT_SEARCHES
 
@@ -950,15 +950,15 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( 
 #ifndef OGRE_EE
 
 	object_3d_instance
-		*scene_object;
+		*scene_object = nullptr;
 
 	object_3d_sub_instance
-		*tmp_object,
-		*result;
+		*tmp_object = nullptr,
+		*result = nullptr;
 
 	object_3d_database_entry
-		*scene_parent,
-		*scene_result;
+		*scene_parent = nullptr,
+		*scene_result = nullptr;
 
 	int
 		search_depth,
@@ -969,7 +969,7 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object_from_sub_object ( 
 		search_index;
 
 	object_3d_scene_sub_object_table_entry
-		*table;
+		*table = nullptr;
 
 #if REPORT_SUB_OBJECT_SEARCHES
 
@@ -1133,11 +1133,11 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 {
 
 	object_3d_database_entry
-		*this_scene,
+		*this_scene = nullptr,
 		*sub_scenes[256];
 
 	object_3d_sub_instance
-		*this_sub_object;
+		*this_sub_object = nullptr;
 
 	int
 		offset,

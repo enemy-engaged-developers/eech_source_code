@@ -84,7 +84,7 @@ static void destroy_local (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -296,15 +296,15 @@ static void kill_local (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		losses;
 
 	entity
-		*task,
-		*destroy_task,
-		*group;
+		*task = nullptr,
+		*destroy_task = nullptr,
+		*group = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -587,10 +587,10 @@ void kill_local_restored_anti_aircraft_entity (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	raw = (anti_aircraft *) get_local_entity_data (en);
 

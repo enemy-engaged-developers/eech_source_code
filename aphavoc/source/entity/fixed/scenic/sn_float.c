@@ -79,7 +79,7 @@
 static float get_local_float_value (entity *en, float_types type)
 {
 	scenic
-		*raw;
+		*raw = nullptr;
 
 	float
 		value;
@@ -93,7 +93,7 @@ static float get_local_float_value (entity *en, float_types type)
 		////////////////////////////////////////
 		{
 			object_3d_bounds
-				*bounding_box;
+				*bounding_box = nullptr;
 
 			bounding_box = get_object_3d_bounding_box_without_lines (raw->fix.object_3d_shape);
 

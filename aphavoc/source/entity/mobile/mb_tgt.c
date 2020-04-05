@@ -139,7 +139,7 @@ int check_position_line_of_sight (entity *source, entity *target, vec3d *source_
 {
 
 	entity
-		*collision_en;
+		*collision_en = nullptr;
 
 	vec3d
 		increment,

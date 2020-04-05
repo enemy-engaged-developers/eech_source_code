@@ -74,10 +74,10 @@ void set_toggle_button_off (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	area = obj->data;
 	
@@ -105,10 +105,10 @@ void set_toggle_button_on (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	area = obj->data;
 

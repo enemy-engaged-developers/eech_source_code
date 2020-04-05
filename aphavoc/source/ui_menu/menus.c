@@ -133,7 +133,7 @@ void deinitialise_ui_menus (void)
 void set_ui_frontend_list_object_highlightable (ui_object *obj)
 {
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ASSERT (obj);
 

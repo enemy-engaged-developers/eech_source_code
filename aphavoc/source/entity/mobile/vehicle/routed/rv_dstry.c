@@ -84,7 +84,7 @@ static void destroy_local (entity *en)
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -305,12 +305,12 @@ static void kill_local (entity *en)
 		losses;
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*task,
-		*destroy_task,
-		*group;
+		*task = nullptr,
+		*destroy_task = nullptr,
+		*group = nullptr;
 
 	////////////////////////////////////////
 	//

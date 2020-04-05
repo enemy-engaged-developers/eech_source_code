@@ -79,7 +79,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -121,7 +121,7 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 
 	task
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -146,7 +146,7 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			//
 /*
 			entity
-				*parent;
+				*parent = nullptr;
 
 			parent = get_local_entity_parent (en, LIST_TYPE_GENERIC_TASK);
 
@@ -238,7 +238,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -288,10 +288,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 

@@ -954,7 +954,7 @@ void update_main_rotor_rpm_dynamics (void)
 		if (number_of_engines)
 		{
 			// arneh - rotor spins at the speed of the fastest engine
-			rotor_rpm = max(current_flight_dynamics->left_engine_rpm.value, current_flight_dynamics->right_engine_rpm.value);
+			rotor_rpm = fmax(current_flight_dynamics->left_engine_rpm.value, current_flight_dynamics->right_engine_rpm.value);
 			if (command_line_dynamics_advanced_engine_model == TRUE)
 			  rotor_rpm -= rotor_workload; //Werewolf
 		}
@@ -1541,7 +1541,7 @@ void update_attitude_dynamics (void)
 			else
 			{
 
-				tail_angular_force *= min (fabs (velocity_z_value) / 15.0, 1.0);
+				tail_angular_force *= fmin (fabs (velocity_z_value) / 15.0, 1.0);
 			}
 		}
 
@@ -1627,7 +1627,7 @@ void update_attitude_dynamics (void)
 		vel = normalise_any_3d_vector (&normalised_model_motion_vector);
 
 		// * 3 because induced air at normal is 9 and max is about 26... needs to scale 0.0 -> 1.0
-		vel *= min (fabs ((3.0 * current_flight_dynamics->main_rotor_induced_air.value) / (current_flight_dynamics->main_rotor_induced_air.max - current_flight_dynamics->main_rotor_induced_air.min)), 1.0);
+		vel *= fmin (fabs ((3.0 * current_flight_dynamics->main_rotor_induced_air.value) / (current_flight_dynamics->main_rotor_induced_air.max - current_flight_dynamics->main_rotor_induced_air.min)), 1.0);
 
 		if (vel >= current_flight_dynamics->translational_lift.min)
 		{
@@ -1688,7 +1688,7 @@ void update_attitude_dynamics (void)
 						main_rotor_pitch_angle_value) -
 						motion_vector_pitch);
 
-			force = max (force, 0.0f);
+			force = fmax (force, 0.0f);
 
 			position.x = -0.4 * sin (main_blade_x_pitch_value);
 			position.y = 0.0;
@@ -1926,7 +1926,7 @@ void update_attitude_dynamics (void)
 				else
 				{
 
-					main_angular_force *= min (fabs (current_flight_dynamics->velocity_z.value) / 15.0, 1.0);
+					main_angular_force *= fmin (fabs (current_flight_dynamics->velocity_z.value) / 15.0, 1.0);
 				}
 			}
 
@@ -1990,7 +1990,7 @@ void update_attitude_dynamics (void)
 			scaling = 1.0 - (1.0 / a);
 		}
 
-		scaling = min (fabs (scaling), 1.0f);
+		scaling = fmin (fabs (scaling), 1.0f);
 
 		reaction_force += (tail_angular_force - main_angular_force) * scaling;
 
@@ -2128,7 +2128,7 @@ void update_attitude_dynamics (void)
 			sign,
 			drag;
 
-		drag = 0.00034 + (0.034 * command_line_dynamics_main_rotor_drag * max (current_flight_dynamics->pitch.value, 0.0f));
+		drag = 0.00034 + (0.034 * command_line_dynamics_main_rotor_drag * fmax (current_flight_dynamics->pitch.value, 0.0f));
 
 		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
 
@@ -2337,7 +2337,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0f);
+			altitude = fmax (altitude, 0.0f);
 
 			front_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - front_g_e_force) * get_model_delta_time ();
 
@@ -2398,7 +2398,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0f);
+			altitude = fmax (altitude, 0.0f);
 
 			back_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - back_g_e_force) * get_model_delta_time ();
 
@@ -2458,7 +2458,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0f);
+			altitude = fmax (altitude, 0.0f);
 
 			left_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - left_g_e_force) * get_model_delta_time ();
 
@@ -2518,7 +2518,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0f);
+			altitude = fmax (altitude, 0.0f);
 
 			right_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - right_g_e_force) * get_model_delta_time ();
 
@@ -2560,7 +2560,7 @@ void update_attitude_dynamics (void)
 	{
 		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
 		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
-		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
+		float velocity_factor = fmax (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
@@ -2749,7 +2749,7 @@ void update_power_dynamics (void)
 
 	current_flight_dynamics->power_surplus.value = current_flight_dynamics->power_avaliable.value - current_flight_dynamics->power_required.value;
 
-	current_flight_dynamics->power_surplus.value = max (current_flight_dynamics->power_surplus.value, 0.0f);
+	current_flight_dynamics->power_surplus.value = fmax (current_flight_dynamics->power_surplus.value, 0.0f);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2769,7 +2769,7 @@ void update_acceleration_dynamics (void)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 

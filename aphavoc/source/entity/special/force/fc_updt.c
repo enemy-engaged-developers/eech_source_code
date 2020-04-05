@@ -97,22 +97,22 @@ static void update_server (entity *en)
 		buffer [1024];
 
 	force
-		*enemy_force_raw,
-		*raw;
+		*enemy_force_raw = nullptr,
+		*raw = nullptr;
 
 	entity
-		*allied_force,
-		*enemy_force;
+		*allied_force = nullptr,
+		*enemy_force = nullptr;
 
 	campaign_result_types
 		campaign_status;
 
 	campaign_criteria_type
-		*result_campaign_criteria,
-		*this_campaign_criteria;
+		*result_campaign_criteria = nullptr,
+		*this_campaign_criteria = nullptr;
 
 	player_log_type
-		*log;
+		*log = nullptr;
 
 	int
 		success_required_count,
@@ -305,7 +305,7 @@ static void update_server (entity *en)
 						elapsed_seconds;
 
 					session
-						*session_raw;
+						*session_raw = nullptr;
 
 					if (this_campaign_criteria->valid)
 					{

@@ -87,7 +87,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			helicopter
-				*raw;
+				*raw = nullptr;
 
 			raw = (helicopter *) get_local_entity_data (en);
 
@@ -191,7 +191,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			helicopter
-				*raw;
+				*raw = nullptr;
 
 			raw = (helicopter *) get_local_entity_data (en);
 
@@ -323,7 +323,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			helicopter
-				*raw;
+				*raw = nullptr;
 
 			raw = (helicopter *) get_local_entity_data (en);
 
@@ -360,7 +360,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			helicopter
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -517,7 +517,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			helicopter
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -834,8 +834,8 @@ void unpack_local_gunship_entity (pack_modes mode)
 {
 
 	entity
-		*ks,
-		*gs;
+		*ks = nullptr,
+		*gs = nullptr;
 
 	if (mode != PACK_MODE_SERVER_SESSION)
 	{

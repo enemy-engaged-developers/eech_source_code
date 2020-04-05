@@ -77,187 +77,168 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*virtual_cockpit_level1_inst3d,
-	*virtual_cockpit_level2_inst3d,
-	*virtual_cockpit_level3_inst3d,
-	*virtual_cockpit_fillet_level1_inst3d,
-	*virtual_cockpit_fillet_level2_inst3d,
-	*virtual_cockpit_fillet_level3_inst3d,
-#ifndef OGRE_EE
-	*virtual_cockpit_hud_glass_inst3d,
-#endif
-	*virtual_cockpit_hud_glass_level1_inst3d,
-	*virtual_cockpit_hud_glass_level2_inst3d,
-	*virtual_cockpit_hud_glass_level3_inst3d,
-#ifndef OGRE_EE
-	*virtual_cockpit_large_hud_glass_inst3d,
-#endif
-	*virtual_cockpit_large_hud_glass_level1_inst3d,
-	*virtual_cockpit_large_hud_glass_level2_inst3d,
-	*virtual_cockpit_large_hud_glass_level3_inst3d,
-	*virtual_cockpit_hud_display_inst3d,
-	*virtual_cockpit_main_rotor_inst3d,
-	*virtual_cockpit_large_hud_main_rotor_inst3d,
-	*virtual_cockpit_adi_inst3d,
-#ifndef OGRE_EE
-	*virtual_cockpit_hsi_inst3d,
-#endif
-	*virtual_cockpit_hsi_level1_inst3d,
-	*virtual_cockpit_hsi_level2_inst3d,
-	*virtual_cockpit_hsi_direction_finder_inst3d,
-	*virtual_cockpit_hsi_flight_path_inst3d,
-	*virtual_cockpit_hsi_drift_inst3d,
-	*virtual_cockpit_ekran_display_inst3d,
-	*virtual_cockpit_crt_display_inst3d,
-#ifndef OGRE_EE
-	*virtual_cockpit_compass_inst3d,
-#endif
-	*virtual_cockpit_compass_level1_inst3d,
-	*virtual_cockpit_compass_level2_inst3d,
-	*virtual_cockpit_instrument_needles_inst3d;
+	*virtual_cockpit_level1_inst3d = nullptr,
+	*virtual_cockpit_level2_inst3d = nullptr,
+	*virtual_cockpit_level3_inst3d = nullptr,
+	*virtual_cockpit_fillet_level1_inst3d = nullptr,
+	*virtual_cockpit_fillet_level2_inst3d = nullptr,
+	*virtual_cockpit_fillet_level3_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_level1_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_level2_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_level3_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_level1_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_level2_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_level3_inst3d = nullptr,
+	*virtual_cockpit_hud_display_inst3d = nullptr,
+	*virtual_cockpit_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_large_hud_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_adi_inst3d = nullptr,
+	*virtual_cockpit_hsi_inst3d = nullptr,
+	*virtual_cockpit_hsi_level1_inst3d = nullptr,
+	*virtual_cockpit_hsi_level2_inst3d = nullptr,
+	*virtual_cockpit_hsi_direction_finder_inst3d = nullptr,
+	*virtual_cockpit_hsi_flight_path_inst3d = nullptr,
+	*virtual_cockpit_hsi_drift_inst3d = nullptr,
+	*virtual_cockpit_ekran_display_inst3d = nullptr,
+	*virtual_cockpit_crt_display_inst3d = nullptr,
+	*virtual_cockpit_compass_inst3d = nullptr,
+	*virtual_cockpit_compass_level1_inst3d = nullptr,
+	*virtual_cockpit_compass_level2_inst3d = nullptr,
+	*virtual_cockpit_instrument_needles_inst3d = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO make Havoc threat lamps
-#ifndef OGRE_EE
 static object_3d_sub_instance
-#else
-static struct OgreGameObjectSceneElement
-#endif
-	*rwr_above_light,
-	*rwr_airborne_light,
-	*rwr_below_light,
-	*rwr_left10_light,
-	*rwr_left30_light,
-	*rwr_left50_light,
-	*rwr_left90_light,
-	*rwr_left_rear_light,
-	*rwr_long_range_light,
-	*rwr_medium_range_light,
-	*rwr_missile_launch_light,
-	*rwr_right10_light,
-	*rwr_right30_light,
-	*rwr_right50_light,
-	*rwr_right90_light,
-	*rwr_right_rear_light,
-	*rwr_short_range_light,
-	*rwr_signal_strength1,
-	*rwr_signal_strength10,
-	*rwr_signal_strength11,
-	*rwr_signal_strength12,
-	*rwr_signal_strength13,
-	*rwr_signal_strength14,
-	*rwr_signal_strength15,
-	*rwr_signal_strength2,
-	*rwr_signal_strength3,
-	*rwr_signal_strength4,
-	*rwr_signal_strength5,
-	*rwr_signal_strength6,
-	*rwr_signal_strength7,
-	*rwr_signal_strength8,
-	*rwr_signal_strength9,
+	*rwr_above_light = nullptr,
+	*rwr_airborne_light = nullptr,
+	*rwr_below_light = nullptr,
+	*rwr_left10_light = nullptr,
+	*rwr_left30_light = nullptr,
+	*rwr_left50_light = nullptr,
+	*rwr_left90_light = nullptr,
+	*rwr_left_rear_light = nullptr,
+	*rwr_long_range_light = nullptr,
+	*rwr_medium_range_light = nullptr,
+	*rwr_missile_launch_light = nullptr,
+	*rwr_right10_light = nullptr,
+	*rwr_right30_light = nullptr,
+	*rwr_right50_light = nullptr,
+	*rwr_right90_light = nullptr,
+	*rwr_right_rear_light = nullptr,
+	*rwr_short_range_light = nullptr,
+	*rwr_signal_strength1 = nullptr,
+	*rwr_signal_strength10 = nullptr,
+	*rwr_signal_strength11 = nullptr,
+	*rwr_signal_strength12 = nullptr,
+	*rwr_signal_strength13 = nullptr,
+	*rwr_signal_strength14 = nullptr,
+	*rwr_signal_strength15 = nullptr,
+	*rwr_signal_strength2 = nullptr,
+	*rwr_signal_strength3 = nullptr,
+	*rwr_signal_strength4 = nullptr,
+	*rwr_signal_strength5 = nullptr,
+	*rwr_signal_strength6 = nullptr,
+	*rwr_signal_strength7 = nullptr,
+	*rwr_signal_strength8 = nullptr,
+	*rwr_signal_strength9 = nullptr,
 
 	// Status Lamps
-	*radar_lmp,
-	*flir_lmp,
-	*llltv_lmp,
-	*lsr_lmp,
-	*rjam_lmp,
-	*ijam_lmp,
-	*nav_comp_lmp,
-	*comm_lmp,
-	*rws_lmp,
-	*hud_lmp,
-	*hms_lmp,
-	*tv_disp_lmp,
-	*tw_disp_lmp,
-	*nvg_lmp,
-	*fire_ex_lmp,
-	*rtr_brk_lmp,
-	*whl_brk_lmp,
-	*acm_lmp,
+	*radar_lmp = nullptr,
+	*flir_lmp = nullptr,
+	*llltv_lmp = nullptr,
+	*lsr_lmp = nullptr,
+	*rjam_lmp = nullptr,
+	*ijam_lmp = nullptr,
+	*nav_comp_lmp = nullptr,
+	*comm_lmp = nullptr,
+	*rws_lmp = nullptr,
+	*hud_lmp = nullptr,
+	*hms_lmp = nullptr,
+	*tv_disp_lmp = nullptr,
+	*tw_disp_lmp = nullptr,
+	*nvg_lmp = nullptr,
+	*fire_ex_lmp = nullptr,
+	*rtr_brk_lmp = nullptr,
+	*whl_brk_lmp = nullptr,
+	*acm_lmp = nullptr,
 
 	// Warning Lamps
-	*leng_warn_lamp,
-	*reng_warn_lamp,
-	*trq_warn_lamp,
-	*rdr_warn_lamp,
-	*ap_warn_lamp,
-	*hvr_warn_lamp,
-	*rjam_warn_lamp,
-	*ijam_warn_lamp,
-	*mast_caut_lamp,
+	*leng_warn_lamp = nullptr,
+	*reng_warn_lamp = nullptr,
+	*trq_warn_lamp = nullptr,
+	*rdr_warn_lamp = nullptr,
+	*ap_warn_lamp = nullptr,
+	*hvr_warn_lamp = nullptr,
+	*rjam_warn_lamp = nullptr,
+	*ijam_warn_lamp = nullptr,
+	*mast_caut_lamp = nullptr,
 
 	// Weapon Status Lamps
-	*chaff_lamp,
-	*flare_lamp,
-	*chaff_dmg_lamp,
-	*flare_dmg_lamp,
-	*he_cann_lamp,
-	*he_cann_dmg_lamp,
-	*ap_cann_lamp,
-	*ap_cann_dmg_lamp,
-	*ro_pylon_lamp,
-	*ro_pylon_dmg_lamp,
-	*ri_pylon_lamp,
-	*ri_pylon_dmg_lamp,
-	*li_pylon_lamp,
-	*li_pylon_dmg_lamp,
-	*lo_pylon_lamp,
-	*lo_pylon_dmg_lamp;
+	*chaff_lamp = nullptr,
+	*flare_lamp = nullptr,
+	*chaff_dmg_lamp = nullptr,
+	*flare_dmg_lamp = nullptr,
+	*he_cann_lamp = nullptr,
+	*he_cann_dmg_lamp = nullptr,
+	*ap_cann_lamp = nullptr,
+	*ap_cann_dmg_lamp = nullptr,
+	*ro_pylon_lamp = nullptr,
+	*ro_pylon_dmg_lamp = nullptr,
+	*ri_pylon_lamp = nullptr,
+	*ri_pylon_dmg_lamp = nullptr,
+	*li_pylon_lamp = nullptr,
+	*li_pylon_dmg_lamp = nullptr,
+	*lo_pylon_lamp = nullptr,
+	*lo_pylon_dmg_lamp = nullptr;
 
 
-#ifndef OGRE_EE
 static void update_threat_warning_lights(void);
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#ifndef OGRE_EE
+/*
 static object_3d_sub_instance
-#else
-static struct OgreGameObjectSceneElement
-#endif
-	*rwr_above_light,
-	*rwr_airborne_light,
-	*rwr_below_light,
-	*rwr_left10_light,
-	*rwr_left30_light,
-	*rwr_left50_light,
-	*rwr_left90_light,
-	*rwr_left_rear_light,
-	*rwr_long_range_light,
-	*rwr_medium_range_light,
-	*rwr_missile_launch_light,
-	*rwr_right10_light,
-	*rwr_right30_light,
-	*rwr_right50_light,
-	*rwr_right90_light,
-	*rwr_right_rear_light,
-	*rwr_short_range_light,
-	*rwr_signal_strength1,
-	*rwr_signal_strength10,
-	*rwr_signal_strength11,
-	*rwr_signal_strength12,
-	*rwr_signal_strength13,
-	*rwr_signal_strength14,
-	*rwr_signal_strength15,
-	*rwr_signal_strength2,
-	*rwr_signal_strength3,
-	*rwr_signal_strength4,
-	*rwr_signal_strength5,
-	*rwr_signal_strength6,
-	*rwr_signal_strength7,
-	*rwr_signal_strength8,
+	*rwr_above_light = nullptr,
+	*rwr_airborne_light = nullptr,
+	*rwr_below_light = nullptr,
+	*rwr_left10_light = nullptr,
+	*rwr_left30_light = nullptr,
+	*rwr_left50_light = nullptr,
+	*rwr_left90_light = nullptr,
+	*rwr_left_rear_light = nullptr,
+	*rwr_long_range_light = nullptr,
+	*rwr_medium_range_light = nullptr,
+	*rwr_missile_launch_light = nullptr,
+	*rwr_right10_light = nullptr,
+	*rwr_right30_light = nullptr,
+	*rwr_right50_light = nullptr,
+	*rwr_right90_light = nullptr,
+	*rwr_right_rear_light = nullptr,
+	*rwr_short_range_light = nullptr,
+	*rwr_signal_strength1 = nullptr,
+	*rwr_signal_strength10 = nullptr,
+	*rwr_signal_strength11 = nullptr,
+	*rwr_signal_strength12 = nullptr,
+	*rwr_signal_strength13 = nullptr,
+	*rwr_signal_strength14 = nullptr,
+	*rwr_signal_strength15 = nullptr,
+	*rwr_signal_strength2 = nullptr,
+	*rwr_signal_strength3 = nullptr,
+	*rwr_signal_strength4 = nullptr,
+	*rwr_signal_strength5 = nullptr,
+	*rwr_signal_strength6 = nullptr,
+	*rwr_signal_strength7 = nullptr,
+	*rwr_signal_strength8 = nullptr,
 	*rwr_signal_strength9
 	;
-
-#ifndef OGRE_EE
+*/
 static void update_threat_warning_lights(void);
-#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -770,7 +751,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		search;
 
 	object_3d_instance
-		*virtual_cockpit_inst3d;
+		*virtual_cockpit_inst3d = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1619,7 +1600,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		search;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	////////////////////////////////////////
 	//

@@ -82,7 +82,7 @@ static void destroy_local (entity *en)
 {
 
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -258,11 +258,11 @@ static void kill_local (entity *en)
 {
 
 	entity
-		*task,
-		*destroy_task;
+		*task = nullptr,
+		*destroy_task = nullptr;
 
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

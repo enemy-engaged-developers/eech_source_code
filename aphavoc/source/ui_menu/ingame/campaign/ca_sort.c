@@ -73,7 +73,7 @@
 struct MISSION_LIST_SORT_TYPE
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	common_list_text_types
 		text_type;
@@ -91,7 +91,7 @@ typedef struct MISSION_LIST_SORT_TYPE mission_list_sort_type;
 struct GROUP_LIST_SORT_TYPE
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	common_list_text_types
 		text_type;
@@ -100,7 +100,7 @@ struct GROUP_LIST_SORT_TYPE
 		type;
 
 	const char
-		*name;
+		*name = nullptr;
 };
 
 typedef struct GROUP_LIST_SORT_TYPE group_list_sort_type;
@@ -112,7 +112,7 @@ typedef struct GROUP_LIST_SORT_TYPE group_list_sort_type;
 struct BASE_LIST_SORT_TYPE
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	common_list_text_types
 		text_type;
@@ -121,7 +121,7 @@ struct BASE_LIST_SORT_TYPE
 		type;
 
 	const char
-		*base_name;
+		*base_name = nullptr;
 };
 
 typedef struct BASE_LIST_SORT_TYPE base_list_sort_type;
@@ -253,10 +253,10 @@ static void collapse_mission_list (mission_list_sort_type *sort_list, int *indic
 		buffer [256];
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	switch (get_mission_sort_mode ())
 	{
@@ -353,18 +353,18 @@ static void collapse_mission_list (mission_list_sort_type *sort_list, int *indic
 void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, entity *group_filter)
 {
 	mission_list_sort_type
-		*sort_list;
+		*sort_list = nullptr;
 
 	entity
-		*keysite,
-		*mission;
+		*keysite = nullptr,
+		*mission = nullptr;
 
 	int
 		count,
-		*indices;
+		*indices = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	rgb_colour
 		col;
@@ -734,10 +734,10 @@ static void collapse_group_list (group_list_sort_type *sort_list, int *indices, 
 		buffer [256];
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	switch (get_group_sort_mode ())
 	{
@@ -851,13 +851,13 @@ static void collapse_group_list (group_list_sort_type *sort_list, int *indices, 
 void display_sorted_collapsed_group_list (entity *force, entity *base_filter, entity *mission_filter)
 {
 	group_list_sort_type
-		*sort_list;
+		*sort_list = nullptr;
 
 	entity
-		*guide,
-		*group,
-		*primary_task,
-		*keysite;
+		*guide = nullptr,
+		*group = nullptr,
+		*primary_task = nullptr,
+		*keysite = nullptr;
 
 	entity_sub_types
 		group_type;
@@ -865,10 +865,10 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 	int
 		count,
 		group_count,
-		*indices;
+		*indices = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	rgb_colour
 		col;
@@ -1179,25 +1179,25 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 void display_sorted_collapsed_base_list (entity *force)
 {
 	base_list_sort_type
-		*sort_list;
+		*sort_list = nullptr;
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	char
 		buffer [256];
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	int
 		loop,
 		count,
 		index,
-		*indices;
+		*indices = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	//
 	// count number of items
@@ -1467,7 +1467,7 @@ int common_list_classify_base_text (entity *en)
 void sort_mission_list (mission_list_sort_type *sort_list, int *indices, int count)
 {
 	int
-		*int_order;
+		*int_order = nullptr;
 
 	int
 		loop;
@@ -1509,7 +1509,7 @@ void sort_mission_list (mission_list_sort_type *sort_list, int *indices, int cou
 void sort_group_list (group_list_sort_type *sort_list, int *indices, int count)
 {
 	int
-		*int_order;
+		*int_order = nullptr;
 
 	int
 		loop;
@@ -1551,7 +1551,7 @@ void sort_group_list (group_list_sort_type *sort_list, int *indices, int count)
 void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 {
 	int
-		*int_order;
+		*int_order = nullptr;
 
 	const char
 		**string_order;
@@ -1668,7 +1668,7 @@ static void qs_string (int *indices, const char **sort_order, int left, int righ
       temp;
 
   	const char
-      *x, *y;
+      *x = nullptr, *y;
 
    i = left;
    j = right;

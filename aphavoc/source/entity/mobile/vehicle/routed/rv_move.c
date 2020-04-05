@@ -98,15 +98,15 @@ void routed_vehicle_movement (entity *en)
 {
 
 	routed_vehicle
-      *raw;
+      *raw = nullptr;
 
    entity
-      *wp,
-		*group,
-		*guide;
+      *wp = nullptr,
+		*group = nullptr,
+		*guide = nullptr;
 
    vec3d
-      *face_normal,
+      *face_normal = nullptr,
       wp_vec,
       wp_pos,
       new_pos;
@@ -416,7 +416,7 @@ void routed_vehicle_death_movement (entity *en)
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		heading,
@@ -426,8 +426,8 @@ void routed_vehicle_death_movement (entity *en)
 		terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	raw = (routed_vehicle *) get_local_entity_data (en);
@@ -525,7 +525,7 @@ void routed_vehicle_falling_movement (entity *en)
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed,
@@ -534,8 +534,8 @@ void routed_vehicle_falling_movement (entity *en)
 		old_terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	raw = (routed_vehicle *) get_local_entity_data (en);
@@ -622,7 +622,7 @@ void routed_vehicle_falling_movement (entity *en)
 				//
 
 				struct OBJECT_3D_BOUNDS
-					*bounding_box;
+					*bounding_box = nullptr;
 
 				vec3d
 					d;
@@ -700,13 +700,13 @@ void routed_vehicle_impact_movement (entity *en)
 {
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed;
 
 	vec3d
-		*velocity;
+		*velocity = nullptr;
 
 	int
 		seed;
@@ -736,8 +736,8 @@ static void routed_vehicle_movement_get_waypoint_position (entity *en, vec3d *wp
 {
 
 	entity
-		*wp,
-		*guide;
+		*wp = nullptr,
+		*guide = nullptr;
 
 	float
 		distance;
@@ -745,10 +745,10 @@ static void routed_vehicle_movement_get_waypoint_position (entity *en, vec3d *wp
 	vec3d
 		offset,
 		temp_pos,
-		*pos;
+		*pos = nullptr;
 
 	routed_vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

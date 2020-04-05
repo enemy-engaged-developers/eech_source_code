@@ -79,7 +79,7 @@
 int weapon_loading_camera_valid (camera *raw)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (raw);
 
@@ -113,7 +113,7 @@ int weapon_loading_camera_valid (camera *raw)
 void reset_weapon_loading_camera (camera *raw)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	//
 	// pre-amble
@@ -165,10 +165,10 @@ void reset_weapon_loading_camera (camera *raw)
 void update_weapon_loading_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	viewpoint
 		vp;

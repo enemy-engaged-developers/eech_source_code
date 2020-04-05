@@ -199,7 +199,7 @@ void initialise_message_log (void)
 void deinitialise_message_log (void)
 {
 	message_log_type
-		*log;
+		*log = nullptr;
 
 	int
 		loop;
@@ -357,7 +357,7 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 		case MESSAGE_TEXT_SHORT_WINGMAN_STRING:
 		{
 			entity
-				*parent;
+				*parent = nullptr;
 
 			ASSERT (sender);
 			ASSERT (target);
@@ -403,19 +403,19 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 		type;
 
 	const char
-		*pilot_name,
-		*flight_name;
+		*pilot_name = nullptr,
+		*flight_name = nullptr;
 	char
 		temp_string [512];
 
 	entity
-		*group,
-		*gunship,
-		*subject,
-		*objective;
+		*group = nullptr,
+		*gunship = nullptr,
+		*subject = nullptr,
+		*objective = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		side,
@@ -541,13 +541,13 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 			// damage
 			{
 				helicopter
-					*raw;
+					*raw = nullptr;
 
 				int
 					percent_damaged;
 
 				char
-					*damage;
+					*damage = nullptr;
 
 				raw = (helicopter *) get_local_entity_data (sender);
 				percent_damaged = (100 * raw->ac.damage_level) / aircraft_database[raw->ac.mob.sub_type].initial_damage_level;
@@ -610,7 +610,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 			if (get_local_entity_type (target) == ENTITY_TYPE_GROUP)
 			{
 				entity
-					*division;
+					*division = nullptr;
 
 				division = get_local_entity_parent (target, LIST_TYPE_DIVISION);
 
@@ -798,7 +798,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 static void set_message_objective_view_interest_level (entity *sender, entity *target, message_text_types type)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	switch (type)
 	{
@@ -865,11 +865,11 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 void set_incoming_message (entity *sender, entity *target, message_text_types type, char *string)
 {
 	message_log_type
-		*temp,
-		*new_message;
+		*temp = nullptr,
+		*new_message = nullptr;
 
 	entity
-		*subject;
+		*subject = nullptr;
 
 	//
 	// check that this player SHOULD display the message
@@ -965,8 +965,8 @@ void display_last_received_message (event *arg)
 void process_radio_message (entity *en, message_categories type, int value)
 {
 	entity
-		*group,
-		*wingman;
+		*group = nullptr,
+		*wingman = nullptr;
 
 	switch (type)
 	{
@@ -1233,7 +1233,7 @@ static void play_radio_message_affirmative_response (entity *en, int speech_inde
 static void play_client_server_radio_message_affirmative_response (entity *en, int speech_index, float priority, float expire_time)
 {
 	entity
-		*sender;
+		*sender = nullptr;
 
 	ASSERT (en);
 
@@ -1328,7 +1328,7 @@ static void play_radio_message_negative_response (entity *en, int speech_index, 
 static void play_client_server_radio_message_negative_response (entity *en, int speech_index, float priority, float expire_time)
 {
 	entity
-		*sender;
+		*sender = nullptr;
 
 	ASSERT (en);
 
@@ -1409,8 +1409,8 @@ static void play_client_server_radio_message_negative_response (entity *en, int 
 void process_message_attack_my_target (entity *en, entity *wingman)
 {
 	entity
-		*group,
-		*target;
+		*group = nullptr,
+		*target = nullptr;
 
 	unsigned int
 		valid_members,
@@ -1475,7 +1475,7 @@ void process_message_attack_my_target (entity *en, entity *wingman)
 void process_message_attack_pfz(entity *en, entity *wingman)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 	ASSERT (wingman);
@@ -1506,9 +1506,9 @@ void process_message_attack_pfz(entity *en, entity *wingman)
 void process_message_help_me (entity *en, entity *wingman)
 {
 	entity
-		*group,
-		*target,
-		*new_task;
+		*group = nullptr,
+		*target = nullptr,
+		*new_task = nullptr;
 
 	unsigned int
 		valid_members,
@@ -1598,7 +1598,7 @@ void process_message_help_me (entity *en, entity *wingman)
 void process_message_return_to_base (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (en);
 
@@ -1627,10 +1627,10 @@ void process_message_return_to_base (entity *en)
 void process_message_weapons_hold (entity *en, entity *wingman, int state, int play_speech)
 {
 	entity
-		*group,
-		*guide,
-		*task,
-		*member;
+		*group = nullptr,
+		*guide = nullptr,
+		*task = nullptr,
+		*member = nullptr;
 
 	unsigned int
 		member_number,
@@ -1776,7 +1776,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 void process_message_hold_position (entity *en, entity *wingman)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	ASSERT (wingman);
 
@@ -1821,7 +1821,7 @@ void process_message_hold_position (entity *en, entity *wingman)
 void process_message_rejoin_formation (entity *en, entity *wingman)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	ASSERT (wingman);
 
@@ -1871,8 +1871,8 @@ void process_message_rejoin_formation (entity *en, entity *wingman)
 void process_message_bob_up (entity *en, entity *wingman)
 {
 	entity
-		*guide,
-		*follower;
+		*guide = nullptr,
+		*follower = nullptr;
 
 	ASSERT (wingman);
 
@@ -1937,11 +1937,11 @@ void process_message_change_formation (entity *en, entity *group, int new_format
 void process_message_request_airstrike (entity *en)
 {
 	entity
-		*target,
-		*task_objective,
-		*group,
-		*assigned_group,
-		*new_task;
+		*target = nullptr,
+		*task_objective = nullptr,
+		*group = nullptr,
+		*assigned_group = nullptr,
+		*new_task = nullptr;
 
 	entity_sides
 		side;
@@ -1966,7 +1966,7 @@ void process_message_request_airstrike (entity *en)
 				case ENTITY_TYPE_SITE_UPDATABLE:
 				{
 					entity
-						*building_group;
+						*building_group = nullptr;
 
 					//
 					// create deep strike
@@ -2105,19 +2105,19 @@ void process_message_request_airstrike (entity *en)
 void process_message_request_artillery (entity *en)
 {
 	entity
-		*target,
-		*force,
-		*group,
-		*member,
-		*best_group,
-		*new_task;
+		*target = nullptr,
+		*force = nullptr,
+		*group = nullptr,
+		*member = nullptr,
+		*best_group = nullptr,
+		*new_task = nullptr;
 
 	entity_sides
 		side;
 
 	vec3d
-		*group_pos,
-		*target_pos;
+		*group_pos = nullptr,
+		*target_pos = nullptr;
 
 	float
 		range,
@@ -2300,9 +2300,9 @@ void process_message_request_artillery (entity *en)
 void process_message_request_assistance (entity *en)
 {
 	entity
-		*force,
-		*group,
-		*aggressor;
+		*force = nullptr,
+		*group = nullptr,
+		*aggressor = nullptr;
 
 	ASSERT (en);
 
@@ -2358,10 +2358,10 @@ void display_in_flight_incoming_messages (void)
 		seconds;
 
 	char
-		*s;
+		*s = nullptr;
 
 	message_log_type
-		*log;
+		*log = nullptr;
 
 	if (command_line_disable_message_text)
 		return;
@@ -2452,7 +2452,7 @@ void update_message_log (void)
 void set_new_display_message (int index)
 {
 	message_log_type
-		*log;
+		*log = nullptr;
 
 	if ((index >= num_messages) || (index < 0))
 	{
@@ -2492,7 +2492,7 @@ void pack_local_message_log (pack_modes mode)
 		num_packed_messages;
 
 	message_log_type
-		*log;
+		*log = nullptr;
 
    ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 
@@ -2559,7 +2559,7 @@ void unpack_local_message_log (pack_modes mode)
 		length;
 
 	message_log_type
-		*log;
+		*log = nullptr;
 
 	static char
 		s [STRING_TYPE_MESSAGE_LENGTH + 4];

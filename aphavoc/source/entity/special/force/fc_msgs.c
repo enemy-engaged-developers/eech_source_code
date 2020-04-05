@@ -144,9 +144,9 @@ static int response_to_unlink_parent (entity_messages message, entity *receiver,
 static int response_to_check_campaign_objectives (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*en,
-		*group,
-		*enemy_force;
+		*en = nullptr,
+		*group = nullptr,
+		*enemy_force = nullptr;
 
 	int
 		side,
@@ -317,8 +317,8 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 static int response_to_entity_fired_at (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*victim,
-		*group;
+		*victim = nullptr,
+		*group = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -372,7 +372,7 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 {
 
 	entity
-		*enemy_entity;
+		*enemy_entity = nullptr;
 
 	if ((get_game_status () != GAME_STATUS_INITIALISED) || (get_comms_model () == COMMS_MODEL_CLIENT))
 	{
@@ -398,10 +398,10 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 	{
 	
 		entity
-			*sector_en;
+			*sector_en = nullptr;
 		
 		vec3d
-			*pos;
+			*pos = nullptr;
 
 		entity_sides
 			side;
@@ -468,7 +468,7 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 static int response_to_force_armour_retreating (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*enemy_entity;
+		*enemy_entity = nullptr;
 
 	if ((get_game_status () != GAME_STATUS_INITIALISED) || (get_comms_model () == COMMS_MODEL_CLIENT))
 	{
@@ -511,10 +511,10 @@ static int response_to_force_destroyed (entity_messages message, entity *receive
 {
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	entity
-		*enemy_entity;
+		*enemy_entity = nullptr;
 
 	//campaign_criteria
 		//criteria;
@@ -582,7 +582,7 @@ static int response_to_force_destroyed (entity_messages message, entity *receive
 static int response_to_force_entered_sector (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*sector_en;
+		*sector_en = nullptr;
 
 	int
 		side;
@@ -686,13 +686,13 @@ static int response_to_force_low_on_supplies (entity_messages message, entity *r
 		airbase_actual_range;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*task,
-		*cargo,
-		*airbase,
-		*factory;
+		*task = nullptr,
+		*cargo = nullptr,
+		*airbase = nullptr,
+		*factory = nullptr;
 
 	if ((get_game_status () != GAME_STATUS_INITIALISED) || (get_comms_model () == COMMS_MODEL_CLIENT))
 	{
@@ -899,7 +899,7 @@ static int response_to_force_special_kill (entity_messages message, entity *rece
 {
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	int
 		kills;
@@ -953,7 +953,7 @@ static int response_to_force_vacant_farp (entity_messages message, entity *recei
 	{
 
 		vec3d
-			*pos;
+			*pos = nullptr;
 
 		pos = get_local_entity_vec3d_ptr (sender, VEC3D_TYPE_POSITION);
 
@@ -1022,17 +1022,17 @@ static int response_to_force_waypoint_reached (entity_messages message, entity *
 static int response_to_request_assistance (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*task,
-		*group,
-		*victim,
-		*victim_group,
-		*member,
-		*aggressor,
-		*target_group;
+		*task = nullptr,
+		*group = nullptr,
+		*victim = nullptr,
+		*victim_group = nullptr,
+		*member = nullptr,
+		*aggressor = nullptr,
+		*target_group = nullptr;
 
 	vec3d
-		*pos,
-		*group_pos;
+		*pos = nullptr,
+		*group_pos = nullptr;
 
 	int
 		flag,
@@ -1210,7 +1210,7 @@ static int response_to_request_assistance (entity_messages message, entity *rece
 static int response_to_task_created (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*objective;
+		*objective = nullptr;
 
 	ASSERT (sender);
 
@@ -1278,7 +1278,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 		sub_type;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	task_terminated_types
 		task_terminated;

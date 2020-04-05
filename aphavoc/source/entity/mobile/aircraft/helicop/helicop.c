@@ -161,11 +161,11 @@ void set_gunship_entity (entity *en)
 void assign_entity_to_user (entity *en)
 {
    entity
-		*group,
-		*member,
-		*previous,
-		*primary_task,
-		*old_group;
+		*group = nullptr,
+		*member = nullptr,
+		*previous = nullptr,
+		*primary_task = nullptr,
+		*old_group = nullptr;
 
 	float
 		fuel;
@@ -480,7 +480,7 @@ void assign_entity_to_user (entity *en)
 			if (group)
 			{
 				entity
-					*member;
+					*member = nullptr;
 
 				member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
@@ -581,9 +581,9 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 	#if !DEMO_VERSION
 
 	entity
-		*en,
-		*pilot,
-		*task;
+		*en = nullptr,
+		*pilot = nullptr,
+		*task = nullptr;
 
 	pilot = get_pilot_entity ();
 
@@ -699,7 +699,7 @@ void notify_gunship_entity_mission_terminated (entity *en, entity *task)
 		points;
 
 	player_log_type
-		*log;
+		*log = nullptr;
 
 	ASSERT (en);
 
@@ -1445,8 +1445,8 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 void kill_helicopter_rotor_sound_effects (entity *en)
 {
 	entity
-		*spec,
-		*next;
+		*spec = nullptr,
+		*next = nullptr;
 
 	ASSERT (en);
 
@@ -1487,7 +1487,7 @@ void kill_helicopter_rotor_sound_effects (entity *en)
 void update_local_helicopter_rotor_sounds (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		looping_amp,
@@ -1501,7 +1501,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		acc_force;
 
 	entity
-		*spec;
+		*spec = nullptr;
 
 	ASSERT (en);
 
@@ -1715,13 +1715,13 @@ float kill_sound_effect(entity* en, entity_sub_types type)
 void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine_num)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	sound_effect
-		*sound_raw;
+		*sound_raw = nullptr;
 
 	entity
-		*spec;
+		*spec = nullptr;
 
 	float
 		start_position;
@@ -1825,7 +1825,7 @@ void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine
 int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	if (!en)
 	{
@@ -1972,9 +1972,9 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 void helicopter_assume_player_control (entity *en)
 {
 	entity
-		*group,
-		*guide,
-		*task;
+		*group = nullptr,
+		*guide = nullptr,
+		*task = nullptr;
 
 	unsigned int
 		member_number,
@@ -2028,9 +2028,9 @@ void helicopter_assume_player_control (entity *en)
 void helicopter_release_player_control (entity *en)
 {
 	entity
-		*group,
-		*guide,
-		*task;
+		*group = nullptr,
+		*guide = nullptr,
+		*task = nullptr;
 
 	unsigned int
 		member_number;
@@ -2090,12 +2090,12 @@ void helicopter_release_player_control (entity *en)
 void transmit_player_recon_data (entity *en)
 {
 	entity
-		*guide,
-		*current_waypoint;
+		*guide = nullptr,
+		*current_waypoint = nullptr;
 
 	vec3d
-		*wp_pos,
-		*en_pos;
+		*wp_pos = nullptr,
+		*en_pos = nullptr;
 
 	float
 		recon_radius;
@@ -2165,13 +2165,13 @@ int helicopter_within_keysite_area (entity *en)
 {
 
 	vec3d
-		*hc_position;
+		*hc_position = nullptr;
 
 	float
 		actual_range;
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	hc_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -2181,14 +2181,14 @@ int helicopter_within_keysite_area (entity *en)
 	{
 
 		object_3d_instance
-			*inst3d;
+			*inst3d = nullptr;
 
 		vec3d
 			position,
-			*keysite_pos;
+			*keysite_pos = nullptr;
 
 		struct OBJECT_3D_BOUNDS
-			*bounding_box;
+			*bounding_box = nullptr;
 
 		float
 			xmin,
@@ -2213,7 +2213,7 @@ int helicopter_within_keysite_area (entity *en)
 					heading = 0.0;
 
 				entity
-					*ship;
+					*ship = nullptr;
 
 				ship = get_local_entity_parent (keysite, LIST_TYPE_MOVEMENT_DEPENDENT);
 

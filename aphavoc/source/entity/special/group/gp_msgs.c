@@ -90,7 +90,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 {
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	list_types
 		list_type;
@@ -138,7 +138,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 			if (get_local_entity_int_value (sender, INT_TYPE_IDENTIFY_FIXED))
 			{
 				entity
-					*parent;
+					*parent = nullptr;
 
 				parent = get_local_entity_parent (receiver, LIST_TYPE_BUILDING_GROUP);
 
@@ -175,7 +175,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 {
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	list_types
 		list_type;
@@ -197,7 +197,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 		{
 
 			entity
-				*member;
+				*member = nullptr;
 
 			int
 				multiplayer_group;
@@ -245,7 +245,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 static int response_to_link_parent (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	list_types
 		list_type;
@@ -295,8 +295,8 @@ static int response_to_unlink_parent (entity_messages message, entity *receiver,
 static int response_to_entity_fired_at (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*victim,
-		*force;
+		*victim = nullptr,
+		*force = nullptr;
 
 	int
 		side,
@@ -365,8 +365,8 @@ static int response_to_entity_fired_at (entity_messages message, entity *receive
 static int response_to_entity_targeted (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*victim,
-		*pilot;
+		*victim = nullptr,
+		*pilot = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -412,7 +412,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 {
 
 	group
-		*group_raw;
+		*group_raw = nullptr;
 
 	unsigned int
 		loop;
@@ -423,12 +423,12 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 		success_flag;
 
 	entity
-		*group,
-		*allied_force,
-		*group_occupying_node;
+		*group = nullptr,
+		*allied_force = nullptr,
+		*group_occupying_node = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	success_flag = TRUE;
 
@@ -517,7 +517,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 	{
 
 		entity
-			*new_task;
+			*new_task = nullptr;
 
 		#if DEBUG_MODULE
 
@@ -628,12 +628,12 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 					{
 	
 						entity
-							*advancing_sector,
-							*supporting_sector;
+							*advancing_sector = nullptr,
+							*supporting_sector = nullptr;
 	
 						sector
-							*advancing_sector_raw,
-							*supporting_sector_raw;
+							*advancing_sector_raw = nullptr,
+							*supporting_sector_raw = nullptr;
 	
 						int
 							advancing_warmth,
@@ -735,14 +735,14 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 		advancing_node;
 
 	group
-		*group_raw;
+		*group_raw = nullptr;
 
 	entity
-		*allied_force,
-		*group_occupying_node;
+		*allied_force = nullptr,
+		*group_occupying_node = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	group_raw = (group *) get_local_entity_data (receiver);
 
@@ -845,7 +845,7 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 					{
 		
 						entity
-							*new_task;
+							*new_task = nullptr;
 		
 						new_task = create_ground_force_task (ENTITY_SUB_TYPE_TASK_RETREAT, receiver, current_node, retreat_node, task_database [ENTITY_SUB_TYPE_TASK_RETREAT].task_priority, NULL, NULL);
 		
@@ -966,9 +966,9 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 static int response_to_task_completed (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*next,
-		*task,
-		*member;
+		*next = nullptr,
+		*task = nullptr,
+		*member = nullptr;
 
 	task_terminated_types
 		task_terminated;
@@ -1191,15 +1191,15 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 		task_terminated;
 
 	entity
-		*guide,
-		*member,
-		*task;
+		*guide = nullptr,
+		*member = nullptr,
+		*task = nullptr;
 
 	int
 		task_type;
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1281,9 +1281,9 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 static int response_to_mobile_killed (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*guide,
-		*task,
-		*next;
+		*guide = nullptr,
+		*task = nullptr,
+		*next = nullptr;
 
 	unsigned int
 		valid_members,

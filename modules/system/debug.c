@@ -75,15 +75,15 @@ struct monitor_data
 {
 
 	struct monitor_data
-		*pred,
-		*succ;
+		*pred = nullptr,
+		*succ = nullptr;
 
 	int
 		offset,
 		number;
 
 	char
-		*string;
+		*string = nullptr;
 
 	enum mt_type
 		type;
@@ -92,10 +92,10 @@ struct monitor_data
 		colour;
 
 	void
-		*data,
-		*data2,
-		*data3,
-		*data4;
+		*data = nullptr,
+		*data2 = nullptr,
+		*data3 = nullptr,
+		*data4 = nullptr;
 };
 
 typedef struct monitor_data MONITORDATA;
@@ -106,12 +106,10 @@ typedef struct monitor_data *LPMONITORDATA;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 static HWND
 	application_debug_log_window,
 	application_debug_watch_window,
 	application_debug_filtered_log_window;
-#endif
 
 int
 	debug_fatal_warning_tone = TRUE;
@@ -120,7 +118,6 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 HANDLE
 	application_monitor_thread;
 
@@ -176,14 +173,6 @@ static int
 	number_of_filtered_log_monitor_lines = 0;		// Total number of monitor lines
 
 #endif
-#else
-static int
-	debug_log_state = FALSE;
-#ifdef DEBUG
-static int
-	debug_timing_info_suppressed = FALSE;
-#endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,16 +182,13 @@ static char
 	debug_log_file_name[100],
 	debug_filtered_log_file_name[100];
 
-#ifndef OGRE_EE
 static COLORREF
 	debug_colour_table[DEBUG_COLOUR_LAST];
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 static void deinitialise_debug_system ( void );
 
 static long initialise_internal_debug_system ( void * data );
@@ -216,12 +202,9 @@ static int debug_initialise_message_id;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void debug_set_window_creation ( enum debug_window_creation create )
 {
-#ifndef OGRE_EE
-
 	if ( create == DEBUG_CREATE_WINDOW )
 	{
 
@@ -232,7 +215,6 @@ void debug_set_window_creation ( enum debug_window_creation create )
 
 		debug_monitor = FALSE;
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +223,6 @@ void debug_set_window_creation ( enum debug_window_creation create )
 
 void debug_set_windows_update ( enum debug_update_state update )
 {
-#ifndef OGRE_EE
 
 	if ( update == DEBUG_UPDATE_AUTO )
 	{
@@ -253,10 +234,8 @@ void debug_set_windows_update ( enum debug_update_state update )
 
 		debug_monitor_auto_update = FALSE;
 	}
-#endif
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,7 +255,6 @@ void suppress_debug_log_timing_info ( int flag )
 
 	debug_timing_info_suppressed = flag;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,17 +269,14 @@ void initialise_debug_system ( int logging )
 
 	unlink ( debug_filtered_log_file_name );
 
-#ifndef OGRE_EE
 	debug_initialise_message_id = get_unique_message_id ();
 
 	register_user_message_function ( debug_initialise_message_id, initialise_internal_debug_system );
 
 	register_exit_function ( deinitialise_debug_system );
-#endif
 
 	debug_log_state = logging;
 
-#ifndef OGRE_EE
 	debug_colour_table[DEBUG_COLOUR_BLACK] =			RGB ( 0, 0, 0 );
 	debug_colour_table[DEBUG_COLOUR_BLUE] =			RGB ( 0, 0, 255 );
 	debug_colour_table[DEBUG_COLOUR_GREEN] =			RGB ( 0, 255, 0 );
@@ -334,10 +309,8 @@ void initialise_debug_system ( int logging )
 
 #endif
 
-#endif
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -493,7 +466,6 @@ long initialise_internal_debug_system ( void * data )
 		if ( ( application_debug_watch_window ) && ( application_debug_log_window ) )
 		{
 
-#ifndef OGRE_EE
 			if ( debug_monitor_auto_update )
 			{
 
@@ -509,7 +481,6 @@ long initialise_internal_debug_system ( void * data )
 
 //				SetThreadPriority ( application_monitor_thread, THREAD_PRIORITY_LOWEST );
 			}
-#endif
 		}
 
 		//
@@ -525,7 +496,6 @@ long initialise_internal_debug_system ( void * data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 #ifdef DEBUG
 
@@ -540,11 +510,9 @@ void debug_log (const char *msg, ...)
 	va_list
 		args;
 
-#ifndef OGRE_EE
 	LPMONITORDATA
 		md,
 		temp;
-#endif
 
 
 	if ( debug_log_state )
@@ -564,7 +532,6 @@ void debug_log (const char *msg, ...)
 
 		va_end (args);
 
-#ifndef OGRE_EE
 //		OutputDebugString ( buffer );
 
 		if ( debug_monitor )
@@ -625,12 +592,10 @@ void debug_log (const char *msg, ...)
 				SetScrollPos ( application_debug_log_window, SB_VERT, top_log_monitor->offset, TRUE);
 			}
 		}
-#endif
 
-#if 1
 		{
 			FILE
-				*fp;
+				*fp = nullptr;
 
 			fp = fopen ( debug_log_file_name, "a" );
 
@@ -643,16 +608,14 @@ void debug_log (const char *msg, ...)
 				fclose ( fp );
 			}
 		}
-#endif
 	}
 }
 
 void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
-#if 1
 	FILE
-		*fp;
-#endif
+		*fp = nullptr;
+
 	static char
 		buffer[1000];
 
@@ -662,11 +625,9 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 	va_list
 		args;
 
-#ifndef OGRE_EE
 	LPMONITORDATA
 		md,
 		temp;
-#endif
 
 
 	if ( debug_log_state )
@@ -686,7 +647,6 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 
 		va_end (args);
 
-#ifndef OGRE_EE
 		if ( debug_monitor )
 		{
 
@@ -745,9 +705,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 				SetScrollPos ( application_debug_log_window, SB_VERT, top_log_monitor->offset, TRUE);
 			}
 		}
-#endif
 
-#if 1
 		fp = fopen ( debug_log_file_name, "a" );
 
 		if ( fp )
@@ -759,16 +717,13 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 
 			fclose ( fp );
 		}
-#endif
 	}
 }
 
-void debug_filtered_log (const char *msg, ...)
-{
-#ifndef OGRE_EE
+void debug_filtered_log (const char *msg, ...) {
 #if 0
 	FILE
-		*fp;
+		*fp = nullptr;
 #endif
 	static char
 		buffer[1000];
@@ -874,15 +829,13 @@ void debug_filtered_log (const char *msg, ...)
 		}
 #endif
 	}
-#endif
 }
 
 void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
-#ifndef OGRE_EE
 #if 0
 	FILE
-		*fp;
+		*fp = nullptr;
 #endif
 	static char
 		buffer[1000];
@@ -988,10 +941,8 @@ void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...
 		}
 #endif
 	}
-#endif
 }
-
-#endif
+#endif//DEBUG
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1004,7 +955,7 @@ void debug_fatal ( const char *string, ... )
 		argument_list;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		buffer[4096];
@@ -1019,9 +970,7 @@ void debug_fatal ( const char *string, ... )
 
 	va_end ( argument_list );
 
-#ifndef OGRE_EE
 	if ( debug_log_state )
-#endif
 	{
 
 		//
@@ -1083,16 +1032,13 @@ void debug_fatal ( const char *string, ... )
 	// Exit the program
 	//
 
-#ifndef OGRE_EE
 	application_debug_fatal = TRUE;
-#endif
 
 	strcpy ( application_debug_fatal_string, buffer );
 
 	end_application ();
 }
 
-#ifndef OGRE_EE
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1124,7 +1070,6 @@ void add_watch_item ( LPMONITORDATA md )
 
 	SetScrollRange ( application_debug_watch_window, SB_VERT, 0, number_of_watch_monitor_lines, TRUE );
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1134,7 +1079,6 @@ void add_watch_item ( LPMONITORDATA md )
 
 void debug_watch ( const char *string, enum mt_type type, void *data )
 {
-#ifndef OGRE_EE
 
 	LPMONITORDATA
 		md;
@@ -1159,7 +1103,6 @@ void debug_watch ( const char *string, enum mt_type type, void *data )
 			md->colour = debug_colour_table[DEBUG_COLOUR_BLACK];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1168,7 +1111,6 @@ void debug_watch ( const char *string, enum mt_type type, void *data )
 
 void debug_watch2 ( const char *string, enum mt_type type, void *data1, void *data2 )
 {
-#ifndef OGRE_EE
 
 	LPMONITORDATA
 		md;
@@ -1194,7 +1136,6 @@ void debug_watch2 ( const char *string, enum mt_type type, void *data1, void *da
 			md->colour = debug_colour_table[DEBUG_COLOUR_BLACK];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1203,8 +1144,6 @@ void debug_watch2 ( const char *string, enum mt_type type, void *data1, void *da
 
 void debug_watch3 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3 )
 {
-#ifndef OGRE_EE
-
 	LPMONITORDATA
 		md;
 
@@ -1230,7 +1169,6 @@ void debug_watch3 ( const char *string, enum mt_type type, void *data1, void *da
 			md->colour = debug_colour_table[DEBUG_COLOUR_BLACK];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1239,7 +1177,6 @@ void debug_watch3 ( const char *string, enum mt_type type, void *data1, void *da
 
 void debug_watch4 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
 {
-#ifndef OGRE_EE
 
 	LPMONITORDATA
 		md;
@@ -1267,7 +1204,6 @@ void debug_watch4 ( const char *string, enum mt_type type, void *data1, void *da
 			md->colour = debug_colour_table[DEBUG_COLOUR_BLACK];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1276,8 +1212,6 @@ void debug_watch4 ( const char *string, enum mt_type type, void *data1, void *da
 
 void debug_colour_watch ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data )
 {
-#ifndef OGRE_EE
-
 	LPMONITORDATA
 		md;
 
@@ -1301,7 +1235,6 @@ void debug_colour_watch ( enum DEBUG_COLOURS colour, const char *string, enum mt
 			md->colour = debug_colour_table[colour];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1310,8 +1243,6 @@ void debug_colour_watch ( enum DEBUG_COLOURS colour, const char *string, enum mt
 
 void debug_colour_watch2 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2 )
 {
-#ifndef OGRE_EE
-
 	LPMONITORDATA
 		md;
 
@@ -1336,7 +1267,6 @@ void debug_colour_watch2 ( enum DEBUG_COLOURS colour, const char *string, enum m
 			md->colour = debug_colour_table[colour];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1345,8 +1275,6 @@ void debug_colour_watch2 ( enum DEBUG_COLOURS colour, const char *string, enum m
 
 void debug_colour_watch3 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3 )
 {
-#ifndef OGRE_EE
-
 	LPMONITORDATA
 		md;
 
@@ -1372,7 +1300,6 @@ void debug_colour_watch3 ( enum DEBUG_COLOURS colour, const char *string, enum m
 			md->colour = debug_colour_table[colour];
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1381,8 +1308,6 @@ void debug_colour_watch3 ( enum DEBUG_COLOURS colour, const char *string, enum m
 
 void debug_colour_watch4 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
 {
-#ifndef OGRE_EE
-
 	LPMONITORDATA
 		md;
 
@@ -1409,7 +1334,6 @@ void debug_colour_watch4 ( enum DEBUG_COLOURS colour, const char *string, enum m
 			md->colour = debug_colour_table[colour];
 		}
 	}
-#endif
 }
 
 #endif
@@ -1428,7 +1352,6 @@ void breakout ( event *ev )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 static void update_window (HWND window_handle)
 {
 
@@ -2071,7 +1994,6 @@ static long WINAPI debug_window_notify ( HWND window_handle, UINT message, WPARA
 
 	return DefWindowProc (window_handle, message, wParam, lParam);
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2079,8 +2001,6 @@ static long WINAPI debug_window_notify ( HWND window_handle, UINT message, WPARA
 
 void update_debug_windows ( void )
 {
-#ifndef OGRE_EE
-
 #ifdef DEBUG
 
 	if ( !debug_monitor_auto_update )
@@ -2092,15 +2012,12 @@ void update_debug_windows ( void )
 	}
 
 #endif
-
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 DWORD WINAPI application_monitor_process_thread ( LPVOID data )
 {
 
@@ -2118,7 +2035,6 @@ DWORD WINAPI application_monitor_process_thread ( LPVOID data )
 
 	return 0;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2130,7 +2046,7 @@ void rename_debug_log_file (const char *new_file_name)
 		error;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	//
 	// check everything is ok with new_file_name

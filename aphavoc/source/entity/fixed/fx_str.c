@@ -107,7 +107,7 @@ static const char
 static void set_local_string (entity *en, string_types type, const char *s)
 {
 	fixed
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (s);
 
@@ -211,10 +211,10 @@ static void set_client_string (entity *en, string_types type, const char *s)
 static const char *get_local_string (entity *en, string_types type)
 {
 	fixed
-		*raw;
+		*raw = nullptr;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	raw = (fixed *) get_local_entity_data (en);
 

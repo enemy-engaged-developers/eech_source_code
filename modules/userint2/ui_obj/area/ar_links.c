@@ -80,7 +80,7 @@ static void set_area_ui_object_association (ui_object *obj, ui_object *associati
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -95,7 +95,7 @@ static ui_object *get_area_ui_object_association (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -110,10 +110,10 @@ static void set_area_ui_object_parent (ui_object *obj, ui_object *parent)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*next;
+		*next = nullptr;
 
 	//
 	// Remove object from current_parents list
@@ -123,8 +123,8 @@ static void set_area_ui_object_parent (ui_object *obj, ui_object *parent)
 	{
 
 		ui_object
-			*prev,
-			*parent;
+			*prev = nullptr,
+			*parent = nullptr;
 
 		next = get_ui_object_next (obj);
 		prev = get_ui_object_prev (obj);
@@ -219,7 +219,7 @@ static ui_object *get_area_ui_object_parent (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -234,7 +234,7 @@ static void set_area_ui_object_child (ui_object *obj, ui_object *child)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -249,7 +249,7 @@ static ui_object *get_area_ui_object_child (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -264,7 +264,7 @@ static void set_area_ui_object_next (ui_object *obj, ui_object *next)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -279,7 +279,7 @@ static ui_object *get_area_ui_object_next (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -294,7 +294,7 @@ static void set_area_ui_object_prev (ui_object *obj, ui_object *prev)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -309,7 +309,7 @@ static ui_object *get_area_ui_object_prev (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 

@@ -90,10 +90,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 entity
-	*current_flight_dynamics_landed_at_keysite;
+	*current_flight_dynamics_landed_at_keysite = nullptr;
 
 dynamics_type
-	*current_flight_dynamics;
+	*current_flight_dynamics = nullptr;
 
 int
 	flight_dynamics_lock_position_flag;
@@ -479,16 +479,16 @@ void initialise_flight_dynamics_collision_points (int update_points_position)
 {
 
 	dynamics_collision_type
-		*fixed_collision_points,
-		*last_frame_fixed_collision_points,
-		*moving_collision_points,
-		*last_frame_moving_collision_points;
+		*fixed_collision_points = nullptr,
+		*last_frame_fixed_collision_points = nullptr,
+		*moving_collision_points = nullptr,
+		*last_frame_moving_collision_points = nullptr;
 
 	int
 		collision_type;
 
 	object_3d_instance
-		*temp_inst3d;
+		*temp_inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -498,7 +498,7 @@ void initialise_flight_dynamics_collision_points (int update_points_position)
 			i;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	object_3d_sub_object_index_numbers
 		sub_object_type;
@@ -727,8 +727,8 @@ void deinitialise_flight_dynamics (void)
 {
 
 	flight_path_data
-		*destroy_flight_path,
-		*flight_path;
+		*destroy_flight_path = nullptr,
+		*flight_path = nullptr;
 
 	#if DEBUG_DYNAMICS
 
@@ -806,14 +806,14 @@ void set_dynamics_entity_values (entity *en)
 {
 
 	entity
-		*group;
+		*group = nullptr;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*pos,
-		*motion_vector;
+		*pos = nullptr,
+		*motion_vector = nullptr;
 
 	float
 		air_density;
@@ -1070,7 +1070,7 @@ void update_flight_dynamics (void)
 		{
 
 			entity
-				*task;
+				*task = nullptr;
 
 			task = get_local_entity_primary_task (get_gunship_entity ());
 
@@ -1194,7 +1194,7 @@ void update_gunship_dynamics (void)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 	ASSERT(raw);
@@ -1435,7 +1435,7 @@ void update_dynamics_external_values (void)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		pos;
@@ -1691,7 +1691,7 @@ void move_cog (void *ev)
 void save_dynamics_model (event *ev)
 {
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_ptr = fopen (current_flight_dynamics->filename, "w");
 
@@ -1799,7 +1799,7 @@ void load_dynamics_model (event *ev)
 		version_number;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	// JB 030313 Enable running out of separate directories
 	if (file_exist (current_flight_dynamics->filename))
@@ -1964,7 +1964,7 @@ void flight_dynamics_toggle_rotor_brake (event *ev)
 void set_current_flight_dynamics_rotor_brake (int flag)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	current_flight_dynamics->rotor_brake = flag;
 
@@ -1997,9 +1997,9 @@ void set_current_flight_dynamics_rotor_brake (int flag)
 			{
 
 				entity
-					*landing_task,
-					*landed_wp,
-					*landing_en;
+					*landing_task = nullptr,
+					*landed_wp = nullptr,
+					*landing_en = nullptr;
 
 				landed_wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
@@ -2279,8 +2279,8 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 		{
 
 			entity
-				*task,
-				*cwp;
+				*task = nullptr,
+				*cwp = nullptr;
 
 //			cwp = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_CURRENT_WAYPOINT);
 			cwp = get_local_entity_current_waypoint (get_gunship_entity ());
@@ -2348,8 +2348,8 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 	{
 
 		entity
-			*task,
-			*cwp;
+			*task = nullptr,
+			*cwp = nullptr;
 
 		cwp = get_local_entity_current_waypoint (get_gunship_entity ());
 
@@ -2660,7 +2660,7 @@ void dynamics_land (void)
 		model_position;
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	//#if DEBUG_DYNAMICS >= 1
 
@@ -2696,13 +2696,13 @@ void dynamics_land (void)
 	if (keysite)
 	{
 		object_3d_instance
-			*inst3d;
+			*inst3d = nullptr;
 
 		vec3d
-			*keysite_pos;
+			*keysite_pos = nullptr;
 
 		struct OBJECT_3D_BOUNDS
-			*bounding_box;
+			*bounding_box = nullptr;
 
 		xmin = 0.0;
 		xmax = 0.0;
@@ -2718,7 +2718,7 @@ void dynamics_land (void)
 					heading = 0.0;
 
 				entity
-					*ship;
+					*ship = nullptr;
 
 				ship = get_local_entity_parent (keysite, LIST_TYPE_MOVEMENT_DEPENDENT);
 
@@ -3033,7 +3033,7 @@ void update_current_flight_dynamics_flight_time (void)
 {
 
 	player_log_type
-		*log;
+		*log = nullptr;
 
 	//
 	// only increment flight time if :-
@@ -3092,7 +3092,7 @@ void add_flight_path_action (float x, float z, flight_path_action_type action)
 {
 
 	flight_path_data
-		*flight_path;
+		*flight_path = nullptr;
 
 	flight_path = (flight_path_data *) malloc_heap_mem (sizeof (flight_path_data));
 
@@ -3754,9 +3754,9 @@ void animate_engine_start_rpm(float* rpm)
 void update_engine_rpm_dynamics (int engine_number)
 {
 	/* arneh - july 2006
-	 * Ok, here's how the engine dynamics works now.  N1 (or NG) is the gas
+	 * Ok = nullptr, here's how the engine dynamics works now.  N1 (or NG) is the gas
 	 * turbine which controls the amount of air/fuel which is combusted in the
-	 * engine, and hence how much power it makes.  N2 (or NP, or in the code
+	 * engine = nullptr, and hence how much power it makes.  N2 (or NP, or in the code
 	 * simply referred to as engine_rpm) is the power turbine which converts
 	 * the combustion energy into shaft rotation.
 	 *

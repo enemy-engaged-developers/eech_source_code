@@ -103,8 +103,8 @@ void update_ah64a_weapon_systems (void)
 		inhibit_launch;
 
 	entity
-		*en,
-		*target;
+		*en = nullptr,
+		*target = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -392,13 +392,13 @@ float get_ah64a_missile_flight_time (void)
 		weapon_sub_type;
 
 	entity
-		*en,
-		*weapon,
-		*target;
+		*en = nullptr,
+		*weapon = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*weapon_position,
-		*target_position;
+		*weapon_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		flight_time,

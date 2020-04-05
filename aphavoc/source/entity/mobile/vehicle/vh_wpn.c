@@ -88,10 +88,10 @@ static float get_fire_timer_difficulty_factor (entity *en);
 void update_vehicle_weapon_fire (entity *en)
 {
  	vehicle
-      *raw;
+      *raw = nullptr;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	int
 		debug_flag = FALSE;
@@ -102,10 +102,10 @@ void update_vehicle_weapon_fire (entity *en)
 		burst_timer_state;
 
 	vec3d
-		*pos,
-		*target_pos,
-		*weapon_vector,
-		*weapon_to_intercept_point_vector;
+		*pos = nullptr,
+		*target_pos = nullptr,
+		*weapon_vector = nullptr,
+		*weapon_to_intercept_point_vector = nullptr;
 
 	ASSERT (en);
 
@@ -433,8 +433,8 @@ while(TRUE)
 int vehicle_select_best_weapon (entity *en, entity *target)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	int
 		weapon_type;
@@ -505,7 +505,7 @@ int vehicle_select_best_weapon (entity *en, entity *target)
 void update_vehicle_decoy_release (entity *en)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		range,
@@ -513,12 +513,12 @@ void update_vehicle_decoy_release (entity *en)
 		time_to_impact;
 
 	entity
-		*persuer,
-		*launched_weapon;
+		*persuer = nullptr,
+		*launched_weapon = nullptr;
 
 	vec3d
-		*target_position,
-		*weapon_position;
+		*target_position = nullptr,
+		*weapon_position = nullptr;
 
 	ASSERT (en);
 
@@ -617,11 +617,11 @@ void update_vehicle_decoy_release (entity *en)
 void update_vehicle_missile_defence (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 	vehicle
-		*raw;
+		*raw = nullptr;
 	entity
-		*persuer,
+		*persuer = nullptr,
 		*rocket = NULL;
 
 	ASSERT (en);
@@ -686,7 +686,7 @@ float get_fire_timer_difficulty_factor (entity *en)
 		loop;
 
 	entity
-		*pilot_en;
+		*pilot_en = nullptr;
 
 	game_difficulty_settings
 		difficulty;
@@ -724,13 +724,13 @@ float get_fire_timer_difficulty_factor (entity *en)
 void rearm_vehicle_weapons(entity *en)
 {
 		entity
-			*group;
+			*group = nullptr;
 		float
 			ammo;
 		weapon_config_types
 			config_type;
 		weapon_package_status
-			*package_status;
+			*package_status = nullptr;
 		int
 			package;
 

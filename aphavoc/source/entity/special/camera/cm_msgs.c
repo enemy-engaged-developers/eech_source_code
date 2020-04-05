@@ -104,7 +104,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 static int response_to_unlink_child (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	list_types
 		list_type;
@@ -194,7 +194,7 @@ static int response_to_unlink_parent (entity_messages message, entity *receiver,
 static int response_to_set_camera_action (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	camera_actions
 		action;

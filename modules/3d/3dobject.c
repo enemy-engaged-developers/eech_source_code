@@ -78,7 +78,7 @@ int
 	object_3d_perform_lod_calculations = TRUE;
 
 object_3d_info
-	*current_object_3d_object_base,
+	*current_object_3d_object_base = nullptr,
 	object_3d_object_base[512];							// Allow 512 objects in one object ( z-sorted only )
 
 vec3d
@@ -93,20 +93,20 @@ int
 	textured_object_rendering_enabled = FALSE;
 
 face_surface_description
-	*current_object_3d_surface;
+	*current_object_3d_surface = nullptr;
 
 point_3d_plain_reference
-	*current_object_3d_gouraud_list,
-	*current_object_3d_face_normal_list;
+	*current_object_3d_gouraud_list = nullptr,
+	*current_object_3d_face_normal_list = nullptr;
 
 point_3d_short_reference
-	*current_object_3d_point_list;
+	*current_object_3d_point_list = nullptr;
 
 object_3d_short_textured_point
-	*current_object_3d_texture_list;
+	*current_object_3d_texture_list = nullptr;
 
 object_3d_transformed_point_normal
-	*current_object_3d_transformed_normals;
+	*current_object_3d_transformed_normals = nullptr;
 
 int
 	current_object_3d_specular,
@@ -123,10 +123,10 @@ int
 	current_object_3d_light_maps_enabled;
 
 screen
-	*object_3d_sprite_flare_texture,
-	*current_object_3d_texture,
-	*current_object_3d_luminosity_texture,
-	*current_object_3d_reflection_texture_map;
+	*object_3d_sprite_flare_texture = nullptr,
+	*current_object_3d_texture = nullptr,
+	*current_object_3d_luminosity_texture = nullptr,
+	*current_object_3d_reflection_texture_map = nullptr;
 
 static int
 	current_object_3d_reflection_texture_map_index;
@@ -143,14 +143,14 @@ int
 	current_object_3d_surface_point_index;
 
 object_3d_short_textured_point
-	*current_object_3d_surface_point_texture_list;
+	*current_object_3d_surface_point_texture_list = nullptr;
 
 point_3d_plain_reference
-	*current_object_3d_surface_point_list,
-	*current_object_3d_surface_point_normal_list;
+	*current_object_3d_surface_point_list = nullptr,
+	*current_object_3d_surface_point_normal_list = nullptr;
 
 object_3d_face
-	*current_object_3d_faces;
+	*current_object_3d_faces = nullptr;
 
 LPTLVERTEX
 	current_object_3d_surface_vertices;
@@ -249,7 +249,7 @@ int get_3d_object_approximation_number ( object_3d_instance *obj )
 {
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	//
 	// Calculate the object's position relative to the view.
@@ -277,7 +277,7 @@ void pre_render_3d_object ( object_3d_instance *obj )
 		object_number;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	//
 	// Go through the object pre-loading the textures
@@ -450,10 +450,10 @@ void draw_3d_object_bounding_box ( object_3d_instance *obj )
 {
 
 	vec3d
-		*object_relative_position;
+		*object_relative_position = nullptr;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	real_colour
 		white_colour,
@@ -758,7 +758,7 @@ void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour co
 		outcode2;
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	points[pt1].next_vertex = &points[pt2];
 	points[pt2].next_vertex = NULL;
@@ -1013,7 +1013,7 @@ real_colour calculate_line_colour ( struct OBJECT_3D_INFO *object_base )
 		direction_factor;
 
 	light_3d_source
-		*this_light;
+		*this_light = nullptr;
 
 	vec3d
 		point1,
@@ -1450,10 +1450,10 @@ light_3d_source *generate_relative_lights ( viewpoint *vp, vec3d *object_unit_po
 {
 
 	light_3d_source
-		*light_ptr,
-		*prev_light,
-		*this_light,
-		*light;
+		*light_ptr = nullptr,
+		*prev_light = nullptr,
+		*this_light = nullptr,
+		*light = nullptr;
 
 	light_ptr = lights;
 

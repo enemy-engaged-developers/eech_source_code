@@ -188,10 +188,10 @@ void create_local_sector_entities (void)
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
   	//

@@ -80,12 +80,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 {
 
 	entity
-		*keysite,
-		*wp,
-		*en;
+		*keysite = nullptr,
+		*wp = nullptr,
+		*en = nullptr;
 
 	regen
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
   	//
@@ -190,9 +190,9 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		#if DEBUG_MODULE
 		{
 			entity
-				*task,
-				*landing,
-				*keysite;
+				*task = nullptr,
+				*landing = nullptr,
+				*keysite = nullptr;
 
 			task = get_local_entity_parent (wp, LIST_TYPE_WAYPOINT);
 			landing = get_local_entity_parent (task, LIST_TYPE_ASSIGNED_TASK);
@@ -233,7 +233,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -256,7 +256,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{

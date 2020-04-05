@@ -91,8 +91,8 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 		sqr_velocity;
 
 	vec3d
-		*target_position,
-		*target_motion_vector,
+		*target_position = nullptr,
+		*target_motion_vector = nullptr,
 		target_old_position,
 		target_new_position,
 		weapon_intercept_point,
@@ -239,8 +239,8 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 entity *collision_test_weapon_with_any_target (entity *weapon, vec3d *weapon_old_position, vec3d *weapon_new_position)
 {
 	entity
-		*launcher,
-		*collision_entity;
+		*launcher = nullptr,
+		*collision_entity = nullptr;
 
 	vec3d
 		weapon_intercept_point,
@@ -323,8 +323,8 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 			difficulty;
 
 		entity
-			*launcher,
-			*pilot;
+			*launcher = nullptr,
+			*pilot = nullptr;
 
 		launcher = get_local_entity_parent (weapon, LIST_TYPE_LAUNCHED_WEAPON);
 
@@ -364,10 +364,10 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 			norm;
 		vec3d
 			impact_vector,
-			*target_position,
-			*weapon_position;
+			*target_position = nullptr,
+			*weapon_position = nullptr;
 		matrix3x3
-			*target_attitude;
+			*target_attitude = nullptr;
 
 		
 		if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_VEHICLE))

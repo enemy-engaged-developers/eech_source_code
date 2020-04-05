@@ -122,14 +122,14 @@ const char* meta_explosion_names[] =
 static void export_explosion_database(void)
 {
 	FILE
-		*file;
+		*file = nullptr;
 	int
 		count1,
 		count2;
 	const meta_explosion_data
-		*ex;
+		*ex = nullptr;
 	const meta_explosion_component
-		*co;
+		*co = nullptr;
 
 	file = safe_fopen(EXPLOSION_DATABASE_FILENAME, "w");
 	fprintf(file, "EXPLOSION;4\n");
@@ -217,7 +217,7 @@ static void export_explosion_database(void)
 				{
 					char
 						buf[128],
-						*ptr;
+						*ptr = nullptr;
 					strcpy(buf, application_sound_effects[co->sound_type].name);
 					ptr = strchr(buf, '.');
 					if (ptr)
@@ -241,19 +241,19 @@ static void export_explosion_database(void)
 static void import_explosion_database(void)
 {
 	FILE
-		*file;
+		*file = nullptr;
 	char
 		buf[2048],
-		*ptr,
-		*name;
+		*ptr = nullptr,
+		*name = nullptr;
 	int
 		count,
 		allocated,
 		type;
 	meta_explosion_data
-		*ex;
+		*ex = nullptr;
 	meta_explosion_component
-		*co;
+		*co = nullptr;
 	int
 		red,
 		green,
@@ -459,7 +459,7 @@ static void import_explosion_database(void)
 							{
 								char
 									buf[128],
-									*ptr;
+									*ptr = nullptr;
 								strcpy(buf, application_sound_effects[count].name);
 								ptr = strchr(buf, '.');
 								if (ptr)
@@ -538,10 +538,10 @@ void initialise_misc_explosion_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -712,10 +712,10 @@ void initialise_object_collision_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -949,10 +949,10 @@ void initialise_high_explosive_explosion_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1751,10 +1751,10 @@ void initialise_ground_collision_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -2109,10 +2109,10 @@ void initialise_water_collision_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -2369,10 +2369,10 @@ void initialise_object_dust_explosion_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -2692,10 +2692,10 @@ void initialise_object_explosive_explosion_database(void)
 {
 
 	meta_explosion_component
-		*explosion_info;
+		*explosion_info = nullptr;
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -3264,7 +3264,7 @@ void deinitialise_explosion_database(void)
 {
 
 	meta_explosion_data
-		*this_explosion;
+		*this_explosion = nullptr;
 
 	deinitialise_weapon_explosion_criteria_tables();
 

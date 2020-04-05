@@ -86,7 +86,7 @@ entity *get_local_entity_landing_entity (entity *en, entity_sub_types landing_ty
 {
 
 	entity
-		*landing_entity;
+		*landing_entity = nullptr;
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_KEYSITE);
 
@@ -115,8 +115,8 @@ entity *get_local_landing_entity_route (entity *landing_en, entity_sub_types typ
 {
 
 	entity
-		*task,
-		*wp;
+		*task = nullptr,
+		*wp = nullptr;
 
 	if (landing_en->type != ENTITY_TYPE_LANDING)
 	{
@@ -155,7 +155,7 @@ entity *get_local_landing_entity_task (entity *landing_en, entity_sub_types type
 {
 
 	entity
-		*task;
+		*task = nullptr;
 
 	ASSERT (landing_en->type == ENTITY_TYPE_LANDING);
 
@@ -185,9 +185,9 @@ entity *get_local_landing_entity_task (entity *landing_en, entity_sub_types type
 entity *get_local_group_member_landing_entity_from_keysite (entity *en)
 {
 	entity
-		*group,
-		*keysite,
-		*landing;
+		*group = nullptr,
+		*keysite = nullptr,
+		*landing = nullptr;
 
 	entity_sub_types
 		group_type;
@@ -218,9 +218,9 @@ entity *get_local_group_member_landing_entity_from_keysite (entity *en)
 entity *get_local_group_member_landing_entity_from_task (entity *en)
 {
 	entity
-		*task,
-		*guide,
-		*landing;
+		*task = nullptr,
+		*guide = nullptr,
+		*landing = nullptr;
 
 	landing = NULL;
 
@@ -249,10 +249,10 @@ void set_local_landing_route_clear (entity *task, entity *en)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	unsigned int
 		formation_position,
@@ -333,16 +333,16 @@ void validate_landing_entity_routes (entity *en)
 		side;
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*ts,
-		*ks,
-		*gd,
-		*gp,
-		*mb,
-		*wp,
-		*task;
+		*ts = nullptr,
+		*ks = nullptr,
+		*gd = nullptr,
+		*gp = nullptr,
+		*mb = nullptr,
+		*wp = nullptr,
+		*task = nullptr;
 
 	unsigned int
 		landed_flags,
@@ -353,7 +353,7 @@ void validate_landing_entity_routes (entity *en)
 		landing_holding_flags;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	raw = (landing *) get_local_entity_data (en);
 
@@ -751,13 +751,13 @@ int check_available_landing_route_lock (entity *landing_en)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		mask,
@@ -784,13 +784,13 @@ int check_landing_route_lock_clear (entity *landing_en, entity *en)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -816,13 +816,13 @@ int check_takeoff_route_lock_clear (entity *landing_en, entity *en)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_takeoff;
@@ -848,7 +848,7 @@ int check_landing_site_lock_clear (entity *landing_en, entity *en)
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -867,11 +867,11 @@ int check_landing_site_lock_clear (entity *landing_en, entity *en)
 void release_mobile_entity_landing_locks (entity *en)
 {
 	entity
-		*task,
-		*group,
-		*guide,
-		*keysite,
-		*landing_en;
+		*task = nullptr,
+		*group = nullptr,
+		*guide = nullptr,
+		*keysite = nullptr,
+		*landing_en = nullptr;
 
 	int
 		landing_flag;
@@ -968,7 +968,7 @@ void release_mobile_entity_landing_locks (entity *en)
 						{
 	
 							entity
-								*primary_task;
+								*primary_task = nullptr;
 	
 							primary_task = get_local_group_primary_task (group);
 	
@@ -1046,7 +1046,7 @@ void release_mobile_entity_landing_locks (entity *en)
 void play_landing_clear_for_takeoff_speech (entity *en)
 {
 	entity
-		*group_en;
+		*group_en = nullptr;
 
 	//
 	// PLAY_SPEECH (ATC)

@@ -254,7 +254,7 @@ static void invert_inlfuence_map (unsigned char *output, int xsize, int zsize)
 		z2;
 
 	unsigned char
-		*temp;
+		*temp = nullptr;
 
 	ASSERT (output);
 
@@ -294,10 +294,10 @@ static void invert_inlfuence_map (unsigned char *output, int xsize, int zsize)
 static float update_sector_side (int sx, int sz, entity_sides side, int in_use, float scale)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	en = get_local_raw_sector_entity (sx, sz);
 
@@ -342,7 +342,7 @@ void update_imap_sector_side (entity *en, int in_use)
 		side;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		max_val,
@@ -411,10 +411,10 @@ void update_imap_sector_side (entity *en, int in_use)
 static float update_sector_importance_level (int sx, int sz, entity_sides side, int in_use, float scale)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -464,7 +464,7 @@ void update_imap_importance_level (entity *en, int in_use)
 		sr2;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		scale,
@@ -541,10 +541,10 @@ void normalise_importance_imaps (void)
 		side;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		val;
@@ -584,10 +584,10 @@ void normalise_importance_imaps (void)
 static float update_sector_distance_to_friendly_base (int sx, int sz, entity_sides side, float scale)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -627,7 +627,7 @@ void update_keysite_distance_to_friendly_base (entity *en, entity_sides side)
 		sr2;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	float
 		scale,
@@ -694,16 +694,16 @@ void update_keysite_distance_to_friendly_base (entity *en, entity_sides side)
 void update_imap_distance_to_friendly_base (entity_sides side)
 {
 	entity
-		*sec,
-		*force,
-		*keysite;
+		*sec = nullptr,
+		*force = nullptr,
+		*keysite = nullptr;
 
 	int
 		x,
 		z;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	for (z = MIN_MAP_Z_SECTOR; z < MAX_MAP_Z_SECTOR; z ++)
 	{
@@ -758,10 +758,10 @@ void normalise_base_distance_imaps (void)
 		side;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		val;
@@ -801,10 +801,10 @@ void normalise_base_distance_imaps (void)
 static float update_sector_surface_to_air_defence_level (int sx, int sz, entity_sides side, int in_use, float scale)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -923,10 +923,10 @@ void normalise_air_defence_imaps (void)
 		side;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		val;
@@ -966,10 +966,10 @@ void normalise_air_defence_imaps (void)
 static float update_sector_surface_to_surface_defence_level (int sx, int sz, entity_sides side, int in_use, float scale)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1088,10 +1088,10 @@ void normalise_surface_defence_imaps (void)
 		side;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		val;
@@ -1139,13 +1139,13 @@ static void output_sector_side_influence_map (const char *filename)
 		temp;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	unsigned char
-		*output;
+		*output = nullptr;
 
 	rgb_colour
 		col;
@@ -1221,13 +1221,13 @@ static void output_sector_side_normalised_influence_map (const char *filename)
 		sz;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	unsigned char
-		*output;
+		*output = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ASSERT (filename);
 
@@ -1295,10 +1295,10 @@ static void output_sector_fog_of_war_influence_map (entity_sides side, const cha
 		fog;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	unsigned char
-		*output;
+		*output = nullptr;
 
 	float
 		val,

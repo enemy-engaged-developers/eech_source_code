@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -215,14 +215,14 @@ static void destroy_client (entity *en)
 static void kill_local (entity *en)
 {
 	site_updatable
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		pos;
 
 	entity
-		*task,
-		*destroy_task;
+		*task = nullptr,
+		*destroy_task = nullptr;
 
 	////////////////////////////////////////
 	//

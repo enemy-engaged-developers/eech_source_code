@@ -80,11 +80,11 @@ static void destroy_local (entity *en)
 {
 
 	task_kill_loss_data
-		*destroy_kill,
-		*kill;
+		*destroy_kill = nullptr,
+		*kill = nullptr;
 
 	task
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -327,7 +327,7 @@ static void destroy_client_family (entity *en)
 static void kill_local (entity *en)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

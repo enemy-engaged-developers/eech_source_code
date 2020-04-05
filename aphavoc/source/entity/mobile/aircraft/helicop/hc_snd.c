@@ -89,7 +89,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		panning;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = get_local_entity_data (en);
 

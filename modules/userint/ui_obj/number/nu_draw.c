@@ -82,13 +82,13 @@ static void draw_number_ui_object (ui_object *obj)
       y1;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
    font_types
       font_id;
 
    number_ui_object
-      *number_obj;
+      *number_obj = nullptr;
 
    if (get_ui_object_redraw (obj))
    {

@@ -79,7 +79,7 @@
 static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -127,10 +127,10 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 static void *get_local_ptr_value (entity *en, ptr_types type)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	raw = (sound_effect *) get_local_entity_data (en);
 

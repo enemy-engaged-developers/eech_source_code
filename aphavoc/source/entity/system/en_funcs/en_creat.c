@@ -165,10 +165,10 @@ entity *create_local_entity (entity_types type, int index, ...)
 		pargs;
 
 	char
-		*pargs_buffer;
+		*pargs_buffer = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT ((type > ENTITY_TYPE_UNKNOWN) && (type < NUM_ENTITY_TYPES));
 
@@ -301,10 +301,10 @@ entity *create_client_server_entity (entity_types type, int index, ...)
 		pargs;
 
 	char
-		*pargs_buffer;
+		*pargs_buffer = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT ((type > ENTITY_TYPE_UNKNOWN) && (type < NUM_ENTITY_TYPES));
 

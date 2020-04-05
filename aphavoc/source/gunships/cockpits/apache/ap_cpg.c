@@ -232,8 +232,8 @@ void animate_co_pilot_head(object_3d_instance* cockpit_inst3d)
 #else
 	struct OgreGameObjectSceneElement
 #endif
-		*torso_inst,
-		*helmet_inst;
+		*torso_inst = nullptr,
+		*helmet_inst = nullptr;
 	object_3d_sub_object_search_data
 		search;
 

@@ -80,7 +80,7 @@ static void draw_local_3d_object (entity *en, float range)
 {
 
 	sprite
-		*raw;
+		*raw = nullptr;
 
 #ifndef OGRE_EE
 	object_3d_sprite
@@ -100,7 +100,7 @@ static void draw_local_3d_object (entity *en, float range)
 		number_of_frames;
 	
 	entity
-		*parent;
+		*parent = nullptr;
 
 	raw = (sprite *) get_local_entity_data (en);
 
@@ -193,8 +193,8 @@ static void draw_local_3d_object (entity *en, float range)
 	if (parent)
 	{
 		vec3d
-			*offset,
-			*raw_position;
+			*offset = nullptr,
+			*raw_position = nullptr;
 
 		matrix3x3
 			m;

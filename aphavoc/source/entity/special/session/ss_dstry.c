@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

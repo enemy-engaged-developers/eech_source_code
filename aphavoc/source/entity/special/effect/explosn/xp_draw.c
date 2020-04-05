@@ -80,7 +80,7 @@ static void draw_local_3d_object (entity *en, float range)
 {
 #ifndef OGRE_EE
 	explosion
-		*raw;
+		*raw = nullptr;
 
 	object_3d_explosion
 		explosion;

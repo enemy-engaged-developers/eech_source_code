@@ -105,20 +105,20 @@ static void draw_button_ui_object (ui_object *obj)
 		pitch;
 
 	struct SCREEN
-		*old_active_screen,
-		*memory_graphic;
+		*old_active_screen = nullptr,
+		*memory_graphic = nullptr;
 
 	unsigned short
-		*graphic;
+		*graphic = nullptr;
 
 	unsigned char
-		*data;
+		*data = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	button_ui_object
-		*button;
+		*button = nullptr;
 
 	button = obj->button;
 

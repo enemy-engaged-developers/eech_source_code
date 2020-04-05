@@ -74,7 +74,7 @@ static void set_text_ui_object_function (ui_object *obj, void (*function) (ui_ob
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = (text_ui_object *) obj->data;
 
@@ -89,7 +89,7 @@ static FUNCTION get_text_ui_object_function (ui_object *obj)
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = (text_ui_object *) obj->data;
 
@@ -104,7 +104,7 @@ static void set_text_ui_object_right_function (ui_object *obj, void (*function) 
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = (text_ui_object *) obj->data;
 
@@ -119,7 +119,7 @@ static FUNCTION get_text_ui_object_right_function (ui_object *obj)
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = (text_ui_object *) obj->data;
 
@@ -137,11 +137,11 @@ static void call_text_ui_object_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	ui_object
-		*notify_obj,
-		*list_parent;
+		*notify_obj = nullptr,
+		*list_parent = nullptr;
 
 	int
 		mouse_state,
@@ -158,7 +158,7 @@ static void call_text_ui_object_function (ui_object *obj, void *arg)
 		{
 
 			ui_object
-				*temp_obj;
+				*temp_obj = nullptr;
 	
 			temp_obj = obj;
 	
@@ -245,7 +245,7 @@ static void call_text_ui_object_right_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = (text_ui_object *) obj->data;
 

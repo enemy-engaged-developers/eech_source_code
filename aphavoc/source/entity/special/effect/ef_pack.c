@@ -107,7 +107,7 @@ void pack_effect_data (entity *en, effect *raw, pack_modes mode)
 					link;
 
 				entity
-					*spec;
+					*spec = nullptr;
 
 				pack_int_value (en, INT_TYPE_VALID, TRUE);
 

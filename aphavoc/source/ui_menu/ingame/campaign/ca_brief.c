@@ -78,31 +78,31 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*briefing_text_area,
-	*briefing_text_list,
-	*briefing_page_title,
-	*briefing_page_type,
-	*briefing_page_takeoff_base_box,
-	*briefing_page_landing_base_box,
-	*briefing_page_group_box,
-	*briefing_page_objective_box,
-	*briefing_page_status_box,
-	*briefing_page_expire_elapsed_text_box,
-	*briefing_page_expire_time_box,
-	*briefing_page_duration_time_box,
-	*briefing_page_weather_box,
-	*briefing_page_wind_box,
-	*briefing_page_pilot_lock_box,
-	*page_map_area,
-	*page_map_view_area,
-	*page_map_view_mode_area,
-	*page_map_toggle,
-	*page_3d_area,
-	*page_3d_toggle,
-	*page_back_button;
+	*briefing_text_area = nullptr,
+	*briefing_text_list = nullptr,
+	*briefing_page_title = nullptr,
+	*briefing_page_type = nullptr,
+	*briefing_page_takeoff_base_box = nullptr,
+	*briefing_page_landing_base_box = nullptr,
+	*briefing_page_group_box = nullptr,
+	*briefing_page_objective_box = nullptr,
+	*briefing_page_status_box = nullptr,
+	*briefing_page_expire_elapsed_text_box = nullptr,
+	*briefing_page_expire_time_box = nullptr,
+	*briefing_page_duration_time_box = nullptr,
+	*briefing_page_weather_box = nullptr,
+	*briefing_page_wind_box = nullptr,
+	*briefing_page_pilot_lock_box = nullptr,
+	*page_map_area = nullptr,
+	*page_map_view_area = nullptr,
+	*page_map_view_mode_area = nullptr,
+	*page_map_toggle = nullptr,
+	*page_3d_area = nullptr,
+	*page_3d_toggle = nullptr,
+	*page_back_button = nullptr;
 
 ui_object
-	*mission_accept_button;
+	*mission_accept_button = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -123,11 +123,11 @@ static void render_static_briefing_objective_preview (entity *en);
 void show_briefing_page (entity *mission, int force_update)
 {
 	entity
-		*base,
-		*previous,
-		*guide,
-		*objective,
-		*group;
+		*base = nullptr,
+		*previous = nullptr,
+		*guide = nullptr,
+		*objective = nullptr,
+		*group = nullptr;
 
 	static char
 		s [128],
@@ -136,11 +136,11 @@ void show_briefing_page (entity *mission, int force_update)
 		text2 [1024],
 		text3 [1024];
 	static const char
-		*objective_name;
+		*objective_name = nullptr;
 
 	char
-		*text_ptr,
-		*dest_text_ptr;
+		*text_ptr = nullptr,
+		*dest_text_ptr = nullptr;
 
 	ASSERT (mission);
 
@@ -392,8 +392,8 @@ void show_briefing_page (entity *mission, int force_update)
 		vec3d
 			min_pos,
 			max_pos,
-			*pos,
-			*base_pos;
+			*pos = nullptr,
+			*base_pos = nullptr;
 
 		base = get_local_entity_parent (mission, get_local_task_list_type (mission));
 
@@ -409,7 +409,7 @@ void show_briefing_page (entity *mission, int force_update)
 			//
 
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_first_child (mission, LIST_TYPE_WAYPOINT);
 
@@ -433,7 +433,7 @@ void show_briefing_page (entity *mission, int force_update)
 			//
 
 			vec3d
-				*route_nodes;
+				*route_nodes = nullptr;
 
 			int
 				loop,
@@ -523,7 +523,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 		s [128];
 
 	entity
-		*mission;
+		*mission = nullptr;
 
 	mission = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]));
 
@@ -631,13 +631,13 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 			speed;
 
 		entity
-			*keysite;
+			*keysite = nullptr;
 
 		weathermodes
 			weather;
 
 		vec3d
-			*pos,
+			*pos = nullptr,
 			wind_velocity;
 
 		keysite = get_local_entity_parent (mission, get_local_task_list_type (mission));
@@ -785,7 +785,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 
 	{
 		entity
-			*pilot;
+			*pilot = nullptr;
 
 		pilot = get_local_entity_parent (mission, LIST_TYPE_PILOT_LOCK);
 
@@ -882,7 +882,7 @@ static void notify_page_show_3d (ui_object *obj, void *arg)
 static void draw_page_map (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]));
 
@@ -901,9 +901,9 @@ static void notify_mission_accept_button (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*group,
-		*guide,
-		*mission;
+		*group = nullptr,
+		*guide = nullptr,
+		*mission = nullptr;
 
 	index = get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BRIEFING]);
 
@@ -954,14 +954,14 @@ static void notify_mission_accept_button (ui_object *obj, void *arg)
 static void draw_page_3d_scene (ui_object *obj, void *arg)
 {
 	entity
-		*en,
-		*mission;
+		*en = nullptr,
+		*mission = nullptr;
 
 	viewpoint
 		vp;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
 
@@ -1032,7 +1032,7 @@ void render_static_briefing_objective_preview (entity *en)
 		vp;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		vec;
 
 	float
@@ -1102,7 +1102,7 @@ void render_static_briefing_objective_preview (entity *en)
 			col;
 
 		screen
-			*old_screen;
+			*old_screen = nullptr;
 
 		old_screen = get_active_screen ();
 
@@ -1173,7 +1173,7 @@ void define_campaign_screen_briefing_page_objects (void)
 		yinc;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		output [64];
@@ -2062,9 +2062,9 @@ void add_briefing_text_to_list (ui_object *list, const char *text1)
 	char
 		temp_text [256],
 		word [128],
-		*word_ptr;
+		*word_ptr = nullptr;
 	const char
-		*text_ptr;
+		*text_ptr = nullptr;
 
 	int
 		max_string_length;
@@ -2131,8 +2131,8 @@ void add_briefing_text_to_list (ui_object *list, const char *text1)
 void resize_briefing_list_size (ui_object *list)
 {
 	ui_object
-		*parent,
-		*slider;
+		*parent = nullptr,
+		*slider = nullptr;
 
 	float
 		y;

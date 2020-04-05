@@ -74,11 +74,11 @@ void set_radio_buttons_off (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*next,
-		*parent;
+		*next = nullptr,
+		*parent = nullptr;
 
 	area = obj->data;
 
@@ -141,10 +141,10 @@ void set_radio_button_on (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	area = obj->data;
 

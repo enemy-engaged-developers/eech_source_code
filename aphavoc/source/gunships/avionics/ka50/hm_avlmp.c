@@ -219,7 +219,7 @@ static void update_master_caution (void)
 static void update_weapon_status_lamps (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		selected_weapon,
@@ -348,7 +348,7 @@ void deinitialise_ka50_lamp_avionics (void)
 void update_ka50_lamp_avionics (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		gear_state;

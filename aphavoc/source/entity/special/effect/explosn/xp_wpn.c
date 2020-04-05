@@ -118,7 +118,7 @@ void initialise_weapon_explosion_criteria_tables ()
 void initialise_ball_explosion_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &ball_explosion_criteria_table;
 
@@ -139,7 +139,7 @@ void initialise_ball_explosion_criteria_table ()
 void initialise_high_explosive_explosion_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &high_explosive_explosion_criteria_table;
 
@@ -163,7 +163,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 void initialise_smoke_grenade_explosion_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 
 	table = &smoke_grenade_explosion_criteria_table;
@@ -184,7 +184,7 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 void initialise_ground_collision_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &ground_collision_criteria_table;
 
@@ -208,7 +208,7 @@ void initialise_ground_collision_criteria_table ()
 void initialise_water_collision_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &water_collision_criteria_table;
 
@@ -229,7 +229,7 @@ void initialise_water_collision_criteria_table ()
 void initialise_object_collision_criteria_table ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &object_collision_criteria_table;
 
@@ -251,7 +251,7 @@ void initialise_object_collision_criteria_table ()
 void deinitialise_weapon_explosion_criteria_tables ()
 {
 	weapon_explosion_criteria
-		*table;
+		*table = nullptr;
 
 	table = &ball_explosion_criteria_table;
 	free (table->max_damage);
@@ -297,7 +297,7 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 		warhead_type;
 
 	weapon_explosion_criteria
-		*criteria_table;
+		*criteria_table = nullptr;
 	
 	entity_sub_types
 			weapon_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);

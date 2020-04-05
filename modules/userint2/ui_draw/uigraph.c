@@ -79,10 +79,10 @@ void ui_draw_graphic (float x1, float y1, float x2, float y2, rgb_data *graphic)
 	unsigned int
 		graphic_x,
 		graphic_y,
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	rgb_colour
-		*image_ptr;
+		*image_ptr = nullptr;
 
 	int
 		int_y_size,
@@ -205,10 +205,10 @@ void ui_draw_part_graphic (float x1, float y1, float x2, float y2, int start_x, 
 	unsigned int
 		graphic_x,
 		graphic_y,
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	rgb_colour
-		*image_ptr;
+		*image_ptr = nullptr;
 
 	int
 		int_y_size,
@@ -329,11 +329,11 @@ void ui_draw_memory_graphic (ui_object *obj, float x1, float y1, float x2, float
 {
 
 	struct SCREEN
-		*memory_graphic;
+		*memory_graphic = nullptr;
 
 	unsigned int
-		*data_ptr,
-		*screen_ptr;
+		*data_ptr = nullptr,
+		*screen_ptr = nullptr;
 
 	int
 		data_pitch,
@@ -381,11 +381,11 @@ void ui_draw_unscaled_memory_graphic (float x1, float y1, float x2, float y2, st
 {
 
 	unsigned int
-		*graphic,
+		*graphic = nullptr,
 		graphic_pitch,
 		graphic_x,
 		graphic_y,
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	int
 		int_y_size,
@@ -511,7 +511,7 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, unsigned sho
 	unsigned short int
 		graphic_x,
 		graphic_y,
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	int
 		int_y_size,
@@ -637,10 +637,10 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, rgb_data *gr
 		loop_height;
 
 	unsigned int
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	rgb_colour
-		*this_image_ptr;
+		*this_image_ptr = nullptr;
 
 
 	//
@@ -678,7 +678,7 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, rgb_data *gr
 			loop_width;
 
 		unsigned int
-			*line_ptr;
+			*line_ptr = nullptr;
 
 		line_ptr = screen_ptr + int_x;
 
@@ -763,10 +763,10 @@ void ui_draw_part_alpha_graphic (float x1, float y1, float x2, float y2, int sta
 	unsigned int
 		graphic_x,
 		graphic_y,
-		*screen_ptr;
+		*screen_ptr = nullptr;
 
 	rgb_colour
-		*image_ptr;
+		*image_ptr = nullptr;
 
 	int
 		int_y_size,
@@ -907,8 +907,8 @@ void ui_draw_scaled_graphic (
 		destination_y_loop;
 
 	unsigned int
-		*destination_line_ptr,
-		*source_line_ptr;
+		*destination_line_ptr = nullptr,
+		*source_line_ptr = nullptr;
 
 	source_x_delta = source_x2 - source_x1;
 	source_y_delta = source_y2 - source_y1;
@@ -988,8 +988,8 @@ void ui_draw_scaled_masked_graphic (
 		destination_y_loop;
 
 	unsigned int
-		*destination_line_ptr,
-		*source_line_ptr;
+		*destination_line_ptr = nullptr,
+		*source_line_ptr = nullptr;
 
 	source_x_delta = source_x2 - source_x1;
 	source_y_delta = source_y2 - source_y1;
@@ -1280,7 +1280,7 @@ void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_gr
 				{
 
 					vertex
-						*poly;
+						*poly = nullptr;
 
 					clip_3d_coord = 0;
 

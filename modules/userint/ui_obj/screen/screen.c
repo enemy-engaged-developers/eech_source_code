@@ -71,11 +71,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*screen_stack_head,
-	*screen_stack_tail;
+	*screen_stack_head = nullptr,
+	*screen_stack_tail = nullptr;
 	
 ui_object
-	*current_screen;
+	*current_screen = nullptr;
 
 static int
 	screen_stack_size = 0;
@@ -91,10 +91,10 @@ void push_ui_screen (ui_object *this_screen)
 		((*function) (ui_object *obj, void *arg));
 
 	ui_object
-		*stack_search;
+		*stack_search = nullptr;
 
 	screen_ui_object
-		*screen;
+		*screen = nullptr;
 
 	// check if already on stack
 
@@ -203,10 +203,10 @@ void pop_ui_screen (void)
 {
 
 	ui_object
-		*popped_screen;
+		*popped_screen = nullptr;
 
 	screen_ui_object
-		*screen;
+		*screen = nullptr;
 
 	// store screen to pop and unlink it and destroy it.
 

@@ -82,7 +82,7 @@ void set_raw_external_view_entity (entity *en)
 		new_view_entity;
 
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -309,7 +309,7 @@ void set_external_view_entity (entity *en)
 entity *get_external_view_entity (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_camera_entity ())
 	{

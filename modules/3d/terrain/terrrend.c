@@ -89,10 +89,10 @@ void draw_3d_terrain_default_clipped_fan_word_face ( int number_of_points )
 {
 		
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -194,10 +194,10 @@ void draw_3d_terrain_default_clipped_fan_byte_face ( int number_of_points )
 {
 		
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -347,10 +347,10 @@ void draw_3d_terrain_default_clipped_strip_word_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -466,10 +466,10 @@ void draw_3d_terrain_default_clipped_strip_byte_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -633,10 +633,10 @@ void draw_3d_terrain_texture_x_clipped_strip_word_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -752,10 +752,10 @@ void draw_3d_terrain_texture_x_clipped_strip_byte_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -919,10 +919,10 @@ void draw_3d_terrain_texture_z_clipped_strip_word_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1038,10 +1038,10 @@ void draw_3d_terrain_texture_z_clipped_strip_byte_face ( int number_of_points )
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1209,10 +1209,10 @@ void draw_3d_terrain_texture_x_colour_clipped_strip_word_face ( int number_of_po
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1330,10 +1330,10 @@ void draw_3d_terrain_texture_x_colour_clipped_strip_byte_face ( int number_of_po
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1499,10 +1499,10 @@ void draw_3d_terrain_texture_z_colour_clipped_strip_word_face ( int number_of_po
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1620,10 +1620,10 @@ void draw_3d_terrain_texture_z_colour_clipped_strip_byte_face ( int number_of_po
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int

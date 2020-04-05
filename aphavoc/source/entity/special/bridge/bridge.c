@@ -99,10 +99,10 @@ void initialise_valid_warzone_bridge_database (void)
 		temp_filename [128];
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
@@ -179,11 +179,11 @@ entity *create_bridge( vec3d *end1, vec3d *end2, int start_node, int end_node, e
 {
 
 	const bridge_data
-		*bridge_info;
+		*bridge_info = nullptr;
 
 	entity
-		*segment_entity,
-		*bridge_entity;
+		*segment_entity = nullptr,
+		*bridge_entity = nullptr;
 
 	float
 		pitch,
@@ -368,10 +368,10 @@ void create_local_bridge_entities (pack_modes pack_mode)
 		filename [512];
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		loop,
@@ -387,7 +387,7 @@ void create_local_bridge_entities (pack_modes pack_mode)
 		max_leg_height;
 
 	entity
-		*first_bridge_entity;
+		*first_bridge_entity = nullptr;
 
 	if (pack_mode == PACK_MODE_BROWSE_SESSION)
 	{
@@ -461,7 +461,7 @@ void create_local_bridge_entities (pack_modes pack_mode)
 float get_actual_bridge_length (vec3d *end1, vec3d *end2, entity_sub_types type, vec3d *actual_start, vec3d *actual_end, int *return_num_mid_sections)
 {
 	const bridge_data
-		*bridge_info;
+		*bridge_info = nullptr;
 
 	float
 		mid_length,
@@ -800,7 +800,7 @@ float get_bridge_max_leg_height (vec3d *end1, vec3d *end2, entity_sub_types type
 {
 
 	const bridge_data
-		*bridge_info;
+		*bridge_info = nullptr;
 
 	float
 		start_length,
@@ -898,7 +898,7 @@ void repair_local_bridge_entity (entity *en)
 		count;
 
 	entity
-		*segment;
+		*segment = nullptr;
 
 	ASSERT (en);
 

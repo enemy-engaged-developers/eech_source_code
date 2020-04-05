@@ -79,7 +79,7 @@
 static void set_local_string (entity *en, string_types type, const char *s)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (s);
 
@@ -176,10 +176,10 @@ static void set_client_string (entity *en, string_types type, const char *s)
 static const char *get_local_string (entity *en, string_types type)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	raw = (keysite *) get_local_entity_data (en);
 

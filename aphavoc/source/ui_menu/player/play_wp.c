@@ -78,13 +78,13 @@
 
 static ui_object
 	/**weapon_log_area,
-	*weapon_log_text_area,*/
+	*weapon_log_text_area = nullptr,*/
 
-	*weapon_list_area,
-	*weapon_type_list,
-	*weapon_hit_list,
-	*weapon_fired_list,
-	*weapon_eff_list;
+	*weapon_list_area = nullptr,
+	*weapon_type_list = nullptr,
+	*weapon_hit_list = nullptr,
+	*weapon_fired_list = nullptr,
+	*weapon_eff_list = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ void notify_show_weapon_log_page (ui_object *obj)
 void rebuild_weapon_log_list (player_log_type *log, int side)
 {
 	ui_object
-		*temp;
+		*temp = nullptr;
 
 	char
 		buff[7];
@@ -215,7 +215,7 @@ void define_weapon_log_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	/////////////////////////////////////////////////////////////////
 	// Weapon Log Area

@@ -88,9 +88,9 @@ struct BRIEFING_SUBSTITUTION_TYPE
 {
 
 	const char
-		*string;
+		*string = nullptr;
 	char
-		*position_ptr;
+		*position_ptr = nullptr;
 
 	void
 		((*function) (entity *task, medal_types medal, pilot_rank_types rank, char **text_buffer));
@@ -129,10 +129,10 @@ static extra_briefing_type *get_extra_briefing_data (extra_briefing_types type, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 task_briefing_type
-	*task_briefing_database;
+	*task_briefing_database = nullptr;
 
 extra_briefing_type
-	*extra_briefing_database;
+	*extra_briefing_database = nullptr;
 
 const char
 	*us_medal_type_names [NUM_MEDAL_TYPES],
@@ -218,10 +218,10 @@ void initialise_briefing_parser (void)
 		temp_filename [128];
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
@@ -426,7 +426,7 @@ void initialise_briefing_parser (void)
 							if (unicode)
 							{
 
-								task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = safe_malloc (strlen (temp_buffer) + 1);
+								task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count] = static_cast<char*>(safe_malloc (strlen (temp_buffer) + 1));
 								strcpy (task_briefing_database [task_type].debriefing_text_success [task_briefing_database [task_type].debriefing_text_success_count], temp_buffer);
 							}
 							else
@@ -526,7 +526,7 @@ void initialise_briefing_parser (void)
 					current_medal_list;
 
 				extra_briefing_type
-					*new_medal_briefing;
+					*new_medal_briefing = nullptr;
 
 				// create new medal type
 
@@ -595,7 +595,7 @@ void initialise_briefing_parser (void)
 			{
 
 				extra_briefing_type
-					*new_promotion_briefing;
+					*new_promotion_briefing = nullptr;
 
 				// create new promotion type
 
@@ -649,7 +649,7 @@ void initialise_briefing_parser (void)
 			{
 
 				extra_briefing_type
-					*new_objective_briefing;
+					*new_objective_briefing = nullptr;
 
 				// create new objective type
 
@@ -728,7 +728,7 @@ void deinitialise_briefing_parser (void)
 		loop2;
 
 	extra_briefing_type
-		*this_medal;
+		*this_medal = nullptr;
 
 	//
 	// Briefing / Debriefing
@@ -827,8 +827,8 @@ void build_substitution_info (entity *task, medal_types medal, pilot_rank_types 
 {
 
 	char
-		*text_ptr,
-		*temp_text;
+		*text_ptr = nullptr,
+		*temp_text = nullptr;
 
 	int
 		flag,
@@ -916,7 +916,7 @@ void briefing_add_position (entity *en, medal_types medal, pilot_rank_types rank
 		buffer [32];
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	switch (get_local_entity_type (en))
 	{
@@ -956,7 +956,7 @@ void briefing_add_sector (entity *en, medal_types medal, pilot_rank_types rank, 
 		buffer [32];
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1008,7 +1008,7 @@ void briefing_add_keysite (entity *en, medal_types medal, pilot_rank_types rank,
 {
 
 	entity
-		*keysite;
+		*keysite = nullptr;
 
 	if (en)
 	{
@@ -1092,8 +1092,8 @@ void briefing_add_group (entity *task, medal_types medal, pilot_rank_types rank,
 {
 
 	entity
-		*group,
-		*company;
+		*group = nullptr,
+		*company = nullptr;
 
 	if (task)
 	{
@@ -1138,7 +1138,7 @@ void briefing_add_target_type (entity *task, medal_types medal, pilot_rank_types
 {
 
 	entity
-		*target;
+		*target = nullptr;
 
 	if (task)
 	{
@@ -1225,7 +1225,7 @@ extra_briefing_type *get_extra_briefing_data (extra_briefing_types type, int sub
 {
 
 	extra_briefing_type
-		*this_item;
+		*this_item = nullptr;
 
 	this_item = extra_briefing_database;
 
@@ -1282,7 +1282,7 @@ int get_briefing_text (entity *task, char *text1, char *text2, char *text3)
 		text3_choice;
 
 	task_briefing_type
-		*task_briefing;
+		*task_briefing = nullptr;
 
 	memset (text1, 0, sizeof (text1));
 	memset (text2, 0, sizeof (text2));
@@ -1355,8 +1355,8 @@ int get_debriefing_text (entity *task, char **debrief, char **ff_debrief)
 		text_choice;
 
 	task_briefing_type
-		*task_debriefing,
-		*ff_task_debriefing;
+		*task_debriefing = nullptr,
+		*ff_task_debriefing = nullptr;
 
 	ASSERT (task);
 
@@ -1455,7 +1455,7 @@ int get_medal_briefing_text (entity *task, int medal_type, char *medal_text)
 		text_choice;
 
 	extra_briefing_type
-		*this_medal;
+		*this_medal = nullptr;
 
 	this_medal = get_extra_briefing_data (EXTRA_BRIEFING_MEDAL, medal_type);
 
@@ -1490,7 +1490,7 @@ int get_promotion_briefing_text (entity *task, int rank_type, char *rank_text)
 		text_choice;
 
 	extra_briefing_type
-		*this_rank;
+		*this_rank = nullptr;
 
 	// sub_type == 0 because there aren't different texts per promotion
 	this_rank = get_extra_briefing_data (EXTRA_BRIEFING_PROMOTION, 0);
@@ -1526,7 +1526,7 @@ int get_objective_briefing_text (entity *keysite, int objective_type, char *obje
 		text_choice;
 
 	extra_briefing_type
-		*this_objective;
+		*this_objective = nullptr;
 
 	this_objective = get_extra_briefing_data (EXTRA_BRIEFING_OBJECTIVES, objective_type);
 

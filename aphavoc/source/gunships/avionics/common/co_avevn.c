@@ -245,7 +245,7 @@ static void toggle_blurred_main_rotors_event (event *ev)
 static void launch_weapon_event (event *ev)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;

@@ -84,7 +84,7 @@ static void destroy_local (entity *en)
 {
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -310,12 +310,12 @@ static void kill_local (entity *en)
 		losses;
 
 	entity
-		*task,
-		*group,
-		*destroy_task;
+		*task = nullptr,
+		*group = nullptr,
+		*destroy_task = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -544,7 +544,7 @@ static void kill_local (entity *en)
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		vec3d
-			*position;
+			*position = nullptr;
 
 		sound_sample_indices
 			sound_sample_index;

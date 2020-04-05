@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

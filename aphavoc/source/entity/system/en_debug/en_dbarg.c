@@ -130,7 +130,7 @@ static void debug_log_text (entity_debug_modes mode, entity *en, char *format, .
 		s1[400],
 		s2[400];
 	const char
-		*name;
+		*name = nullptr;
 
 	//
 	// prefix
@@ -250,7 +250,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 			//
 
 			matrix3x3
-				*attitude;
+				*attitude = nullptr;
 
 			float
 				heading,
@@ -543,7 +543,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			entity
-				*child_pred;
+				*child_pred = nullptr;
 
 			int
 				index;
@@ -570,7 +570,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			entity
-				*child_succ;
+				*child_succ = nullptr;
 
 			int
 				index;
@@ -597,7 +597,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			entity
-				*first_child;
+				*first_child = nullptr;
 
 			int
 				index;
@@ -624,7 +624,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			int
 				index;
@@ -668,7 +668,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			void
-				*ptr;
+				*ptr = nullptr;
 
 			type = va_arg (pargs, ptr_types);
 
@@ -707,7 +707,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			const char
-				*s;
+				*s = nullptr;
 
 			type = va_arg (pargs, string_types);
 
@@ -748,7 +748,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 				type;
 
 			vec3d
-				*v;
+				*v = nullptr;
 
 			type = va_arg (pargs, vec3d_types);
 

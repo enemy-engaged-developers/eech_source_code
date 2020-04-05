@@ -79,10 +79,10 @@
 static void *get_local_ptr_value (entity *en, ptr_types type)
 {
 	sector
-		*raw;
+		*raw = nullptr;
 
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	raw = (sector *) get_local_entity_data (en);
 

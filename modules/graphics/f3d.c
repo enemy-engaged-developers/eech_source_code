@@ -1,4 +1,4 @@
-#ifndef OGRE_EE
+
 #include "graphics.h"
 #include "system.h"
 
@@ -701,4 +701,3 @@ int f3d_texture_unlock(screen *texture)
 
 	return TRUE;
 }
-#endif

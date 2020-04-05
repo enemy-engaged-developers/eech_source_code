@@ -130,7 +130,7 @@ void animate_viper_virtual_cockpit_canopy_doors (void)
 		aiming_state;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (virtual_cockpit_inst3d);
 

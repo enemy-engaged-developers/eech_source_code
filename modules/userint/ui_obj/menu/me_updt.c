@@ -86,12 +86,12 @@ static void update_menu_ui_object (ui_object *obj)
 		grand_parent_y_origin = 0.0;
 
 	ui_object
-		*stack_head,
-		*grand_parent,
-		*parent;
+		*stack_head = nullptr,
+		*grand_parent = nullptr,
+		*parent = nullptr;
 
    area_ui_object
-      *area;
+      *area = nullptr;
 
    area = obj->data;
 

@@ -79,10 +79,10 @@
 entity *get_external_view_entity_viewable_weapon (void)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_camera_entity ());
 
@@ -112,7 +112,7 @@ entity *get_external_view_entity_viewable_weapon (void)
 entity *get_local_entity_viewable_weapon (entity *this_entity)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (this_entity);
 
@@ -180,11 +180,11 @@ void reset_weapon_camera (camera *raw)
 void update_weapon_camera (camera *raw)
 {
 	entity
-		*weapon,
-		*target;
+		*weapon = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*weapon_position,
+		*weapon_position = nullptr,
 		target_position,
 		direction;
 

@@ -77,20 +77,20 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*blade_stall_area,
-	*cross_couple_area,
-	*ground_effect_area,
-	*over_torque_area,
-	*vortex_ring_area,
-	*wind_area,
-	*transitional_lift_area,
-	*blade_stall_option_button,
-	*cross_couple_option_button,
-	*ground_effect_option_button,
-	*over_torque_option_button,
-	*vortex_ring_option_button,
-	*wind_option_button,
-	*transitional_lift_option_button;
+	*blade_stall_area = nullptr,
+	*cross_couple_area = nullptr,
+	*ground_effect_area = nullptr,
+	*over_torque_area = nullptr,
+	*vortex_ring_area = nullptr,
+	*wind_area = nullptr,
+	*transitional_lift_area = nullptr,
+	*blade_stall_option_button = nullptr,
+	*cross_couple_option_button = nullptr,
+	*ground_effect_option_button = nullptr,
+	*over_torque_option_button = nullptr,
+	*vortex_ring_option_button = nullptr,
+	*wind_option_button = nullptr,
+	*transitional_lift_option_button = nullptr;
 
 static const char
 	*option_boolean_text[2];
@@ -156,7 +156,7 @@ void define_options_screen_dynamics_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	ui_object
 		*title_change_array [7],

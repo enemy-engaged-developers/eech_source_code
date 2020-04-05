@@ -135,13 +135,13 @@ void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int v
 	float
 		vibrations_power,
 		inertia_power,
-		*vibration,
-		*vibration_force,
+		*vibration = nullptr,
+		*vibration_force = nullptr,
 		*rotor_rpm = &current_flight_dynamics->main_rotor_rpm.value;
 	dynamics_float_variable
 		*velocity = &current_flight_dynamics->velocity_z;
 	vec3d
-		*movement,
+		*movement = nullptr,
 		*accel = &current_flight_dynamics->model_acceleration_vector;
 			
 
@@ -165,10 +165,10 @@ void get_forces_acting_on_pilot (float* x, float* y, float* z, int invert, int v
 	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE && vibrations_power > 0)
 	{
 		float z_velocity = 100 * bound(velocity->value * velocity->modifier - 0.9 * velocity->max, 0, 30),
-				y_acceleration = *rotor_rpm * max((accel->y > 1.0) * (accel->y - 1.0),
+				y_acceleration = *rotor_rpm * fmax((accel->y > 1.0) * (accel->y - 1.0),
 					(current_flight_dynamics->velocity_y.value < - 10.0) * (- current_flight_dynamics->velocity_y.value - 10.0));
 
-		*vibration_force = move_by_rate(*vibration_force, 0.000002f * (vibrations_power * max(z_velocity, y_acceleration) + max(0.0f, vibrations_power - 1) * 5 * *rotor_rpm + 20 * max(0.0f, 40 - fabs(*rotor_rpm - 50))), 0.01f); // G force > 1.1, rotor spin-up, vortex ring or maximum speed
+		*vibration_force = move_by_rate(*vibration_force, 0.000002f * (vibrations_power * fmax(z_velocity, y_acceleration) + fmax(0.0f, vibrations_power - 1) * 5 * *rotor_rpm + 20 * fmax(0.0f, 40 - fabs(*rotor_rpm - 50))), 0.01f); // G force > 1.1, rotor spin-up, vortex ring or maximum speed
 		for (i = 0; i < 3; i++)
 			vibration[i] = (vibration[i] >= 0 ? -1 : 1) * frand1() * *vibration_force; // should be negative to previous
 	}

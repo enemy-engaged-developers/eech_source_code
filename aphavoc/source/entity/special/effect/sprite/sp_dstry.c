@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	sprite
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

@@ -142,10 +142,10 @@ void deinitialise_hokum_eo (void)
 void get_hokum_eo_centred_viewpoint (viewpoint *vp)
 {
 	entity
-		*source;
+		*source = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -215,10 +215,10 @@ void get_hokum_eo_centred_viewpoint (viewpoint *vp)
 void get_hokum_eo_relative_centred_viewpoint (viewpoint *vp)
 {
 	entity
-		*source;
+		*source = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

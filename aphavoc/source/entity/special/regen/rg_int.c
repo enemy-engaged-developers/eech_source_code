@@ -79,7 +79,7 @@
 static void set_local_int_value (entity *en, int_types type, int value)
 {
 	regen
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -191,7 +191,7 @@ static void set_client_int_value (entity *en, int_types type, int value)
 static int get_local_int_value (entity *en, int_types type)
 {
 	regen
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;

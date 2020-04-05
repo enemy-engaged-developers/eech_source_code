@@ -229,12 +229,12 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 {
 
 	entity
-		*guide,
-		*landing_en,
-		*task;
+		*guide = nullptr,
+		*landing_en = nullptr,
+		*task = nullptr;
 
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (receiver);
 

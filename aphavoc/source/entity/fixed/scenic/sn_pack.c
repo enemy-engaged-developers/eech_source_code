@@ -107,10 +107,10 @@ void pack_local_scenic_data (pack_modes mode)
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	scenic
-		*raw;
+		*raw = nullptr;
 
 	int
 		pack_size,
@@ -186,10 +186,10 @@ void unpack_local_scenic_data (pack_modes mode)
 {
 
 	scenic
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		count,

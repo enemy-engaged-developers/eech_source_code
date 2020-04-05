@@ -196,8 +196,8 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 	game_difficulty_settings difficulty;
 
 	entity
-		*launcher,
-		*pilot;
+		*launcher = nullptr,
+		*pilot = nullptr;
 
 	// get game difficulty level (use player's own level)
 
@@ -277,12 +277,12 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 void update_decoy (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*launcher,
-		*locked_on_weapon,
-		*succ;
+		*launcher = nullptr,
+		*locked_on_weapon = nullptr,
+		*succ = nullptr;
 
 	ASSERT (en);
 
@@ -383,7 +383,7 @@ void get_jammer_distract_position (entity *weapon, vec3d *target_position)
 entity_sub_types get_decoy_type_for_weapon (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;

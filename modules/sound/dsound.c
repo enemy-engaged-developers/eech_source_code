@@ -379,7 +379,7 @@ unsigned char * dsound_lock_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, int posit
 {
 
 	unsigned	 char
-		*data;
+		*data = nullptr;
 
 	DWORD
 		length;

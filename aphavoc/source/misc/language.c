@@ -83,7 +83,7 @@
 
 #define PREPROCESS_DAT_FILES 0
 
-#define POSTPROCESS_DAT_FILES 0
+#define POSTPROCESS_DAT_FILES 1
 
 #define DEBUG_LANGUAGES 0
 
@@ -127,8 +127,8 @@ struct MISSING_TRANSLATION
 {
 	char name[100];
 	struct MISSING_TRANSLATION
-		*pred,
-		*succ;
+		*pred = nullptr,
+		*succ = nullptr;
 };
 
 typedef struct MISSING_TRANSLATION missing_translation;
@@ -171,7 +171,7 @@ static unsigned l2i(char ch)
 language_struct *initialise_translation (void)
 {
 	language_struct
-		*new_;
+		*new_ = nullptr;
 
 	new_ = (language_struct*) safe_malloc (sizeof (language_struct));
 
@@ -224,7 +224,7 @@ void delete_translation (language_struct *delete_me)
 void initialise_language_file (FILE *fp)
 {
 	language_struct
-		*lang;
+		*lang = nullptr;
 
 	file_tags
 		tag;
@@ -402,10 +402,10 @@ void initialise_language_file (FILE *fp)
 void initialise_language_database (void)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	directory_file_list
-		*directory_listing;
+		*directory_listing = nullptr;
 
 	int
 		valid_file;
@@ -413,7 +413,7 @@ void initialise_language_database (void)
 	char
 		directory_search_path[256];
 	const char
-		*filename;
+		*filename = nullptr;
 
 	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
 
@@ -476,10 +476,10 @@ void initialise_language_database (void)
 const char *get_trans (const char *string)
 {
 	language_struct
-		*temp;
+		*temp = nullptr;
 
 	const char
-		*result;
+		*result = nullptr;
 
 	for (temp = alphabet_pointers [l2i(string[0])]; temp; temp = temp->next)
 	{
@@ -560,7 +560,7 @@ const char *get_trans (const char *string)
 void deinitialise_language_database (void)
 {
 	language_struct
-		*temp;
+		*temp = nullptr;
 
 	int
 		count;
@@ -804,11 +804,11 @@ void preprocess_language_file (FILE *fp, FILE *fp_out)
 void preprocess_language_database (void)
 {
 	FILE
-		*fp,
-		*fp_out;
+		*fp = nullptr,
+		*fp_out = nullptr;
 
 	directory_file_list
-		*directory_listing;
+		*directory_listing = nullptr;
 
 	int
 		count = 0,
@@ -819,7 +819,7 @@ void preprocess_language_database (void)
 		full_filename [256],
 		output_filename [256];
 	const char
-		*filename;
+		*filename = nullptr;
 
 	sprintf (directory_search_path, "%s\\*.txt", LANGUAGE_DIRECTORY);
 
@@ -917,13 +917,13 @@ static void postprocess_missing_translation() {
 
 			if (fp_out != NULL) {
 				fprintf (fp_out, ":TRANSLATION ");
-				fprintf (fp_out, &this_string->name);
+				fprintf (fp_out, (const char*)&this_string->name);
 				fprintf (fp_out, "\n");
 
 				for (i = 0; i < 7; i++) {
 					fprintf (fp_out, language_strings[i]);
 					fprintf (fp_out, " ");
-					fprintf (fp_out, &this_string->name);
+					fprintf (fp_out, (const char*)&this_string->name);
 					fprintf (fp_out, "\n");		
 				}
 
@@ -953,8 +953,8 @@ static void add_missing_translation(const char *buffer) {
 	if ( missing_list )
 	{
 		missing_translation
-			*this_string,
-			*last_string;
+			*this_string = nullptr,
+			*last_string = nullptr;
 
 		this_string = missing_list;
 

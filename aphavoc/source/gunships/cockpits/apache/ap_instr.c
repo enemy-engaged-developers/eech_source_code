@@ -121,7 +121,7 @@ static char
 #endif
 
 static screen
-	*altitude_counter_screen;
+	*altitude_counter_screen = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -449,8 +449,8 @@ void draw_apache_fixed_cockpit_airspeed_indicator_needle (cockpit_panels panel)
 		y_centre;
 
 	scale_data
-		*airspeed_needle_scale,
-		*p;
+		*airspeed_needle_scale = nullptr,
+		*p = nullptr;
 
 	if (draw_virtual_cockpit_needles_on_fixed_cockpits)
 	{
@@ -531,8 +531,8 @@ void draw_apache_fixed_cockpit_barometric_altimeter_needle (cockpit_panels panel
 		y_centre;
 
 	scale_data
-		*altimeter_needle_scale,
-		*p;
+		*altimeter_needle_scale = nullptr,
+		*p = nullptr;
 
 	if (draw_virtual_cockpit_needles_on_fixed_cockpits)
 	{
@@ -765,10 +765,10 @@ void draw_apache_fixed_cockpit_clock_hands (cockpit_panels panel)
 		y_centre;
 
 	scale_data
-		*hour_hand_scale,
-		*minute_hand_scale,
-		*second_hand_scale,
-		*p;
+		*hour_hand_scale = nullptr,
+		*minute_hand_scale = nullptr,
+		*second_hand_scale = nullptr,
+		*p = nullptr;
 
 	if (draw_virtual_cockpit_needles_on_fixed_cockpits)
 	{

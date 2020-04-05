@@ -83,9 +83,9 @@ void ui_object_list_item_function (ui_object *obj, void *arg)
 		list_position;
 
 	ui_object
-		*parent,
-		*next_parent,
-		*current_list_item;
+		*parent = nullptr,
+		*next_parent = nullptr,
+		*current_list_item = nullptr;
 
 	void
 		((*pfunction) (ui_object *obj, void *arg));
@@ -156,9 +156,9 @@ void ui_object_list_item_right_function (ui_object *obj, void *arg)
 		list_position;
 
 	ui_object
-		*parent,
-		*next_parent,
-		*current_list_item;
+		*parent = nullptr,
+		*next_parent = nullptr,
+		*current_list_item = nullptr;
 
 	void
 		((*pfunction) (ui_object *obj, void *arg));
@@ -225,11 +225,11 @@ float get_next_list_position (ui_object *list_object)
 		y_max;
 
 	ui_object
-		*y_max_object,
-		*current_list_item;
+		*y_max_object = nullptr,
+		*current_list_item = nullptr;
 
 	list_ui_object
-		*list;
+		*list = nullptr;
 
 	list = list_object->data;
 
@@ -271,8 +271,8 @@ void ui_object_destroy_list_items (ui_object *list)
 {
 
 	ui_object
-		*destroy_item,
-		*current_list_item;
+		*destroy_item = nullptr,
+		*current_list_item = nullptr;
 
 	if (!list)
 	{
@@ -303,7 +303,7 @@ int ui_object_destroy_list_item (ui_object *list, ui_object *item)
 {
 
 	ui_object
-		*current_list_item;
+		*current_list_item = nullptr;
 
 	if ((!list) || (!item))
 	{
@@ -338,7 +338,7 @@ ui_object *add_to_pop_up_list (char *text, ui_object *obj, int list_id, int font
 {
 
 	ui_object
-		*text_obj;
+		*text_obj = nullptr;
 
 	int
 		hilight_font,
@@ -412,10 +412,10 @@ void ui_object_unselect_list (ui_object *list)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*item;
+		*item = nullptr;
 
 	item = get_ui_object_child (list);
 

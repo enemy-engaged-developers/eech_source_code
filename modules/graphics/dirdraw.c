@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 #include "project.h"
 
@@ -73,14 +68,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 int
 	application_video_width,
 	application_video_height,
 	application_video_windowed;
 
-#ifndef OGRE_EE
 display_format
 	display_modes[256];
 
@@ -95,11 +88,11 @@ int
 	number_of_display_devices;
 
 display_device
-	*display_devices;
+	*display_devices = nullptr;
 
 static display_device
-	*primary_display_device,
-	*selected_display_device;
+	*primary_display_device = nullptr,
+	*selected_display_device = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,7 +348,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	if ( command_line_export_mfd && command_line_export_mfd_adapter >= 0 )
 	{
 		display_device
-			*export_display_device;
+			*export_display_device = nullptr;
 		int
 			index;
 
@@ -467,7 +460,7 @@ BOOL ddraw_release_objects ( void )
 	while ( display_devices )
 	{
 		display_device
-			*device;
+			*device = nullptr;
 
 		device = display_devices;
 		display_devices = display_devices->succ;
@@ -736,43 +729,43 @@ BOOL ddraw_change_display_resolution ( int width, int height )
 		}
 
 		SetWindowPos ( application_window, NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
-		}
+	}
 
-		release_video_screens ();
+	release_video_screens ();
 
-		//
-		// Set the video mode
-		//
+	//
+	// Set the video mode
+	//
 
-		{
-			int
-				param[2];
+	{
+		int
+			param[2];
 
-			param[0] = width;
-			param[1] = height;
+		param[0] = width;
+		param[1] = height;
 
-			ret = system_thread_function ( ddraw_internal_set_display_mode, param );
-		}
+		ret = system_thread_function ( ddraw_internal_set_display_mode, param );
+	}
 
-		if( FAILED ( ret ) )
-		{
+	if( FAILED ( ret ) )
+	{
 
-			debug_log ( "Unable to set display resolution: %s", get_d3d_error_message ( ret ) );
+		debug_log ( "Unable to set display resolution: %s", get_d3d_error_message ( ret ) );
 
-			return ( FALSE );
-		}
+		return ( FALSE );
+	}
 
-		initialise_d3d_state ();
+	initialise_d3d_state ();
 
-		recreate_video_screens ();
+	recreate_video_screens ();
 
-		//
-		// Create the screen associated with the render buffer ( video_screen )
-		//
+	//
+	// Create the screen associated with the render buffer ( video_screen )
+	//
 
-		create_video_screen ( width, height );
+	create_video_screen ( width, height );
 
-		return ( TRUE );
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -786,7 +779,7 @@ int ddraw_internal_set_display_mode ( void *data )
 		ret;
 
 	int
-		*ptr;
+		*ptr = nullptr;
 
 	ptr = ( int * ) data;
 
@@ -886,7 +879,7 @@ static void ddraw_enumerate_adapters ( unsigned adapter )
 	{
 
 		display_device
-			*device;
+			*device = nullptr;
 
 		//
 		// Add this driver to the list
@@ -929,8 +922,8 @@ static void copy_export_mfd_one ( struct DIRECT_3D_EXPORT_MFD *mfd, screen *src 
 		res;
 
 	LPDIRECT3DSURFACE9
-		ssurface,
-		dsurface;
+		ssurface = nullptr,
+		dsurface = nullptr;
 
 	D3DLOCKED_RECT
 		srect,
@@ -1006,4 +999,3 @@ void copy_export_mfd ( screen *export_left, screen *export_right )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

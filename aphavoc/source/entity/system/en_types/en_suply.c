@@ -159,9 +159,9 @@ void build_supply_heat_map (void)
 		z;
 
 	entity
-		*en,
-		*group,
-		*sector;
+		*en = nullptr,
+		*group = nullptr,
+		*sector = nullptr;
 
 	float
 		supplies;

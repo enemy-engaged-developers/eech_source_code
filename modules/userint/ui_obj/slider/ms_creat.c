@@ -74,10 +74,10 @@ static void create_mslider_ui_object (ui_object *obj, ui_object_types type, va_l
 {
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
    slider_ui_object
-      *new_mslider;
+      *new_mslider = nullptr;
 
 	increase_ui_object_counter ();
 

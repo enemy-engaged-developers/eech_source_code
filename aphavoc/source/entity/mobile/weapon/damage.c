@@ -79,8 +79,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_index_numbers
-	*destroyed_object_table,
-	*restored_object_table;
+	*destroyed_object_table = nullptr,
+	*restored_object_table = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -249,14 +249,14 @@ void display_debug_kill_info (entity *victim, entity *aggressor)
 {
 
 	entity
-		*victim_task,
-		*aggressor_task;
+		*victim_task = nullptr,
+		*aggressor_task = nullptr;
 
 	const char
-		*desc1,
-		*desc2,
-		*victim_desc,
-		*aggressor_desc;
+		*desc1 = nullptr,
+		*desc2 = nullptr,
+		*victim_desc = nullptr,
+		*aggressor_desc = nullptr;
 
 	debug_colours
 		col;
@@ -352,7 +352,7 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 		damage_capability,
 		armor_penetration_capability;
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (target);
 
@@ -418,7 +418,7 @@ int weapon_damage_capability (entity *wpn, entity *target, float damage_modifier
 		float he_warheads = WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_AIRCRAFT - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK; // subtract 1
 		
 		damage_modifier = 1 - pow(damage_modifier, pow((float)(warhead_type - WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK + 1) / he_warheads, 1.5f));
-		armor_modifier =  min(1.0f, damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5f));
+		armor_modifier =  fmin(1.0f, damage_capability * damage_modifier * random_modifier / pow(target_armor_thickness, 1.5f));
 		
 		result = (int) (damage_capability * damage_modifier * armor_modifier * random_modifier);
 
@@ -493,9 +493,9 @@ void initialise_destroyed_object_database (void)
 		destroyed_object;
 
 	const char
-		*normal_object_string;
+		*normal_object_string = nullptr;
 	char
-		*destroyed_object_string;
+		*destroyed_object_string = nullptr;
 
 	int
 		found_flag,
@@ -635,7 +635,7 @@ float get_player_damage_modifier (entity *en)
 		loop;
 
 	entity
-		*pilot_en;
+		*pilot_en = nullptr;
 
 	game_difficulty_settings
 		difficulty;

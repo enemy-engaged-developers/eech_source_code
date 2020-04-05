@@ -136,29 +136,29 @@ entity *create_task
 		route_length = 0;
 
 	vec3d
-		*position,
-		*route_nodes,
+		*position = nullptr,
+		*route_nodes = nullptr,
 		route_node_list [MAX_ROUTE_NODES];
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	sector
-		*sec_raw;
+		*sec_raw = nullptr;
 
 	entity
-		*sec,
-		*force_en,
-		*new_task,
-		*dependent,
+		*sec = nullptr,
+		*force_en = nullptr,
+		*new_task = nullptr,
+		*dependent = nullptr,
 		**route_dependents,
 		*route_dependent_list [MAX_ROUTE_NODES];
 
 	entity_sub_types
 		waypoint_type,
 		formation_type,
-		*route_waypoint_types,
-		*route_formation_types,
+		*route_waypoint_types = nullptr,
+		*route_formation_types = nullptr,
 		route_waypoint_type_list [MAX_ROUTE_NODES],
 		route_formation_type_list [MAX_ROUTE_NODES];
 
@@ -395,7 +395,7 @@ entity *create_task
 		{
 
 			entity
-				*enemy_force;
+				*enemy_force = nullptr;
 
 			enemy_force = (entity*) get_local_force_entity ((entity_sides) get_local_entity_int_value (task_objective, INT_TYPE_SIDE));
 
@@ -448,14 +448,14 @@ entity *create_anti_ship_strike_task (entity_sides side, entity *target, entity 
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -520,17 +520,17 @@ entity *create_anti_ship_strike_task (entity_sides side, entity *target, entity 
 entity *create_bai_task (entity_sides side, entity *target_group, entity *originator, int critical, float priority, entity *start_keysite, entity *end_keysite)
 {
 	vec3d
-		*start_pos;
+		*start_pos = nullptr;
 
 	float
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -614,14 +614,14 @@ entity *create_barcap_task (entity_sides side, entity *this_keysite, entity *ori
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	keysite
-		*keysite_raw;
+		*keysite_raw = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -720,14 +720,14 @@ entity *create_bda_task (entity_sides side, entity *objective, entity *originato
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -795,14 +795,14 @@ entity *create_cap_task (entity_sides side, entity *this_keysite, entity *origin
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	keysite
-		*keysite_raw;
+		*keysite_raw = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -903,17 +903,17 @@ entity *create_cap_task (entity_sides side, entity *this_keysite, entity *origin
 entity *create_close_air_support_task (entity_sides side, entity *target_group, entity *originator, int critical, float priority, entity *start_keysite, entity *end_keysite)
 {
 	vec3d
-		*start_pos;
+		*start_pos = nullptr;
 
 	float
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -987,11 +987,11 @@ entity *create_coastal_patrol_task (entity_sides side, vec3d *source_position, v
 {
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	float
 		expire_time;
@@ -1042,14 +1042,14 @@ entity *create_escort_task (entity *group, int critical, float priority, entity 
 		expire_time;
 
 	vec3d
-		*start;
+		*start = nullptr;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	entity_sides
 		side;
@@ -1145,16 +1145,16 @@ entity *create_ground_force_task (entity_sub_types type, entity *group, int from
 		original_formation;
 
 	entity
-		*new_task,
-		*member;
+		*new_task = nullptr,
+		*member = nullptr;
 
 	vec3d
-		*start,
-		*stop;
+		*start = nullptr,
+		*stop = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	entity_sides
 		side;
@@ -1228,14 +1228,14 @@ entity *create_ground_strike_task (entity_sides side, entity *target, entity *or
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1310,14 +1310,14 @@ entity *create_oca_strike_task (entity_sides side, entity *target, entity *origi
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1374,14 +1374,14 @@ entity *create_oca_sweep_task (entity_sides side, entity *target, entity *origin
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1438,12 +1438,12 @@ entity *create_recon_task (entity_sides side, entity *objective, entity *origina
 		expire_time;
 
 	entity
-		*start_ks,
-		*end_ks,
-		*new_task;
+		*start_ks = nullptr,
+		*end_ks = nullptr,
+		*new_task = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (objective);
 
@@ -1501,14 +1501,14 @@ entity *create_repair_task (entity_sides side, vec3d *pos, entity *objective, fl
 {
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	float
 		expire_time;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
@@ -1555,17 +1555,17 @@ entity *create_sead_task (entity_sides side, entity *target, entity *originator,
 {
 
 	vec3d
-		*start_pos;
+		*start_pos = nullptr;
 
 	float
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1645,16 +1645,16 @@ entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, 
 		finish,
 		prepare,
 		direction,
-		*start,
-		*stop;
+		*start = nullptr,
+		*stop = nullptr;
 
 	entity_sides
 		side;
 
 	entity
-		*new_task,
-		*start_ks,
-		*end_ks;
+		*new_task = nullptr,
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1736,15 +1736,15 @@ entity *create_transfer_task (entity_sides side, entity_sub_types task_type, flo
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
 		//*landing_en,
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	vec3d
-		*keysite_position;
+		*keysite_position = nullptr;
 
 	new_task = NULL;
 
@@ -1811,11 +1811,11 @@ entity *create_troop_insertion_task (entity_sides side, entity *destination_keys
 		expire_time;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	new_task = NULL;
 
@@ -1924,9 +1924,9 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 		new_route_wp_type [MAX_TROOP_ROUTE_COUNT];
 
 	vec3d
-		*helicopter_pos,
+		*helicopter_pos = nullptr,
 		new_route [MAX_TROOP_ROUTE_COUNT],
-		*helicopter_route;
+		*helicopter_route = nullptr;
 
 	float heading_offset = 0.0;
 	
@@ -1934,7 +1934,7 @@ entity *create_troop_movement_capture_task (entity_sides side, vec3d *start_pos,
 		helicopter_att;
 	
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	// troops out of helicopter
 
@@ -2057,7 +2057,7 @@ entity *create_troop_movement_defend_task (entity_sides side, vec3d *start_pos, 
 		mid2_pos;
 
 	entity
-		*new_task;
+		*new_task = nullptr;
 
 	mid2_pos = *mid_pos;
 	mid2_pos.x += 0.1;
@@ -2214,9 +2214,9 @@ entity *create_user_task (entity *en, entity_sub_types task_type, vec3d *start_p
 {
 
 	entity
-		*group,
-		*keysite,
-		*new_task;
+		*group = nullptr,
+		*keysite = nullptr,
+		*new_task = nullptr;
 
 	float
 		expire_time;
@@ -2229,8 +2229,8 @@ entity *create_user_task (entity *en, entity_sub_types task_type, vec3d *start_p
 		stop;
 
 	entity
-		*start_ks,
-		*end_ks;
+		*start_ks = nullptr,
+		*end_ks = nullptr;
 
 	entity_sides
 		side;
@@ -2377,10 +2377,10 @@ int validate_task_generation (entity_sides side, entity_sub_types sub_type)
 	#if 0
 
 	entity
-		*this_force;
+		*this_force = nullptr;
 
 	force
-		*raw;
+		*raw = nullptr;
 
 	#if TASK_SAFE_LIMIT
 	{
@@ -2389,7 +2389,7 @@ int validate_task_generation (entity_sides side, entity_sub_types sub_type)
 			task_count;
 
 		entity
-			*task;
+			*task = nullptr;
 
 		task_count = 0;
 
@@ -2440,18 +2440,18 @@ float get_estimated_task_duration (entity *task_en)
 {
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*wp_pos2,
-		*wp_pos1;
+		*wp_pos2 = nullptr,
+		*wp_pos1 = nullptr;
 
 	float
 		time,
 		range;
 
 	task
-		*task_raw;
+		*task_raw = nullptr;
 
 	range = 0;
 
@@ -2486,9 +2486,9 @@ float get_estimated_task_duration (entity *task_en)
 			length;
 
 		vec3d
-			*nodes,
-			*route,
-			*keysite_pos,
+			*nodes = nullptr,
+			*route = nullptr,
+			*keysite_pos = nullptr,
 			temp_nodes [50];
 
 		//
@@ -2547,7 +2547,7 @@ void display_task_generation_stats (entity *force_en)
 		loop;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	//suppress_debug_log_timing_info (TRUE);
 

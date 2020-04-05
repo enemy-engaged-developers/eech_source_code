@@ -243,7 +243,7 @@ int get_system_time_of_day (void)
 		timer;
 
 	struct tm
-		*tmbuf;
+		*tmbuf = nullptr;
 
 //	struct timeval t;
 
@@ -275,7 +275,7 @@ void get_system_date (int *day, int *month, int *year)
 		timer;
 
 	struct tm
-		*tmbuf;
+		*tmbuf = nullptr;
 
 	timer = time ( NULL );
 

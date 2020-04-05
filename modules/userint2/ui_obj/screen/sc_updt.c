@@ -92,10 +92,10 @@ void update_ui_screen_stack (void)
 		y_origin;
 
 	ui_object
-		*screen_stack_head;
+		*screen_stack_head = nullptr;
 
 	screen_ui_object
-		*screen;
+		*screen = nullptr;
 
 	float
 		old_viewport_x1,
@@ -179,7 +179,7 @@ int update_ui_screen_stack_redraw_count (void)
 {
 
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	int
 		ui_user_function_count,
@@ -220,7 +220,7 @@ int recurse_count_redraw_number (ui_object *obj)
 {
 
 	area_ui_object
-		*raw;
+		*raw = nullptr;
 
 	int
 		new_count,

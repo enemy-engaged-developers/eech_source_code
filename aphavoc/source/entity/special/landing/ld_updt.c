@@ -85,7 +85,7 @@ void update_server (entity *en)
 	{
 	
 		entity
-			*keysite;
+			*keysite = nullptr;
 	
 		keysite = get_local_entity_parent (en, LIST_TYPE_LANDING_SITE);
 	

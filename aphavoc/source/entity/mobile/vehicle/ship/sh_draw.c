@@ -79,7 +79,7 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 #ifndef OGRE_EE
 	day_segment_types

@@ -100,7 +100,7 @@ static unsigned int
 	ivfraction,
 	idufraction,
 	idvfraction,
-	*shading_table;
+	*shading_table = nullptr;
 
 
 static int
@@ -114,7 +114,7 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 texture_map
-	*default_texture;
+	*default_texture = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,10 +199,10 @@ void	fill_plain_polygon ( unsigned int colour )
 		temp;
 
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -329,7 +329,7 @@ void	fill_zbuffer_plain_polygon ( unsigned int colour )
 		pitch;
 
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 //	unsigned short int
 //		*dst;
@@ -391,7 +391,7 @@ void	fill_zbuffer_plain_polygon ( unsigned int colour )
 		{
 
 			char
-				*bitmask_instructions,
+				*bitmask_instructions = nullptr,
 				mask,
 				bitmask;
 
@@ -537,10 +537,10 @@ void	fill_gouraud_polygon ( int colour )
 		dintensity;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	unsigned char
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -653,11 +653,11 @@ void	fill_plain_textured_polygon ( struct TEXTURE_MAP *texture )
 		idv;
 
 	unsigned char
-		*texture_data,
-		*ptr;
+		*texture_data = nullptr,
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -688,7 +688,7 @@ void	fill_plain_textured_polygon ( struct TEXTURE_MAP *texture )
 			x;
 
 		unsigned char
-			*texture_ptr;
+			*texture_ptr = nullptr;
 
 		x1 = lhs_x[y];
 
@@ -813,11 +813,11 @@ void	fill_flat_shaded_textured_polygon ( struct TEXTURE_MAP *texture, float inte
 		idv;
 
 	unsigned char
-		*texture_data,
-		*ptr;
+		*texture_data = nullptr,
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -852,7 +852,7 @@ void	fill_flat_shaded_textured_polygon ( struct TEXTURE_MAP *texture, float inte
 			x;
 
 		unsigned char
-			*texture_ptr;
+			*texture_ptr = nullptr;
 
 		x1 = lhs_x[y];
 
@@ -1006,11 +1006,11 @@ void	fill_flat_shaded_wrapped_textured_polygon ( struct TEXTURE_MAP *texture, fl
 		dv;
 
 	unsigned char
-		*texture_data,
-		*ptr;
+		*texture_data = nullptr,
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -1205,11 +1205,11 @@ void	fill_gouraud_shaded_textured_polygon ( struct TEXTURE_MAP *texture )
 		idv;
 
 	unsigned char
-		*texture_data,
-		*ptr;
+		*texture_data = nullptr,
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 
@@ -1240,7 +1240,7 @@ void	fill_gouraud_shaded_textured_polygon ( struct TEXTURE_MAP *texture )
 			x;
 
 		unsigned char
-			*texture_ptr;
+			*texture_ptr = nullptr;
 
 		x1 = lhs_x[y];
 
@@ -1407,11 +1407,11 @@ void	fill_gouraud_shaded_wrapped_textured_polygon ( struct TEXTURE_MAP *texture 
 		dv;
 
 	unsigned char
-		*texture_data,
-		*ptr;
+		*texture_data = nullptr,
+		*ptr = nullptr;
 
 	unsigned short int
-		*dst;
+		*dst = nullptr;
 
 	ASSERT ( active_screen );
 

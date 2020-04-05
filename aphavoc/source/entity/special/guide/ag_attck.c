@@ -185,7 +185,7 @@ void initialise_air_to_ground_attack_guide (entity *en, entity *aggressor, entit
 void attack_guide_approach_reached (entity *en)
 {
 	entity
-		*aggressor;
+		*aggressor = nullptr;
 
 	//
 	// change guide type to SEEK_COVER (Helicopter) or CLIMB (Jet) and calculate new position
@@ -252,11 +252,11 @@ void attack_guide_fly_to_cover_reached (entity *en)
 void attack_guide_take_cover_reached (entity *en)
 {
 	entity
-		*group,
-		*leader,
-		*task,
-		*target,
-		*aggressor;
+		*group = nullptr,
+		*leader = nullptr,
+		*task = nullptr,
+		*target = nullptr,
+		*aggressor = nullptr;
 
 	entity_sub_types
 		best_weapon,
@@ -406,9 +406,9 @@ void attack_guide_dive_reached (entity *en)
 void attack_guide_fire_reached (entity *en)
 {
 	entity
-		*aggressor,
-		*task,
-		*target;
+		*aggressor = nullptr,
+		*task = nullptr,
+		*target = nullptr;
 	
 	//
 	// Fire Weapon
@@ -605,9 +605,9 @@ void attack_guide_egress_reached (entity *en)
 		best_weapon;
 
 	entity
-		*task,
-		*target,
-		*aggressor;
+		*task = nullptr,
+		*target = nullptr,
+		*aggressor = nullptr;
 
 	ASSERT(en);
 	
@@ -656,8 +656,8 @@ void attack_guide_egress_reached (entity *en)
 void attack_guide_hasty_fire_reached (entity *en)
 {
 	entity
-		*aggressor,
-		*target;
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
@@ -729,9 +729,9 @@ void attack_guide_hasty_fire_reached (entity *en)
 void attack_guide_hasty_take_cover_reached (entity *en)
 {
 	entity
-		*task,
-		*target,
-		*aggressor;
+		*task = nullptr,
+		*target = nullptr,
+		*aggressor = nullptr;
 
 	entity_sub_types
 		best_weapon;
@@ -807,16 +807,16 @@ void set_attack_guide_approach_position (entity *en)
 		distance;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
-		*cover_pos,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
+		*cover_pos = nullptr,
 		direction,
 		position;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	int
 		force_new_position;
@@ -976,9 +976,9 @@ void set_attack_guide_approach_position (entity *en)
 void set_attack_guide_seek_cover_position (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	vec3d
 		position;
@@ -1062,13 +1062,13 @@ void set_attack_guide_seek_cover_position (entity *en)
 void attack_guide_no_cover_found (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*aggressor_pos,
-		*target_pos,
+		*aggressor_pos = nullptr,
+		*target_pos = nullptr,
 		position;
 
 	vec2d
@@ -1163,12 +1163,12 @@ void attack_guide_no_cover_found (entity *en)
 void set_attack_guide_fly_to_cover_position (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	ASSERT(en);
 	
@@ -1226,12 +1226,12 @@ void set_attack_guide_fly_to_cover_position (entity *en)
 void set_attack_guide_take_cover_position (entity *en)
 {
 	vec3d
-		*position;
+		*position = nullptr;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -1299,15 +1299,15 @@ void set_attack_guide_climb_position (entity *en)
 		velocity;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
 		direction,
 		position;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -1409,15 +1409,15 @@ void set_attack_guide_dive_position (entity *en)
 		velocity;
 
 	vec3d
-		*target_pos,
+		*target_pos = nullptr,
 		position,
 		direction,
-		*agg_pos;
+		*agg_pos = nullptr;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -1484,9 +1484,9 @@ void set_attack_guide_fire_position (entity *en)
 		position;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	
@@ -1533,7 +1533,7 @@ void set_attack_guide_fire_position (entity *en)
 				weapon_range;
 
 			vec3d
-				*target_pos;
+				*target_pos = nullptr;
 
 			//
 			// find aggressors selected weapon, and it's max range
@@ -1606,9 +1606,9 @@ void set_attack_guide_fire_position (entity *en)
 void set_attack_guide_disengage_position (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	entity_sub_types
 		selected_weapon;
@@ -1623,8 +1623,8 @@ void set_attack_guide_disengage_position (entity *en)
 		virtual_;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
 		position;
 
 	ASSERT(en);
@@ -1749,12 +1749,12 @@ void set_attack_guide_disengage_position (entity *en)
 void set_attack_guide_egress_position (entity *en)
 {
 	entity
-		*wp,
-		*task,
-		*group,
-		*base,
-		*aggressor,
-		*target;
+		*wp = nullptr,
+		*task = nullptr,
+		*group = nullptr,
+		*base = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	float
 		angle,
@@ -1765,8 +1765,8 @@ void set_attack_guide_egress_position (entity *en)
 	vec3d
 		position,
 		direction,
-		*base_pos,
-		*aggressor_position;
+		*base_pos = nullptr,
+		*aggressor_position = nullptr;
 
 	int
 		member_number;
@@ -1916,9 +1916,9 @@ void set_attack_guide_egress_position (entity *en)
 void set_attack_guide_hasty_fire_position (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	vec3d
 		position;
@@ -1976,9 +1976,9 @@ void set_attack_guide_hasty_take_cover_position (entity *en)
 		position;
 
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT(en);
 	

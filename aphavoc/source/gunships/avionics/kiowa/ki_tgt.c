@@ -303,8 +303,8 @@ void update_kiowa_target_acquisition_system (void)
 
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		int
 			laser_on,

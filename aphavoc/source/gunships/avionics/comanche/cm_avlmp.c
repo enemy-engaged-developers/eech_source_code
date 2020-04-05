@@ -244,7 +244,7 @@ void deinitialise_comanche_lamp_avionics (void)
 void update_comanche_lamp_avionics (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		gear_state;
