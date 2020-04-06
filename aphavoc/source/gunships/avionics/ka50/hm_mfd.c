@@ -7741,7 +7741,7 @@ void set_ka50_text_display_text (char *s1, char *s2, char *s3, char *s4, char *s
 void update_ka50_cannon_rounds_display (void)
 {
 	char
-		c1[80] = "";
+		c1[10] = "";
 
 	int
 		ap_rounds_number,
@@ -7761,19 +7761,15 @@ void update_ka50_cannon_rounds_display (void)
 
 	if (get_local_entity_weapon_hardpoint_info (en, KA50_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND, &weapon_sub_type, &ap_rounds_number, &damaged))
 	{
-		if (!damaged) {
-			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%02d", (ap_rounds_number/10));
-			}
+		if (!damaged && weapon_sub_type == selected_weapon) {
+			sprintf	(c1, "%02d", ap_rounds_number > 0 ? (ap_rounds_number - 1) / 10 + 1 : 0);
 		}
 	}
 
 	if (get_local_entity_weapon_hardpoint_info (en, KA50_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, &weapon_sub_type, &he_rounds_number, &damaged))
 	{
-		if (!damaged) {
-			if (weapon_sub_type == selected_weapon) {
-				sprintf	(c1, "%02d", (he_rounds_number/10));
-			}
+		if (!damaged && weapon_sub_type == selected_weapon) {
+			sprintf	(c1, "%02d", he_rounds_number > 0 ? (he_rounds_number - 1) / 10 + 1 : 0);
 		}
 	}
 

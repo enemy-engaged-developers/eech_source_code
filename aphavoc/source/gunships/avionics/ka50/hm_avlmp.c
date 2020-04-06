@@ -386,9 +386,9 @@ void update_ka50_lamp_avionics (void)
 
 	ka50_lamps.oil_temperature = 0;
 
-	ka50_lamps.leng_max_n2_rpm = current_flight_dynamics->left_engine_rpm.value > 100.0;
+	ka50_lamps.leng_max_n2_rpm = current_flight_dynamics->left_engine_temp.value > (current_flight_dynamics->left_engine_temp.max * 0.80); //current_flight_dynamics->left_engine_rpm.value > 100.0;
 
-	ka50_lamps.reng_max_n2_rpm = current_flight_dynamics->right_engine_rpm.value > 100.0;
+	ka50_lamps.reng_max_n2_rpm = current_flight_dynamics->right_engine_temp.value > (current_flight_dynamics->right_engine_temp.max * 0.80); //current_flight_dynamics->right_engine_rpm.value > 100.0;
 
 	ka50_lamps.rotor_rpm = get_current_flight_dynamics_low_rotor_rpm ();
 
