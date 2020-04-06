@@ -79,16 +79,16 @@
 static void update_city_bounding_box (entity *this_city, entity *this_building)
 {
 	city
-		*raw;
+		*raw = nullptr;
 
 	object_3d_index_numbers
 		object_3d_index;
 
 	object_3d_bounds
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	vec3d
-		*building_position,
+		*building_position = nullptr,
 		position_offset,
 		p1,
 		p2;

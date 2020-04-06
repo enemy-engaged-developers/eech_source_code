@@ -83,10 +83,10 @@ static void set_text_ui_object_text (ui_object *obj, char *text)
 		pixel_length;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	area = obj->data;
 
@@ -161,7 +161,7 @@ static void set_text_ui_object_font (ui_object *obj, int font_id)
 		this_font;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

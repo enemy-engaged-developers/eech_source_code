@@ -947,7 +947,7 @@ static void draw_path_lines
 		z2;
 
 	vec3d
-		*sub_positions;
+		*sub_positions = nullptr;
 
 //	ASSERT (number_of_paths > 0);
 	if (number_of_paths <= 0)
@@ -1202,12 +1202,12 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		dz_grid,
 		dx_start,
 		dz_start,
-		*this_row_ptr,
-		*next_row_ptr,
-		*this_row_start_ptr,
-		*next_row_start_ptr,
-		*aspectrow,
-		*old_aspectrow;
+		*this_row_ptr = nullptr,
+		*next_row_ptr = nullptr,
+		*this_row_start_ptr = nullptr,
+		*next_row_start_ptr = nullptr,
+		*aspectrow = nullptr,
+		*old_aspectrow = nullptr;
 
 	float
 		terrain_elev=0,
@@ -1511,10 +1511,10 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 		dz_grid,
 		dx_start,
 		dz_start,
-		*this_row_ptr,
-		*next_row_ptr,
-		*this_row_start_ptr,
-		*next_row_start_ptr;
+		*this_row_ptr = nullptr,
+		*next_row_ptr = nullptr,
+		*this_row_start_ptr = nullptr,
+		*next_row_start_ptr = nullptr;
 
 	vec3d
 		p1,
@@ -2025,7 +2025,7 @@ void draw_tsd_map_towns(vec3d* centre_position, float scale)
 		pos;
 
 	population_name_database_type
-		*item;
+		*item = nullptr;
 
 	item = population_name_database;
 

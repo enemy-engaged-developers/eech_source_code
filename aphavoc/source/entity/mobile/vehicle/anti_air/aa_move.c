@@ -90,7 +90,7 @@ void anti_aircraft_death_movement (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	float
 		heading,
@@ -100,8 +100,8 @@ void anti_aircraft_death_movement (entity *en)
 		terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	raw = (anti_aircraft *) get_local_entity_data (en);
@@ -200,7 +200,7 @@ void anti_aircraft_falling_movement (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed,
@@ -209,8 +209,8 @@ void anti_aircraft_falling_movement (entity *en)
 		old_terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	raw = (anti_aircraft *) get_local_entity_data (en);
@@ -297,7 +297,7 @@ void anti_aircraft_falling_movement (entity *en)
 				//
 	
 				struct OBJECT_3D_BOUNDS
-					*bounding_box;
+					*bounding_box = nullptr;
 	
 				vec3d
 					d;
@@ -377,13 +377,13 @@ void anti_aircraft_impact_movement (entity *en)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed;
 
 	vec3d
-		*velocity;
+		*velocity = nullptr;
 
 	int
 		seed;

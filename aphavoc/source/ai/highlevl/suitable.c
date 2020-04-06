@@ -89,8 +89,8 @@ static float calculate_group_to_task_suitability (entity_sub_types group_type, e
 {
 
 	const ai_statistics
-		*group_factors,
-		*task_factors;
+		*group_factors = nullptr,
+		*task_factors = nullptr;
 
 	float
 		a,

@@ -79,7 +79,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -120,7 +120,7 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -148,8 +148,8 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 		{
 
 			entity
-				*old_sector,
-				*new_sector;
+				*old_sector = nullptr,
+				*new_sector = nullptr;
 
 			raw->position = *v;
 
@@ -240,7 +240,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -306,10 +306,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (mobile *) get_local_entity_data (en);
 

@@ -74,7 +74,7 @@ static void create_menu_ui_object (ui_object *obj, ui_object_types type, va_list
 {
 
    menu_ui_object
-      *new_menu;
+      *new_menu = nullptr;
 
 	increase_ui_object_counter ();
 

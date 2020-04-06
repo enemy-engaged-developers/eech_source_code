@@ -159,7 +159,7 @@ void in_flight_test (void)
 			kill_type;
 
 		entity
-			*en;
+			*en = nullptr;
 
 		kill_type = 0;
 
@@ -391,7 +391,7 @@ static float display_in_flight_debug_misc_info (float y)
 					//
 					{
 						vec3d
-							*camera_pos,
+							*camera_pos = nullptr,
 							wind_velocity;
 
 						float
@@ -432,10 +432,10 @@ static float display_in_flight_debug_misc_info (float y)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				camera
-					*raw;
+					*raw = nullptr;
 
 				set_mono_font_position (0.0, y);
 
@@ -565,13 +565,13 @@ static float display_in_flight_debug_misc_info (float y)
 			#if DEBUG_AIR_MEDAL
 			{
 				player_log_type
-					*player;
+					*player = nullptr;
 
 				int
 					side,
 					counter,
 					medal_count,
-					*medals;
+					*medals = nullptr;
 
 				player = get_current_player_log ();
 
@@ -614,7 +614,7 @@ static float display_in_flight_debug_demo_message (float y)
 		last_event_time;
 
 	camera
-		*camera_raw;
+		*camera_raw = nullptr;
 
 	switch (get_game_type ())
 	{
@@ -623,7 +623,7 @@ static float display_in_flight_debug_demo_message (float y)
 		{
 
 			screen
-				*old_screen;
+				*old_screen = nullptr;
 
 			old_screen = get_active_screen ();
 
@@ -700,7 +700,7 @@ static float display_in_flight_debug_keysite_info (float y)
 	#ifdef DEBUG
 
 	entity
-		*member;
+		*member = nullptr;
 
 	char
 		s [200];
@@ -733,12 +733,12 @@ static float display_in_flight_debug_keysite_info (float y)
 		{
 
 			entity
-				*group,
-				*keysite,
-				*landing;
+				*group = nullptr,
+				*keysite = nullptr,
+				*landing = nullptr;
 
 			debug_landing_lock_type
-				*item;
+				*item = nullptr;
 
 			group = get_local_entity_parent (member, LIST_TYPE_MEMBER);
 
@@ -831,14 +831,14 @@ static float display_in_flight_debug_force_info (float y)
 #ifndef OGRE_EE
 
 	entity
-		*keysite_en,
-		*force_en;
+		*keysite_en = nullptr,
+		*force_en = nullptr;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	session
-		*session_raw;
+		*session_raw = nullptr;
 
 	char
 		s [200];
@@ -988,12 +988,12 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 #ifndef OGRE_EE
 
 	entity
-		*group,
-		*en;
+		*group = nullptr,
+		*en = nullptr;
 
 	vec3d
-		*camera_pos,
-		*pos;
+		*camera_pos = nullptr,
+		*pos = nullptr;
 
 	char
 		s[200];
@@ -1007,7 +1007,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 		roll;
 
 	routed_vehicle
-		*routed;
+		*routed = nullptr;
 
 	if ((in_flight_external_view_entity_debug_flight_info) && (get_external_view_entity ()))
 	{
@@ -1095,7 +1095,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 
 		{
 			vec3d
-				*mv;
+				*mv = nullptr;
 
 			mv = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_MOTION_VECTOR);
 
@@ -1169,12 +1169,12 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 
 		{
 			entity
-				*parent,
-				*cwp;
+				*parent = nullptr,
+				*cwp = nullptr;
 
 			vec3d
-				*parent_pos,
-				*cwp_pos;
+				*parent_pos = nullptr,
+				*cwp_pos = nullptr;
 
 			y += get_mono_font_char_height ('X');
 			y += get_mono_font_char_height ('X');
@@ -1342,7 +1342,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 		{
 
 			aircraft
-				*raw;
+				*raw = nullptr;
 
 			raw = ( aircraft * ) get_local_entity_data (en);
 
@@ -1354,7 +1354,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 		{
 
 			vehicle
-				*raw;
+				*raw = nullptr;
 
 			raw = ( vehicle * ) get_local_entity_data (en);
 
@@ -1409,19 +1409,19 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 #ifndef OGRE_EE
 
 	entity
-		*current_task,
-		*keysite,
-		*group,
-		*task,
-		*dep,
-		*task_parent,
-		*mb,
-		*wp,
-		*cwp,
-		*en;
+		*current_task = nullptr,
+		*keysite = nullptr,
+		*group = nullptr,
+		*task = nullptr,
+		*dep = nullptr,
+		*task_parent = nullptr,
+		*mb = nullptr,
+		*wp = nullptr,
+		*cwp = nullptr,
+		*en = nullptr;
 
 	vec3d
-		*en_pos;
+		*en_pos = nullptr;
 
 	char
 		s[200];
@@ -1541,7 +1541,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 				{
 
 					vec3d
-						*wp_pos;
+						*wp_pos = nullptr;
 
 					wp_pos = get_local_entity_vec3d_ptr (wp, VEC3D_TYPE_POSITION);
 
@@ -1671,12 +1671,12 @@ static void display_in_flight_external_view_entity_weapon_info (void)
 {
 #ifndef OGRE_EE
 	entity
-		*en,
-		*target,
-		*persuer;
+		*en = nullptr,
+		*target = nullptr,
+		*persuer = nullptr;
 
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -2093,13 +2093,13 @@ static void display_in_flight_gunship_target_list_info (void)
 {
 #ifndef OGRE_EE
 	entity
-		*source,
-		*target,
-		*current_target;
+		*source = nullptr,
+		*target = nullptr,
+		*current_target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		y,
@@ -2225,12 +2225,12 @@ static void display_in_flight_external_view_entity_guide_info (void)
 {
 #ifndef OGRE_EE
 	entity
-		*en,
-		*wp,
-		*task,
-		*group,
-		*guide,
-		*member;
+		*en = nullptr,
+		*wp = nullptr,
+		*task = nullptr,
+		*group = nullptr,
+		*guide = nullptr,
+		*member = nullptr;
 
 	entity_sub_types
 		waypoint_type,
@@ -2320,7 +2320,7 @@ static void display_in_flight_external_view_entity_guide_info (void)
 						if (get_guide_criteria_valid (guide, ( guide_criteria_types ) loop))
 						{
 							const char
-								*criteria_name;
+								*criteria_name = nullptr;
 
 							float
 								value;

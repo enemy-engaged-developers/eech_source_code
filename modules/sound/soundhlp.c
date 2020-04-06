@@ -80,10 +80,10 @@ LPDIRECTSOUNDBUFFER create_and_load_sound_buffer ( const char *filename, sample_
 		size;
 
 	unsigned char
-		*data;
+		*data = nullptr;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	if ( !file_exist ( filename ) )
 	{

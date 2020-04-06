@@ -99,25 +99,25 @@ enum PLAYERS_VERSIONS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*player_list_bdrop,
-	*player_list_area,
-	*player_list,
-	*player_name_entry_area,
-	*player_name_input,
+	*player_list_bdrop = nullptr,
+	*player_list_area = nullptr,
+	*player_list = nullptr,
+	*player_name_entry_area = nullptr,
+	*player_name_input = nullptr,
 
-	*player_general_log_selection_button,
-	*player_flight_hours_selection_button,
-	*player_weapon_log_selection_button,
-	*player_medals_selection_button,
+	*player_general_log_selection_button = nullptr,
+	*player_flight_hours_selection_button = nullptr,
+	*player_weapon_log_selection_button = nullptr,
+	*player_medals_selection_button = nullptr,
 
-	*player_blue_side_selection_button,
-	*player_red_side_selection_button,
+	*player_blue_side_selection_button = nullptr,
+	*player_red_side_selection_button = nullptr,
 
-	*current_player_rank_text,
-	*player_commision_date_text;
+	*current_player_rank_text = nullptr,
+	*player_commision_date_text = nullptr;
 
 ui_object
-	*select_player_screen,
+	*select_player_screen = nullptr,
 	*log_page [NUM_LOG_PAGES];
 
 entity_sides
@@ -185,8 +185,8 @@ void initialise_select_player_screen (void)
 		gap_width;
 
 	ui_object
-		*temp_obj,
-		*option_bdrop,
+		*temp_obj = nullptr,
+		*option_bdrop = nullptr,
 		*change_array[3];
 
 	x1 = 0.0;
@@ -212,24 +212,24 @@ void initialise_select_player_screen (void)
 									);
 
    create_ui_object
-            (
-               UI_TYPE_TEXT,
-               UI_ATTR_PARENT (select_player_screen),
+			(
+			   UI_TYPE_TEXT,
+			   UI_ATTR_PARENT (select_player_screen),
 					UI_ATTR_TIME_LENGTH (0),
 					UI_ATTR_OFFSET_TIME (0),
-               UI_ATTR_VIRTUAL_POSITION (TITLE_TEXT_POSITION_X, TITLE_TEXT_POSITION_Y),
+			   UI_ATTR_VIRTUAL_POSITION (TITLE_TEXT_POSITION_X, TITLE_TEXT_POSITION_Y),
 					UI_ATTR_VIRTUAL_SIZE (TITLE_TEXT_WIDTH, TITLE_TEXT_HEIGHT),
 					UI_ATTR_TEXT (get_trans ("UI_PILOTS")),
 					UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_22),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_BOTTOM),
-               UI_ATTR_FONT_COLOUR_START (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 0),
-               UI_ATTR_FONT_COLOUR_END (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 255),
+			   UI_ATTR_FONT_COLOUR_START (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 0),
+			   UI_ATTR_FONT_COLOUR_END (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 255),
 					UI_ATTR_OFFSET_TIME (0),
 					UI_ATTR_TIME_LENGTH (500),
 					UI_ATTR_HIGHLIGHTABLE (FALSE),
 					UI_ATTR_CLEAR (TRUE),
-               UI_ATTR_END
-            );
+			   UI_ATTR_END
+			);
 
 	// setup other pages
 
@@ -299,10 +299,10 @@ void initialise_select_player_screen (void)
 							UI_ATTR_PARENT (player_list_area),
 							UI_ATTR_VIRTUAL_POSITION (x1, y1),
 							UI_ATTR_VIRTUAL_SIZE (x2, y2),
-		            	UI_ATTR_FONT_COLOUR_START (ui_list_text_default_colour.r, ui_list_text_default_colour.g, ui_list_text_default_colour.b, 0),
-   		         	UI_ATTR_FONT_COLOUR_END (ui_list_text_default_colour.r, ui_list_text_default_colour.g, ui_list_text_default_colour.b, 255),
-      		      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_list_text_hilite_colour.r, ui_list_text_hilite_colour.g, ui_list_text_hilite_colour.b, 0),
-         		   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_list_text_hilite_colour.r, ui_list_text_hilite_colour.g, ui_list_text_hilite_colour.b, 255),
+						UI_ATTR_FONT_COLOUR_START (ui_list_text_default_colour.r, ui_list_text_default_colour.g, ui_list_text_default_colour.b, 0),
+					UI_ATTR_FONT_COLOUR_END (ui_list_text_default_colour.r, ui_list_text_default_colour.g, ui_list_text_default_colour.b, 255),
+					UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_list_text_hilite_colour.r, ui_list_text_hilite_colour.g, ui_list_text_hilite_colour.b, 0),
+					UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_list_text_hilite_colour.r, ui_list_text_hilite_colour.g, ui_list_text_hilite_colour.b, 255),
 							UI_ATTR_HIGHLIGHTABLE (TRUE),
 							UI_ATTR_LIST_BOX_Y_SPACE (0),
 							UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_18),
@@ -330,10 +330,10 @@ void initialise_select_player_screen (void)
 		UI_ATTR_VIRTUAL_POSITION (x1, y1),
 		UI_ATTR_VIRTUAL_SIZE (x2, y2),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-   	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-    	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-     	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-    	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_TEXT (get_trans ("DELETE")),
 		UI_ATTR_CLEAR ( TRUE ),
@@ -363,10 +363,10 @@ void initialise_select_player_screen (void)
 		UI_ATTR_VIRTUAL_POSITION (x1, y1),
 		UI_ATTR_VIRTUAL_SIZE (x2, y2),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-     	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-    	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-     	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-    	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_TEXT (get_trans ("RENAME")),
 		UI_ATTR_FUNCTION ( player_rename_function ),
@@ -397,10 +397,10 @@ void initialise_select_player_screen (void)
 		UI_ATTR_VIRTUAL_POSITION (x1, y1),
 		UI_ATTR_VIRTUAL_SIZE (x2, y2),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-     	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-     	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-     	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-     	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_TEXT (get_trans ("ADD")),
 		UI_ATTR_CLEAR ( TRUE ),
@@ -444,10 +444,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
 													UI_ATTR_TEXT (get_trans ("Medals")),
 													UI_ATTR_FUNCTION (notify_medals_button),
-  									          	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      								      	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-            									UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+											UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+												UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
 													UI_ATTR_END
@@ -490,10 +490,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_TEXT (get_trans ("Red Force")),
 													UI_ATTR_FUNCTION (player_select_side_function),
 													UI_ATTR_ITEM_NUMBER ( ENTITY_SIDE_RED_FORCE ),
-  									          	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      								      	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-            									UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+											UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+												UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_DRAWABLE (TRUE),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
@@ -544,10 +544,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_TEXT (get_trans ("Blue Force")),
 													UI_ATTR_FUNCTION (player_select_side_function),
 													UI_ATTR_ITEM_NUMBER ( ENTITY_SIDE_BLUE_FORCE ),
-          									  	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-       									     	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-    									        	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
- 									           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+												UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+													UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+												UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_DRAWABLE (TRUE),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
@@ -590,10 +590,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
 													UI_ATTR_TEXT (get_trans ("Flight Log")),
 													UI_ATTR_FUNCTION (notify_show_general_log_page),
-  									          	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-  									         	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-		  									   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+												UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+												UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
 													UI_ATTR_END
@@ -635,10 +635,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
 													UI_ATTR_TEXT (get_trans ("Flight Hours")),
 													UI_ATTR_FUNCTION (notify_show_flight_hours_page),
-            									UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-         								   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-   								         	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+											UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
 													UI_ATTR_END
@@ -681,10 +681,10 @@ void initialise_select_player_screen (void)
 													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
 													UI_ATTR_TEXT (get_trans ("Weapons Log")),
 													UI_ATTR_FUNCTION (notify_show_weapon_log_page),
-            									UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-         								   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-   								         	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+												UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+											UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+											UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 													UI_ATTR_HIGHLIGHTABLE (TRUE),
 													UI_ATTR_CLEAR ( TRUE ),
 													UI_ATTR_END
@@ -722,10 +722,10 @@ void initialise_select_player_screen (void)
 				UI_ATTR_FUNCTION (notify_select_player_exit_button),
 				UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
-           	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-           	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+			UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+			UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+			UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+			UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 				UI_ATTR_HIGHLIGHTABLE (TRUE),
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
@@ -766,10 +766,10 @@ void initialise_select_player_screen (void)
 				UI_ATTR_FUNCTION (notify_select_player_restore_button),
 				UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
-           	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-           	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+			UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+			UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+			UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+			UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 				UI_ATTR_HIGHLIGHTABLE (TRUE),
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
@@ -787,16 +787,16 @@ void initialise_select_player_screen (void)
 	y2 = get_ui_object_virtual_y_size (player_list);
 
    player_name_entry_area = create_ui_object
-            (
-               UI_TYPE_AREA,
-               UI_ATTR_PARENT (player_list_area),
+			(
+			   UI_TYPE_AREA,
+			   UI_ATTR_PARENT (player_list_area),
 					UI_ATTR_VIRTUAL_POSITION (x1, y1),
 					UI_ATTR_VIRTUAL_SIZE (x2, y2),
 					UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_18),
 					UI_ATTR_CLEAR (TRUE),
 					UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_NONE),
-               UI_ATTR_END
-            );
+			   UI_ATTR_END
+			);
 
 	x1 = 0.0;
 	y1 = 0.0;
@@ -804,18 +804,18 @@ void initialise_select_player_screen (void)
 	y2 = 0.25;
 
    player_name_input = create_ui_object
-            (
-               UI_TYPE_INPUT,
-               UI_ATTR_PARENT (player_name_entry_area),
+			(
+			   UI_TYPE_INPUT,
+			   UI_ATTR_PARENT (player_name_entry_area),
 					UI_ATTR_VIRTUAL_POSITION (x1, y1),
 					UI_ATTR_VIRTUAL_SIZE (x2, y2),
 					UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_18),
-            	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-            	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+				UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+				UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
 					UI_ATTR_FUNCTION (player_name_input_function),
 					UI_ATTR_CLEAR (FALSE),
-               UI_ATTR_END
-            );
+			   UI_ATTR_END
+			);
 
 	/////////////////////////////////////////////////////////////////
 	// Text Areas
@@ -826,19 +826,19 @@ void initialise_select_player_screen (void)
 	y2 = 0.030;
 
    current_player_rank_text = create_ui_object
-            (
-               UI_TYPE_AREA,
-               UI_ATTR_PARENT (select_player_screen),
+			(
+			   UI_TYPE_AREA,
+			   UI_ATTR_PARENT (select_player_screen),
 					UI_ATTR_VIRTUAL_POSITION (x1, y1),
 					UI_ATTR_VIRTUAL_SIZE (x2, y2),
 					UI_ATTR_CLEAR ( TRUE ),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 					UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_22),
-  				   UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-   				UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+				   UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+				UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 					UI_ATTR_TEXT (""),
-               UI_ATTR_END
-            );
+			   UI_ATTR_END
+			);
 
 	x1 = 0.462;
 	y1 = 0.946;
@@ -846,19 +846,19 @@ void initialise_select_player_screen (void)
 	y2 = 0.030;
 
    player_commision_date_text = create_ui_object
-            (
-               UI_TYPE_AREA,
-               UI_ATTR_PARENT (select_player_screen),
+			(
+			   UI_TYPE_AREA,
+			   UI_ATTR_PARENT (select_player_screen),
 					UI_ATTR_VIRTUAL_POSITION (x1, y1),
 					UI_ATTR_VIRTUAL_SIZE (x2, y2),
 					UI_ATTR_CLEAR ( TRUE ),
 					UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_16),
-     	 			UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      			UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+					UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+				UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 					UI_ATTR_TEXT (""),
-               UI_ATTR_END
-            );
+			   UI_ATTR_END
+			);
 
 	rebuild_player_log_list ();
 
@@ -1028,10 +1028,10 @@ void player_list_function (ui_object *obj, void *arg)
 {
 
 	const char
-		*player_name;
+		*player_name = nullptr;
 
 	player_log_type
-		*player_log;
+		*player_log = nullptr;
 
 	int
 		player_unique_id;
@@ -1087,8 +1087,8 @@ void player_add_function (ui_object *obj, void *arg)
 {
 
 	ui_object
-		*slider,
-		*list_item;
+		*slider = nullptr,
+		*list_item = nullptr;
 
 	float
 		x,
@@ -1098,7 +1098,7 @@ void player_add_function (ui_object *obj, void *arg)
 		count;
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	player = get_player_log_list ();
 
@@ -1161,14 +1161,14 @@ void player_add_function (ui_object *obj, void *arg)
 void player_name_input_function ( ui_object *obj, void *arg )
 {
 
-  	const char
-		*text;
+	const char
+		*text = nullptr;
 
 	ui_object
-		*object;
+		*object = nullptr;
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	text = get_ui_object_text ( obj );
 
@@ -1245,14 +1245,14 @@ void player_rename_function ( ui_object *obj, void *arg )
 {
 
 	ui_object
-		*list_item;
+		*list_item = nullptr;
 
 	float
 		y,
 		y_size;
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	player = get_current_player_log ();
 
@@ -1301,10 +1301,10 @@ void player_delete_function ( ui_object *obj, void *arg )
 {
 
 	player_log_type
-		*log,
-		*prev,
-		*next,
-		*delete_log;
+		*log = nullptr,
+		*prev = nullptr,
+		*next = nullptr,
+		*delete_log = nullptr;
 
 	log = get_player_log_list ();
 
@@ -1451,10 +1451,10 @@ void load_player_list (void)
 		level;
 
 	player_log_type
-		*new_player;
+		*new_player = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -1702,10 +1702,10 @@ void save_player_list (void)
 	//
 	{
 		FILE
-			*file_ptr;
+			*file_ptr = nullptr;
 
 		player_log_type
-			*current_player;
+			*current_player = nullptr;
 
 		int
 			version,
@@ -1792,10 +1792,10 @@ void save_player_list (void)
 	//
 	{
 		FILE
-			*file_ptr;
+			*file_ptr = nullptr;
 
 		player_log_type
-			*current_player;
+			*current_player = nullptr;
 
 		file_ptr = safe_fopen ("players.log", "w");
 
@@ -1875,7 +1875,7 @@ int get_player_log_unique_id ( void )
 		unique;
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	id = 1;
 
@@ -1920,8 +1920,8 @@ player_log_type *create_empty_player_log ( void )
 {
 
 	player_log_type
-		*new_player_log,
-		*list;
+		*new_player_log = nullptr,
+		*list = nullptr;
 
 	int
 		side,
@@ -1982,7 +1982,7 @@ player_log_type *create_player_log (const char *name)
 {
 
 	player_log_type
-		*new_player_log;
+		*new_player_log = nullptr;
 
 	ASSERT (name);
 
@@ -2015,7 +2015,7 @@ player_log_type *rename_player_log (int id, const char *name)
 {
 
 	player_log_type
-		*player;
+		*player = nullptr;
 
 	ASSERT (name);
 
@@ -2065,12 +2065,12 @@ void rebuild_player_log_list ( void )
 		count;
 
 	ui_object
-		*list_item,
-		*selected_item;
+		*list_item = nullptr,
+		*selected_item = nullptr;
 
 	player_log_type
-		*player_log,
-		*current_log;
+		*player_log = nullptr,
+		*current_log = nullptr;
 
 	ui_object_destroy_list_items (player_list);
 
@@ -2203,8 +2203,8 @@ void destroy_player_log (player_log_type *player_log)
 {
 
 	player_log_type
-		*last_player_log,
-		*this_player_log;
+		*last_player_log = nullptr,
+		*this_player_log = nullptr;
 
 	this_player_log = get_player_log_list ();
 
@@ -2309,7 +2309,7 @@ void test_player_scoring (player_log_type *log, int side)
 void resize_player_list_size (void)
 {
 	ui_object
-		*slider;
+		*slider = nullptr;
 
 	//float
 		//y;

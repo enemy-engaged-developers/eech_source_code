@@ -74,10 +74,10 @@ void ui_object_autosize (ui_object *obj)
 {
 
 	ui_object
-		*child;
+		*child = nullptr;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		x2 = 0.0,

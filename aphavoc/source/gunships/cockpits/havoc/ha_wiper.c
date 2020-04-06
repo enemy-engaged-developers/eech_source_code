@@ -77,12 +77,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*virtual_cockpit_wiper_arm_inst3d,
-	*virtual_cockpit_wiper_rod_inst3d,
-	*virtual_cockpit_large_hud_wiper_arm_inst3d,
-	*virtual_cockpit_large_hud_wiper_rod_inst3d,
-	*virtual_cockpit_rain_effect_inst3d,
-	*virtual_cockpit_large_hud_rain_effect_inst3d;
+	*virtual_cockpit_wiper_arm_inst3d = nullptr,
+	*virtual_cockpit_wiper_rod_inst3d = nullptr,
+	*virtual_cockpit_large_hud_wiper_arm_inst3d = nullptr,
+	*virtual_cockpit_large_hud_wiper_rod_inst3d = nullptr,
+	*virtual_cockpit_rain_effect_inst3d = nullptr,
+	*virtual_cockpit_large_hud_rain_effect_inst3d = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +143,8 @@ void deinitialise_havoc_virtual_cockpit_wiper_and_rain_effect (void)
 void draw_havoc_virtual_cockpit_wiper (viewpoint *vp, int large_hud)
 {
 	object_3d_instance
-		*wiper_arm_inst3d,
-		*wiper_rod_inst3d;
+		*wiper_arm_inst3d = nullptr,
+		*wiper_rod_inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

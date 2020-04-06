@@ -79,7 +79,7 @@
 entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, unsigned int criteria)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -96,8 +96,8 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 		weapon_type;
 
 	vec3d
-		*launcher_pos,
-		*target_pos;
+		*launcher_pos = nullptr,
+		*target_pos = nullptr;
 	float
 		target_range;
 
@@ -589,7 +589,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 float get_local_entity_max_weapon_range (entity *launcher)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	weapon_config_types
 		config_type;
@@ -671,7 +671,7 @@ float get_local_entity_max_weapon_range (entity *launcher)
 float get_local_group_max_weapon_range (entity *group)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	float
 		max_range;

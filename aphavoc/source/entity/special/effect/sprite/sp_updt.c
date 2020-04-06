@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	sprite
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -105,7 +105,7 @@ static void update_client (entity *en)
 {
 
 	sprite
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 

@@ -96,10 +96,10 @@ void create_local_update_entity (void)
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	update
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
   	//

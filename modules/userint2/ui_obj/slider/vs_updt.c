@@ -88,10 +88,10 @@ static void update_vslider_ui_object (ui_object *obj)
 		y2;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
    area_ui_object
-      *area;
+      *area = nullptr;
 
 	float
 		old_viewport_x1,

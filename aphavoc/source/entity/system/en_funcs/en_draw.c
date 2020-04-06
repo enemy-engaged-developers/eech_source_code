@@ -94,7 +94,7 @@ int
 void reset_local_entity_drawn_flags (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_update_entity ());
 
@@ -133,15 +133,15 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 		fog_end;
 
 	entity
-		*sctr,
-		*en;
+		*sctr = nullptr,
+		*en = nullptr;
 
 	vec3d
 		scan_origin,
-		*position;
+		*position = nullptr;
 
 	env_3d
-		*env;
+		*env = nullptr;
 
 	ASSERT (vp);
 

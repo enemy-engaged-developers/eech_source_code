@@ -92,10 +92,10 @@ static float
 void animate_ship_rotors (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	float
 		ang,
@@ -175,7 +175,7 @@ void animate_ship_rotors (entity *en)
 void damage_ship_3d_object (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -214,7 +214,7 @@ void damage_ship_3d_object (entity *en)
 void set_ship_vehicle_id_number (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

@@ -139,7 +139,7 @@ static int response_to_unlink_parent (entity_messages message, entity *receiver,
 static int response_to_waypoint_action (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*current_wp;
+		*current_wp = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -325,7 +325,7 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 static int response_to_task_completed (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	task_terminated_types
 		task_terminated;
@@ -360,7 +360,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 static int response_to_task_terminated (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	task_terminated_types
 		task_terminated;
@@ -417,7 +417,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 static int response_to_group_killed (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	int
 		task_type;

@@ -1190,7 +1190,7 @@ void DumpGWutInfo(const char *filename)
 void ReadGWutInfo(const char *fname)
 {
 	FILE *f;
-	FILE *fout;
+	FILE *fout = nullptr;
 	int i, j, k;
 	char buf[2048];
 	char *p;

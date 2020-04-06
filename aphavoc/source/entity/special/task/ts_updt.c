@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -207,7 +207,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 

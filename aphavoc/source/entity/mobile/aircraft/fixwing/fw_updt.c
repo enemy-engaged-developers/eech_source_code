@@ -82,10 +82,10 @@ static void update_propellors (entity *en)
 {
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	raw = (fixed_wing *) get_local_entity_data (en);
 
@@ -115,7 +115,7 @@ static void update_propellors (entity *en)
 static void update_server (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;
@@ -242,7 +242,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;

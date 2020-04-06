@@ -98,7 +98,7 @@ void reset_end_of_mission_camera (camera *raw)
 void update_end_of_mission_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	float
 		heading,

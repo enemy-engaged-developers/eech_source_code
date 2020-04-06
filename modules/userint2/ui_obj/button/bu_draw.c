@@ -102,7 +102,7 @@ static void draw_button_ui_object (ui_object *obj)
 //		pitch;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 //		*memory_graphic;
 
 //	unsigned short
@@ -115,7 +115,7 @@ static void draw_button_ui_object (ui_object *obj)
 //		*parent;
 
 	button_ui_object
-		*button;
+		*button = nullptr;
 
 	button = obj->button;
 
@@ -188,7 +188,7 @@ static void draw_button_ui_object (ui_object *obj)
 					{
 
 						texture_graphic
-							*graphic;
+							*graphic = nullptr;
 
 						if ((get_ui_object_state (obj) == UI_OBJECT_STATE_ON) && (get_ui_object_selected_texture_graphic (obj)))
 						{
@@ -361,7 +361,7 @@ static void draw_button_ui_object (ui_object *obj)
 			{
 
 				const char
-					*text_ptr;
+					*text_ptr = nullptr;
 
 				int
 					count;

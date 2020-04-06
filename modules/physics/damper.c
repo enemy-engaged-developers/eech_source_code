@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 damper_type
-	*damper_list_head;
+	*damper_list_head = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ void initialise_dampers (void)
 {
 
 	damper_type
-		*destroy_damper;
+		*destroy_damper = nullptr;
 
 	while (damper_list_head)
 	{
@@ -110,7 +110,7 @@ damper_type *create_damper (float damping)
 {
 
 	damper_type
-		*new_damper;
+		*new_damper = nullptr;
 	
 	new_damper = (damper_type *) malloc_heap_mem (sizeof (damper_type));
 
@@ -139,7 +139,7 @@ void update_dampers (struct OBJECT *obj, rigid_body_dynamics *rb)
 {
 
 	damper_type
-		*damper;
+		*damper = nullptr;
 
 	damper = damper_list_head;
 
@@ -222,7 +222,7 @@ void draw_dampers (void)
 {
 
 	damper_type
-		*current_damper;
+		*current_damper = nullptr;
 
 	current_damper = damper_list_head;
 

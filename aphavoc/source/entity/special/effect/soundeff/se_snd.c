@@ -83,7 +83,7 @@ struct SOUND_CHANNEL_INFO_TYPE
 		volume;
 
 	const char
-		*text;
+		*text = nullptr;
 };
 
 typedef struct SOUND_CHANNEL_INFO_TYPE sound_channel_info_type;
@@ -114,10 +114,10 @@ int ui_sounds_muted = FALSE;
 static void play_local_sound (entity *en, viewpoint *vp, float range)
 {
 	entity
-		*parent;
+		*parent = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	int
 		volume,
@@ -418,7 +418,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		if (csa_code != CSA_CODES_LAST)
 		{
 			int
-				*values;
+				*values = nullptr;
 
 			values = canopy_sound_amp[csa_code];
 			v *= values[CSA_VALUES_MIN] * 0.01 + bound((int)(canopy_door_state * 100), 0, values[CSA_VALUES_TOP]) * values[CSA_VALUES_MUL] * 0.0001;
@@ -484,7 +484,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 					sample_loop;
 
 				sound_sequence_information
-					*samples;
+					*samples = nullptr;
 
 				ASSERT (!raw->looping);
 

@@ -86,7 +86,7 @@ bridge_segment_data
 void initialise_segment_database()
 {
 	bridge_segment_data
-		*segment_info;
+		*segment_info = nullptr;
 
 	////////////////////////////////////////
 	//

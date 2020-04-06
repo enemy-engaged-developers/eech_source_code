@@ -96,7 +96,7 @@ static int sprite_light_valid (entity *en);
 static void draw_local_3d_object (entity *en, float range)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	int
 		internal_view,
@@ -469,7 +469,7 @@ static void draw_local_3d_object (entity *en, float range)
 	if (raw->ac.object_3d_shape == OBJECT_3D_RAH66)
 	{
 		object_3d_instance
-			*shadow_object;
+			*shadow_object = nullptr;
 
 		shadow_object = construct_temporary_3d_object (OBJECT_3D_RAH66_FUSELAGE, FALSE);
 
@@ -480,7 +480,7 @@ static void draw_local_3d_object (entity *en, float range)
 	else if (raw->ac.object_3d_shape == OBJECT_3D_KA_52)
 	{
 		object_3d_instance
-			*shadow_object;
+			*shadow_object = nullptr;
 
 		shadow_object = construct_temporary_3d_object (OBJECT_3D_KA_52_FUSELAGE, FALSE);
 

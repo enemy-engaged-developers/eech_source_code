@@ -79,7 +79,7 @@
 static int recognition_guide_camera_valid (camera *raw, object_3d_camera_index_numbers index)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (raw);
 
@@ -135,7 +135,7 @@ int recognition_guide_3d_view_camera_valid (camera *raw)
 static void reset_recognition_guide_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	//
 	// pre-amble
@@ -197,10 +197,10 @@ void reset_recognition_guide_3d_view_camera (camera *raw)
 static void update_recognition_guide_camera (camera *raw, object_3d_camera_index_numbers index)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	viewpoint
 		vp;

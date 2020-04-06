@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "3d.h"
 #include "cmndline.h" // trees_fog
 
@@ -92,15 +87,15 @@
 //
 
 scene_slot_drawing_list
-	*high_zbuffered_scene_slot_sorted_list,
-	*high_nonzbuffered_scene_slot_sorted_list,
-	*middle_scene_slot_sorted_list,
-	*low_zbuffered_scene_slot_sorted_list,
-	*low_nonzbuffered_scene_slot_sorted_list,
+	*high_zbuffered_scene_slot_sorted_list = nullptr,
+	*high_nonzbuffered_scene_slot_sorted_list = nullptr,
+	*middle_scene_slot_sorted_list = nullptr,
+	*low_zbuffered_scene_slot_sorted_list = nullptr,
+	*low_nonzbuffered_scene_slot_sorted_list = nullptr,
 #if 0
-	*near_scene_slot_list,
+	*near_scene_slot_list = nullptr,
 #endif
-	*current_scene_slot_list;
+	*current_scene_slot_list = nullptr;
 
 float
 	middle_scene_slot_height;
@@ -112,21 +107,21 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static scene_slot_drawing_list
-	*last_high_zbuffered_scene_slot_insert_point,
-	*last_high_nonzbuffered_scene_slot_insert_point,
-	*last_middle_scene_slot_insert_point,
-	*last_low_zbuffered_scene_slot_insert_point,
-	*last_low_nonzbuffered_scene_slot_insert_point,
+	*last_high_zbuffered_scene_slot_insert_point = nullptr,
+	*last_high_nonzbuffered_scene_slot_insert_point = nullptr,
+	*last_middle_scene_slot_insert_point = nullptr,
+	*last_low_zbuffered_scene_slot_insert_point = nullptr,
+	*last_low_nonzbuffered_scene_slot_insert_point = nullptr,
 #if 0
-	*last_near_scene_slot_insert_point,
+	*last_near_scene_slot_insert_point = nullptr,
 #endif
 	scene_slot_order_list[MAX_3D_OBJECTS];
 
 static int
 	scene_slot_order_index;
 
-object_3d_instance
-	*exclusive_3d_instance = NULL;
+extern object_3d_instance
+	*exclusive_3d_instance = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +190,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 {
 
 	scene_slot_drawing_list
-		*buffer;
+		*buffer = nullptr;
 
 	number_of_objects_in_3d_scene++;
 
@@ -206,7 +201,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -311,7 +306,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 		{
 
 			struct OBJECT_3D_SCENE
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -362,7 +357,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -427,7 +422,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 		{
 
 			object_3d_sprite
-				*sprite;
+				*sprite = nullptr;
 
 			vec3d
 				relative_position;
@@ -486,7 +481,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 		{
 
 			object_3d_explosion
-				*explosion;
+				*explosion = nullptr;
 
 			vec3d
 				relative_position;
@@ -554,7 +549,7 @@ void insert_object_shadow_into_3d_scene ( object_3d_instance *object )
 {
 
 	scene_slot_drawing_list
-		*buffer;
+		*buffer = nullptr;
 
 	number_of_objects_in_3d_scene++;
 
@@ -607,7 +602,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 {
 
 	scene_slot_drawing_list
-		*buffer;
+		*buffer = nullptr;
 
 	number_of_objects_in_3d_scene++;
 
@@ -618,7 +613,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -689,7 +684,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -768,7 +763,7 @@ void insert_zbiased_coloured_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 {
 
 	scene_slot_drawing_list
-		*buffer;
+		*buffer = nullptr;
 
 	number_of_objects_in_3d_scene++;
 
@@ -779,7 +774,7 @@ void insert_zbiased_coloured_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			enum OBJECT_3D_VISIBILITY
 				visibility;
@@ -847,7 +842,7 @@ void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void 
 {
 
 	scene_slot_drawing_list
-		*buffer;
+		*buffer = nullptr;
 
 	number_of_objects_in_3d_scene++;
 
@@ -876,7 +871,7 @@ void insert_near_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, void 
 		{
 
 			object_3d_instance
-				*object;
+				*object = nullptr;
 
 			object = ( object_3d_instance * ) data;
 
@@ -1698,10 +1693,10 @@ void draw_3d_scene ( void )
 	{
 
 		scene_slot_drawing_list
-			*zbuffered_list,
-			*zbuffered_insert,
-			*nonzbuffered_list,
-			*nonzbuffered_insert;
+			*zbuffered_list = nullptr,
+			*zbuffered_insert = nullptr,
+			*nonzbuffered_list = nullptr,
+			*nonzbuffered_insert = nullptr;
 
 		//
 		// Swap the layers around
@@ -2375,7 +2370,7 @@ void set_up_tnl_hardware ( void )
 			light;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		int
 			count;
@@ -2558,4 +2553,3 @@ void set_up_tnl_hardware ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

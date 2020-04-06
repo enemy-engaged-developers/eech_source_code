@@ -79,7 +79,7 @@
 static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -117,10 +117,10 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 static void *get_local_ptr_value (entity *en, ptr_types type)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -145,8 +145,8 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 		////////////////////////////////////////
 		{
 			entity
-				*group,
-				*group_leader;
+				*group = nullptr,
+				*group_leader = nullptr;
 
 			//
 			// Task Leader is the first member in the follower list UNLESS the group leader is one of the followers

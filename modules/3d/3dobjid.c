@@ -120,13 +120,13 @@ void initialise_3d_objects_info ( const char *directory )
 		count;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		filename[1024];
 
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	sprintf ( filename, "%s\\bininfo.bin", directory );
 
@@ -474,7 +474,7 @@ void initialise_3d_objects_info ( const char *directory )
 				size_t
 					length;
 				char
-					*ptr;
+					*ptr = nullptr;
 
 				ASSERT ( number_of_texture_animations < TEXTURE_ANIMATION_INDEX_LAST );
 				texture_animation_index = number_of_texture_animations++;
@@ -500,7 +500,7 @@ void initialise_3d_objects_info ( const char *directory )
 				while ( fgets ( line, sizeof ( line ), file ) && *line )
 				{
 					char
-						*last;
+						*last = nullptr;
 					last = line + strlen ( line ) - 1;
 					if ( *last == '\n' )
 						*last = '\0';
@@ -509,7 +509,7 @@ void initialise_3d_objects_info ( const char *directory )
 					if ( texture_animation.number_of_frames == texture_animation.current_frame )
 					{
 						int
-							*new_texture_indices;
+							*new_texture_indices = nullptr;
 
 						texture_animation.current_frame = texture_animation.current_frame ? texture_animation.current_frame * 2 : 8;
 						new_texture_indices = ( int * ) safe_malloc ( texture_animation.current_frame * sizeof ( int ) );
@@ -874,7 +874,7 @@ static enum SKIN_TYPE skin_type ( const char* name )
 void skin_init ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene )
 {
 	struct OBJECT_3D_SCENE_SKIN
-		*skin;
+		*skin = nullptr;
 	int
 		number_of_textures,
 		count;
@@ -911,7 +911,7 @@ void skin_init ( struct OBJECT_3D_SCENE_DATABASE_ENTRY* scene )
 void skin_random ( object_3d_instance* scene )
 {
 	struct OBJECT_3D_SCENE_SKIN
-		*skin;
+		*skin = nullptr;
 	int
 		number_of_textures,
 		texture,
@@ -965,7 +965,7 @@ void skin_random ( object_3d_instance* scene )
 void skin_next ( object_3d_instance* scene )
 {
 	struct OBJECT_3D_SCENE_SKIN
-		*skin;
+		*skin = nullptr;
 
 	skin = &objects_3d_scene_database[scene->object_number].skin;
 	if ( skin->animation >= 0 )

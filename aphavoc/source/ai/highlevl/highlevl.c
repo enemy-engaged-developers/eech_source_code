@@ -394,15 +394,15 @@ void create_advance_and_retreat_tasks (void)
 		rating;
 
 	vec3d
-		*pos,
-		*node_pos;
+		*pos = nullptr,
+		*node_pos = nullptr;
 
 	group
-		*group_raw;
+		*group_raw = nullptr;
 
 	entity
-		*force,
-		*group;
+		*force = nullptr,
+		*group = nullptr;
 
 	ai_log ("================================");
 	ai_log ("CREATE ADVANCE AND RETREAT TASKS");
@@ -579,14 +579,14 @@ void create_bai_tasks (void)
 		this_side;
 
 	entity
-		*group,
-		*force,
-		*sector,
-		*new_task,
-		*target_force;
+		*group = nullptr,
+		*force = nullptr,
+		*sector = nullptr,
+		*new_task = nullptr,
+		*target_force = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -819,14 +819,14 @@ void create_cas_tasks (void)
 		this_side;
 
 	entity
-		*group,
-		*force,
-		*sector,
-		*new_task,
-		*target_force;
+		*group = nullptr,
+		*force = nullptr,
+		*sector = nullptr,
+		*new_task = nullptr,
+		*target_force = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1030,14 +1030,14 @@ void create_keysite_strike_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*sector,
-		*target_force,
-		*new_task,
-		*keysite;
+		*force = nullptr,
+		*sector = nullptr,
+		*target_force = nullptr,
+		*new_task = nullptr,
+		*keysite = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1290,14 +1290,14 @@ void create_oca_strike_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*sector,
-		*target_force,
-		*new_task,
-		*keysite;
+		*force = nullptr,
+		*sector = nullptr,
+		*target_force = nullptr,
+		*new_task = nullptr,
+		*keysite = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1477,14 +1477,14 @@ void create_oca_sweep_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*sector,
-		*target_force,
-		*new_task,
-		*keysite;
+		*force = nullptr,
+		*sector = nullptr,
+		*target_force = nullptr,
+		*new_task = nullptr,
+		*keysite = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1664,14 +1664,14 @@ void create_troop_insertion_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*sector,
-		*target_force,
-		*new_task,
-		*keysite;
+		*force = nullptr,
+		*sector = nullptr,
+		*target_force = nullptr,
+		*new_task = nullptr,
+		*keysite = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -1922,14 +1922,14 @@ void create_sead_tasks (void)
 		this_side;
 
 	entity
-		*group,
-		*force,
-		*sector,
-		*new_task,
-		*target_force;
+		*group = nullptr,
+		*force = nullptr,
+		*sector = nullptr,
+		*new_task = nullptr,
+		*target_force = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -2136,17 +2136,17 @@ void create_fixed_wing_transfer_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*group,
-		*keysite,
-		*donar,
-		*landing_en;
+		*force = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*donar = nullptr,
+		*landing_en = nullptr;
 
 	landing
-		*landing_raw;
+		*landing_raw = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -2356,17 +2356,17 @@ void create_helicopter_transfer_tasks (void)
 		this_side;
 
 	entity
-		*force,
-		*group,
-		*keysite,
-		*donar,
-		*landing_en;
+		*force = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*donar = nullptr,
+		*landing_en = nullptr;
 
 	landing
-		*landing_raw;
+		*landing_raw = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		x,
@@ -2576,10 +2576,10 @@ void create_helicopter_transfer_tasks (void)
 int create_sead_tasks_around_keysite (entity *original_task, entity *keysite, entity_sides this_side)
 {
 	entity
-		*force,
-		*group,
-		*new_task,
-		*sector;
+		*force = nullptr,
+		*group = nullptr,
+		*new_task = nullptr,
+		*sector = nullptr;
 		
 	entity_sides
 		enemy_side;
@@ -2589,8 +2589,8 @@ int create_sead_tasks_around_keysite (entity *original_task, entity *keysite, en
 		group_type;
 
 	vec3d
-		*group_pos,
-		*keysite_pos;
+		*group_pos = nullptr,
+		*keysite_pos = nullptr;
 
 	float
 		priority;
@@ -2693,10 +2693,10 @@ int create_sead_tasks_around_keysite (entity *original_task, entity *keysite, en
 void create_patrol_task(entity *group, entity *keysite, entity_sides side)
 {
 	entity
-		*task;
+		*task = nullptr;
 		
 	vec3d
-		*start_pos;
+		*start_pos = nullptr;
 
 	ASSERT(group);
 	ASSERT(keysite);
@@ -2735,9 +2735,9 @@ void create_patrol_task(entity *group, entity *keysite, entity_sides side)
 void create_troop_patrol_tasks (void)
 {
 	entity
-		*group,
-		*keysite,
-		*force;
+		*group = nullptr,
+		*keysite = nullptr,
+		*force = nullptr;
 
 	entity_sides
 		side;
@@ -2842,17 +2842,17 @@ void create_artillery_strike_tasks (void)
 		enemy_side;
 
 	entity
-		*group,
-		*target,
+		*group = nullptr,
+		*target = nullptr,
 		**group_list,
 		**target_list,
-		*sector,
-		*force,
-		*target_force;
+		*sector = nullptr,
+		*force = nullptr,
+		*target_force = nullptr;
 
 	vec3d
-		*pos,
-		*target_pos;
+		*pos = nullptr,
+		*target_pos = nullptr;
 
 	int
 		result,

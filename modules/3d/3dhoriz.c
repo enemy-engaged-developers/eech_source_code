@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +86,7 @@ void initialise_3d_horizon ( env_3d *env, object_3d_index_numbers index )
 {
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	int
 		count;
@@ -147,22 +142,22 @@ void add_3d_horizon_image ( env_3d *env, const char *filename, float time, weath
 		maximum_height;
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	horizon_colour
-		*point_colours;
+		*point_colours = nullptr;
 
 	unsigned char
-		*horizon_image;
+		*horizon_image = nullptr;
 
 	horizon_image_data
-		*horizon_image_info;
+		*horizon_image_info = nullptr;
 
 	char
 		binary_filename[256];
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	ASSERT ( env );
 
@@ -363,8 +358,8 @@ void insert_3d_horizon_image ( env_3d *env, weathermodes mode, horizon_image_dat
 	{
 
 		horizon_image_data
-			*this_image,
-			*last_image;
+			*this_image = nullptr,
+			*last_image = nullptr;
 
 		last_image = env->horizon_images_lists[mode];
 
@@ -444,8 +439,8 @@ void destroy_all_3d_horizon_images ( env_3d *env )
 		{
 
 			horizon_image_data
-				*last_horizon_image_info,
-				*this_horizon_image_info;
+				*last_horizon_image_info = nullptr,
+				*this_horizon_image_info = nullptr;
 
 			this_horizon_image_info = env->horizon_images_lists[mode];
 
@@ -477,13 +472,13 @@ void update_3d_horizon ( env_3d *env )
 {
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	horizon_image_data
-		*image1,
-		*image2,
-		*image3,
-		*image4;
+		*image1 = nullptr,
+		*image2 = nullptr,
+		*image3 = nullptr,
+		*image4 = nullptr;
 
 	float
 		dr,
@@ -769,10 +764,10 @@ void draw_3d_horizon ( void )
 		count;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	object_3d_info
-		*this_object_3d_info;
+		*this_object_3d_info = nullptr;
 
 	object_3d_info
 		object_base;
@@ -983,11 +978,11 @@ void transform_3d_horizon ( object_3d *object )
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	vertex
-		*last_transformed_point,
-		*result_points,
+		*last_transformed_point = nullptr,
+		*result_points = nullptr,
 		tmp_vertex;
 
 	float
@@ -1006,7 +1001,7 @@ void transform_3d_horizon ( object_3d *object )
 		iymin;
 
 	horizon_colour
-		*point_colours;
+		*point_colours = nullptr;
 
 	//
 	// We only need the fpu to be in single precision mode
@@ -1144,7 +1139,7 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 {
 
 	face_surface_description
-		*surface;
+		*surface = nullptr;
 
 	surface = &objects_3d_data[ object_base->object_number ].surfaces[surface_index];
 
@@ -1164,7 +1159,7 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 	{
 
 		vertex
-			*poly;
+			*poly = nullptr;
 
 		int
 			outcode;
@@ -1176,7 +1171,7 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 		{
 
 			point_3d_short_reference
-				*point_list;
+				*point_list = nullptr;
 
 			point_list = objects_3d_data[object_base->object_number].object_faces_point_plain_list;
 
@@ -1194,13 +1189,13 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 						this_point;
 
 					vertex
-						*vert;
+						*vert = nullptr;
 
 					LPTLVERTEX
 						destination_vertices;
 
 					vertex
-						*transformed_points;
+						*transformed_points = nullptr;
 
 					transformed_points = transformed_3d_points;	//[object_base->points_base];
 
@@ -1318,7 +1313,7 @@ static void render_3d_horizon_infrared_face ( object_3d_face *this_face, int sur
 {
 
 	face_surface_description
-		*surface;
+		*surface = nullptr;
 
 	real_colour
 		face_colour;
@@ -1334,7 +1329,7 @@ static void render_3d_horizon_infrared_face ( object_3d_face *this_face, int sur
 	{
 
 		vertex
-			*poly;
+			*poly = nullptr;
 
 		int
 			outcode;
@@ -1346,7 +1341,7 @@ static void render_3d_horizon_infrared_face ( object_3d_face *this_face, int sur
 		{
 
 			point_3d_short_reference
-				*point_list;
+				*point_list = nullptr;
 
 			point_list = objects_3d_data[object_base->object_number].object_faces_point_plain_list;
 
@@ -1364,13 +1359,13 @@ static void render_3d_horizon_infrared_face ( object_3d_face *this_face, int sur
 						this_point;
 
 					vertex
-						*vert;
+						*vert = nullptr;
 
 					LPTLVERTEX
 						destination_vertices;
 
 					vertex
-						*transformed_points;
+						*transformed_points = nullptr;
 
 					transformed_points = &transformed_3d_points[object_base->points_base];
 
@@ -1486,7 +1481,7 @@ int outcode_3d_horizon_polygon ( int num_points, point_3d_short_reference *point
 		outcode2;
 
 	vertex
-		*vertices;
+		*vertices = nullptr;
 
 	vertices = transformed_3d_points + base_point;
 
@@ -1565,4 +1560,3 @@ vertex * construct_3d_horizon_triangle_fan ( int triangle_index, point_3d_short_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

@@ -98,7 +98,7 @@ void initialise_ai_sector_exposure (void)
 {
 
 	entity
-		*sector;
+		*sector = nullptr;
 
    int
 		min_terrain_height = 0.0,

@@ -101,16 +101,16 @@ static void initialise_armoured_divisions (entity *force)
 		artillery_count;
 
 	entity
-		*en,
-		*first_group,
-		*division,
-		*keysite,
+		*en = nullptr,
+		*first_group = nullptr,
+		*division = nullptr,
+		*keysite = nullptr,
 		**list,
 		**frontline_groups,
 		**artillery_groups;
 
 	float
-		*rating,
+		*rating = nullptr,
 		frontline_remainder,
 		artillery_remainder,
 		f_count,
@@ -119,8 +119,8 @@ static void initialise_armoured_divisions (entity *force)
 		artillery_per_division;
 
 	vec3d
-		*pos1,
-		*pos2;
+		*pos1 = nullptr,
+		*pos2 = nullptr;
 
 	ASSERT (force);
 
@@ -318,7 +318,7 @@ static void initialise_armoured_divisions (entity *force)
 				company_count;
 
 			entity
-				*company;
+				*company = nullptr;
 
 			ASSERT (frontline_count > 0);
 
@@ -396,7 +396,7 @@ static void initialise_armoured_divisions (entity *force)
 				company_count;
 
 			entity
-				*company;
+				*company = nullptr;
 
 			ASSERT (artillery_count > 0);
 
@@ -476,10 +476,10 @@ static void initialise_armoured_divisions (entity *force)
 static void initialise_airborne_divisions (entity *force)
 {
 	entity
-		*keysite,
-		*hc_division,
-		*fw_division,
-		*transport_division;
+		*keysite = nullptr,
+		*hc_division = nullptr,
+		*fw_division = nullptr,
+		*transport_division = nullptr;
 
 	int
 		side;
@@ -536,8 +536,8 @@ static void initialise_airborne_divisions (entity *force)
 static void initialise_infantry_divisions (entity *force)
 {
 	entity
-		*keysite,
-		*division;
+		*keysite = nullptr,
+		*division = nullptr;
 
 	int
 		side;
@@ -574,10 +574,10 @@ static void initialise_infantry_divisions (entity *force)
 static void initialise_carrier_divisions (entity *force)
 {
 	entity
-		*keysite,
-		*group,
-		*company,
-		*division;
+		*keysite = nullptr,
+		*group = nullptr,
+		*company = nullptr,
+		*division = nullptr;
 
 	int
 		side;
@@ -630,7 +630,7 @@ static void initialise_carrier_divisions (entity *force)
 static void assign_remaining_groups_to_divisions (entity *force)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (force);
 
@@ -690,7 +690,7 @@ static void assign_remaining_groups_to_divisions (entity *force)
 void initialise_order_of_battle (void)
 {
 	entity
-		*force;
+		*force = nullptr;
 
 	ASSERT (get_session_entity ());
 
@@ -733,8 +733,8 @@ static void debug_output_division (entity *en)
 		id;
 
 	entity
-		*next,
-		*hq;
+		*next = nullptr,
+		*hq = nullptr;
 
 	ASSERT (en);
 
@@ -784,7 +784,7 @@ static void debug_output_division (entity *en)
 void debug_output_force_order_of_battle (entity *force)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (force);
 

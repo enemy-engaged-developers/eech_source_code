@@ -170,7 +170,7 @@ struct SYSTEM_TEXTURE_INFORMATION
 
 #ifndef OGRE_EE
 	screen
-		*texture_screen;
+		*texture_screen = nullptr;
 #endif
 };
 
@@ -188,7 +188,7 @@ struct TEXTURE_NAME_HASH_ENTRY
 		texture_index;
 
 	struct TEXTURE_NAME_HASH_ENTRY
-		*succ;
+		*succ = nullptr;
 };
 
 typedef struct TEXTURE_NAME_HASH_ENTRY texture_name_hash_entry;
@@ -296,7 +296,7 @@ static const unsigned char
 #endif
 
 static const unsigned char
-	*textures_bin;
+	*textures_bin = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +371,7 @@ static void real_set_texture_camoflage ( int set )
 		if ( system_texture_info[count].flags.number_of_camoflage_textures )
 		{
 			screen
-				*texture;
+				*texture = nullptr;
 			texture = system_texture_info[count + set].texture_screen;
 			if ( texture )
 			{
@@ -424,7 +424,7 @@ int get_system_texture_index ( const char *name )
 		hash_index;
 
 	texture_name_hash_entry
-		*entry;
+		*entry = nullptr;
 	int
 		length = strlen ( name );
 	char
@@ -481,7 +481,7 @@ BOOL load_texturemap_data ( const char *path )
 		texture_format_type;
 
 	const unsigned char
-		*fp;
+		*fp = nullptr;
 
 	char
 		filename[512];
@@ -492,9 +492,7 @@ BOOL load_texturemap_data ( const char *path )
 	// Mark off the system texture slots as not used / locked
 	//
 
-#ifndef OGRE_EE
 	memset ( system_textures, 0, sizeof ( system_textures ) );
-#endif
 
 	//
 	// Reset texture hash table
@@ -508,7 +506,7 @@ BOOL load_texturemap_data ( const char *path )
 
 	sprintf ( filename, "%s\\textures.bin", path );
 
-	textures_bin = mopen ( filename );
+	textures_bin = static_cast<unsigned char*>(mopen ( filename ));
 
 #define fread(dst, size, nmemb, ptr) do { memcpy((dst), (ptr), (size) * (nmemb)); (ptr) += (size) * (nmemb); } while (0)
 #define fseek(ptr, size, where) ((ptr) += (size))
@@ -546,10 +544,8 @@ BOOL load_texturemap_data ( const char *path )
 			unsigned int
 				value;
 
-#ifndef OGRE_EE
 			screen
-				*this_texture;
-#endif
+				*this_texture = nullptr;
 
 			texture_flags
 				flags;
@@ -560,9 +556,7 @@ BOOL load_texturemap_data ( const char *path )
 
 			system_texture_info[count].flags.flags = flags.flags;
 
-#ifndef OGRE_EE
 			system_texture_info[count].texture_screen = NULL;
-#endif
 
 			memset ( system_texture_names[count], 0, 128 );
 
@@ -581,11 +575,7 @@ BOOL load_texturemap_data ( const char *path )
 				// Reserve this texture slot
 				//
 
-#ifndef OGRE_EE
 				system_textures[count] = NULL;
-#else
-				ogre_textures_define (count, 1, -1, 1, 1, 3, white);
-#endif
 			}
 			else
 			{
@@ -603,7 +593,6 @@ BOOL load_texturemap_data ( const char *path )
 
 				texture_format_type = (texture_map_types) type;
 
-#ifndef OGRE_EE
 				while ( ( width > d3d_maximum_texture_width ) || ( height > d3d_maximum_texture_height ) )
 				{
 
@@ -640,17 +629,15 @@ BOOL load_texturemap_data ( const char *path )
 						}
 					}
 				}
-#endif
 
-#ifndef OGRE_EE
-//VJ mip mapped textures are just one behind the other and width/height is halved
+				//VJ mip mapped textures are just one behind the other and width/height is halved
 
 				this_texture = create_texture_map ( width, height, texture_format_type, number_of_mipmaps + 1 );
 
 				system_textures[count] = this_texture;
 
 				system_texture_info[count].texture_screen = this_texture;
-#endif
+
 
 				//
 				// Now fill the data in
@@ -661,7 +648,6 @@ BOOL load_texturemap_data ( const char *path )
 
 
 					{
-#ifndef OGRE_EE
 //VJ# in C:\gms\Razorworks\eech-new\modules\graphics\textsys.c
 #if ( ALLOW_TEXTURE_CREATION )
 						while ( !lock_texture ( this_texture, temp ) )
@@ -670,9 +656,6 @@ BOOL load_texturemap_data ( const char *path )
 							Sleep ( 100 );
 						}
 #endif
-#else
-						ogre_textures_define (count, number_of_mipmaps, temp, width, height, TEXTURE_MAP_ALPHA (type) ? 4 : 3, fp);
-#endif
 
 						switch ( type )
 						{
@@ -680,10 +663,8 @@ BOOL load_texturemap_data ( const char *path )
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 							{
-#ifndef OGRE_EE
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_no_alpha_24bit_texture_map_data ( fp, width, height, this_texture );
-#endif
 #endif
 
 								//3 bytes for RGB
@@ -694,10 +675,8 @@ BOOL load_texturemap_data ( const char *path )
 
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-#ifndef OGRE_EE
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_single_alpha_32bit_texture_map_data ( fp, width, height, this_texture );
-#endif
 #endif
 
 								//4 bytes for RGBA
@@ -708,10 +687,8 @@ BOOL load_texturemap_data ( const char *path )
 
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-#ifndef OGRE_EE
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_multiple_alpha_32bit_texture_map_data ( fp, width, height, this_texture );
-#endif
 #endif
 
 								fseek ( fp, ( width * height * 4 ), SEEK_CUR );
@@ -720,10 +697,8 @@ BOOL load_texturemap_data ( const char *path )
 							}
 						}
 
-#ifndef OGRE_EE
 #if ( ALLOW_TEXTURE_CREATION )
 						unlock_texture ( this_texture );
-#endif
 #endif
 					}
 #if 0
@@ -776,23 +751,12 @@ BOOL load_texturemap_data ( const char *path )
 #undef fread
 #undef fseek
 
-#ifndef OGRE_EE
 	mclose ( ( void * ) textures_bin );
-#endif
 
-#ifndef OGRE_EE
 	register_exit_function ( &restore_default_textures );
-#endif
 
 	// adjust for texture indices added since EECH was released (i.e. not in the big texures-file)
-#ifndef OGRE_EE
 	number_of_system_textures = TEXTURE_INDEX_LAST;
-#else
-	for (; number_of_system_textures < TEXTURE_INDEX_LAST; number_of_system_textures++)
-	{
-		ogre_textures_define (number_of_system_textures, 1, -1, 1, 1, 3, white);
-	}
-#endif
 
 	texture_sprite_index = add_new_texture("SPRITE_LIGHT", "");
 
@@ -805,7 +769,6 @@ BOOL load_texturemap_data ( const char *path )
 
 void unload_texturemap_data ( void )
 {
-#ifndef OGRE_EE
 	int
 		count;
 
@@ -818,14 +781,8 @@ void unload_texturemap_data ( void )
 			system_texture_info[count].texture_screen->used = FALSE;
 		}
 	}
-#else
-	ogre_textures_clear ( TRUE );
-
-	mclose ( ( void * ) textures_bin );
-#endif
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -840,7 +797,7 @@ void convert_no_alpha_24bit_texture_map_data ( const unsigned char *data, int wi
 	{
 
 		unsigned int
-			*ptr;
+			*ptr = nullptr;
 
 		int
 			pitch;
@@ -889,7 +846,7 @@ void convert_single_alpha_32bit_texture_map_data ( const unsigned char *data, in
 	{
 
 		unsigned int
-			*ptr;
+			*ptr = nullptr;
 
 		int
 			pitch;
@@ -939,7 +896,7 @@ void convert_multiple_alpha_32bit_texture_map_data ( const unsigned char *data, 
 	{
 
 		unsigned int
-			*ptr;
+			*ptr = nullptr;
 
 		int
 			pitch;
@@ -991,7 +948,7 @@ screen *get_system_texture_ptr ( int index )
 screen *create_texture_map ( int width, int height, texture_map_types type, int number_of_mipmaps )
 {
 	screen
-		*texture;
+		*texture = nullptr;
 
 	texture = get_free_screen ();
 
@@ -1012,7 +969,6 @@ void create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, 
 
 	system_textures[index] = this_screen;
 }
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1026,7 +982,7 @@ static int match_system_texture_name ( const char *name, camo_type* camo )
 		real_name[128];
 
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	int
 		index;
@@ -1290,8 +1246,6 @@ void report_system_texture_stats ( void )
 
 texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 {
-#ifndef OGRE_EE
-
 	int
 		width,
 		height,
@@ -1309,21 +1263,19 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 		base_texture_index;
 
 	char
-		*data;
+		*data = nullptr;
 
 	unsigned
 		**texture_data;
 
 	int
-		*texture_pitch;
-#endif
+		*texture_pitch = nullptr;
 
 	texture_graphic
-		*graphic;
+		*graphic = nullptr;
 
-#ifndef OGRE_EE
 	screen
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	texture_map_types
 		type;
@@ -1339,8 +1291,8 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 		{
 
 			psd_rgb
-				*dest,
-				*source;
+				*dest = nullptr,
+				*source = nullptr;
 
 			source = ( psd_rgb * ) data;
 
@@ -1360,8 +1312,8 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 		{
 
 			psd_rgba
-				*dest,
-				*source;
+				*dest = nullptr,
+				*source = nullptr;
 
 			source = ( psd_rgba * ) data;
 
@@ -1383,13 +1335,11 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 		width /= 2;
 		height /= 2;
 	}*/
-#endif
 
 	graphic = ( texture_graphic * ) safe_malloc ( sizeof ( texture_graphic ) );
 
 	graphic->ref_count = ref_count;
 
-#ifndef OGRE_EE
 	{
 
 		int
@@ -1596,7 +1546,7 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 	{
 
 		psd_rgb
-			*ptr;
+			*ptr = nullptr;
 
 		ptr = ( psd_rgb * ) data;
 
@@ -1616,7 +1566,7 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 						pixel_x;
 
 					unsigned int
-						*pixels;
+						*pixels = nullptr;
 
 					rgb_colour
 						value;
@@ -1649,7 +1599,7 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 	{
 
 		psd_rgba
-			*ptr;
+			*ptr = nullptr;
 
 		ptr = ( psd_rgba * ) data;
 
@@ -1669,7 +1619,7 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 						pixel_x;
 
 					unsigned int
-						*pixels;
+						*pixels = nullptr;
 
 					rgb_colour
 						value;
@@ -1720,9 +1670,6 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 	//
 
 	safe_free ( data );
-#else
-	graphic->texture = ogre_texture_load ( filename );
-#endif
 
 	return ( graphic );
 }
@@ -1734,10 +1681,8 @@ texture_graphic *create_texture_graphic ( const char *filename, int ref_count )
 void destroy_texture_graphic ( texture_graphic *graphic )
 {
 
-#ifndef OGRE_EE
 	int
 		count;
-#endif
 
 	ASSERT ( graphic );
 	ASSERT ( graphic->ref_count > 0 );
@@ -1749,17 +1694,12 @@ void destroy_texture_graphic ( texture_graphic *graphic )
 		return;
 	}
 
-#ifndef OGRE_EE
 	for ( count = 0; count < graphic->number_of_textures; count++ )
 	{
-
 		destroy_screen ( graphic->textures[count].texture );
 	}
 
 	safe_free ( graphic->textures );
-#else
-	ogre_texture_clear ( graphic->texture );
-#endif
 
 	safe_free ( graphic );
 }
@@ -1778,7 +1718,6 @@ texture_graphic *texture_graphic_addref ( texture_graphic *graphic )
 	return graphic;
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1794,7 +1733,6 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 
 	*height = graphic->graphic_height;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1832,7 +1770,7 @@ void clear_texture_override_names ( void )
 int initialize_texture_override_names ( const char *mapname )
 {
 	directory_file_list
-		*directory_listing;
+		*directory_listing = nullptr;
 
 	int
 		count = 0;
@@ -1844,7 +1782,6 @@ int initialize_texture_override_names ( const char *mapname )
 	camo_type
 		overrider = CAMO_REGULAR;
 
-#ifndef OGRE_EE
 	switch (get_global_season())
 	{
 	case SESSION_SEASON_WINTER:
@@ -1856,7 +1793,6 @@ int initialize_texture_override_names ( const char *mapname )
 	default:
 		break;
 	}
-#endif
 
 	snprintf (directory_search_path, sizeof (directory_search_path), "%s\\%s\\*", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 	directory_listing = get_first_directory_file ( directory_search_path );
@@ -1968,7 +1904,7 @@ int initialize_texture_override_names ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef OGRE_EE
+
 //VJ load warzone specific textures, called from: eech-new\aphavoc\source\flight.c about line 130
 //with this function textures are called from just before you go into campaign
 //they are called in a crtain order and later occurences of a texture take precedence over earlier
@@ -2111,72 +2047,6 @@ void load_warzone_override_textures ( void )
 	if (global_dynamic_water)
 		load_texture_water();
 }
-#else
-static float OGREEE_CALL get_terrain_3d_tree_scale_wrap ( const terrain_3d_tree_data *tree )
-{
-	return get_terrain_3d_tree_scale ( ( terrain_3d_tree_data * ) tree );
-}
-
-void load_models_override_textures ( void )
-{
-	initialize_terrain_textures ();
-
-	clear_texture_override_names ();
-
-	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_GENERAL);
-	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
-	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_CAMO);
-	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_ANIMATION);
-	initialize_texture_override_names (TEXTURE_OVERRIDE_DIRECTORY_TEMP);
-
-	load_texture_override ();
-
-	// FIXME
-	//apply_object_3d_reflection_texture_map ();
-
-	clear_texture_override_names ();
-
-	ogre_textures_commit (FALSE);
-}
-
-void find_terrain_override_textures ( void )
-{
-	char
-		directory_textdir_path[256];
-
-	sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, current_map_info.name);
-
-	initialize_texture_override_names (directory_textdir_path);
-
-	initialize_terrain_texture_scales (directory_textdir_path);
-
-	if (global_dynamic_water)
-		load_texture_water ();
-}
-
-void load_terrain_override_textures ( void )
-{
-	memcpy (backup_system_texture_info, system_texture_info, sizeof (backup_system_texture_info));
-
-	load_texture_override ();
-
-	ogre_textures_commit (TRUE);
-	{
-		struct OgreTerrainInit terrain_init;
-		terrain_init.sector_z_max = terrain_3d_sector_z_max;
-		terrain_init.sector_x_max = terrain_3d_sector_x_max;
-		terrain_init.map_scaled_height_difference = terrain_3d_map_scaled_height_difference;
-		terrain_init.map_minimum_height = terrain_3d_map_minimum_height;
-		terrain_init.map_maximum_height = terrain_3d_map_maximum_height;
-		terrain_init.tree = &objects_3d_data[objects_3d_scene_database[OBJECT_3D_FOREST_TREE_OBJECT].index];
-		terrain_init.get_tree_scale = get_terrain_3d_tree_scale_wrap;
-		terrain_init.type_information = terrain_type_information;
-		terrain_init.sectors = ( struct TERRAIN_3D_SECTOR const * const * ) terrain_sectors;
-		terrain_init.tree_sectors = ( struct TERRAIN_3D_TREE_SECTOR const * const * ) terrain_tree_sectors;
-		ogre_terrain_init (&terrain_init);
-	}
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2187,11 +2057,6 @@ void load_terrain_override_textures ( void )
 void restore_default_textures ( void )
 {
 	int count = 0;
-
-#ifdef OGRE_EE
-	ogre_terrain_clear ();
-	ogre_textures_clear ( FALSE );
-#endif
 
 	//VJ 050621 restore backup commandline
 	if ( texture_colour_bak != -1 )
@@ -2208,19 +2073,8 @@ void restore_default_textures ( void )
 		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
 #endif
 
-#ifndef OGRE_EE
-		f3d_texture_release ( system_texture_info[count].texture_screen );
-
-		system_texture_info[count].texture_screen->used = FALSE;
-
-	// restore pointer to original textures
-		system_textures[ count ] = backup_system_textures[ count ];
-#endif
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 	}
-#ifndef OGRE_EE
-	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
-#endif
 
 	clear_texture_override_names();
 
@@ -2295,7 +2149,6 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename )
 {
 	if (bmih.biCompression != BI_RGB)
@@ -2327,7 +2180,6 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 	*/
 	return 1;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2336,7 +2188,7 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 void load_texture_override ( void )
 {
 	const char
-		*full_override_texture_filename;
+		*full_override_texture_filename = nullptr;
 
 	int
 		count;
@@ -2347,13 +2199,8 @@ void load_texture_override ( void )
 	// Now that all the screens are loaded we check to see if there is are any overrides
 	for ( count = 0; count < MAX_TEXTURES; count++ )
 	{
-#ifndef OGRE_EE
 		screen
 			*override_screen = NULL;
-#else
-		int
-			override_screen = 0;
-#endif
 
 		full_override_texture_filename = system_texture_override_names[count].path;
 		switch ( system_texture_override_names[count].type )
@@ -2365,11 +2212,7 @@ void load_texture_override ( void )
 #endif
 				if (!*missing_textures)
 				{
-#ifndef OGRE_EE
 					override_screen = load_bmp_file_screen(full_override_texture_filename);
-#else
-					override_screen = 1;
-#endif
 				}
 				break;
 			}
@@ -2380,11 +2223,7 @@ void load_texture_override ( void )
 #endif
 				if (!*missing_textures)
 				{
-#ifndef OGRE_EE
 					override_screen = load_tga_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
-#else
-					override_screen = 1;
-#endif
 				}
 				break;
 			}
@@ -2395,32 +2234,23 @@ void load_texture_override ( void )
 #endif
 				if (!*missing_textures)
 				{
-#ifndef OGRE_EE
 					override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
-#else
-					override_screen = 1;
-#endif
 				}
 				break;
 			}
 			default:
 			{
-#ifndef OGRE_EE
 				// need to provide all these textures ourselves
 				if ( count >= TEXTURE_INDEX_LAST && count < number_of_system_textures )
 				{
 					sprintf ( missing_textures + strlen ( missing_textures ), "\n(%d): %s%s (object %s)", count, get_system_texture_name ( count ), system_texture_info[count].flags.camoflage_texture ? TEXTSUFFIX_DESERT : "", new_texture_sources[count] );
 				}
-#else
-				// FIXME
-#endif
 				break;
 			}
 		}
 		//VJ 050821 check if it worked
 		if (override_screen)
 		{
-#ifndef OGRE_EE
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
 			system_textures[count] = override_screen;
@@ -2428,9 +2258,6 @@ void load_texture_override ( void )
 			system_texture_info[count].texture_screen = override_screen;
 			// adjust alpha bit
 			system_texture_info[count].flags.contains_alpha = override_screen->contains_alpha;
-#else
-			ogre_textures_override (count, full_override_texture_filename);
-#endif
 		}
 		else
 		{
@@ -2454,10 +2281,8 @@ void load_texture_water( void )
 {
 	FILE *fin;
 
-#ifndef OGRE_EE
 	screen
-		*override_screen;
-#endif
+		*override_screen = nullptr;
 
 	int
 		i, placenr, count;
@@ -2550,18 +2375,14 @@ void load_texture_water( void )
 	//rivertextures are put behind last texture in system_texture_info array
 	// order is river, sea, reservoir (0, 1, 2)
 
-#ifndef OGRE_EE
 	placenr = number_of_system_textures;
-#endif
 
 	////// load textures
 
 	for (i = 0; i < 3; i++)
 	{
 		int rivernr = 0;
-#ifdef OGRE_EE
 		placenr = add_new_texture(current_map_info.water_info[i].name_top, "textuser.c");
-#endif
 		current_map_info.water_info[i].placenr = placenr;
 		// read the bottom texture
 		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, current_map_info.water_info[i].name_top);
@@ -2570,23 +2391,15 @@ void load_texture_water( void )
 		debug_log("water %d %d %s",placenr, i, filename);
 		#endif
 
-#ifndef OGRE_EE
 		override_screen = load_tga_file_screen(filename, 0, 1.0);
-#else
-		system_texture_override_names[placenr].type = TYPE_TGA;
-		strcpy(system_texture_override_names[placenr].path, filename);
-		system_texture_override_names[placenr].camo = CAMO_REGULAR;
-#endif
 
 		system_texture_info[placenr].flags.contains_alpha = 1;
 		system_texture_info[placenr].flags.vertically_inverted = 1;
 		system_texture_info[placenr].flags.mipmap_enabled = 1;
 		system_texture_info[placenr].flags.wrapped = 1;
 
-#ifndef OGRE_EE
 		system_textures[placenr] = override_screen;
 		system_texture_info[placenr].texture_screen = override_screen;
-#endif
 
 		// load dynamic texture series
 		rivernr = current_map_info.water_info[i].start;
@@ -2596,20 +2409,14 @@ void load_texture_water( void )
 				name[256];
 			sprintf(name, "%s%0*d", current_map_info.water_info[i].name_bottom, current_map_info.water_info[i].number < 100 ? 2 : 3, rivernr);
 
-#ifndef OGRE_EE
 			placenr++;
-#else
-			placenr = add_new_texture(name, "textuser.c");
-#endif
 			system_texture_info[placenr].flags.contains_alpha = 1;
 			system_texture_info[placenr].flags.vertically_inverted = 1;
 			system_texture_info[placenr].flags.mipmap_enabled = 1;
 			system_texture_info[placenr].flags.wrapped = 1;
 
-#ifndef OGRE_EE
 			system_texture_info[placenr].texture_screen = NULL;
 			strcpy ( system_texture_names[placenr], name );
-#endif
 
 			//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[placenr]);
 
@@ -2620,41 +2427,27 @@ void load_texture_water( void )
 			case TYPE_BMP:
 			{
 				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
-#ifndef OGRE_EE
 				override_screen = load_bmp_file_screen(filename);
-#endif
 				break;
 			}
 			case TYPE_TGA:
 			{
 				sprintf(filename,"%s\\%s\\%s.tga", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
-#ifndef OGRE_EE
 				override_screen = load_tga_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
-#endif
 				break;
 			}
 			case TYPE_DDS:
 			{
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER, name);
-#ifndef OGRE_EE
 				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
-#endif
 				break;
 			}
 			}
 
-#ifndef OGRE_EE
 			if (override_screen)
-#endif
 			{
-#ifndef OGRE_EE
 				system_textures[placenr] = override_screen;
 				system_texture_info[placenr].texture_screen = override_screen;
-#else
-				system_texture_override_names[placenr].type = current_map_info.water_info[i].type;
-				strcpy(system_texture_override_names[placenr].path, filename);
-				system_texture_override_names[placenr].camo = CAMO_REGULAR;
-#endif
 			}
 		}
 		placenr++;
@@ -2665,14 +2458,13 @@ void load_texture_water( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 //VJ 050814 load a mipmapped and alpha dds file and link to a screen
 screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment)
 {
 		int
 			temp;
 		FILE
-			*fp;
+			*fp = nullptr;
 
 		struct DDS_PIXELFORMAT {
 			DWORD dwSize;
@@ -2710,7 +2502,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 		    type;
 
 		unsigned char
-			*buffer;
+			*buffer = nullptr;
 
 		int
 			mipmap,
@@ -2718,7 +2510,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			buffer_size;
 
 		screen
-			*override_screen;
+			*override_screen = nullptr;
 
 		fp = safe_fopen (full_override_texture_filename, "rb");
 
@@ -2827,14 +2619,14 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 screen *load_tga_file_screen ( const char *full_override_texture_filename, int step, float gamma_adjustment )
 {
 		FILE
-			*fp;
+			*fp = nullptr;
 
 		texture_map_types
 			type;
 
 		unsigned char
 			header[18],
-			*buffer;
+			*buffer = nullptr;
 
 		int
 			width,
@@ -2845,7 +2637,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 			y;
 
 		screen
-			*override_screen;
+			*override_screen = nullptr;
 
 		fp = safe_fopen ( full_override_texture_filename, "rb" );
 
@@ -2986,7 +2778,7 @@ screen *load_tga_file_screen ( const char *full_override_texture_filename, int s
 screen *load_bmp_file_screen (const char *full_override_texture_filename)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 // VJ 041217 bitmap header info: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_5f8y.asp
 	BITMAPFILEHEADER
@@ -2996,7 +2788,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		bmih;
 
 	unsigned char
-		*buffer, *bufferswap;
+		*buffer = nullptr, *bufferswap;
 
 	int
 		type,
@@ -3006,7 +2798,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 
 	//static
 	screen
-		*override_screen;
+		*override_screen = nullptr;
 
 	//VJ 050530 mipmapping, set mipmap to 0 for now, it works but reserved for dds files
 	mipmap = 0;
@@ -3098,7 +2890,6 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 
 	return override_screen;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3261,10 +3052,10 @@ void read_map_info_data ( void )
 		filename[128];
 
 	const char
-		*map;
+		*map = nullptr;
 
 	directory_file_list
-		*list;
+		*list = nullptr;
 
 	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
 	// moved to init_3d.c
@@ -3442,7 +3233,7 @@ int add_new_texture(const char* texture_name, const char* source)
 		name[128];
 
 	texture_flags
-		*flags;
+		*flags = nullptr;
 
 	strncpy ( name, texture_name, 127 );
 	name[127] = '\0';
@@ -3487,9 +3278,6 @@ int add_new_texture(const char* texture_name, const char* source)
 		flags = &system_texture_info[number_of_system_textures].flags;
 		flags->main_texture = 1;
 		flags->number_of_camoflage_textures = 1;
-#ifdef OGRE_EE
-		ogre_textures_define (number_of_system_textures, 1, -1, 1, 1, 3, white);
-#endif
 		add_texture_to_name_hash ( number_of_system_textures++ );
 
 		strcpy ( system_texture_names[number_of_system_textures], name );
@@ -3503,9 +3291,6 @@ int add_new_texture(const char* texture_name, const char* source)
 	flags->main_texture = !camo;
 	flags->camoflage_texture = camo;
 	flags->camoflage_index = camo;
-#ifdef OGRE_EE
-	ogre_textures_define (number_of_system_textures, 1, -1, 1, 1, 3, white);
-#endif
 	add_texture_to_name_hash ( number_of_system_textures );
 	return number_of_system_textures++ - camo;
 }

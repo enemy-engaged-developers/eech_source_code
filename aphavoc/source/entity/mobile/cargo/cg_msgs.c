@@ -156,14 +156,14 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		velocity,
 		heading;
 
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	raw = (cargo *) get_local_entity_data (receiver);
 

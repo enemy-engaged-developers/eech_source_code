@@ -79,7 +79,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    vehicle
-      *raw;
+	  *raw = nullptr;
 
    ASSERT (v);
 
@@ -93,22 +93,22 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 
    switch (type)
    {
-      ////////////////////////////////////////
-      case VEC3D_TYPE_POSITION:
-      ////////////////////////////////////////
-      {
-         raw->mob.position = *v;
+	  ////////////////////////////////////////
+	  case VEC3D_TYPE_POSITION:
+	  ////////////////////////////////////////
+	  {
+		 raw->mob.position = *v;
 
-         break;
-      }
-      ////////////////////////////////////////
-      default:
-      ////////////////////////////////////////
-      {
-         debug_fatal_invalid_vec3d_type (en, type);
+		 break;
+	  }
+	  ////////////////////////////////////////
+	  default:
+	  ////////////////////////////////////////
+	  {
+		 debug_fatal_invalid_vec3d_type (en, type);
 
-         break;
-      }
+		 break;
+	  }
    }
 }
 
@@ -119,7 +119,7 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    vehicle
-      *raw;
+	  *raw = nullptr;
 
    ASSERT (v);
 
@@ -133,38 +133,38 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 
    switch (type)
    {
-      ////////////////////////////////////////
-      case VEC3D_TYPE_MOTION_VECTOR:
-      ////////////////////////////////////////
-      {
-         raw->mob.motion_vector = *v;
+	  ////////////////////////////////////////
+	  case VEC3D_TYPE_MOTION_VECTOR:
+	  ////////////////////////////////////////
+	  {
+		 raw->mob.motion_vector = *v;
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VEC3D_TYPE_POSITION:
-      ////////////////////////////////////////
-      {
+		 break;
+	  }
+	  ////////////////////////////////////////
+	  case VEC3D_TYPE_POSITION:
+	  ////////////////////////////////////////
+	  {
 
-         float
-            heading;
+		 float
+			heading;
 
-         int
-            old_x_sec,
-            old_z_sec,
-            new_x_sec,
-            new_z_sec;
+		 int
+			old_x_sec,
+			old_z_sec,
+			new_x_sec,
+			new_z_sec;
 
-         entity
-				*dependent,
-				*special_effect,
-            *parent;
+		 entity
+				*dependent = nullptr,
+				*special_effect = nullptr,
+			*parent = nullptr;
 
 			//
 			// notify dependents of move, must be done before set_vec3d so children can work out delta positions
 			//
 
-         heading = get_heading_from_attitude_matrix (raw->mob.attitude);
+		 heading = get_heading_from_attitude_matrix (raw->mob.attitude);
 
 			dependent = get_local_entity_first_child (en, LIST_TYPE_MOVEMENT_DEPENDENT);
 
@@ -186,26 +186,26 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			// Actual set_vec3d
 			//
 
-         get_x_sector (old_x_sec, raw->mob.position.x);
-         get_z_sector (old_z_sec, raw->mob.position.z);
+		 get_x_sector (old_x_sec, raw->mob.position.x);
+		 get_z_sector (old_z_sec, raw->mob.position.z);
 
-         get_x_sector (new_x_sec, v->x);
-         get_z_sector (new_z_sec, v->z);
+		 get_x_sector (new_x_sec, v->x);
+		 get_z_sector (new_z_sec, v->z);
 
-         if ((old_x_sec != new_x_sec) || (old_z_sec != new_z_sec))
-         {
-            delete_local_entity_from_parents_child_list (en, LIST_TYPE_SECTOR);
+		 if ((old_x_sec != new_x_sec) || (old_z_sec != new_z_sec))
+		 {
+			delete_local_entity_from_parents_child_list (en, LIST_TYPE_SECTOR);
 
-            raw->mob.position = *v;
+			raw->mob.position = *v;
 
-            parent = get_local_raw_sector_entity (new_x_sec, new_z_sec);
+			parent = get_local_raw_sector_entity (new_x_sec, new_z_sec);
 
-            insert_local_entity_into_parents_child_list (en, LIST_TYPE_SECTOR, parent, NULL);
-         }
-         else
-         {
-            raw->mob.position = *v;
-         }
+			insert_local_entity_into_parents_child_list (en, LIST_TYPE_SECTOR, parent, NULL);
+		 }
+		 else
+		 {
+			raw->mob.position = *v;
+		 }
 
 			//
 			// notify special effects of move
@@ -227,16 +227,16 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 				special_effect = get_local_entity_child_succ (special_effect, LIST_TYPE_SPECIAL_EFFECT);
 			}
 
-         break;
-      }
-      ////////////////////////////////////////
-      case VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR:
-      ////////////////////////////////////////
-      {
-         raw->weapon_to_target_vector = *v;
+		 break;
+	  }
+	  ////////////////////////////////////////
+	  case VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR:
+	  ////////////////////////////////////////
+	  {
+		 raw->weapon_to_target_vector = *v;
 
-         break;
-      }
+		 break;
+	  }
 		////////////////////////////////////////
 		case VEC3D_TYPE_WEAPON_TO_INTERCEPT_POINT_VECTOR:
 		////////////////////////////////////////
@@ -246,21 +246,21 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			break;
 		}
 		////////////////////////////////////////
-      case VEC3D_TYPE_WEAPON_VECTOR:
-      ////////////////////////////////////////
-      {
-         raw->weapon_vector = *v;
+	  case VEC3D_TYPE_WEAPON_VECTOR:
+	  ////////////////////////////////////////
+	  {
+		 raw->weapon_vector = *v;
 
-         break;
-      }
-      ////////////////////////////////////////
-      default:
-      ////////////////////////////////////////
-      {
-         debug_fatal_invalid_vec3d_type (en, type);
+		 break;
+	  }
+	  ////////////////////////////////////////
+	  default:
+	  ////////////////////////////////////////
+	  {
+		 debug_fatal_invalid_vec3d_type (en, type);
 
-         break;
-      }
+		 break;
+	  }
    }
 }
 
@@ -308,15 +308,15 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 
    if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
    {
-      validate_client_server_remote_fn ();
+	  validate_client_server_remote_fn ();
 
-      set_remote_vec3d (en, type, v);
+	  set_remote_vec3d (en, type, v);
    }
    else
    {
-      validate_client_server_local_fn ();
+	  validate_client_server_local_fn ();
 
-      set_local_vec3d (en, type, v);
+	  set_local_vec3d (en, type, v);
    }
 }
 
@@ -327,7 +327,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
    vehicle
-      *raw;
+	  *raw = nullptr;
 
    ASSERT (v);
 
@@ -393,10 +393,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 

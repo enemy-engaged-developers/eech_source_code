@@ -115,10 +115,10 @@ void deinitialise_hind_eo (void)
 void get_hind_eo_centred_viewpoint (viewpoint *vp)
 {
 	entity
-		*source;
+		*source = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

@@ -390,7 +390,7 @@ void set_local_entity_id_number
 )
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		seed,

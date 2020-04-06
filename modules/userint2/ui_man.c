@@ -101,10 +101,10 @@ static event
 
 ui_object
 	*root_object = NULL,
-	*left_captured_object,
-	*right_captured_object,
+	*left_captured_object = nullptr,
+	*right_captured_object = nullptr,
 	**captured_object,
-	*highlighted_object;
+	*highlighted_object = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ ui_object *check_ui_object_for_selection (ui_object *obj, int mouse_x, int mouse
 {
 
 	ui_object
-		*selected_object;
+		*selected_object = nullptr;
 
 	selected_object = NULL;
 
@@ -268,7 +268,7 @@ ui_object *check_ui_object_for_selection (ui_object *obj, int mouse_x, int mouse
 	{
 
 		ui_object
-			*child;
+			*child = nullptr;
 
 		child = get_ui_object_child (obj);
 
@@ -318,7 +318,7 @@ ui_object *check_ui_object_for_selection (ui_object *obj, int mouse_x, int mouse
 	{
 
 		ui_object
-			*parent_obj;
+			*parent_obj = nullptr;
 
 		float
 			parent_x = 0,
@@ -408,7 +408,7 @@ int ui_check_ui_object_under_mouse ( ui_object *obj, int mouse_x, int mouse_y )
 {
 
 	ui_object
-		*parent_obj;
+		*parent_obj = nullptr;
 
 	float
 		parent_x = 0,
@@ -559,8 +559,8 @@ void ui_mouse_button_up (void)
 		mouse_y;
 
 	ui_object
-		*current_obj,
-		*this_captured_object;
+		*current_obj = nullptr,
+		*this_captured_object = nullptr;
 
 	int
 		state = BUTTON_STATE_UP;
@@ -650,7 +650,7 @@ void ui_mouse_button_down (void)
 {
 
 	ui_object
-		*current_obj;
+		*current_obj = nullptr;
 
 	int
 		state = BUTTON_STATE_DOWN;

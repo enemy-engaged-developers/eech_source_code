@@ -79,10 +79,10 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	raw = (weapon *) get_local_entity_data (en);
 
@@ -799,7 +799,7 @@ void overload_weapon_draw_functions (void)
 int get_local_weapon_entity_parachute_open (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

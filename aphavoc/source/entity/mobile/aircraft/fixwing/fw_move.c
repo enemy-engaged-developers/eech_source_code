@@ -136,20 +136,20 @@ void clear_fixed_wing_velocity (entity *en);
 void fixed_wing_collision_avoidance (entity *en, vec3d *des_acc)
 {
 	entity
-		*group,
-		*member,
-		*nearest;
+		*group = nullptr,
+		*member = nullptr,
+		*nearest = nullptr;
 
 	fixed_wing
-		*raw,
-		*jet_raw;
+		*raw = nullptr,
+		*jet_raw = nullptr;
 
 	matrix3x3
 		wp_attitude;
 
 	vec3d
-		*curr_pos,
-		*jet_pos,
+		*curr_pos = nullptr,
+		*jet_pos = nullptr,
 		jet_to_jet,
 		nearest_jet_to_jet,
 		local_jet_to_jet,
@@ -281,7 +281,7 @@ void fixed_wing_collision_avoidance (entity *en, vec3d *des_acc)
 void fixed_wing_attain_waypoint (entity *en, vec3d *wp_vec, vec3d *vel)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		distance_to_wp,
@@ -320,7 +320,7 @@ void fixed_wing_attain_waypoint (entity *en, vec3d *wp_vec, vec3d *vel)
 void fixed_wing_aim_correction (entity *en, vec3d *wp_vec, vec3d *vel)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		dir_vec;
@@ -386,13 +386,13 @@ void fixed_wing_aim_correction (entity *en, vec3d *wp_vec, vec3d *vel)
 void fixed_wing_follow_waypoint (entity *en, vec3d *vel, vec3d *des_acc)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide;
+		*guide = nullptr;
 
 	vec3d
-		*curr_pos,
+		*curr_pos = nullptr,
 		wp_pos,
 		wp_vec;
 
@@ -446,15 +446,15 @@ void fixed_wing_follow_waypoint (entity *en, vec3d *vel, vec3d *des_acc)
 void fixed_wing_pursue_guide (entity *en, vec3d *vel, vec3d *des_acc)
 {
 	entity
-		*guide,
-		*leader;
+		*guide = nullptr,
+		*leader = nullptr;
 
 	fixed_wing
-		*leader_raw,
-		*raw;
+		*leader_raw = nullptr,
+		*raw = nullptr;
 
 	vec3d
-		*curr_pos,
+		*curr_pos = nullptr,
 		wp_pos,
 		wp_vec,
 		vel_shift;
@@ -576,7 +576,7 @@ void fixed_wing_bound_vector_scale (vec3d *vector, float min, float max)
 void fixed_wing_set_velocity (entity *en, vec3d *acc, vec3d *velocity)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		d,
@@ -707,7 +707,7 @@ void fixed_wing_navigator(entity *en, vec3d *acc, vec3d *vel)
 void fixed_wing_calc_attitude(entity *en, vec3d *acc, vec3d *vel)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		norm_mv;
@@ -798,15 +798,15 @@ void fixed_wing_calc_attitude(entity *en, vec3d *acc, vec3d *vel)
 void fixed_wing_land_jet (entity *en, vec3d *new_pos)
 {
 	entity
-		*guide;
+		*guide = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		wp_vec,
 		wp_pos,
-		*curr_pos;
+		*curr_pos = nullptr;
 
 	float
 		factor,
@@ -923,13 +923,13 @@ void fixed_wing_land_jet (entity *en, vec3d *new_pos)
 void fixed_wing_flight (entity *en, vec3d *new_pos)
 {
 	entity
-		*wp;
+		*wp = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*current_pos,
+		*current_pos = nullptr,
 		acc,
 		vel;
 
@@ -980,10 +980,10 @@ void fixed_wing_flight (entity *en, vec3d *new_pos)
 void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos, float ter_elev)
 {
 	entity
-		*guide;
+		*guide = nullptr;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		wp_pos,
@@ -1081,9 +1081,9 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, 0.0);
 
-	dist->x = min (raw->ac.mob.velocity * raw->ac.mob.zv.x * get_entity_movement_delta_time (), fabs (wp_vec.x));
+	dist->x = fmin (raw->ac.mob.velocity * raw->ac.mob.zv.x * get_entity_movement_delta_time (), fabs (wp_vec.x));
 	dist->y = 0.0;
-	dist->z = min (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
+	dist->z = fmin (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
 
 	#if DEBUG_MODULE
 		if (en == get_external_view_entity ())
@@ -1113,9 +1113,9 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 {
 	entity
-		*wp,
-		*group,
-		*guide;
+		*wp = nullptr,
+		*group = nullptr,
+		*guide = nullptr;
 
 	float
 		distance,
@@ -1123,7 +1123,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 		terrain_elevation;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	guide_terrain_follow_modes
 		terrain_follow;
@@ -1206,10 +1206,10 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 				if (terrain_follow != GUIDE_TERRAIN_FOLLOW_NONE)
 				{
 					entity
-						*sector;
+						*sector = nullptr;
 
 					fixed_wing
-						*raw;
+						*raw = nullptr;
 
 					raw = (fixed_wing *) get_local_entity_data (en);
 
@@ -1246,10 +1246,10 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 						xv;
 
 					entity
-						*group_leader;
+						*group_leader = nullptr;
 
 					formation_type
-						*formation;
+						*formation = nullptr;
 
 					int
 						type,
@@ -1326,14 +1326,14 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 				//
 
 				entity
-					*task_leader;
+					*task_leader = nullptr;
 
 				vec3d
-					*xv,
-					*leader_pos;
+					*xv = nullptr,
+					*leader_pos = nullptr;
 
 				formation_type
-					*formation;
+					*formation = nullptr;
 
 				int
 					type,
@@ -1418,9 +1418,9 @@ static void fixed_wing_movement_avoid_enemy_fire (entity *en, vec3d *wp_pos)
 {
 #if 0
 	entity
-		*guide,
-		*persuer,
-		*aggressor;
+		*guide = nullptr,
+		*persuer = nullptr,
+		*aggressor = nullptr;
 
 	float
 		d,
@@ -1430,10 +1430,10 @@ static void fixed_wing_movement_avoid_enemy_fire (entity *en, vec3d *wp_pos)
 		evasion_distance;
 
 	vec3d
-		*xv,
-		*yv,
-		*pos,
-		*aggressor_pos;
+		*xv = nullptr,
+		*yv = nullptr,
+		*pos = nullptr,
+		*aggressor_pos = nullptr;
 
 	ASSERT (en);
 
@@ -1534,10 +1534,10 @@ static void fixed_wing_movement_avoid_enemy_fire (entity *en, vec3d *wp_pos)
 void basic_fixed_wing_movement (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide;
+		*guide = nullptr;
 
 	float
 		old_roll,
@@ -1549,7 +1549,7 @@ void basic_fixed_wing_movement (entity *en)
 		dist,
 		wp_pos,
 		new_pos,
-		*current_pos;
+		*current_pos = nullptr;
 
 	raw = (fixed_wing *) get_local_entity_data (en);
 
@@ -1618,7 +1618,7 @@ void basic_fixed_wing_movement (entity *en)
 		vec3d wpvector, mvvector;
 		
 		entity
-			*wp;
+			*wp = nullptr;
 			
 		int curr_wp;
 		
@@ -1642,8 +1642,8 @@ void basic_fixed_wing_movement (entity *en)
 					if(guide)
 					{
 						entity
-							*task,
-							*target;
+							*task = nullptr,
+							*target = nullptr;
 
 						task = get_local_entity_current_task (en);
 
@@ -1667,7 +1667,7 @@ void basic_fixed_wing_movement (entity *en)
 										{
 											vec3d
 											//	vec_to_targ,
-												*target_pos;
+												*target_pos = nullptr;
 
 											target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 											//magitek: bother checking if we are actually using a cannon?
@@ -1712,14 +1712,14 @@ void basic_fixed_wing_movement (entity *en)
 			if(!get_local_entity_int_value (en, INT_TYPE_TASK_LEADER))
 			{
 				vec3d 
-					*leader_pos, leader_dist;
+					*leader_pos = nullptr, leader_dist;
 				
 				fixed_wing
-					*leader_raw;
+					*leader_raw = nullptr;
 					
 				entity
-					*leader,
-					*guide;
+					*leader = nullptr,
+					*guide = nullptr;
 				
 				guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 				ASSERT (guide);
@@ -1803,10 +1803,10 @@ void basic_fixed_wing_movement (entity *en)
 void basic_fixed_wing_movement_absolute (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide;
+		*guide = nullptr;
 
 	float
 		wp_vel,
@@ -1818,7 +1818,7 @@ void basic_fixed_wing_movement_absolute (entity *en)
 		wp_vec,
 		wp_pos,
 		new_pos,
-		*current_pos;
+		*current_pos = nullptr;
 
 	raw = (fixed_wing*) get_local_entity_data (en);
 
@@ -1945,9 +1945,9 @@ void basic_fixed_wing_movement_absolute (entity *en)
 
 		get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, new_roll);
 
-		dist.x = min (raw->ac.mob.velocity * raw->ac.mob.zv.x * get_entity_movement_delta_time (), fabs (wp_vec.x));
+		dist.x = fmin (raw->ac.mob.velocity * raw->ac.mob.zv.x * get_entity_movement_delta_time (), fabs (wp_vec.x));
 		dist.y = 0.0;
-		dist.z = min (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
+		dist.z = fmin (raw->ac.mob.velocity * raw->ac.mob.zv.z * get_entity_movement_delta_time (), fabs (wp_vec.z));
 
 		#if DEBUG_MODULE
 			if (en == get_external_view_entity ())
@@ -2132,7 +2132,7 @@ void basic_fixed_wing_death_movement (entity *en)
 {
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed,
@@ -2141,8 +2141,8 @@ void basic_fixed_wing_death_movement (entity *en)
 		old_terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		direction_vector,
 		new_pos;
 
@@ -2328,7 +2328,7 @@ void basic_fixed_wing_death_movement (entity *en)
 					//
 
 					struct OBJECT_3D_BOUNDS
-						*bounding_box;
+						*bounding_box = nullptr;
 
 					vec3d
 						d;
@@ -2397,7 +2397,7 @@ void basic_fixed_wing_death_movement (entity *en)
 
 			{
 				struct OBJECT_3D_BOUNDS
-					*bounding_box;
+					*bounding_box = nullptr;
 
 				vec3d
 					d;
@@ -2527,7 +2527,7 @@ void fixed_wing_crash_movement (entity *en)
 {
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		heading,
@@ -2542,10 +2542,10 @@ void fixed_wing_crash_movement (entity *en)
 		terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos,
-		*face_normal;
+		*face_normal = nullptr;
 
 	matrix3x3
 		m;
@@ -2697,13 +2697,13 @@ void fixed_wing_impact_movement (entity *en)
 {
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed;
 
 	vec3d
-		*velocity;
+		*velocity = nullptr;
 
 	int
 		seed;
@@ -2758,10 +2758,10 @@ void draw_aircraft_turn_radius (entity *en)
 
 	vec3d
 		test_point,
-		*wp_pos;
+		*wp_pos = nullptr;
 
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	raw = get_local_entity_data (en);
 
@@ -2837,17 +2837,17 @@ void draw_debug_takeoff_landing_routes (entity *en)
 {
 
 	entity
-		*landing,
-		*group,
-		*keysite,
-		*wp;
+		*landing = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*wp = nullptr;
 
 	vec3d
 		wp_pos,
 		offset;
 
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	raw = (fixed_wing *) get_local_entity_data (en);
 

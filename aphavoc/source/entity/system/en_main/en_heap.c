@@ -175,7 +175,7 @@ static void check_no_local_entities_in_use (void)
 		#if DEBUG_MODULE
 		{
 			entity
-				*en;
+				*en = nullptr;
 
 			en = first_used_local_entity;
 
@@ -203,7 +203,7 @@ static void check_no_entities_in_use (void)
 		#if DEBUG_MODULE
 		{
 			entity
-				*en;
+				*en = nullptr;
 
 			en = first_used_entity;
 
@@ -296,7 +296,7 @@ void deinitialise_entity_heap (void)
 entity *get_free_local_entity (int index)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (index == ENTITY_INDEX_CREATE_LOCAL)
 	{
@@ -352,7 +352,7 @@ entity *get_free_local_entity (int index)
 entity *get_free_entity (int index)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (index == ENTITY_INDEX_DONT_CARE)
 	{
@@ -597,7 +597,7 @@ entity *unpack_entity_safe_ptr (void)
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	index = unpack_entity_safe_index ();
 

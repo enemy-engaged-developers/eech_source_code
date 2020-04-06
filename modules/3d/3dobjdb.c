@@ -92,10 +92,10 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct OBJECT_3D_SCENE_DATABASE_ENTRY
-	*objects_3d_scene_database;
+	*objects_3d_scene_database = nullptr;
 
 struct OBJECT_3D_SCENE_CAMERA
-	*objects_3d_camera_database;
+	*objects_3d_camera_database = nullptr;
 
 int
 	object_3d_scenes_creation_count[OBJECT_3D_LAST];
@@ -148,7 +148,7 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct OBJECT_3D
-	*objects_3d_data;
+	*objects_3d_data = nullptr;
 
 int
 	total_number_of_raw_3d_objects;
@@ -158,39 +158,39 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_sub_object_index
-	*current_scene_sub_object_index_array;
+	*current_scene_sub_object_index_array = nullptr;
 
 static object_3d_database_entry
-	*current_scene_sub_object_array;
+	*current_scene_sub_object_array = nullptr;
 
 //
 // Arrays for the objects
 //
 
 struct FACE_SURFACE_DESCRIPTION
-	*object_database_surfaces;
+	*object_database_surfaces = nullptr;
 
 static struct OBJECT_SHORT_3D_POINT
-	*object_database_points;
+	*object_database_points = nullptr;
 
 static struct OBJECT_3D_FACE
-	*object_database_faces;
+	*object_database_faces = nullptr;
 
 static struct OBJECT_3D_HEADING_PITCH_NORMAL
-	*object_database_point_normals;
+	*object_database_point_normals = nullptr;
 
 static struct POINT_3D_SHORT_REFERENCE
-	*object_database_faces_point_list;
+	*object_database_faces_point_list = nullptr;
 
 static struct POINT_3D_PLAIN_REFERENCE
-	*object_database_faces_gouraud_list,
-	*object_database_faces_face_normal_list,
-	*object_database_surface_point_list,
-	*object_database_surface_point_normal_list;
+	*object_database_faces_gouraud_list = nullptr,
+	*object_database_faces_face_normal_list = nullptr,
+	*object_database_surface_point_list = nullptr,
+	*object_database_surface_point_normal_list = nullptr;
 
 static struct OBJECT_3D_SHORT_TEXTURED_POINT
-	*object_database_faces_texture_list,
-	*object_database_surface_point_texture_list;
+	*object_database_faces_texture_list = nullptr,
+	*object_database_surface_point_texture_list = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -581,8 +581,8 @@ static int get_next_object_id ( void )
 static int get_object ( FILE *fp )
 {
 	char
-		*ptr,
-		*ext,
+		*ptr = nullptr,
+		*ext = nullptr,
 		filename[260],
 		new_filename[260];
 	int
@@ -726,8 +726,8 @@ static int read_new_camera ( FILE *fp )
 		count;
 
 	object_3d_scene_camera
-		*camera,
-		*current;
+		*camera = nullptr,
+		*current = nullptr;
 
 	ASSERT ( custom_number_of_cameras );
 
@@ -806,7 +806,7 @@ static void add_animation (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *al
 {
 	int
 		anim,
-		*new_anim;
+		*new_anim = nullptr;
 
 	for ( anim = 0; anim < scene->number_of_texture_animations; anim++ )
 	{
@@ -833,7 +833,7 @@ static void add_animation (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *al
 static void add_animation_object (struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene, int *allocated, int object_id )
 {
 	struct OBJECT_3D
-		*object_3d;
+		*object_3d = nullptr;
 	int
 		surface;
 
@@ -1039,7 +1039,7 @@ static void read_scene ( FILE *fp, int version )
 	if ( number_of_scene_links )
 	{
 		struct OBJECT_3D_SCENE_LINK_OBJECT
-			*objects_3d_scene_link_ptr;
+			*objects_3d_scene_link_ptr = nullptr;
 
 		objects_3d_scene_link_ptr = ( struct OBJECT_3D_SCENE_LINK_OBJECT * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_LINK_OBJECT ) * number_of_scene_links );
 		objects_3d_scene_database[scene_index].scene_link_objects = objects_3d_scene_link_ptr;
@@ -1085,7 +1085,7 @@ static void read_scene ( FILE *fp, int version )
 	if ( number_of_sprite_lights )
 	{
 		struct OBJECT_3D_SPRITE_LIGHT
-			*objects_3d_scene_sprite_light_ptr;
+			*objects_3d_scene_sprite_light_ptr = nullptr;
 
 		objects_3d_scene_sprite_light_ptr = ( struct OBJECT_3D_SPRITE_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_SPRITE_LIGHT ) * number_of_sprite_lights );
 		objects_3d_scene_database[scene_index].sprite_lights = objects_3d_scene_sprite_light_ptr;
@@ -1134,7 +1134,7 @@ static void read_scene ( FILE *fp, int version )
 	if ( number_of_ambient_lights )
 	{
 		struct OBJECT_3D_AMBIENT_LIGHT
-			*objects_3d_scene_ambient_light_ptr;
+			*objects_3d_scene_ambient_light_ptr = nullptr;
 
 		objects_3d_scene_ambient_light_ptr = ( struct OBJECT_3D_AMBIENT_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_AMBIENT_LIGHT ) * number_of_ambient_lights );
 		objects_3d_scene_database[scene_index].ambient_lights = objects_3d_scene_ambient_light_ptr;
@@ -1179,7 +1179,7 @@ static void read_scene ( FILE *fp, int version )
 	if ( number_of_distant_lights )
 	{
 		struct OBJECT_3D_DISTANT_LIGHT
-			*objects_3d_scene_distant_light_ptr;
+			*objects_3d_scene_distant_light_ptr = nullptr;
 
 		objects_3d_scene_distant_light_ptr = ( struct OBJECT_3D_DISTANT_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_DISTANT_LIGHT ) * number_of_distant_lights );
 		objects_3d_scene_database[scene_index].distant_lights = objects_3d_scene_distant_light_ptr;
@@ -1531,7 +1531,7 @@ void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out)
 void read_custom_scene ( const char* filename )
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 	int
 		version;
 
@@ -1557,7 +1557,7 @@ void read_custom_scene ( const char* filename )
 int read_object ( object_3d *obj, const char* filename )
 {
 	FILE
-		*file;
+		*file = nullptr;
 
 	int
 		format_version,
@@ -1748,30 +1748,30 @@ void initialise_3d_objects ( const char *directory )
 		count;
 
 	object_short_3d_point
-		*current_points;
+		*current_points = nullptr;
 
 	object_3d_face
-		*current_faces;
+		*current_faces = nullptr;
 
 	object_3d_heading_pitch_normal
-		*current_point_normals;
+		*current_point_normals = nullptr;
 
 	face_surface_description
-		*current_surfaces;
+		*current_surfaces = nullptr;
 
 	point_3d_short_reference
-		*current_faces_point_list;
+		*current_faces_point_list = nullptr;
 
 	point_3d_plain_reference
-		*current_faces_face_normal_list,
-		*current_object_surface_point_references,
-		*current_object_surface_point_normal_references;
+		*current_faces_face_normal_list = nullptr,
+		*current_object_surface_point_references = nullptr,
+		*current_object_surface_point_normal_references = nullptr;
 
 	object_3d_short_textured_point
-		*current_object_surface_point_texture_references;
+		*current_object_surface_point_texture_references = nullptr;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		filename[512];
@@ -1787,7 +1787,7 @@ void initialise_3d_objects ( const char *directory )
 	initialise_object_3d_lookup_tables ();
 
 	//
- 	// Initialise the objects name data first
+	// Initialise the objects name data first
 	//
 
 	initialise_3d_objects_info ( directory );
@@ -2018,7 +2018,6 @@ void initialise_3d_objects ( const char *directory )
 				fread ( &objects_3d_data[count].surfaces[surface_count].reflectivity, sizeof ( unsigned char ), 1, fp );
 				fread ( &objects_3d_data[count].surfaces[surface_count].specularity, sizeof ( unsigned char ), 1, fp );
 
-#ifndef OGRE_EE
 				if ( objects_3d_data[count].surfaces[surface_count].textured )
 				{
 
@@ -2032,7 +2031,6 @@ void initialise_3d_objects ( const char *directory )
 						}
 					}
 				}
-#endif
 
 				if ( objects_3d_data[count].surfaces[surface_count].polygons )
 				{
@@ -2219,8 +2217,8 @@ void initialise_3d_objects ( const char *directory )
 		// reallocates surfaces memory
 
 		struct FACE_SURFACE_DESCRIPTION
-			*surfaces,
-			*cursurface;
+			*surfaces = nullptr,
+			*cursurface = nullptr;
 		int
 			number_of_surfaces = 0;
 
@@ -2251,7 +2249,6 @@ void initialise_3d_objects ( const char *directory )
 		skin_init ( &objects_3d_scene_database[count] );
 	}
 
-#ifndef OGRE_EE
 	//
 	// Initialise the d3d version of the objects now
 	//
@@ -2261,7 +2258,6 @@ void initialise_3d_objects ( const char *directory )
 
 		initialise_3d_objects_in_d3d ();
 	}
-#endif
 
 #if REPORT_OBJECT_STATS
 	debug_log ( "Finished" );
@@ -2269,7 +2265,6 @@ void initialise_3d_objects ( const char *directory )
 
 	initialised_3d_objects = TRUE;
 
-#ifndef OGRE_EE
 	//
 	// Setup a sprite flare texture
 	//
@@ -2289,7 +2284,6 @@ void initialise_3d_objects ( const char *directory )
 			object_3d_sprite_flare_texture = get_system_texture_ptr ( index );
 		}
 	}
-#endif
 
 	current_number_of_3d_objects_constructed = 0;
 
@@ -2301,39 +2295,6 @@ void initialise_3d_objects ( const char *directory )
 
 	memset ( object_3d_scenes_creation_count, 0, sizeof ( int ) * OBJECT_3D_LAST );
 
-#ifdef OGRE_EE
-	load_models_override_textures ();
-	{
-		unsigned
-			count,
-			index,
-			size,
-			*data,
-			*ptr;
-
-		size = 0;
-		for (count = 0; count < number_of_texture_animations; count++)
-		{
-			size += texture_animations[count].number_of_frames + 1;
-		}
-		data = (unsigned *) safe_malloc (sizeof(unsigned) * size);
-		ptr = data;
-		for (count = 0; count < number_of_texture_animations; count++)
-		{
-			size = texture_animations[count].number_of_frames;
-			*ptr++ = size;
-			for (index = 0; index < size; index++)
-			{
-				*ptr++ = texture_animations[count].texture_indices[index];
-			}
-		}
-		ogre_textures_animation (number_of_texture_animations, data);
-		safe_free (data);
-		ogre_objects_init (total_number_of_objects, objects_3d_data);
-		ogre_scenes_init (OBJECT_3D_LAST - 1, objects_3d_scene_database);
-		ogre_particles_init ();
-	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2443,17 +2404,11 @@ void deinitialise_3d_objects ( void )
 	int
 		i;
 
-#ifndef OGRE_EE
 	//
 	// Deinitialise the d3d versions first
 	//
 
 	deinitialise_3d_objects_in_d3d ();
-#else
-	ogre_scenes_clear ();
-	ogre_particles_clear ();
-	ogre_objects_clear ();
-#endif
 
 	for ( i = 0; i < OBJECT_3D_LAST; i++ )
 	{
@@ -2626,7 +2581,6 @@ int get_3d_objects_initialised ( void )
 	return ( initialised_3d_objects );
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2790,24 +2744,21 @@ int get_object_light_sourcing ( int scene_index )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 object_3d_sub_instance
-	*object_3d_sub_instance_construction_array;
+	*object_3d_sub_instance_construction_array = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 {
 
 	object_3d_instance
-		*object;
+		*object = nullptr;
 
-#ifndef OGRE_EE
 	int
 		count,
 		found;
-#endif
 
 	ASSERT ( index > OBJECT_3D_INVALID_OBJECT_INDEX );
 	ASSERT ( index < OBJECT_3D_LAST );
@@ -2826,19 +2777,16 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 
 	object_3d_scenes_creation_count[index]++;
 
-#ifndef OGRE_EE
 	if ( objects_3d_scene_database[index].total_number_of_sub_objects )
 	{
 
 		object_3d_sub_instance_construction_array = ( object_3d_sub_instance * ) safe_malloc ( sizeof ( object_3d_sub_instance ) * objects_3d_scene_database[index].total_number_of_sub_objects );
 	}
-#endif
 
 	object = ( object_3d_instance * ) safe_malloc ( sizeof ( object_3d_instance ) );
 
 	object->object_number = index;
 
-#ifndef OGRE_EE
 	found = FALSE;
 
 	count = index;
@@ -2897,7 +2845,6 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->vp.x = 0;
 	object->vp.y = 0;
 	object->vp.z = 0;
-#endif
 
 	//
 	// All objects scaled to original size to start with
@@ -2907,7 +2854,6 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	object->relative_scale.y = 1;
 	object->relative_scale.z = 1;
 
-#ifndef OGRE_EE
 	//
 	// Objects normally have shadows ( default )
 	//
@@ -2938,13 +2884,6 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 
 	object->object_dissolve_value = 255;
 	object->object_diffuse_value = 255;
-#else
-
-	ogre_scene_create ( &object->vp, index );
-
-	object->temporary = FALSE;
-
-#endif
 
 	// Casm 18DEC15 Skin
 	skin_random ( object );
@@ -2952,7 +2891,6 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	return ( object );
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3092,7 +3030,6 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void destruct_3d_object ( object_3d_instance *object )
 {
@@ -3109,7 +3046,6 @@ void destruct_3d_object ( object_3d_instance *object )
 
 	object_3d_scenes_creation_count[object->object_number]--;
 
-#ifndef OGRE_EE
 	//
 	// Free up the texture animations array
 	//
@@ -3127,9 +3063,6 @@ void destruct_3d_object ( object_3d_instance *object )
 
 		object->sub_objects = NULL;
 	}
-#else
-	ogre_scene_destroy ( &object->vp );
-#endif
 
 	safe_free ( object );
 /*
@@ -3192,13 +3125,13 @@ int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers i
 			count;
 
 		object_3d
-			*obj;
+			*obj = nullptr;
 
 		struct POINT_3D_SHORT_REFERENCE
-			*refs;
+			*refs = nullptr;
 
 		struct POINT_3D_PLAIN_REFERENCE
-			*surface_point_refs;
+			*surface_point_refs = nullptr;
 
 		obj = &objects_3d_data[ objects_3d_scene_database[index].collision_object_index ];
 
@@ -3297,7 +3230,6 @@ int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers i
 	}
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3310,7 +3242,7 @@ int get_object_3d_number_of_poly_lines ( object_3d_index_numbers index )
 		count;
 
 	object_3d
-		*obj;
+		*obj = nullptr;
 
 	ASSERT ( ( index > OBJECT_3D_INVALID_OBJECT_INDEX ) && ( index < OBJECT_3D_LAST ) );
 
@@ -3345,7 +3277,7 @@ void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d *return
 		surface;
 
 	object_3d
-		*obj;
+		*obj = nullptr;
 
 	float
 		xmax,
@@ -3353,10 +3285,10 @@ void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d *return
 		zmax;
 
 	struct POINT_3D_SHORT_REFERENCE
-		*refs;
+		*refs = nullptr;
 
 	struct POINT_3D_PLAIN_REFERENCE
-		*surface_point_refs;
+		*surface_point_refs = nullptr;
 
 	ASSERT ( ( index > OBJECT_3D_INVALID_OBJECT_INDEX ) && ( index < OBJECT_3D_LAST ) );
 	ASSERT ( objects_3d_scene_database[index].index );
@@ -3423,23 +3355,16 @@ void get_object_3d_poly_line_data ( object_3d_index_numbers index, vec3d *return
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp )
 {
 
-#ifndef OGRE_EE
 	object_3d_sub_instance
-		*this_object,
+		*this_object = nullptr,
 		*objects[256];
-#else
-	unsigned
-		this_object,
-		objects[256];
-#endif
 
 	object_3d_instance
-		*main_object;
+		*main_object = nullptr;
 
 	int
 		count = -1;
@@ -3451,7 +3376,6 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 	matrix3x3
 		attitude;
 
-#ifndef OGRE_EE
 	this_object = search->result_sub_object;
 
 	while ( this_object->parent )
@@ -3462,28 +3386,12 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 	}
 
 	main_object = ( object_3d_instance * ) this_object;
-#else
-	main_object = search->search_object;
-
-	this_object = search->result_sub_object - main_object->vp.elements;
-
-	while ( this_object )
-	{
-		count++;
-		objects[count] = this_object;
-		this_object = ogre_scene_get_parent ( &main_object->vp, this_object );
-	}
-#endif
 
 	memcpy ( &position, &main_object->vp.position, sizeof ( vec3d ) );
 
 	memcpy ( attitude, main_object->vp.attitude, sizeof ( matrix3x3 ) );
 
-#ifndef OGRE_EE
 	scale = main_object->relative_scale;
-#else
-	scale.x = scale.y = scale.z = 1.0f;
-#endif
 
 	for ( ; count >= 0; count-- )
 	{
@@ -3495,11 +3403,7 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 			result_attitude,
 			sub_attitude;
 
-#ifndef OGRE_EE
 		sub = objects[count]->relative_position;
-#else
-		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
-#endif
 
 		sub.x *= scale.x;
 		sub.y *= scale.y;
@@ -3511,21 +3415,13 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 		position.y += sub.y;
 		position.z += sub.z;
 
-#ifndef OGRE_EE
 		sub = objects[count]->relative_scale;
-#else
-		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
-#endif
 
 		scale.x *= sub.x;
 		scale.y *= sub.y;
 		scale.z *= sub.z;
 
-#ifndef OGRE_EE
 		get_3d_transformation_matrix ( sub_attitude, objects[count]->relative_heading, -objects[count]->relative_pitch, -objects[count]->relative_roll );
-#else
-		get_3d_transformation_matrix ( sub_attitude, main_object->vp.elements[objects[count]].relative_heading, -main_object->vp.elements[objects[count]].relative_pitch, -main_object->vp.elements[objects[count]].relative_roll );
-#endif
 
 		multiply_matrix3x3_matrix3x3 ( result_attitude, sub_attitude, attitude );
 
@@ -3546,18 +3442,12 @@ void get_3d_sub_object_world_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA
 void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *search, viewpoint *vp, int global )
 {
 
-#ifndef OGRE_EE
 	object_3d_sub_instance
-		*this_object,
+		*this_object = nullptr,
 		*objects[256];
-#else
-	unsigned
-		this_object,
-		objects[256];
-#endif
 
 	object_3d_instance
-		*main_object;
+		*main_object = nullptr;
 
 	int
 		count = -1;
@@ -3569,7 +3459,6 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 	matrix3x3
 		attitude;
 
-#ifndef OGRE_EE
 	this_object = search->result_sub_object;
 
 	while ( this_object->parent )
@@ -3580,18 +3469,6 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 	}
 
 	main_object = ( object_3d_instance * ) this_object;
-#else
-	main_object = search->search_object;
-
-	this_object = search->result_sub_object - main_object->vp.elements;
-
-	while ( this_object )
-	{
-		count++;
-		objects[count] = this_object;
-		this_object = ogre_scene_get_parent ( &main_object->vp, this_object );
-	}
-#endif
 
 	memcpy ( &position, &main_object->vp.position, sizeof ( vec3d ) );
 
@@ -3604,22 +3481,14 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 
 		multiply_matrix3x3_matrix3x3 ( attitude, vp->attitude, main_object->vp.attitude );
 
-#ifndef OGRE_EE
 		scale = main_object->relative_scale;
-#else
-		scale.x = scale.y = scale.z = 1.0f;
-#endif
 
 	}
 	else if (global)
 	{
 		memcpy ( attitude, main_object->vp.attitude, sizeof ( matrix3x3 ) );
 
-#ifndef OGRE_EE
 		scale = main_object->relative_scale;
-#else
-		scale.x = scale.y = scale.z = 1.0f;
-#endif
 	}
 	else
 	{
@@ -3644,11 +3513,7 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 			result_attitude,
 			sub_attitude;
 
-#ifndef OGRE_EE
 		sub = objects[count]->relative_position;
-#else
-		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
-#endif
 
 		sub.x *= scale.x;
 		sub.y *= scale.y;
@@ -3660,21 +3525,13 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 		position.y += sub.y;
 		position.z += sub.z;
 
-#ifndef OGRE_EE
 		sub = objects[count]->relative_scale;
-#else
-		memcpy ( &sub, &main_object->vp.elements[objects[count]].relative_position, sizeof ( vec3d ) );
-#endif
 
 		scale.x *= sub.x;
 		scale.y *= sub.y;
 		scale.z *= sub.z;
 
-#ifndef OGRE_EE
 		get_3d_transformation_matrix ( sub_attitude, objects[count]->relative_heading, -objects[count]->relative_pitch, -objects[count]->relative_roll );
-#else
-		get_3d_transformation_matrix ( sub_attitude, main_object->vp.elements[objects[count]].relative_heading, -main_object->vp.elements[objects[count]].relative_pitch, -main_object->vp.elements[objects[count]].relative_roll );
-#endif
 
 		multiply_matrix3x3_matrix3x3 ( result_attitude, sub_attitude, attitude );
 
@@ -3686,7 +3543,6 @@ void get_3d_sub_object_viewpoint ( struct OBJECT_3D_SUB_OBJECT_SEARCH_DATA *sear
 	vp->position = position;
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3716,7 +3572,6 @@ int get_number_of_3d_scene_cameras ( object_3d_index_numbers scene_index, object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_camera_index_numbers camera_index )
 {
@@ -3726,7 +3581,7 @@ int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_came
 		count;
 
 	struct OBJECT_3D_SCENE_DATABASE_ENTRY
-		*scene;
+		*scene = nullptr;
 
 	scene = &objects_3d_scene_database[object->object_number];
 
@@ -3745,7 +3600,6 @@ int get_number_of_3d_object_cameras ( object_3d_instance *object, object_3d_came
 	return ( total );
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3784,7 +3638,6 @@ object_3d_scene_camera *get_3d_scene_camera ( object_3d_index_numbers scene_inde
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 object_3d_scene_camera *get_3d_object_camera ( object_3d_instance *object, object_3d_camera_index_numbers camera_index, int camera_depth )
 {
@@ -3794,7 +3647,7 @@ object_3d_scene_camera *get_3d_object_camera ( object_3d_instance *object, objec
 		depth;
 
 	struct OBJECT_3D_SCENE_DATABASE_ENTRY
-		*scene;
+		*scene = nullptr;
 
 	scene = &objects_3d_scene_database[object->object_number];
 
@@ -3830,7 +3683,7 @@ float get_object_3d_camera_lifetime ( object_3d_instance *obj, object_3d_camera_
 {
 
 	object_3d_scene_camera
-		*camera;
+		*camera = nullptr;
 
 	//
 	// Get the camera
@@ -3866,7 +3719,7 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 {
 
 	object_3d_scene_camera
-		*camera;
+		*camera = nullptr;
 
 	//
 	// Get the camera
@@ -4002,7 +3855,6 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 	}
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4174,7 +4026,6 @@ void count_sub_object_statistics ( object_3d_database_entry *sub_object, int app
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void report_objects_not_destructed ( void )
 {

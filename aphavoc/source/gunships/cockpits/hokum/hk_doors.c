@@ -133,7 +133,7 @@ void animate_hokum_virtual_cockpit_canopy_doors (void)
 		aiming_state;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

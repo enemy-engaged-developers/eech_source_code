@@ -123,7 +123,7 @@ void add_shared_polygon_to_shared_primitive ( int number_of_vertices, WORD *indi
 	WORD
 		first_index,
 		number_of_triangles,
-		*index_list;
+		*index_list = nullptr;
 
 	int
 		count;
@@ -164,7 +164,7 @@ void add_shared_line_to_shared_primitive ( WORD *indices )
 {
 
 	WORD
-		*index_list;
+		*index_list = nullptr;
 
 	index_list = &shared_line_indices[ ( number_of_shared_lines * 2 ) ];
 

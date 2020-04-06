@@ -128,8 +128,8 @@ void initialise_apache_lamps (void)
 void draw_apache_indicator_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -345,8 +345,8 @@ void draw_apache_indicator_lamps (cockpit_panels panel)
 void draw_apache_fire_detector_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -474,8 +474,8 @@ void draw_apache_fire_detector_lamps (cockpit_panels panel)
 void draw_apache_armament_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -591,8 +591,8 @@ void draw_apache_armament_lamps (cockpit_panels panel)
 void draw_apache_mfd_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 

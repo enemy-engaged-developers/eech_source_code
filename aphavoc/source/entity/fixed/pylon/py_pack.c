@@ -160,10 +160,10 @@ void overload_pylon_pack_functions (void)
 void pack_local_pylon_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
    pylon
-      *raw;
+      *raw = nullptr;
 
 	int
 		total,
@@ -255,11 +255,11 @@ void pack_local_pylon_data (pack_modes mode)
 void unpack_local_pylon_data (pack_modes mode)
 {
    entity
-		*destroy_en,
-      *en;
+		*destroy_en = nullptr,
+      *en = nullptr;
 
    pylon
-      *raw;
+      *raw = nullptr;
 
 	int
 		alive,

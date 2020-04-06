@@ -342,8 +342,8 @@ char
 void process_command_line (int argc, char *argv[])
 {
 	const char
-		*s1,
-		*s2;
+		*s1 = nullptr,
+		*s2 = nullptr;
 	char
 		buf[128];
 
@@ -390,9 +390,9 @@ void process_environment_variable (const char *name)
 
 	char
 		*argv[128],
-		*env,
-		*buffer,
-		*ptr;
+		*env = nullptr,
+		*buffer = nullptr,
+		*ptr = nullptr;
 
 	if (name)
 	{

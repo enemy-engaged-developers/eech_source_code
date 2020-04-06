@@ -526,7 +526,7 @@ void write_tacview_town_names(void)
 {
 #if 0
 	population_name_database_type
-		*item;
+		*item = nullptr;
 
 	for (item = population_name_database; item; item = item->next)
 		if (item->type == POPULATION_TYPE_TOWN)

@@ -144,13 +144,13 @@ void process_game_initialisation_phases (void)
 {
 
 	session_list_data_type
-		*session;
+		*session = nullptr;
 
    connection_data_type
-      *this_connection;
+      *this_connection = nullptr;
 
    session_table_type
-      *this_session;
+      *this_session = nullptr;
 
 	int
 		flag,
@@ -354,7 +354,7 @@ void process_game_initialisation_phases (void)
 						line_count;
 
 					FILE
-						*file_ptr;
+						*file_ptr = nullptr;
 
 					char
 						line [1024],
@@ -733,7 +733,7 @@ void process_game_initialisation_phases (void)
 				char
 					text [128];
 				const char
-					*name;
+					*name = nullptr;
 
 				name = get_player_log_name (get_current_player_log ());
 

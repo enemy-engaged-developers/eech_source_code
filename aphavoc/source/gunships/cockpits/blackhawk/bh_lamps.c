@@ -128,8 +128,8 @@ void initialise_blackhawk_lamps (void)
 void draw_blackhawk_indicator_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -345,8 +345,8 @@ void draw_blackhawk_indicator_lamps (cockpit_panels panel)
 void draw_blackhawk_fire_detector_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -474,8 +474,8 @@ void draw_blackhawk_fire_detector_lamps (cockpit_panels panel)
 void draw_blackhawk_armament_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 
@@ -591,8 +591,8 @@ void draw_blackhawk_armament_lamps (cockpit_panels panel)
 void draw_blackhawk_mfd_lamps (cockpit_panels panel)
 {
 	unsigned char
-		*sprite_data,
-		*mask_data;
+		*sprite_data = nullptr,
+		*mask_data = nullptr;
 
 	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_APACHE_SPRITES);
 

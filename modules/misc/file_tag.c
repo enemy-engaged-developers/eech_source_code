@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 file_tag_variable_type
-	*file_tag_variables;
+	*file_tag_variables = nullptr;
 
 //static int
 	//last_enum;
@@ -134,7 +134,7 @@ void initialise_file_tag_system (void)
 {
 
 	file_tag_variable_type
-		*destroy_file_tag_variable;
+		*destroy_file_tag_variable = nullptr;
 
 	//tag_strings = application_tag_array;
 
@@ -796,7 +796,7 @@ int get_next_file_string (FILE *file_ptr, char *buffer, int size)
 {
 
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	memset (buffer, 0, size);
 
@@ -949,7 +949,7 @@ void register_file_tag_variable (const char *variable_name, int *variable)
 		next_id;
 
 	file_tag_variable_type
-		*new_variable;
+		*new_variable = nullptr;
 
 	//
 	// check if variable already registered
@@ -1008,8 +1008,8 @@ void unregister_file_tag_variable (const char *variable_name)
 {
 
 	file_tag_variable_type
-		*variable,
-		*last_variable;
+		*variable = nullptr,
+		*last_variable = nullptr;
 
 	//
 	// check if variable already registered
@@ -1071,7 +1071,7 @@ int *get_file_tag_variable (const char *variable_name)
 {
 
 	file_tag_variable_type
-		*variable;
+		*variable = nullptr;
 
 	variable = file_tag_variables;
 
@@ -1111,7 +1111,7 @@ int if_file_tag_variable (const char *variable_name, const char *operator_, int 
 
 	int
 		return_value,
-		*variable;
+		*variable = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -1262,7 +1262,7 @@ int set_file_tag_variable (const char *variable_name, int value)
 {
 
 	int
-		*variable;
+		*variable = nullptr;
 
 	variable = get_file_tag_variable (variable_name);
 
@@ -1291,7 +1291,7 @@ int get_variable_id (const char *variable_name)
 {
 
 	file_tag_variable_type
-		*variable;
+		*variable = nullptr;
 
 	variable = file_tag_variables;
 
@@ -1324,7 +1324,7 @@ const char *get_variable_name (int id)
 {
 
 	file_tag_variable_type
-		*variable;
+		*variable = nullptr;
 
 	variable = file_tag_variables;
 

@@ -262,14 +262,14 @@ static void update_gunship_target_list (void)
 		timeout;
 
 	entity
-		*source,
-		*target,
-		*current_target,
-		*succ;
+		*source = nullptr,
+		*target = nullptr,
+		*current_target = nullptr,
+		*succ = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
@@ -362,7 +362,7 @@ static void update_cpg_identify_target (void)
 		los_clear;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -568,8 +568,8 @@ void set_common_target_acquisition_system_lock_target (int lock)
 void set_gunship_target (entity *target)
 {
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		range;
@@ -649,7 +649,7 @@ const char *get_target_display_name (entity *target, char *buffer, int large_dis
 		allied;
 
 	const char
-		*target_name;
+		*target_name = nullptr;
 
 	ASSERT (buffer);
 
@@ -808,11 +808,11 @@ int get_number_of_valid_gunship_targets (entity *receiver)
 		sqr_target_range;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	vec3d
-		*receiver_position,
-		*target_position;
+		*receiver_position = nullptr,
+		*target_position = nullptr;
 
 	ASSERT (receiver);
 
@@ -855,11 +855,11 @@ int get_valid_gunship_target_safe_index (entity *receiver, int depth)
 		sqr_target_range;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	vec3d
-		*receiver_position,
-		*target_position;
+		*receiver_position = nullptr,
+		*target_position = nullptr;
 
 	ASSERT (receiver);
 
@@ -905,7 +905,7 @@ int get_valid_gunship_target_safe_index (entity *receiver, int depth)
 void set_valid_gunship_target_safe_index (int index)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	target = get_local_entity_safe_ptr (index);
 
@@ -1149,7 +1149,7 @@ void play_common_cpg_target_acquisition_system_speech (target_acquisition_system
 void toggle_designated_target (void)
 {
 	entity
-		*current_target;
+		*current_target = nullptr;
 	
 	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 	

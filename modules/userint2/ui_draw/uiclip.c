@@ -244,7 +244,7 @@ int check_ui_object_clipped (ui_object *obj)
 		flag;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	float
 		x1,

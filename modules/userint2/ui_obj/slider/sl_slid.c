@@ -74,7 +74,7 @@ static void set_slider_ui_object_slider_min (ui_object *obj, float min)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 
@@ -89,7 +89,7 @@ static float get_slider_ui_object_slider_min (ui_object *obj)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 
@@ -104,7 +104,7 @@ static void set_slider_ui_object_slider_max (ui_object *obj, float max)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 
@@ -119,7 +119,7 @@ static float get_slider_ui_object_slider_max (ui_object *obj)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 
@@ -134,7 +134,7 @@ static void set_slider_ui_object_slider_inc (ui_object *obj, float inc)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 
@@ -149,7 +149,7 @@ static float get_slider_ui_object_slider_inc (ui_object *obj)
 {
 
 	slider_ui_object
-		*slider_obj;
+		*slider_obj = nullptr;
 
 	slider_obj = (slider_ui_object *) obj->data;
 

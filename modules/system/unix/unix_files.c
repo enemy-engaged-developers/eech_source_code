@@ -98,7 +98,7 @@ struct FILEMAP
 		length;
 
 	void
-		*data;
+		*data = nullptr;
 };
 
 typedef struct FILEMAP filemap;
@@ -108,7 +108,7 @@ typedef struct FILEMAP filemap;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static filemap
-	*file_maps;
+	*file_maps = nullptr;
 
 static int
 	safe_memory_mapped_file_counter = 0;
@@ -186,7 +186,7 @@ void * mopen ( char *filename )
 	struct stat filestat;
 	
 	void
-		*data;
+		*data = nullptr;
 
 	int
 		count;
@@ -300,7 +300,7 @@ int file_exist (char *filename)
 	char fn[1024];
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	if (file_ptr = fopen (filename, "r"))
 	{
@@ -347,7 +347,7 @@ int file_size ( char *filename )
 	char fn[1024];
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		size;
@@ -438,7 +438,7 @@ extern char comanche_hokum_installation_path[];
 void *safe_mopen (char *filename)
 {
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT (filename);
 
@@ -513,7 +513,7 @@ BOOL safe_mclose (void *data)
 FILE *safe_fopen( char *filename, char *mode )
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	ASSERT (filename);
 

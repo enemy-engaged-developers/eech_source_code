@@ -1200,7 +1200,7 @@ void update_dynamics_at_keysite (void)
 	if (current_flight_dynamics->refueling && current_flight_dynamics->repairing_damage == DYNAMICS_DAMAGE_NONE)
 	{
 		entity
-			*keysite;
+			*keysite = nullptr;
 
 		keysite = get_keysite_currently_landed_at ();
 		available_fuel = current_flight_dynamics->fuel_weight.max;

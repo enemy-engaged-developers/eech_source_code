@@ -80,11 +80,11 @@
 void update_helicopter_target_scan (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*target;
+		*force = nullptr,
+		*target = nullptr;
 
 	ASSERT (en);
 

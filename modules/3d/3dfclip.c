@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +168,7 @@ struct CLIP_PRIMITIVE
 		number_of_edges;
 
 	clip_primitive_edge_reference
-		*edges;
+		*edges = nullptr;
 };
 
 typedef struct CLIP_PRIMITIVE clip_primitive;
@@ -183,17 +178,17 @@ typedef struct CLIP_PRIMITIVE clip_primitive;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 clip_primitive
-	*current_clipping_primitives,
+	*current_clipping_primitives = nullptr,
 	clipping_primitives_array1[MAX_NUMBER_OF_CLIP_PRIMITIVES],
 	clipping_primitives_array2[MAX_NUMBER_OF_CLIP_PRIMITIVES];
 
 clip_primitive_edge_reference
-	*current_clipping_edge_references,
+	*current_clipping_edge_references = nullptr,
 	clipping_edge_reference_array1[MAX_NUMBER_OF_CLIP_EDGE_REFERENCES],
 	clipping_edge_reference_array2[MAX_NUMBER_OF_CLIP_EDGE_REFERENCES];
 
 clip_primitive_edge
-	*current_clipping_edges,
+	*current_clipping_edges = nullptr,
 	clipping_edges_array1[MAX_NUMBER_OF_CLIP_EDGES],
 	clipping_edges_array2[MAX_NUMBER_OF_CLIP_EDGES];
 
@@ -840,7 +835,7 @@ void clip_3d_primitives ( int whole_outcode )
 		{
 
 			clip_primitive_edge
-				*edge;
+				*edge = nullptr;
 
 			edge = &current_clipping_edges[ current_clipping_primitives[primitive_count].edges[edge_count].edge_index ];
 
@@ -878,11 +873,11 @@ void reconstruct_clip_edges ( void )
 		old_number_of_clipping_edges;
 
 	clip_primitive
-		*new_clipping_primitives;
+		*new_clipping_primitives = nullptr;
 	
 	clip_primitive_edge_reference
-		*new_clipping_edge_references,
-		*destination_clipping_edge_references;
+		*new_clipping_edge_references = nullptr,
+		*destination_clipping_edge_references = nullptr;
 
 	//
 	// Now reconstruct the primitives.
@@ -912,15 +907,15 @@ void reconstruct_clip_edges ( void )
 			number_of_destination_edges;
 
 		clip_primitive
-			*source_primitive,
-			*destination_primitive;
+			*source_primitive = nullptr,
+			*destination_primitive = nullptr;
 
 		clip_primitive_edge_reference
-			*source_edges,
-			*destination_edges;
+			*source_edges = nullptr,
+			*destination_edges = nullptr;
 
 		clip_primitive_edge
-			*source_edge;
+			*source_edge = nullptr;
 
 		unsigned char
 			last_clipped_vertex_index;
@@ -1126,10 +1121,10 @@ void reconstruct_clip_edges ( void )
 			number_of_source_edges;
 
 		clip_primitive
-			*source_primitive;
+			*source_primitive = nullptr;
 
 		clip_primitive_edge_reference
-			*source_edges;
+			*source_edges = nullptr;
 
 		source_primitive = &current_clipping_primitives[source_primitive_index];
 
@@ -1156,7 +1151,7 @@ int generate_hither_clipped_edge ( vertex *point1, vertex *point2 )
 		t;
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	float
 		fog,
@@ -1294,7 +1289,7 @@ int generate_yonder_clipped_edge ( vertex *point1, vertex *point2 )
 		t;
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	float
 		fog,
@@ -1429,7 +1424,7 @@ int generate_xmin_clipped_edge ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	double
 		t,
@@ -1586,7 +1581,7 @@ int generate_xmax_clipped_edge ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	double
 		t,
@@ -1743,7 +1738,7 @@ int generate_ymin_clipped_edge ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	double
 		t,
@@ -1898,7 +1893,7 @@ int generate_ymax_clipped_edge ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	double
 		t,
@@ -2048,4 +2043,3 @@ int generate_ymax_clipped_edge ( vertex *point1, vertex *point2 )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

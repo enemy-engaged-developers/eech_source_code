@@ -79,11 +79,11 @@
 void update_fixed_wing_target_scan (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*target;
+		*force = nullptr,
+		*target = nullptr;
 
 	ASSERT (en);
 

@@ -165,7 +165,7 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 		target_move_distance;
 
 	vec3d
-		*weapon_position,
+		*weapon_position = nullptr,
 		target_position,
 		target_motion_vector;
 
@@ -229,10 +229,10 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 static int get_target_position (entity *en, vec3d *position, int can_guide_on_ground_lock)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	int
 		target_position_valid = FALSE;
@@ -305,7 +305,7 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercept_point, int loal)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	float
 		length,
@@ -359,7 +359,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		float range, dive_ratio;
 		vec3d
-			*weapon_position;
+			*weapon_position = nullptr;
 
 		weapon_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -811,14 +811,14 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 {
 	entity
-		*new_target;
+		*new_target = nullptr;
 
 	float
 		target_range,
 		theta;
 
 	vec3d
-		*target_position,
+		*target_position = nullptr,
 		weapon_to_target;
 
 	ASSERT (raw);
@@ -907,7 +907,7 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 void weapon_movement (entity *en)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	int
 		i,
@@ -935,7 +935,7 @@ void weapon_movement (entity *en)
 		test_point;
 
 	entity
-		*hit_target;
+		*hit_target = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1723,7 +1723,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 		pitch_ratio = tan(pitch);
 
 		// don't calculate out to entire range for very high or low pitch values (takes too long)
-		max_range = min(weapon_database[wpn->mob.sub_type].max_range,
+		max_range = fmin(weapon_database[wpn->mob.sub_type].max_range,
 			weapon_database[wpn->mob.sub_type].max_range * cos(pitch) * 1.25f);
 
 		while (TRUE)
@@ -1739,7 +1739,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
 
 			if (wpn->weapon_lifetime < - weapon_database[wpn->mob.sub_type].cruise_time ||
-					wpn->mob.position.y < max(- weapon_database[wpn->mob.sub_type].max_range, - 4000.0f) ||
+					wpn->mob.position.y < fmax(- weapon_database[wpn->mob.sub_type].max_range, - 4000.0f) ||
 					wpn->mob.velocity < 20.0 && wpn->weapon_lifetime < 0)
 				break;
 			
@@ -1792,7 +1792,7 @@ void calculate_projectory(weapon* wpn, FILE* output, int velocity_test)
 			if (fake_z >= ((float)(range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
 			{
 				int
-					stop_index = min((int)((fake_z + 1) / RANGE_STEP), num_range_values);
+					stop_index = min((int)((fake_z + 1.0f) / RANGE_STEP), num_range_values);
 				float
 					drop_angle;
 

@@ -107,7 +107,7 @@ static int
 struct HMS_TARGET
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	float
 		cos_angular_error;
@@ -119,14 +119,14 @@ struct HMS_TARGET
 		locked;
 
 	struct HMS_TARGET
-		*succ,
-		*pred;
+		*succ = nullptr,
+		*pred = nullptr;
 };
 
 typedef struct HMS_TARGET hms_target;
 
 static hms_target
-	*hms_target_root;
+	*hms_target_root = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,8 +167,8 @@ static void initialise_hms_target_list (void)
 static void deinitialise_hms_target_list (void)
 {
 	hms_target
-		*this_hms_target,
-		*succ;
+		*this_hms_target = nullptr,
+		*succ = nullptr;
 
 	this_hms_target = hms_target_root;
 
@@ -191,9 +191,9 @@ static void deinitialise_hms_target_list (void)
 static void insert_entity_into_hms_target_list (entity *target, entity *locked_target, float cos_angular_error, vec3d *target_position)
 {
 	hms_target
-		*new_,
-		*succ,
-		*pred;
+		*new_ = nullptr,
+		*succ = nullptr,
+		*pred = nullptr;
 
 	int
 		insert;
@@ -560,14 +560,14 @@ static entity *get_hms_boresight_target (void)
 		face_normal;
 
 	entity
-		*source,
-		*target,
-		*locked_target,
-		*this_sector,
-		*hms_boresight_target;
+		*source = nullptr,
+		*target = nullptr,
+		*locked_target = nullptr,
+		*this_sector = nullptr,
+		*hms_boresight_target = nullptr;
 
 	hms_target
-		*this_hms_target;
+		*this_hms_target = nullptr;
 
 	ASSERT (hms_max_visual_range > 0.0);
 
@@ -768,8 +768,8 @@ static entity *get_hms_boresight_target (void)
 void update_common_hms (void)
 {
 	entity
-		*current_target,
-		*new__target;
+		*current_target = nullptr,
+		*new__target = nullptr;
 
 	get_pilot_head_viewpoint ();
 
@@ -869,11 +869,11 @@ void deactivate_common_hms (void)
 static int get_selectable_hms_target (entity *target)
 {
 	entity
-		*source,
-		*boresight_target;
+		*source = nullptr,
+		*boresight_target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_position;
 
 	float
@@ -944,9 +944,9 @@ static int get_selectable_hms_target (entity *target)
 void select_next_hms_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1019,9 +1019,9 @@ void select_next_hms_target (void)
 void select_previous_hms_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1096,9 +1096,9 @@ void select_previous_hms_target (void)
 void select_next_designated_hms_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1171,9 +1171,9 @@ void select_next_designated_hms_target (void)
 void select_previous_designated_hms_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 

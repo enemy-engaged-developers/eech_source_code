@@ -6666,7 +6666,7 @@ void initialise_target_point_offsets (void)
 		object_3d_index;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -6675,7 +6675,7 @@ void initialise_target_point_offsets (void)
 		vp;
 
 	object_3d_bounds
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	debug_assert (get_3d_objects_initialised ());
 

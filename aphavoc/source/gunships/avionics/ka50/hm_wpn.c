@@ -76,7 +76,7 @@ void update_ka50_weapon_systems (void)
 		inhibit_launch;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -382,13 +382,13 @@ void update_ka50_weapon_systems (void)
 float get_ka50_missile_flight_time (void)
 {
 	entity
-		*en,
-		*weapon,
-		*target;
+		*en = nullptr,
+		*weapon = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*weapon_position,
-		*target_position;
+		*weapon_position = nullptr,
+		*target_position = nullptr;
 
 	float
 		flight_time,

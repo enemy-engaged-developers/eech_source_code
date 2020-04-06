@@ -91,7 +91,7 @@ float mobile_terrain_adjust_waypoint_height (entity *en, vec3d *wp_pos, float mi
 		vector;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	raw = (mobile *) get_local_entity_data (en);
 
@@ -187,17 +187,17 @@ float mobile_terrain_adjust_waypoint_height (entity *en, vec3d *wp_pos, float mi
 void draw_mobile_entity_debug_info (entity *en)
 {
 	vec3d
-		*pos,
+		*pos = nullptr,
 		velocity_vector,
-		*target_pos,
+		*target_pos = nullptr,
 		line_pos;
 
 	entity
-		*guide,
-		*target;
+		*guide = nullptr,
+		*target = nullptr;
 
 	mobile
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -288,9 +288,9 @@ static int calculate_task_points_for_kill (entity *victim, entity *aggressor)
 		p;
 
 	entity
-		*target,
-		*group,
-		*aggressor_group;
+		*target = nullptr,
+		*group = nullptr,
+		*aggressor_group = nullptr;
 
 	points = get_local_entity_int_value (victim, INT_TYPE_POINTS_VALUE);
 
@@ -365,9 +365,9 @@ static int calculate_task_points_for_kill (entity *victim, entity *aggressor)
 void credit_client_server_mobile_kill (entity *victim, entity *aggressor)
 {
 	entity
-		*force,
-		*task,
-		*group;
+		*force = nullptr,
+		*task = nullptr,
+		*group = nullptr;
 
 	int
 		side,
@@ -498,8 +498,8 @@ void credit_client_server_mobile_kill (entity *victim, entity *aggressor)
 float calculate_mobile_death_timer_value (entity *en)
 {
 	vec3d
-		*pos,
-		*keysite_pos;
+		*pos = nullptr,
+		*keysite_pos = nullptr;
 
 	float
 		result,
@@ -507,8 +507,8 @@ float calculate_mobile_death_timer_value (entity *en)
 		closest;
 
 	entity
-		*force,
-		*keysite;
+		*force = nullptr,
+		*keysite = nullptr;
 
 	//
 	// calculate timer based on proximity to nearest keysite
@@ -573,10 +573,10 @@ float calculate_mobile_death_timer_value (entity *en)
 int insert_mobile_into_takeoff_route (entity *member, entity *landing_entity)
 {
 	entity
-		*task,
-		*guide,
-		*group,
-		*route_wp;
+		*task = nullptr,
+		*guide = nullptr,
+		*group = nullptr,
+		*route_wp = nullptr;
 
 	unsigned int
 		member_number;
@@ -702,15 +702,15 @@ int insert_mobile_into_takeoff_route (entity *member, entity *landing_entity)
 int mobile_check_all_members_taken_off (entity *en)
 {
 	entity
-		*group,
-		*force,
-		*member,
-		*mb_guide,
-		*mb_task,
-		*new_guide,
-		*task,
-		*current_guide,
-		*landing_en;
+		*group = nullptr,
+		*force = nullptr,
+		*member = nullptr,
+		*mb_guide = nullptr,
+		*mb_task = nullptr,
+		*new_guide = nullptr,
+		*task = nullptr,
+		*current_guide = nullptr,
+		*landing_en = nullptr;
 
 	entity_sides
 		side;
@@ -925,14 +925,14 @@ int mobile_check_all_members_taken_off (entity *en)
 void play_mobile_under_attack_speech (entity *en, entity *aggressor)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		member_number,
 		speech_index;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 

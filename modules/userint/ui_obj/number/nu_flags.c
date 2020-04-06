@@ -74,11 +74,11 @@ static void set_number_ui_object_state (ui_object *obj, int flag)
 {
 	
 	number_ui_object
-		*number;
+		*number = nullptr;
 
 	ui_object
-		*next,
-		*parent;
+		*next = nullptr,
+		*parent = nullptr;
 
 	number = obj->data;
 

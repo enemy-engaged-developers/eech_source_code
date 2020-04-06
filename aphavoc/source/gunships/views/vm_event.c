@@ -1628,8 +1628,8 @@ static void players_target_event (event *ev)
 	else
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		source = get_gunship_entity ();
 
@@ -2196,7 +2196,7 @@ static void reset_mouse_event(event* ev)
 static void advance_skin (event *ev)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 	skin_next (raw->ac.inst3d);
@@ -2421,7 +2421,7 @@ void set_gunship_view_mode_events (void)
 */
 	}
 
-	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50 && get_global_gunship_type () != GUNSHIP_TYPE_HIND)
+	if (get_comanche_hokum_gunship () && get_global_gunship_type () != GUNSHIP_TYPE_KA50)
 	{
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
 	}

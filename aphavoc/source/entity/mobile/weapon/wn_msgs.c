@@ -79,7 +79,7 @@
 static int response_to_collision (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -101,7 +101,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 static int response_to_decoy_active (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	weapon_decoy_types
 		decoy_type;
@@ -257,7 +257,7 @@ static int response_to_link_parent (entity_messages message, entity *receiver, e
 static int response_to_unlink_parent (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	list_types
 		list_type;

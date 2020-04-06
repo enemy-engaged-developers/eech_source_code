@@ -151,7 +151,7 @@ void notify_session_screen (ui_object *obj, void *arg)
 	{
 
 		ui_object
-			*slider;
+			*slider = nullptr;
 
 		slider = get_ui_object_vslider (session_list_area);
 
@@ -344,7 +344,7 @@ void session_list_function (ui_object *obj, void *arg)
 {
 
    session_list_data_type
-      *current_session_list;
+      *current_session_list = nullptr;
 
 	int selection;
 	//int num_sessions; // Jabberwock 031210 Session filter
@@ -590,7 +590,7 @@ void session_list_function (ui_object *obj, void *arg)
 
 			{
 				ui_object
-					*slider;
+					*slider = nullptr;
 				slider = get_ui_object_vslider (session_list_area);
 				set_ui_object_vslider_virtual_position (slider, 0.0);
 			}
@@ -663,11 +663,11 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 {
 
 	session_list_data_type
-		*new_session,
-		*new_session_list;
+		*new_session = nullptr,
+		*new_session_list = nullptr;
 
 	ui_object
-		*selected_obj;
+		*selected_obj = nullptr;
 
 	int
 		re_highlight_flag;
@@ -849,10 +849,10 @@ void build_session_list (void)
 		col;
 
 	ui_object
-		*list_item;
+		*list_item = nullptr;
 
 	session_list_data_type
-		*list;
+		*list = nullptr;
 
 	ui_object_destroy_list_items (session_list);
 
@@ -936,7 +936,7 @@ void build_session_list (void)
 	{
 
 		ui_object
-			*slider;
+			*slider = nullptr;
 
 		slider = get_ui_object_vslider (session_list_area);
 
@@ -952,16 +952,16 @@ void build_session_list (void)
 void rename_session (void)
 {
 	char
-		*ptr,
+		*ptr = nullptr,
 		old_name [1024],
 		filename [1024],
 		new_name [1024];
 
 	ui_object
-		*list_item;
+		*list_item = nullptr;
 
 	session_list_data_type
-		*session;
+		*session = nullptr;
 
 	session = get_current_game_session ();
 
@@ -1041,12 +1041,12 @@ void session_name_input_function ( ui_object *obj, void *arg )
   	char
 		limited_name [34];
   	const char
-		*text;
+		*text = nullptr;
 	char *
 		copy;
 
 	ui_object
-		*object;
+		*object = nullptr;
 
 	text = get_ui_object_text (obj);
 
@@ -1084,10 +1084,10 @@ void notify_session_rename_button ( ui_object *obj, void *arg )
 		y;
 
 	ui_object
-		*list_item;
+		*list_item = nullptr;
 
 	session_list_data_type
-		*session;
+		*session = nullptr;
 
 	session = get_current_game_session ();
 
@@ -1137,7 +1137,7 @@ void notify_session_delete_button ( ui_object *obj, void *arg )
 {
 
 	session_list_data_type
-		*session;
+		*session = nullptr;
 
 	char
 		filename[1024];
@@ -1151,7 +1151,7 @@ void notify_session_delete_button ( ui_object *obj, void *arg )
 		{
 
 			char
-				*ptr;
+				*ptr = nullptr;
 
 			sprintf ( filename, "%s\\%s\\%s", session->data_path, session->campaign_directory, session->campaign_filename );
 

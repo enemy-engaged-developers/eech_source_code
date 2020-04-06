@@ -111,7 +111,7 @@ env_3d *create_3d_environment ( void )
 {
 
 	env_3d
-		*env;
+		*env = nullptr;
 
 	env = ( env_3d * ) safe_malloc ( sizeof ( env_3d ) );
 
@@ -278,7 +278,7 @@ void add_3d_ambient_light_setting ( env_3d *env, rgb_colour light, float time )
 {
 
 	ambient_light_setting
-		*light;
+		*light = nullptr;
 
 	ASSERT ( env );
 
@@ -349,13 +349,13 @@ float
 	horizon_3d_ambient_light_blue;
 
 unsigned char
-	*horizon_image;
+	*horizon_image = nullptr;
 
 horizon_image_data
 	horizon_images[MAX_HORIZON_IMAGES];
 
 horizon_image_data
-	*horizon_images_list;
+	*horizon_images_list = nullptr;
 
 int
 	number_of_horizon_images,
@@ -400,7 +400,7 @@ void initialise_3d_horizon ( char *filename, enum OBJECT_3D_INDEX_NUMBERS index 
 		count;
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	number_of_horizon_images = 0;
 
@@ -546,10 +546,10 @@ void add_3d_horizon_image ( char *filename, float time, weathermodes mode )
 		count;
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	horizon_colour
-		*point_colours;
+		*point_colours = nullptr;
 
 	horizon_image = load_tga_file ( filename, &width, &height, &bits );
 
@@ -672,8 +672,8 @@ void insert_3d_horizon_image ( horizon_image_data *image )
 	{
 
 		horizon_image_data
-			*this_image,
-			*last_image;
+			*this_image = nullptr,
+			*last_image = nullptr;
 
 		last_image = horizon_images_list;
 
@@ -742,11 +742,11 @@ void update_3d_horizon ( float time )
 {
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	horizon_image_data
-		*image1,
-		*image2;
+		*image1 = nullptr,
+		*image2 = nullptr;
 
 	float
 		dr,
@@ -851,10 +851,10 @@ void draw_3d_horizon ( void )
 		num_faces;
 
 	face_3d
-		*faces;
+		*faces = nullptr;
 
 	object_3d_info
-		*this_object_3d_info;
+		*this_object_3d_info = nullptr;
 
 	object_3d_info
 		object_base;
@@ -917,13 +917,13 @@ void draw_3d_horizon ( void )
 	{
 
 		object_3d_point
-			*object_points;
+			*object_points = nullptr;
 
 		point_3d_textured_reference
-			*textured_point_list;
+			*textured_point_list = nullptr;
 
 		point_3d_plain_reference
-			*plain_point_list;
+			*plain_point_list = nullptr;
 
 		object_points = objects_3d_data[object_number].points;
 
@@ -935,7 +935,7 @@ void draw_3d_horizon ( void )
 		{
 	
 			object_3d_point
-				*depth_point;
+				*depth_point = nullptr;
 	
 			if ( faces->number_of_points > 2 )
 			{
@@ -946,7 +946,7 @@ void draw_3d_horizon ( void )
 					normal_direction2;
 	
 				point_3d_plain_reference
-					*point_list;
+					*point_list = nullptr;
 			
 				point_list = &plain_point_list[faces->point_reference_index];
 
@@ -1000,11 +1000,11 @@ void transform_3d_horizon ( object_3d *object )
 		number_of_points;
 
 	object_3d_point
-		*points;
+		*points = nullptr;
 
 	vertex
-		*last_transformed_point,
-		*result_points,
+		*last_transformed_point = nullptr,
+		*result_points = nullptr,
 		tmp_vertex;
 
 	float
@@ -1020,7 +1020,7 @@ void transform_3d_horizon ( object_3d *object )
 		iymin;
 
 	horizon_colour
-		*point_colours;
+		*point_colours = nullptr;
 
 	//
 	// We only need the fpu to be in single precision mode

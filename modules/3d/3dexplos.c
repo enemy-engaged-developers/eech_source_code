@@ -59,12 +59,6 @@
 //
 
 
-
-#ifndef OGRE_EE
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include	"3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,10 +83,10 @@ struct EXPLOSION_OBJECT_POINTS_LOOKUP
 		object_number;
 
 	struct EXPLOSION_OBJECT_POINTS_LOOKUP
-		*succ;
+		*succ = nullptr;
 
 	explosion_point_uv_lookup
-		*points;
+		*points = nullptr;
 };
 
 typedef struct EXPLOSION_OBJECT_POINTS_LOOKUP explosion_object_points_lookup;
@@ -138,7 +132,7 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 		object_number;
 
 	vec3d
-		*object_relative_position;
+		*object_relative_position = nullptr;
 
 	vec3d
 		object_camera_position,
@@ -147,7 +141,7 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 		object_unit_pos;
 
 	polygon_buffer
-		*translucent_sorted_buffer;
+		*translucent_sorted_buffer = nullptr;
 
 	float
 		amplitude;
@@ -157,16 +151,16 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 		displacement_frame;
 
 	displacement_map
-		*displacement;
+		*displacement = nullptr;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	viewpoint
 		vp;
 
 	explosion_object_points_lookup
-		*displacement_points_lookup;
+		*displacement_points_lookup = nullptr;
 
 	//
 	// Set the scene pointer
@@ -220,6 +214,10 @@ void draw_3d_explosion ( object_3d_explosion *explosion )
 			scale.x = keyframe.scale_x;
 			scale.y = keyframe.scale_y;
 			scale.z = keyframe.scale_z;
+		}
+		else
+		{
+			scale.x = scale.y = scale.z = 1.0f;
 		}
 
 		object_3d_scale.x *= scale.x;
@@ -494,10 +492,10 @@ void draw_sub_explosion ( object_3d_database_entry *obj, viewpoint *parent_viewp
 		sub_pos;
 
 	light_3d_source
-		*this_light,
-		*prev_light,
-		*light_ptr,
-		*light;
+		*this_light = nullptr,
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	viewpoint
 		vp;
@@ -938,19 +936,19 @@ void transform_3d_explosion_object ( object_3d *object, vec3d *pos, displacement
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points,
-		*last_transformed_point,
+		*result_2d_points = nullptr,
+		*last_transformed_point = nullptr,
 		temp_last_transformed_point;
 
 	unsigned char
-		*result_outcode,
-		*last_transformed_point_outcode,
+		*result_outcode = nullptr,
+		*last_transformed_point_outcode = nullptr,
 		temp_last_transformed_point_outcode;
 
 	float
@@ -1717,7 +1715,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 explosion_object_points_lookup * generate_explosion_object_texture_points ( int object_number, displacement_map *displacement )
 {
 	explosion_object_points_lookup
-		*list;
+		*list = nullptr;
 
 	list = explosion_object_points_lookup_list;
 
@@ -1905,4 +1903,3 @@ void set_explosion_texture_animations ( object_3d_index_numbers scene, float ani
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

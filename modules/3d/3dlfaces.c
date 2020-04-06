@@ -146,7 +146,7 @@ void render_clipped_3d_object_textured_lightmap_polygon ( object_3d_face *this_f
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	real_colour
 		colour,
@@ -265,7 +265,7 @@ void render_clipped_3d_object_textured_lightmap_polygon ( object_3d_face *this_f
 			{
 		
 				vertex
-					*vert;
+					*vert = nullptr;
 		
 				int
 					number_of_points,
@@ -359,7 +359,7 @@ void render_clipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_face
 		outcode;
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	float
 		specular;
@@ -454,7 +454,7 @@ void render_clipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_face
 				{
 			
 					vertex
-						*vert;
+						*vert = nullptr;
 		
 					int
 						number_of_points,
@@ -615,16 +615,16 @@ void render_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *this
 			count;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 	
 		LPD3DTLVERTEX
 			destination_vertices,
 			lightmap_vertices;
 	
 		object_3d_short_textured_point
-			*texture_list,
-			*luminosity_texture_list;
+			*texture_list = nullptr,
+			*luminosity_texture_list = nullptr;
 
 		float
 			distance;
@@ -697,16 +697,16 @@ void render_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *this
 			count;
 	
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 	
 		LPD3DTLVERTEX
 			destination_vertices,
 			lightmap_vertices;
 	
 		object_3d_short_textured_point
-			*texture_list,
-			*luminosity_texture_list;
+			*texture_list = nullptr,
+			*luminosity_texture_list = nullptr;
 
 		//
 		// Should draw a flat shaded polygon - with a lightmap
@@ -778,19 +778,19 @@ void render_unclipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_fa
 		count;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices,
 		lightmap_vertices;
 
 	object_3d_short_textured_point
-		*texture_list,
-		*luminosity_texture_list;
+		*texture_list = nullptr,
+		*luminosity_texture_list = nullptr;
 
 	point_3d_plain_reference
-		*gouraud_list;
+		*gouraud_list = nullptr;
 
 	real_colour
 		specular_colour;

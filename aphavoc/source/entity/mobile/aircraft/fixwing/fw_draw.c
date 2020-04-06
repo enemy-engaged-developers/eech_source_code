@@ -94,7 +94,7 @@ static int sprite_light_valid (entity *en);
 static void draw_local_3d_object (entity *en, float range)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 #ifndef OGRE_EE
 	day_segment_types
@@ -174,7 +174,7 @@ static void draw_local_3d_object (entity *en, float range)
 	if (en == get_external_view_entity ())
 	{
 		vec3d
-			*pos,
+			*pos = nullptr,
 			wp_pos;
 
 		draw_mobile_entity_debug_info (en);

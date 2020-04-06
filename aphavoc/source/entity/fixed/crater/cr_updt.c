@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	crater
-		*raw;
+		*raw = nullptr;
 
 	raw = (crater *) get_local_entity_data (en);
 

@@ -79,7 +79,7 @@
 static const char *get_local_string (entity *en, string_types type)
 {
 	const char
-		*s;
+		*s = nullptr;
 
 	switch (type)
 	{

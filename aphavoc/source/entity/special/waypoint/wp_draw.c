@@ -88,17 +88,17 @@ static void draw_local_3d_object (entity *en, float range)
 		formation_count;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*next_waypoint;
+		*next_waypoint = nullptr;
 
 	vec3d
-		*next_waypoint_position,
+		*next_waypoint_position = nullptr,
 		direction;
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	float
 		size,
@@ -234,18 +234,18 @@ void draw_local_waypoint_2d_symbol (entity *en, int add_waypoint_flag, int draw_
 		loop;
 
 	entity
-		*task,
-		*succ;
+		*task = nullptr,
+		*succ = nullptr;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		position1,
 		position2;
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	ASSERT (en->type == ENTITY_TYPE_WAYPOINT);
 

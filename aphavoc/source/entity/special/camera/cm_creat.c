@@ -96,10 +96,10 @@ void create_local_camera_entity (void)
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	camera
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
   	//

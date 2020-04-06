@@ -161,7 +161,7 @@ env_3d *create_3d_environment ( void )
 {
 
 	env_3d
-		*env;
+		*env = nullptr;
 
 	env = ( env_3d * ) safe_malloc ( sizeof ( env_3d ) );
 
@@ -385,8 +385,8 @@ void calculate_interpolated_fog_setting ( float time_of_day, fog_setting *fog_he
 	{
 
 		fog_setting
-			*fog1,
-			*fog2;
+			*fog1 = nullptr,
+			*fog2 = nullptr;
 
 		float
 			t;
@@ -529,8 +529,8 @@ void calculate_interpolated_light_setting ( float time_of_day, main_light_settin
 	{
 
 		main_light_setting
-			*light1,
-			*light2;
+			*light1 = nullptr,
+			*light2 = nullptr;
 
 		float
 			t;
@@ -617,8 +617,8 @@ void reset_3d_fog_settings ( env_3d *env )
 			weathermode;
 
 		fog_setting
-			*old_fog,
-			*fog;
+			*old_fog = nullptr,
+			*fog = nullptr;
 
 		for ( weathermode = WEATHERMODE_INVALID + 1; weathermode < WEATHERMODE_LAST; weathermode++ )
 		{
@@ -654,7 +654,7 @@ void add_3d_fog_setting ( env_3d *env, weathermodes mode, float fog_scale, float
 {
 
 	fog_setting
-		*fog;
+		*fog = nullptr;
 
 	ASSERT ( env );
 
@@ -669,8 +669,8 @@ void add_3d_fog_setting ( env_3d *env, weathermodes mode, float fog_scale, float
 	{
 
 		fog_setting
-			*this_fog,
-			*last_fog;
+			*this_fog = nullptr,
+			*last_fog = nullptr;
 
 		env->number_of_fog_settings++;
 
@@ -790,8 +790,8 @@ void reset_3d_ambient_light_settings ( env_3d *env )
 			weathermode;
 
 		main_light_setting
-			*old_light,
-			*light;
+			*old_light = nullptr,
+			*light = nullptr;
 
 		for ( weathermode = WEATHERMODE_INVALID + 1; weathermode < WEATHERMODE_LAST; weathermode++ )
 		{
@@ -827,7 +827,7 @@ void add_3d_ambient_light_setting ( env_3d *env, weathermodes mode, rgb_colour c
 {
 
 	main_light_setting
-		*light;
+		*light = nullptr;
 
 	float
 		r,
@@ -861,8 +861,8 @@ void add_3d_ambient_light_setting ( env_3d *env, weathermodes mode, rgb_colour c
 	{
 
 		main_light_setting
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		env->number_of_ambient_light_settings++;
 
@@ -961,8 +961,8 @@ void reset_3d_sun_settings ( env_3d *env )
 	{
 
 		main_light_setting
-			*old_light,
-			*light;
+			*old_light = nullptr,
+			*light = nullptr;
 
 		int
 			weathermode;
@@ -1005,7 +1005,7 @@ void add_3d_sun_setting ( env_3d *env, weathermodes weathermode, float scale, fl
 {
 
 	main_light_setting
-		*light;
+		*light = nullptr;
 
 	float
 		r,
@@ -1073,8 +1073,8 @@ void add_3d_sun_setting ( env_3d *env, weathermodes weathermode, float scale, fl
 	{
 
 		main_light_setting
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		env->number_of_sun_settings++;
 
@@ -1173,8 +1173,8 @@ void reset_3d_moon_settings ( env_3d *env )
 	{
 
 		main_light_setting
-			*old_light,
-			*light;
+			*old_light = nullptr,
+			*light = nullptr;
 
 		int
 			weathermode;
@@ -1217,7 +1217,7 @@ void add_3d_moon_setting ( env_3d *env, weathermodes weathermode, float scale, f
 {
 
 	main_light_setting
-		*light;
+		*light = nullptr;
 
 	float
 		r,
@@ -1276,8 +1276,8 @@ void add_3d_moon_setting ( env_3d *env, weathermodes weathermode, float scale, f
 	{
 
 		main_light_setting
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		env->number_of_moon_settings++;
 
@@ -1379,8 +1379,8 @@ void reset_3d_cloud_light_settings ( env_3d *env )
 			weathermode;
 
 		main_light_setting
-			*old_light,
-			*light;
+			*old_light = nullptr,
+			*light = nullptr;
 
 		for ( weathermode = WEATHERMODE_INVALID + 1; weathermode < WEATHERMODE_LAST; weathermode++ )
 		{
@@ -1416,7 +1416,7 @@ void add_3d_cloud_light_setting ( env_3d *env, weathermodes mode, rgb_colour col
 {
 
 	main_light_setting
-		*light;
+		*light = nullptr;
 
 	ASSERT ( env );
 
@@ -1441,8 +1441,8 @@ void add_3d_cloud_light_setting ( env_3d *env, weathermodes mode, rgb_colour col
 	{
 
 		main_light_setting
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		env->number_of_cloud_light_settings++;
 
@@ -1544,8 +1544,8 @@ void reset_3d_shadow_settings ( env_3d *env )
 			weathermode;
 
 		main_light_setting
-			*old_light,
-			*light;
+			*old_light = nullptr,
+			*light = nullptr;
 
 		for ( weathermode = WEATHERMODE_INVALID + 1; weathermode < WEATHERMODE_LAST; weathermode++ )
 		{
@@ -1581,7 +1581,7 @@ void add_3d_shadow_setting ( env_3d *env, weathermodes mode, rgb_colour colour, 
 {
 
 	main_light_setting
-		*light;
+		*light = nullptr;
 
 	float
 		r,
@@ -1611,8 +1611,8 @@ void add_3d_shadow_setting ( env_3d *env, weathermodes mode, rgb_colour colour, 
 	{
 
 		main_light_setting
-			*this_light,
-			*last_light;
+			*this_light = nullptr,
+			*last_light = nullptr;
 
 		env->number_of_shadow_settings++;
 
@@ -1726,7 +1726,7 @@ void add_3d_light_to_environment ( env_3d *env, light_3d_source *light )
 {
 
 	light_3d_source
-		*lights;
+		*lights = nullptr;
 
 	ASSERT ( env );
 
@@ -1788,7 +1788,7 @@ void set_global_3d_fog_scale_setting ( env_3d *env, float new_fog_scale )
 	{
 
 		fog_setting
-			*fog;
+			*fog = nullptr;
 
 		fog = env->fog_settings[mode];
 
@@ -1810,7 +1810,7 @@ void remove_3d_light_from_environment ( env_3d *env, light_3d_source *light )
 {
 
 	light_3d_source
-		*lights;
+		*lights = nullptr;
 
 	int
 		in_list;

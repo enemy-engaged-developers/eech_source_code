@@ -80,10 +80,10 @@ static void draw_local_3d_object (entity *en, float range)
 {
 
 	site
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	vec3d
 		face_normal;

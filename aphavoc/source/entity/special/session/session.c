@@ -342,7 +342,7 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 		range;
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	weathermodes
 		cwm,
@@ -515,7 +515,7 @@ weathermodes get_simple_session_weather_at_point (vec3d *pos)
 void set_session_fixed_weather_mode (entity *en, weathermodes weather_mode)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -538,7 +538,7 @@ void set_session_fixed_weather_mode (entity *en, weathermodes weather_mode)
 void set_session_random_weather_mode (entity *en)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	float
 		theta;
@@ -600,7 +600,7 @@ float get_session_wind_velocity_at_point (vec3d *pos, vec3d *wind_velocity)
 		wind_speed;
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_session_entity ());
 
@@ -945,7 +945,7 @@ int check_point_inside_population_area (vec3d *point)
 {
 
 	session
-		*raw;
+		*raw = nullptr;
 
 	debug_assert (get_session_entity ());
 

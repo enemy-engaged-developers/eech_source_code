@@ -79,13 +79,13 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	segment
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*parent;
+		*parent = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	float
 		pitch;
@@ -165,10 +165,10 @@ static void draw_local_3d_object (entity *en, float range)
 static void draw_local_2d_symbol (entity *en)
 {
 	segment
-		*raw;
+		*raw = nullptr;
 
 	struct OBJECT_3D_BOUNDS
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	if (command_line_run_mode == RUN_MODE_AITOOL)
 	{

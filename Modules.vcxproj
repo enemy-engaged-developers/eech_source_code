@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6E37A9CD-22E4-4E99-8C0A-FC9D8C998CC7}</ProjectGuid>
+    <RootNamespace>Modules</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.29904.37</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <BrowseInformation>true</BrowseInformation>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <SDLCheck>true</SDLCheck>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <ProjectReference />
+    <Lib>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="aphavoc\source\cdmusic.c" />
+    <ClCompile Include="modules\maths\constant.c" />
+    <ClCompile Include="modules\maths\fixedpt.c" />
+    <ClCompile Include="modules\maths\initmath.c" />
+    <ClCompile Include="modules\maths\invsqrt.c" />
+    <ClCompile Include="modules\maths\matrix.c" />
+    <ClCompile Include="modules\maths\miscmath.c" />
+    <ClCompile Include="modules\maths\projtile.c" />
+    <ClCompile Include="modules\maths\qternion.c" />
+    <ClCompile Include="modules\maths\random.c" />
+    <ClCompile Include="modules\maths\range.c" />
+    <ClCompile Include="modules\maths\reciptab.c" />
+    <ClCompile Include="modules\maths\tevent.c" />
+    <ClCompile Include="modules\maths\trig.c" />
+    <ClCompile Include="modules\maths\vector.c" />
+    <ClCompile Include="modules\misc\file_tag.c" />
+    <ClCompile Include="modules\misc\iff.c" />
+    <ClCompile Include="modules\misc\int_list.c" />
+    <ClCompile Include="modules\misc\string.c" />
+    <ClCompile Include="modules\multi\directp.c" />
+    <ClCompile Include="modules\multi\dpguid.c" />
+    <ClCompile Include="modules\multi\server.c" />
+    <ClCompile Include="modules\sound\dirsound.c" />
+    <ClCompile Include="modules\sound\dsound.c" />
+    <ClCompile Include="modules\sound\dsound3d.c" />
+    <ClCompile Include="modules\sound\soundhlp.c" />
+    <ClCompile Include="modules\sound\soundman.c" />
+    <ClCompile Include="modules\system\ascii.c" />
+    <ClCompile Include="modules\system\assert.c" />
+    <ClCompile Include="modules\system\cdrom.c" />
+    <ClCompile Include="modules\system\cpuclock.c" />
+    <ClCompile Include="modules\system\debug.c" />
+    <ClCompile Include="modules\system\event.c" />
+    <ClCompile Include="modules\system\ev_alpha.c" />
+    <ClCompile Include="modules\system\ev_stack.c" />
+    <ClCompile Include="modules\system\filedir.c" />
+    <ClCompile Include="modules\system\files.c" />
+    <ClCompile Include="modules\system\fpu.c" />
+    <ClCompile Include="modules\system\joyevent.c" />
+    <ClCompile Include="modules\system\joystick.c" />
+    <ClCompile Include="modules\system\keyboard.c" />
+    <ClCompile Include="modules\system\keyevent.c" />
+    <ClCompile Include="modules\system\keymapping.c" />
+    <ClCompile Include="modules\system\memblock.c" />
+    <ClCompile Include="modules\system\memcmp.c" />
+    <ClCompile Include="modules\system\memory.c" />
+    <ClCompile Include="modules\system\mouse.c" />
+    <ClCompile Include="modules\system\safemem.c" />
+    <ClCompile Include="modules\system\startup.c" />
+    <ClCompile Include="modules\system\sysinput.c" />
+    <ClCompile Include="modules\system\sysmess.c" />
+    <ClCompile Include="modules\system\time.c" />
+    <ClCompile Include="modules\system\timer.c" />
+    <ClCompile Include="modules\system\trackir.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aphavoc\source\cdmusic.h" />
+    <ClInclude Include="modules\maths.h" />
+    <ClInclude Include="modules\maths\constant.h" />
+    <ClInclude Include="modules\maths\convert.h" />
+    <ClInclude Include="modules\maths\fixedpt.h" />
+    <ClInclude Include="modules\maths\initmath.h" />
+    <ClInclude Include="modules\maths\invsqrt.h" />
+    <ClInclude Include="modules\maths\matrix.h" />
+    <ClInclude Include="modules\maths\miscmath.h" />
+    <ClInclude Include="modules\maths\projtile.h" />
+    <ClInclude Include="modules\maths\qternion.h" />
+    <ClInclude Include="modules\maths\random.h" />
+    <ClInclude Include="modules\maths\range.h" />
+    <ClInclude Include="modules\maths\reciptab.h" />
+    <ClInclude Include="modules\maths\tevent.h" />
+    <ClInclude Include="modules\maths\trig.h" />
+    <ClInclude Include="modules\maths\vector.h" />
+    <ClInclude Include="modules\maths\vertex.h" />
+    <ClInclude Include="modules\misc.h" />
+    <ClInclude Include="modules\misc\file_tag.h" />
+    <ClInclude Include="modules\misc\iff.h" />
+    <ClInclude Include="modules\misc\int_list.h" />
+    <ClInclude Include="modules\misc\listitem.h" />
+    <ClInclude Include="modules\misc\string.h" />
+    <ClInclude Include="modules\multi.h" />
+    <ClInclude Include="modules\physics.h" />
+    <ClInclude Include="modules\sound.h" />
+    <ClInclude Include="modules\sound\dirsound.h" />
+    <ClInclude Include="modules\sound\dsound.h" />
+    <ClInclude Include="modules\sound\dsound3d.h" />
+    <ClInclude Include="modules\sound\soundhlp.h" />
+    <ClInclude Include="modules\sound\soundman.h" />
+    <ClInclude Include="modules\system.h" />
+    <ClInclude Include="modules\system2.h" />
+    <ClInclude Include="modules\system\ascii.h" />
+    <ClInclude Include="modules\system\assert.h" />
+    <ClInclude Include="modules\system\cdrom.h" />
+    <ClInclude Include="modules\system\cpuclock.h" />
+    <ClInclude Include="modules\system\debug.h" />
+    <ClInclude Include="modules\system\event.h" />
+    <ClInclude Include="modules\system\ev_alpha.h" />
+    <ClInclude Include="modules\system\ev_stack.h" />
+    <ClInclude Include="modules\system\filedir.h" />
+    <ClInclude Include="modules\system\files.h" />
+    <ClInclude Include="modules\system\fpu.h" />
+    <ClInclude Include="modules\system\joyevent.h" />
+    <ClInclude Include="modules\system\joystick.h" />
+    <ClInclude Include="modules\system\keyboard.h" />
+    <ClInclude Include="modules\system\keyevent.h" />
+    <ClInclude Include="modules\system\keymapping.h" />
+    <ClInclude Include="modules\system\memblock.h" />
+    <ClInclude Include="modules\system\memcmp.h" />
+    <ClInclude Include="modules\system\memory.h" />
+    <ClInclude Include="modules\system\mouse.h" />
+    <ClInclude Include="modules\system\safemem.h" />
+    <ClInclude Include="modules\system\startup.h" />
+    <ClInclude Include="modules\system\sysinput.h" />
+    <ClInclude Include="modules\system\sysmess.h" />
+    <ClInclude Include="modules\system\time.h" />
+    <ClInclude Include="modules\system\timer.h" />
+    <ClInclude Include="modules\system\trackir.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

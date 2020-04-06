@@ -90,13 +90,13 @@ ui_object
 
 static ui_object
 	*common_list_area [NUM_COMMON_LIST_MODES],
-	*common_list_mode_area,
-	*common_list_filter_area,
-	*mission_list_mode_button,
-	*group_list_mode_button,
-	*base_list_mode_button,
-	*available_button,
-	*all_button;
+	*common_list_mode_area = nullptr,
+	*common_list_filter_area = nullptr,
+	*mission_list_mode_button = nullptr,
+	*group_list_mode_button = nullptr,
+	*base_list_mode_button = nullptr,
+	*available_button = nullptr,
+	*all_button = nullptr;
 
 static int
 	common_available_only_flag;
@@ -105,8 +105,8 @@ entity
 	*list_filter [NUM_COMMON_LIST_MODES];
 
 static texture_graphic
-	*mission_group_graphic,
-	*mission_group_base_graphic;
+	*mission_group_graphic = nullptr,
+	*mission_group_base_graphic = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,10 +164,10 @@ void initialise_campaign_screen_list_objects (void)
 void add_mission_to_common_list (entity *en, int text_type)
 {
 	entity
-		*previous;
+		*previous = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	char
 		buffer [128];
@@ -228,10 +228,10 @@ void add_mission_to_common_list (entity *en, int text_type)
 void build_mission_list (void)
 {
 	entity
-		*en,
-		*force,
-		*group_filter,
-		*base_filter;
+		*en = nullptr,
+		*force = nullptr,
+		*group_filter = nullptr,
+		*base_filter = nullptr;
 
 	ui_object_destroy_list_items (common_list [COMMON_LIST_MODE_MISSION]);
 
@@ -302,15 +302,15 @@ void build_mission_list (void)
 void add_group_to_common_list (entity *en, int text_type)
 {
 	entity
-		*previous,
-		*company,
-		*keysite;
+		*previous = nullptr,
+		*company = nullptr,
+		*keysite = nullptr;
 
 	entity_sub_types
 		sub_type;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	char
 		ext1 [5],
@@ -432,10 +432,10 @@ void add_group_to_common_list (entity *en, int text_type)
 void build_group_list ()
 {
 	entity
-		*en,
-		*force,
-		*base_filter,
-		*mission_filter;
+		*en = nullptr,
+		*force = nullptr,
+		*base_filter = nullptr,
+		*mission_filter = nullptr;
 
 	ui_object_destroy_list_items (common_list [COMMON_LIST_MODE_GROUP]);
 
@@ -499,10 +499,10 @@ void build_group_list ()
 void add_base_to_common_list (entity *en, int text_type)
 {
 	entity
-		*previous;
+		*previous = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	char
 		buffer [128];
@@ -553,7 +553,7 @@ void add_base_to_common_list (entity *en, int text_type)
 void build_base_list ()
 {
 	entity
-		*force;
+		*force = nullptr;
 
 	ui_object_destroy_list_items (common_list [COMMON_LIST_MODE_BASE]);
 
@@ -685,7 +685,7 @@ static void common_list_mission_selected (ui_object *obj)
 		case COMMON_LIST_ITEM_ENTITY:
 		{
 			entity
-				*task;
+				*task = nullptr;
 
 			task = get_local_entity_safe_ptr (index);
 
@@ -1410,7 +1410,7 @@ static int response_to_group_change_base (campaign_screen_messages message, enti
 static int response_to_group_remove_member (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	//
 	// sender is a mobile

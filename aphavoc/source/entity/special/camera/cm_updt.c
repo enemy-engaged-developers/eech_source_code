@@ -88,7 +88,7 @@
 static void update_server (entity *en)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	raw = (camera *) get_local_entity_data (en);
 

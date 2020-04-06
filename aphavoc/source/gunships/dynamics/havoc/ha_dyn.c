@@ -302,7 +302,7 @@ void set_dynamics_defaults (entity *en)
 	{
 
 		entity
-			*keysite;
+			*keysite = nullptr;
 
 		keysite = get_local_entity_parent (get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER), LIST_TYPE_KEYSITE_GROUP);
 
@@ -2027,7 +2027,7 @@ void update_attitude_dynamics (void)
 			scaling = 1.0 - (1.0 / a);
 		}
 
-		scaling = min (fabs (scaling), 1.0f);
+		scaling = fmin (fabs (scaling), 1.0f);
 
 		reaction_force += (tail_angular_force - main_angular_force) * scaling;
 
@@ -2600,7 +2600,7 @@ void update_attitude_dynamics (void)
 	{
 		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
 		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
-		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
+		float velocity_factor = fmax (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
@@ -2806,7 +2806,7 @@ void update_acceleration_dynamics (void)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 

@@ -81,12 +81,12 @@ void update_fixed_wing_crate_dropping (entity *en)
 {
 
 	entity
-		*current_waypoint,
-		*crate;
+		*current_waypoint = nullptr,
+		*crate = nullptr;
 
 	vec3d
-		*crate_pos,
-		*en_pos;
+		*crate_pos = nullptr,
+		*en_pos = nullptr;
 
 	float
 		range;

@@ -90,10 +90,10 @@ float
 static entity *create_local (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	int
 		seed,
@@ -353,7 +353,7 @@ static entity *create_remote (entity_types type, int index, char *pargs)
 static entity *create_server (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_client_server_local_fn ();
 
@@ -376,7 +376,7 @@ static entity *create_server (entity_types type, int index, char *pargs)
 static entity *create_client (entity_types type, int index, char *pargs)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
 	{
@@ -414,9 +414,9 @@ void overload_weapon_create_functions (void)
 void create_client_server_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int weapon_index, int burst_size, int *smoke_trail_indices, int salvo)
 {
 	entity
-		*force,
-		*target,
-		*weapon;
+		*force = nullptr,
+		*target = nullptr,
+		*weapon = nullptr;
 
 	meta_smoke_list_types
 		smoke_trail_type;
@@ -640,7 +640,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 				if (create_smoke_trail)
 				{
 					struct OBJECT_3D_BOUNDS
-						*bounding_box;
+						*bounding_box = nullptr;
 
 					vec3d
 						exhaust_offset;
@@ -849,7 +849,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE && smoke_trail_indices)
 			{
 				struct OBJECT_3D_BOUNDS
-					*bounding_box;
+					*bounding_box = nullptr;
 
 				vec3d
 					exhaust_offset;
@@ -946,8 +946,8 @@ void launch_client_server_weapon (entity *launcher, entity_sub_types weapon_sub_
 void create_server_entity_submunition_weapon (entity *launcher, entity *target, entity_sub_types weapon_sub_type, viewpoint *vp, float velocity)
 {
 	entity
-		*force,
-		*weapon;
+		*force = nullptr,
+		*weapon = nullptr;
 
 	ASSERT(get_comms_model () == COMMS_MODEL_SERVER);
 	ASSERT (launcher);

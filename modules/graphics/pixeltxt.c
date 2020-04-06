@@ -152,7 +152,7 @@ void set_texture_pixel ( screen *texture, const int x, const int y, const unsign
 	{
 
 		unsigned char
-			*ptr;
+			*ptr = nullptr;
 
 		ptr = get_screen_data ( texture );
 
@@ -166,7 +166,7 @@ void set_texture_pixel ( screen *texture, const int x, const int y, const unsign
 	{
 
 		unsigned char
-			*ptr;
+			*ptr = nullptr;
 
 		switch ( texture->type )
 		{

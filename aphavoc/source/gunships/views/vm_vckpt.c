@@ -797,7 +797,7 @@ void update_virtual_cockpit_track_target_view (void)
 		frame_rotate_rate;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
@@ -2073,8 +2073,8 @@ void draw_virtual_cockpit_3d_view (void)
 	if (external_view_inset_target)
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		viewpoint
 			vp;
@@ -2966,7 +2966,7 @@ static void restore_co_pilot_seat_values (void)
 void switch_seat_position (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_gunship_entity ());
 
@@ -3198,9 +3198,9 @@ static void display_padlock_message (padlock_modes mode)
 				pilot_name[200];
 
 			entity
-				*wingman,
-				*group,
-				*pilot;
+				*wingman = nullptr,
+				*group = nullptr,
+				*pilot = nullptr;
 
 			wingman = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_PADLOCK);
 
@@ -3240,7 +3240,7 @@ static void display_padlock_message (padlock_modes mode)
 		////////////////////////////////////////
 		{
 			entity
-				*air_threat;
+				*air_threat = nullptr;
 
 			air_threat = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_PADLOCK);
 
@@ -3257,7 +3257,7 @@ static void display_padlock_message (padlock_modes mode)
 		////////////////////////////////////////
 		{
 			entity
-				*ground_threat;
+				*ground_threat = nullptr;
 
 			ground_threat = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_PADLOCK);
 
@@ -3274,7 +3274,7 @@ static void display_padlock_message (padlock_modes mode)
 		////////////////////////////////////////
 		{
 			entity
-				*incoming;
+				*incoming = nullptr;
 
 			incoming = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_PADLOCK);
 
@@ -3291,7 +3291,7 @@ static void display_padlock_message (padlock_modes mode)
 		////////////////////////////////////////
 		{
 			entity
-				*waypoint;
+				*waypoint = nullptr;
 
 			waypoint = get_local_entity_current_waypoint (get_gunship_entity ());
 
@@ -3340,9 +3340,9 @@ static int get_valid_wingman (entity *wingman)
 static entity *get_first_wingman (void)
 {
 	entity
-		*source,
-		*group,
-		*wingman;
+		*source = nullptr,
+		*group = nullptr,
+		*wingman = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3379,9 +3379,9 @@ static entity *get_first_wingman (void)
 static entity *get_next_wingman (void)
 {
 	entity
-		*source,
-		*group,
-		*wingman;
+		*source = nullptr,
+		*group = nullptr,
+		*wingman = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3476,9 +3476,9 @@ static int get_valid_air_threat (entity *threat, entity_sides source_side)
 static entity *get_first_air_threat (void)
 {
 	entity
-		*source,
-		*threat,
-		*closest_threat;
+		*source = nullptr,
+		*threat = nullptr,
+		*closest_threat = nullptr;
 
 	entity_sides
 		source_side;
@@ -3488,8 +3488,8 @@ static entity *get_first_air_threat (void)
 		closest_threat_range;
 
 	vec3d
-		*source_position,
-		*threat_position;
+		*source_position = nullptr,
+		*threat_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3534,8 +3534,8 @@ static entity *get_first_air_threat (void)
 static entity *get_next_air_threat (void)
 {
 	entity
-		*source,
-		*threat;
+		*source = nullptr,
+		*threat = nullptr;
 
 	entity_sides
 		source_side;
@@ -3630,9 +3630,9 @@ static int get_valid_ground_threat (entity *threat, entity_sides source_side)
 static entity *get_first_ground_threat (void)
 {
 	entity
-		*source,
-		*threat,
-		*closest_threat;
+		*source = nullptr,
+		*threat = nullptr,
+		*closest_threat = nullptr;
 
 	entity_sides
 		source_side;
@@ -3642,8 +3642,8 @@ static entity *get_first_ground_threat (void)
 		closest_threat_range;
 
 	vec3d
-		*source_position,
-		*threat_position;
+		*source_position = nullptr,
+		*threat_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3688,8 +3688,8 @@ static entity *get_first_ground_threat (void)
 static entity *get_next_ground_threat (void)
 {
 	entity
-		*source,
-		*threat;
+		*source = nullptr,
+		*threat = nullptr;
 
 	entity_sides
 		source_side;
@@ -3778,9 +3778,9 @@ static int get_valid_missile_threat (entity *threat)
 static entity *get_first_missile_threat (void)
 {
 	entity
-		*source,
-		*threat,
-		*closest_missile;
+		*source = nullptr,
+		*threat = nullptr,
+		*closest_missile = nullptr;
 
 	int
 		overshot;
@@ -3794,12 +3794,12 @@ static entity *get_first_missile_threat (void)
 		cos_error;
 
 	vec3d
-		*source_position,
-		*threat_position,
+		*source_position = nullptr,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3882,8 +3882,8 @@ static entity *get_first_missile_threat (void)
 static entity *get_next_missile_threat (void)
 {
 	entity
-		*source,
-		*threat;
+		*source = nullptr,
+		*threat = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -3951,8 +3951,8 @@ static entity *get_next_missile_threat (void)
 void select_padlock_view_event (padlock_modes mode)
 {
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -4259,8 +4259,8 @@ void select_inset_view_event (padlock_modes mode)
 entity *get_inset (void)
 {
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	source = get_external_view_entity ();
 
@@ -4335,7 +4335,7 @@ entity *get_inset (void)
 entity *get_players_padlock (void)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	target = NULL;
 
@@ -4402,8 +4402,8 @@ void update_virtual_cockpit_padlock_view (void)
 		frame_rotate_rate;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	source = get_gunship_entity ();
 

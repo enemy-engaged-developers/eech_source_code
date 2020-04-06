@@ -80,22 +80,22 @@
 
 
 static object_3d_instance
-	*virtual_cockpit_level1_inst3d,
-	*virtual_cockpit_level2_inst3d,
-	*virtual_cockpit_level3_inst3d,
-	*virtual_cockpit_fillet_level1_inst3d,
-	*virtual_cockpit_fillet_level2_inst3d,
-	*virtual_cockpit_fillet_level3_inst3d,
-	*virtual_cockpit_main_rotor_inst3d,
-	*virtual_cockpit_adi_inst3d,
-	*virtual_cockpit_large_adi_inst3d,
-	*virtual_cockpit_compass_inst3d,
-	*virtual_cockpit_instrument_needles_inst3d,
-	*virtual_cockpit_instrument_large_needles_inst3d,
-	*virtual_cockpit_upfront_display_inst3d,
-	*virtual_cockpit_lhs_mfd_inst3d,
-	*virtual_cockpit_rhs_mfd_inst3d,
-	*virtual_cockpit_display_view_mfd_inst3d;
+	*virtual_cockpit_level1_inst3d = nullptr,
+	*virtual_cockpit_level2_inst3d = nullptr,
+	*virtual_cockpit_level3_inst3d = nullptr,
+	*virtual_cockpit_fillet_level1_inst3d = nullptr,
+	*virtual_cockpit_fillet_level2_inst3d = nullptr,
+	*virtual_cockpit_fillet_level3_inst3d = nullptr,
+	*virtual_cockpit_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_adi_inst3d = nullptr,
+	*virtual_cockpit_large_adi_inst3d = nullptr,
+	*virtual_cockpit_compass_inst3d = nullptr,
+	*virtual_cockpit_instrument_needles_inst3d = nullptr,
+	*virtual_cockpit_instrument_large_needles_inst3d = nullptr,
+	*virtual_cockpit_upfront_display_inst3d = nullptr,
+	*virtual_cockpit_lhs_mfd_inst3d = nullptr,
+	*virtual_cockpit_rhs_mfd_inst3d = nullptr,
+	*virtual_cockpit_display_view_mfd_inst3d = nullptr;
 
 #ifndef OGRE_EE
 static float clipx;
@@ -496,7 +496,7 @@ void draw_default_internal_virtual_cockpit (unsigned int flags)
 		search;
 
 	object_3d_instance
-		*virtual_cockpit_inst3d;
+		*virtual_cockpit_inst3d = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1077,7 +1077,7 @@ void draw_default_external_virtual_cockpit (unsigned int flags, unsigned char *w
 		search;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	////////////////////////////////////////
 	//

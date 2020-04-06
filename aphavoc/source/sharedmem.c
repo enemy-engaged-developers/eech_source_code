@@ -329,7 +329,7 @@ void update_waypoint_shared_mem(void)
 	if (wp)
 	{
 		vec3d
-			*gunship_position,
+			*gunship_position = nullptr,
 			waypoint_position;
 
 		float
@@ -359,7 +359,7 @@ void update_waypoint_shared_mem(void)
 void update_weapon_load_shared_mem (void)
 {
 	weapon_package_status
-		*package_status;
+		*package_status = nullptr;
 
 	unsigned next_free = 0;
 

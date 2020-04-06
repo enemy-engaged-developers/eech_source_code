@@ -96,13 +96,13 @@ static void dump_guide_stack (entity *group);
 void assign_keysite_tasks (entity *keysite, task_category_types category)
 {
 	entity
-		*task,
-		*group,
-		*force,
+		*task = nullptr,
+		*group = nullptr,
+		*force = nullptr,
 		**task_list;
 
 	float
-		*sort_order;
+		*sort_order = nullptr;
 
 	int
 		loop,
@@ -322,7 +322,7 @@ static int suitable_group_task_specific_checks (entity *task, entity *group)
 			//
 
 			entity
-				*objective;
+				*objective = nullptr;
 	
 			int
 				objective_group_type;
@@ -370,7 +370,7 @@ static int suitable_group_task_specific_checks (entity *task, entity *group)
 			//
 
 			entity
-				*objective;
+				*objective = nullptr;
 	
 			int
 				objective_type;
@@ -407,12 +407,12 @@ entity *get_suitable_registered_group (entity *task, int *idle_group_count)
 		best_result;
 
 	group
-		*group_raw;
+		*group_raw = nullptr;
 
 	entity
-		*keysite,
-		*best_group,
-		*current_group;
+		*keysite = nullptr,
+		*best_group = nullptr,
+		*current_group = nullptr;
 
 	unsigned int
 		idle_count;
@@ -528,8 +528,8 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 		group_type;
 
 	entity
-		*force,
-		*keysite;
+		*force = nullptr,
+		*keysite = nullptr;
 
 	int
 		side,
@@ -659,8 +659,8 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 entity *push_task_onto_group_task_stack (entity *group, entity *task, unsigned int valid_members)
 {
 	entity
-		*task_parent,
-		*guide;
+		*task_parent = nullptr,
+		*guide = nullptr;
 
 	list_types
 		list_type;
@@ -773,18 +773,18 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 		group_type;
 
 	entity
-		*force,
-		*landing,
-		*end_keysite,
-		*start_keysite,
-		*guide,
-		*member;
+		*force = nullptr,
+		*landing = nullptr,
+		*end_keysite = nullptr,
+		*start_keysite = nullptr,
+		*guide = nullptr,
+		*member = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	task
-		*task_raw;
+		*task_raw = nullptr;
 
    debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -957,8 +957,8 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 int assign_task_to_group_members (entity *group, entity *guide, unsigned int valid_members)
 {
 	entity
-		*task,
-		*member;
+		*task = nullptr,
+		*member = nullptr;
 
 	ASSERT (group);
 
@@ -996,9 +996,9 @@ int assign_task_to_group_members (entity *group, entity *guide, unsigned int val
 int reassign_group_members_to_valid_tasks (entity *group, entity *last_task, unsigned int members_to_reassign, int engage_enemy)
 {
 	entity
-		*guide,
-		*member,
-		*new_task;
+		*guide = nullptr,
+		*member = nullptr,
+		*new_task = nullptr;
 
 	unsigned int
 		member_number,
@@ -1101,8 +1101,8 @@ int reassign_group_members_to_valid_tasks (entity *group, entity *last_task, uns
 int assign_new_task_to_group_member (entity *group, entity *member, entity *task, entity *guide)
 {
 	entity
-		*current_guide,
-		*current_task;
+		*current_guide = nullptr,
+		*current_task = nullptr;
 
 	unsigned int
 		member_number;
@@ -1205,7 +1205,7 @@ int assign_new_task_to_group_member (entity *group, entity *member, entity *task
 void respond_to_player_task_assign_request (entity *pilot, entity *task, entity *mobile)
 {
 	entity
-		*group;
+		*group = nullptr;
 		
 	ASSERT (pilot);
 
@@ -1248,8 +1248,8 @@ void respond_to_player_task_assign_request (entity *pilot, entity *task, entity 
 void dump_guide_stack (entity *group)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	debug_filtered_log ("GUIDE STACK:-");
 	debug_filtered_log ("-------------");
@@ -1282,7 +1282,7 @@ int check_group_members_awake (entity *group)
 {
 
 	entity
-		*mb;
+		*mb = nullptr;
 
 	mb = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
@@ -1307,13 +1307,13 @@ int check_group_members_awake (entity *group)
 
 void prepare_helicopter_for_task(entity *en, entity *task, entity *group, entity *guide) {
 	helicopter
-		*raw;
+		*raw = nullptr;
 	waypoint
-		*wp_object;
+		*wp_object = nullptr;
 	entity
-		*wp;
+		*wp = nullptr;
 	vec3d
-	   *wp_pos,
+	   *wp_pos = nullptr,
 		*last_pos = NULL,
 		temp_pos;
 	float

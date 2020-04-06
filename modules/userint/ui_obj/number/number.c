@@ -110,7 +110,7 @@ void adjust_number_function (event *ev)
 
 	char
 		new_number [32],
-		*str_number;
+		*str_number = nullptr;
 
 	int
 		number;

@@ -159,6 +159,7 @@ unsigned int
 
 #else
 
+#pragma warning (disable : 4838)
 unsigned char
 	font_character_table [] =
 	{
@@ -179,6 +180,7 @@ unsigned char
 		182, 183, 184, 185, 186, 187, 188, 189,
 		190,
 	};
+#pragma warning (default : 4838)
 
 unsigned int
 	unicode_character_table[] =
@@ -280,11 +282,11 @@ char* string_to_utf8(const char* str)
 			len;
 
 		const char
-			*src;
+			*src = nullptr;
 
 		char
-			*dst,
-			*ptr;
+			*dst = nullptr,
+			*ptr = nullptr;
 
 		len = 0;
 		for (src = str; *src; src++)
@@ -530,7 +532,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		my_font;
 
 	screen
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	int
 		screen_index,
@@ -563,7 +565,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		colour;
 
 	ui_font_type
-		*new_font;
+		*new_font = nullptr;
 
 	screen
 		**font_screens;
@@ -578,7 +580,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		hdc;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	ASSERT ((font >= 0) && (font < NUM_FONT_TYPES));
 
@@ -618,7 +620,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			number_of_fonts;
 
 		font_database_header
-			*font_headers;
+			*font_headers = nullptr;
 
 		number_of_fonts = file_size ( UI_FONT_HEADER_FILE );
 
@@ -661,8 +663,8 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			font_character_maximum_height;
 
 		FILE
-			*fonts_header_file,
-			*fonts_data_file;
+			*fonts_header_file = nullptr,
+			*fonts_data_file = nullptr;
 
 		font_database_header
 			font_header;
@@ -768,7 +770,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		{
 
 			KERNINGPAIR
-				*pairs;
+				*pairs = nullptr;
 
 			pairs = ( KERNINGPAIR * ) safe_malloc ( number_of_kerning_pairs * sizeof ( KERNINGPAIR ) );
 
@@ -794,7 +796,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				metric;
 
 			unsigned char
-				*ptr;
+				*ptr = nullptr;
 
 			int
 				x_adjust,
@@ -1063,7 +1065,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 	{
 
 		font_database_header
-			*font_headers;
+			*font_headers = nullptr;
 
 		font_headers = ( font_database_header * ) safe_mopen ( UI_FONT_HEADER_FILE );
 
@@ -1344,7 +1346,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 #else
 	ui_font_type
-		*new_font;
+		*new_font = nullptr;
 
 	new_font = &ui_fonts[font];
 
@@ -1444,7 +1446,7 @@ float ui_display_text (const char *text, float x, float y)
 
 #ifndef OGRE_EE
 		font_character
-			*character;
+			*character = nullptr;
 
 		float
 			char_end_x,
@@ -1454,7 +1456,7 @@ float ui_display_text (const char *text, float x, float y)
 			original_x_position;
 
 		const char
-			*text_ptr;
+			*text_ptr = nullptr;
 #endif
 
 		viewport
@@ -1471,7 +1473,7 @@ float ui_display_text (const char *text, float x, float y)
 			specular;
 
 		screen
-			*texture;
+			*texture = nullptr;
 
 		wchar_t
 			cur,
@@ -1701,7 +1703,7 @@ float ui_display_text (const char *text, float x, float y)
 					{
 
 						vertex
-							*poly;
+							*poly = nullptr;
 
 						clip_3d_coord = 0;
 
@@ -1767,7 +1769,7 @@ float ui_display_text (const char *text, float x, float y)
 				{
 
 					vertex
-						*poly;
+						*poly = nullptr;
 
 					clip_3d_coord = 0;
 
@@ -1858,7 +1860,7 @@ int get_kerning_offset ( wchar_t first, wchar_t second )
 		count;
 
 	font_character
-		*character;
+		*character = nullptr;
 
 	character = &current_font->characters[first];
 
@@ -1905,10 +1907,10 @@ float ui_get_string_length (const char *string)
 		length;
 
 	const char
-		*current_char;
+		*current_char = nullptr;
 
 	font_character
-		*character;
+		*character = nullptr;
 
 	wchar_t
 		cur,

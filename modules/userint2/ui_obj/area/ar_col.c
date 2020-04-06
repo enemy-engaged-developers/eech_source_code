@@ -74,7 +74,7 @@ static void set_area_ui_object_colour (ui_object *obj, char colour_r, char colou
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -97,7 +97,7 @@ static void set_area_ui_object_colour_end (ui_object *obj, char colour_r, char c
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -115,7 +115,7 @@ static void set_area_ui_object_colour_start (ui_object *obj, char colour_r, char
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -133,7 +133,7 @@ static rgb_colour get_area_ui_object_colour (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	rgb_colour
 		col;
@@ -185,7 +185,7 @@ static rgb_colour get_area_ui_object_colour_end (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -200,7 +200,7 @@ static rgb_colour get_area_ui_object_colour_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -215,7 +215,7 @@ static void set_area_ui_object_highlighted_colour (ui_object *obj, char colour_r
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -238,7 +238,7 @@ static void set_area_ui_object_highlighted_colour_end (ui_object *obj, char colo
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -256,7 +256,7 @@ static void set_area_ui_object_highlighted_colour_start (ui_object *obj, char co
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -274,7 +274,7 @@ static rgb_colour get_area_ui_object_highlighted_colour (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -289,7 +289,7 @@ static rgb_colour get_area_ui_object_highlighted_colour_end (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -304,7 +304,7 @@ static rgb_colour get_area_ui_object_highlighted_colour_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -319,7 +319,7 @@ static void set_area_ui_object_selected_colour (ui_object *obj, char colour_r, c
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -342,7 +342,7 @@ static void set_area_ui_object_selected_colour_end (ui_object *obj, char colour_
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -360,7 +360,7 @@ static void set_area_ui_object_selected_colour_start (ui_object *obj, char colou
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -378,7 +378,7 @@ static rgb_colour get_area_ui_object_selected_colour (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -393,7 +393,7 @@ static rgb_colour get_area_ui_object_selected_colour_end (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 
@@ -408,7 +408,7 @@ static rgb_colour get_area_ui_object_selected_colour_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = ( area_ui_object * ) obj->data;
 

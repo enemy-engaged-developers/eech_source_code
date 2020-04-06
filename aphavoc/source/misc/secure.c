@@ -87,7 +87,7 @@ static char
 const char *get_security_message (void)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		cdrom_drive_letter;

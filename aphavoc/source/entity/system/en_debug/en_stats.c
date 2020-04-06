@@ -329,7 +329,7 @@ static entity_sides get_vehicle_side (entity_sub_types type)
 void dump_aircraft_and_vehicle_count (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		sub_type;

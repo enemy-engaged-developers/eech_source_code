@@ -88,7 +88,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			weapon
-				*raw;
+				*raw = nullptr;
 
 			raw = (weapon *) get_local_entity_data (en);
 
@@ -181,7 +181,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			weapon
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity

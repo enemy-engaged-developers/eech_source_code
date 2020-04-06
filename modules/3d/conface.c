@@ -151,10 +151,10 @@ vertex * construct_3d_affine_textured_face ( int num_points, point_3d_reference 
 		outcode2;
 
 	vertex
-		*points_base,
-		*first_point,
-		*this_point,
-		*previous_point;
+		*points_base = nullptr,
+		*first_point = nullptr,
+		*this_point = nullptr,
+		*previous_point = nullptr;
 
 	outcode = 0;
 	outcode2 = CLIP_YONDER | CLIP_HITHER | CLIP_TOP | CLIP_BOTTOM | CLIP_LEFT | CLIP_RIGHT;
@@ -214,10 +214,10 @@ vertex * construct_3d_perspective_textured_face ( int num_points, point_3d_refer
 		outcode2;
 
 	vertex
-		*points_base,
-		*first_point,
-		*this_point,
-		*previous_point;
+		*points_base = nullptr,
+		*first_point = nullptr,
+		*this_point = nullptr,
+		*previous_point = nullptr;
 
 	outcode = 0;
 	outcode2 = CLIP_YONDER | CLIP_HITHER | CLIP_TOP | CLIP_BOTTOM | CLIP_LEFT | CLIP_RIGHT;

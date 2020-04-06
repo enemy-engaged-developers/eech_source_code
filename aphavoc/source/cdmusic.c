@@ -517,7 +517,7 @@ void update_music_fadeout( void ) {
 		if (get_gunship_entity() == NULL || music_fadeout_timer < 0.0) {
 			stop_music(0.0);
 		} else {
-			set_local_entity_float_value(music_entity, FLOAT_TYPE_AMPLIFICATION, max(0, music_fadeout_timer / music_fadeout));
+			set_local_entity_float_value(music_entity, FLOAT_TYPE_AMPLIFICATION, fmax(0, music_fadeout_timer / music_fadeout));
 		}
 	}
 }

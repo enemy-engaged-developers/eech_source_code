@@ -126,7 +126,7 @@ static rgb_colour
 
 #ifndef OGRE_EE
 static env_2d
-	*mfd_env;
+	*mfd_env = nullptr;
 #endif
 
 static float
@@ -167,12 +167,12 @@ static entity
 #define OVERLAID_MFD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD2)	//  Javelin  7/19  
 
 static screen
-	*mfd_texture_screen,
-	*eo_3d_texture_screen,
-	*eo_3d_texture_screen_over,
-	*overlaid_mfd_texture_screen,
-	*flight_mfd_texture_screen,   		//  Javelin  6/19
-	*mfd_engine_screen;					//  Javelin  7/19
+	*mfd_texture_screen = nullptr,
+	*eo_3d_texture_screen = nullptr,
+	*eo_3d_texture_screen_over = nullptr,
+	*overlaid_mfd_texture_screen = nullptr,
+	*flight_mfd_texture_screen = nullptr,   		//  Javelin  6/19
+	*mfd_engine_screen = nullptr;					//  Javelin  7/19
 
 static rgb_colour
 	clear_mfd_colour;
@@ -572,7 +572,7 @@ static void display_radar_scan_range (float scan_range)
 static void display_radar_target_details (entity *target, float target_range, radar_params *radar)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -786,7 +786,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 		dy;
 
 	vec3d
-		*target_position;
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1074,9 +1074,9 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 		radius;
 
 	vec3d
-		*target_position,
-		*bounding_box_min,
-		*bounding_box_max;
+		*target_position = nullptr,
+		*bounding_box_min = nullptr,
+		*bounding_box_max = nullptr;
 
 	ASSERT (target);
 
@@ -1124,12 +1124,12 @@ static void draw_ground_radar_mfd (void)
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -1449,12 +1449,12 @@ static void draw_air_radar_mfd (void)
 		target_range;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	source = get_gunship_entity ();
 
@@ -1827,7 +1827,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -1933,7 +1933,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2051,7 +2051,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		noise_level;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	weathermodes
 		weather_mode;
@@ -2268,7 +2268,7 @@ static char small_range_marker[] =
 static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int valid_3d, int scaled_3d)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -2288,12 +2288,12 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		y;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		target_point;
 
 	viewpoint
@@ -2790,11 +2790,11 @@ static void draw_adv_2d_eo_display (eo_params *eo, target_acquisition_systems sy
 		target_range = get_range_to_target();
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position;
+		*source_position = nullptr;
 
 	ASSERT (eo);
 
@@ -3575,14 +3575,14 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		if (!hokum_damage.navigation_computer)
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 			if (wp)
 			{
 				vec3d
-					*gunship_position,
+					*gunship_position = nullptr,
 					waypoint_position;
 
 				float
@@ -4042,8 +4042,8 @@ static void draw_pitch_ladder (void)
 		else  // 90 degree bank
 		{
 			rgb_colour
-				*left_colour,
-				*right_colour;
+				*left_colour = nullptr,
+				*right_colour = nullptr;
 
 			if (roll == rad(90))
 			{
@@ -4212,7 +4212,7 @@ static void draw_altitude_scale (void)
 
 
 	char
-		*format,
+		*format = nullptr,
 		buffer[8];
 
 	int
@@ -4516,10 +4516,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float

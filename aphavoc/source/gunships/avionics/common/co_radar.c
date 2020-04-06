@@ -1006,13 +1006,13 @@ static entity *get_best_ground_radar_target (void)
 		theta;
 
 	entity
-		*source,
-		*target,
-		*best_target;
+		*source = nullptr,
+		*target = nullptr,
+		*best_target = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -1356,11 +1356,11 @@ static int get_selectable_ground_radar_target (entity *target)
 		theta;
 
 	entity
-		*source;
+		*source = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -1471,8 +1471,8 @@ int get_target_matches_ground_radar_declutter_criteria (entity *target)
 void get_next_ground_radar_target (void)
 {
 	entity
-		*current_target,
-		*new_target;
+		*current_target = nullptr,
+		*new_target = nullptr;
 
 	ground_radar.auto_target = FALSE;
 
@@ -1509,8 +1509,8 @@ void get_next_ground_radar_target (void)
 void get_previous_ground_radar_target (void)
 {
 	entity
-		*current_target,
-		*new_target;
+		*current_target = nullptr,
+		*new_target = nullptr;
 
 	ground_radar.auto_target = FALSE;
 
@@ -1572,15 +1572,15 @@ void update_common_ground_radar (int inactive_check)
 		sqr_target_range;
 
 	entity
-		*source,
-		*target,
-		*old_target,
-		*new_target,
-		*sector;
+		*source = nullptr,
+		*target = nullptr,
+		*old_target = nullptr,
+		*new_target = nullptr,
+		*sector = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		cw_sweep_start_position,
 		cw_sweep_end_position;
 
@@ -2058,16 +2058,16 @@ static entity *get_best_air_radar_target (void)
 		theta;
 
 	entity
-		*source,
-		*target,
-		*best_target;
+		*source = nullptr,
+		*target = nullptr,
+		*best_target = nullptr;
 
 	entity_sides
 		source_side;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	entity_sub_types
 		weapon_sub_type;
@@ -2411,14 +2411,14 @@ static int get_selectable_air_radar_target (entity *target)
 		target_range;
 
 	entity
-		*source;
+		*source = nullptr;
 
 	entity_sides
 		source_side;
 
 	vec3d
-		*source_position,
-		*target_position;
+		*source_position = nullptr,
+		*target_position = nullptr;
 
 	ASSERT (target);
 
@@ -2488,8 +2488,8 @@ int get_target_matches_air_radar_declutter_criteria (entity *target, entity_side
 void get_next_air_radar_target (void)
 {
 	entity
-		*current_target,
-		*new_target;
+		*current_target = nullptr,
+		*new_target = nullptr;
 
 	air_radar.auto_target = FALSE;
 
@@ -2526,8 +2526,8 @@ void get_next_air_radar_target (void)
 void get_previous_air_radar_target (void)
 {
 	entity
-		*current_target,
-		*new_target;
+		*current_target = nullptr,
+		*new_target = nullptr;
 
 	air_radar.auto_target = FALSE;
 
@@ -2589,15 +2589,15 @@ void update_common_air_radar (void)
 		radar_stealth_factor;
 
 	entity
-		*source,
-		*target,
-		*old_target,
-		*new_target,
-		*sector;
+		*source = nullptr,
+		*target = nullptr,
+		*old_target = nullptr,
+		*new_target = nullptr,
+		*sector = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		cw_sweep_start_position,
 		cw_sweep_end_position;
 
@@ -2942,9 +2942,9 @@ void deactivate_common_air_radar (void)
 void select_next_designated_ground_radar_target (void)
 {
 	entity
-		*target,
-		*new_target,
-		*current_target;
+		*target = nullptr,
+		*new_target = nullptr,
+		*current_target = nullptr;
 
 	new_target = NULL;
 
@@ -2993,9 +2993,9 @@ void select_next_designated_ground_radar_target (void)
 void select_previous_designated_ground_radar_target (void)
 {
 	entity
-		*target,
-		*new_target,
-		*current_target;
+		*target = nullptr,
+		*new_target = nullptr,
+		*current_target = nullptr;
 
 	new_target = NULL;
 
@@ -3039,9 +3039,9 @@ void select_previous_designated_ground_radar_target (void)
 void select_next_designated_air_radar_target (void)
 {
 	entity
-		*target,
-		*new_target,
-		*current_target;
+		*target = nullptr,
+		*new_target = nullptr,
+		*current_target = nullptr;
 
 	new_target = NULL;
 
@@ -3090,9 +3090,9 @@ void select_next_designated_air_radar_target (void)
 void select_previous_designated_air_radar_target (void)
 {
 	entity
-		*target,
-		*new_target,
-		*current_target;
+		*target = nullptr,
+		*new_target = nullptr,
+		*current_target = nullptr;
 
 	new_target = NULL;
 

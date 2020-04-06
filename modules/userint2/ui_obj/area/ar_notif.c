@@ -74,7 +74,7 @@ static void set_area_ui_object_notify_on (ui_object *obj, notify_types event)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -89,7 +89,7 @@ static notify_types get_area_ui_object_notify_on (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -104,7 +104,7 @@ static void set_area_ui_object_highlighted_notify_on (ui_object *obj, notify_typ
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -119,7 +119,7 @@ static notify_types get_area_ui_object_highlighted_notify_on (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 

@@ -1043,7 +1043,7 @@ static void enter_view_mode (view_modes mode)
 				s[200];
 
 			entity
-				*target;
+				*target = nullptr;
 
 			ASSERT (get_gunship_entity ());
 
@@ -1136,7 +1136,7 @@ int set_view_mode (view_modes mode)
 entity *get_viewed_entity (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	switch (get_view_mode ())
 	{

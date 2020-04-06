@@ -510,7 +510,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			vec3d
-				*pos;
+				*pos = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *wp, vec3d *pos)
@@ -594,7 +594,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			matrix3x3
-				*attitude;
+				*attitude = nullptr;
 
 			ASSERT (en);
 
@@ -726,7 +726,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				index;
 
 			const char
-				*buffer;
+				*buffer = nullptr;
 
 			ASSERT (!en);
 
@@ -759,7 +759,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			meta_explosion_types
 				type;
@@ -768,10 +768,10 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				loop,
 				index,
 				list_count,
-				*entity_index_list;
+				*entity_index_list = nullptr;
 
 			vec3d
-				*position;
+				*position = nullptr;
 
 			ASSERT (!en);
 
@@ -824,7 +824,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			meta_smoke_list_types
 				type;
@@ -833,10 +833,10 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				loop,
 				index,
 				list_count,
-				*entity_index_list;
+				*entity_index_list = nullptr;
 
 			vec3d
-				*rel_pos;
+				*rel_pos = nullptr;
 
 			ASSERT (!en);
 
@@ -910,7 +910,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			meta_smoke_list_types
 				type;
@@ -921,7 +921,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				list_count,
 				sub_object_type,
 				sub_object_depth,
-				*entity_index_list;
+				*entity_index_list = nullptr;
 
 			ASSERT (!en);
 
@@ -974,7 +974,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*parent;
+				*parent = nullptr;
 
 			entity_sub_types
 				sub_type;
@@ -989,13 +989,13 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				looping,
 				position_valid,
 				sample_count,
-				*sample_index_list;
+				*sample_index_list = nullptr;
 
 			float
 				amp, pitch;
 
 			vec3d
-				*position;
+				*position = nullptr;
 
 			ASSERT (!en);
 
@@ -1074,13 +1074,13 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			vec3d
-				*start,
-				*stop;
+				*start = nullptr,
+				*stop = nullptr;
 
 			entity
-				*wp,
-				*group,
-				*return_keysite;
+				*wp = nullptr,
+				*group = nullptr,
+				*return_keysite = nullptr;
 
 			unsigned int
 				count,
@@ -1176,7 +1176,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*launcher;
+				*launcher = nullptr;
 
 			entity_sub_types
 				weapon_sub_type;
@@ -1184,7 +1184,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			int
 				weapon_index,
 				burst_size,
-				*smoke_trail_indices,
+				*smoke_trail_indices = nullptr,
 				num_smoke_trail_entities,
 				i,
 				create_smoke_trail = TRUE;
@@ -1573,7 +1573,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*victim;
+				*victim = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *force, entity *victim)
@@ -1601,7 +1601,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		{
 
 			entity
-				*wp;
+				*wp = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *en, entity *wp)
@@ -1650,7 +1650,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			vec3d
-				*pos;
+				*pos = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *wp, vec3d *pos)
@@ -1742,10 +1742,10 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			const char
-				*message;
+				*message = nullptr;
 
 			entity
-				*target;
+				*target = nullptr;
 
 			message_text_types
 				type;
@@ -1931,8 +1931,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*aggressor,
-				*victim;
+				*aggressor = nullptr,
+				*victim = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *aggressor, entity *victim)
@@ -1961,7 +1961,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*task;
+				*task = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *en, entity *task)
@@ -1993,7 +1993,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		{
 
 			entity
-				*task;
+				*task = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *en, entity *task)
@@ -2101,7 +2101,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*destination;
+				*destination = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *en, entity *destination)
@@ -2136,7 +2136,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			vec3d
-				*pos;
+				*pos = nullptr;
 
 			int
 				operational_state;
@@ -2217,7 +2217,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			routed_vehicle
-				*raw;
+				*raw = nullptr;
 
 			ASSERT (en);
 
@@ -2242,11 +2242,11 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*destination;
+				*destination = nullptr;
 
 			int
 				loop,
-				*index_list,
+				*index_list = nullptr,
 				target_count;
 
 			//
@@ -2360,7 +2360,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*position_entity;
+				*position_entity = nullptr;
 
 			ASSERT (en);
 
@@ -2388,7 +2388,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		{
 
 			task
-				*raw;
+				*raw = nullptr;
 
 			unsigned int
 				loop;
@@ -2461,7 +2461,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*wp;
+				*wp = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *en, entity *wp)
@@ -2499,7 +2499,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				type;
 
 			const char
-				*s;
+				*s = nullptr;
 
 			ASSERT (en);
 
@@ -2534,7 +2534,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				type2;
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			ASSERT (en);
 
@@ -2585,7 +2585,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				type;
 
 			entity
-				*parent;
+				*parent = nullptr;
 
 			ASSERT (en);
 
@@ -2616,8 +2616,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			//
 
 			entity
-				*task,
-				*mobile;;
+				*task = nullptr,
+				*mobile = nullptr;;
 
 			ASSERT (en);
 
@@ -2648,8 +2648,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*task,
-				*mobile;
+				*task = nullptr,
+				*mobile = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *pilot, entity *task, entity *mobile)
@@ -2691,8 +2691,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*victim,
-				*aggressor;
+				*victim = nullptr,
+				*aggressor = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
@@ -2722,8 +2722,8 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 		////////////////////////////////////////
 		{
 			entity
-				*victim,
-				*aggressor;
+				*victim = nullptr,
+				*aggressor = nullptr;
 
 			//
 			// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
@@ -2845,7 +2845,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				type;
 
 			vec3d
-				*v;
+				*v = nullptr;
 
 			ASSERT (en);
 
@@ -2950,7 +2950,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*wp;
+					*wp = nullptr;
 
 				vec3d
 					pos;
@@ -2985,7 +2985,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -3007,7 +3007,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				float
 					heading,
@@ -3033,7 +3033,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				matrix3x3
 					attitude;
@@ -3061,7 +3061,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en;
+					*en = nullptr;
 
 				entity_sides
 					side;
@@ -3094,7 +3094,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en;
+					*en = nullptr;
 
 				entity_sides
 					side;
@@ -3118,7 +3118,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				char_types
 					type;
@@ -3176,7 +3176,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*parent;
+					*parent = nullptr;
 
 				meta_explosion_types
 					type;
@@ -3184,7 +3184,7 @@ void process_received_entity_comms_messages (void)
 				int
 					loop,
 					list_count,
-					*entity_index_list;
+					*entity_index_list = nullptr;
 
 				vec3d
 					position;
@@ -3230,7 +3230,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*parent;
+					*parent = nullptr;
 
 				meta_smoke_list_types
 					type;
@@ -3238,7 +3238,7 @@ void process_received_entity_comms_messages (void)
 				int
 					loop,
 					list_count,
-					*entity_index_list;
+					*entity_index_list = nullptr;
 
 				vec3d
 					rel_pos;
@@ -3291,7 +3291,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*parent;
+					*parent = nullptr;
 
 				meta_smoke_list_types
 					type;
@@ -3301,7 +3301,7 @@ void process_received_entity_comms_messages (void)
 					list_count,
 					sub_object_type,
 					sub_object_depth,
-					*entity_index_list;
+					*entity_index_list = nullptr;
 
 				type = (meta_smoke_list_types) unpack_int_value (NULL, INT_TYPE_META_SMOKE_LIST_TYPE);
 
@@ -3346,7 +3346,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*parent;
+					*parent = nullptr;
 
 				entity_sub_types
 					sub_type;
@@ -3361,14 +3361,14 @@ void process_received_entity_comms_messages (void)
 					looping,
 					valid_position,
 					sample_count,
-					*sample_index_list,
+					*sample_index_list = nullptr,
 					create_stack_attributes;
 
 				float
 					amp, pitch;
 
 				vec3d
-					*pos,
+					*pos = nullptr,
 					position;
 
 				index = unpack_entity_safe_index ();
@@ -3457,18 +3457,18 @@ void process_received_entity_comms_messages (void)
 				//
 
 				vec3d
-					*start_ptr,
-					*stop_ptr,
+					*start_ptr = nullptr,
+					*stop_ptr = nullptr,
 					start,
 					stop;
 
 				entity
-					*task,
-					*group,
-					*return_keysite;
+					*task = nullptr,
+					*group = nullptr,
+					*return_keysite = nullptr;
 	
 				unsigned int
-					*waypoint_indices,
+					*waypoint_indices = nullptr,
 					loop,
 					count,
 					check_sum;
@@ -3535,7 +3535,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*launcher;
+					*launcher = nullptr;
 
 				entity_sub_types
 					weapon_sub_type;
@@ -3543,7 +3543,7 @@ void process_received_entity_comms_messages (void)
 				int
 					weapon_index,
 					burst_size,
-					*smoke_trail_indices,
+					*smoke_trail_indices = nullptr,
 					num_smoke_trail_entities,
 					i,
 					create_smoke_trail = TRUE;
@@ -3652,7 +3652,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en;
+					*en = nullptr;
 
 				unsigned int
 					random,
@@ -3689,7 +3689,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				gunship_damage_levels
 					damage_level;
@@ -3718,7 +3718,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					weapon_package_heading_depth,
@@ -3760,7 +3760,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -3779,7 +3779,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -3798,7 +3798,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -3825,7 +3825,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				float_types
 					type;
@@ -3879,7 +3879,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int_types
 					type;
@@ -3933,7 +3933,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					create_stack_attributes;
@@ -3961,8 +3961,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
-					*victim;
+					*en = nullptr,
+					*victim = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -3985,8 +3985,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*wp,
-					*en;
+					*wp = nullptr,
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -4009,10 +4009,10 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
+					*en = nullptr,
 //					*cwp,
 //					*group,
-					*landing_en;
+					*landing_en = nullptr;
 //					*landing_task;
 
 				en = unpack_entity_safe_ptr ();
@@ -4068,8 +4068,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*member,
-					*wp;
+					*member = nullptr,
+					*wp = nullptr;
 
 				vec3d
 					pos;
@@ -4111,7 +4111,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				entity_sub_types
 					type;
@@ -4146,7 +4146,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				entity_sub_types
 					weapon_sub_type;
@@ -4180,14 +4180,14 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*sender,
-					*target;
+					*sender = nullptr,
+					*target = nullptr;
 
 				message_text_types
 					type;
 
 				char
-					*string,
+					*string = nullptr,
 					message [STRING_TYPE_MESSAGE_LENGTH];
 
 				sender = unpack_entity_safe_ptr ();
@@ -4247,8 +4247,8 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*sender,
-					*wingman;
+					*sender = nullptr,
+					*wingman = nullptr;
 
 				entity
 					*targets[17];
@@ -4325,8 +4325,8 @@ void process_received_entity_comms_messages (void)
 /*					if (get_local_entity_int_value (wingman, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
 					{
 						entity
-							*target,
-							*group;
+							*target = nullptr,
+							*group = nullptr;
 
 						unsigned int valid_members = 0, member_number;
 
@@ -4358,7 +4358,7 @@ void process_received_entity_comms_messages (void)
 			{
 
 				entity
-					*en;
+					*en = nullptr;
 	
 				int
 					pilot_index,
@@ -4392,7 +4392,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					speech_index1,
@@ -4425,7 +4425,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					speech_index,
@@ -4468,7 +4468,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					speech_index;
@@ -4497,8 +4497,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*aggressor,
-					*victim;
+					*aggressor = nullptr,
+					*victim = nullptr;
 
 				aggressor = unpack_entity_safe_ptr ();
 
@@ -4528,8 +4528,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*task,
-					*en;
+					*task = nullptr,
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -4561,8 +4561,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*task,
-					*en;
+					*task = nullptr,
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -4594,7 +4594,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					message_type,
@@ -4634,7 +4634,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				//
 				// (entity_comms_messages message, entity *en)
@@ -4659,7 +4659,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				//
 				// (entity_comms_messages message, entity *en)
@@ -4686,8 +4686,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
-					*destination;
+					*en = nullptr,
+					*destination = nullptr;
 
 				//
 				// (entity_comms_messages message, entity *en, entity *destination)
@@ -4713,7 +4713,7 @@ void process_received_entity_comms_messages (void)
 				{
 					int
 						loop,
-						*index_list,
+						*index_list = nullptr,
 						target_count;
 
 					target_count = get_number_of_valid_gunship_targets (en);
@@ -4761,7 +4761,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					operational_state;
@@ -4797,7 +4797,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -4816,7 +4816,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				entity_sub_types
 					type;
@@ -4850,7 +4850,7 @@ void process_received_entity_comms_messages (void)
 				//
 	
 				node_link_data
-					*sub_route_node;
+					*sub_route_node = nullptr;
 
 				int
 					count,
@@ -4858,9 +4858,9 @@ void process_received_entity_comms_messages (void)
 					next_index;
 
 				entity
-					*en,
-					*group,
-					*mb;
+					*en = nullptr,
+					*group = nullptr,
+					*mb = nullptr;
 
 				// unpack group data
 	
@@ -4883,7 +4883,7 @@ void process_received_entity_comms_messages (void)
 				{
 	
 					routed_vehicle
-						*raw;
+						*raw = nullptr;
 	
 					set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_THIS_INDEX, this_index);
 					set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_NEXT_INDEX, next_index);
@@ -4913,12 +4913,12 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
-					*destination;
+					*en = nullptr,
+					*destination = nullptr;
 
 				int
 					loop,
-					*index_list,
+					*index_list = nullptr,
 					target_count;
 
 				//
@@ -4988,7 +4988,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -5013,7 +5013,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en;
+					*en = nullptr;
 	
 				int
 					type,
@@ -5055,8 +5055,8 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en,
-					*position_entity;
+					*en = nullptr,
+					*position_entity = nullptr;
 	
 				en = unpack_entity_safe_ptr ();
 
@@ -5084,10 +5084,10 @@ void process_received_entity_comms_messages (void)
 			{
 
 				entity
-					*en;
+					*en = nullptr;
 
 				task
-					*raw;
+					*raw = nullptr;
 
 				unsigned int
 					loop;
@@ -5171,8 +5171,8 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en,
-					*wp;
+					*en = nullptr,
+					*wp = nullptr;
 	
 				en = unpack_entity_safe_ptr ();
 
@@ -5199,7 +5199,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				string_types
 					type;
@@ -5228,8 +5228,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
-					*parent;
+					*en = nullptr,
+					*parent = nullptr;
 
 				list_types
 					type1,
@@ -5276,8 +5276,8 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en,
-					*parent;
+					*en = nullptr,
+					*parent = nullptr;
 
 				list_types
 					type;
@@ -5323,9 +5323,9 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en,
-					*mobile,
-					*task;
+					*en = nullptr,
+					*mobile = nullptr,
+					*task = nullptr;
 
 				ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -5364,9 +5364,9 @@ void process_received_entity_comms_messages (void)
 				//
 
 				entity
-					*en,
-					*task,
-					*mobile;
+					*en = nullptr,
+					*task = nullptr,
+					*mobile = nullptr;
 
 				ASSERT (get_comms_model () == COMMS_MODEL_CLIENT);
 
@@ -5413,9 +5413,9 @@ void process_received_entity_comms_messages (void)
 			{
 	
 				entity
-					*task_en,
-					*victim,
-					*aggressor;
+					*task_en = nullptr,
+					*victim = nullptr,
+					*aggressor = nullptr;
 	
 				//
 				// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
@@ -5442,9 +5442,9 @@ void process_received_entity_comms_messages (void)
 			{
 	
 				entity
-					*task_en,
-					*victim,
-					*aggressor;
+					*task_en = nullptr,
+					*victim = nullptr,
+					*aggressor = nullptr;
 	
 				//
 				// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
@@ -5470,7 +5470,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -5493,7 +5493,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 	
@@ -5512,7 +5512,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				int
 					in_use;
@@ -5536,7 +5536,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 	
@@ -5555,7 +5555,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				vec3d_types
 					type;
@@ -5584,7 +5584,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 
@@ -5603,7 +5603,7 @@ void process_received_entity_comms_messages (void)
 			////////////////////////////////////////
 			{
 				entity
-					*en;
+					*en = nullptr;
 
 				en = unpack_entity_safe_ptr ();
 

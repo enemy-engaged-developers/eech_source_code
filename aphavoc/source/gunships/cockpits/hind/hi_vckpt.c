@@ -77,43 +77,43 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*virtual_cockpit_level1_inst3d,
-	*virtual_cockpit_level2_inst3d,
-	*virtual_cockpit_level3_inst3d,
-	*virtual_cockpit_fillet_level1_inst3d,
-	*virtual_cockpit_fillet_level2_inst3d,
-	*virtual_cockpit_fillet_level3_inst3d,
+	*virtual_cockpit_level1_inst3d = nullptr,
+	*virtual_cockpit_level2_inst3d = nullptr,
+	*virtual_cockpit_level3_inst3d = nullptr,
+	*virtual_cockpit_fillet_level1_inst3d = nullptr,
+	*virtual_cockpit_fillet_level2_inst3d = nullptr,
+	*virtual_cockpit_fillet_level3_inst3d = nullptr,
 #ifndef OGRE_EE
-	*virtual_cockpit_hud_glass_inst3d,
+	*virtual_cockpit_hud_glass_inst3d = nullptr,
 #endif
-	*virtual_cockpit_hud_glass_level1_inst3d,
-	*virtual_cockpit_hud_glass_level2_inst3d,
-	*virtual_cockpit_hud_glass_level3_inst3d,
+	*virtual_cockpit_hud_glass_level1_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_level2_inst3d = nullptr,
+	*virtual_cockpit_hud_glass_level3_inst3d = nullptr,
 #ifndef OGRE_EE
-	*virtual_cockpit_large_hud_glass_inst3d,
+	*virtual_cockpit_large_hud_glass_inst3d = nullptr,
 #endif
-	*virtual_cockpit_large_hud_glass_level1_inst3d,
-	*virtual_cockpit_large_hud_glass_level2_inst3d,
-	*virtual_cockpit_large_hud_glass_level3_inst3d,
-	*virtual_cockpit_hud_display_inst3d,
-	*virtual_cockpit_main_rotor_inst3d,
-	*virtual_cockpit_large_hud_main_rotor_inst3d,
-	*virtual_cockpit_adi_inst3d,
+	*virtual_cockpit_large_hud_glass_level1_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_level2_inst3d = nullptr,
+	*virtual_cockpit_large_hud_glass_level3_inst3d = nullptr,
+	*virtual_cockpit_hud_display_inst3d = nullptr,
+	*virtual_cockpit_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_large_hud_main_rotor_inst3d = nullptr,
+	*virtual_cockpit_adi_inst3d = nullptr,
 #ifndef OGRE_EE
-	*virtual_cockpit_hsi_inst3d,
+	*virtual_cockpit_hsi_inst3d = nullptr,
 #endif
-	*virtual_cockpit_hsi_level1_inst3d,
-	*virtual_cockpit_hsi_level2_inst3d,
-	*virtual_cockpit_hsi_direction_finder_inst3d,
-	*virtual_cockpit_hsi_flight_path_inst3d,
-	*virtual_cockpit_hsi_drift_inst3d,
-	*virtual_cockpit_ekran_display_inst3d,
-	*virtual_cockpit_crt_display_inst3d,
+	*virtual_cockpit_hsi_level1_inst3d = nullptr,
+	*virtual_cockpit_hsi_level2_inst3d = nullptr,
+	*virtual_cockpit_hsi_direction_finder_inst3d = nullptr,
+	*virtual_cockpit_hsi_flight_path_inst3d = nullptr,
+	*virtual_cockpit_hsi_drift_inst3d = nullptr,
+	*virtual_cockpit_ekran_display_inst3d = nullptr,
+	*virtual_cockpit_crt_display_inst3d = nullptr,
 #ifndef OGRE_EE
-	*virtual_cockpit_compass_inst3d,
+	*virtual_cockpit_compass_inst3d = nullptr,
 #endif
-	*virtual_cockpit_compass_level1_inst3d,
-	*virtual_cockpit_compass_level2_inst3d;
+	*virtual_cockpit_compass_level1_inst3d = nullptr,
+	*virtual_cockpit_compass_level2_inst3d = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,7 +482,6 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 void draw_hind_internal_virtual_cockpit (unsigned int flags)
 {
-#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -490,7 +489,7 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 		search;
 
 	object_3d_instance
-		*virtual_cockpit_inst3d;
+		*virtual_cockpit_inst3d = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -977,7 +976,6 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -986,7 +984,6 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 
 void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic)
 {
-#ifndef OGRE_EE
 	viewpoint
 		vp;
 
@@ -994,7 +991,7 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 		search;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -1362,7 +1359,6 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

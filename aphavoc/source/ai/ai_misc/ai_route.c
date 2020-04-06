@@ -107,13 +107,13 @@ static int read_road_route_node_link_positions (char *name);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 node_data
-   *road_nodes;
+   *road_nodes = nullptr;
 
 vec3d
-   *road_node_positions;
+   *road_node_positions = nullptr;
 
 node_link_data
-   *road_node_link_positions;
+   *road_node_link_positions = nullptr;
 
 int
    duplicate_count = 0,
@@ -341,13 +341,13 @@ static int read_road_route_node_data (char *name)
 		fvalue;
 
    FILE
-      *file_ptr;
+      *file_ptr = nullptr;
 
    int
       number_of_road_nodes;
 
    node_data
-      *new_node;
+      *new_node = nullptr;
 
 	char
 		filename [1024];
@@ -552,7 +552,7 @@ static int read_road_route_node_positions (char *name)
 {
 
    FILE
-      *file_ptr;
+      *file_ptr = nullptr;
 
    int
       number_of_road_nodes;
@@ -645,7 +645,7 @@ static int read_road_route_node_link_positions (char *name)
 {
 
    FILE
-      *file_ptr;
+      *file_ptr = nullptr;
 
    int
 		value,
@@ -653,7 +653,7 @@ static int read_road_route_node_link_positions (char *name)
       count;
 
    node_link_data
-      *new_link;
+      *new_link = nullptr;
 
 	char
 		filename [1024];

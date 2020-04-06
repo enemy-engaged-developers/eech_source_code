@@ -170,9 +170,9 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 {
 
 	entity
-		*force,
-		*enemy_force,
-		*aggressor;
+		*force = nullptr,
+		*enemy_force = nullptr,
+		*aggressor = nullptr;
 
 	int
 		damage_caused,
@@ -265,7 +265,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 					)
 				{
 					entity
-						*pilot_en;
+						*pilot_en = nullptr;
 	
 					int
 						score;
@@ -430,7 +430,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 static int response_to_articulate_loading_doors (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	sound_sample_indices
 		sound_sample_index;
@@ -478,10 +478,10 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position,
+		*position = nullptr,
 		new_position,
 		delta_position,
-		*parent_position;
+		*parent_position = nullptr;
 
 	float
 		velocity,
@@ -489,7 +489,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 		heading;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (receiver);
 
@@ -535,7 +535,7 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		guide_pos;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	entity_sub_types
 		waypoint_type;
@@ -709,8 +709,8 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 					selected_weapon;
 		
 				vec3d
-					*weapon_vector,
-					*weapon_to_intercept_point_vector;
+					*weapon_vector = nullptr,
+					*weapon_to_intercept_point_vector = nullptr;
 		
 				float
 					launch_angle_error;
@@ -757,11 +757,11 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 	else
 	{
 		entity
-			*leader;
+			*leader = nullptr;
 
 		vec3d
-			*pos,
-			*leader_pos;
+			*pos = nullptr,
+			*leader_pos = nullptr;
 
 		ASSERT (get_guide_criteria_valid (sender, GUIDE_CRITERIA_LAST_TO_REACH));
 

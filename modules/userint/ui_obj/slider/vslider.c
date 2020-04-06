@@ -104,7 +104,7 @@ void vslider_move_function (void *ev)
 		inc;
 
 	ui_object
-		*slider_object;
+		*slider_object = nullptr;
 
 	if (*captured_object)
 	{
@@ -133,8 +133,8 @@ void ui_object_vslider_decrease_function (ui_object *obj, void *ev)
 		inc;
 
 	ui_object
-		*parent_object,
-		*slider_object;
+		*parent_object = nullptr,
+		*slider_object = nullptr;
 
 	obj;
 	ev;
@@ -165,8 +165,8 @@ void ui_object_vslider_increase_function (ui_object *obj, void *ev)
 		inc;
 
 	ui_object
-		*parent_object,
-		*slider_object;
+		*parent_object = nullptr,
+		*slider_object = nullptr;
 
 	obj;
 	ev;
@@ -215,7 +215,7 @@ void recalculate_slider_size (ui_object *slider_object)
 {
 
 	ui_object
-		*current_list_item;
+		*current_list_item = nullptr;
 
 	float
 		slider_size,

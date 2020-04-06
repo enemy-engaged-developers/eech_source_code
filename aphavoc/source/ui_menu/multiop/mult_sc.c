@@ -78,53 +78,53 @@
 
 // screen objects
 ui_object
-   *multi_player_setup_area,
-	*connection_type_bdrop,
-	*connection_type_area,
-	*connection_type_button;
+   *multi_player_setup_area = nullptr,
+	*connection_type_bdrop = nullptr,
+	*connection_type_area = nullptr,
+	*connection_type_button = nullptr;
 
 // areas
 ui_object
-	*serial_parameters_area,
-	*modem_parameters_area,
-	*tcpip_parameters_area;
+	*serial_parameters_area = nullptr,
+	*modem_parameters_area = nullptr,
+	*tcpip_parameters_area = nullptr;
 
 // ip objects
 ui_object
-	*ip_address_title,
-	*ip_address_text_area,
-	*ip_address_text_obj,
-	*ip_address_text_input;
+	*ip_address_title = nullptr,
+	*ip_address_text_area = nullptr,
+	*ip_address_text_obj = nullptr,
+	*ip_address_text_input = nullptr;
 
 // serial objects
 ui_object
-	*com_port_area,
-	*com_port_button,
-	*baud_rate_area,
-	*baud_rate_button,
-	*stop_bits_area,
-	*stop_bits_button,
-	*parity_area,
-	*parity_button,
-	*flow_area,
-	*flow_button,
-	*serial_status_text;
+	*com_port_area = nullptr,
+	*com_port_button = nullptr,
+	*baud_rate_area = nullptr,
+	*baud_rate_button = nullptr,
+	*stop_bits_area = nullptr,
+	*stop_bits_button = nullptr,
+	*parity_area = nullptr,
+	*parity_button = nullptr,
+	*flow_area = nullptr,
+	*flow_button = nullptr,
+	*serial_status_text = nullptr;
 
 // modem objects
 ui_object
-	*modem_type_area,
-	*ghost_multiplayer_modem_area,
-	*ghost_multiplayer_modem_area2,
-	*modem_type_button,
-	*phone_number_area,
-	*phone_number_text_area,
-	*phone_number_text_obj,
-	*phone_number_text_input,
-	*modem_call_buttons_area,
-	*modem_answer_button,
-	*modem_dial_button,
-	*modem_cancel_button,
-	*modem_status_text;
+	*modem_type_area = nullptr,
+	*ghost_multiplayer_modem_area = nullptr,
+	*ghost_multiplayer_modem_area2 = nullptr,
+	*modem_type_button = nullptr,
+	*phone_number_area = nullptr,
+	*phone_number_text_area = nullptr,
+	*phone_number_text_obj = nullptr,
+	*phone_number_text_input = nullptr,
+	*modem_call_buttons_area = nullptr,
+	*modem_answer_button = nullptr,
+	*modem_dial_button = nullptr,
+	*modem_cancel_button = nullptr,
+	*modem_status_text = nullptr;
 
 const char
 	*baud_rate_text[4],
@@ -1480,7 +1480,7 @@ void multi_text_input_function ( ui_object *obj, void *arg )
 {
 
 	const char
-		*text;
+		*text = nullptr;
 		
 	obj;
 	arg;

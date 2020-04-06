@@ -81,11 +81,11 @@ void draw_vslider_ui_object (ui_object *obj)
 		y2;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 #if 0
 	rgb_data
-		*graphic;
+		*graphic = nullptr;
 #endif
 
 	if (get_ui_object_redraw (obj))

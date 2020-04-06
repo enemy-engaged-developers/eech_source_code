@@ -199,7 +199,7 @@ static void default_set_entity_string (entity *en, string_types type, const char
 static const char *default_get_entity_string (entity *en, string_types type)
 {
 	char
-		*s;
+		*s = nullptr;
 
 	switch (type)
 	{
@@ -280,7 +280,7 @@ void unpack_string (entity *en, string_types type, char *s)
 {
 	char
 		buffer[STRING_TYPE_MAX_LENGTH+1],
-		*p;
+		*p = nullptr;
 
 	ASSERT ((type >= 0) && (type < NUM_STRING_TYPES));
 

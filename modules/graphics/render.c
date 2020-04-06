@@ -98,7 +98,7 @@ void play_avi ( const char *filename, int exit_key )
 {
 /*
 	IAMMultiMediaStream
-		*pAMStream;
+		*pAMStream = nullptr;
 
 	WCHAR
 		wPath[512];
@@ -119,7 +119,7 @@ void play_avi ( const char *filename, int exit_key )
 		rect;
 
 	screen
-		*texture_screen;
+		*texture_screen = nullptr;
 
 	HRESULT
 		ret;

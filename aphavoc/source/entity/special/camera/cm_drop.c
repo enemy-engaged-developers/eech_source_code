@@ -79,7 +79,7 @@
 void reset_drop_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,
@@ -153,7 +153,7 @@ void reset_drop_camera (camera *raw)
 void update_drop_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,

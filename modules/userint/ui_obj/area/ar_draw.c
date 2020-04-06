@@ -92,23 +92,23 @@ static void draw_area_ui_object (ui_object *obj)
 		font_id;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	struct SCREEN
-		*old_active_screen,
-		*memory_graphic;
+		*old_active_screen = nullptr,
+		*memory_graphic = nullptr;
 
 	unsigned short int
-		*graphic;
+		*graphic = nullptr;
 
 	struct ZOOMABLE_GRAPHIC
-		*zoomable_graphic;
+		*zoomable_graphic = nullptr;
 
 	unsigned char
-		*data;
+		*data = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	if (get_ui_object_redraw (obj))
 	{

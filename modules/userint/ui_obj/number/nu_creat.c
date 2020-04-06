@@ -74,7 +74,7 @@ static void create_number_ui_object (ui_object *obj, ui_object_types type, va_li
 {
 
    number_ui_object
-      *new_number;
+      *new_number = nullptr;
 
 	increase_ui_object_counter ();
 

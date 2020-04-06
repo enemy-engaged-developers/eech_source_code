@@ -82,7 +82,7 @@ struct CAMPAIGN_SCREEN_WEAPON_LOADING_BUTTON_TYPE
 		valid;
 
 	ui_object
-		*button_ptr;
+		*button_ptr = nullptr;
 };
 
 typedef struct CAMPAIGN_SCREEN_WEAPON_LOADING_BUTTON_TYPE campaign_screen_weapon_loading_button_type;
@@ -92,22 +92,22 @@ typedef struct CAMPAIGN_SCREEN_WEAPON_LOADING_BUTTON_TYPE campaign_screen_weapon
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*page_back_button,
-	*page_member_area,
-	*page_member_list,
-	*page_default_payload_list,
-	*page_auw_text,
-	*page_fuel_text,
-	*page_fuel_gauge,
-	*page_repairing_text,
-	*page_repairing_gauge,
+	*page_back_button = nullptr,
+	*page_member_area = nullptr,
+	*page_member_list = nullptr,
+	*page_default_payload_list = nullptr,
+	*page_auw_text = nullptr,
+	*page_fuel_text = nullptr,
+	*page_fuel_gauge = nullptr,
+	*page_repairing_text = nullptr,
+	*page_repairing_gauge = nullptr,
 	*weapon_loading_page [NUM_GUNSHIP_TYPES];
 
 static campaign_screen_weapon_loading_button_type
 	weapon_loading_button_list [NUM_GUNSHIP_TYPES][NUM_WEAPON_LOADING_HARDPOINT_TYPES];
 
 static texture_graphic
-	*bar_graphic;
+	*bar_graphic = nullptr;
 
 static char
 	buffer [192];
@@ -132,12 +132,12 @@ void show_weapon_loading_page (entity *group, int force_update)
 		loop;
 
 	entity
-		*en,
-		*pilot,
-		*member;
+		*en = nullptr,
+		*pilot = nullptr,
+		*member = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	ASSERT (group);
 
@@ -310,8 +310,8 @@ static void notify_member_list (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -335,10 +335,10 @@ static void notify_member_list (ui_object *obj, void *arg)
 static void notify_weapon_loading_page_change_weapon (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ui_object
-		*gunship_page;
+		*gunship_page = nullptr;
 
 	int
 		hardpoint;
@@ -481,7 +481,7 @@ void update_common_gauges (entity *en)
 static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	gunship_types
 		gunship;
@@ -495,10 +495,10 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 		weapon_type;
 
 	ui_object
-		*button_object;
+		*button_object = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ASSERT (obj);
 
@@ -587,7 +587,7 @@ void rebuild_default_payload_list (entity *en)
 		fixed;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	ASSERT (en);
 
@@ -654,7 +654,7 @@ void rebuild_default_payload_list (entity *en)
 static void notify_default_payload_list (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		config_type;
@@ -747,8 +747,8 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 		gunship;
 
 	ui_object
-		*page,
-		*gunship_page;
+		*page = nullptr,
+		*gunship_page = nullptr;
 
 	bar_graphic = create_texture_graphic ("graphics\\ui\\cohokum\\map\\fuelrep.psd", 1);
 

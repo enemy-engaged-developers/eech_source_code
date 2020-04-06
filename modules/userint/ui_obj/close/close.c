@@ -74,7 +74,7 @@ void ui_object_close_box_function (ui_object *obj, void *arg)
 {
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	arg;
 

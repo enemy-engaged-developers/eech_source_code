@@ -60,12 +60,7 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include	"3d.h"
+#include "3d.h"
 #include "cmndline.h" // trees_fog thealx 130430
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,11 +102,11 @@ void draw_3d_translucent_surface_unclipped_reflection_faces ( translucent_object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 translucent_object_surface
-	*current_object_3d_translucent_surfaces;
+	*current_object_3d_translucent_surfaces = nullptr;
 
 vec3d
-	*current_object_3d_relative_position,
-	*current_object_3d_unit_position;
+	*current_object_3d_relative_position = nullptr,
+	*current_object_3d_unit_position = nullptr;
 
 matrix3x3
 	object_to_eye_attitude;
@@ -130,7 +125,7 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		object_number;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	vec3d
 		object_camera_position,
@@ -138,7 +133,7 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		object_unit_pos;
 
 	object_3d_scene_database_entry
-		*scene;
+		*scene = nullptr;
 
 	set_d3d_texture_batching ( TRUE );
 
@@ -547,7 +542,7 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		{
 
 			scene_slot_drawing_list
-				*buffer;
+				*buffer = nullptr;
 
 			//
 			// Insert surface list into renderer
@@ -649,7 +644,7 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 		sub_pos,
 		relative_position,
 		relative_scale,
-		*old_current_object_3d_relative_position;
+		*old_current_object_3d_relative_position = nullptr;
 
 	float
 		relative_heading,
@@ -657,7 +652,7 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 		relative_roll;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	viewpoint
 		vp;
@@ -2264,14 +2259,14 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 		object_number;
 
 	light_3d_source
-		*light;
+		*light = nullptr;
 
 	vec3d
 		object_camera_position,
 		object_camera_direction;
 
 	translucent_object_surface
-		*surface;
+		*surface = nullptr;
 
 	reset_deferred_state_changes ();
 
@@ -2289,8 +2284,7 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 				temp_vec;
 			float
 					heading,
-					pitch,
-					distance;
+					pitch;
 
 			//
 			// Set up the object drawing global variables
@@ -2331,13 +2325,6 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 				temp_vec.x = visual_3d_vp->position.x - surface->vp.position.x;
 				temp_vec.y = visual_3d_vp->position.y - surface->vp.position.y;
 				temp_vec.z = visual_3d_vp->position.z - surface->vp.position.z;
-
-				distance = get_3d_vector_magnitude(&temp_vec);
-				if (distance < 1000.0) {
-					current_object_3d_dissolve_value *= max(0.0, (distance - 500.0) / 500.0);
-					current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
-					current_object_3d_dissolve_factor /= 255.0;
-				}
 
 				normalise_any_3d_vector(&temp_vec);
 				get_heading_and_pitch_from_3d_unit_vector(&temp_vec, &heading, &pitch);
@@ -3011,4 +2998,3 @@ void draw_3d_translucent_surface_unclipped_reflection_faces ( translucent_object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

@@ -81,7 +81,7 @@
 static void set_local_string (entity *en, string_types type, char *s)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (s);
 
@@ -183,10 +183,10 @@ static void set_client_string (entity *en, string_types type, char *s)
 static const char *get_local_string (entity *en, string_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	const char
-		*s;
+		*s = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 

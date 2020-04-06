@@ -238,7 +238,7 @@ const person_animation_data
 void animate_person (entity *en)
 {
 	person
-		*raw;
+		*raw = nullptr;
 	
 	int
 		state;
@@ -288,7 +288,7 @@ void animate_person (entity *en)
 void update_person_animation (entity *en)
 {
 	person
-		*raw;
+		*raw = nullptr;
 
 	int
 		wrapped,
@@ -314,7 +314,7 @@ void update_person_animation (entity *en)
 
 			vec3d
 				fire_heading,
-				*target_pos;
+				*target_pos = nullptr;
 
 			target_pos = get_local_entity_vec3d_ptr (raw->vh.mob.target_link.parent, VEC3D_TYPE_POSITION);
 
@@ -404,7 +404,7 @@ void update_person_animation (entity *en)
 void damage_person_3d_object (entity *en)
 {
 	person
-		*raw;
+		*raw = nullptr;
 	int
 		state,
 		state_selector;

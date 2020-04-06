@@ -97,7 +97,7 @@ void play_vehicle_shot_at_speech (entity *victim, entity *aggressor)
 		speech_index;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (victim);
 
@@ -394,7 +394,7 @@ void play_vehicle_destroyed_speech (entity *victim, entity *aggressor)
 int vehicle_critically_damaged (entity *en)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		percent_damaged;
@@ -415,7 +415,7 @@ int vehicle_critically_damaged (entity *en)
 void assess_vehicle_damage_level (entity *en, int old_damage_level)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 	float
 		initial_damage,
 		old_percent_damaged,

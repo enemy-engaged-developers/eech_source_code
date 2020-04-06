@@ -101,7 +101,7 @@ static object_3d_camera_index_numbers
 crew_roles get_crew_role (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_pilot_entity ();
 
@@ -123,7 +123,7 @@ crew_roles get_crew_role (void)
 void read_motion_values (const char *filespec, int num_frames, motion_data *array)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		s[200];
@@ -496,22 +496,22 @@ static screen
 #else
 const char
 #endif
-	*us_pilot_high_detail_face,
-	*us_pilot_low_detail_face,
-	*us_pilot_neck,
-	*us_pilot_hands,
-	*us_co_pilot_high_detail_face,
-	*us_co_pilot_low_detail_face,
-	*us_co_pilot_neck,
-	*us_co_pilot_hands,
-	*russian_pilot_high_detail_face,
-	*russian_pilot_low_detail_face,
-	*russian_pilot_neck,
-	*russian_pilot_hands,
-	*russian_co_pilot_high_detail_face,
-	*russian_co_pilot_low_detail_face,
-	*russian_co_pilot_neck,
-	*russian_co_pilot_hands;
+	*us_pilot_high_detail_face = nullptr,
+	*us_pilot_low_detail_face = nullptr,
+	*us_pilot_neck = nullptr,
+	*us_pilot_hands = nullptr,
+	*us_co_pilot_high_detail_face = nullptr,
+	*us_co_pilot_low_detail_face = nullptr,
+	*us_co_pilot_neck = nullptr,
+	*us_co_pilot_hands = nullptr,
+	*russian_pilot_high_detail_face = nullptr,
+	*russian_pilot_low_detail_face = nullptr,
+	*russian_pilot_neck = nullptr,
+	*russian_pilot_hands = nullptr,
+	*russian_co_pilot_high_detail_face = nullptr,
+	*russian_co_pilot_low_detail_face = nullptr,
+	*russian_co_pilot_neck = nullptr,
+	*russian_co_pilot_hands = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

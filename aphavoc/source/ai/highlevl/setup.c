@@ -91,7 +91,7 @@ static void create_force_campaign_objectives (entity *force);
 void setup_campaign (void)
 {
 	entity
-		*force;
+		*force = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -126,8 +126,8 @@ void setup_campaign (void)
 void create_force_campaign_objectives (entity *force)
 {
 	entity
-		*keysite,
-		*target_force,
+		*keysite = nullptr,
+		*target_force = nullptr,
 		**list;
 
 	int
@@ -138,7 +138,7 @@ void create_force_campaign_objectives (entity *force)
 
 	float
 		highest,
-		*rating;
+		*rating = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -216,7 +216,7 @@ void create_force_campaign_objectives (entity *force)
 							actual_range;
 	
 						vec3d
-							*pos;
+							*pos = nullptr;
 	
 						list [count] = keysite;
 	

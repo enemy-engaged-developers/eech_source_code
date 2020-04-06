@@ -177,7 +177,7 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	unsigned int
 		landed_lock,
@@ -187,17 +187,17 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 		formation_position;
 
 	entity
-		*member,
-		*guide,
-		*keysite,
-		*fw_landing,
-		*incoming_group,
-		*landing_task,
-		*holding_task,
-		*landing_route_first_wp;
+		*member = nullptr,
+		*guide = nullptr,
+		*keysite = nullptr,
+		*fw_landing = nullptr,
+		*incoming_group = nullptr,
+		*landing_task = nullptr,
+		*holding_task = nullptr,
+		*landing_route_first_wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -477,13 +477,13 @@ static int response_to_lock_landing_route (entity_messages message, entity *rece
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -600,7 +600,7 @@ static int response_to_lock_landing_site (entity_messages message, entity *recei
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -718,13 +718,13 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_takeoff;
@@ -787,17 +787,17 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 			//
 
 			entity
-				*group,
-				*hanger,
-				*keysite,
-				*building;
+				*group = nullptr,
+				*hanger = nullptr,
+				*keysite = nullptr,
+				*building = nullptr;
 
 			float
 				sqr_range;
 
 			vec3d
-				*en_pos,
-				*building_pos;
+				*en_pos = nullptr,
+				*building_pos = nullptr;
 
 			keysite = get_local_entity_parent (receiver, LIST_TYPE_LANDING_SITE);
 
@@ -907,7 +907,7 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 	if (get_game_status () != GAME_STATUS_INITIALISING && get_local_entity_int_value (sender, INT_TYPE_IDENTIFY_AIRCRAFT))
 	{
 		entity
-			*group;
+			*group = nullptr;
 
 		group = get_local_entity_parent (sender, LIST_TYPE_MEMBER);
 
@@ -951,7 +951,7 @@ static int response_to_reserve_landing_site (entity_messages message, entity *re
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	int
 		count;
@@ -1069,10 +1069,10 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 		heading;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	entity
-		*task;
+		*task = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1121,7 +1121,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	unsigned int
 		exit,
@@ -1130,16 +1130,16 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 		formation_landing;
 
 	entity
-		*guide,
-		*keysite,
-		*landing_task,
-		*holding_task,
-		*holding_member,
-		*next_group,
-		*incoming_group,
-		*next_landing_member,
+		*guide = nullptr,
+		*keysite = nullptr,
+		*landing_task = nullptr,
+		*holding_task = nullptr,
+		*holding_member = nullptr,
+		*next_group = nullptr,
+		*incoming_group = nullptr,
+		*next_landing_member = nullptr,
 //		*landing_route_last_wp,
-		*landing_route_first_wp;
+		*landing_route_first_wp = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1322,8 +1322,8 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 			{
 
 				entity
-					*keysite,
-					*transport_landing;
+					*keysite = nullptr,
+					*transport_landing = nullptr;
 
 				debug_log ("LD_MSGS: no more FIXED WING landing, checking TRANSPORT");
 
@@ -1393,7 +1393,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 	//
 	{
 		entity
-			*landed_member;
+			*landed_member = nullptr;
 
 		int
 			count = 0,
@@ -1443,13 +1443,13 @@ static int response_to_unlock_landing_route (entity_messages message, entity *re
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -1568,7 +1568,7 @@ static int response_to_unlock_landing_site (entity_messages message, entity *rec
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_landing;
@@ -1690,14 +1690,14 @@ static int response_to_unlock_takeoff_route (entity_messages message, entity *re
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	entity
-		*wp,
-		*member;
+		*wp = nullptr,
+		*member = nullptr;
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	unsigned int
 		formation_takeoff;
@@ -1881,7 +1881,7 @@ static int response_to_unreserve_landing_site (entity_messages message, entity *
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	int
 		count;
@@ -2072,7 +2072,7 @@ void debug_update_entity_landing_locks (entity *en, entity *landing, debug_landi
 {
 
 	debug_landing_lock_type
-		*item;
+		*item = nullptr;
 
 	item = debug_landing_lock_list;
 
@@ -2125,7 +2125,7 @@ void debug_update_entity_landing_locks (entity *en, entity *landing, debug_landi
 			loop;
 
 		entity
-			*keysite;
+			*keysite = nullptr;
 
 		keysite = get_local_entity_parent (landing, LIST_TYPE_LANDING_SITE);
 
@@ -2166,8 +2166,8 @@ void debug_update_entity_landing_locks (entity *en, entity *landing, debug_landi
 void destroy_debug_landing_route_check (void)
 {
 	debug_landing_lock_type
-		*destroy_item,
-		*item;
+		*destroy_item = nullptr,
+		*item = nullptr;
 
 	item = debug_landing_lock_list;
 
@@ -2195,8 +2195,8 @@ void destroy_debug_landing_route_check (void)
 void destroy_debug_entity_landing_route_check (entity *en)
 {
 	debug_landing_lock_type
-		*last_item,
-		*item;
+		*last_item = nullptr,
+		*item = nullptr;
 
 	item = debug_landing_lock_list;
 
@@ -2243,7 +2243,7 @@ void pack_debug_entity_landing_locks (pack_modes mode)
 {
 
 	debug_landing_lock_type
-		*item;
+		*item = nullptr;
 
 	if (mode != PACK_MODE_SERVER_SESSION)
 	{
@@ -2291,7 +2291,7 @@ void unpack_debug_entity_landing_locks (pack_modes mode)
 		valid;
 
 	debug_landing_lock_type
-		*item;
+		*item = nullptr;
 
 	if (mode != PACK_MODE_SERVER_SESSION)
 	{

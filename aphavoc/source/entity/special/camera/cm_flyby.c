@@ -79,7 +79,7 @@
 void reset_fly_by_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_forces
 		force;
@@ -342,7 +342,7 @@ void update_fly_by_camera (camera *raw)
 void update_fly_by_camera_continued (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,

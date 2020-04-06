@@ -84,7 +84,7 @@ static rgb_colour
 	clear_colour;
 
 static screen
-	*texture_screen;
+	*texture_screen = nullptr;
 
 static char
 	line1[MAX_STRING_LENGTH + 1],

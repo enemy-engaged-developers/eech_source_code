@@ -475,8 +475,8 @@ static void light_signal_strength_lamps(float range, float max_range)
 static void update_threat_warning_display (void)
 {
 	entity
-		*source,
-		*threat;
+		*source = nullptr,
+		*threat = nullptr;
 
 	int
 		above = FALSE,
@@ -500,12 +500,12 @@ static void update_threat_warning_display (void)
 		threat_type;
 
 	vec3d
-		*source_position,
-		*threat_position,
+		*source_position = nullptr,
+		*threat_position = nullptr,
 		uvec_threat_to_target;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	clear_threat_warning_display_lamps ();
 
@@ -795,7 +795,7 @@ static void update_threat_warning_display (void)
 static void update_warning_panel_lamps (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_gunship_entity ();
 
@@ -901,7 +901,7 @@ static void initialise_weapon_status_lamps (void)
 static void update_weapon_status_lamps (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		selected_weapon,

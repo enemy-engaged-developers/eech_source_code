@@ -59,7 +59,7 @@
 //
 
 
-
+/*
 #if 0
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,10 +89,10 @@ void blit_rgb_graphic (const unsigned char *rgb_graphic, const int x, const int 
 		height;
 
 	const unsigned char
-		*rd;
+		*rd = nullptr;
 	unsigned char
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rgb_graphic);
 
@@ -130,10 +130,10 @@ void blit_rgb_clipped_graphic (const unsigned char *rgb_graphic, int x, int y)
 		height;
 
 	const unsigned char
-		*rd;
+		*rd = nullptr;
 	unsigned char
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rgb_graphic);
 
@@ -231,10 +231,10 @@ void blit_rgb_centralised_clipped_graphic (const unsigned char *rgb_graphic, int
 		height;
 
 	const unsigned char
-		*rd;
+		*rd = nullptr;
 	unsigned char
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rgb_graphic);
 
@@ -341,11 +341,11 @@ void blit_rgb_alpha_centralised_clipped_graphic (const unsigned char *rgb_graphi
 		height;
 
 	const unsigned char
-		*rd,
-		*rda;
+		*rd = nullptr,
+		*rda = nullptr;
 	unsigned char
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rgb_graphic);
 
@@ -427,8 +427,8 @@ void blit_rgb_alpha_centralised_clipped_graphic (const unsigned char *rgb_graphi
 			loop;
 
 		unsigned short int
-			*read,
-			*write;
+			*read = nullptr,
+			*write = nullptr;
 
 		read = ( unsigned short int * ) rd;
 		write = ( unsigned short int * ) wt;
@@ -468,7 +468,7 @@ void blit_rgb_alpha_masked_sprite (const unsigned char *rgb_data, const unsigned
 		v_loop;
 
 	unsigned char
-		*screen_data,
+		*screen_data = nullptr,
 		mask_value;
 
 	ASSERT (rgb_data);
@@ -564,7 +564,7 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value (const unsigned char *rgb_data
 		v_loop;
 
 	unsigned char
-		*screen_data,
+		*screen_data = nullptr,
 		mask_value;
 
 	ASSERT (rgb_data);
@@ -659,7 +659,7 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 		v_loop;
 
 	unsigned char
-		*screen_data,
+		*screen_data = nullptr,
 		mask_value;
 
 	rgb_colour
@@ -783,7 +783,7 @@ static rgb_alpha_masked_sprite_data
 		dy;
 
 	unsigned char
-		*screen_data;
+		*screen_data = nullptr;
 
 	rgb_colour
 		col;
@@ -881,13 +881,13 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 {
 
 	FILE
-		*rgb_file_ptr;
+		*rgb_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*image;
+		*image = nullptr;
 
 	short int
 		width,
@@ -899,10 +899,10 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 		bits_per_pixel;
 
 	unsigned char
-		*destination_image;
+		*destination_image = nullptr;
 
 	rgb_packed
-		*destination_ptr;
+		*destination_ptr = nullptr;
 
 	if ((rgb_file_ptr = fopen (rgb_filename, "wb")) == NULL)
 	{
@@ -936,8 +936,8 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 	{
 
 		tga_rgb
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (tga_rgb *) image;
 
@@ -965,8 +965,8 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 	{
 
 		tga_rgba
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (tga_rgba *) image;
 
@@ -1024,17 +1024,17 @@ void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_f
 {
 
 	FILE
-		*rgb_alpha_file_ptr;
+		*rgb_alpha_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*alpha;
+		*alpha = nullptr;
 
 	tga_rgba
-		*this_pixel,
-		*image_data;
+		*this_pixel = nullptr,
+		*image_data = nullptr;
 
 	short int
 		width,
@@ -1126,11 +1126,11 @@ void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_f
 void convert_tga_to_alpha_mask (const char *tga_filename, const char *alpha_mask_filename)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	tga_rgba
-		*image_data,
-		*this_pixel;
+		*image_data = nullptr,
+		*this_pixel = nullptr;
 
 	short int
 		width,
@@ -1182,13 +1182,13 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 {
 
 	FILE
-		*rgb_file_ptr;
+		*rgb_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*image;
+		*image = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1202,10 +1202,10 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 		number_of_channels;
 
 	unsigned char
-		*destination_image;
+		*destination_image = nullptr;
 
 	rgb_packed
-		*destination_ptr;
+		*destination_ptr = nullptr;
 
 	//
 	// load psd file
@@ -1243,8 +1243,8 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 	{
 
 		psd_rgb
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (psd_rgb *) image;
 
@@ -1272,8 +1272,8 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 	{
 
 		psd_rgba
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (psd_rgba *) image;
 
@@ -1335,17 +1335,17 @@ void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_f
 {
 
 	FILE
-		*rgb_alpha_file_ptr;
+		*rgb_alpha_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*alpha;
+		*alpha = nullptr;
 
 	psd_rgba
-		*this_pixel,
-		*image_data;
+		*this_pixel = nullptr,
+		*image_data = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1447,11 +1447,11 @@ void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_f
 void convert_psd_to_alpha_mask (const char *psd_filename, const char *alpha_mask_filename)
 {
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	psd_rgba
-		*image_data,
-		*this_pixel;
+		*image_data = nullptr,
+		*this_pixel = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1513,10 +1513,10 @@ void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_f
 {
 
 	FILE
-		*rgb_file_ptr;
+		*rgb_file_ptr = nullptr;
 
 	unsigned char
-		*image;
+		*image = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1528,7 +1528,7 @@ void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_f
 		number_of_channels;
 
 	unsigned char
-		*destination_image;
+		*destination_image = nullptr;
 
 	//
 	// load psd file
@@ -1607,22 +1607,22 @@ void convert_and_dither_psd_to_rgb_alpha ( const char *psd_filename, const char 
 {
 
 	FILE
-		*rgb_alpha_file_ptr;
+		*rgb_alpha_file_ptr = nullptr;
 
 	unsigned char
-		*destination_alpha,
-		*alpha;
+		*destination_alpha = nullptr,
+		*alpha = nullptr;
 
 	psd_rgba
-		*image_data,
-		*image_ptr;
+		*image_data = nullptr,
+		*image_ptr = nullptr;
 
 	unsigned short int
 		short_width,
 		short_height;
 
 	rgb_packed
-		*destination_image;
+		*destination_image = nullptr;
 
 	int
 		width,
@@ -1736,13 +1736,13 @@ void convert_psd_to_rgbx (const char *psd_filename, const char *rgbx_filename)
 {
 
 	FILE
-		*rgbx_file_ptr;
+		*rgbx_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*image;
+		*image = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1756,10 +1756,10 @@ void convert_psd_to_rgbx (const char *psd_filename, const char *rgbx_filename)
 		number_of_channels;
 
 	unsigned char
-		*destination_image;
+		*destination_image = nullptr;
 
 	rgb_colour
-		*destination_ptr;
+		*destination_ptr = nullptr;
 
 	//
 	// load psd file
@@ -1797,8 +1797,8 @@ void convert_psd_to_rgbx (const char *psd_filename, const char *rgbx_filename)
 	{
 
 		psd_rgb
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (psd_rgb *) image;
 
@@ -1826,8 +1826,8 @@ void convert_psd_to_rgbx (const char *psd_filename, const char *rgbx_filename)
 	{
 
 		psd_rgba
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (psd_rgba *) image;
 
@@ -1889,13 +1889,13 @@ void convert_psd_to_rgba (const char *psd_filename, const char *rgba_filename)
 {
 
 	FILE
-		*rgba_file_ptr;
+		*rgba_file_ptr = nullptr;
 
 	rgb_colour
 		colour;
 
 	unsigned char
-		*image;
+		*image = nullptr;
 
 	unsigned short int
 		short_width,
@@ -1909,10 +1909,10 @@ void convert_psd_to_rgba (const char *psd_filename, const char *rgba_filename)
 		number_of_channels;
 
 	unsigned char
-		*destination_image;
+		*destination_image = nullptr;
 
 	rgb_colour
-		*destination_ptr;
+		*destination_ptr = nullptr;
 
 	//
 	// load psd file
@@ -1950,8 +1950,8 @@ void convert_psd_to_rgba (const char *psd_filename, const char *rgba_filename)
 	{
 
 		psd_rgba
-			*this_pixel,
-			*image_data;
+			*this_pixel = nullptr,
+			*image_data = nullptr;
 
 		image_data = (psd_rgba *) image;
 
@@ -2016,11 +2016,11 @@ void blit_rgb_clipped_graphic (const rgb_data *rgb_graphic, int x, int y)
 		height;
 
 	const rgb_colour
-		*rd;
+		*rd = nullptr;
 
 	unsigned int
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rgb_graphic);
 
@@ -2104,3 +2104,4 @@ void blit_rgb_clipped_graphic (const rgb_data *rgb_graphic, int x, int y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif
+*/

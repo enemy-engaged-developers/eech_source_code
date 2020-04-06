@@ -100,7 +100,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				struct SCREEN
-					*active_screen;
+					*active_screen = nullptr;
 
 				active_screen = va_arg (pargs, struct SCREEN *);
 
@@ -115,7 +115,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				const char
-					*text;
+					*text = nullptr;
 
 				text = va_arg (pargs, const char *);
 
@@ -141,7 +141,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 					type;
 
 				const char
-					*text;
+					*text = nullptr;
 
 				type = va_arg (pargs, ui_object_types);
 
@@ -197,7 +197,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*association;
+					*association = nullptr;
 
 				association = (ui_object *) va_arg (pargs, int);
 
@@ -227,7 +227,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*child;
+					*child = nullptr;
 
 				child = (ui_object *) va_arg (pargs, int);
 
@@ -833,10 +833,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 					height;
 
 				area_ui_object
-					*area;
+					*area = nullptr;
 
 				struct SCREEN
-					*sc;
+					*sc = nullptr;
 
 				area = (area_ui_object *) obj->data;
 
@@ -922,7 +922,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*next;
+					*next = nullptr;
 
 				next = (ui_object *) va_arg (pargs, int);
 
@@ -986,7 +986,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*parent;
+					*parent = nullptr;
 
 				parent = (ui_object *) va_arg (pargs, int);
 
@@ -1001,7 +1001,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*prev;
+					*prev = nullptr;
 
 				prev = (ui_object *) va_arg (pargs, int);
 
@@ -1390,7 +1390,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				const char
-					*text;
+					*text = nullptr;
 
 				text = va_arg (pargs, const char *);
 
@@ -1467,7 +1467,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				const char
-					*tool_tips;
+					*tool_tips = nullptr;
 
 				tool_tips = va_arg (pargs, const char *);
 
@@ -1640,7 +1640,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			{
 
 				ui_object
-					*vslider;
+					*vslider = nullptr;
 
 				float
 					min,

@@ -210,7 +210,7 @@ void clear_factions (void)
 {
 
    entity
-      *this_force;
+      *this_force = nullptr;
 
    if (get_session_entity ())
    {
@@ -235,7 +235,7 @@ void create_faction (entity_sides side, int colour)
 {
 
    static entity
-      *this_force;
+      *this_force = nullptr;
 
    #if DEBUG_MODULE
 
@@ -288,12 +288,12 @@ entity *create_landed_faction_members (entity *keysite, entity_sub_types member_
       loop;
 
    entity
-      *wp,
-      *group,
-      *member,
-		*parent,
-      *landing_en,
-		*movement_parent;
+      *wp = nullptr,
+      *group = nullptr,
+      *member = nullptr,
+		*parent = nullptr,
+      *landing_en = nullptr,
+		*movement_parent = nullptr;
 
 	entity_sides
 		side;
@@ -497,7 +497,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 {
 
 	formation_vehicle_components
-		*formation_components;
+		*formation_components = nullptr;
 
    float
       fuselage_angle = 0,
@@ -522,13 +522,13 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 		list_type;
 
    entity
-      *wp,
-      *prev_wp,
-      *group,
-      *member,
-		*parent,
-      *landing_en,
-		*movement_parent;
+      *wp = nullptr,
+      *prev_wp = nullptr,
+      *group = nullptr,
+      *member = nullptr,
+		*parent = nullptr,
+      *landing_en = nullptr,
+		*movement_parent = nullptr;
 
 	entity_sides
 		side;
@@ -789,8 +789,8 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 
    vec3d
 		pos,
-		*wp_pos,
-		*normal,
+		*wp_pos = nullptr,
+		*normal = nullptr,
 		start_wp_pos,
 		member_pos,
       direction;
@@ -806,11 +806,11 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 		terrain_info;
 
    entity
-      *wp,
-		*force,
-      *group,
-      *member,
-      *landing_en;
+      *wp = nullptr,
+		*force = nullptr,
+      *group = nullptr,
+      *member = nullptr,
+      *landing_en = nullptr;
 
 	ASSERT (keysite);
 
@@ -1061,10 +1061,10 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 {
 
 	formation_vehicle_components
-		*formation_components;
+		*formation_components = nullptr;
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
    float
 		formation_radius,
@@ -1091,9 +1091,9 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
       loop;
 
    entity
-		*parent,
-      *group,
-      *member;
+		*parent = nullptr,
+      *group = nullptr,
+      *member = nullptr;
 
 	entity_sub_types
 		member_type;
@@ -1324,15 +1324,15 @@ void place_frontline_forces (entity *force, int force_size)
 {
 
 	sector
-		*sector_raw;
+		*sector_raw = nullptr;
 
 	formation_component_types
 		formation_component;
 
 	entity
-		*group,
-		*keysite,
-		*sector_en;
+		*group = nullptr,
+		*keysite = nullptr,
+		*sector_en = nullptr;
 
 	entity_sides
 		side,
@@ -1349,7 +1349,7 @@ void place_frontline_forces (entity *force, int force_size)
 		number;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	if (!get_road_nodes_loaded ())
 	{
@@ -1603,10 +1603,10 @@ void place_frontline_forces (entity *force, int force_size)
 			{
 
 				formation_vehicle_components
-					*formation_component_data;
+					*formation_component_data = nullptr;
 
 				formation_type
-					*formation_data;
+					*formation_data = nullptr;
 
 				int
 					size;
@@ -1689,7 +1689,7 @@ entity *create_mobile_member (
 {
 
 	entity
-		*member;
+		*member = nullptr;
 
 	member = NULL;
 

@@ -153,7 +153,7 @@ static void draw_campaign_time_acceleration (ui_object *obj, void *arg)
 static void draw_campaign_current_message (ui_object *obj, void *arg)
 {
 	message_log_type
-		*message;
+		*message = nullptr;
 
 	rgb_colour
 		*col = NULL;
@@ -247,9 +247,9 @@ static void display_mouse_over_task_entity_description (entity *en, ui_object *a
 		seconds;
 
 	entity
-		*guide,
-		*group,
-		*company;
+		*guide = nullptr,
+		*group = nullptr,
+		*company = nullptr;
 
 	ASSERT (en);
 
@@ -477,8 +477,8 @@ static void display_mouse_over_group_entity_description (entity *en, ui_object *
 		seconds;
 
 	entity
-		*mission,
-		*company;
+		*mission = nullptr,
+		*company = nullptr;
 
 	ASSERT (en);
 
@@ -567,9 +567,9 @@ static void display_mouse_over_group_entity_description (entity *en, ui_object *
 static void display_mouse_over_mobile_entity_description (entity *en, ui_object *area1, ui_object *area2)
 {
 	entity
-		*group,
-		*mission,
-		*company;
+		*group = nullptr,
+		*mission = nullptr,
+		*company = nullptr;
 
 	ASSERT (en);
 
@@ -656,11 +656,11 @@ static void display_mouse_over_mobile_entity_description (entity *en, ui_object 
 void draw_mouse_over_description_area (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ui_object
-		*area1,
-		*area2;
+		*area1 = nullptr,
+		*area2 = nullptr;
 
 	en = get_ui_mouse_over_entity ();
 
@@ -739,9 +739,9 @@ void define_info_bar_objects (ui_object *parent)
 		y2;
 
 	ui_object
-		*mouse_over_description_area,
-		*area1,
-		*area2;
+		*mouse_over_description_area = nullptr,
+		*area1 = nullptr,
+		*area2 = nullptr;
 
 	ASSERT (parent);
 

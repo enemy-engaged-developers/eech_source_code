@@ -74,7 +74,7 @@ static void set_area_ui_object_x (ui_object *obj, float x)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -96,14 +96,14 @@ static float get_area_ui_object_x (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		x,
 		px = 0;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	parent = get_ui_object_parent (obj);
 
@@ -143,7 +143,7 @@ static void set_area_ui_object_y (ui_object *obj, float y)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -165,14 +165,14 @@ static float get_area_ui_object_y (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		y,
 		py = 0;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	parent = get_ui_object_parent (obj);
 
@@ -212,7 +212,7 @@ static void set_area_ui_object_x_end (ui_object *obj, float x)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -229,7 +229,7 @@ static float get_area_ui_object_x_end (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -244,7 +244,7 @@ static void set_area_ui_object_y_end (ui_object *obj, float y)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -261,7 +261,7 @@ static float get_area_ui_object_y_end (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -276,7 +276,7 @@ static void set_area_ui_object_x_start (ui_object *obj, float x)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -293,7 +293,7 @@ static float get_area_ui_object_x_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -308,7 +308,7 @@ static void set_area_ui_object_y_start (ui_object *obj, float y)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -325,7 +325,7 @@ static float get_area_ui_object_y_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -340,7 +340,7 @@ static void set_area_ui_object_cx (ui_object *obj, float cx)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 	
@@ -355,7 +355,7 @@ static float get_area_ui_object_cx (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -370,7 +370,7 @@ static void set_area_ui_object_cy (ui_object *obj, float cy)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -385,7 +385,7 @@ static float get_area_ui_object_cy (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -400,7 +400,7 @@ static void set_area_ui_object_virtual_x (ui_object *obj, float x)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -420,13 +420,13 @@ static float get_area_ui_object_virtual_x (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		px = 0;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	if (get_ui_object_virtual_coords (obj))
 	{
@@ -452,7 +452,7 @@ static float get_area_ui_object_virtual_x (ui_object *obj)
 			x;
 
 		ui_object
-			*parent;
+			*parent = nullptr;
 	
 		parent = get_ui_object_parent (obj);
 	
@@ -479,7 +479,7 @@ static void set_area_ui_object_virtual_y (ui_object *obj, float y)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -499,13 +499,13 @@ static float get_area_ui_object_virtual_y (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	float
 		py = 0;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	if (get_ui_object_virtual_coords (obj))
 	{
@@ -531,7 +531,7 @@ static float get_area_ui_object_virtual_y (ui_object *obj)
 			y;
 
 		ui_object
-			*parent;
+			*parent = nullptr;
 	
 		parent = get_ui_object_parent (obj);
 	

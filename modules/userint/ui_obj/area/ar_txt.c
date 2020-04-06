@@ -77,10 +77,10 @@ static void set_area_ui_object_text (ui_object *obj, char *text)
 		length;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	area = obj->data;
 
@@ -136,7 +136,7 @@ static const char *get_area_ui_object_text (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -151,14 +151,14 @@ static void set_area_ui_object_add_text (ui_object *obj, char *text)
 {
 
 	char
-		*temp_text;
+		*temp_text = nullptr;
 
 	int
 		new_length,
 		old_length;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -193,7 +193,7 @@ static void set_area_ui_object_text_justify (ui_object *obj, text_justify_types 
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -208,7 +208,7 @@ static text_justify_types get_area_ui_object_text_justify (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -223,7 +223,7 @@ static void set_area_ui_object_font (ui_object *obj, int font_id)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -238,7 +238,7 @@ static int get_area_ui_object_font (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -253,7 +253,7 @@ static void set_area_ui_object_hilight_font (ui_object *obj, int font_id)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -268,7 +268,7 @@ static int get_area_ui_object_hilight_font (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

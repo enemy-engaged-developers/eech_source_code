@@ -88,7 +88,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			sound_effect
-				*raw;
+				*raw = nullptr;
 
 			unsigned int
 				loop;
@@ -205,7 +205,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			sound_effect
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -321,7 +321,7 @@ void overload_sound_effect_pack_functions (void)
 void pack_local_only_sound_effect_data (entity *en, pack_modes mode)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

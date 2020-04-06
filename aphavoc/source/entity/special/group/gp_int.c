@@ -79,7 +79,7 @@
 static void set_local_int_value (entity *en, int_types type, int value)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -197,8 +197,8 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			if ( raw->side != ENTITY_SIDE_UNINITIALISED && value != ENTITY_SIDE_UNINITIALISED && raw->side != value )
 			{
 				entity
-					*old_force,
-					*new_force;
+					*old_force = nullptr,
+					*new_force = nullptr;
 				list_types
 					list_type;
 
@@ -304,7 +304,7 @@ static void set_client_int_value (entity *en, int_types type, int value)
 static int get_local_int_value (entity *en, int_types type)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;

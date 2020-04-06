@@ -85,7 +85,7 @@
 #define HUD_VIEWPORT_SIZE	(256)
 
 static env_2d
-	*hud_env;
+	*hud_env = nullptr;
 
 static float
 //VJ 050126 hud mod start
@@ -125,7 +125,7 @@ static float
 #define HUD_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD2)
 
 static screen
-	*hud_texture_screen;
+	*hud_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour;
@@ -542,14 +542,14 @@ static void draw_heading_scale (void)
 	if (!apache_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 		if (wp)
 		{
 			vec3d
-				*gunship_position,
+				*gunship_position = nullptr,
 				waypoint_position;
 
 			float
@@ -590,7 +590,7 @@ static void draw_heading_scale (void)
 
 	{
 		radar_params
-			*radar;
+			*radar = nullptr;
 
 		float
 			sweep_position;
@@ -1626,10 +1626,10 @@ static void display_waypoint_information (void)
 		buffer[80];
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
-		*gunship_position,
+		*gunship_position = nullptr,
 		waypoint_position;
 
 	float
@@ -2140,8 +2140,8 @@ static void draw_target_symbology (void)
 		pitch_offset;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
 		target_position,
@@ -2332,7 +2332,7 @@ static void draw_target_symbology (void)
 static void display_target_information (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 	char
 		buffer[200];
 
@@ -2341,7 +2341,7 @@ static void display_target_information (void)
 		target_range;
 
 	entity
-		*target;
+		*target = nullptr;
 
 	rangefinding_system
 		rangefinder = get_range_finder();
@@ -2740,8 +2740,8 @@ static void draw_bob_up_overlay (void)
 		dzt;
 
 	vec3d
-		*position,
-		*motion_vector;
+		*position = nullptr,
+		*motion_vector = nullptr;
 
 	if (hud_bob_up_overlay)
 	{

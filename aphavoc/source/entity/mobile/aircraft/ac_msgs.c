@@ -81,10 +81,10 @@
 static int response_to_articulate_undercarriage (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	vec3d
-		*position;
+		*position = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	sound_sample_indices
 		sample_index;
@@ -200,7 +200,7 @@ static int response_to_link_parent (entity_messages message, entity *receiver, e
 		////////////////////////////////////////
 		{
 			entity
-				*group;
+				*group = nullptr;
 
 			//
 			// Notify the group that it has been targeted
@@ -294,12 +294,12 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 {
 
 	entity
-		*guide,
-		*landing_en,
-		*task;
+		*guide = nullptr,
+		*landing_en = nullptr,
+		*task = nullptr;
 
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	raw = (aircraft *) get_local_entity_data (receiver);
 
@@ -459,7 +459,7 @@ static int response_to_waypoint_raise_undercarriage_reached (entity_messages mes
 static int response_to_guide_cover_position_reached (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*aggressor;
+		*aggressor = nullptr;
 		
 	float
 		silence_timer;

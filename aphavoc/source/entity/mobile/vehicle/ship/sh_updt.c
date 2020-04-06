@@ -81,7 +81,7 @@
 static void update_server (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	int	
 		loop,
@@ -172,7 +172,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;

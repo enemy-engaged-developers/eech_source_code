@@ -74,7 +74,7 @@ static void set_area_ui_object_x_size (ui_object *obj, float x_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -95,7 +95,7 @@ static float get_area_ui_object_x_size (ui_object *obj)
 		size;
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -114,7 +114,7 @@ static float get_area_ui_object_x_size (ui_object *obj)
 	{
 
 		ui_object
-			*parent;
+			*parent = nullptr;
 
 		parent = get_ui_object_parent (obj);
 
@@ -141,7 +141,7 @@ static void set_area_ui_object_y_size (ui_object *obj, float y_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -162,7 +162,7 @@ static float get_area_ui_object_y_size (ui_object *obj)
 		size;
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -181,7 +181,7 @@ static float get_area_ui_object_y_size (ui_object *obj)
 	{
 
 		ui_object
-			*parent;
+			*parent = nullptr;
 
 		parent = get_ui_object_parent (obj);
 
@@ -208,7 +208,7 @@ static void set_area_ui_object_x_size_end (ui_object *obj, float x_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -225,7 +225,7 @@ static float get_area_ui_object_x_size_end (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -240,7 +240,7 @@ static void set_area_ui_object_y_size_end (ui_object *obj, float y_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -257,7 +257,7 @@ static float get_area_ui_object_y_size_end (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -272,7 +272,7 @@ static void set_area_ui_object_x_size_start (ui_object *obj, float x_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -289,7 +289,7 @@ static float get_area_ui_object_x_size_start (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -304,7 +304,7 @@ static void set_area_ui_object_y_size_start (ui_object *obj, float y_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -321,7 +321,7 @@ static float get_area_ui_object_y_size_start (ui_object *obj)
 {
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -336,7 +336,7 @@ static void set_area_ui_object_virtual_x_size (ui_object *obj, float x_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -356,7 +356,7 @@ static float get_area_ui_object_virtual_x_size (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -380,7 +380,7 @@ static void set_area_ui_object_virtual_y_size (ui_object *obj, float y_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 
@@ -400,7 +400,7 @@ static float get_area_ui_object_virtual_y_size (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = (area_ui_object *) obj->data;
 

@@ -217,8 +217,8 @@ void create_task_completed_reactionary_tasks (entity *task)
 void create_reaction_to_offensive_keysite_task_assigned (entity *task)
 {
 	entity
-		*new_task,
-		*objective;
+		*new_task = nullptr,
+		*objective = nullptr;
 	
 	entity_sub_types
 		objective_type;
@@ -259,14 +259,14 @@ void create_reaction_to_offensive_keysite_task_assigned (entity *task)
 			if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_BARCAP, objective_side))
 			{
 				entity
-					*group,
-					*guide;
+					*group = nullptr,
+					*guide = nullptr;
 
 				vec3d
 					position,
 					direction,
-					*objective_pos,
-					*group_pos;
+					*objective_pos = nullptr,
+					*group_pos = nullptr;
 
 				float
 					distance;
@@ -314,9 +314,9 @@ void create_reaction_to_offensive_keysite_task_assigned (entity *task)
 void create_reaction_to_recon_task_completed (entity *task)
 {
 	entity
-		*force,
-		*new_task,
-		*objective;
+		*force = nullptr,
+		*new_task = nullptr,
+		*objective = nullptr;
 
 	entity_sides
 		task_side;
@@ -609,8 +609,8 @@ void create_reaction_to_recon_task_completed (entity *task)
 void create_reaction_to_strike_task_completed (entity *task)
 {
 	entity
-		*new_task,
-		*objective;
+		*new_task = nullptr,
+		*objective = nullptr;
 
 	entity_sides
 		task_side;
@@ -703,8 +703,8 @@ void create_reaction_to_strike_task_completed (entity *task)
 void create_reaction_to_artillery_fire (entity *group, entity *target)
 {
 	entity
-		*sector,
-		*new_task;
+		*sector = nullptr,
+		*new_task = nullptr;
 
 	entity_sides
 		side,
@@ -723,7 +723,7 @@ void create_reaction_to_artillery_fire (entity *group, entity *target)
 		base_distance_rating;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	//
 	// Create Recon/BAI Task in response to artillery fire
@@ -818,8 +818,8 @@ void create_reaction_to_artillery_fire (entity *group, entity *target)
 void create_reaction_to_map_click (entity *objective)
 {
 	entity
-		*force,
-		*new_task;
+		*force = nullptr,
+		*new_task = nullptr;
 
 	entity_sides
 		task_side;

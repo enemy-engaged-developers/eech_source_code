@@ -77,22 +77,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if 0
 entity
-	*parser_keysite,
-	*parser_force,
-	*parser_landing,
-	*parser_route,
-	*parser_waypoint,
-	*parser_member,
-	*parser_object;
+	*parser_keysite = nullptr,
+	*parser_force = nullptr,
+	*parser_landing = nullptr,
+	*parser_route = nullptr,
+	*parser_waypoint = nullptr,
+	*parser_member = nullptr,
+	*parser_object = nullptr;
 #endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if 0
 char
-	*campaign_population_filename,
-	*population_placement_filename,
-	*side_data_filename;
+	*campaign_population_filename = nullptr,
+	*population_placement_filename = nullptr,
+	*side_data_filename = nullptr;
 
 int
 	parser_flight_dynamics_options;
@@ -143,10 +143,10 @@ void load_campaign_file (session_list_data_type *session)
 {
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
@@ -401,7 +401,7 @@ void load_campaign_file (session_list_data_type *session)
 				if (!get_session_entity ())
 				{
 					entity
-						*en;
+						*en = nullptr;
 									
 					en = create_local_entity
 					(
@@ -955,8 +955,8 @@ void load_campaign_file (session_list_data_type *session)
 					campaign_result;
 
 				int
-					*experience_variable,
-					*rank_variable,
+					*experience_variable = nullptr,
+					*rank_variable = nullptr,
 					value1,
 					value2,
 					value3,
@@ -964,7 +964,7 @@ void load_campaign_file (session_list_data_type *session)
 					type;
 
 				force
-					*raw;
+					*raw = nullptr;
 
 				ASSERT (get_parser_force ());
 
@@ -1231,7 +1231,7 @@ void load_campaign_file (session_list_data_type *session)
 						this_type;
 
 					force
-						*raw;
+						*raw = nullptr;
 
 					raw = get_local_entity_data (get_parser_force ());
 
@@ -1281,7 +1281,7 @@ void load_campaign_file (session_list_data_type *session)
 					count;
 
 				force
-					*force_raw;
+					*force_raw = nullptr;
 
 				ASSERT (get_parser_force ());
 
@@ -1386,8 +1386,8 @@ void load_campaign_file (session_list_data_type *session)
 					frequency_modifier;
 
 				entity
-					*regen,
-					*keysite;
+					*regen = nullptr,
+					*keysite = nullptr;
 
 				entity_sides
 					side;
@@ -1432,7 +1432,7 @@ void load_campaign_file (session_list_data_type *session)
 					formation_component;
 
 				entity
-					*keysite;
+					*keysite = nullptr;
 
 				value = get_next_file_int (file_ptr);
 
@@ -1583,8 +1583,8 @@ void load_campaign_file (session_list_data_type *session)
 					count;
 
 				entity
-					*group,
-					*member;
+					*group = nullptr,
+					*member = nullptr;
 
 				member = NULL;
 
@@ -1733,7 +1733,7 @@ void load_campaign_file (session_list_data_type *session)
 					formation_component_type;
 
 				entity
-					*group;
+					*group = nullptr;
 
 				result = get_next_file_tag (file_ptr);
 
@@ -1818,33 +1818,33 @@ void load_campaign_file (session_list_data_type *session)
 			{
 
 				vec3d
-					*wp_nodes;
+					*wp_nodes = nullptr;
 
 				movement_types
 					movement_type;
 
 				entity
-					*wp,
-					*group_en,
-					*guide,
-					*new_task;
+					*wp = nullptr,
+					*group_en = nullptr,
+					*guide = nullptr,
+					*new_task = nullptr;
 
 				entity_sub_types
 					task_type,
-					*wp_types;
+					*wp_types = nullptr;
 
 				entity_sides
 					side;
 
 				float
-					*wp_radius,
+					*wp_radius = nullptr,
 					start_time,
 					stop_time,
 					expire_time;
 
 				int
 //					*wp_criteria,
-					*wp_delta_time,
+					*wp_delta_time = nullptr,
 					count,
 					wp_count;
 
@@ -2037,11 +2037,11 @@ void load_campaign_file (session_list_data_type *session)
 					campaign_size;
 
 				FILE
-					*saved_file_ptr;
+					*saved_file_ptr = nullptr;
 
 				char
-					*load_ptr,
-					*campaign_buffer,
+					*load_ptr = nullptr,
+					*campaign_buffer = nullptr,
 					filename [128];
 
 //				comms_model_types
@@ -2147,16 +2147,16 @@ void load_campaign_object_population_data (char *filename)
 	#if 0
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
 
 	entity
-		*keysite,
-		*building,
-		*landing,
-		*route;
+		*keysite = nullptr,
+		*building = nullptr,
+		*landing = nullptr,
+		*route = nullptr;
 
 	int
 		value,
@@ -2216,10 +2216,10 @@ void load_campaign_object_population_data (char *filename)
 			{
 
 				vec3d
-					*keysite_pos;
+					*keysite_pos = nullptr;
 
 				entity
-					*keysite_group;
+					*keysite_group = nullptr;
 
 				int
 					side,
@@ -2334,10 +2334,10 @@ void load_campaign_object_population_data (char *filename)
 				{
 
 					entity
-						*wp,
-						*regen,
-						*landing,
-						*closest_wp;
+						*wp = nullptr,
+						*regen = nullptr,
+						*landing = nullptr,
+						*closest_wp = nullptr;
 
 					entity_sub_types
 						sub_type;
@@ -2484,7 +2484,7 @@ void load_campaign_object_population_data (char *filename)
 			{
 
 				object_3d_instance
-					*inst3d;
+					*inst3d = nullptr;
 
 				int
 					type,
@@ -2635,7 +2635,7 @@ void load_campaign_object_population_data (char *filename)
 			{
 
 				vec3d
-					*keysite_pos;
+					*keysite_pos = nullptr;
 
 				char
 					filename [512],
@@ -2729,11 +2729,11 @@ void load_campaign_object_population_data (char *filename)
 					radius;
 
 				vec3d
-					*landing_pos,
+					*landing_pos = nullptr,
 					position;
 
 				entity
-					*wp;
+					*wp = nullptr;
 
 				if (!get_parser_landing ())
 				{

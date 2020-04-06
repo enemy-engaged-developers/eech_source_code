@@ -146,7 +146,7 @@ static float
 	refresh_timer;
 
 static entity
-	*entity_being_destroyed;
+	*entity_being_destroyed = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -323,8 +323,8 @@ static int get_match_view_search_group (entity* en)
 		////////////////////////////////////////
 		{
 			entity
-				*gunship,
-				*parent;
+				*gunship = nullptr,
+				*parent = nullptr;
 
 			gunship = get_gunship_entity ();
 
@@ -455,8 +455,8 @@ static int get_match_view_search_type (entity* en)
 static int get_match_view_search_range (entity *en)
 {
 	vec3d
-		*p1,
-		*p2;
+		*p1 = nullptr,
+		*p2 = nullptr;
 
 	ASSERT (en);
 
@@ -514,7 +514,7 @@ static int get_match_view_search (entity *en)
 static entity *get_first_view_search_match (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_camera_entity ());
 
@@ -643,7 +643,7 @@ static view_types get_local_entity_view_type (entity *en)
 static void build_view_menu (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	view_sides
 		side;
@@ -731,7 +731,7 @@ static void build_view_menu (void)
 static entity *get_widen_view_search_match (entity *this_entity)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	//
 	// if this_entity is given then only try to match this_entity
@@ -777,7 +777,7 @@ static entity *get_widen_view_search_match (entity *this_entity)
 static entity *widen_view_search_params (entity *this_entity)
 {
 	entity
-		*found;
+		*found = nullptr;
 
 	view_sides
 		side;
@@ -994,7 +994,7 @@ static entity *widen_view_search_params (entity *this_entity)
 static void rebuild_view_menu (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = widen_view_search_params (NULL);
 
@@ -1140,7 +1140,7 @@ void initialise_view_menu (void)
 	if (!get_external_view_entity ())
 	{
 		entity
-			*en;
+			*en = nullptr;
 
 		en = get_gunship_entity ();
 
@@ -1282,7 +1282,7 @@ static void validate_view_menu (void)
 	////////////////////////////////////////
 	{
 		entity
-			*en;
+			*en = nullptr;
 
 		en = get_external_view_entity ();
 
@@ -1482,8 +1482,8 @@ static void display_array_list
 static void display_object_list (float x, float y, float y_add, int num_list_items, int display_list_length)
 {
 	entity
-		*en,
-		*first;
+		*en = nullptr,
+		*first = nullptr;
 
 	int
 		page,
@@ -2222,7 +2222,7 @@ void select_view_menu_previous_type (void)
 void select_view_menu_next_object (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_view_menu ();
 
@@ -2240,7 +2240,7 @@ void select_view_menu_next_object (void)
 void select_view_menu_previous_object_event (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_view_menu ();
 
@@ -2258,7 +2258,7 @@ void select_view_menu_previous_object_event (void)
 int select_view_menu_view_players_gunship (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_view_menu ();
 
@@ -2283,8 +2283,8 @@ int select_view_menu_view_players_gunship (void)
 int select_view_menu_view_players_target (void)
 {
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	validate_view_menu ();
 
@@ -2322,8 +2322,8 @@ int select_view_menu_view_players_target (void)
 int select_view_menu_view_players_padlock (void)
 {
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	validate_view_menu ();
 
@@ -2365,7 +2365,7 @@ int select_view_menu_view_players_padlock (void)
 				if (get_local_entity_int_value (target, INT_TYPE_VIEWABLE_WEAPON))
 				{
 					entity
-						*launcher;
+						*launcher = nullptr;
 
 					launcher = get_local_entity_parent (target, LIST_TYPE_LAUNCHED_WEAPON);
 
@@ -2419,7 +2419,7 @@ void select_view_menu_view_all (void)
 int select_view_menu_view_wingmen (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_view_menu ();
 
@@ -2461,7 +2461,7 @@ int select_view_menu_view_wingmen (void)
 void select_view_menu_view_players (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	validate_view_menu ();
 
@@ -2616,7 +2616,7 @@ void notify_view_menu_of_view_list_change (entity *en)
 void set_view_menu_to_match_external_view_entity (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	if (initialised)
 	{

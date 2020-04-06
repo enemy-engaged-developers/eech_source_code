@@ -342,8 +342,8 @@ void update_blackhawk_threat_warning_system (void)
 		infra_red_jammer_on;
 
 	entity
-		*source,
-		*threat;
+		*source = nullptr,
+		*threat = nullptr;
 
 	source = get_gunship_entity ();
 

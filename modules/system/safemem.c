@@ -88,18 +88,18 @@ struct SAFE_MEMORY_TRACK
 {
 
 	void
-		*memory;
+		*memory = nullptr;
 
 	const char
-		*file;
+		*file = nullptr;
 
 	int
 		size,
 		line;
 
 	struct SAFE_MEMORY_TRACK
-		*succ,
-		*pred;
+		*succ = nullptr,
+		*pred = nullptr;
 };
 
 typedef struct SAFE_MEMORY_TRACK safe_memory_track;
@@ -180,7 +180,7 @@ void check_safe_memory_counter (void)
 void *safe_malloc_memory (size_t size, const char *file, int line)
 {
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT (size > 0);
 
@@ -242,7 +242,7 @@ void *safe_malloc_memory (size_t size, const char *file, int line)
 	{
 
 		safe_memory_track
-			*track;
+			*track = nullptr;
 
 		track = ( safe_memory_track * ) malloc ( sizeof ( safe_memory_track ) );
 
@@ -271,7 +271,7 @@ void *safe_malloc_memory (size_t size, const char *file, int line)
 void *safe_malloc_memory (size_t size)
 {
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT (size > 0);
 
@@ -378,7 +378,7 @@ void safe_free (void *ptr)
 	{
 
 		safe_memory_track
-			*track;
+			*track = nullptr;
 
 		track = safe_memory_tracks;
 
@@ -424,7 +424,7 @@ void report_tracked_safe_memory (void)
 {
 
 	safe_memory_track
-		*track;
+		*track = nullptr;
 
 	debug_log ( "BEGIN TRACKED MEMORY STATUS ( total safemem allocated: %d )", total_safe_memory_allocated );
 

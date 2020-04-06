@@ -105,7 +105,7 @@ service_provider_table_type
 	*current_active_service = NULL;
 
 modem_names
-	*current_modem;
+	*current_modem = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ void set_serial_connection_status ( void )
 		text_buffer [256];
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	this_connection = direct_play_get_connection_data ();
 
@@ -162,7 +162,7 @@ void notify_multi_player_setup (void)
 {
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	char
 		text [10];
@@ -313,7 +313,7 @@ void break_modem_connection ( void )
 		text_buffer [256];
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	ui_set_user_function ( NULL );
 
@@ -405,8 +405,8 @@ void notify_modem_dial_function ( ui_object *obj, void *arg )
 		{
 
 			const char
-				*modem,
-				*phone;
+				*modem = nullptr,
+				*phone = nullptr;
 
 			modem = current_modem->name;
 
@@ -477,7 +477,7 @@ void notify_modem_answer_function ( ui_object *obj, void *arg )
 		{
 
 			char
-				*modem;
+				*modem = nullptr;
 
 			modem = current_modem->name;
 
@@ -583,10 +583,10 @@ void multiplayer_modem_dial_update_function ( void )
 	{
 
 		session_table_type
-			*this_session;
+			*this_session = nullptr;
 
 		connection_data_type
-			*this_connection;
+			*this_connection = nullptr;
 
 		HRESULT
 			connection_code;
@@ -808,7 +808,7 @@ void initialise_service_provider_connection ( void )
 {
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	this_connection = direct_play_get_connection_data ();
 
@@ -1099,7 +1099,7 @@ void install_global_options_service_provider (void)
 	//
 
    service_provider_table_type
-      *this_service;
+      *this_service = nullptr;
 
    this_service = direct_play_get_service_provider_table ();
 
@@ -1126,7 +1126,7 @@ void set_multiplayer_options_display ( void )
 {
 
 	connection_data_type
-		*this_connection;
+		*this_connection = nullptr;
 
 	// Set options areas themselves
 

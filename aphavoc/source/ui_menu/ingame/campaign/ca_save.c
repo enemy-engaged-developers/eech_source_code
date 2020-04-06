@@ -85,18 +85,18 @@ static void build_save_file_list (void);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 session_list_data_type
-	*current_session;
+	*current_session = nullptr;
 
 ui_object
-	*save_file_list_area,
-	*save_file_list,
-	*save_text_area,
-	*save_filename_input,
-	*save_current_filename,
-	*save_game_confirm_button;
+	*save_file_list_area = nullptr,
+	*save_file_list = nullptr,
+	*save_text_area = nullptr,
+	*save_filename_input = nullptr,
+	*save_current_filename = nullptr,
+	*save_game_confirm_button = nullptr;
 
 static ui_object
-	*page_back_button;
+	*page_back_button = nullptr;
 
 static char
 	full_filename [512];
@@ -146,7 +146,7 @@ void initialise_campaign_screen_save_page_objects (void)
 static void save_session (ui_object *obj, void *arg)
 {
 	const char
-		*filename;
+		*filename = nullptr;
 
 	ASSERT (get_current_game_session ());
 
@@ -212,9 +212,9 @@ static int valid_filename_symbol (char c)
 void parse_filename (char *text, int max_length)
 {
 	char
-		*kb,
-		*pm,
-		*parsed_text;
+		*kb = nullptr,
+		*pm = nullptr,
+		*parsed_text = nullptr;
 
 	int
 		length;
@@ -268,7 +268,7 @@ void parse_filename (char *text, int max_length)
 void filename_input_function ( ui_object *obj, void *arg )
 {
 	const char
-		*text;
+		*text = nullptr;
 	char *
 		copy;
 
@@ -301,7 +301,7 @@ void filename_input_function ( ui_object *obj, void *arg )
 static void save_game_function (ui_object *obj, void *arg)
 {
 	const char
-		*text;
+		*text = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -355,19 +355,19 @@ static void save_enter_filename_function (ui_object *obj, void *arg)
 void build_save_file_list (void)
 {
 	session_list_data_type
-		*game_session;
+		*game_session = nullptr;
 
 	directory_file_list
-		*directory_listing;
+		*directory_listing = nullptr;
 
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	int
 		valid_file;
 
 	char
-		*p,
+		*p = nullptr,
 		filename [256],
 		extension [8];
 
@@ -427,7 +427,7 @@ void build_save_file_list (void)
 static void notify_save_file_list (ui_object *obj, void *arg)
 {
 	const char
-		*text;
+		*text = nullptr;
 	char *
 		copy;
 
@@ -460,7 +460,7 @@ static void notify_save_file_list (ui_object *obj, void *arg)
 static void update_save_page_objects (ui_object *obj, void *arg)
 {
 	const char
-		*text;
+		*text = nullptr;
 
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());
 
@@ -494,7 +494,7 @@ void define_campaign_screen_save_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		string [256];

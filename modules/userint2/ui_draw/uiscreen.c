@@ -79,11 +79,11 @@ struct UI_SCREEN_STACK
 		screen_id;
 
 	void
-		*screen; // should be entity_screen..
+		*screen = nullptr; // should be entity_screen..
 
 	struct UI_SCREEN_STACK
-		*prev,
-		*next;
+		*prev = nullptr,
+		*next = nullptr;
 
 	int
 		displayable;
@@ -96,8 +96,8 @@ typedef struct UI_SCREEN_STACK ui_screen_stack;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_screen_stack
-	*screen_stack_head,
-	*screen_stack_tail;
+	*screen_stack_head = nullptr,
+	*screen_stack_tail = nullptr;
 
 static int
 	screen_id = 0;
@@ -116,8 +116,8 @@ void ui_push_screen (void *this_screen) // should be entity_screen..
 {
 
 	ui_screen_stack
-		*stack_search,
-		*new_stack_item;
+		*stack_search = nullptr,
+		*new_stack_item = nullptr;
 
 	// check if already on stack
 
@@ -198,7 +198,7 @@ void ui_pop_screen (void)
 {
 
 	ui_screen_stack
-		*popped_screen;
+		*popped_screen = nullptr;
 
 	// store screen to pop and unlink it and destroy it.
 
@@ -236,7 +236,7 @@ void ui_list_screen_stack (void)
 {
 
 	ui_screen_stack
-		*this_screen;
+		*this_screen = nullptr;
 
 	int
 		counter = 0,

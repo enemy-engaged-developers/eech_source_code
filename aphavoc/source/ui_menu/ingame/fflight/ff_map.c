@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*page_map_area;
+	*page_map_area = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -89,7 +89,7 @@ static map_dimension_type
 void initialise_free_flight_screen_map_page_objects (void)
 {
 	vec3d
-		*pos;
+		*pos = nullptr;
 		
 	set_active_map_object (NULL);
 
@@ -131,10 +131,10 @@ static void draw_page_map (ui_object *obj, void *arg)
 static void free_flight_map_left_click_function (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	map_dimension_type
-		*map_dimensions;
+		*map_dimensions = nullptr;
 
 	entity_sides
 		side;

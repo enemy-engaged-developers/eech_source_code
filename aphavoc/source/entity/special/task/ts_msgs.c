@@ -204,17 +204,17 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		velocity,
 		heading;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (receiver);
 
@@ -261,12 +261,12 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 static int response_to_task_completed (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*guide,
-		*list_parent;
+		*force = nullptr,
+		*guide = nullptr,
+		*list_parent = nullptr;
 
 	task_terminated_types
 		task_terminated;
@@ -396,12 +396,12 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 static int response_to_task_terminated (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide,
-		*next,
-		*en;
+		*guide = nullptr,
+		*next = nullptr,
+		*en = nullptr;
 
 	task_terminated_types
 		task_terminated;

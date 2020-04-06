@@ -79,11 +79,11 @@
 void update_ship_vehicle_target_scan (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*force,
-		*target;
+		*force = nullptr,
+		*target = nullptr;
 
 	ASSERT (en);
 

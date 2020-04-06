@@ -88,7 +88,7 @@ void basic_cargo_movement (entity *en)
 {
 
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	raw = (cargo *) get_local_entity_data (en);
 }

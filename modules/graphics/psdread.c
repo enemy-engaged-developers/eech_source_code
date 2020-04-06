@@ -108,12 +108,12 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		id_buffer[256],
-		*data,
-		*ptr;
+		*data = nullptr,
+		*ptr = nullptr;
 
 	int
 		count,

@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 connection_type
-	*connection_list_head;
+	*connection_list_head = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ void initialise_connections (void)
 {
 
 	connection_type
-		*destroy_connection;
+		*destroy_connection = nullptr;
 
 	while (connection_list_head)
 	{
@@ -114,7 +114,7 @@ connection_type *create_connection (double length, double max_compression_percen
 {
 
 	connection_type
-		*new_connection;
+		*new_connection = nullptr;
 	
 	new_connection = (connection_type *) malloc_heap_mem (sizeof (connection_type));
 
@@ -160,7 +160,7 @@ void update_connections_parameters (int index)
 {
 
 	connection_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	current_connection = connection_list_head;
 
@@ -181,7 +181,7 @@ void update_connections_forces (rigid_body_dynamics *rb, int index)
 {
 
 	connection_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	current_connection = connection_list_head;
 
@@ -398,7 +398,7 @@ void update_connections_constraints (int index)
 {
 
 	connection_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	// calculate constraint forces
 
@@ -924,7 +924,7 @@ void draw_connections (void)
 {
 
 	connection_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	current_connection = connection_list_head;
 
@@ -1017,7 +1017,7 @@ double get_total_connection_energies (void)
 		total_epe;
 
 	connection_type
-		*current_connection;
+		*current_connection = nullptr;
 
 	current_connection = connection_list_head;
 
@@ -1057,7 +1057,7 @@ int get_rigid_body_angular_constraint (rigid_body_dynamics *rb, double_vec3d *co
 {
 
 	connection_type
-		*connection;
+		*connection = nullptr;
 		
 	connection = connection_list_head;
 

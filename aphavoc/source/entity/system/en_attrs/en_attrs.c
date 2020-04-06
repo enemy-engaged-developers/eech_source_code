@@ -216,7 +216,7 @@ void set_local_entity_attributes (entity *en, char *pargs)
 					type;
 
 				entity
-					*child_pred;
+					*child_pred = nullptr;
 
 				type = get_list_item (pargs, list_types);
 
@@ -270,7 +270,7 @@ void set_local_entity_attributes (entity *en, char *pargs)
 					type;
 
 				entity
-					*parent;
+					*parent = nullptr;
 
 				type = get_list_item (pargs, list_types);
 
@@ -288,7 +288,7 @@ void set_local_entity_attributes (entity *en, char *pargs)
 					type;
 
 				void
-					*ptr;
+					*ptr = nullptr;
 
 				type = get_list_item (pargs, ptr_types);
 
@@ -306,7 +306,7 @@ void set_local_entity_attributes (entity *en, char *pargs)
 					type;
 
 				const char
-					*s;
+					*s = nullptr;
 
 				type = get_list_item (pargs, string_types);
 
@@ -422,7 +422,7 @@ void pack_entity_attributes (const char *buffer)
 					type;
 
 				entity
-					*child_pred;
+					*child_pred = nullptr;
 
 				type = get_list_item (buffer, list_types);
 
@@ -482,7 +482,7 @@ void pack_entity_attributes (const char *buffer)
 					type;
 
 				entity
-					*parent;
+					*parent = nullptr;
 
 				type = get_list_item (buffer, list_types);
 
@@ -510,7 +510,7 @@ void pack_entity_attributes (const char *buffer)
 					type;
 
 				const char
-					*s;
+					*s = nullptr;
 
 				type = get_list_item (buffer, string_types);
 
@@ -639,7 +639,7 @@ int unpack_entity_attributes (char *buffer)
 					type;
 
 				entity
-					*child_pred;
+					*child_pred = nullptr;
 
 				type = unpack_list_type ();
 
@@ -699,7 +699,7 @@ int unpack_entity_attributes (char *buffer)
 					type;
 
 				entity
-					*parent;
+					*parent = nullptr;
 
 				type = unpack_list_type ();
 

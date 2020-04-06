@@ -79,10 +79,10 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	particle
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		loop,

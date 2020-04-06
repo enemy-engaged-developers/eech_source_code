@@ -79,7 +79,7 @@
 static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -149,10 +149,10 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 static void *get_local_ptr_value (entity *en, ptr_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	void
-		*ptr;
+		*ptr = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 

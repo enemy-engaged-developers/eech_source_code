@@ -60,7 +60,6 @@
 
 
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,8 +91,8 @@ static screen
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 screen
-	*video_screen,
-	*active_screen;
+	*video_screen = nullptr,
+	*active_screen = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +153,7 @@ screen * create_user_texture_screen ( int width, int height, int type, int numbe
 {
 
 	screen
-		*this_screen;
+		*this_screen = nullptr;
 
 	ASSERT ( width );
 	ASSERT ( height );
@@ -175,7 +174,7 @@ screen * create_system_texture_screen ( int width, int height, int texture_index
 {
 
 	screen
-		*this_screen;
+		*this_screen = nullptr;
 
 	ASSERT ( width );
 	ASSERT ( height );
@@ -196,7 +195,7 @@ screen *create_user_3dvisual_texture_screen ( int width, int height, int type )
 {
 
 	screen
-		*this_screen;
+		*this_screen = nullptr;
 
 	ASSERT ( width );
 	ASSERT ( height );
@@ -440,7 +439,7 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 			pitch;
 
 		unsigned
-			*ptr;
+			*ptr = nullptr;
 
 		pitch = get_screen_pitch ( active_screen );
 
@@ -448,7 +447,7 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 
 		{
 			unsigned int
-				*line;
+				*line = nullptr;
 
 			for ( y = y1; y <= y2; y++ )
 			{
@@ -509,7 +508,7 @@ void destroy_all_screens ( void )
 void release_video_screens ( void )
 {
 	screen
-		*scr;
+		*scr = nullptr;
 
 	debug_log ( "release_video_screens: start" );
 
@@ -527,7 +526,7 @@ void release_video_screens ( void )
 void recreate_video_screens ( void )
 {
 	screen
-		*scr;
+		*scr = nullptr;
 
 	debug_log ( "recreate_video_screens: start" );
 
@@ -541,4 +540,3 @@ void recreate_video_screens ( void )
 
 	debug_log ( "recreate_video_screens: stop" );
 }
-#endif

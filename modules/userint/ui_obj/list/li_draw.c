@@ -82,16 +82,16 @@ static void draw_list_ui_object (ui_object *obj)
 		y_size;
 
 	ui_object
-		*current_list_item;
+		*current_list_item = nullptr;
 
 	unsigned short int
-		*graphic;
+		*graphic = nullptr;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	list_ui_object
-		*list;
+		*list = nullptr;
 
 	list = (list_ui_object *) obj->data;
 

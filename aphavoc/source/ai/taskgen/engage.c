@@ -88,14 +88,14 @@ static unsigned int assign_specific_engage_task_to_group (entity *group, entity 
 entity *create_engage_task (entity *group, entity *objective, entity *originator, int expire)
 {
 	entity
-		*force_en,
-		*new_task;
+		*force_en = nullptr,
+		*new_task = nullptr;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	entity_sides
 		side;
@@ -198,15 +198,15 @@ int engage_targets_in_sector (entity *group, int sx, int sz, unsigned int task_t
 		objective_target_type;
 
 	entity
-		*new_task,
-		*objective,
-		*target_sector;
+		*new_task = nullptr,
+		*objective = nullptr,
+		*target_sector = nullptr;
 
 	entity_sides
 		side;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	new_task = NULL;
 
@@ -279,15 +279,15 @@ int engage_targets_in_area (entity *group, vec3d *target_point, float radius, un
 		max_sector_z;
 
 	entity
-		*new_task,
-		*objective,
-		*target_sector;
+		*new_task = nullptr,
+		*objective = nullptr,
+		*target_sector = nullptr;
 
 	entity_sides
 		side;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		range,
@@ -295,7 +295,7 @@ int engage_targets_in_area (entity *group, vec3d *target_point, float radius, un
 		temp_z;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	unsigned int
 		objective_target_type;
@@ -409,15 +409,15 @@ int debug_engage_targets_in_area (entity *group, vec3d *target_point, float radi
 		max_sector_z;
 
 	entity
-		*new_task,
-		*objective,
-		*target_sector;
+		*new_task = nullptr,
+		*objective = nullptr,
+		*target_sector = nullptr;
 
 	entity_sides
 		side;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	float
 		range,
@@ -425,7 +425,7 @@ int debug_engage_targets_in_area (entity *group, vec3d *target_point, float radi
 		temp_z;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	new_task = NULL;
 
@@ -515,10 +515,10 @@ int debug_engage_targets_in_area (entity *group, vec3d *target_point, float radi
 int engage_targets_in_group (entity *group, entity *target_group, int expire)
 {
 	entity
-		*task,
-		*guide,
-		*member,
-		*new_task;
+		*task = nullptr,
+		*guide = nullptr,
+		*member = nullptr,
+		*new_task = nullptr;
 
 	ASSERT (group);
 
@@ -542,8 +542,8 @@ int engage_targets_in_group (entity *group, entity *target_group, int expire)
 		{
 
 			entity
-				*member,
-				*objective;
+				*member = nullptr,
+				*objective = nullptr;
 
 			objective = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
@@ -631,10 +631,10 @@ int engage_targets_in_group (entity *group, entity *target_group, int expire)
 int engage_specific_target (entity *group, entity *target, unsigned int valid_members, int expire)
 {
 	entity
-		*task,
-		*guide,
-		*new_task,
-		*objective;
+		*task = nullptr,
+		*guide = nullptr,
+		*new_task = nullptr,
+		*objective = nullptr;
 
 	ASSERT (group);
 
@@ -713,7 +713,7 @@ int engage_specific_target (entity *group, entity *target, unsigned int valid_me
 void engage_specific_targets(entity *wingman, entity *targets[])
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	unsigned int valid_members = 0, member_number, i;
 
@@ -746,7 +746,7 @@ void engage_specific_targets(entity *wingman, entity *targets[])
 unsigned int assign_specific_engage_task_to_group (entity *group, entity *task, unsigned int valid_members)
 {
 	entity
-		*member;
+		*member = nullptr;
 
 	unsigned int
 		member_number;
@@ -796,12 +796,12 @@ unsigned int assign_specific_engage_task_to_group (entity *group, entity *task, 
 unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_members)
 {
 	entity
-		*task,
-		*guide,
-		*target,
-		*member,
-		*single_member,
-		*persuer,
+		*task = nullptr,
+		*guide = nullptr,
+		*target = nullptr,
+		*member = nullptr,
+		*single_member = nullptr,
+		*persuer = nullptr,
 		**guide_list;
 
 	unsigned int
@@ -813,15 +813,15 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 		loop,
 		criteria,
 		task_count,
-		*assigned_count;
+		*assigned_count = nullptr;
 
 	float
 		range,
-		*priority;
+		*priority = nullptr;
 
 	vec3d
-		*member_pos,
-		*target_pos;
+		*member_pos = nullptr,
+		*target_pos = nullptr;
 
 	ASSERT (group);
 
@@ -1198,8 +1198,8 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 void terminate_all_engage_tasks (entity *group)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	ASSERT (group);
 
@@ -1238,8 +1238,8 @@ void terminate_all_engage_tasks (entity *group)
 void terminate_entity_current_engage_task (entity *en)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	ASSERT (en);
 

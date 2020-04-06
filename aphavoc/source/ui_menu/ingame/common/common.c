@@ -226,13 +226,13 @@ void deinitialise_ingame_screen (void)
 void ingame_screen_draw_function (ui_object *obj, void *arg)
 {
 	ui_object
-		*mouse_over_object;
+		*mouse_over_object = nullptr;
 
 	int
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	//
 	// Clear Mouse Over Entity + initialise to highlighted ui object
@@ -299,7 +299,7 @@ void entity_mouse_over_function (ui_object *obj, void *arg)
 void set_ingame_ui_object_mouse_over_properties (ui_object *obj)
 {
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	ASSERT (obj);
 
@@ -359,9 +359,9 @@ void stop_ingame_ui_system (void)
 int get_mission_player_suitability_status (entity *mission)
 {
 	entity
-		*guide,
-		*group,
-		*base;
+		*guide = nullptr,
+		*group = nullptr,
+		*base = nullptr;
 
 	entity_sub_types
 		group_type,
@@ -453,8 +453,8 @@ int get_mission_player_suitability_status (entity *mission)
 int get_group_player_suitability_status (entity *group)
 {
 	entity
-		*base,
-		*mission;
+		*base = nullptr,
+		*mission = nullptr;
 
 	entity_sub_types
 		group_type,
@@ -531,9 +531,9 @@ int get_group_player_suitability_status (entity *group)
 int get_base_player_suitability_status (entity *base)
 {
 	entity
-		*group,
-		*guide,
-		*mission;
+		*group = nullptr,
+		*guide = nullptr,
+		*mission = nullptr;
 
 	entity_sub_types
 		group_type,
@@ -957,8 +957,8 @@ void ingame_screen_set_events (void)
 void set_common_slider_graphics (ui_object *parent)
 {
 	ui_object
-		*temp,
-		*slider;
+		*temp = nullptr,
+		*slider = nullptr;
 
 	slider = get_ui_object_vslider (parent);
 

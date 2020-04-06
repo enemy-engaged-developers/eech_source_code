@@ -104,8 +104,8 @@ void calculate_keyframe ( int number_of_keyframes, object_3d_sub_object_keyframe
 {
 
 	object_3d_sub_object_keyframe
-		*key0,
-		*key1;
+		*key0 = nullptr,
+		*key1 = nullptr;
 
 	float
 		t,
@@ -319,8 +319,8 @@ void calculate_value_keyframe ( int number_of_keyframes, object_3d_sub_object_va
 {
 
 	object_3d_sub_object_value_keyframe
-		*key0,
-		*key1;
+		*key0 = nullptr,
+		*key1 = nullptr;
 
 	float
 		t,

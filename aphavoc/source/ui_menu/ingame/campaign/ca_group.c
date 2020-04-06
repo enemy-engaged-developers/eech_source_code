@@ -79,28 +79,28 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*group_page_title,
-	*group_page_type_box,
-	*group_page_kills_box,
-	*group_page_losses_box,
-	*group_page_base_box,
-	*group_page_mission_box,
-	*group_page_pilot_lock_box,
-	*group_page_member_area,
-	*group_page_member_list,
-	*page_back_button;
+	*group_page_title = nullptr,
+	*group_page_type_box = nullptr,
+	*group_page_kills_box = nullptr,
+	*group_page_losses_box = nullptr,
+	*group_page_base_box = nullptr,
+	*group_page_mission_box = nullptr,
+	*group_page_pilot_lock_box = nullptr,
+	*group_page_member_area = nullptr,
+	*group_page_member_list = nullptr,
+	*page_back_button = nullptr;
 
 static ui_object
-	*view_button,
-	*page_3d_area,
-	*page_map_area,
-	*page_map_view_area,
-	*page_map_view_mode_area,
-	*page_map_toggle,
-	*page_3d_toggle;
+	*view_button = nullptr,
+	*page_3d_area = nullptr,
+	*page_map_area = nullptr,
+	*page_map_view_area = nullptr,
+	*page_map_view_mode_area = nullptr,
+	*page_map_toggle = nullptr,
+	*page_3d_toggle = nullptr;
 
 ui_object
-	*gunship_accept_button;
+	*gunship_accept_button = nullptr;
 
 static map_dimension_type
 	page_map_dimensions;
@@ -128,23 +128,23 @@ int show_group_page (entity *group, int force_update)
 		buffer [192];
 
 	entity
-		*member,
-		*company,
-		*division,
-		*previous,
-		*base,
-		*pilot,
-		*mission;
+		*member = nullptr,
+		*company = nullptr,
+		*division = nullptr,
+		*previous = nullptr,
+		*base = nullptr,
+		*pilot = nullptr,
+		*mission = nullptr;
 
 	ui_object
-		*new_item,
-		*first_item;
+		*new_item = nullptr,
+		*first_item = nullptr;
 
 	int
 		return_value;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (group);
 
@@ -404,7 +404,7 @@ entity *get_group_page_member_list_current_entity (void)
 static void update_group_page_objects (ui_object *obj, void *arg)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	group = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]));
 
@@ -428,7 +428,7 @@ static void update_group_page_objects (ui_object *obj, void *arg)
 
 	{
 		entity
-			*pilot;
+			*pilot = nullptr;
 
 		pilot = get_local_entity_parent (group, LIST_TYPE_PILOT_LOCK);
 
@@ -489,7 +489,7 @@ void update_member_list (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -557,10 +557,10 @@ void notify_member_list (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -597,8 +597,8 @@ static void notify_member_accept_button (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en,
-		*mission;
+		*en = nullptr,
+		*mission = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -662,7 +662,7 @@ static void notify_member_view_button (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	index = get_ui_object_item_number (group_page_member_list);
 
@@ -709,7 +709,7 @@ static void notify_page_show_3d (ui_object *obj, void *arg)
 static void draw_page_map (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_GROUP]));
 
@@ -725,13 +725,13 @@ static void draw_page_map (ui_object *obj, void *arg)
 static void draw_page_3d_scene (ui_object *obj, void *arg)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	viewpoint
 		vp;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		vec;
 
 	en = get_local_entity_safe_ptr (get_ui_object_item_number (obj));
@@ -823,7 +823,7 @@ void define_campaign_screen_group_page_objects (void)
 		yinc;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		output [128];
@@ -1448,7 +1448,7 @@ static int response_to_group_change_base (campaign_screen_messages message, enti
 static int response_to_group_add_member (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
@@ -1472,7 +1472,7 @@ static int response_to_group_add_member (campaign_screen_messages message, entit
 static int response_to_group_remove_member (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	group = sender;
 
@@ -1509,7 +1509,7 @@ static int response_to_group_remove_member (campaign_screen_messages message, en
 static int response_to_mission_assigned (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{
@@ -1531,7 +1531,7 @@ static int response_to_mission_assigned (campaign_screen_messages message, entit
 static int response_to_mission_completed (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
 	{

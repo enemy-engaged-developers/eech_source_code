@@ -80,10 +80,10 @@ void draw_local_city_building_object (entity *en, float range)
 {
 
 	city_building
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	vec3d
 		face_normal;
@@ -143,14 +143,14 @@ static void draw_local_2d_symbol (entity *en)
 {
 
 	city_building
-		*raw;
+		*raw = nullptr;
 
 	int
 		screen_x,
 		screen_y;
 
 	struct OBJECT_3D_BOUNDS
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	raw = get_local_entity_data (en);
 

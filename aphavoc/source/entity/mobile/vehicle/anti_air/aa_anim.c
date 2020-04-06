@@ -155,7 +155,7 @@ int set_initial_rotation_angle_of_anti_aircraft_wheels (object_3d_instance *inst
 void damage_anti_aircraft_3d_object (entity *en)
 {
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -194,7 +194,7 @@ void damage_anti_aircraft_3d_object (entity *en)
 void set_anti_aircraft_id_number (entity *en)
 {
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

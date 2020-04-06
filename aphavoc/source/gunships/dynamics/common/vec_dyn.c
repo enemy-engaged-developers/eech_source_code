@@ -111,7 +111,7 @@ void initialise_vector_dynamics (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	current_flight_dynamics = &vector_flight_dynamics;
 
@@ -661,7 +661,7 @@ void update_vector_altitude_dynamics (void)
 
 	vec3d
 		position,
-		*face_normal;
+		*face_normal = nullptr;
 
 	centre_of_gravity_to_ground_distance = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
 
@@ -716,7 +716,7 @@ void update_vector_altitude_dynamics (void)
 			{
 
 				entity
-					*wp;
+					*wp = nullptr;
 
 				vec3d
 					wp_pos;
@@ -825,7 +825,7 @@ void update_vector_altitude_dynamics (void)
 
 	vec3d
 		position,
-		*old_z,
+		*old_z = nullptr,
 		n;
 
 	centre_of_gravity_to_ground_distance = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);

@@ -95,26 +95,26 @@
 //
 
 terrain_3d_point_byte_reference
-	*terrain_3d_sector_point_byte_references;
+	*terrain_3d_sector_point_byte_references = nullptr;
 
 terrain_3d_point_word_reference
-	*terrain_3d_sector_point_word_references;
+	*terrain_3d_sector_point_word_references = nullptr;
 
 terrain_types
 	current_terrain_type;
 
 #ifndef OGRE_EE
 terrain_type_info
-	*current_terrain_type_class;
+	*current_terrain_type_class = nullptr;
 
 terrain_3d_sector
-	*current_terrain_sector;
+	*current_terrain_sector = nullptr;
 
 terrain_3d_point_xz
-	*current_terrain_points_xz;
+	*current_terrain_points_xz = nullptr;
 
 terrain_3d_point_y
-	*current_terrain_points_y;
+	*current_terrain_points_y = nullptr;
 
 float
 	current_terrain_sector_xz_texture_scale,
@@ -495,7 +495,7 @@ void scan_3d_terrain ( void )
 		maximum_sector_z;
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	float
 		initial_sector_x_offset,
@@ -504,10 +504,10 @@ void scan_3d_terrain ( void )
 		current_sector_z_offset;
 
 	vec3d
-		*point_normals;
+		*point_normals = nullptr;
 
 	terrain_3d_transformed_point_normal
-		*result_normals;
+		*result_normals = nullptr;
 
 	//
 	// First, set the texture blending values
@@ -551,7 +551,7 @@ void scan_3d_terrain ( void )
 			b;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		int
 			ir,
@@ -724,7 +724,7 @@ void scan_3d_terrain ( void )
 					{
 
 						scene_slot_drawing_list
-							*sorting_slot;
+							*sorting_slot = nullptr;
 
 						float
 							sector_range,
@@ -800,10 +800,10 @@ void scan_3d_terrain ( void )
 								tree_count;
 
 							terrain_3d_tree_data
-								*trees;
+								*trees = nullptr;
 
 							terrain_3d_colour
-								*colours;
+								*colours = nullptr;
 
 							//
 							// Insert the trees within the sectors.
@@ -943,12 +943,12 @@ void scan_3d_terrain ( void )
 						if ( outcode2 == 0 )
 						{
 							scene_slot_drawing_list
-								*sorting_slot;
+								*sorting_slot = nullptr;
 							int
 								cloud_puff_count;
 
 							terrain_3d_cloud_puff_data
-								*cloud_puffs;
+								*cloud_puffs = nullptr;
 
 							cloud_puffs = terrain_cloud_puff_sectors[current_sector_z][current_sector_x].cloud_puffs;
 
@@ -1011,10 +1011,10 @@ void scan_3d_terrain ( void )
 			{
 
 				terrain_3d_object
-					*object;
+					*object = nullptr;
 
 				scene_slot_drawing_list
-					*sorting_slot;
+					*sorting_slot = nullptr;
 
 				object = sector->objects;
 
@@ -1213,41 +1213,41 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 		iymin;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
 		tmp_vertex,
-		*last_transformed_point,
-		*result_2d_points;
+		*last_transformed_point = nullptr,
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	unsigned char
 		tmp_outcode,
-		*result_outcodes,
-		*last_transformed_point_outcode;
+		*result_outcodes = nullptr,
+		*last_transformed_point_outcode = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -1722,41 +1722,41 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 		iymin;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
 		tmp_vertex,
-		*last_transformed_point,
-		*result_2d_points;
+		*last_transformed_point = nullptr,
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	unsigned char
 		tmp_outcode,
-		*result_outcodes,
-		*last_transformed_point_outcode;
+		*result_outcodes = nullptr,
+		*last_transformed_point_outcode = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -2197,31 +2197,31 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 		current_sector_z_visual_offset;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -2558,41 +2558,41 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 		iymin;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
 		tmp_vertex,
-		*last_transformed_point,
-		*result_2d_points;
+		*last_transformed_point = nullptr,
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	unsigned char
 		tmp_outcode,
-		*result_outcodes,
-		*last_transformed_point_outcode;
+		*result_outcodes = nullptr,
+		*last_transformed_point_outcode = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -3070,41 +3070,41 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 		iymin;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
 		tmp_vertex,
-		*last_transformed_point,
-		*result_2d_points;
+		*last_transformed_point = nullptr,
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	unsigned char
 		tmp_outcode,
-		*result_outcodes,
-		*last_transformed_point_outcode;
+		*result_outcodes = nullptr,
+		*last_transformed_point_outcode = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -3551,31 +3551,31 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 		current_sector_z_visual_offset;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	float
 		scaled_rotation[3][3];
@@ -3922,20 +3922,20 @@ void draw_3d_terrain_sector_point_normals ( scene_slot_drawing_list *slot )
 		iymin;
 
 	terrain_3d_sector
-		*sector;
+		*sector = nullptr;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_point_y
-		*points_y;
+		*points_y = nullptr;
 
 	terrain_3d_normal_index
-		*normal_indices;
+		*normal_indices = nullptr;
 
 	vertex
-		*result_points,
-		*result_point_normals;
+		*result_points = nullptr,
+		*result_point_normals = nullptr;
 
 	//
 	// Set fpu precision
@@ -4169,7 +4169,7 @@ void draw_3d_terrain_sector_point_normals ( scene_slot_drawing_list *slot )
 	{
 
 		vertex
-			*line;
+			*line = nullptr;
 
 		int
 			outcode;

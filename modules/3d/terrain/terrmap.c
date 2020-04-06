@@ -70,7 +70,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef OGRE_EE
 #define MAX_3D_CLIP_COORDINATES 16
 
 #define CONTOUR_SHADING_FACTOR 0.05
@@ -78,13 +77,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 extern int
 	command_line_campaign_map,
 	command_line_campaign_map_palette;
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +115,6 @@ static float
 
 static int
 	terrain_2d_map_textured = TRUE;
-#endif
 
 rgb_colour
 	*terrain_2d_contour_colours = NULL,
@@ -220,7 +216,6 @@ rgb_colour
 		{255, 255, 255},
 	};
 
-#ifndef OGRE_EE
 float
 	*terrain_2d_contour_heights = NULL,
 	contour_heights[] =
@@ -270,21 +265,20 @@ float
 	};
 
 float
-	*contour_height_difference_reciprocals;
+	*contour_height_difference_reciprocals = nullptr;
 
 int
 	number_of_contour_height_lines = 42;
 
 static vertex
-	*this_point,
-	*last_point,
-	*clip_list,
-	*clip_point;
+	*this_point = nullptr,
+	*last_point = nullptr,
+	*clip_list = nullptr,
+	*clip_point = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 vec3d
 	*contour_map_river_nodes = NULL,
@@ -314,14 +308,13 @@ float
 	**contour_map_mipmaps = NULL;
 
 contour_lake
-	*contour_lakes,
-	*contour_citybases;
+	*contour_lakes = nullptr,
+	*contour_citybases = nullptr;
 
 vec3d
-	*contour_lake_vertices,
-	*contour_citybase_vertices;
+	*contour_lake_vertices = nullptr,
+	*contour_citybase_vertices = nullptr;
 
-#ifndef OGRE_EE
 float
 	contour_minimum_height,
 	contour_maximum_height;
@@ -329,7 +322,6 @@ float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 static int load_2d_terrain_contour_river_data ( char *nodes_filenamne, char *path_filename );
 
@@ -343,7 +335,6 @@ static void set_node_database_extents ( int number_of_paths, contour_path *paths
 
 static void set_lake_database_extents ( int number_of_triangle_sets, contour_lake *lakes );
 
-#ifndef OGRE_EE
 static void render_contour_triangle_database ( int number_of_triangle_sets, contour_lake *lakes, real_colour lake_colour );
 
 void generate_simple_elevation_vertex ( int x, int z, vertex *v );
@@ -386,11 +377,9 @@ static void insert_xmax_contour_coordinate ( vertex *point1, vertex *point2 );
 static void insert_ymin_contour_coordinate ( vertex *point1, vertex *point2 );
 
 static void insert_ymax_contour_coordinate ( vertex *point1, vertex *point2 );
-#endif
 
 int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_filename );
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,19 +477,19 @@ void draw_2d_terrain_map ( void )
 		sector_z_increment;
 
 	terrain_3d_face
-		*polygon;
+		*polygon = nullptr;
 
 	object_transformed_3d_point
-		*result_3d_points;
+		*result_3d_points = nullptr;
 
 	object_transformed_2d_point
-		*result_2d_points;
+		*result_2d_points = nullptr;
 
 	terrain_3d_transformed_point_colour
-		*result_colours;
+		*result_colours = nullptr;
 
 	unsigned char
-		*result_outcodes;
+		*result_outcodes = nullptr;
 
 	float
 		current_sector_x_offset,
@@ -517,16 +506,16 @@ void draw_2d_terrain_map ( void )
 		iymin;
 
 	terrain_3d_point_xz
-		*points_xz;
+		*points_xz = nullptr;
 
 	terrain_3d_surface
-		*surface;
+		*surface = nullptr;
 
 	terrain_3d_colour
-		*colours;
+		*colours = nullptr;
 
 	terrain_3d_colour_index
-		*colour_indices;
+		*colour_indices = nullptr;
 
 	//
 	// Turn off Z buffering for the 2d map.
@@ -865,7 +854,6 @@ void draw_2d_terrain_map ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void generate_2d_terrain_contour_mipmaps ( void )
 {
@@ -880,8 +868,8 @@ void generate_2d_terrain_contour_mipmaps ( void )
 		parent_height;
 
 	float
-		*parent_data,
-		*data,
+		*parent_data = nullptr,
+		*data = nullptr,
 		min_value;
 
 	//
@@ -1003,7 +991,6 @@ void generate_2d_terrain_contour_mipmaps ( void )
 	}
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1032,11 +1019,9 @@ void set_2d_terrain_contour_colour ( int flag )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 {
-#ifndef OGRE_EE
 	terrain_2d_contour_heights = contour_heights;
 
 #if 0  // arneh - unused code with new map
@@ -1058,8 +1043,7 @@ void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 
 		memcpy ( terrain_2d_contour_heights, heights, ( sizeof ( float ) * number_of_heights ) );
 	}
-#endif
-#endif
+#endif//0
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1098,7 +1082,7 @@ void load_2d_terrain ( const char *path )
 		sprintf ( path_file, "%s\\route\\rivdata.wp", path );
 
 //VJ for loading homemade maps without rivers 030405
-    	if ( file_exist ( node_file ) )
+		if ( file_exist ( node_file ) )
 		   load_2d_terrain_contour_river_data ( node_file, path_file );
 	}
 
@@ -1121,8 +1105,8 @@ void load_2d_terrain ( const char *path )
 		sprintf ( path_file, "%s\\route\\roaddata.wp", path );
 
 //VJ for loading homemade maps without roads 030405
-    	if ( file_exist ( node_file ) )
-    		load_2d_terrain_contour_road_data ( node_file, path_file );
+		if ( file_exist ( node_file ) )
+			load_2d_terrain_contour_road_data ( node_file, path_file );
 	}
 
 	//
@@ -1370,14 +1354,14 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		total,
 		count;
 
 	vec3d
-		*current_position;
+		*current_position = nullptr;
 
 	//
 	// Read in the river nodes
@@ -1472,14 +1456,14 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		total,
 		count;
 
 	vec3d
-		*current_position;
+		*current_position = nullptr;
 
 	//
 	// Read in the nodes
@@ -1574,14 +1558,14 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		total,
 		count;
 
 	vec3d
-		*current_position;
+		*current_position = nullptr;
 
 	//
 	// Read in the nodes
@@ -1787,7 +1771,7 @@ void load_contour_map_colours ()
 			channels;
 
 		char
-			*data;
+			*data = nullptr;
 
 		data = load_psd_file ( filename, &width, &height, &channels );
 
@@ -1820,21 +1804,19 @@ void load_contour_map_colours ()
 
 		safe_free ( data );
 	}
-#endif
+#endif//0
 	terrain_2d_current_contour_colours = terrain_2d_contour_colours;
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 void load_contour_map_lakes ( char *filename )
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		number_of_lake_triangles,
@@ -1842,7 +1824,7 @@ void load_contour_map_lakes ( char *filename )
 		count;
 
 	vec3d
-		*vertices;
+		*vertices = nullptr;
 
 	fp = safe_fopen ( filename, "rb" );
 
@@ -1920,7 +1902,7 @@ void load_contour_map_citybases ( char *filename )
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		number_of_triangles,
@@ -1928,7 +1910,7 @@ void load_contour_map_citybases ( char *filename )
 		count;
 
 	vec3d
-		*vertices;
+		*vertices = nullptr;
 
 	fp = safe_fopen ( filename, "rb" );
 
@@ -2071,7 +2053,7 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 			{
 
 				vec3d
-					*sub_positions;
+					*sub_positions = nullptr;
 
 				int
 					sub_count;
@@ -2161,7 +2143,6 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 	return ( -1 );
 }
 
-#ifndef OGRE_EE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2195,7 +2176,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		terrain_height_data_x_distance,
 		terrain_height_data_z_distance,
 		contour_shading_zoom_adjustment,
-		*terrain_height_data;
+		*terrain_height_data = nullptr;
 
 	float
 		world_width,
@@ -2730,7 +2711,7 @@ void render_contour_triangle_database ( int number_of_triangle_sets, contour_lak
 			triangle;
 
 		vec3d
-			*points;
+			*points = nullptr;
 
 		vertex
 			vertices[3];
@@ -2806,7 +2787,7 @@ void render_contour_triangle_database ( int number_of_triangle_sets, contour_lak
 				{
 
 					vertex
-						*poly;
+						*poly = nullptr;
 
 					poly = &vertices[0];
 
@@ -2911,7 +2892,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			{
 
 				vertex
-					*poly;
+					*poly = nullptr;
 
 				vertices[0].next_vertex = &vertices[1];
 				vertices[1].next_vertex = &vertices[2];
@@ -2938,7 +2919,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			{
 
 				vertex
-					*poly;
+					*poly = nullptr;
 
 				vertices[2].next_vertex = &vertices[1];
 				vertices[1].next_vertex = &vertices[3];
@@ -3068,7 +3049,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 					if ( triangle1_outcode2 == 0 )
 					{
 						vertex
-							*poly;
+							*poly = nullptr;
 
 						vertices[0].next_vertex = &vertices[1];
 						vertices[1].next_vertex = &vertices[2];
@@ -3144,7 +3125,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 					{
 
 						vertex
-							*poly;
+							*poly = nullptr;
 
 						vertices[2].next_vertex = &vertices[1];
 						vertices[1].next_vertex = &vertices[3];
@@ -3447,7 +3428,7 @@ void render_contour_node_database ( int number_of_nodes, contour_path *paths, ve
 			{
 
 				vec3d
-					*sub_positions;
+					*sub_positions = nullptr;
 
 				int
 					outcode,
@@ -3577,7 +3558,7 @@ void render_contour_node_thick_database ( int number_of_nodes, contour_path *pat
 			{
 
 				vec3d
-					*sub_positions;
+					*sub_positions = nullptr;
 
 				int
 					outcode,
@@ -3776,7 +3757,7 @@ void draw_contour_line ( vertex *vertices, real_colour colour )
 	{
 
 		vertex
-			*poly;
+			*poly = nullptr;
 
 		poly = &vertices[0];
 
@@ -3866,7 +3847,7 @@ void draw_thick_contour_line ( vertex *vertices, real_colour colour )
 	{
 
 		vertex
-			*poly;
+			*poly = nullptr;
 
 		poly = &new_vertices[0];
 
@@ -4320,7 +4301,7 @@ void insert_xmin_contour_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -4431,7 +4412,7 @@ void insert_xmax_contour_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -4542,7 +4523,7 @@ void insert_ymin_contour_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -4653,7 +4634,7 @@ void insert_ymax_contour_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -4983,7 +4964,7 @@ void insert_bottom_contour_coordinate ( vertex *point1, vertex *point2 )
 		t;
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	ASSERT ( clip_3d_coord < MAX_3D_CLIP_COORDINATES );
 
@@ -5025,7 +5006,7 @@ void insert_top_contour_coordinate ( vertex *point1, vertex *point2 )
 		t;
 
 	vertex
-		*clip;
+		*clip = nullptr;
 
 	ASSERT ( clip_3d_coord < MAX_3D_CLIP_COORDINATES );
 
@@ -5059,4 +5040,3 @@ void insert_top_contour_coordinate ( vertex *point1, vertex *point2 )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

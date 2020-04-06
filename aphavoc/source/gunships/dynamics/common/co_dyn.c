@@ -73,7 +73,8 @@ static float
 	right_g_e_force = 0.0,
 	left_g_e_force = 0.0,
 	back_g_e_force = 0.0,
-	front_g_e_force = 0.0;
+	front_g_e_force = 0.0,
+	this_reaction_force = 0.0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +221,7 @@ void initialise_common_dynamics(void)
 	left_g_e_force = 0.0,
 	back_g_e_force = 0.0,
 	front_g_e_force = 0.0,
+	this_reaction_force = 0.0;
 	trim_button_held = FALSE;
 }
 
@@ -870,7 +872,7 @@ void update_common_attitude_dynamics (void)
 			scaling = 1.0 - (1.0 / a);
 		}
 
-		scaling = min (fabs (scaling), 1.0f);
+		scaling = fmin (fabs (scaling), 1.0f);
 
 //		if (!coaxial)
 //			reaction_force += (tail_angular_force - main_angular_force) * scaling;
@@ -895,17 +897,24 @@ void update_common_attitude_dynamics (void)
 		{
 
 			vec3d
-				normalised_vector;
+				unnormalised_direction;
 
-			normalised_vector = model_motion_vector;
+			direction = model_motion_vector;
 
-			normalise_any_3d_vector (&normalised_vector);
+			invert_3d_vector (&direction);
+
+			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = heading_inertia_modifier * normalised_vector.x * 0.00001 * pow(horizontal_velocity, 2.0) * 
-					(0.25 * current_flight_dynamics->tail_boom_length.value + pow(current_flight_dynamics->tail_rotor_diameter.value, 2.0));
+			force = heading_inertia_modifier * 0.00001 * (horizontal_velocity * horizontal_velocity) * (0.25 * current_flight_dynamics->tail_boom_length.value + current_flight_dynamics->tail_rotor_diameter.value * current_flight_dynamics->tail_rotor_diameter.value);
+//			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
-			direction.x *= - sign(force);
+			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
+
+			this_reaction_force = bound (this_reaction_force, -100.0, 100.0);
+
+			normalise_any_3d_vector (&direction);
+
 			direction.y = 0.0;
 			direction.z = 0.0;
 
@@ -913,7 +922,7 @@ void update_common_attitude_dynamics (void)
 			position.y = 0.0;
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
-			add_dynamic_force ("Realign force (Y axis)", fabs(force), 0.0, &position, &direction, FALSE);
+			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
 		}
 	}
 
@@ -975,7 +984,7 @@ void update_common_attitude_dynamics (void)
 			direction.y = - motion_vector.y;
 			direction.z = - motion_vector.z;
 
-			add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
+			add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, TRUE);
 		}
 	}
 	////////////////////////////////////////////
@@ -1328,7 +1337,7 @@ void update_common_attitude_dynamics (void)
 	{
 		float air_over_rotor = -fabs(main_rotor_induced_air_value) * mass_percentage - model_motion_vector.y;
 		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
-		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
+		float velocity_factor = fmax (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
@@ -1377,8 +1386,6 @@ void update_common_attitude_dynamics (void)
 		position.z = current_flight_dynamics->rotation_origin.z;
 
 		multiply_transpose_matrix3x3_vec3d (&direction, attitude, &direction);
-
-		normalise_any_3d_vector (&direction);
 
 		force += (desired_force - force) * get_model_delta_time ();
 

@@ -97,7 +97,7 @@ ui_object *create_ui_object (ui_object_types type, ...)
 		pargs;
 
 	ui_object
-		*obj;
+		*obj = nullptr;
 
 	obj = get_free_ui_object ();
 

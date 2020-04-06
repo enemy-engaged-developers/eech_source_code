@@ -282,7 +282,7 @@ float iff_float_read ( FILE *fp )
 		buffer2[4];
 
 	float
-		*result;
+		*result = nullptr;
 
 	fread ( buffer1, 4, 1, fp );
 
@@ -304,7 +304,7 @@ void iff_float_write ( float value, FILE *fp )
 {
 
 	unsigned char
-		*ptr,
+		*ptr = nullptr,
 		buffer[4];
 
 	ptr = ( unsigned char * ) &value;
@@ -325,7 +325,7 @@ void iff_int_write ( int value, FILE *fp )
 {
 
 	unsigned char
-		*ptr,
+		*ptr = nullptr,
 		buffer[4];
 
 	ptr = ( unsigned char * ) &value;
@@ -346,7 +346,7 @@ void iff_short_int_write ( short int value, FILE *fp )
 {
 
 	unsigned char
-		*ptr,
+		*ptr = nullptr,
 		buffer[2];
 
 	ptr = ( unsigned char * ) &value;

@@ -436,7 +436,7 @@ typedef struct {
 	char utf8[2];
 } utf8_conversion;
 
-utf8_conversion conversion_table[94];
+utf8_conversion conversion_table[95]; // D4rthCoffee 94 -> 95 - buffer overrun
 
 const int utf8_start = 161;
 
@@ -450,7 +450,7 @@ void initialise_utf8_conversion_table(void)
 		conversion_table[chr - utf8_start].utf8[1] = 0xa1 + (chr-utf8_start);
 	}
 
-	for (chr = 192; chr <= 255; chr++)
+	for (chr = 192; chr <= 255; chr++) // D4rthCoffee 94 is a buffer overrun (255-161)
 	{
 		conversion_table[chr - utf8_start].utf8[0] = 0xc3;
 		conversion_table[chr - utf8_start].utf8[1] = 0x80 + (chr-192);

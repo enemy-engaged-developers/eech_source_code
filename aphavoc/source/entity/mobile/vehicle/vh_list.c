@@ -121,7 +121,7 @@
 static void set_local_first_child (entity *en, list_types type, entity *first_child)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -139,10 +139,10 @@ static void set_local_first_child (entity *en, list_types type, entity *first_ch
 static entity *get_local_first_child (entity *en, list_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*first_child;
+		*first_child = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -162,7 +162,7 @@ static entity *get_local_first_child (entity *en, list_types type)
 static void set_local_parent (entity *en, list_types type, entity *parent)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -180,10 +180,10 @@ static void set_local_parent (entity *en, list_types type, entity *parent)
 static entity *get_local_parent (entity *en, list_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*parent;
+		*parent = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -203,7 +203,7 @@ static entity *get_local_parent (entity *en, list_types type)
 static void set_local_child_succ (entity *en, list_types type, entity *child_succ)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -221,10 +221,10 @@ static void set_local_child_succ (entity *en, list_types type, entity *child_suc
 static entity *get_local_child_succ (entity *en, list_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*child_succ;
+		*child_succ = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -244,7 +244,7 @@ static entity *get_local_child_succ (entity *en, list_types type)
 static void set_local_child_pred (entity *en, list_types type, entity *child_pred)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 
@@ -262,10 +262,10 @@ static void set_local_child_pred (entity *en, list_types type, entity *child_pre
 static entity *get_local_child_pred (entity *en, list_types type)
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*child_pred;
+		*child_pred = nullptr;
 
 	raw = (vehicle *) get_local_entity_data (en);
 

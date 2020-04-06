@@ -98,10 +98,10 @@ static int
 void set_client_server_fixed_wing_afterburner_state (entity *en, int state)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 
@@ -198,10 +198,10 @@ void set_client_server_fixed_wing_afterburner_state (entity *en, int state)
 void set_local_fixed_wing_afterburner_state (entity *en, int state)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 
@@ -284,10 +284,10 @@ void set_local_fixed_wing_afterburner_state (entity *en, int state)
 void animate_fixed_wing_afterburners( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	float
 		val,
@@ -316,7 +316,7 @@ void animate_fixed_wing_afterburners( entity *en )
 void update_fixed_wing_afterburners (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	float
 		frac,
@@ -434,7 +434,7 @@ void update_fixed_wing_afterburners (entity *en)
 void animate_fixed_wing_airbrakes( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	//
 	// animates the airbrakes on a fixed wing aircraft
@@ -459,7 +459,7 @@ void animate_fixed_wing_airbrakes( entity *en )
 void update_fixed_wing_airbrakes( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	int
 		airbrake_state;
@@ -523,7 +523,7 @@ void update_fixed_wing_airbrakes( entity *en )
 void animate_fixed_wing_flaps( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	//
 	// animates the flaps on a fixed wing aircraft
@@ -548,7 +548,7 @@ void animate_fixed_wing_flaps( entity *en )
 void update_fixed_wing_flaps( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	int
 		flap_state;
@@ -604,10 +604,10 @@ void update_fixed_wing_flaps( entity *en )
 void animate_fixed_wing_propellors( entity *en )
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	float
 		ang;
@@ -687,10 +687,10 @@ void animate_fixed_wing_propellors( entity *en )
 void initialise_fixed_wing_propellors (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -740,7 +740,7 @@ void initialise_fixed_wing_propellors (entity *en)
 void damage_fixed_wing_3d_object (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -778,7 +778,7 @@ void damage_fixed_wing_3d_object (entity *en)
 void set_fixed_wing_id_number (entity *en)
 {
 	fixed_wing
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

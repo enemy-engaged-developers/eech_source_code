@@ -106,10 +106,10 @@ void overload_segment_pack_functions (void)
 void pack_local_segment_data (pack_modes mode)
 {
    entity
-      *en;
+      *en = nullptr;
 
    segment
-      *raw;
+      *raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -194,12 +194,12 @@ void pack_local_segment_data (pack_modes mode)
 void unpack_local_segment_data (pack_modes mode)
 {
    entity
-      *en,
-		*pred,
-		*succ;
+      *en = nullptr,
+		*pred = nullptr,
+		*succ = nullptr;
 
    segment
-      *raw;
+      *raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -266,7 +266,7 @@ void unpack_local_segment_data (pack_modes mode)
 				//
 
 				vec3d
-					*pos;
+					*pos = nullptr;
 
 				terrain_3d_point_data
 					terrain_info;

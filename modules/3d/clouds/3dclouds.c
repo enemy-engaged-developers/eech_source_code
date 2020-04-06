@@ -58,16 +58,9 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-
-
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include	"3d.h"
-
+#include "3d.h"
 #include "graphics.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,22 +82,22 @@ void draw_3d_cloud ( object_3d_instance *obj )
 		num_faces;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	object_3d_info
-		*this_object_3d_info;
+		*this_object_3d_info = nullptr;
 
 	light_3d_source
-		*this_light,
-		*prev_light,
-		*light_ptr,
-		*light;
+		*this_light = nullptr,
+		*prev_light = nullptr,
+		*light_ptr = nullptr,
+		*light = nullptr;
 
 	object_3d_info
 		object_base;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		object_pos;
 
 	//
@@ -418,19 +411,19 @@ void transform_3d_cloud ( object_3d *object, vec3d *pos, light_3d_source *lights
 		number_of_normals;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	object_3d_heading_pitch_normal
-		*point_normals;
+		*point_normals = nullptr;
 
 	vertex
-		*last_transformed_point,
-		*result_points,
+		*last_transformed_point = nullptr,
+		*result_points = nullptr,
 		tmp_vertex;
 
 	object_3d_transformed_point_normal
-		*transformed_point_normals,
-		*result_normals;
+		*transformed_point_normals = nullptr,
+		*result_normals = nullptr;
 
 	float
 		pos_x,
@@ -483,7 +476,7 @@ void transform_3d_cloud ( object_3d *object, vec3d *pos, light_3d_source *lights
 			b;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		//
 		// Set the light levels
@@ -655,4 +648,3 @@ void transform_3d_cloud ( object_3d *object, vec3d *pos, light_3d_source *lights
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

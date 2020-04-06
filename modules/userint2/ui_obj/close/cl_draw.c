@@ -82,15 +82,15 @@ static void draw_close_ui_object (ui_object *obj)
 		y2;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 #if 0
 	rgb_data
-		*graphic;
+		*graphic = nullptr;
 #endif
 
 	close_ui_object
-		*close;
+		*close = nullptr;
 
 	close = (close_ui_object *) obj->data;
 

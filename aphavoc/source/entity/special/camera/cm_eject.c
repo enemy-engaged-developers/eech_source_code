@@ -86,7 +86,7 @@ float
 void reset_eject_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,
@@ -166,10 +166,10 @@ void reset_eject_camera (camera *raw)
 void update_eject_camera (camera *raw)
 {
 	entity
-		*players_gunship,
-		*launched_weapon,
-		*ejected_pilot,
-		*track_target;
+		*players_gunship = nullptr,
+		*launched_weapon = nullptr,
+		*ejected_pilot = nullptr,
+		*track_target = nullptr;
 
 	//
 	// pre-amble (assume the external view entity is the player's gunship)

@@ -83,11 +83,11 @@ enum
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*flight_hours_text_area,
+	*flight_hours_text_area = nullptr,
 
-	*gunship_type_list,
-	*gunship_missions_list,
-	*gunship_hours_list;
+	*gunship_type_list = nullptr,
+	*gunship_missions_list = nullptr,
+	*gunship_hours_list = nullptr;
 
 static int
 	hours_type = PLAYER_HELICOPTER_HOURS;
@@ -257,7 +257,7 @@ void define_flight_hours_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	/////////////////////////////////////////////////////////////////
 	// Flight hours Area

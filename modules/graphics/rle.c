@@ -98,12 +98,12 @@
 void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 {
 	FILE
-		*rle_file_ptr;
+		*rle_file_ptr = nullptr;
 
 	tga_rgba
-		*tga_image,
-		*tga_col,
-		*run_start;
+		*tga_image = nullptr,
+		*tga_col = nullptr,
+		*run_start = nullptr;
 
 	rgb_colour
 		rgb_col;
@@ -132,8 +132,8 @@ void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 		bits_per_pixel;
 
 	unsigned char
-		*rle_image,
-		*destination_ptr;
+		*rle_image = nullptr,
+		*destination_ptr = nullptr;
 
 	//
 	// load TGA file
@@ -302,12 +302,12 @@ void convert_psd_to_rle ( const char *psd_filename, const char *rle_filename )
 {
 
 	FILE
-		*rle_file_ptr;
+		*rle_file_ptr = nullptr;
 
 	psd_rgba
-		*psd_image,
-		*psd_col,
-		*run_start;
+		*psd_image = nullptr,
+		*psd_col = nullptr,
+		*run_start = nullptr;
 
 	rgb_colour
 		rgb_col;
@@ -334,8 +334,8 @@ void convert_psd_to_rle ( const char *psd_filename, const char *rle_filename )
 		number_of_channels;
 
 	unsigned char
-		*rle_image,
-		*destination_ptr;
+		*rle_image = nullptr,
+		*destination_ptr = nullptr;
 
 	//
 	// load PSD file
@@ -515,21 +515,21 @@ void convert_and_dither_psd_to_rle (const char *psd_filename, const char *rle_fi
 {
 
 	FILE
-		*rle_file_ptr;
+		*rle_file_ptr = nullptr;
 
 	psd_rgba
-		*psd_image,
-		*psd_ptr;
+		*psd_image = nullptr,
+		*psd_ptr = nullptr;
 
 	rgb_packed
-		*dither_col,
-		*run_start;
+		*dither_col = nullptr,
+		*run_start = nullptr;
 
 	rgb_colour
 		rgb_col;
 
 	rgb_packed
-		*dither_image,
+		*dither_image = nullptr,
 		packed_rgb_col;
 
 	unsigned short int
@@ -551,8 +551,8 @@ void convert_and_dither_psd_to_rle (const char *psd_filename, const char *rle_fi
 		number_of_channels;
 
 	unsigned char
-		*rle_image,
-		*destination_ptr;
+		*rle_image = nullptr,
+		*destination_ptr = nullptr;
 
 	//
 	// Load PSD file
@@ -754,10 +754,10 @@ void blit_rle_graphic (const unsigned char *rle_graphic, const int x, const int 
 		x_add;
 
 	const unsigned char
-		*rd;
+		*rd = nullptr;
 	unsigned char
-		*screen_data,
-		*wt;
+		*screen_data = nullptr,
+		*wt = nullptr;
 
 	ASSERT (rle_graphic);
 

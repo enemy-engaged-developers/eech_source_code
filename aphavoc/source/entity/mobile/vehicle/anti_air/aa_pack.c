@@ -149,10 +149,10 @@ void pack_local_anti_aircraft_data (pack_modes mode)
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		pack_size,
@@ -240,11 +240,11 @@ void unpack_local_anti_aircraft_data (pack_modes mode)
 {
 
 	anti_aircraft
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*destroy_en,
-		*en;
+		*destroy_en = nullptr,
+		*en = nullptr;
 
 	int
 		count,

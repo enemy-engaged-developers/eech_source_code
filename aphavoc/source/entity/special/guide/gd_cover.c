@@ -135,7 +135,7 @@ static int update_guide_seek_cover_current_position_search (entity *en);
 void reset_guide_seek_cover_results (entity *en)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -162,13 +162,13 @@ void reset_guide_seek_cover_results (entity *en)
 int update_guide_seek_cover_results (entity *en)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*group,
-		*guide,
-		*member,
-		*aggressor;
+		*group = nullptr,
+		*guide = nullptr,
+		*member = nullptr,
+		*aggressor = nullptr;
 
 	int
 		loop;
@@ -335,7 +335,7 @@ int update_guide_seek_cover_results (entity *en)
 void set_guide_seek_cover_next_search_mode (entity *en)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -364,12 +364,12 @@ void set_guide_seek_cover_next_search_mode (entity *en)
 static unsigned char assess_cover_position (entity *en, entity *aggressor, entity *target, vec3d *cover_pos, entity *cover_structure)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*aggressor_pos,
-		*target_pos,
-		*structure_pos,
+		*aggressor_pos = nullptr,
+		*target_pos = nullptr,
+		*structure_pos = nullptr,
 		check_pos,
 		aggressor_min,
 		aggressor_max,
@@ -403,8 +403,8 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 		result;
 
 	object_3d_bounds
-		*aggressor_bounding_box,
-		*object_bounding_box;
+		*aggressor_bounding_box = nullptr,
+		*object_bounding_box = nullptr;
 
 	object_3d_index_numbers
 		aggressor_3d_index,
@@ -659,9 +659,9 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 
 	{
 		entity
-			*group,
-			*member,
-			*guide;
+			*group = nullptr,
+			*member = nullptr,
+			*guide = nullptr;
 
 		entity_sub_types
 			guide_type;
@@ -840,11 +840,11 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 	//
 	{
 		entity
-			*sector,
-			*object;
+			*sector = nullptr,
+			*object = nullptr;
 	
 		vec3d
-			*object_pos,
+			*object_pos = nullptr,
 			object_min,
 			object_max;
 
@@ -965,7 +965,7 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 static int check_fixed_structure_search_object_type (entity *en, entity *structure)
 {
 	guide
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 
@@ -1018,22 +1018,22 @@ static int check_fixed_structure_search_object_type (entity *en, entity *structu
 int update_guide_seek_cover_fixed_structure_search (entity *en)
 {
 	entity
-		*aggressor,
-		*target,
-		*task,
-		*sector,
-		*structure;
+		*aggressor = nullptr,
+		*target = nullptr,
+		*task = nullptr,
+		*sector = nullptr,
+		*structure = nullptr;
 
 	guide
-		*raw;
+		*raw = nullptr;
 
 	int
 		count,
 		search_count;
 
 	vec3d
-		*target_pos,
-		*structure_pos,
+		*target_pos = nullptr,
+		*structure_pos = nullptr,
 		cover_vec,
 		cover_pos;
 
@@ -1137,7 +1137,7 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 	
 		{
 			struct OBJECT_3D_BOUNDS
-				*bounding_box;
+				*bounding_box = nullptr;
 	
 			vec3d
 				d;
@@ -1182,7 +1182,7 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 		if (aggressor == get_external_view_entity ())
 		{
 			vec3d
-				*aggressor_pos;
+				*aggressor_pos = nullptr;
 	
 			debug_filtered_log ("GD_COVER: (%d - %d) Checking %s (%d) SCORE %d",
 										 raw->current_seek_cover_result.search_mode,
@@ -1245,13 +1245,13 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 int update_guide_seek_cover_forest_search (entity *en)
 {
 	entity
-		*aggressor,
-		*target,
-		*task,
-		*sector;
+		*aggressor = nullptr,
+		*target = nullptr,
+		*task = nullptr,
+		*sector = nullptr;
 
 	guide
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop,
@@ -1259,10 +1259,10 @@ int update_guide_seek_cover_forest_search (entity *en)
 		check_count;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
-		*normal,
-		*point,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
+		*normal = nullptr,
+		*point = nullptr,
 		average_point,
 		cover_vec,
 		cover_pos;
@@ -1528,12 +1528,12 @@ int update_guide_seek_cover_forest_search (entity *en)
 int update_guide_seek_cover_default_terrain_search (entity *en)
 {
 	entity
-		*aggressor,
-		*target,
-		*task;
+		*aggressor = nullptr,
+		*target = nullptr,
+		*task = nullptr;
 
 	guide
-		*raw;
+		*raw = nullptr;
 
 	int
 		a,
@@ -1545,8 +1545,8 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 		ta_vec;
 
 	vec3d
-		*target_pos,
-		*aggressor_pos,
+		*target_pos = nullptr,
+		*aggressor_pos = nullptr,
 		cover_pos;
 
 	float
@@ -1672,12 +1672,12 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 int update_guide_seek_cover_current_position_search (entity *en)
 {
 	entity
-		*aggressor,
-		*target,
-		*task;
+		*aggressor = nullptr,
+		*target = nullptr,
+		*task = nullptr;
 
 	vec3d
-		*aggressor_pos;
+		*aggressor_pos = nullptr;
 
 	unsigned char
 		score;

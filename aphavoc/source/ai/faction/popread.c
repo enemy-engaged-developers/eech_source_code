@@ -148,7 +148,7 @@ struct TEMPORARY_TEMPLATE
 		routes_object;
 
 	struct TEMPORARY_TEMPLATE_OBJECT
-		*objects;
+		*objects = nullptr;
 };
 
 typedef struct TEMPORARY_TEMPLATE temporary_template;
@@ -184,8 +184,8 @@ struct TROOP_LANDING_ROUTE_INFORMATION
 		landing_position_valid;
 
 	vec3d
-		*landing_route,
-		*takeoff_route,
+		*landing_route = nullptr,
+		*takeoff_route = nullptr,
 		landing_position;
 
 	float
@@ -269,7 +269,7 @@ int
 	number_of_temporary_templates;
 
 temporary_template
-	*temporary_templates;
+	*temporary_templates = nullptr;
 
 vec3d
 	temporary_relative_waypoints[256];
@@ -357,7 +357,7 @@ void read_sector_side_file ( const char *sides_filename )
 			channels;
 
 		unsigned char
-			*sides_data;
+			*sides_data = nullptr;
 
 		sides_data = (unsigned char*) load_psd_file ( sides_filename, &width, &height, &channels );
 
@@ -365,7 +365,7 @@ void read_sector_side_file ( const char *sides_filename )
 		{
 
 			psd_rgb
-				*ptr;
+				*ptr = nullptr;
 
 			ASSERT ( channels == 3 );
 			ASSERT ( width == ( MAX_MAP_X_SECTOR + 1 ) );
@@ -428,7 +428,7 @@ void reset_population_sector_values ( int width, int height )
 		y;
 
 	sector
-		*sector_raw;
+		*sector_raw = nullptr;
 
 	for ( y = 0; y < height; y++ )
 	{
@@ -437,7 +437,7 @@ void reset_population_sector_values ( int width, int height )
 		{
 
 			entity
-				*sector;
+				*sector = nullptr;
 
 			sector = get_local_raw_sector_entity ( x, ( MAX_MAP_Z_SECTOR - y ) );
 
@@ -482,7 +482,7 @@ void process_population_forces ( psd_rgb *ptr, int width, int height )
 		{
 
 			entity
-				*sector;
+				*sector = nullptr;
 
 			if ( ptr->r > 240 )
 			{
@@ -558,7 +558,7 @@ entity_sides get_initial_sector_side ( int x_sec, int z_sec )
 {
 
 	psd_rgb
-		*ptr;
+		*ptr = nullptr;
 
 	ASSERT ( current_initial_sector_sides );
 
@@ -591,7 +591,7 @@ void read_population_placement_file ( const char *placement_filename )
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		count;
@@ -767,7 +767,7 @@ void read_population_templates ( FILE *fp )
 	{
 
 		temporary_template_object
-			*objects;
+			*objects = nullptr;
 
 		int
 			valid,
@@ -927,10 +927,10 @@ void read_population_city_placements ( FILE *fp )
 		count;
 
 	entity
-		*city,
-		*closest_keysite,
-		*sector,
-		*keysite,
+		*city = nullptr,
+		*closest_keysite = nullptr,
+		*sector = nullptr,
+		*keysite = nullptr,
 		*keysite_group = NULL;
 
    int
@@ -1383,8 +1383,8 @@ void read_population_city_placements ( FILE *fp )
 											formation_type;
 
 										entity
-											*group,
-											*member;
+											*group = nullptr,
+											*member = nullptr;
 
 										switch (objects_3d_scene_database[object_number].scene_link_objects[scene_link_count].scene_index)
 										{
@@ -1485,7 +1485,7 @@ void read_population_airfield_placements ( FILE *fp )
 		count;
 
 	entity
-		*sector;
+		*sector = nullptr;
 
 	airfield_count = 1;
 
@@ -1801,9 +1801,9 @@ void read_population_airfield_placements ( FILE *fp )
 			{
 
 				entity
-					*force,
-					*sector,
-					*keysite;
+					*force = nullptr,
+					*sector = nullptr,
+					*keysite = nullptr;
 
 				vec3d
 					position;
@@ -1811,7 +1811,7 @@ void read_population_airfield_placements ( FILE *fp )
 				char
 					buffer [256];
 				const char
-					*airfield_name;
+					*airfield_name = nullptr;
 
 				int
 					fixed_wing_flag,
@@ -1830,10 +1830,10 @@ void read_population_airfield_placements ( FILE *fp )
 
 #ifndef OGRE_EE
 				object_3d_database_entry
-					*landing_route,
-					*takeoff_route,
-					*landing_holding_route,
-					*takeoff_holding_route;
+					*landing_route = nullptr,
+					*takeoff_route = nullptr,
+					*landing_holding_route = nullptr,
+					*takeoff_holding_route = nullptr;
 #else
 				unsigned
 					landing_route,
@@ -2167,13 +2167,13 @@ void read_population_sam_placements ( FILE *fp )
 			pos;
 
 		entity
-			*sector;
+			*sector = nullptr;
 
 		entity_sides
 			side;
 
 		formation_vehicle_components
-			*formation_vehicle_component;
+			*formation_vehicle_component = nullptr;
 
 		formation_component_types
 			formation_type;
@@ -2219,26 +2219,26 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 {
 
 	object_3d_instance
-		*current_airport_inst3d;
+		*current_airport_inst3d = nullptr;
 
 #ifndef OGRE_EE
 	object_3d_database_entry
-		*fixedwing_landing_route,
-		*fixedwing_takeoff_route,
-		*helicopter_landing_route,
-		*helicopter_takeoff_route,
-		*vehicle_landing_route,
-		*vehicle_takeoff_route,
-		*ship_landing_route,
-		*ship_takeoff_route,
-		*fixedwing_landing_holding_route,
-		*fixedwing_takeoff_holding_route,
-		*helicopter_landing_holding_route,
-		*helicopter_takeoff_holding_route,
-		*vehicle_landing_holding_route,
-		*vehicle_takeoff_holding_route,
-		*ship_landing_holding_route,
-		*ship_takeoff_holding_route;
+		*fixedwing_landing_route = nullptr,
+		*fixedwing_takeoff_route = nullptr,
+		*helicopter_landing_route = nullptr,
+		*helicopter_takeoff_route = nullptr,
+		*vehicle_landing_route = nullptr,
+		*vehicle_takeoff_route = nullptr,
+		*ship_landing_route = nullptr,
+		*ship_takeoff_route = nullptr,
+		*fixedwing_landing_holding_route = nullptr,
+		*fixedwing_takeoff_holding_route = nullptr,
+		*helicopter_landing_holding_route = nullptr,
+		*helicopter_takeoff_holding_route = nullptr,
+		*vehicle_landing_holding_route = nullptr,
+		*vehicle_takeoff_holding_route = nullptr,
+		*ship_landing_holding_route = nullptr,
+		*ship_takeoff_holding_route = nullptr;
 #else
 	unsigned
 		fixedwing_landing_route,
@@ -2305,7 +2305,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 			slot_count;
 
 		vec3d
-			*matching_slots;
+			*matching_slots = nullptr;
 
 
 		//
@@ -2720,8 +2720,8 @@ unsigned int get_waypoint_inhangar_bits ( route_waypoint_position *waypoint, obj
 		inhangar_bits;
 
 	object_3d_scene_database_entry
-		*scene_link,
-		*scene;
+		*scene_link = nullptr,
+		*scene = nullptr;
 
 	inhangar_bits = 0;
 
@@ -2827,11 +2827,11 @@ void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, unsi
 
 	vec3d
 		waypoint_world_pos,
-		*matching_slots,
-		*keysite_pos;
+		*matching_slots = nullptr,
+		*keysite_pos = nullptr;
 
 	entity
-		*landing;
+		*landing = nullptr;
 
 	unsigned int
 		inhangar_flags;
@@ -3110,11 +3110,11 @@ void insert_airport_helicopter_routes ( vec3d *position, unsigned landing_route,
 
 	vec3d
 		waypoint_world_pos,
-		*matching_slots,
-		*keysite_pos;
+		*matching_slots = nullptr,
+		*keysite_pos = nullptr;
 
 	entity
-		*landing;
+		*landing = nullptr;
 
 	unsigned int
 		inhangar_flags;
@@ -3616,11 +3616,11 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 
 	vec3d
 		waypoint_world_pos,
-		*matching_slots,
-		*keysite_pos;
+		*matching_slots = nullptr,
+		*keysite_pos = nullptr;
 
 	entity
-		*landing;
+		*landing = nullptr;
 
 	//
 	// Insert the landing routes
@@ -3915,7 +3915,7 @@ void create_airfield_waypoint ( entity_sub_types type, vec3d *waypoint_world_pos
 {
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	wp = create_local_entity
 	(
@@ -3949,11 +3949,11 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 		count;
 
 	entity
-		*keysite_group,
-		*building;
+		*keysite_group = nullptr,
+		*building = nullptr;
 
 	struct OBJECT_3D_SCENE_DATABASE_ENTRY
-		*scene;
+		*scene = nullptr;
 
 
 	scene = &objects_3d_scene_database[instance->object_number];
@@ -4004,10 +4004,10 @@ void insert_airfield_buildings ( int side, object_3d_instance *instance )
 		{
 
 			entity
-				*wp,
-				*regen,
-				*landing,
-				*closest_wp;
+				*wp = nullptr,
+				*regen = nullptr,
+				*landing = nullptr,
+				*closest_wp = nullptr;
 
 			float
 				wp_range,
@@ -4252,11 +4252,11 @@ static const char *get_keysite_name (float x, float z, entity_sides *side)
 		best_range;
 
 	population_name_database_type
-		*best_item,
-		*item;
+		*best_item = nullptr,
+		*item = nullptr;
 
 	entity
-		*sector;
+		*sector = nullptr;
 
 	int
 		x_sec,
@@ -4364,7 +4364,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 		search;
 
 	object_3d_instance
-		*object;
+		*object = nullptr;
 
 	initialise_object_3d_troop_landing_routes ();
 
@@ -4392,7 +4392,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 
 #ifndef OGRE_EE
 			object_3d_database_entry
-				*route;
+				*route = nullptr;
 #else
 			unsigned
 				route;
@@ -4445,7 +4445,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 		search;
 
 	object_3d_instance
-		*object;
+		*object = nullptr;
 
 	initialise_object_3d_troop_landing_routes ();
 
@@ -4473,7 +4473,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 
 #ifndef OGRE_EE
 			object_3d_database_entry
-				*route;
+				*route = nullptr;
 #else
 			unsigned
 				route;
@@ -4526,7 +4526,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 		search;
 
 	object_3d_instance
-		*object;
+		*object = nullptr;
 
 	int
 		count;
@@ -4585,7 +4585,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 
 #ifndef OGRE_EE
 			object_3d_database_entry
-				*troop_lz;
+				*troop_lz = nullptr;
 
 			troop_lz = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LZ );
 
@@ -4601,7 +4601,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 			unsigned
 				troop_lz_index;
 			struct OgreGameObjectSceneElement
-				*troop_lz;
+				*troop_lz = nullptr;
 
 			troop_lz_index = get_airfield_waypoint_route_object ( object, OBJECT_3D_SUB_OBJECT_TROOP_LZ );
 			troop_lz = troop_lz_index ? &object->vp.elements[troop_lz_index] : NULL;

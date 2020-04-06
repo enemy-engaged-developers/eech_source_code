@@ -87,7 +87,7 @@ static void interpolate_entity_position (entity *en);
 static void update_rotors (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	raw = (helicopter *) get_local_entity_data (en);
 
@@ -108,7 +108,7 @@ static void update_rotors (entity *en)
 static void update_fuel_weight (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 	float fuel_delta, fuel_economy;
 	
 	if (get_comms_model() != COMMS_MODEL_SERVER || !get_local_entity_int_value (en, INT_TYPE_MOBILE_MOVING) || get_local_entity_int_value (en, INT_TYPE_LANDED))
@@ -134,11 +134,11 @@ static void update_fuel_weight (entity *en)
 	// 20 MINS FUEL RESERVE RETURN HOME
 	else if ((raw->fuel_supply_level / fuel_economy) <= 20.0) {
 		entity
-			*group,
-			*guide,
-			*task,
-			*wp,
-			*current_wp;
+			*group = nullptr,
+			*guide = nullptr,
+			*task = nullptr,
+			*wp = nullptr,
+			*current_wp = nullptr;
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -207,10 +207,10 @@ static void update_fuel_weight (entity *en)
 static void update_server (entity *en)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;
@@ -583,7 +583,7 @@ static void update_server (entity *en)
 static void update_client (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;
@@ -911,7 +911,7 @@ void reset_interpolation_timer (void)
 {
 
 	connection_list_type
-		*connection;
+		*connection = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_CLIENT)
 	{
@@ -935,11 +935,11 @@ void interpolate_entity_position (entity *en)
 
 	vec3d
 		new_position,
-		*motion_vector,
-		*position;
+		*motion_vector = nullptr,
+		*position = nullptr;
 
 	connection_list_type
-		*connection;
+		*connection = nullptr;
 
 	float
 		delta_time;

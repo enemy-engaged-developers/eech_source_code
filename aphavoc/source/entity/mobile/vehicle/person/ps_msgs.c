@@ -84,9 +84,9 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 {
 
 	entity
-		*force,
-		*aggressor,
-		*enemy_force;
+		*force = nullptr,
+		*aggressor = nullptr,
+		*enemy_force = nullptr;
 
 	int
 		old_damage_state,
@@ -247,14 +247,14 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		velocity,
 		heading;
 
 	person
-		*raw;
+		*raw = nullptr;
 
 	raw = (person *) get_local_entity_data (receiver);
 

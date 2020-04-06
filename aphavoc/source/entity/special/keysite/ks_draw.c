@@ -79,7 +79,7 @@
 static void draw_local_2d_symbol (entity *en)
 {
 	keysite
-		*raw;
+		*raw = nullptr;
 
 	graphics_file_specifiers
 		icon_graphic;

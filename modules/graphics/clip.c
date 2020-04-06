@@ -92,10 +92,10 @@ float
 
 #ifndef OGRE_EE
 static vertex
-	*this_point,
-	*last_point,
-	*clip_list,
-	*clip_point;
+	*this_point = nullptr,
+	*last_point = nullptr,
+	*clip_list = nullptr,
+	*clip_point = nullptr;
 
 int
 	number_of_xmin_coordinates_inserted,
@@ -1054,7 +1054,7 @@ void insert_xmin_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1197,7 +1197,7 @@ void insert_xmax_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1340,7 +1340,7 @@ void insert_ymin_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1483,7 +1483,7 @@ void insert_ymax_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1626,7 +1626,7 @@ void insert_xmin_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1807,7 +1807,7 @@ void insert_xmax_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -1988,7 +1988,7 @@ void insert_ymin_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,
@@ -2169,7 +2169,7 @@ void insert_ymax_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 {
 
 	vertex
-		*tmp;
+		*tmp = nullptr;
 
 	double
 		t,

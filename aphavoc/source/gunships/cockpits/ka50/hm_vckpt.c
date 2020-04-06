@@ -78,40 +78,40 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*virtual_cockpit_inst3d_detail_level_high_inst3d,
-	*virtual_cockpit_inst3d_detail_level_medium_inst3d,
-	*virtual_cockpit_inst3d_detail_level_low_inst3d,
-	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
+	*virtual_cockpit_inst3d_detail_level_high_inst3d = nullptr,
+	*virtual_cockpit_inst3d_detail_level_medium_inst3d = nullptr,
+	*virtual_cockpit_inst3d_detail_level_low_inst3d = nullptr,
+	*virtual_cockpit_inst3d_detail_level_glass_inst3d = nullptr;
 
 static object_3d_sub_instance
-	*left_temperature,
-	*left_temperature_small,
-	*right_temperature,
-	*right_temperature_small,
+	*left_temperature = nullptr,
+	*left_temperature_small = nullptr,
+	*right_temperature = nullptr,
+	*right_temperature_small = nullptr,
 
 	// lamps
-	*left_wheel_down_light,
-	*right_wheel_down_light,
-	*nose_wheel_down_light,
-	*wheels_up_light,
-	*rotor_rpm_light,
-	*leng_rpm_light,
-	*reng_rpm_light,
-	*gmax_light,
-	*max_isa_light,
-	*fire_light,
-	*leng_fire_light,
-	*reng_fire_light,
+	*left_wheel_down_light = nullptr,
+	*right_wheel_down_light = nullptr,
+	*nose_wheel_down_light = nullptr,
+	*wheels_up_light = nullptr,
+	*rotor_rpm_light = nullptr,
+	*leng_rpm_light = nullptr,
+	*reng_rpm_light = nullptr,
+	*gmax_light = nullptr,
+	*max_isa_light = nullptr,
+	*fire_light = nullptr,
+	*leng_fire_light = nullptr,
+	*reng_fire_light = nullptr,
 //	*apu_fire_light,
-	*master_alarm,
-	*left_outer_wep_light,
-	*left_inner_wep_light,
-	*right_inner_wep_light,
-	*right_outer_wep_light,
-	*left_outer_wep_store_light,
-	*left_inner_wep_store_light,
-	*right_inner_wep_store_light,
-	*right_outer_wep_store_light;
+	*master_alarm = nullptr,
+	*left_outer_wep_light = nullptr,
+	*left_inner_wep_light = nullptr,
+	*right_inner_wep_light = nullptr,
+	*right_outer_wep_light = nullptr,
+	*left_outer_wep_store_light = nullptr,
+	*left_inner_wep_store_light = nullptr,
+	*right_inner_wep_store_light = nullptr,
+	*right_outer_wep_store_light = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,7 +570,7 @@ void draw_ka50_virtual_cockpit (void)
 		draw_main_rotors;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -686,8 +686,8 @@ void draw_ka50_virtual_cockpit (void)
 		//
 
 		light_3d_source
-			*display_backlight,
-			*cockpit_light;
+			*display_backlight = nullptr,
+			*cockpit_light = nullptr;
 
 		vec3d
 			direction;

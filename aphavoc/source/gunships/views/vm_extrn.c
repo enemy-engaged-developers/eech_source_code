@@ -266,17 +266,17 @@ static void display_external_view_text (void)
 			////////////////////////////////////////////////////////////////////////////////
 			{
 			   char
-      			*s,
+      			*s = nullptr,
 					buffer[200];
 
 				entity
-					*weapon,
-					*launcher,
-					*target;
+					*weapon = nullptr,
+					*launcher = nullptr,
+					*target = nullptr;
 
 				vec3d
-					*weapon_position,
-					*target_position;
+					*weapon_position = nullptr,
+					*target_position = nullptr;
 
 				float
 					x,
@@ -426,28 +426,28 @@ static void display_external_view_text (void)
 			////////////////////////////////////////////////////////////////////////////////
 			{
 	   			char
-					*s2,
+					*s2 = nullptr,
 					buffer1[200],
 					buffer2[200],
 					tmp[200];
    				const char
-    	  			*s1,
-					*full_name,
-					*first_name,
-					*last_name,
-					*group_name,
-					*task_name;
+    	  			*s1 = nullptr,
+					*full_name = nullptr,
+					*first_name = nullptr,
+					*last_name = nullptr,
+					*group_name = nullptr,
+					*task_name = nullptr;
 
 				float
 					x,
 					y;
 
 	   			entity
-    	  			*en,
-					*aircrew,
-					*group,
-					*task,
-					*company;
+    	  			*en = nullptr,
+					*aircrew = nullptr,
+					*group = nullptr,
+					*task = nullptr,
+					*company = nullptr;
 
 				en = get_external_view_entity ();
 
@@ -691,8 +691,8 @@ void draw_external_3d_view (void)
 	if (external_view_inset_target)
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		viewpoint
 			vp;

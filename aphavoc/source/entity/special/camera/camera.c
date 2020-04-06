@@ -178,8 +178,8 @@ void set_camera_entity (entity *en)
 entity *get_local_entity_view_list_pred (entity *en)
 {
 	entity
-		*pred,
-		*parent;
+		*pred = nullptr,
+		*parent = nullptr;
 
 	ASSERT (en);
 
@@ -211,10 +211,10 @@ entity *get_local_entity_view_list_pred (entity *en)
 const char *get_camera_mode_name (camera_modes mode)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	char
-		*s;
+		*s = nullptr;
 
 	ASSERT (get_camera_entity ());
 

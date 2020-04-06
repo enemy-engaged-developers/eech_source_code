@@ -123,7 +123,7 @@
 static void set_local_first_child (entity *en, list_types type, entity *first_child)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -141,10 +141,10 @@ static void set_local_first_child (entity *en, list_types type, entity *first_ch
 static entity *get_local_first_child (entity *en, list_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*first_child;
+		*first_child = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -164,7 +164,7 @@ static entity *get_local_first_child (entity *en, list_types type)
 static void set_local_parent (entity *en, list_types type, entity *parent)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -182,10 +182,10 @@ static void set_local_parent (entity *en, list_types type, entity *parent)
 static entity *get_local_parent (entity *en, list_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*parent;
+		*parent = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -205,7 +205,7 @@ static entity *get_local_parent (entity *en, list_types type)
 static void set_local_child_succ (entity *en, list_types type, entity *child_succ)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -223,10 +223,10 @@ static void set_local_child_succ (entity *en, list_types type, entity *child_suc
 static entity *get_local_child_succ (entity *en, list_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*child_succ;
+		*child_succ = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -246,7 +246,7 @@ static entity *get_local_child_succ (entity *en, list_types type)
 static void set_local_child_pred (entity *en, list_types type, entity *child_pred)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 
@@ -264,10 +264,10 @@ static void set_local_child_pred (entity *en, list_types type, entity *child_pre
 static entity *get_local_child_pred (entity *en, list_types type)
 {
 	task
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*child_pred;
+		*child_pred = nullptr;
 
 	raw = (task *) get_local_entity_data (en);
 

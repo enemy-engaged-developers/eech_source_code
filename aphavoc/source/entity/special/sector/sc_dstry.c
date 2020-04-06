@@ -79,7 +79,7 @@
 static void destroy_local (entity *en)
 {
 	sector
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

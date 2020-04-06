@@ -108,7 +108,7 @@ typedef enum DIRECT_PLAY_COMMS_MODE_TYPES direct_play_comms_mode_types;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern direct_play_comms_mode_types
-        direct_play_comms_mode;
+		direct_play_comms_mode;
 
 #define direct_play_set_comms_mode(MODE) (direct_play_comms_mode = (MODE))
 
@@ -354,7 +354,7 @@ typedef enum DIRECT_PLAY_COMMS_MODE_TYPES direct_play_comms_mode_types;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern direct_play_comms_mode_types
-        direct_play_comms_mode;
+		direct_play_comms_mode;
 
 #define direct_play_set_comms_mode(MODE) (direct_play_comms_mode = (MODE))
 
@@ -565,7 +565,6 @@ extern struct GROUP_TABLE_TYPE *direct_play_get_group_table (void);
 extern void direct_play_set_group_name (const char *name);
 extern void direct_play_set_session_name (const char *name);
 extern void direct_play_set_player_name (const char *name);
-extern const char *direct_play_get_session_name (void);
 extern const char *direct_play_get_session_name (void);
 extern const char *direct_play_get_group_name (void);
 extern const char *direct_play_get_player_name (DPID player_id);

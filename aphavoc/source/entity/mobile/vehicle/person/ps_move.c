@@ -87,14 +87,14 @@ static void person_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 {
 
 	entity
-		*wp,
-		*guide;
+		*wp = nullptr,
+		*guide = nullptr;
 
 	float
 		distance;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (en);
 
@@ -138,15 +138,15 @@ static void person_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 			//
 	
 			entity
-				*group,
-				*task_leader;
+				*group = nullptr,
+				*task_leader = nullptr;
 	
 			vec3d
-				*xv,
-				*leader_pos;
+				*xv = nullptr,
+				*leader_pos = nullptr;
 	
 			formation_type
-				*formation;
+				*formation = nullptr;
 	
 			int
 				type,
@@ -241,12 +241,12 @@ void person_movement (entity *en)
 		wp_pos;
 
 	person
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*task,
-		*guide,
-		*group;
+		*task = nullptr,
+		*guide = nullptr,
+		*group = nullptr;
 
 	float
 		ps_vel,

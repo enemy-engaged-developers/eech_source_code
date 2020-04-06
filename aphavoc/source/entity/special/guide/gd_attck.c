@@ -79,9 +79,9 @@
 void initialise_attack_guide (entity *en)
 {
 	entity
-		*task,
-		*aggressor,
-		*target;
+		*task = nullptr,
+		*aggressor = nullptr,
+		*target = nullptr;
 
 	ASSERT (en);
 
@@ -248,8 +248,8 @@ void calculate_attack_guide_intercept_point (entity *aggressor, entity *target, 
 int attack_guide_find_best_weapon (entity *en)
 {
 	entity
-		*target,
-		*aggressor;
+		*target = nullptr,
+		*aggressor = nullptr;
 
 	entity_sub_types
 		best_weapon;

@@ -79,7 +79,7 @@
 void repair_local_segment_entity (entity *en)
 {
 	segment
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 

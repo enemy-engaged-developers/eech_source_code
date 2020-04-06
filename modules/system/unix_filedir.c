@@ -81,7 +81,7 @@ directory_file_list *get_first_directory_file ( const char *path )
 {
 
 	directory_file_list
-		*first_file;
+		*first_file = nullptr;
 
 	ASSERT ( get_memory_block_system_installed () );
 
@@ -227,8 +227,8 @@ int file_extension ( char *filename, char *extension )
 {
 
 	char
-		*ptr,
-		*string;
+		*ptr = nullptr,
+		*string = nullptr;
 
 	//
 	// Search for the "."

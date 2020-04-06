@@ -74,7 +74,7 @@ static void set_text_ui_object_colour (ui_object *obj, int colour_r, int colour_
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = obj->data;
 
@@ -93,7 +93,7 @@ static rgb_colour *get_text_ui_object_colour (ui_object *obj)
 {
 	
 	text_ui_object
-		*text;
+		*text = nullptr;
 
 	text = obj->data;
 

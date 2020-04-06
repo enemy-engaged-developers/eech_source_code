@@ -346,8 +346,8 @@ void update_ka50_target_acquisition_system (void)
 
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		int
 			laser_on,

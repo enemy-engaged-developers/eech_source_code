@@ -87,10 +87,10 @@ static float adjust_radio_message_amplification (float amp, vec3d *pos);
 int pause_local_entity_sound_type (entity *en, entity_sub_types type, float delay)
 {
 	entity
-		*spec;
+		*spec = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	int
 		count;
@@ -135,10 +135,10 @@ int pause_local_entity_sound_type (entity *en, entity_sub_types type, float dela
 int resume_local_entity_sound_type (entity *en, entity_sub_types type)
 {
 	entity
-		*spec;
+		*spec = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	int
 		count;
@@ -174,10 +174,10 @@ int resume_local_entity_sound_type (entity *en, entity_sub_types type)
 					else
 					{
 						vec3d
-							*position;
+							*position = nullptr;
 	
 						viewpoint
-							*vp;
+							*vp = nullptr;
 	
 						float
 							range;
@@ -246,11 +246,11 @@ int resume_client_server_entity_sound_type (entity *en, entity_sub_types type)
 void kill_local_entity_sound_type (entity *en, entity_sub_types type)
 {
 	entity
-		*spec,
-		*next;
+		*spec = nullptr,
+		*next = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	spec = get_local_entity_first_child (en, LIST_TYPE_SPECIAL_EFFECT);
 	
@@ -283,11 +283,11 @@ void kill_local_entity_sound_type (entity *en, entity_sub_types type)
 void kill_client_server_entity_sound_type (entity *en, entity_sub_types type)
 {
 	entity
-		*spec,
-		*next;
+		*spec = nullptr,
+		*next = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	spec = get_local_entity_first_child (en, LIST_TYPE_SPECIAL_EFFECT);
 	
@@ -320,8 +320,8 @@ void kill_client_server_entity_sound_type (entity *en, entity_sub_types type)
 void destroy_local_sound_effects (entity *en)
 {
 	entity
-		*spec,
-		*next;
+		*spec = nullptr,
+		*next = nullptr;
 
 	spec = get_local_entity_first_child (en, LIST_TYPE_SPECIAL_EFFECT);
 	
@@ -345,8 +345,8 @@ void destroy_local_sound_effects (entity *en)
 void destroy_client_server_sound_effects (entity *en)
 {
 	entity
-		*spec,
-		*next;
+		*spec = nullptr,
+		*next = nullptr;
 
 	spec = get_local_entity_first_child (en, LIST_TYPE_SPECIAL_EFFECT);
 	
@@ -441,10 +441,10 @@ int resume_client_server_continuous_weapon_sound_effect (entity *en, entity_sub_
 int get_local_entity_sound_type_valid (entity *en, entity_sub_types type)
 {
 	entity
-		*spec;
+		*spec = nullptr;
 
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	spec = get_local_entity_first_child (en, LIST_TYPE_SPECIAL_EFFECT);
 	
@@ -473,7 +473,7 @@ int get_local_entity_sound_type_valid (entity *en, entity_sub_types type)
 void set_local_sound_effect_sample_indices (entity *en, int count, sound_sample_indices *indices)
 {
 	sound_effect
-		*raw;
+		*raw = nullptr;
 
 	int
 		loop;
@@ -558,7 +558,7 @@ entity *create_local_sound_effect_entity
 			)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos;
@@ -709,7 +709,7 @@ entity *create_client_server_sound_effect_entity
 			)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 

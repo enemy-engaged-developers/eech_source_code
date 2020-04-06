@@ -95,7 +95,7 @@ void clear_temporary_3d_instances ( void )
 	{
 
 		temporary_object_3d_instance
-			*this_temp;
+			*this_temp = nullptr;
 
 		this_temp = temporary_3d_objects;
 
@@ -134,10 +134,10 @@ object_3d_instance *construct_temporary_3d_object ( object_3d_index_numbers inde
 {
 
 	temporary_object_3d_instance
-		*this_instance;
+		*this_instance = nullptr;
 
 	object_3d_instance
-		*object;
+		*object = nullptr;
 
 	this_instance = ( temporary_object_3d_instance * ) malloc_fast_mem ( sizeof ( temporary_object_3d_instance ) );
 

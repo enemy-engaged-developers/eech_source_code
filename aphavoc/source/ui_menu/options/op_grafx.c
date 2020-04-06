@@ -99,27 +99,27 @@ static void set_card_selection_device ( display_device *device );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*graphics_area,
-	*terrain_detail_area1,
-	*object_detail_area1,
-	*cockpit_detail_area1,
-	*rain_textures_area1,
-	*incockpit_blurred_area1,
-	*card_selection_area1,
-	*card_selection_title_graphic_area,
-	*card_selection_title_text,
-	*ghost_card_selection_area1,
-	*screen_resolution_area,
-	*screen_accept_area,
-	*terrain_detail_button,
-	*object_detail_button,
-	*cockpit_detail_button,
-	*rain_textures_option_button,
-	*incockpit_blurred_option_button,
-	*card_selection_button_graphic,
-	*card_selection_button,
-	*screen_resolution_button,
-	*screen_accept_button;
+	*graphics_area = nullptr,
+	*terrain_detail_area1 = nullptr,
+	*object_detail_area1 = nullptr,
+	*cockpit_detail_area1 = nullptr,
+	*rain_textures_area1 = nullptr,
+	*incockpit_blurred_area1 = nullptr,
+	*card_selection_area1 = nullptr,
+	*card_selection_title_graphic_area = nullptr,
+	*card_selection_title_text = nullptr,
+	*ghost_card_selection_area1 = nullptr,
+	*screen_resolution_area = nullptr,
+	*screen_accept_area = nullptr,
+	*terrain_detail_button = nullptr,
+	*object_detail_button = nullptr,
+	*cockpit_detail_button = nullptr,
+	*rain_textures_option_button = nullptr,
+	*incockpit_blurred_option_button = nullptr,
+	*card_selection_button_graphic = nullptr,
+	*card_selection_button = nullptr,
+	*screen_resolution_button = nullptr,
+	*screen_accept_button = nullptr;
 
 static const char
 	*detail_text[3],
@@ -138,7 +138,7 @@ void notify_show_graphics_page (void)
 {
 #ifndef OGRE_EE
 	display_device
-		*device;
+		*device = nullptr;
 
 	int
 		found = 0;
@@ -283,7 +283,7 @@ void define_options_screen_graphics_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	ui_object
 		*title_change_array [7],
@@ -1130,7 +1130,7 @@ void notify_card_selection_button ( ui_object *obj, void *arg )
 #ifndef OGRE_EE
 
 	display_device
-		*device;
+		*device = nullptr;
 
 	//
 	// Set next device identifiers
@@ -1251,7 +1251,7 @@ display_device *get_card_selection_device ( void )
 #ifndef OGRE_EE
 
 	display_device
-		*device;
+		*device = nullptr;
 
 	device = display_devices;
 

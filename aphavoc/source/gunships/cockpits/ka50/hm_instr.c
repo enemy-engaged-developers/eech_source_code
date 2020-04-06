@@ -104,14 +104,14 @@ static void get_ka50_hsi_needle_values (float *direction_finder, float *flight_p
 		cross_product;
 
 	entity
-		*en,
-		*wp,
-		*prev_wp;
+		*en = nullptr,
+		*wp = nullptr,
+		*prev_wp = nullptr;
 
 	vec3d
-		*motion_vector,
+		*motion_vector = nullptr,
 		wind_vector,
-		*en_position,
+		*en_position = nullptr,
 		wp_position,
 		prev_wp_position;
 
@@ -318,7 +318,7 @@ void get_ka50_virtual_cockpit_hsi_needle_values (float *direction_finder, float 
 void draw_ka50_virtual_cockpit_instruments (void)
 {
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	object_3d_sub_object_search_data
 		search;

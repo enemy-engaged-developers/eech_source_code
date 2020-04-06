@@ -846,7 +846,7 @@ namespace nedpolicy {
 namespace nedallocatorI
 {
 	using namespace std;
-	using namespace tr1;
+	//dr3adl0rd: using namespace tr1;
 
 	/* Roll on variadic templates is all I can say! */
 #ifdef HAVE_CPP0XVARIADICTEMPLATES

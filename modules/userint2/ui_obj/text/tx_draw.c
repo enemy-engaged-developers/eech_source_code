@@ -86,10 +86,10 @@ static void draw_text_ui_object (ui_object *obj)
 		y1;
 
 	text_ui_object
-		*text_obj;
+		*text_obj = nullptr;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	if (get_ui_object_redraw (obj))
 	{

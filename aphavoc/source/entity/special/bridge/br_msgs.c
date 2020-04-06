@@ -89,10 +89,10 @@ static int response_to_child_killed (entity_messages message, entity *receiver, 
 		bridge_type;
 
 	entity
-		*sec;
+		*sec = nullptr;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	bridge_type = get_local_entity_int_value (receiver, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -181,8 +181,8 @@ static int response_to_child_killed (entity_messages message, entity *receiver, 
 static int response_to_collision (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*pred,
-		*succ;
+		*pred = nullptr,
+		*succ = nullptr;
 
 	entity_sub_types
 		sub_type;

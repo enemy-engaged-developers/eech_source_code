@@ -79,11 +79,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*top_menu_area,
-	*campaign_chat_button,
-	*campaign_save_button,
-	*campaign_briefing_button,
-	*campaign_weapon_loading_button,
+	*top_menu_area = nullptr,
+	*campaign_chat_button = nullptr,
+	*campaign_save_button = nullptr,
+	*campaign_briefing_button = nullptr,
+	*campaign_weapon_loading_button = nullptr,
 	*button_list [MAX_MENU_BUTTONS];
 
 static int
@@ -108,10 +108,10 @@ static void update_top_menu_area (ui_object *obj, void *arg)
 		page;
 
 	ui_object
-		*this_object;
+		*this_object = nullptr;
 
 	entity
-		*task;
+		*task = nullptr;
 
 	ASSERT (get_session_entity ());
 
@@ -266,7 +266,7 @@ static void notify_log_button (ui_object *obj, void *arg)
 static void notify_briefing_button (ui_object *obj, void *arg)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	task = get_player_task (NULL);
 
@@ -290,7 +290,7 @@ static void notify_briefing_button (ui_object *obj, void *arg)
 static void notify_weapon_loading_button(ui_object *obj, void *arg)
 {
 	entity
-		*group;
+		*group = nullptr;
 
 	ASSERT (get_gunship_entity ());
 

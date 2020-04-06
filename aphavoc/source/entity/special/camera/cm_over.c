@@ -115,7 +115,7 @@ void reset_overview_camera (camera *raw)
 void update_overview_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		rel_camera_position;

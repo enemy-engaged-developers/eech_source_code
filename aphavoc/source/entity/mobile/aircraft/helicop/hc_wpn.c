@@ -79,7 +79,7 @@
 void update_helicopter_weapon_fire (entity *en)
 {
    helicopter
-      *raw;
+      *raw = nullptr;
 
 	ASSERT (en);
 

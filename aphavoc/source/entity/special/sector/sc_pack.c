@@ -106,10 +106,10 @@ void overload_sector_pack_functions (void)
 void pack_local_sector_data (pack_modes mode)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	entity_sides
 		current_side;
@@ -300,10 +300,10 @@ void unpack_local_sector_data (pack_modes mode)
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	entity_sides
 		side;

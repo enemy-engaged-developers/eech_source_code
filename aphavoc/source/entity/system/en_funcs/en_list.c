@@ -422,7 +422,7 @@ void initialise_entity_list_default_functions (void)
 void insert_local_entity_into_parents_child_list (entity *en, list_types type, entity *parent, entity *pred)
 {
 	entity
-		*succ;
+		*succ = nullptr;
 
 	ASSERT (en);
 
@@ -435,8 +435,8 @@ void insert_local_entity_into_parents_child_list (entity *en, list_types type, e
 	#if DEBUG_MODULE_VALIDATE_LISTS
 	{
 		entity
-			*item,
-			*current_parent;
+			*item = nullptr,
+			*current_parent = nullptr;
 
 		current_parent = get_local_entity_parent (en, type);
 
@@ -542,9 +542,9 @@ int local_entity_is_in_list(entity* en, list_types list, entity* search_object)
 void delete_local_entity_from_parents_child_list (entity *en, list_types type)
 {
 	entity
-		*parent,
-		*succ,
-		*pred;
+		*parent = nullptr,
+		*succ = nullptr,
+		*pred = nullptr;
 
 	ASSERT (en);
 
@@ -589,7 +589,7 @@ void delete_local_entity_from_parents_child_list (entity *en, list_types type)
 void unlink_local_entity_children (entity *en, list_types list)
 {
 	entity
-		*child;
+		*child = nullptr;
 
 	ASSERT (en);
 
@@ -606,8 +606,8 @@ void unlink_local_entity_children (entity *en, list_types list)
 entity *get_local_entity_child_succ_circular (entity *en, list_types type)
 {
 	entity
-		*succ,
-		*parent;
+		*succ = nullptr,
+		*parent = nullptr;
 
 	ASSERT (en);
 
@@ -632,9 +632,9 @@ entity *get_local_entity_child_succ_circular (entity *en, list_types type)
 entity *get_local_entity_child_pred_circular (entity *en, list_types type)
 {
 	entity
-		*pred,
-		*succ,
-		*parent;
+		*pred = nullptr,
+		*succ = nullptr,
+		*parent = nullptr;
 
 	ASSERT (en);
 
@@ -897,7 +897,7 @@ int get_local_entity_list_size (entity *parent, list_types type)
 {
 
 	entity
-		*child;
+		*child = nullptr;
 
 	int
 		count;

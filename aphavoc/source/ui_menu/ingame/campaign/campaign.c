@@ -73,17 +73,17 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*campaign_screen,
+	*campaign_screen = nullptr,
 	*campaign_page [NUM_CAMPAIGN_PAGES];
 
 static ui_object
-	*campaign_full_screen_mask_area,
-	*campaign_dialog_area,
-	*campaign_complete_area,
-	*campaign_complete_side,
-	*campaign_complete_reason,
-	*campaign_quit_mission_area,
-	*campaign_quit_campaign_area;
+	*campaign_full_screen_mask_area = nullptr,
+	*campaign_dialog_area = nullptr,
+	*campaign_complete_area = nullptr,
+	*campaign_complete_side = nullptr,
+	*campaign_complete_reason = nullptr,
+	*campaign_quit_mission_area = nullptr,
+	*campaign_quit_campaign_area = nullptr;
 
 static texture_graphic
 	*blue_campaign_complete_graphic = NULL,
@@ -369,7 +369,7 @@ static void notify_campaign_cancel_quit_mission_button (ui_object *obj, void *ar
 static void campaign_accept_quit_mission (event *ev)
 {
 	entity
-		*task;
+		*task = nullptr;
 
 	campaign_cancel_quit_mission (ev);
 
@@ -560,7 +560,7 @@ void setup_campaign_quit_campaign_dialog (void)
 void initialise_campaign_screen (void)
 {
 	ui_object
-		*temp;
+		*temp = nullptr;
 
 	float
 		x1,
@@ -1097,7 +1097,7 @@ void campaign_completed (entity_sides side, campaign_completed_types complete)
 {
 
 	player_log_type
-		*log;
+		*log = nullptr;
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -1154,8 +1154,8 @@ void campaign_completed (entity_sides side, campaign_completed_types complete)
 void campaign_screen_show_external_view_entity (event *ev)
 {
 	entity
-		*en,
-		*group;
+		*en = nullptr,
+		*group = nullptr;
 
 	//
 	// Switch back to campaign screen

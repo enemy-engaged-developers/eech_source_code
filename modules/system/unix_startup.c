@@ -129,7 +129,7 @@ struct exit_struct
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SDL_Surface
-	*application_window;
+	*application_window = nullptr;
 
 int
 	argc;
@@ -150,7 +150,7 @@ Uint32
 	system_thread_id = 0;
 
 SDL_Thread
-	*application_thread_handle;
+	*application_thread_handle = nullptr;
 
 char
 	application_current_directory[1024];
@@ -233,7 +233,7 @@ int main(int m_argc, char **m_argv)
 		terminated;
 
 	SDL_Event
-		*input_events;
+		*input_events = nullptr;
 
 	argc = m_argc;
 	argv = m_argv;
@@ -355,7 +355,7 @@ void set_application_current_directory ( void )
 {
 
 	char
-		*ptr;
+		*ptr = nullptr;
 
 	getcwd ( application_current_directory, sizeof ( application_current_directory ) );
 /*
@@ -869,7 +869,7 @@ struct EXCEPTION_DETAILS
 		code;
 
 	char
-		*reason;
+		*reason = nullptr;
 };
 
 typedef struct EXCEPTION_DETAILS exception_details;
@@ -916,19 +916,19 @@ long application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData )
 {
 
 	EXCEPTION_RECORD
-		*exception_record;
+		*exception_record = nullptr;
 
 	CONTEXT
-		*context_record;
+		*context_record = nullptr;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	int
 		count;
 
 	DWORD
-		*memory;
+		*memory = nullptr;
 
 	fp = fopen ( "crash.log", "w" );
 

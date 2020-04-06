@@ -85,7 +85,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		damage_modifier;
 
 	entity
-		*aggressor;
+		*aggressor = nullptr;
 
 	#if DEBUG_MODULE
 

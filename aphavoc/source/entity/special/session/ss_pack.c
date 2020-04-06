@@ -97,7 +97,7 @@ static void pack_local_data (entity *en, pack_modes mode)
       ////////////////////////////////////////
       {
          session
-            *raw;
+            *raw = nullptr;
 
          raw = (session *) get_local_entity_data (en);
 
@@ -230,10 +230,10 @@ void overload_session_pack_functions (void)
 void pack_local_session_data (pack_modes mode)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
    ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 
@@ -494,10 +494,10 @@ void pack_local_session_data (pack_modes mode)
 void unpack_local_session_data (pack_modes mode)
 {
 	session
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		index;

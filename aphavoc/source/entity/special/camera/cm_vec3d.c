@@ -85,7 +85,7 @@
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -125,7 +125,7 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -167,10 +167,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (camera *) get_local_entity_data (en);
 

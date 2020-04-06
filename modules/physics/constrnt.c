@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 constraint_forces
-	*constraint_force_list_head;
+	*constraint_force_list_head = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ void apply_constraint_forces (int index)
 		torque;
 
 	rigid_body_dynamics
-		*rb;
+		*rb = nullptr;
 
 	rb = rigid_body_list_head;
 	
@@ -133,7 +133,7 @@ void add_constraint_force (rigid_body_dynamics *rb, double_vec3d *force, double_
 {
 
 	constraint_forces
-		*new_constraint;
+		*new_constraint = nullptr;
 
 	// debug
 	//if ((get_3d_double_vector_magnitude (force) > 0.5))
@@ -194,7 +194,7 @@ void calculate_constraint_force_and_torque (rigid_body_dynamics *rb, double_vec3
 		t;
 
 	constraint_forces
-		*cf;
+		*cf = nullptr;
 
 	force->x = 0.0;
 	force->y = 0.0;
@@ -281,13 +281,13 @@ void recursively_add_constraint_force (rigid_body_dynamics *owner, rigid_body_dy
 {
 
 	rigid_body_dynamics
-		*victim;
+		*victim = nullptr;
 
 	double
 		mag;
 
 	connection_type
-		*connection;
+		*connection = nullptr;
 
 	double_vec3d
 		new_torque,
@@ -372,8 +372,8 @@ void destroy_constraint_forces (void)
 {
 
 	constraint_forces
-		*destroy_cf,
-		*cf;
+		*destroy_cf = nullptr,
+		*cf = nullptr;
 
 	cf = constraint_force_list_head;
 

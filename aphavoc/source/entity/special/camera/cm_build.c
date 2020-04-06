@@ -104,7 +104,7 @@ void reset_building_camera (camera *raw)
 void reset_building_camera_values (entity *en)
 {
 	camera
-		*raw;
+		*raw = nullptr;
 
 	float
 		dx,
@@ -115,7 +115,7 @@ void reset_building_camera_values (entity *en)
 		object_3d_index;
 
 	object_3d_bounds
-		*bounding_box;
+		*bounding_box = nullptr;
 
 	ASSERT (en);
 

@@ -74,7 +74,7 @@ static void create_screen_ui_object (ui_object *obj, ui_object_types type, va_li
 {
 
    screen_ui_object
-      *new_screen;
+      *new_screen = nullptr;
 
 	increase_ui_object_counter ();
 

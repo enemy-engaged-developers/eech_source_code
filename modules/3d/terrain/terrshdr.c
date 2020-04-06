@@ -83,10 +83,10 @@ void draw_3d_terrain_default_short_clipped_fan_word_face ( int number_of_points 
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -151,10 +151,10 @@ void draw_3d_terrain_default_short_clipped_fan_byte_face ( int number_of_points 
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -245,10 +245,10 @@ void draw_3d_terrain_default_short_clipped_strip_word_face ( int number_of_point
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -327,10 +327,10 @@ void draw_3d_terrain_default_short_clipped_strip_byte_face ( int number_of_point
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -435,10 +435,10 @@ void draw_3d_terrain_texture_x_short_clipped_strip_word_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -517,10 +517,10 @@ void draw_3d_terrain_texture_x_short_clipped_strip_byte_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -625,10 +625,10 @@ void draw_3d_terrain_texture_z_short_clipped_strip_word_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -707,10 +707,10 @@ void draw_3d_terrain_texture_z_short_clipped_strip_byte_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -817,10 +817,10 @@ void draw_3d_terrain_texture_x_colour_short_clipped_strip_word_face ( int number
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -901,10 +901,10 @@ void draw_3d_terrain_texture_x_colour_short_clipped_strip_byte_face ( int number
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -1011,10 +1011,10 @@ void draw_3d_terrain_texture_z_colour_short_clipped_strip_word_face ( int number
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1095,10 +1095,10 @@ void draw_3d_terrain_texture_z_colour_short_clipped_strip_byte_face ( int number
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -1205,10 +1205,10 @@ void draw_3d_terrain_transparent_short_clipped_fan_word_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1275,10 +1275,10 @@ void draw_3d_terrain_transparent_short_clipped_fan_byte_face ( int number_of_poi
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -1371,10 +1371,10 @@ void draw_3d_terrain_transparent_texture_x_short_clipped_strip_word_face ( int n
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1455,10 +1455,10 @@ void draw_3d_terrain_transparent_texture_x_short_clipped_strip_byte_face ( int n
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -1565,10 +1565,10 @@ void draw_3d_terrain_transparent_texture_z_short_clipped_strip_word_face ( int n
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1649,10 +1649,10 @@ void draw_3d_terrain_transparent_texture_z_short_clipped_strip_byte_face ( int n
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];
@@ -1761,10 +1761,10 @@ void draw_3d_terrain_water_short_clipped_fan_word_face ( int number_of_points )
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_word_reference
-		*point_refs,
+		*point_refs = nullptr,
 		fan_point_refs[3];
 
 	int
@@ -1886,10 +1886,10 @@ void draw_3d_terrain_water_short_clipped_fan_byte_face ( int number_of_points )
 {
 
 	short_vertex
-		*poly;
+		*poly = nullptr;
 
 	terrain_3d_point_byte_reference
-		*point_refs;
+		*point_refs = nullptr;
 
 	terrain_3d_point_word_reference
 		fan_point_refs[3];

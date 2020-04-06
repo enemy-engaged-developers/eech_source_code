@@ -94,7 +94,7 @@ static void display_target_information (void);
 #define HUD_VIEWPORT_SMALL_SIZE		(128)
 
 static env_2d
-	*hud_env;
+	*hud_env = nullptr;
 
 static float
 	hud_viewport_size,
@@ -126,7 +126,7 @@ static float
 
 static screen
 	*hud_texture_screen = NULL,
-	*outside_hud_texture_screen;
+	*outside_hud_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour;
@@ -654,14 +654,14 @@ static void draw_heading_scale (void)
 	if (!hokum_damage.navigation_computer)
 	{
 		entity
-			*wp;
+			*wp = nullptr;
 
 		wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
 		if (wp)
 		{
 			vec3d
-				*gunship_position,
+				*gunship_position = nullptr,
 				waypoint_position;
 
 			float
@@ -1045,11 +1045,11 @@ static void display_waypoint_information (void)
 		width;
 
 	entity
-		*en,
-		*wp;
+		*en = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*en_position,
+		*en_position = nullptr,
 		wp_position;
 
 	en = get_gunship_entity ();
@@ -1595,7 +1595,7 @@ void draw_external_hokum_hud (void)
 static void draw_hms_centre_datum (void)
 {
 /*	vec3d
-		*source_position,
+		*source_position = nullptr,
 		position;
 
 	object_3d_visibility
@@ -1772,11 +1772,11 @@ static void draw_target_marker (void)
 		target_range;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_position,
 		intercept_point;
 
@@ -1959,7 +1959,7 @@ static void display_weapon_information (void)
 static void display_target_information (void)
 {
 	const char
-		*s;
+		*s = nullptr;
 
 	char
 		buffer[200];
@@ -1968,8 +1968,8 @@ static void display_target_information (void)
 		width;
 
 	entity
-		*target,
-		*source;
+		*target = nullptr,
+		*source = nullptr;
 
 	int has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
 

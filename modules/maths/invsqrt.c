@@ -83,7 +83,7 @@ void initialise_inverse_square_root_table ( void )
 		f;
 
 	unsigned int
-		*h;
+		*h = nullptr;
 
 	union FLOAT_AND_INT
 		fi,

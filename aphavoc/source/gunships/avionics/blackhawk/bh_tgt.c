@@ -407,8 +407,8 @@ void update_blackhawk_target_acquisition_system (void)
 
 	{
 		entity
-			*source,
-			*target;
+			*source = nullptr,
+			*target = nullptr;
 
 		int
 			radar_on,

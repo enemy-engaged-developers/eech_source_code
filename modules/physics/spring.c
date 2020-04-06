@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 spring_type
-	*spring_list_head;
+	*spring_list_head = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ void initialise_springs (void)
 {
 
 	spring_type
-		*destroy_spring;
+		*destroy_spring = nullptr;
 
 	while (spring_list_head)
 	{
@@ -110,7 +110,7 @@ spring_type *create_spring (float length, float max_compression_percentage, floa
 {
 
 	spring_type
-		*new_spring;
+		*new_spring = nullptr;
 	
 	new_spring = (spring_type *) malloc_heap_mem (sizeof (spring_type));
 
@@ -152,7 +152,7 @@ void update_springs (struct OBJECT *obj, rigid_body_dynamics *rb)
 {
 
 	spring_type
-		*current_spring;
+		*current_spring = nullptr;
 
 	current_spring = spring_list_head;
 
@@ -229,7 +229,7 @@ void draw_springs (void)
 {
 
 	spring_type
-		*current_spring;
+		*current_spring = nullptr;
 
 	current_spring = spring_list_head;
 
@@ -293,7 +293,7 @@ float calculate_total_spring_energy (void)
 		epe;
 
 	spring_type
-		*current_spring;
+		*current_spring = nullptr;
 
 	current_spring = spring_list_head;
 

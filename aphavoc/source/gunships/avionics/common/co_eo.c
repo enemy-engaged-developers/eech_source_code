@@ -145,7 +145,7 @@ static float
 	time_until_next_co_pilot_sweep;
 
 entity
-	*next_cpg_target_report,
+	*next_cpg_target_report = nullptr,
 	*slave_target = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ entity
 struct EO_TARGET
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	float
 		sqr_range,
@@ -165,14 +165,14 @@ struct EO_TARGET
 		target_position;
 
 	struct EO_TARGET
-		*succ,
-		*pred;
+		*succ = nullptr,
+		*pred = nullptr;
 };
 
 typedef struct EO_TARGET eo_target;
 
 static eo_target
-	*eo_target_root;
+	*eo_target_root = nullptr;
 
 static int
 	laser_active = FALSE,
@@ -337,8 +337,8 @@ static void initialise_eo_target_list (void)
 static void deinitialise_eo_target_list (void)
 {
 	eo_target
-		*this_eo_target,
-		*succ;
+		*this_eo_target = nullptr,
+		*succ = nullptr;
 
 	this_eo_target = eo_target_root;
 
@@ -361,9 +361,9 @@ static void deinitialise_eo_target_list (void)
 static void insert_entity_into_eo_target_list (entity *target, float sqr_range, float radius, vec3d *target_position)
 {
 	eo_target
-		*new_,
-		*succ,
-		*pred;
+		*new_ = nullptr,
+		*succ = nullptr,
+		*pred = nullptr;
 
 	int
 		insert;
@@ -728,13 +728,13 @@ float get_eo_los_intercept_point(vec3d* intercept_point)
 static void update_eo_visibility (void)
 {
 	vec3d
-		*position;
+		*position = nullptr;
 
 	// start full_eo_range by GCsDriver  08-12-2007
 //	if (command_line_eo_full_range)
 	{
 		entity
-			*current_target;
+			*current_target = nullptr;
 
 		update_eo_max_visual_range();
 
@@ -818,10 +818,10 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 		los_test_distance;
 
 	entity
-		*source,
-		*target,
-		*this_sector,
-		*eo_boresight_target;
+		*source = nullptr,
+		*target = nullptr,
+		*this_sector = nullptr,
+		*eo_boresight_target = nullptr;
 
 	vec3d
 		target_position,
@@ -831,7 +831,7 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 		face_normal;
 
 	eo_target
-		*this_eo_target;
+		*this_eo_target = nullptr;
 
 	object_3d_index_numbers
 		object_3d_index;
@@ -1102,9 +1102,9 @@ static entity *get_eo_boresight_target (void)
 		range;
 
 	entity
-		*target,
-		*first_pass_target,
-		*second_pass_target;
+		*target = nullptr,
+		*first_pass_target = nullptr,
+		*second_pass_target = nullptr;
 
 	vec3d
 		los_unit_vector,
@@ -1170,8 +1170,8 @@ void update_common_eo (void)
 		flat_range;
 
 	entity
-		*current_target,
-		*new__target;
+		*current_target = nullptr,
+		*new__target = nullptr;
 
 	viewpoint
 		vp;
@@ -1572,11 +1572,11 @@ void slave_common_eo_to_position (vec3d* target_position)
 static int get_selectable_eo_target (entity *target)
 {
 	entity
-		*source,
-		*boresight_target;
+		*source = nullptr,
+		*boresight_target = nullptr;
 
 	vec3d
-		*source_position,
+		*source_position = nullptr,
 		target_position,
 		target_vector,
 		offset_vector;
@@ -1686,9 +1686,9 @@ static int get_selectable_eo_target (entity *target)
 void select_next_eo_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1747,9 +1747,9 @@ void select_next_eo_target (void)
 void select_previous_eo_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1870,9 +1870,9 @@ float make_panning_offset_from_axis (long state)
 void select_next_designated_eo_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -1924,9 +1924,9 @@ void select_next_designated_eo_target (void)
 void select_previous_designated_eo_target (void)
 {
 	entity
-		*target,
-		*new__target,
-		*current_target;
+		*target = nullptr,
+		*new__target = nullptr,
+		*current_target = nullptr;
 
 	new__target = NULL;
 
@@ -2689,13 +2689,13 @@ static void co_pilot_perform_eo_scan(void)
 		sqr_scan_range;
 
 	entity
-		*source,
-		*target,
-		*sector;
+		*source = nullptr,
+		*target = nullptr,
+		*sector = nullptr;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		cw_sweep_start_position,
 		cw_sweep_end_position;
 

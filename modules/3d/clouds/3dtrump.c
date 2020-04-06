@@ -59,13 +59,7 @@
 // 
 
 
-
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include	"3d.h"
+#include "3d.h"
 
 #include "graphics.h"
 
@@ -89,7 +83,7 @@ typedef struct CLOUD_TRUMPET_TEXTURE_INFO cloud_trumpet_texture_info;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*cloud_trumpet_object;
+	*cloud_trumpet_object = nullptr;
 
 static cloud_trumpet_texture_info
 	cloud_trumpet_texture_values[256];
@@ -137,16 +131,16 @@ void draw_3d_cloud_trumpet ( void )
 		num_faces;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	object_3d_info
-		*this_object_3d_info;
+		*this_object_3d_info = nullptr;
 
 	object_3d_info
 		object_base;
 
 	object_3d_instance
-		*obj;
+		*obj = nullptr;
 
 	//
 	// Construct an attitude matrix from the visual viewpoint
@@ -349,11 +343,11 @@ void transform_3d_cloud_trumpet ( object_3d *object, viewpoint *vp, vec3d *relat
 		number_of_points;
 
 	object_short_3d_point
-		*points;
+		*points = nullptr;
 
 	vertex
-		*last_transformed_point,
-		*result_points,
+		*last_transformed_point = nullptr,
+		*result_points = nullptr,
 		tmp_vertex;
 
 	float
@@ -369,7 +363,7 @@ void transform_3d_cloud_trumpet ( object_3d *object, viewpoint *vp, vec3d *relat
 		iymin;
 
 	cloud_trumpet_texture_info
-		*texture_values;
+		*texture_values = nullptr;
 
 	//
 	// We only need the fpu to be in single precision mode
@@ -525,7 +519,7 @@ void render_3d_cloud_trumpet_face ( object_3d_face *this_face, int surface_index
 {
 
 	face_surface_description
-		*surface;
+		*surface = nullptr;
 
 	clip_3d_coord = 0;
 
@@ -535,13 +529,13 @@ void render_3d_cloud_trumpet_face ( object_3d_face *this_face, int surface_index
 	{
 
 		vertex
-			*poly;
+			*poly = nullptr;
 
 		int
 			outcode;
 	
 		point_3d_plain_reference
-			*point_list;
+			*point_list = nullptr;
 
 		point_list = NULL;	//objects_3d_data[object_base->object_number].object_faces_point_plain_list;
 
@@ -688,4 +682,3 @@ vertex *construct_3d_cloud_trumpet_polygon ( int num_points, point_3d_plain_refe
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

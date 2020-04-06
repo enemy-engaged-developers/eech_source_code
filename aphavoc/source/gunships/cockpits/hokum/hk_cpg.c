@@ -1329,7 +1329,7 @@ static void update_co_pilot_head_animation (void)
 static void update_co_pilot_animation (void)
 {
 	co_pilot_anim_data
-		*anim_data;
+		*anim_data = nullptr;
 
 	////////////////////////////////////////
 	//

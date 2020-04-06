@@ -79,7 +79,7 @@
 static int response_to_collision (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*aggressor;
+		*aggressor = nullptr;
 
 	int
 		total_damage_level;
@@ -157,7 +157,7 @@ static int response_to_articulate_loading_doors (entity_messages message, entity
 		sample_index;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	#if DEBUG_MODULE
 

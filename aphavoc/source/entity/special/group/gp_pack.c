@@ -87,7 +87,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			group
-				*raw;
+				*raw = nullptr;
 
 			raw = (group *) get_local_entity_data (en);
 
@@ -213,7 +213,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 			group
-				*raw;
+				*raw = nullptr;
 
 			raw = (group *) get_local_entity_data (en);
 
@@ -344,7 +344,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			group
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -453,7 +453,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 					list_type;
 	
 				entity
-					*force;
+					*force = nullptr;
 	
 				list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 	
@@ -480,7 +480,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			group
-				*raw;
+				*raw = nullptr;
 
 			//
 			// create entity
@@ -578,7 +578,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 					list_type;
 	
 				entity
-					*force;
+					*force = nullptr;
 	
 				list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 	
@@ -633,10 +633,10 @@ void overload_group_pack_functions (void)
 void pack_local_group_data (pack_modes mode)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	if ((mode != PACK_MODE_SERVER_SESSION) && (mode != PACK_MODE_CLIENT_SESSION))
 	{
@@ -688,10 +688,10 @@ void unpack_local_group_data (pack_modes mode)
 {
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	if ((mode != PACK_MODE_SERVER_SESSION) && (mode != PACK_MODE_CLIENT_SESSION))
 	{
@@ -737,11 +737,11 @@ void unpack_local_group_data (pack_modes mode)
 void validate_local_group_data (void)
 {
 	entity
-		*force,
-		*en;
+		*force = nullptr,
+		*en = nullptr;
 
 	group
-		*raw;
+		*raw = nullptr;
 
 	//
 	// re-calculate group division names (Cannot be done until all groups + divisions are unpacked)

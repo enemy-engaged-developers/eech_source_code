@@ -74,7 +74,7 @@ static float get_list_ui_object_y_size (ui_object *obj)
 {
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 
 	parent = get_ui_object_parent (obj);
 

@@ -93,7 +93,7 @@ static void pack_local_data (entity *en, pack_modes mode)
       ////////////////////////////////////////
       {
          pilot
-            *raw;
+            *raw = nullptr;
 
          raw = (pilot *) get_local_entity_data (en);
 
@@ -136,7 +136,7 @@ static void pack_local_data (entity *en, pack_modes mode)
       ////////////////////////////////////////
       {
          pilot
-            *raw;
+            *raw = nullptr;
 
          raw = (pilot *) get_local_entity_data (en);
 
@@ -203,7 +203,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
             index;
 
          pilot
-            *raw;
+            *raw = nullptr;
 
          //
          // create entity
@@ -259,7 +259,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
             index;
 
          pilot
-            *raw;
+            *raw = nullptr;
 
          //
          // create entity

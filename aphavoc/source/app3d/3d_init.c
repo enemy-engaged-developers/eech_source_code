@@ -1588,7 +1588,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				interference;
 
 			camera
-				*raw;
+				*raw = nullptr;
 
 
 			//

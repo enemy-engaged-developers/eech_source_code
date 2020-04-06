@@ -80,9 +80,9 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 {
 
 	entity
-		*force,
-		*enemy_force,
-		*aggressor;
+		*force = nullptr,
+		*enemy_force = nullptr,
+		*aggressor = nullptr;
 
 	int
 		damage_caused,
@@ -137,8 +137,8 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 						vec3d
 							rel_pos,
 							rel_vec,
-							*en_pos,
-							*weapon_pos;
+							*en_pos = nullptr,
+							*weapon_pos = nullptr;
 	
 						matrix3x3
 							m,
@@ -230,7 +230,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 static int response_to_articulate_loading_doors (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	sound_sample_indices
 		sound_sample_index;

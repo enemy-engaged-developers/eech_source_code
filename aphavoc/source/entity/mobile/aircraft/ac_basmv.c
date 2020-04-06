@@ -79,10 +79,10 @@
 void basic_aircraft_movement (entity *en)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*wp;
+		*wp = nullptr;
 
 	vec3d
 		wp_pos,

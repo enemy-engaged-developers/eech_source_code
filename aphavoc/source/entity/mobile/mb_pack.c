@@ -125,7 +125,7 @@ void pack_mobile_data (entity *en, mobile *raw, pack_modes mode)
 					root;
 
 				entity
-					*spec;
+					*spec = nullptr;
 
 				pack_int_value (en, INT_TYPE_VALID, TRUE);
 
@@ -341,7 +341,7 @@ int pack_mobile_local_sound_effects (entity *mobile, pack_modes mode)
 		count;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	entity_sub_types
 		sub_type;

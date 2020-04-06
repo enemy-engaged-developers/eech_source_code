@@ -79,7 +79,7 @@
 static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -119,7 +119,7 @@ static void set_local_raw_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -138,9 +138,9 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 		////////////////////////////////////////
 		{
 			entity
-				*special_effect,
-				*old_sector,
-				*new_sector;
+				*special_effect = nullptr,
+				*old_sector = nullptr,
+				*new_sector = nullptr;
 
 			raw->mob.position = *v;
 
@@ -250,7 +250,7 @@ static void set_client_vec3d (entity *en, vec3d_types type, vec3d *v)
 static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (v);
 
@@ -284,10 +284,10 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	weapon
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*v;
+		*v = nullptr;
 
 	raw = (weapon *) get_local_entity_data (en);
 

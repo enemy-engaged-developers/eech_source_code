@@ -101,7 +101,7 @@
 void animate_vehicle_loading_doors( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the doors on the 3d objects
@@ -135,7 +135,7 @@ void animate_vehicle_loading_doors( entity *en )
 void update_vehicle_loading_doors( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		door_state;
@@ -199,7 +199,7 @@ void update_vehicle_loading_doors( entity *en )
 void animate_vehicle_weapon_system_ready( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the "weapon system readies" on the 3d objects
@@ -224,7 +224,7 @@ void animate_vehicle_weapon_system_ready( entity *en )
 void update_vehicle_weapon_system_ready( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		wsr_state;
@@ -280,7 +280,7 @@ void update_vehicle_weapon_system_ready( entity *en )
 void animate_vehicle_radar( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	//
 	// articulate the radar on the 3d objects
@@ -305,7 +305,7 @@ void animate_vehicle_radar( entity *en )
 void update_vehicle_radar( entity *en )
 {
 	vehicle
-		*raw;
+		*raw = nullptr;
 
 	//
 	// updates the radar rotation ( regardless of whether the vehicle is drawn or not )
@@ -331,7 +331,7 @@ void update_vehicle_radar( entity *en )
 void set_vehicle_headlight_state (entity *en, int state)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	ASSERT (en);
 

@@ -60,11 +60,6 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include "graphics.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,13 +92,13 @@ int
 	current_number_of_translucent_vertices;
 
 polygon_buffer
-	*active_translucent_sorted_polygon_buffer,
+	*active_translucent_sorted_polygon_buffer = nullptr,
 	translucent_polygon_buffers[MAX_TRANSLUCENT_POLYGON_BUFFERS];
 
 buffered_polygon
-	*buffered_sorted_translucent_polygons_head,
-	*buffered_sorted_translucent_polygons_tail,
-	*buffered_sorted_translucent_polygons_insert,
+	*buffered_sorted_translucent_polygons_head = nullptr,
+	*buffered_sorted_translucent_polygons_tail = nullptr,
+	*buffered_sorted_translucent_polygons_insert = nullptr,
 	buffered_translucent_polygons_array[MAX_BUFFERED_TRANSLUCENT_POLYGONS];
 
 TLVERTEX
@@ -234,7 +229,7 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 {
 
 	buffered_polygon
-		*polygon;
+		*polygon = nullptr;
 
 	//
 	// First, flush all the buffered primitives!
@@ -316,8 +311,8 @@ static void add_buffered_sorted_translucent_polygon ( int index )
 	{
 
 		buffered_polygon
-			*previous_polygon,
-			*this_polygon;
+			*previous_polygon = nullptr,
+			*this_polygon = nullptr;
 
 		this_polygon = buffered_sorted_translucent_polygons_insert;
 
@@ -575,10 +570,10 @@ buffered_polygon * buffer_wbuffered_plain_polygon ( vertex *polygon, real_colour
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		distance;
@@ -677,10 +672,10 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_polygon ( vertex *polygon, fl
 		b;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		fr,
@@ -803,10 +798,10 @@ buffered_polygon * buffer_wbuffered_flat_shaded_textured_polygon ( vertex *polyg
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		distance;
@@ -905,10 +900,10 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_polygon ( vertex *po
 		number_of_vertices;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		distance;
@@ -1011,10 +1006,10 @@ buffered_polygon * buffer_wbuffered_flat_shaded_textured_line ( vertex *polygon,
 {
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		distance;
@@ -1096,10 +1091,10 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_line ( vertex *polyg
 {
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	TLVERTEX
-		*vptr;
+		*vptr = nullptr;
 
 	float
 		distance;
@@ -1182,4 +1177,3 @@ buffered_polygon * buffer_wbuffered_gouraud_shaded_textured_line ( vertex *polyg
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

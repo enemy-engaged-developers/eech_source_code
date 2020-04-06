@@ -107,10 +107,10 @@ void pack_local_city_building_data (pack_modes mode)
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	city_building
-		*raw;
+		*raw = nullptr;
 
 	int
 		city_building_pack_size,
@@ -186,11 +186,11 @@ void unpack_local_city_building_data (pack_modes mode)
 {
 
 	city_building
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*destroy_en,
-		*en;
+		*destroy_en = nullptr,
+		*en = nullptr;
 
 	int
 		city_building_count,

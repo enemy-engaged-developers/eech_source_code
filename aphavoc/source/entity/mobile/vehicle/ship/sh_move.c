@@ -85,15 +85,15 @@ static int clear_ship_fires (entity *ship_en, entity_sub_types type);
 static void ship_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 {
 	entity
-		*wp,
-		*group,
-		*guide;
+		*wp = nullptr,
+		*group = nullptr,
+		*guide = nullptr;
 
 	float
 		distance;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	ASSERT (en);
 
@@ -145,14 +145,14 @@ static void ship_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 			//
 	
 			entity
-				*task_leader;
+				*task_leader = nullptr;
 	
 			vec3d
-				*xv,
-				*leader_pos;
+				*xv = nullptr,
+				*leader_pos = nullptr;
 	
 			formation_type
-				*formation;
+				*formation = nullptr;
 	
 			int
 				type,
@@ -237,11 +237,11 @@ static void ship_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 void ship_vehicle_movement (entity *en)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide,
-		*current_waypoint;
+		*guide = nullptr,
+		*current_waypoint = nullptr;
 
 	vec3d
 		wp_pos,
@@ -461,7 +461,7 @@ void ship_vehicle_death_movement (entity *en)
 {
 
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed,
@@ -470,8 +470,8 @@ void ship_vehicle_death_movement (entity *en)
 		roll;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	raw = (ship_vehicle *) get_local_entity_data (en);
@@ -533,7 +533,7 @@ void ship_vehicle_death_movement (entity *en)
 	{
 
 		struct OBJECT_3D_BOUNDS
-			*bounding_box;
+			*bounding_box = nullptr;
 
 		vec3d
 			d;
@@ -567,10 +567,10 @@ void ship_vehicle_death_movement (entity *en)
 int clear_ship_fires (entity *ship_en, entity_sub_types type)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	en = get_local_entity_first_child (ship_en, LIST_TYPE_SPECIAL_EFFECT);
 

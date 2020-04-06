@@ -802,7 +802,7 @@ void full_initialise_game (void)
 	// INITIALISE DIRECT PLAY
 	//
 	////////////////////////////////////////
-
+#ifdef MULTIPLAYER
 	debug_log ( "Initialising direct play" );
 
 	sprintf (buffer, "%s...%s", get_trans ("Loading"), get_trans ("Comms System"));
@@ -811,7 +811,6 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
-#ifndef OGRE_EE
 	direct_play_initialise_system ();
 
 	//
@@ -819,7 +818,7 @@ void full_initialise_game (void)
 	//
 
 	direct_play_register_application ( "COMANCHE HOKUM", "cohokum.exe" );
-#endif
+#endif//MULTIPLAYER
 
 	////////////////////////////////////////
 	//
@@ -944,8 +943,8 @@ void full_initialise_game (void)
 	//
 	////////////////////////////////////////
 
-    if (command_line_wut)
-    {
+	if (command_line_wut)
+	{
 		debug_log ( "reading WUT file %s",WUT_filename );
 /*
 //VJ 030807 moved to beginning of this function as separate ui_object
@@ -955,8 +954,8 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 */
-    	parse_WUT_file(WUT_filename);
-    }
+		parse_WUT_file(WUT_filename);
+	}
 
 	////////////////////////////////////////
 	//
@@ -1010,8 +1009,8 @@ void full_initialise_game (void)
 
 	initialise_game_initialisation_phases ();
 
-    //Werewolf
-    net_init_heartbeat();
+	//Werewolf
+	net_init_heartbeat();
 
 //	play_avi ( "wenesday.avi", 0 );
 

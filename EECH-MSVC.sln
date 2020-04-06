@@ -1,24 +1,19 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EECH-MSVC", "EECH-MSVC.vcproj", "{6C0F7CD3-E76A-464F-9F04-7B6510901457}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A5FB423F-DAD7-4281-B3A1-72174917712A} = {A5FB423F-DAD7-4281-B3A1-72174917712A}
-		{E532C860-4F7E-4B9B-A70D-9E4E5A7AFBB5} = {E532C860-4F7E-4B9B-A70D-9E4E5A7AFBB5}
-		{6E37A9CD-22E4-4E99-8C0A-FC9D8C998CC7} = {6E37A9CD-22E4-4E99-8C0A-FC9D8C998CC7}
-		{821C3FF0-49CB-4A80-8C58-9F03C35258DF} = {821C3FF0-49CB-4A80-8C58-9F03C35258DF}
-		{D8B035F9-C08F-441E-8B34-5EFB1418FB56} = {D8B035F9-C08F-441E-8B34-5EFB1418FB56}
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EECH-MSVC", "EECH-MSVC.vcxproj", "{6C0F7CD3-E76A-464F-9F04-7B6510901457}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules", "Modules.vcproj", "{6E37A9CD-22E4-4E99-8C0A-FC9D8C998CC7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules", "Modules.vcxproj", "{6E37A9CD-22E4-4E99-8C0A-FC9D8C998CC7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-UserInt2", "Modules-UserInt2.vcproj", "{A5FB423F-DAD7-4281-B3A1-72174917712A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-UserInt2", "Modules-UserInt2.vcxproj", "{A5FB423F-DAD7-4281-B3A1-72174917712A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-Graphics", "Modules-Graphics.vcproj", "{821C3FF0-49CB-4A80-8C58-9F03C35258DF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-Graphics", "Modules-Graphics.vcxproj", "{821C3FF0-49CB-4A80-8C58-9F03C35258DF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-3d", "Modules-3d.vcproj", "{E532C860-4F7E-4B9B-A70D-9E4E5A7AFBB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-3d", "Modules-3d.vcxproj", "{E532C860-4F7E-4B9B-A70D-9E4E5A7AFBB5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-3dTerrain", "Modules-3dTerrain.vcproj", "{D8B035F9-C08F-441E-8B34-5EFB1418FB56}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modules-3dTerrain", "Modules-3dTerrain.vcxproj", "{D8B035F9-C08F-441E-8B34-5EFB1418FB56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,5 +48,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0AF4062-3214-4242-94AC-FD88406A7D99}
 	EndGlobalSection
 EndGlobal

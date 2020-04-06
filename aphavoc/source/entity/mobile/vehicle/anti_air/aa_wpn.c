@@ -79,7 +79,7 @@
 void update_anti_aircraft_weapon_fire (entity *en)
 {
    anti_aircraft
-      *raw;
+      *raw = nullptr;
 
 	int
 		continue_burst_fire;
@@ -88,8 +88,8 @@ void update_anti_aircraft_weapon_fire (entity *en)
 		launch_angle_error;
 
 	vec3d
-		*weapon_vector,
-		*weapon_to_intercept_point_vector;
+		*weapon_vector = nullptr,
+		*weapon_to_intercept_point_vector = nullptr;
 
 	ASSERT (en);
 

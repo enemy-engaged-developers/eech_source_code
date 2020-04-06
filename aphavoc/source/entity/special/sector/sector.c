@@ -103,7 +103,7 @@ void play_sector_keysite_sighted_speech (entity *en, entity *sector_en, entity *
 entity *get_local_sector_entity (vec3d *pos)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		x_sec,
@@ -164,7 +164,7 @@ static float get_local_sector_entity_enemy_defence_level (float *array, entity_s
 float get_local_sector_entity_enemy_surface_to_air_defence_level (entity *sector_en, entity_sides side)
 {
 	sector
-		*raw;
+		*raw = nullptr;
 
 	raw = (sector *) get_local_entity_data (sector_en);
 
@@ -178,7 +178,7 @@ float get_local_sector_entity_enemy_surface_to_air_defence_level (entity *sector
 float get_local_sector_entity_enemy_surface_to_surface_defence_level (entity *sector_en, entity_sides side)
 {
 	sector
-		*raw;
+		*raw = nullptr;
 
 	raw = (sector *) get_local_entity_data (sector_en);
 
@@ -192,10 +192,10 @@ float get_local_sector_entity_enemy_surface_to_surface_defence_level (entity *se
 float get_sector_importance_level (int sx, int sz, entity_sides side)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -215,10 +215,10 @@ float get_sector_importance_level (int sx, int sz, entity_sides side)
 float get_sector_distance_to_friendly_base (int sx, int sz, entity_sides side)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -302,10 +302,10 @@ float get_local_sector_side_ratio (int sx, int sz, entity_sides side)
 		total;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_raw_sector_entity (sx, sz);
 
@@ -335,11 +335,11 @@ void validate_local_sector_entities (void)
 		entity_z_sector;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	entity
-		*sec,
-		*en;
+		*sec = nullptr,
+		*en = nullptr;
 
 	for (x_sector = 0; x_sector < NUM_MAP_X_SECTORS; x_sector++)
 	{
@@ -374,8 +374,8 @@ void validate_local_sector_entities (void)
 void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 {
 	entity
-		*sec,
-		*group;
+		*sec = nullptr,
+		*group = nullptr;
 
 	float
 		r,
@@ -386,7 +386,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 		side;
 
 	sector
-		*sector_raw;
+		*sector_raw = nullptr;
 
 	int
 		x, z,
@@ -400,7 +400,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 		current_fog_value;
 
 	vec3d
-		*pos,
+		*pos = nullptr,
 		sector_pos;
 
 	ASSERT (en);
@@ -510,7 +510,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 float get_sector_fog_of_war_value (entity *en, entity_sides side)
 {
 	sector
-		*raw;
+		*raw = nullptr;
 		
 	ASSERT (en);
 
@@ -533,10 +533,10 @@ float get_sector_fog_of_war_value (entity *en, entity_sides side)
 void update_sector_fog_of_war (void)
 {
 	entity
-		*sec;
+		*sec = nullptr;
 
 	sector
-		*raw;
+		*raw = nullptr;
 
 	int
 		x, z;
@@ -579,7 +579,7 @@ void update_client_server_sector_fog_of_war (void)
 void update_sector_side_count (void)
 {
 	entity
-		*sec,
+		*sec = nullptr,
 		*force_entity [NUM_ENTITY_SIDES];
 
 	int
@@ -639,7 +639,7 @@ void update_client_server_sector_side_count (void)
 int get_sector_task_type_count (entity *en, entity_sub_types task_type, entity_sides side)
 {
 	entity
-		*task_en;
+		*task_en = nullptr;
 
 	int
 		count;
@@ -668,7 +668,7 @@ int get_sector_task_type_count (entity *en, entity_sub_types task_type, entity_s
 	#if DEBUG_MODULE
 	{
 		sector
-			*raw;
+			*raw = nullptr;
 			
 		raw = (sector *) get_local_entity_data (en);
 		

@@ -101,22 +101,22 @@ static void draw_area_ui_object (ui_object *obj)
 #endif
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 #if 0
 	struct SCREEN
-		*old_active_screen,
-		*memory_graphic;
+		*old_active_screen = nullptr,
+		*memory_graphic = nullptr;
 /*
 	unsigned short int
-		*graphic;
+		*graphic = nullptr;
 
 */
 	unsigned int
-		*data;
+		*data = nullptr;
 
 	ui_object
-		*parent;
+		*parent = nullptr;
 #endif
 
 	if (get_ui_object_redraw (obj))
@@ -185,7 +185,7 @@ static void draw_area_ui_object (ui_object *obj)
 				{
 
 					rgb_data
-						*graphic;
+						*graphic = nullptr;
 
 					if (!get_ui_object_clear (obj))
 					{
@@ -222,7 +222,7 @@ static void draw_area_ui_object (ui_object *obj)
 					{
 
 						texture_graphic
-							*graphic;
+							*graphic = nullptr;
 
 						if ((get_ui_object_state (obj) == UI_OBJECT_STATE_ON) && (get_ui_object_selected_texture_graphic (obj)))
 						{
@@ -301,7 +301,7 @@ static void draw_area_ui_object (ui_object *obj)
 							t;
 
 						texture_graphic
-							*graphic;
+							*graphic = nullptr;
 
 						graphic = get_ui_object_texture_graphic (obj);
 
@@ -388,7 +388,7 @@ static void draw_area_ui_object (ui_object *obj)
 				{
 
 					rgb_data
-						*graphic;
+						*graphic = nullptr;
 
 					if (!get_ui_object_clear (obj))
 					{
@@ -422,7 +422,7 @@ static void draw_area_ui_object (ui_object *obj)
 				{
 
 					struct ZOOMABLE_GRAPHIC
-						*zoomable_graphic;
+						*zoomable_graphic = nullptr;
 
 					if (!get_ui_object_clear (obj))
 					{
@@ -471,7 +471,7 @@ static void draw_area_ui_object (ui_object *obj)
 			{
 
 				const char
-					*text_ptr;
+					*text_ptr = nullptr;
 
 				int
 					count;
@@ -575,7 +575,7 @@ static void tool_tips_draw_area_ui_object (ui_object *obj)
 		{
 
 			const char
-				*text;
+				*text = nullptr;
 
 			float
 				x,

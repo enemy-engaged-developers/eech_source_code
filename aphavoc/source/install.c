@@ -77,7 +77,7 @@ void add_file_to_uninstall_log ( const char *filename )
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		full_filename[1024];

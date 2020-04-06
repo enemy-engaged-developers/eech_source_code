@@ -81,7 +81,7 @@
 void reset_satellite_camera (camera *raw)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	vec3d
 		pos,
@@ -185,7 +185,7 @@ void update_satellite_camera (camera *raw)
 		pos;*/
 
 	entity
-		*en;
+		*en = nullptr;
 	
 	ASSERT (raw);
 	

@@ -87,7 +87,7 @@ void render_3d_object_triangle_non_textured_fan ( int num_points, point_3d_plain
 		this_point;
 
 	vertex
-		*vert;
+		*vert = nullptr;
 
 	float
 		fr,
@@ -103,7 +103,7 @@ void render_3d_object_triangle_non_textured_fan ( int num_points, point_3d_plain
 		destination_vertices;
 
 	vertex
-		*transformed_points;
+		*transformed_points = nullptr;
 
 	transformed_points = &transformed_3d_points[base_point];
 

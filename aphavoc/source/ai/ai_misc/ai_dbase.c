@@ -120,7 +120,7 @@ void load_ai_sector_data (const char *sector_filename)
 {
 
 	entity
-		*sector;
+		*sector = nullptr;
 
 	int
 		size,
@@ -129,7 +129,7 @@ void load_ai_sector_data (const char *sector_filename)
 		loop_z;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	// JB 030311 Enable running out of separate directories
 	file_ptr = safe_fopen (sector_filename, "rb");
@@ -173,13 +173,13 @@ void initialise_population_name_database (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	population_name_database_type
-		*new_city;
+		*new_city = nullptr;
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	char
 		temp_filename [256];
@@ -307,7 +307,7 @@ void deinitialise_population_name_database (void)
 	{
 
 		population_name_database_type
-			*destroy_city;
+			*destroy_city = nullptr;
 
 		while (population_name_database)
 		{

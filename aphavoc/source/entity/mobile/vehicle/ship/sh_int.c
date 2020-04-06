@@ -79,7 +79,7 @@
 static int get_local_int_value (entity *en, int_types type)
 {
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;

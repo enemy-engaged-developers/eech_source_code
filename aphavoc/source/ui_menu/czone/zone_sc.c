@@ -71,8 +71,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*combat_zone_text_area,
-	*combat_zone_screen;
+	*combat_zone_text_area = nullptr,
+	*combat_zone_screen = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +220,7 @@ void load_3d_terrain_game_data (void)
 		filename [1024];
 
 	session_list_data_type
-		*session;
+		*session = nullptr;
 
 	//
 	// Load 3d terrain
@@ -253,8 +253,8 @@ int combat_zone_read_text (void)
 {
 
 	ui_object
-		*ui_line,
-		*destroy_ui_line;
+		*ui_line = nullptr,
+		*destroy_ui_line = nullptr;
 
 	int
 		long_text_flag,
@@ -262,7 +262,7 @@ int combat_zone_read_text (void)
 		line_count;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	char
 		variable [64],

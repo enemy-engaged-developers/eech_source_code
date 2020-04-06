@@ -85,7 +85,7 @@ static void kill_routed_vehicles_on_segment (entity *en);
 static void destroy_local (entity *en)
 {
 	segment
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -223,11 +223,11 @@ static void destroy_client (entity *en)
 static void kill_local (entity *en)
 {
 	entity
-		*parent;
+		*parent = nullptr;
 
 	entity
-		*task,
-		*destroy_task;
+		*task = nullptr,
+		*destroy_task = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -435,12 +435,12 @@ void kill_routed_vehicles_on_segment (entity *en)
 		sz;
 
 	vec3d
-		*segment_position,
-		*object_position;
+		*segment_position = nullptr,
+		*object_position = nullptr;
 
 	entity
-		*sect,
-		*object;
+		*sect = nullptr,
+		*object = nullptr;
 
 	bridge_segment_types
 		bridge_segment_type;

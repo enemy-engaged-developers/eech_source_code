@@ -144,10 +144,10 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 		heading;
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	entity
-		*building;
+		*building = nullptr;
 
 	position = va_arg (pargs, vec3d *);
 

@@ -46,10 +46,10 @@ int create_downwash_effect(downwash_types type, vec3d *position, float main_roto
 		num_components,
 		comp,
 		index_counter,
-		*entity_index_list;
+		*entity_index_list = nullptr;
 
 	downwash_component
-		*this_downwash_component;
+		*this_downwash_component = nullptr;
 
 	ASSERT (type >= 0);
 
@@ -150,7 +150,7 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 		terrain_info;
 
 	entity
-		*new_entity;
+		*new_entity = nullptr;
 
 	memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
@@ -343,7 +343,7 @@ int count_entities_in_downwash( downwash_types type )
 		num_components;
 
 	downwash_component
-		*downwash_component;
+		*downwash_component = nullptr;
 	
 	ASSERT (type >= 0);
 
@@ -387,7 +387,7 @@ void draw_downwash_effect(entity *en)
 {
 
 	vec3d
-		*position,
+		*position = nullptr,
 		pos;
 
 	terrain_3d_point_data

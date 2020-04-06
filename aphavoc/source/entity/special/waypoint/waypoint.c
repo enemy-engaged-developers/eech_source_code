@@ -79,10 +79,10 @@
 entity *get_local_entity_first_waypoint (entity *en)
 {
    entity
-		*cwp,
-		*task,
-		*group,
-      *first_waypoint;
+		*cwp = nullptr,
+		*task = nullptr,
+		*group = nullptr,
+      *first_waypoint = nullptr;
 
    ASSERT (en);
 
@@ -136,8 +136,8 @@ entity *get_local_entity_first_waypoint (entity *en)
 entity *get_local_entity_current_waypoint (entity *en)
 {
 	entity
-		*guide,
-		*cwp;
+		*guide = nullptr,
+		*cwp = nullptr;
 		
 	ASSERT (en);
 
@@ -160,10 +160,10 @@ entity *get_local_entity_current_waypoint (entity *en)
 entity *get_local_entity_last_waypoint (entity *en)
 {
    entity
-		*cwp,
-		*task,
-      *group,
-      *last_waypoint;
+		*cwp = nullptr,
+		*task = nullptr,
+      *group = nullptr,
+      *last_waypoint = nullptr;
 
    ASSERT (en);
 
@@ -214,8 +214,8 @@ entity *get_local_entity_next_waypoint (entity *en)
 {
 
    entity
-      *current_waypoint,
-      *next_waypoint;
+      *current_waypoint = nullptr,
+      *next_waypoint = nullptr;
 
    ASSERT (en);
 
@@ -246,8 +246,8 @@ entity *get_local_entity_prev_waypoint (entity *en)
 {
 
    entity
-      *current_waypoint,
-      *prev_waypoint;
+      *current_waypoint = nullptr,
+      *prev_waypoint = nullptr;
 
    ASSERT (en);
 
@@ -282,11 +282,11 @@ void get_local_waypoint_formation_position_offset (int formation_position, entit
 		formation_count;
 
    entity
-      *wp_pred,
-      *wp_succ;
+      *wp_pred = nullptr,
+      *wp_succ = nullptr;
 
    vec3d
-      *wp_pos,
+      *wp_pos = nullptr,
       pred_pos,
       succ_pos,
       first,
@@ -299,10 +299,10 @@ void get_local_waypoint_formation_position_offset (int formation_position, entit
 		sin_heading;
 
 	formation_type
-		*formation;
+		*formation = nullptr;
 
 	waypoint
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (wp);
 
@@ -519,7 +519,7 @@ void get_local_waypoint_simple_formation_position (int formation_position, vec3d
       perpendicular;
 
 	formation_type
-		*formation;
+		*formation = nullptr;
 
 	perpendicular.x = 1.0;
 	perpendicular.y = 0.0;

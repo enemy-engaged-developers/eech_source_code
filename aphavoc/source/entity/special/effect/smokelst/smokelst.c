@@ -79,10 +79,10 @@
 int set_infinite_smoke_list_generating_state (entity *parent, entity_sub_types type, float state)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	en = get_local_entity_first_child (parent, LIST_TYPE_SPECIAL_EFFECT);
 
@@ -126,10 +126,10 @@ int set_infinite_smoke_list_generating_state (entity *parent, entity_sub_types t
 int clear_smoke_list_generator_lifetime (entity *parent, entity_sub_types type)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	en = get_local_entity_first_child (parent, LIST_TYPE_SPECIAL_EFFECT);
 
@@ -158,7 +158,7 @@ int clear_smoke_list_generator_lifetime (entity *parent, entity_sub_types type)
 int attach_client_server_meta_smoke_lists_to_object (entity *parent, meta_smoke_list_types meta_smoke_type, object_3d_sub_object_index_numbers sub_object_type)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		create_count;
@@ -191,7 +191,7 @@ int attach_client_server_meta_smoke_lists_to_object (entity *parent, meta_smoke_
 int attach_local_meta_smoke_lists_to_object (entity *parent, meta_smoke_list_types meta_smoke_type, object_3d_sub_object_index_numbers sub_object_type, int *entity_index_list)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		create_count;
@@ -219,7 +219,7 @@ int attach_local_meta_smoke_lists_to_object (entity *parent, meta_smoke_list_typ
 				int
 					i,
 					count,
-					*temp_index_list;
+					*temp_index_list = nullptr;
 
 				//
 				// create an array of entity index numbers and fill them all with ENTITY_INDEX_DONT_CARE

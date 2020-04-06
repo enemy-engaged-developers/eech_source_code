@@ -91,7 +91,7 @@ void create_system_texture_screen_mapping ( screen *this_screen, int texture_ind
 {
 
 	screen
-		*texture;
+		*texture = nullptr;
 
 	//
 	// Usurp a system texture

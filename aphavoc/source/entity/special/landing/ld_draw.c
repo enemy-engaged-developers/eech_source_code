@@ -88,7 +88,7 @@ static void draw_local_2d_symbol (entity *en)
 {
 
 	landing
-		*raw;
+		*raw = nullptr;
 
 	raw = get_local_entity_data (en);
 

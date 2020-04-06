@@ -213,13 +213,13 @@ void initialise_formation_database (void)
 {
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	formation_type
-		*new_formation;
+		*new_formation = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
@@ -369,7 +369,7 @@ void initialise_formation_database_table (void)
 {
 
 	formation_type
-		*this_formation;
+		*this_formation = nullptr;
 
 	if (formation_database_table)
 	{
@@ -400,7 +400,7 @@ int add_formation_to_database (int number_in_formation, vec3d *site_positions)
 {
 
 	formation_type
-		*new_formation;
+		*new_formation = nullptr;
 
 	char
 		name [128];
@@ -453,7 +453,7 @@ void deinitialise_formation_database (void)
 {
 
 	formation_type
-		*destroy_formation;
+		*destroy_formation = nullptr;
 
 	while (formation_database)
 	{
@@ -495,7 +495,7 @@ void deinitialise_formation_database (void)
 formation_type *get_formation (formation_types formation)
 {
 	formation_type
-		*this_formation;
+		*this_formation = nullptr;
 
 	ASSERT (formation_database);
 
@@ -530,7 +530,7 @@ short int get_number_in_formation (formation_types formation)
 {
 
 	formation_type
-		*this_formation;
+		*this_formation = nullptr;
 
 	ASSERT (formation_database);
 
@@ -553,7 +553,7 @@ const char *get_formation_name (formation_types formation)
 {
 
 	formation_type
-		*this_formation;
+		*this_formation = nullptr;
 
 	ASSERT (formation_database);
 
@@ -576,7 +576,7 @@ float get_formation_member_radius (formation_types form, int member_count)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	int
 		loop,
@@ -620,7 +620,7 @@ void get_formation_position (formation_types form, int index, vec3d *vec)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	formation_data = get_formation (form);
 
@@ -637,16 +637,16 @@ void initialise_formation_component_database (void)
 {
 
 	formation_type
-		*formation_data;
+		*formation_data = nullptr;
 
 	session_list_data_type
-		*current_session;
+		*current_session = nullptr;
 
 	formation_vehicle_components
-		*new_formation_component;
+		*new_formation_component = nullptr;
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_tags
 		tag;
@@ -832,7 +832,7 @@ void deinitialise_formation_component_database (void)
 {
 
 	formation_vehicle_components
-		*destroy_formation_component;
+		*destroy_formation_component = nullptr;
 
 	while (formation_component_database)
 	{
@@ -859,7 +859,7 @@ formation_vehicle_components *get_formation_components (formation_component_type
 {
 
 	formation_vehicle_components
-		*this_formation_component;
+		*this_formation_component = nullptr;
 
 	ASSERT (formation_component_database);
 

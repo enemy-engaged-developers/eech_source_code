@@ -60,12 +60,7 @@
 
 
 
-#ifndef OGRE_EE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include	"3d.h"
+#include "3d.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,28 +193,28 @@ void initialise_3d_objects_in_d3d_old ( void )
 		current_lightmap_vertex_buffer_index_vertex_offset,
 		current_lightmap_vertex_buffer_size,
 		total_vb_memory_allocated,
-		*objects_3d_vertex_buffer_types;
+		*objects_3d_vertex_buffer_types = nullptr;
 
 	object_3d_surface_info
-		*surfaces;
+		*surfaces = nullptr;
 
 	WORD
-		*indices;
+		*indices = nullptr;
 
 	D3DVERTEX
-		*textured_vertices;
+		*textured_vertices = nullptr;
 
 	D3DPLAINVERTEX
-		*plain_vertices;
+		*plain_vertices = nullptr;
 
 	D3DTEXTURE2VERTEX
-		*lightmap_vertices;
+		*lightmap_vertices = nullptr;
 
 	object_3d
-		*object;
+		*object = nullptr;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	debug_log ( "Number of objects to vb: %d", total_number_of_raw_3d_objects );
 
@@ -439,7 +434,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 			surface_vertex_offset;
 
 		object_3d_extra_object_info
-			*object_extra;
+			*object_extra = nullptr;
 
 		current_vb_object = count;
 		object = &objects_3d_data[count];
@@ -531,7 +526,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 							{
 
 								object_short_3d_point
-									*point;
+									*point = nullptr;
 
 								point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -543,7 +538,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 								{
 
 									object_3d_heading_pitch_normal
-										*point_normal;
+										*point_normal = nullptr;
 
 									vec3d
 										normal;
@@ -602,7 +597,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 											index;
 
 										object_3d_heading_pitch_normal
-											*point_normal;
+											*point_normal = nullptr;
 
 										vec3d
 											normal;
@@ -665,7 +660,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 							{
 
 								object_short_3d_point
-									*point;
+									*point = nullptr;
 
 								point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -677,7 +672,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 								{
 
 									object_3d_heading_pitch_normal
-										*point_normal;
+										*point_normal = nullptr;
 
 									vec3d
 										normal;
@@ -731,7 +726,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 									{
 
 										object_3d_heading_pitch_normal
-											*point_normal;
+											*point_normal = nullptr;
 
 										vec3d
 											normal;
@@ -798,7 +793,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 						{
 
 							object_short_3d_point
-								*point;
+								*point = nullptr;
 
 							point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -810,7 +805,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 							{
 
 								object_3d_heading_pitch_normal
-									*point_normal;
+									*point_normal = nullptr;
 
 								vec3d
 									normal;
@@ -861,7 +856,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 								{
 
 									object_3d_heading_pitch_normal
-										*point_normal;
+										*point_normal = nullptr;
 
 									vec3d
 										normal;
@@ -1356,16 +1351,16 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		number_of_surface_points;
 
 	d3d_vb_object_3d_info
-		*surface;
+		*surface = nullptr;
 
 	NTVERTEX
-		*textured_vertices;
+		*textured_vertices = nullptr;
 
 	D3DPLAINVERTEX
-		*plain_vertices;
+		*plain_vertices = nullptr;
 
 	D3DTEXTURE2VERTEX
-		*lightmap_vertices;
+		*lightmap_vertices = nullptr;
 
 	unsigned
 		fvf,
@@ -1449,16 +1444,16 @@ void object_3d_render_hardware_surface ( object_3d *object )
 			zmax;
 
 		WORD
-			*indices;
+			*indices = nullptr;
 
 		object_3d_face
-			*faces;
+			*faces = nullptr;
 
 		point_3d_short_reference
-			*saved_object_3d_point_list;
+			*saved_object_3d_point_list = nullptr;
 
 		point_3d_plain_reference
-			*saved_object_3d_face_normal_list;
+			*saved_object_3d_face_normal_list = nullptr;
 
 		//
 		// Remove first vb slot of this type
@@ -1522,7 +1517,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 					for ( vertex_count = 0; vertex_count < number_of_surface_points; vertex_count++ )
 					{
 						object_short_3d_point
-							*point;
+							*point = nullptr;
 
 						point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -1533,7 +1528,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 						if ( current_object_3d_surface->smoothed )
 						{
 							object_3d_heading_pitch_normal
-								*point_normal;
+								*point_normal = nullptr;
 
 							vec3d
 								normal;
@@ -1567,7 +1562,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 									point_index;
 
 								object_3d_heading_pitch_normal
-									*point_normal;
+									*point_normal = nullptr;
 
 								vec3d
 									normal;
@@ -1605,7 +1600,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 					for ( vertex_count = 0; vertex_count < number_of_surface_points; vertex_count++ )
 					{
 						object_short_3d_point
-							*point;
+							*point = nullptr;
 
 						point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -1616,7 +1611,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 						if ( current_object_3d_surface->smoothed )
 						{
 							object_3d_heading_pitch_normal
-								*point_normal;
+								*point_normal = nullptr;
 
 							vec3d
 								normal;
@@ -1648,7 +1643,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 									point_index;
 
 								object_3d_heading_pitch_normal
-									*point_normal;
+									*point_normal = nullptr;
 
 								vec3d
 									normal;
@@ -1686,7 +1681,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 				for ( vertex_count = 0; vertex_count < number_of_surface_points; vertex_count++ )
 				{
 					object_short_3d_point
-						*point;
+						*point = nullptr;
 
 					point = &object->points[ current_object_3d_surface_point_list[vertex_count].point ];
 
@@ -1697,7 +1692,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 					if ( current_object_3d_surface->smoothed )
 					{
 						object_3d_heading_pitch_normal
-							*point_normal;
+							*point_normal = nullptr;
 
 						vec3d
 							normal;
@@ -1727,7 +1722,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 								point_index;
 
 							object_3d_heading_pitch_normal
-								*point_normal;
+								*point_normal = nullptr;
 
 							vec3d
 								normal;
@@ -1870,4 +1865,3 @@ void object_3d_render_hardware_surface ( object_3d *object )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif

@@ -77,7 +77,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 constraint_forces
-	*friction_force_list_head;
+	*friction_force_list_head = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ void calculate_friction (rigid_body_dynamics *rb, int index)
 		coll_point,
 		linear_force,
 		cross_result,
-		*face_normal,
+		*face_normal = nullptr,
 		angular_force,
 		point_velocity,
 		constraint_force,
@@ -358,7 +358,7 @@ void add_friction_force (rigid_body_dynamics *rb, double_vec3d *force, double_ve
 {
 
 	constraint_forces
-		*new_friction;
+		*new_friction = nullptr;
 
 	new_friction = (constraint_forces *) malloc_heap_mem (sizeof (constraint_forces));
 
@@ -392,8 +392,8 @@ void apply_friction_forces (int index)
 {
 
 	constraint_forces
-		*destroy_cf,
-		*cf;
+		*destroy_cf = nullptr,
+		*cf = nullptr;
 
 	cf = friction_force_list_head;
 
@@ -453,8 +453,8 @@ void destroy_friction_forces (void)
 {
 
 	constraint_forces
-		*destroy_cf,
-		*cf;
+		*destroy_cf = nullptr,
+		*cf = nullptr;
 
 	cf = friction_force_list_head;
 
@@ -479,7 +479,7 @@ void calculate_friction_force_and_torque (rigid_body_dynamics *rb, double_vec3d 
 {
 
 	constraint_forces
-		*cf;
+		*cf = nullptr;
 
 	force->x = 0.0;
 	force->y = 0.0;

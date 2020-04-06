@@ -74,7 +74,7 @@ static void set_area_ui_object_x_size (ui_object *obj, float x_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -95,7 +95,7 @@ static float get_area_ui_object_x_size (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -110,7 +110,7 @@ static void set_area_ui_object_y_size (ui_object *obj, float y_size)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -131,7 +131,7 @@ static float get_area_ui_object_y_size (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

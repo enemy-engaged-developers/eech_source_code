@@ -74,7 +74,7 @@ static void set_area_ui_object_notify_on (ui_object *obj, int event)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -89,7 +89,7 @@ static int get_area_ui_object_notify_on (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

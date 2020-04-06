@@ -130,7 +130,7 @@ int
 	number_of_route_waypoint_positions;
 
 route_waypoint_position
-	*route_waypoint_positions;
+	*route_waypoint_positions = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 {
 
 	struct OBJECT_3D
-		*object;
+		*object = nullptr;
 
 	int
 		surface,
@@ -203,13 +203,13 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 		current_depth;
 
 	struct POINT_3D_SHORT_REFERENCE
-		*point_refs;
+		*point_refs = nullptr;
 
 	struct POINT_3D_PLAIN_REFERENCE
-		*surface_point_refs;
+		*surface_point_refs = nullptr;
 
 	object_3d_face
-		*faces;
+		*faces = nullptr;
 
 	//
 	// Copy the point data into each node.
@@ -602,7 +602,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 		{
 
 			waypoint_node
-				*this_node;
+				*this_node = nullptr;
 
 			//
 			// Follow route up to top
@@ -627,7 +627,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 			primary_start_index;
 
 		waypoint_node
-			*tmp;
+			*tmp = nullptr;
 
 		for ( count = 1; count < number_of_waypoint_starting_nodes; count++ )
 		{
@@ -653,7 +653,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 	{
 
 		waypoint_node
-			*this_node;
+			*this_node = nullptr;
 
 		this_node = waypoint_starting_nodes[count];
 
@@ -865,7 +865,7 @@ void set_node_indices ( void )
 				{
 
 					waypoint_node
-						*parent;
+						*parent = nullptr;
 
 					parent = waypoint_nodes[count].parents[0];
 
@@ -898,7 +898,7 @@ void set_node_indices ( void )
 					{
 
 						waypoint_node
-							*parent;
+							*parent = nullptr;
 
 						parent = waypoint_nodes[count].parents[parent_count];
 
@@ -1068,9 +1068,9 @@ void swap_waypoint_nodes ( int node, int other_node )
 		other_child_index;
 
 	waypoint_node
-		*child,
-		*other_child,
-		*common_parent;
+		*child = nullptr,
+		*other_child = nullptr,
+		*common_parent = nullptr;
 
 	//
 	// Find the common parent of these two nodes.
@@ -1211,7 +1211,7 @@ void swap_waypoint_nodes ( int node, int other_node )
 		{
 	
 			waypoint_node
-				*this_node;
+				*this_node = nullptr;
 	
 			this_node = waypoint_starting_nodes[count];
 	

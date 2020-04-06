@@ -164,7 +164,7 @@ static void update_server (entity *en)
 {
 
 	regen
-		*raw;
+		*raw = nullptr;
 
 	raw = (regen *) get_local_entity_data (en);
 
@@ -200,21 +200,21 @@ entity *regen_update (entity *en)
 {
 
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	entity_sub_types
 		member_type,
 		group_type;
 
 	entity
-		*wp,
-		*task,
-		*group,
-		*member,
-		*building,
-		*force_en,
-		*landing,
-		*keysite;
+		*wp = nullptr,
+		*task = nullptr,
+		*group = nullptr,
+		*member = nullptr,
+		*building = nullptr,
+		*force_en = nullptr,
+		*landing = nullptr,
+		*keysite = nullptr;
 
 	unsigned int
 		member_number;
@@ -223,13 +223,13 @@ entity *regen_update (entity *en)
 		reserve_count;
 
 	force
-		*force_raw;
+		*force_raw = nullptr;
 
 	regen
-		*raw;
+		*raw = nullptr;
 
 	regen_list_element
-		*e1;
+		*e1 = nullptr;
 
 	raw = (regen *) get_local_entity_data (en);
 
@@ -391,9 +391,9 @@ entity *regen_update (entity *en)
 			route_node;
 
 		entity
-			*building,
-			*member,
-			*guide,
+			*building = nullptr,
+			*member = nullptr,
+			*guide = nullptr,
 			*group = NULL;
 
 		group = create_landing_faction_members (keysite, member_type, group_type, 1, wp, &raw->position);
@@ -451,9 +451,9 @@ entity *regen_update (entity *en)
 					best_range;
 
 				entity
-					*transport_wp,
-					*transport_task,
-					*transport_landing;
+					*transport_wp = nullptr,
+					*transport_task = nullptr,
+					*transport_landing = nullptr;
 
 				best_range = 999999999.0;
 
@@ -503,7 +503,7 @@ entity *regen_update (entity *en)
 			{
 
 				entity
-					*keysite;
+					*keysite = nullptr;
 
 				keysite = get_local_entity_parent (landing, LIST_TYPE_LANDING_SITE);
 
@@ -763,10 +763,10 @@ void add_default_entity_to_regen_queue (entity_sides side, entity_sub_types grou
 void regen_queue_insert (entity_sides side, int regen_type, regen_list_element *insert_me)
 {
 	regen_list_element
-		*e1;
+		*e1 = nullptr;
 
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	int
 		rear;
@@ -820,10 +820,10 @@ void regen_queue_insert (entity_sides side, int regen_type, regen_list_element *
 void regen_queue_use (entity_sides side, int regen_type)
 {
 	regen_list_element
-		*e1;
+		*e1 = nullptr;
 
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	m1 = &regen_manager [side][regen_type];
 
@@ -892,7 +892,7 @@ int set_regen_queue_size (regen_management_element *m1, int size)
 void initialise_regen_queues (void)
 {
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	int
 		i,
@@ -955,11 +955,11 @@ void initialise_regen_queues (void)
 int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 {
 	regen_list_element
-		*e1,
-		*temp;
+		*e1 = nullptr,
+		*temp = nullptr;
 
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	int
 		front,
@@ -1060,10 +1060,10 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 void output_regen_data (int side, int regen_type)
 {
 	regen_list_element
-		*e1;
+		*e1 = nullptr;
 
 	regen_management_element
-		*m1;
+		*m1 = nullptr;
 
 	int
 		i;

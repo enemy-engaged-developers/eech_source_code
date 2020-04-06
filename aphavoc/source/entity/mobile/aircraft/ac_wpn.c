@@ -164,15 +164,15 @@ static void play_aircraft_weapon_launched_speech (entity *en, int weapon_type)
 aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags, int increase_accuracy)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*target_pos,
+		*target_pos = nullptr,
 		en_pos,
-		*weapon_vector,
+		*weapon_vector = nullptr,
 		weapon_to_intercept_point_vector;
 	float
 		launch_angle_error,
@@ -390,18 +390,18 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags,
 void update_aircraft_weapon_fire (entity *en)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 	entity
-		*target;
+		*target = nullptr;
 	int
 		debug_flag = FALSE;
 	float
 		range;
 	vec3d
 		en_pos,
-		*target_pos,
-		*weapon_vector,
-		*weapon_to_intercept_point_vector;
+		*target_pos = nullptr,
+		*weapon_vector = nullptr,
+		*weapon_to_intercept_point_vector = nullptr;
 	float
 		launch_angle_error,
 		burst_timer_state;
@@ -669,8 +669,8 @@ while(TRUE)
 int aircraft_select_best_weapon (entity *en, entity *target)
 {
 	entity
-		*guide,
-		*task;
+		*guide = nullptr,
+		*task = nullptr;
 
 	int
 		weapon_type;
@@ -739,7 +739,7 @@ int aircraft_select_best_weapon (entity *en, entity *target)
 void update_aircraft_decoy_release (entity *en)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		chaff_available,
@@ -756,11 +756,11 @@ void update_aircraft_decoy_release (entity *en)
 		weapon_sub_type;
 
 	entity
-		*persuer;
+		*persuer = nullptr;
 
 	vec3d
-		*target_position,
-		*weapon_position;
+		*target_position = nullptr,
+		*weapon_position = nullptr;
 
 	ASSERT (en);
 

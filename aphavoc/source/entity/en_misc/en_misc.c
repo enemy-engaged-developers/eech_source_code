@@ -85,7 +85,7 @@ static void qs (entity **en_list, float *sort_order, int left, int right)
       x, y;
 
    entity
-      *temp;
+      *temp = nullptr;
 
    i = left;
    j = right;

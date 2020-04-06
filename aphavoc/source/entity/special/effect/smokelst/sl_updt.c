@@ -121,11 +121,11 @@ static void update_client (entity *en)
 int update_smoke( entity *en )
 {
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	vec3d
-		*tail_pos,
-		*last_pos,
+		*tail_pos = nullptr,
+		*last_pos = nullptr,
 		new_pos,
 		interpolated_pos,
 		d,
@@ -463,16 +463,16 @@ void create_new_point( entity *en, vec3d *new_pos, vec3d *initial_velocity, smok
 {
 
 	vec3d
-		*head_pos;
+		*head_pos = nullptr;
 
 	smoke_list
-		*raw;
+		*raw = nullptr;
 
 	float
 		iv_noise = 0;
 	
 	smoke_list_data
-		*smoke_info;
+		*smoke_info = nullptr;
 	
 	raw = (smoke_list *) get_local_entity_data( en );
 
@@ -550,7 +550,7 @@ int get_new_smoke_position (entity *en, vec3d *new_pos)
 	//
 
 	entity
-		*parent;
+		*parent = nullptr;
 
 	if (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_EXPLOSION_PARTICLE)
 	{
@@ -568,8 +568,8 @@ int get_new_smoke_position (entity *en, vec3d *new_pos)
 	if (parent)
 	{
 		vec3d
-			*offset,
-			*raw_position;
+			*offset = nullptr,
+			*raw_position = nullptr;
 
 		matrix3x3
 			m;

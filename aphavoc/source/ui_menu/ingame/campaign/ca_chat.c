@@ -77,19 +77,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*chat_window_mode_area,
-	*chat_window_area,
-	*chat_window_destination_button,
-	*chat_window_message_button,
-	*chat_text_area,
-	*chat_input,
-	*chat_current_text,
-	*chat_send_button,
-	*chat_target_list_area,
-	*chat_target_list,
-	*chat_message_list_area,
-	*chat_message_list,
-	*page_back_button;
+	*chat_window_mode_area = nullptr,
+	*chat_window_area = nullptr,
+	*chat_window_destination_button = nullptr,
+	*chat_window_message_button = nullptr,
+	*chat_text_area = nullptr,
+	*chat_input = nullptr,
+	*chat_current_text = nullptr,
+	*chat_send_button = nullptr,
+	*chat_target_list_area = nullptr,
+	*chat_target_list = nullptr,
+	*chat_message_list_area = nullptr,
+	*chat_message_list = nullptr,
+	*page_back_button = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,10 +181,10 @@ void chat_enter_message_function (ui_object *obj, void *arg)
 static void chat_input_function (ui_object *obj, void *arg)
 {
 	entity 	// Jabberwock 040213 Chat send after Enter
-		*target;
+		*target = nullptr;
 
 	const char
-		*text;
+		*text = nullptr;
 
 	text = get_ui_object_text (chat_input);
 
@@ -217,10 +217,10 @@ static void chat_input_function (ui_object *obj, void *arg)
 static void notify_send_message (ui_object *obj, void *arg)
 {
 	entity
-		*target;
+		*target = nullptr;
 
 	const char
-		*text;
+		*text = nullptr;
 
 	target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
 
@@ -292,12 +292,12 @@ static void notify_show_messages (ui_object *obj, void *arg)
 void build_chat_target_list (void)
 {
 	ui_object
-		*new_item;
+		*new_item = nullptr;
 
 	entity
-		*force,
-		*pilot,
-		*current_target;
+		*force = nullptr,
+		*pilot = nullptr,
+		*current_target = nullptr;
 
 	static char
 		s [128];
@@ -439,13 +439,13 @@ static void update_chat_page_objects (ui_object *obj, void *arg)
 static void draw_chat_send_button (ui_object *obj, void *arg)
 {
 	entity
-		*current_target;
+		*current_target = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	static const char
-		*text;
+		*text = nullptr;
 	static char
 		s [256];
 
@@ -526,10 +526,10 @@ int add_message_to_campaign_log (int index)
 		seconds;
 
 	char
-		*s;
+		*s = nullptr;
 
 	message_log_type
-		*message;
+		*message = nullptr;
 
 	rgb_colour
 		*col = NULL;
@@ -569,7 +569,7 @@ int add_message_to_campaign_log (int index)
 void campaign_screen_update_chat_page_pilot (entity *en)
 {
 	entity
-		*current_target;
+		*current_target = nullptr;
 
 	current_target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
 
@@ -594,7 +594,7 @@ void define_campaign_screen_chat_page_objects (void)
 		y2;
 
 	ui_object
-		*page;
+		*page = nullptr;
 
 	char
 		string [256];

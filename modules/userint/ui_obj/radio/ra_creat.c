@@ -74,7 +74,7 @@ static void create_radio_ui_object (ui_object *obj, ui_object_types type, va_lis
 {
 
    radio_ui_object
-      *new_radio;
+      *new_radio = nullptr;
 
 	increase_ui_object_counter ();
 

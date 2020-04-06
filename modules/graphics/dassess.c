@@ -238,7 +238,7 @@ HRESULT CALLBACK ddraw_assess_enum_3d_devices (
 
 	int
 		assessment,
-		*best_yet_assessment;
+		*best_yet_assessment = nullptr;
 
 	best_yet_assessment = ( int * ) lpContext;
 

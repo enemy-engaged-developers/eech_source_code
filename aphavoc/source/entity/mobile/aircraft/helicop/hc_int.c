@@ -79,7 +79,7 @@
 static void set_local_int_value (entity *en, int_types type, int value)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	ASSERT (en);
 	
@@ -180,7 +180,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 				create_stack_attributes;
 
 			entity
-				*group;
+				*group = nullptr;
 
 			old_value = raw->player;
 
@@ -234,7 +234,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 				{
 
 					entity
-						*member;
+						*member = nullptr;
 
 					multiplayer_group = FALSE;
 
@@ -388,7 +388,7 @@ static void set_client_int_value (entity *en, int_types type, int value)
 static int get_local_int_value (entity *en, int_types type)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;
@@ -483,8 +483,8 @@ static int get_local_int_value (entity *en, int_types type)
 		{
 
 			entity
-				*group,
-				*keysite;
+				*group = nullptr,
+				*keysite = nullptr;
 
 			value = FALSE;
 

@@ -74,7 +74,7 @@ static void set_area_ui_object_graphic (ui_object *obj, unsigned short int *grap
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -100,7 +100,7 @@ static unsigned short int *get_area_ui_object_graphic (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -115,7 +115,7 @@ static void set_area_ui_object_memory_graphic (ui_object *obj, struct SCREEN *me
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -141,7 +141,7 @@ static struct SCREEN *get_area_ui_object_memory_graphic (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -156,7 +156,7 @@ static void set_area_ui_object_zoomable_palette_graphic (ui_object *obj, struct 
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -182,7 +182,7 @@ static struct ZOOMABLE_GRAPHIC *get_area_ui_object_zoomable_palette_graphic (ui_
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -197,7 +197,7 @@ static void set_area_ui_object_graphic_type (ui_object *obj, int graphic_type)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -212,7 +212,7 @@ static int get_area_ui_object_graphic_type (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -227,7 +227,7 @@ static void set_area_ui_object_graphic_zoom (ui_object *obj, int zoom)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -242,7 +242,7 @@ static int get_area_ui_object_graphic_zoom (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -257,7 +257,7 @@ static void set_area_ui_object_active_screen (ui_object *obj, struct SCREEN *act
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 
@@ -272,7 +272,7 @@ static struct SCREEN *get_area_ui_object_active_screen (ui_object *obj)
 {
 	
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	area = obj->data;
 

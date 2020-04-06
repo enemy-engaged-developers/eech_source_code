@@ -80,8 +80,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static object_3d_instance
-	*virtual_cockpit_inst3d_detail_level_normal_inst3d,
-	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
+	*virtual_cockpit_inst3d_detail_level_normal_inst3d = nullptr,
+	*virtual_cockpit_inst3d_detail_level_glass_inst3d = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -454,7 +454,7 @@ void draw_kiowa_virtual_cockpit (void)
 		draw_main_rotors;
 
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	object_3d_sub_object_search_data
 		search;
@@ -549,8 +549,8 @@ void draw_kiowa_virtual_cockpit (void)
 		//
 
 		light_3d_source
-			*display_backlight,
-			*cockpit_light;
+			*display_backlight = nullptr,
+			*cockpit_light = nullptr;
 
 		vec3d
 			direction;

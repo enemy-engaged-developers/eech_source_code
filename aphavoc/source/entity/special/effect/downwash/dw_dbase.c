@@ -50,7 +50,7 @@ static void	initialise_misc_downwash_database()
 {
 
 	downwash_data
-		*this_downwash;
+		*this_downwash = nullptr;
 
 	
 	// NONE. FIRST IS EMPTY
@@ -69,10 +69,10 @@ static void	initialise_misc_downwash_database()
 static void initialise_land_downwash_database()
 {
 	downwash_component
-		*downwash_info;
+		*downwash_info = nullptr;
 
 	downwash_data
-		*this_downwash;
+		*this_downwash = nullptr;
 
 	// LAND DOWNWASH COMPONENTS
 
@@ -125,10 +125,10 @@ void initialise_water_downwash_database()
 {
 
 	downwash_component
-		*downwash_info;
+		*downwash_info = nullptr;
 
 	downwash_data
-		*this_downwash;
+		*this_downwash = nullptr;
 
 	// WATER DOWNWASH COMPONENTS
 
@@ -181,7 +181,7 @@ void initialise_water_downwash_database()
 void deinitialise_downwash_database()
 {
 	downwash_data
-		*this_downwash;
+		*this_downwash = nullptr;
 
 	this_downwash = &(downwash_database[ DOWNWASH_TYPE_LAND ]);
 	free_mem (this_downwash->component);

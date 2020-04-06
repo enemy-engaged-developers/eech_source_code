@@ -85,7 +85,7 @@
 #define SAT_VIEWPORT_SIZE	(512)
 
 static env_2d
-	*sat_env;
+	*sat_env = nullptr;
 
 static float
 	sat_viewport_x_org,
@@ -114,7 +114,7 @@ static float
 #define SAT_TEXTURE_INDEX (TEXTURE_INDEX_COMANCHE_MFD2)
 
 static screen
-	*sat_texture_screen;
+	*sat_texture_screen = nullptr;
 
 static rgb_colour
 	clear_hud_colour;
@@ -462,8 +462,8 @@ static void draw_target_symbology (void)
 		pitch_offset;
 
 	entity
-		*source,
-		*target;
+		*source = nullptr,
+		*target = nullptr;
 
 	vec3d
 		target_position,

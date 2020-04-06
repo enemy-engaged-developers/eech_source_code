@@ -176,7 +176,7 @@ void attach_ship_meta_smoke_lists (entity *en)
 void pack_ship_meta_smoke_lists (entity *en, pack_modes mode)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		item,
@@ -186,7 +186,7 @@ void pack_ship_meta_smoke_lists (entity *en, pack_modes mode)
 		packed_indices;
 
 	entity
-		*special_effect;
+		*special_effect = nullptr;
 
 	object_3d_sub_object_index_numbers
 		attachment_point;
@@ -302,14 +302,14 @@ void pack_ship_meta_smoke_lists (entity *en, pack_modes mode)
 void unpack_ship_meta_smoke_lists (entity *en, pack_modes mode)
 {
 	object_3d_instance
-		*inst3d;
+		*inst3d = nullptr;
 
 	int
 		item,
 		loop,
 		count,
 		point,
-		*entity_index_list;
+		*entity_index_list = nullptr;
 
 	meta_smoke_list_types
 		type;

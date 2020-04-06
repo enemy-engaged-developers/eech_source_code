@@ -236,7 +236,7 @@ void render_clipped_3d_object_textured_polygon ( object_3d_face *this_face, stru
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	real_colour
 		colour,
@@ -390,7 +390,7 @@ void render_clipped_3d_object_gouraud_textured_polygon ( object_3d_face *this_fa
 		specular;
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	ASSERT ( current_object_3d_surface->polygons );
 
@@ -481,7 +481,7 @@ void render_clipped_3d_object_polygon ( object_3d_face *this_face, struct OBJECT
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		outcode,
@@ -628,7 +628,7 @@ void render_clipped_3d_object_polygon ( object_3d_face *this_face, struct OBJECT
 			v;
 
 		vertex
-			*this_point;
+			*this_point = nullptr;
 
 		normal_index = current_object_3d_face_normal_list->point;
 
@@ -702,7 +702,7 @@ void render_clipped_3d_object_gouraud_polygon ( object_3d_face *this_face, struc
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		triangle_count,
@@ -817,7 +817,7 @@ void render_clipped_3d_object_white_polygon ( object_3d_face *this_face, struct 
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		outcode,
@@ -921,7 +921,7 @@ void render_clipped_3d_object_gouraud_white_polygon ( object_3d_face *this_face,
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		triangle_count,
@@ -1015,7 +1015,7 @@ void render_clipped_3d_object_textured_lightmap_polygon ( object_3d_face *this_f
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	real_colour
 		colour,
@@ -1136,7 +1136,7 @@ void render_clipped_3d_object_textured_lightmap_polygon ( object_3d_face *this_f
 			{
 
 				vertex
-					*vert;
+					*vert = nullptr;
 
 				int
 					number_of_points,
@@ -1230,7 +1230,7 @@ void render_clipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_face
 		outcode;
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	float
 		specular;
@@ -1327,7 +1327,7 @@ void render_clipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_face
 				{
 
 					vertex
-						*vert;
+						*vert = nullptr;
 
 					int
 						number_of_points,
@@ -1477,14 +1477,14 @@ void render_unclipped_3d_object_textured_polygon ( object_3d_face *this_face, st
 			count;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		LPD3DTLVERTEX
 			destination_vertices;
 
 		object_3d_short_textured_point
-			*texture_list;
+			*texture_list = nullptr;
 
 		float
 			distance;
@@ -1533,14 +1533,14 @@ void render_unclipped_3d_object_textured_polygon ( object_3d_face *this_face, st
 			count;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		LPD3DTLVERTEX
 			destination_vertices;
 
 		object_3d_short_textured_point
-			*texture_list;
+			*texture_list = nullptr;
 
 		commit_deferred_state_changes ();
 
@@ -1576,7 +1576,7 @@ void render_unclipped_3d_object_textured_polygon ( object_3d_face *this_face, st
 				count;
 
 			vec3d
-				*normal,
+				*normal = nullptr,
 				reflected_ray,
 				camera_position;
 
@@ -1683,7 +1683,7 @@ void render_unclipped_3d_object_textured_polygon ( object_3d_face *this_face, st
 				lightmap_destination_vertices;
 
 			texture_map
-				*lightmap_texture;
+				*lightmap_texture = nullptr;
 
 			lightmap_texture = &system_textures[current_object_3d_surface->texture_index+1];
 
@@ -1731,17 +1731,17 @@ void render_unclipped_3d_object_gouraud_textured_polygon ( object_3d_face *this_
 		count;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
 
 	object_3d_short_textured_point
-		*texture_list;
+		*texture_list = nullptr;
 
 	point_3d_plain_reference
-		*gouraud_list;
+		*gouraud_list = nullptr;
 
 	real_colour
 		specular_colour;
@@ -1893,7 +1893,7 @@ void render_unclipped_3d_object_gouraud_textured_polygon ( object_3d_face *this_
 
 				vec3d
 					ray,
-					*normal;
+					*normal = nullptr;
 
 				double
 					ndotr,
@@ -1970,17 +1970,17 @@ void render_unclipped_3d_object_gouraud_textured_nospecular_polygon ( object_3d_
 		count;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices;
 
 	object_3d_short_textured_point
-		*texture_list;
+		*texture_list = nullptr;
 
 	point_3d_plain_reference
-		*gouraud_list;
+		*gouraud_list = nullptr;
 
 	ASSERT ( current_object_3d_surface->polygons );
 
@@ -2117,7 +2117,7 @@ void render_unclipped_3d_object_polygon ( object_3d_face *this_face, struct OBJE
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	real_colour
 		colour,
@@ -2201,8 +2201,8 @@ void render_unclipped_3d_object_polygon ( object_3d_face *this_face, struct OBJE
 			destination_vertices;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		commit_deferred_state_changes ();
 
@@ -2249,7 +2249,7 @@ void render_unclipped_3d_object_polygon ( object_3d_face *this_face, struct OBJE
 			v;
 
 		vertex
-			*this_point;
+			*this_point = nullptr;
 
 		real_colour
 			this_colour;
@@ -2313,7 +2313,7 @@ void render_unclipped_3d_object_gouraud_polygon ( object_3d_face *this_face, str
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	//
 	// The face is a true polygon - triangle or above
@@ -2364,11 +2364,11 @@ void render_unclipped_3d_object_gouraud_polygon ( object_3d_face *this_face, str
 				destination_vertices;
 
 			object_transformed_2d_point
-				*vert,
-				*transformed_points;
+				*vert = nullptr,
+				*transformed_points = nullptr;
 
 			point_3d_plain_reference
-				*gouraud_list;
+				*gouraud_list = nullptr;
 
 			commit_deferred_state_changes ();
 
@@ -2438,7 +2438,7 @@ void render_unclipped_3d_object_white_polygon ( object_3d_face *this_face, struc
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	real_colour
 		colour,
@@ -2493,8 +2493,8 @@ void render_unclipped_3d_object_white_polygon ( object_3d_face *this_face, struc
 			destination_vertices;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		commit_deferred_state_changes ();
 
@@ -2527,7 +2527,7 @@ void render_unclipped_3d_object_gouraud_white_polygon ( object_3d_face *this_fac
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	//
 	// The face is a true polygon - triangle or above
@@ -2547,11 +2547,11 @@ void render_unclipped_3d_object_gouraud_white_polygon ( object_3d_face *this_fac
 				destination_vertices;
 
 			object_transformed_2d_point
-				*vert,
-				*transformed_points;
+				*vert = nullptr,
+				*transformed_points = nullptr;
 
 			point_3d_plain_reference
-				*gouraud_list;
+				*gouraud_list = nullptr;
 
 			commit_deferred_state_changes ();
 
@@ -2679,16 +2679,16 @@ void render_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *this
 			count;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		LPD3DTLVERTEX
 			destination_vertices,
 			lightmap_vertices;
 
 		object_3d_short_textured_point
-			*texture_list,
-			*luminosity_texture_list;
+			*texture_list = nullptr,
+			*luminosity_texture_list = nullptr;
 
 		float
 			distance;
@@ -2761,16 +2761,16 @@ void render_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *this
 			count;
 
 		object_transformed_2d_point
-			*vert,
-			*transformed_points;
+			*vert = nullptr,
+			*transformed_points = nullptr;
 
 		LPD3DTLVERTEX
 			destination_vertices,
 			lightmap_vertices;
 
 		object_3d_short_textured_point
-			*texture_list,
-			*luminosity_texture_list;
+			*texture_list = nullptr,
+			*luminosity_texture_list = nullptr;
 
 		//
 		// Should draw a flat shaded polygon - with a lightmap
@@ -2842,19 +2842,19 @@ void render_unclipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_fa
 		count;
 
 	object_transformed_2d_point
-		*vert,
-		*transformed_points;
+		*vert = nullptr,
+		*transformed_points = nullptr;
 
 	LPD3DTLVERTEX
 		destination_vertices,
 		lightmap_vertices;
 
 	object_3d_short_textured_point
-		*texture_list,
-		*luminosity_texture_list;
+		*texture_list = nullptr,
+		*luminosity_texture_list = nullptr;
 
 	point_3d_plain_reference
-		*gouraud_list;
+		*gouraud_list = nullptr;
 
 	real_colour
 		specular_colour;
@@ -3013,7 +3013,7 @@ void render_clipped_3d_object_textured_line ( object_3d_face *this_face, struct 
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	int
 		outcode;
@@ -3100,7 +3100,7 @@ void render_clipped_3d_object_textured_line ( object_3d_face *this_face, struct 
 				blue;
 
 			light_3d_source
-				*this_light;
+				*this_light = nullptr;
 
 			vec3d
 				point1,
@@ -3229,7 +3229,7 @@ void render_clipped_3d_object_plain_line ( object_3d_face *this_face, struct OBJ
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	int
 		outcode;
@@ -3294,7 +3294,7 @@ void render_clipped_3d_object_plain_line ( object_3d_face *this_face, struct OBJ
 			direction_factor;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		vec3d
 			point1,
@@ -3420,7 +3420,7 @@ void render_clipped_3d_object_plain_white_line ( object_3d_face *this_face, stru
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	int
 		outcode;
@@ -3485,7 +3485,7 @@ void render_clipped_3d_object_plain_white_line ( object_3d_face *this_face, stru
 			direction_factor;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		vec3d
 			point1,
@@ -3611,7 +3611,7 @@ void render_unclipped_3d_object_textured_line ( object_3d_face *this_face, struc
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	ASSERT ( !current_object_3d_surface->polygons );
 
@@ -3661,7 +3661,7 @@ void render_unclipped_3d_object_textured_line ( object_3d_face *this_face, struc
 				direction_factor;
 
 			light_3d_source
-				*this_light;
+				*this_light = nullptr;
 
 			vec3d
 				point1,
@@ -3790,7 +3790,7 @@ void render_unclipped_3d_object_plain_line ( object_3d_face *this_face, struct O
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	ASSERT ( !current_object_3d_surface->polygons );
 
@@ -3822,7 +3822,7 @@ void render_unclipped_3d_object_plain_line ( object_3d_face *this_face, struct O
 			direction_factor;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		vec3d
 			point1,
@@ -3947,7 +3947,7 @@ void render_unclipped_3d_object_plain_white_line ( object_3d_face *this_face, st
 {
 
 	vertex
-		*line;
+		*line = nullptr;
 
 	ASSERT ( !current_object_3d_surface->polygons );
 
@@ -3979,7 +3979,7 @@ void render_unclipped_3d_object_plain_white_line ( object_3d_face *this_face, st
 			direction_factor;
 
 		light_3d_source
-			*this_light;
+			*this_light = nullptr;
 
 		vec3d
 			point1,
@@ -4104,16 +4104,16 @@ void render_3d_shadow_surface_plain_polygon ( object_3d_face *this_face, int sur
 {
 
 	face_surface_description
-		*surface;
+		*surface = nullptr;
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		outcode;
 
 	point_3d_plain_reference
-		*point_list;
+		*point_list = nullptr;
 
 	surface = &objects_3d_data[ object_base->object_number ].surfaces[surface_index];
 
@@ -4143,13 +4143,13 @@ void render_3d_shadow_surface_plain_polygon ( object_3d_face *this_face, int sur
 				count;
 
 			vertex
-				*vert;
+				*vert = nullptr;
 
 			LPD3DTLVERTEX
 				destination_vertices;
 
 			vertex
-				*transformed_points;
+				*transformed_points = nullptr;
 
 			//
 			// Should draw a gouraud shaded polygon
@@ -4238,19 +4238,19 @@ void render_3d_shadow_surface_alpha_textured_polygon ( object_3d_face *this_face
 {
 
 	vertex
-		*poly;
+		*poly = nullptr;
 
 	int
 		outcode;
 
 	point_3d_plain_reference
-		*point_list;
+		*point_list = nullptr;
 
 	object_3d_short_textured_point
-		*texture_list;
+		*texture_list = nullptr;
 
 	texture_map
-		*texture;
+		*texture = nullptr;
 
 	ASSERT ( surface->polygons );
 
@@ -4294,13 +4294,13 @@ void render_3d_shadow_surface_alpha_textured_polygon ( object_3d_face *this_face
 				count;
 
 			vertex
-				*vert;
+				*vert = nullptr;
 
 			LPD3DTLVERTEX
 				destination_vertices;
 
 			vertex
-				*transformed_points;
+				*transformed_points = nullptr;
 
 			//
 			// Should draw a gouraud shaded polygon

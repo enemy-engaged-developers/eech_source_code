@@ -84,7 +84,7 @@ static void destroy_local (entity *en)
 {
 
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//
@@ -305,13 +305,13 @@ static void kill_local (entity *en)
 		losses;
 
 	entity
-		*task,
-		*group,
-		*keysite,
-		*destroy_task;
+		*task = nullptr,
+		*group = nullptr,
+		*keysite = nullptr,
+		*destroy_task = nullptr;
 
 	ship_vehicle
-		*raw;
+		*raw = nullptr;
 
 	////////////////////////////////////////
 	//

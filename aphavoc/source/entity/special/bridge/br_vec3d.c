@@ -79,7 +79,7 @@
 static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 {
 	vec3d
-		*v;
+		*v = nullptr;
 
 	switch (type)
 	{
@@ -88,7 +88,7 @@ static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 		////////////////////////////////////////
 		{
 			entity
-				*segment;
+				*segment = nullptr;
 
 			segment = get_local_entity_first_child (en, LIST_TYPE_SEGMENT);
 

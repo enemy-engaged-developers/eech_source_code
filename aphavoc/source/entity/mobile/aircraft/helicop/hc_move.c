@@ -135,10 +135,10 @@ static void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_
 void helicopter_movement (entity *en)
 {
 	entity
-		*wp,
-		*guide,
-		*group,
-		*member;
+		*wp = nullptr,
+		*guide = nullptr,
+		*group = nullptr,
+		*member = nullptr;
 
 	float
 		maxx,
@@ -168,14 +168,14 @@ void helicopter_movement (entity *en)
 		wp_vec,
 		wp_pos,
 		wp_vel,
-		*hc_pos,
+		*hc_pos = nullptr,
 		normalised_wp_vec,
 		model_motion_vector,
 		model_acceleration_vector,
 		world_acceleration_vector;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	#ifdef DEBUG
 
@@ -430,7 +430,7 @@ void helicopter_death_movement (entity *en)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		heading,
@@ -444,8 +444,8 @@ void helicopter_death_movement (entity *en)
 		old_terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos;
 
 	terrain_classes
@@ -645,7 +645,7 @@ void helicopter_death_movement (entity *en)
 					//
 
 					struct OBJECT_3D_BOUNDS
-						*bounding_box;
+						*bounding_box = nullptr;
 
 					vec3d
 						d;
@@ -720,7 +720,7 @@ void helicopter_death_movement (entity *en)
 
 			{
 				struct OBJECT_3D_BOUNDS
-					*bounding_box;
+					*bounding_box = nullptr;
 
 				vec3d
 					d;
@@ -825,7 +825,7 @@ int helicopter_crash_movement (entity *en)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		heading,
@@ -842,10 +842,10 @@ int helicopter_crash_movement (entity *en)
 		terrain_elevation;
 
 	vec3d
-		*pos,
-		*velocity,
+		*pos = nullptr,
+		*velocity = nullptr,
 		new_pos,
-		*face_normal;
+		*face_normal = nullptr;
 
 	matrix3x3
 		m;
@@ -996,13 +996,13 @@ void helicopter_impact_movement (entity *en)
 {
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		speed;
 
 	vec3d
-		*velocity;
+		*velocity = nullptr;
 
 	int
 		seed;
@@ -1032,15 +1032,15 @@ void helicopter_impact_movement (entity *en)
 void helicopter_movement_get_waypoint_position_and_velocity (entity *en, vec3d *wp_pos, vec3d *wp_vel)
 {
 	entity
-		*wp,
-		*group,
-		*guide;
+		*wp = nullptr,
+		*group = nullptr,
+		*guide = nullptr;
 
 	float
 		distance;
 
 	vec3d
-		*pos;
+		*pos = nullptr;
 
 	int
 		hold_position;
@@ -1160,14 +1160,14 @@ void helicopter_movement_get_waypoint_position_and_velocity (entity *en, vec3d *
 					//
 
 					entity
-						*task_leader;
+						*task_leader = nullptr;
 
 					vec3d
 						xv,
-						*leader_pos;
+						*leader_pos = nullptr;
 
 					formation_type
-						*formation;
+						*formation = nullptr;
 
 					int
 						type,
@@ -1298,12 +1298,12 @@ void get_waypoint_display_position (entity *en, entity *wp, vec3d *wp_pos)
 float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, float current_heading)
 {
 	entity
-		*guide,
-		*leader,
-		*wp;
+		*guide = nullptr,
+		*leader = nullptr,
+		*wp = nullptr;
 
 	vec3d
-		*mv;
+		*mv = nullptr;
 
 	float
 		heading;
@@ -1381,8 +1381,8 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vector, vec3d *model_acceleration_vector, int *return_flag)
 {
 	entity
-		*guide,
-		*target;
+		*guide = nullptr,
+		*target = nullptr;
 
 	float
 		pitch,
@@ -1403,8 +1403,8 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 			get_local_entity_float_value (en, FLOAT_TYPE_WEAPON_BURST_TIMER))) // AI waiting for proper conditions to engage or already engaging
 	{
 		vec3d
-			*weapon_vector,
-			*weapon_to_intercept_point_vector;
+			*weapon_vector = nullptr,
+			*weapon_to_intercept_point_vector = nullptr;
 		float
 			dummie,
 			weapon_to_target_pitch,
@@ -1496,7 +1496,7 @@ float helicopter_movement_get_desired_roll (entity *en, float lateral_velocity, 
 void helicopter_movement_calculate_rotor_rpm (entity *en, float lift)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		delta_rpm,
@@ -1535,19 +1535,19 @@ void helicopter_movement_calculate_rotor_rpm (entity *en, float lift)
 float helicopter_movement_structure_avoidance (entity *en)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*guide,
-		*sector,
-		*structure;
+		*guide = nullptr,
+		*sector = nullptr,
+		*structure = nullptr;
 
 	vec3d
 		pos,
-		*test_pos;
+		*test_pos = nullptr;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	float
 		d,
@@ -1638,7 +1638,7 @@ float helicopter_movement_structure_avoidance (entity *en)
 float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_pos)
 {
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		min_height,
@@ -1647,14 +1647,14 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 		terrain_elevation;
 
 	entity
-		*leader;
+		*leader = nullptr;
 
 	vec3d
 		test_pos,
-		*pos;
+		*pos = nullptr;
 
 	matrix3x3
-		*attitude;
+		*attitude = nullptr;
 
 	guide_terrain_follow_modes
 		terrain_follow;
@@ -1752,11 +1752,11 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3d *wp_pos)
 {
 	vec3d
-		*position,
-		*mv;
+		*position = nullptr,
+		*mv = nullptr;
 
 	helicopter
-		*raw;
+		*raw = nullptr;
 
 	float
 		min_height;
@@ -1874,13 +1874,13 @@ void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 	vec3d
 		closest_collision_point,
 		collision_point,
-		*en_pos,
-		*hc_pos;
+		*en_pos = nullptr,
+		*hc_pos = nullptr;
 
 	entity
-		*closest_hc,
-		*group,
-		*hc;
+		*closest_hc = nullptr,
+		*group = nullptr,
+		*hc = nullptr;
 
 	if (get_local_entity_int_value (en, INT_TYPE_GROUP_LEADER))
 	{
@@ -1994,11 +1994,11 @@ void debug_visuals (entity *en, vec3d *tg_pos, float lifetime)
 {
 
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	vec3d
 		flat_wp_pos,
-		*ac_pos;
+		*ac_pos = nullptr;
 
 	rgb_colour
 		los_colour;

@@ -79,7 +79,7 @@
 static int response_to_collision (entity_messages message, entity *receiver, entity *sender, va_list pargs)
 {
 	entity
-		*aggressor;
+		*aggressor = nullptr;
 
 	int
 		total_damage_level;

@@ -77,7 +77,7 @@ static void call_radio_ui_object_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	radio_ui_object
-		*radio;
+		*radio = nullptr;
 
 	int
 		mouse_state,
@@ -141,7 +141,7 @@ static void call_radio_ui_object_right_function (ui_object *obj, void *arg)
 		((*function) (ui_object *object, void *arg));
 	
 	radio_ui_object
-		*radio;
+		*radio = nullptr;
 
 	radio = (radio_ui_object *) obj->data;
 

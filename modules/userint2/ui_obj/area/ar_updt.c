@@ -88,11 +88,11 @@ static void update_area_ui_object (ui_object *obj)
       grand_parent_y_origin = 0.0;
 
    ui_object
-      *grand_parent,
-      *parent;
+      *grand_parent = nullptr,
+      *parent = nullptr;
 
    area_ui_object
-      *area;
+      *area = nullptr;
 
 	float
 		old_viewport_x1,

@@ -293,7 +293,7 @@ void set_camera_action (camera *raw, camera_actions action)
 		////////////////////////////////////////
 		{
 			entity
-				*en;
+				*en = nullptr;
 
 			en = get_external_view_entity_viewable_weapon ();
 

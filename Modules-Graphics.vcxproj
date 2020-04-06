@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{821C3FF0-49CB-4A80-8C58-9F03C35258DF}</ProjectGuid>
+    <RootNamespace>ModulesGraphics</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.29904.37</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\modules;.\modules\3d;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>graphics.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <BrowseInformation>true</BrowseInformation>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>dxguid.lib;AMSTRMID.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)BuildLog-$(ProjectName).htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.\modules;.\aphavoc\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_MBCS;_WIN32_WINNT=0x0601;WINVER=0x0601;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>4Bytes</StructMemberAlignment>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>graphics.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <SDLCheck>true</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>dxguid.lib;amstrmid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\modules\linklib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="modules\2d\2dart.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="modules\2d\2dview.c" />
+    <ClCompile Include="modules\2d\2dwrap.c" />
+    <ClCompile Include="modules\graphics\block.c" />
+    <ClCompile Include="modules\graphics\circle.c" />
+    <ClCompile Include="modules\graphics\clip.c" />
+    <ClCompile Include="modules\graphics\colour.c" />
+    <ClCompile Include="modules\graphics\d3d.c" />
+    <ClCompile Include="modules\graphics\d3dfog.c" />
+    <ClCompile Include="modules\graphics\d3dpoly.c" />
+    <ClCompile Include="modules\graphics\d3dstate.c" />
+    <ClCompile Include="modules\graphics\d3dvert.c" />
+    <ClCompile Include="modules\graphics\dirdraw.c" />
+    <ClCompile Include="modules\graphics\dresol.c" />
+    <ClCompile Include="modules\graphics\f3d.c" />
+    <ClCompile Include="modules\graphics\heckfill.c" />
+    <ClCompile Include="modules\graphics\lbm.c" />
+    <ClCompile Include="modules\graphics\line.c" />
+    <ClCompile Include="modules\graphics\mipmap.c" />
+    <ClCompile Include="modules\graphics\monofont.c" />
+    <ClCompile Include="modules\graphics\monosprt.c" />
+    <ClCompile Include="modules\graphics\mouseptr.c" />
+    <ClCompile Include="modules\graphics\pixel.c" />
+    <ClCompile Include="modules\graphics\polyd3d.c" />
+    <ClCompile Include="modules\graphics\polyline.c" />
+    <ClCompile Include="modules\graphics\psdread.c" />
+    <ClCompile Include="modules\graphics\psdwrite.c" />
+    <ClCompile Include="modules\graphics\render.c" />
+    <ClCompile Include="modules\graphics\screens.c" />
+    <ClCompile Include="modules\graphics\shadfill.c" />
+    <ClCompile Include="modules\graphics\tempbuf.c" />
+    <ClCompile Include="modules\graphics\textsys.c" />
+    <ClCompile Include="modules\graphics\textuser.c" />
+    <ClCompile Include="modules\graphics\tga.c" />
+    <ClCompile Include="modules\graphics\tranbuf.c" />
+    <ClCompile Include="modules\graphics\vcache.c" />
+    <ClCompile Include="modules\graphics\viewport.c" />
+    <ClCompile Include="modules\graphics\zbuffer.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modules\2d.h" />
+    <ClInclude Include="modules\2d\2dart.h" />
+    <ClInclude Include="modules\2d\2dview.h" />
+    <ClInclude Include="modules\2d\2dwrap.h" />
+    <ClInclude Include="modules\graphics.h" />
+    <ClInclude Include="modules\graphics\bin.h" />
+    <ClInclude Include="modules\graphics\block.h" />
+    <ClInclude Include="modules\graphics\circle.h" />
+    <ClInclude Include="modules\graphics\clip.h" />
+    <ClInclude Include="modules\graphics\colour.h" />
+    <ClInclude Include="modules\graphics\d3d.h" />
+    <ClInclude Include="modules\graphics\d3dfog.h" />
+    <ClInclude Include="modules\graphics\d3dpoly.h" />
+    <ClInclude Include="modules\graphics\d3dstate.h" />
+    <ClInclude Include="modules\graphics\d3dvert.h" />
+    <ClInclude Include="modules\graphics\dirdraw.h" />
+    <ClInclude Include="modules\graphics\dresol.h" />
+    <ClInclude Include="modules\graphics\f3d.h" />
+    <ClInclude Include="modules\graphics\heckfill.h" />
+    <ClInclude Include="modules\graphics\lbm.h" />
+    <ClInclude Include="modules\graphics\line.h" />
+    <ClInclude Include="modules\graphics\mipmap.h" />
+    <ClInclude Include="modules\graphics\monofont.h" />
+    <ClInclude Include="modules\graphics\monosprt.h" />
+    <ClInclude Include="modules\graphics\mouseptr.h" />
+    <ClInclude Include="modules\graphics\palette.h" />
+    <ClInclude Include="modules\graphics\pixel.h" />
+    <ClInclude Include="modules\graphics\polyd3d.h" />
+    <ClInclude Include="modules\graphics\polyline.h" />
+    <ClInclude Include="modules\graphics\psdread.h" />
+    <ClInclude Include="modules\graphics\psdwrite.h" />
+    <ClInclude Include="modules\graphics\render.h" />
+    <ClInclude Include="modules\graphics\rgb.h" />
+    <ClInclude Include="modules\graphics\screens.h" />
+    <ClInclude Include="modules\graphics\scrnstr.h" />
+    <ClInclude Include="modules\graphics\shadfill.h" />
+    <ClInclude Include="modules\graphics\tempbuf.h" />
+    <ClInclude Include="modules\graphics\textsys.h" />
+    <ClInclude Include="modules\graphics\textures.h" />
+    <ClInclude Include="modules\graphics\textuser.h" />
+    <ClInclude Include="modules\graphics\tga.h" />
+    <ClInclude Include="modules\graphics\tranbuf.h" />
+    <ClInclude Include="modules\graphics\vcache.h" />
+    <ClInclude Include="modules\graphics\vertex.h" />
+    <ClInclude Include="modules\graphics\viewport.h" />
+    <ClInclude Include="modules\graphics\zbuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="modules\graphics\fillasm.asm" />
+    <None Include="modules\graphics\zbufasm.asm" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

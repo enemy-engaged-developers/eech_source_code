@@ -79,7 +79,7 @@
 static void update_server (entity *en)
 {
 	group
-		*raw;
+		*raw = nullptr;
 
 	//
 	// Group is only on update list when its sleeping or under attack

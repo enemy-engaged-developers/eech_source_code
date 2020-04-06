@@ -79,7 +79,7 @@
 static void set_local_raw_int_value (entity *en, int_types type, int value)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -125,7 +125,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 static void set_local_int_value (entity *en, int_types type, int value)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	#if DEBUG_MODULE
 
@@ -398,7 +398,7 @@ static void set_client_int_value (entity *en, int_types type, int value)
 static int get_local_int_value (entity *en, int_types type)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	int
 		value;
@@ -547,7 +547,7 @@ static int get_local_int_value (entity *en, int_types type)
 		////////////////////////////////////////
 		{
 			entity
-				*group;
+				*group = nullptr;
 
 			value = FALSE;
 
@@ -644,7 +644,7 @@ static int get_local_int_value (entity *en, int_types type)
 		////////////////////////////////////////
 		{
 			entity
-				*task;
+				*task = nullptr;
 
 			//
 			// First check for being on takeoff queue
@@ -996,7 +996,7 @@ static int get_local_int_value (entity *en, int_types type)
 		////////////////////////////////////////
 		{
 			entity
-				*guide;
+				*guide = nullptr;
 
 			value = FALSE;
 

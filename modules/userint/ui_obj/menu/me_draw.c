@@ -80,20 +80,20 @@ static void draw_menu_ui_object (ui_object *obj)
 		y2;
 
 	area_ui_object
-		*area;
+		*area = nullptr;
 
 	unsigned short int
-		*graphic;
+		*graphic = nullptr;
 
 	int
 		x_size,
 		y_size;
 
 	menu_ui_object
-		*menu;
+		*menu = nullptr;
 
 	struct SCREEN
-		*old_active_screen;
+		*old_active_screen = nullptr;
 
 	menu = (menu_ui_object *) obj->data;
 

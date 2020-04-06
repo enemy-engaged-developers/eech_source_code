@@ -163,7 +163,7 @@ void save_screen_image_and_viewpoint_data (void)
 #if WRITE_VIEWPOINT_DATA
 		{
 			FILE
-				*fp;
+				*fp = nullptr;
 
 			int
 				x_sec,
@@ -265,10 +265,10 @@ void save_high_res_screen_image ( void )
 		screen_pitch;
 
 	unsigned int
-		*huge_screen_shot_memory;
+		*huge_screen_shot_memory = nullptr;
 
 	unsigned
-		*screen_data;
+		*screen_data = nullptr;
 
 	x_repeat = 8;
 
@@ -287,8 +287,8 @@ void save_high_res_screen_image ( void )
 		{
 
 			unsigned int
-				*destination_ptr,
-				*screen_line;
+				*destination_ptr = nullptr,
+				*screen_line = nullptr;
 
 			int
 				screen_y;

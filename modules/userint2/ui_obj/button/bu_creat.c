@@ -74,7 +74,7 @@ static void create_button_ui_object (ui_object *obj, ui_object_types type, va_li
 {
 
    button_ui_object
-      *new_object;
+      *new_object = nullptr;
 
 	increase_ui_object_counter ();
 

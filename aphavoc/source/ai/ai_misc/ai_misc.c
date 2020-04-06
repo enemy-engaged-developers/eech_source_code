@@ -88,11 +88,11 @@ entity *get_closest_waypoint (entity *task, vec3d *pos, float min_range, float *
 		range;
 
 	vec3d
-		*waypoint_pos;
+		*waypoint_pos = nullptr;
 
 	entity
 		*closest_waypoint = NULL,
-		*current_waypoint;
+		*current_waypoint = nullptr;
 
 	best_range = 99999999;
 
@@ -169,14 +169,14 @@ entity *get_closest_halfway_waypoint (entity *task, vec3d *pos, float min_range,
 		range;
 
 	vec3d
-		*waypoint_pos1,
-		*waypoint_pos2,
+		*waypoint_pos1 = nullptr,
+		*waypoint_pos2 = nullptr,
 		mid_pos;
 
 	entity
 		*closest_waypoint = NULL,
-		*waypoint1,
-		*waypoint2;
+		*waypoint1 = nullptr,
+		*waypoint2 = nullptr;
 
 	best_range = 99999999;
 
@@ -246,12 +246,12 @@ entity *get_closest_free_landing_site (entity_sub_types sub_type, entity *force,
 		range;
 
 	vec3d
-		*landing_pos;
+		*landing_pos = nullptr;
 
 	entity
 		*closest_landing = NULL,
-		*current_keysite,
-		*current_landing;
+		*current_keysite = nullptr,
+		*current_landing = nullptr;
 
 	best_range = 99999999;
 
@@ -392,12 +392,12 @@ entity *get_closest_free_landing_site (entity_sub_types sub_type, entity *force,
 				range;
 		
 			vec3d
-				*landing_pos;
+				*landing_pos = nullptr;
 		
 			entity
 				*closest_landing = NULL,
-				*current_keysite,
-				*current_landing;
+				*current_keysite = nullptr,
+				*current_landing = nullptr;
 		
 			best_range = 99999999;
 		
@@ -599,9 +599,9 @@ int validate_landing_route (entity *route_task)
 		type;
 
 	entity
-		*landing_en,
-		*keysite_en,
-		*wp;
+		*landing_en = nullptr,
+		*keysite_en = nullptr,
+		*wp = nullptr;
 
 	formation_types
 		route_formation,
@@ -1025,7 +1025,7 @@ entity *get_closest_mobile_entity (vec3d *pos)
 
 	entity
 		*closest_en = NULL,
-		*en;
+		*en = nullptr;
 
 	int
 		range,

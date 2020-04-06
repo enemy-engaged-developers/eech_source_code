@@ -169,9 +169,9 @@ void destroy_local_entity (entity *en)
 		#if DEBUG_UPDATE_LIST_VALIDATION
 
 		entity
-			*succ,
-			*pred,
-			*updt;
+			*succ = nullptr,
+			*pred = nullptr,
+			*updt = nullptr;
 
 		if (get_update_entity ())
 		{
@@ -270,7 +270,7 @@ void destroy_local_entity (entity *en)
 void destroy_local_entities (void)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	en = get_local_entity_list ();
 
@@ -291,9 +291,9 @@ void destroy_local_entities (void)
 			#if DEBUG_UPDATE_LIST_VALIDATION
 
 			entity
-				*succ,
-				*pred,
-				*updt;
+				*succ = nullptr,
+				*pred = nullptr,
+				*updt = nullptr;
 	
 			if (get_update_entity ())
 			{
@@ -395,7 +395,7 @@ void destroy_local_entities (void)
 void destroy_local_entity_children (entity *en, list_types list)
 {
    entity
-      *child;
+      *child = nullptr;
 
    child = get_local_entity_first_child (en, list);
 
@@ -413,9 +413,9 @@ void destroy_local_entity_children (entity *en, list_types list)
 			#if DEBUG_UPDATE_LIST_VALIDATION
 
 			entity
-				*succ,
-				*pred,
-				*updt;
+				*succ = nullptr,
+				*pred = nullptr,
+				*updt = nullptr;
 		
 			if (get_update_entity ())
 			{
@@ -517,7 +517,7 @@ void destroy_local_entity_children (entity *en, list_types list)
 void destroy_client_server_entity_children (entity *en, list_types list)
 {
    entity
-      *child;
+      *child = nullptr;
 
    child = get_local_entity_first_child (en, list);
 
@@ -535,9 +535,9 @@ void destroy_client_server_entity_children (entity *en, list_types list)
 			#if DEBUG_UPDATE_LIST_VALIDATION
 
 			entity
-				*succ,
-				*pred,
-				*updt;
+				*succ = nullptr,
+				*pred = nullptr,
+				*updt = nullptr;
 		
 			if (get_update_entity ())
 			{

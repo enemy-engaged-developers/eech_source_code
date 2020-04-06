@@ -79,7 +79,7 @@
 static void pack_local_data (entity *en, pack_modes mode)
 {
 	person
-		*raw;
+		*raw = nullptr;
 
 	ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 
@@ -146,7 +146,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				index;
 
 			person
-				*raw;
+				*raw = nullptr;
 
 
 			index = unpack_entity_safe_index ();

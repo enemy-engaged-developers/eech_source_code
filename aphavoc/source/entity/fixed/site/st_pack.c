@@ -107,10 +107,10 @@ void pack_local_site_data (pack_modes mode)
 {
 
 	entity
-		*en;
+		*en = nullptr;
 
 	site
-		*raw;
+		*raw = nullptr;
 
 	int
 		pack_size,
@@ -198,10 +198,10 @@ void unpack_local_site_data (pack_modes mode)
 {
 
 	site
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	int
 		count,

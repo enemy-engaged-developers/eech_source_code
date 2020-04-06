@@ -79,7 +79,7 @@
 static void draw_local_3d_object (entity *en, float range)
 {
 	cargo
-		*raw;
+		*raw = nullptr;
 
 	raw = get_local_entity_data (en);
 

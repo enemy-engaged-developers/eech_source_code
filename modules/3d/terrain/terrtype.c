@@ -2301,7 +2301,7 @@ struct TERRAIN_TYPE_NAME
 		type;
 
 	char
-		*name;
+		*name = nullptr;
 };
 
 typedef struct TERRAIN_TYPE_NAME terrain_type_name;

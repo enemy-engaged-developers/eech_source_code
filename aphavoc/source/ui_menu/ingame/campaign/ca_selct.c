@@ -74,21 +74,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
-	*mission_title_area,
-	*select_mission_button,
-	*member_title_area,
-	*select_member_button,
-	*mission_time_text,
-	*mission_time_area,
-	*member_status_text,
-	*member_status_area,
-	*selections_area,
-	*auto_select_mission_button,
-	*auto_select_member_button,
-	*cockpit_button,
-	*accept_current_selections_button,
-	*clear_current_selections_button,
-	*quit_current_mission_button;
+	*mission_title_area = nullptr,
+	*select_mission_button = nullptr,
+	*member_title_area = nullptr,
+	*select_member_button = nullptr,
+	*mission_time_text = nullptr,
+	*mission_time_area = nullptr,
+	*member_status_text = nullptr,
+	*member_status_area = nullptr,
+	*selections_area = nullptr,
+	*auto_select_mission_button = nullptr,
+	*auto_select_member_button = nullptr,
+	*cockpit_button = nullptr,
+	*accept_current_selections_button = nullptr,
+	*clear_current_selections_button = nullptr,
+	*quit_current_mission_button = nullptr;
 
 static char
 	string [128];
@@ -130,12 +130,12 @@ void initialise_campaign_screen_selection_objects (void)
 int activate_accept_selections_button (void)
 {
 	entity
-		*mission,
-		*member,
-		*member_current_mission,
-		*group,
-		*mission_base,
-		*member_base;
+		*mission = nullptr,
+		*member = nullptr,
+		*member_current_mission = nullptr,
+		*group = nullptr,
+		*mission_base = nullptr,
+		*member_base = nullptr;
 
 	member = get_local_entity_safe_ptr (get_ui_object_item_number (select_member_button));
 
@@ -274,9 +274,9 @@ int activate_accept_selections_button (void)
 static void set_raw_currently_selected_mission (int index)
 {
 	entity
-		*en,
-		*next,
-		*mission;
+		*en = nullptr,
+		*next = nullptr,
+		*mission = nullptr;
 
 	//
 	// Clear any locks the player has on a mission
@@ -349,10 +349,10 @@ static void set_raw_currently_selected_mission (int index)
 static void set_raw_currently_selected_member (int index)
 {
 	entity
-		*member,
-		*group,
-		*next,
-		*en;
+		*member = nullptr,
+		*group = nullptr,
+		*next = nullptr,
+		*en = nullptr;
 
 	//
 	// Clear any locks the player has on a group
@@ -422,11 +422,11 @@ static void set_raw_currently_selected_member (int index)
 void set_currently_selected_mission (int index)
 {
 	entity
-		*en,
-		*base,
-		*member,
-		*group,
-		*mission;
+		*en = nullptr,
+		*base = nullptr,
+		*member = nullptr,
+		*group = nullptr,
+		*mission = nullptr;
 
 	en = get_local_entity_safe_ptr (index);
 
@@ -495,10 +495,10 @@ void set_currently_selected_mission (int index)
 void set_currently_selected_member (int index)
 {
 	entity
-		*en,
-		*base,
-		*group,
-		*mission;
+		*en = nullptr,
+		*base = nullptr,
+		*group = nullptr,
+		*mission = nullptr;
 
 	en = get_local_entity_safe_ptr (index);
 
@@ -599,7 +599,7 @@ static void notify_select_mission_button (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*en;
+		*en = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -634,7 +634,7 @@ static void notify_select_member_button (ui_object *obj, void *arg)
 		index;
 
 	entity
-		*group;
+		*group = nullptr;
 
 	index = get_ui_object_item_number (obj);
 
@@ -701,12 +701,12 @@ static void notify_quit_campaign (ui_object *obj, void *arg)
 static void notify_auto_select_mission (ui_object *obj, void *arg)
 {
 	entity
-		*base,
-		*group,
-		*mission,
-		*force,
-		*selected_base,
-		*selected_member;
+		*base = nullptr,
+		*group = nullptr,
+		*mission = nullptr,
+		*force = nullptr,
+		*selected_base = nullptr,
+		*selected_member = nullptr;
 
 	int
 		side;
@@ -846,16 +846,16 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 static void notify_auto_select_member (ui_object *obj, void *arg)
 {
 	entity
-		*base,
-		*group,
-		*guide,
-		*member,
-		*mission,
-		*group_current_mission,
-		*force,
-		*selected_base,
-		*selected_group,
-		*selected_mission;
+		*base = nullptr,
+		*group = nullptr,
+		*guide = nullptr,
+		*member = nullptr,
+		*mission = nullptr,
+		*group_current_mission = nullptr,
+		*force = nullptr,
+		*selected_base = nullptr,
+		*selected_group = nullptr,
+		*selected_mission = nullptr;
 
 	int
 		side;
@@ -1025,11 +1025,11 @@ static void notify_accept_current_selections (ui_object *obj, void *arg)
 	#if !DEMO_VERSION
 
 	entity
-		*mission,
-		*member,
-		*group,
-		*next,
-		*en;
+		*mission = nullptr,
+		*member = nullptr,
+		*group = nullptr,
+		*next = nullptr,
+		*en = nullptr;
 
 	member = get_local_entity_safe_ptr (get_ui_object_item_number (select_member_button));
 
@@ -1158,12 +1158,12 @@ static void update_current_selection_buttons (void)
 		seconds;
 
 	entity
-		*en,
-		*mouse_en,
-		*group;
+		*en = nullptr,
+		*mouse_en = nullptr,
+		*group = nullptr;
 
 	rgb_colour
-		*col;
+		*col = nullptr;
 
 	mouse_en = get_ui_mouse_over_entity ();
 
@@ -1467,7 +1467,7 @@ static void update_current_selection_buttons (void)
 		if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 		{
 			entity
-				*current_mission;
+				*current_mission = nullptr;
 
 			set_ui_object_drawable (auto_select_member_button, TRUE);
 
@@ -1941,7 +1941,7 @@ void define_campaign_screen_selection_objects (void)
 static int response_to_group_remove_member (campaign_screen_messages message, entity *sender)
 {
 	entity
-		*en;
+		*en = nullptr;
 
 	//
 	// Check selected gunship to see if it is dead, or has no group

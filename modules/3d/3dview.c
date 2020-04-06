@@ -76,7 +76,7 @@ env_3d
 	*active_3d_environment = NULL;
 
 viewpoint
-	*visual_3d_vp;
+	*visual_3d_vp = nullptr;
 
 float
 	current_3d_viewangle_distance_conversion_factor;

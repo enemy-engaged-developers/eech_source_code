@@ -171,7 +171,7 @@ int system_thread_function ( int ( *function ) ( void * ), void *data )
 		* (push a message, wait for an answer message and continue). This is how it is supposed
 		* to work: We start with the mutex locked. When we come here, we try to lock it once again.
 		* This will fail, and the thread will suspend. Meanwhile, the system thread will get the
-		* message, run the code, and unlock the mutex. This will wake the sleeping thread,
+		* message = nullptr, run the code, and unlock the mutex. This will wake the sleeping thread,
 		* which will once again lock the thread and continue.
 		*
 		* This hack works because a standard linux mutex can be locked and unlocked from any thread.

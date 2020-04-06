@@ -26,7 +26,7 @@
 
 static const ALCchar
 	*reported_devices[256],
-	*reported_default_device;
+	*reported_default_device = nullptr;
 
 struct EXTENDED_SOUND_EFFECT_INFO
 {
@@ -64,7 +64,7 @@ static int
 	number_of_buffers;
 
 static sound_buffer
-	*buffers;
+	*buffers = nullptr;
 
 static int
 	sound_system_initialised,
@@ -95,7 +95,7 @@ static void switch_context ( int context )
 static ALuint get_source ( system_sound_effect *effect )
 {
 	extended_sound_effect_info
-		*info;
+		*info = nullptr;
 
 	info = get_info ( effect );
 	switch_context ( info->context );
@@ -106,7 +106,7 @@ static ALuint get_source ( system_sound_effect *effect )
 static ALuint get_source_context ( system_sound_effect *effect, int context )
 {
 	extended_sound_effect_info
-		*info;
+		*info = nullptr;
 
 	info = get_info ( effect );
 	ASSERT ( info->context == -1 );
@@ -221,8 +221,8 @@ int get_sound_system_devices ( const char ***devices, const char **default_devic
 	if ( !*reported_devices )
 	{
 		const char
-			*devices,
-			*device;
+			*devices = nullptr,
+			*device = nullptr;
 
 		int
 			count;
@@ -410,7 +410,7 @@ static system_sound_effect * get_next_free_system_system_sound_effect ( void )
 system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data, int context )
 {
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	if ( !sound_system_initialised || context >= MAX_NUMBER_OF_CONTEXTS )
 	{
@@ -456,7 +456,7 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data, int context )
 {
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	if ( !sound_system_initialised || context >= MAX_NUMBER_OF_CONTEXTS )
 	{
@@ -524,7 +524,7 @@ int get_system_sound_effect_playing ( system_sound_effect *effect )
 void destroy_system_sound_effect ( system_sound_effect *effect )
 {
 	extended_sound_effect_info
-		*info;
+		*info = nullptr;
 	ALuint
 		source;
 
@@ -571,7 +571,7 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 		else
 		{
 			extended_sound_effect_info
-				*info;
+				*info = nullptr;
 			ALuint
 				source;
 
@@ -703,7 +703,7 @@ void update_system_sound_effect_system ( void )
 		count;
 
 	system_sound_effect
-		*effect;
+		*effect = nullptr;
 
 	ALint
 		status;
@@ -716,7 +716,7 @@ void update_system_sound_effect_system ( void )
 	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
 		extended_sound_effect_info
-			*info;
+			*info = nullptr;
 		ALuint
 			source;
 

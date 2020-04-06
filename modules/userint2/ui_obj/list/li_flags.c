@@ -74,11 +74,11 @@ static void set_list_ui_object_state (ui_object *obj, int flag)
 {
 	
 	area_ui_object
-		*child_area,
-		*area;
+		*child_area = nullptr,
+		*area = nullptr;
 
 	ui_object
-		*child;
+		*child = nullptr;
 
 	if (flag == UI_OBJECT_STATE_OFF)
 	{
@@ -109,7 +109,7 @@ static void set_list_ui_list_box_y_space (ui_object *obj, float y_space)
 {
 
 	list_ui_object
-		*list;
+		*list = nullptr;
 
 	list = (list_ui_object *) obj->data;
 

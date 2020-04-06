@@ -91,7 +91,7 @@ char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 user_defined_key_type
-	*user_defined_keys;
+	*user_defined_keys = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ void initialise_user_defined_events (void)
 		ev;
 
 	user_defined_key_type
-		*new_user_defined_key;
+		*new_user_defined_key = nullptr;
 
 	char
 		enum_event [100],
@@ -118,7 +118,7 @@ void initialise_user_defined_events (void)
 		modifier [10];
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_ptr = fopen ("userdef.key", "r");
 
@@ -169,7 +169,7 @@ void process_user_defined_flight_events (void)
 {
 
 	user_defined_key_type
-		*current_key;
+		*current_key = nullptr;
 
 	current_key = user_defined_keys;
 
@@ -280,7 +280,7 @@ void create_user_defined_file (void)
 {
 
 	FILE
-		*file_ptr;
+		*file_ptr = nullptr;
 
 	file_ptr = fopen ("userdef.key", "w");
 

@@ -74,15 +74,15 @@ struct monitor_data
 {
 
 	struct monitor_data
-		*pred,
-		*succ;
+		*pred = nullptr,
+		*succ = nullptr;
 
 	int
 		offset,
 		number;
 
 	char
-		*string;
+		*string = nullptr;
 
 	enum mt_type
 		type;
@@ -91,10 +91,10 @@ struct monitor_data
 		colour;
 
 	void
-		*data,
-		*data2,
-		*data3,
-		*data4;
+		*data = nullptr,
+		*data2 = nullptr,
+		*data3 = nullptr,
+		*data4 = nullptr;
 };
 
 typedef struct monitor_data MONITORDATA;
@@ -120,7 +120,7 @@ int
 
 //HANDLE
 SDL_Thread //FIXME: Must determine correct datatype
-	*application_monitor_thread;
+	*application_monitor_thread = nullptr;
 
 static LPMONITORDATA
 
@@ -367,7 +367,7 @@ void debug_log (char *msg, ...)
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	static char
 		buffer[1000];
@@ -479,7 +479,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, char *msg, ...)
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	static char
 		buffer[1000];
@@ -589,7 +589,7 @@ void debug_filtered_log (char *msg, ...)
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	static char
 		buffer[1000];
@@ -699,7 +699,7 @@ void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, char *msg, ...)
 {
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	static char
 		buffer[1000];
@@ -818,7 +818,7 @@ void debug_fatal ( char *string, ... )
 		argument_list;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	char
 		buffer[1000];
@@ -1907,7 +1907,7 @@ void rename_debug_log_file (char *new_file_name)
 		error;
 
 	FILE
-		*fp;
+		*fp = nullptr;
 
 	//
 	// check everything is ok with new_file_name

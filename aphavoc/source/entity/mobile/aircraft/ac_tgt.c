@@ -93,7 +93,7 @@ static int check_aircraft_target_scan_valid (entity *en)
 {
 
 	entity
-		*group;
+		*group = nullptr;
 
 	//
 	// Is entity allowed to scan for targets 
@@ -168,12 +168,12 @@ void update_aircraft_target_scan (entity *en)
 void aircraft_target_scan (entity *en)
 {
 	aircraft
-		*raw;
+		*raw = nullptr;
 
 	entity
-		*task,
-		*group,
-		*target_group;
+		*task = nullptr,
+		*group = nullptr,
+		*target_group = nullptr;
 
 	int
 		target_count;
@@ -342,18 +342,18 @@ entity *get_aircraft_air_to_surface_scan_group_targets (entity *source, int *tar
 		z_sec;
 
 	entity
-		*best_group,
-		*best_target,
-		*target,
-		*group,
-		*sec;
+		*best_group = nullptr,
+		*best_target = nullptr,
+		*target = nullptr,
+		*group = nullptr,
+		*sec = nullptr;
 
 	matrix3x3
 		attitude;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		target_vector;
 
 	float
@@ -550,18 +550,18 @@ entity *get_aircraft_air_to_air_scan_group_targets (entity *source, int *target_
 		z_sec;
 
 	entity
-		*best_group,
-		*best_target,
-		*target,
-		*group,
-		*sec;
+		*best_group = nullptr,
+		*best_target = nullptr,
+		*target = nullptr,
+		*group = nullptr,
+		*sec = nullptr;
 
 	matrix3x3
 		attitude;
 
 	vec3d
-		*source_position,
-		*target_position,
+		*source_position = nullptr,
+		*target_position = nullptr,
 		target_vector;
 
 	float

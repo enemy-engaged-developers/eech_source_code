@@ -71,16 +71,16 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ui_object
-	*dedicated_server_screen;
+	*dedicated_server_screen = nullptr;
 
 static ui_object
-	*player_list,
-	*player_list_area,
-	*dedicated_server_quit_button,
-	*dedicated_server_title_text,
-	*dedicated_server_map_text,
-	*dedicated_server_game_text,
-	*dedicated_server_time_text;
+	*player_list = nullptr,
+	*player_list_area = nullptr,
+	*dedicated_server_quit_button = nullptr,
+	*dedicated_server_title_text = nullptr,
+	*dedicated_server_map_text = nullptr,
+	*dedicated_server_game_text = nullptr,
+	*dedicated_server_time_text = nullptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,8 +318,8 @@ void dedicated_server_function (ui_object *obj, void *arg)
 static void dedicated_server_build_player_list (void)
 {
 	entity
-		*force,
-		*pilot;
+		*force = nullptr,
+		*pilot = nullptr;
 
 	entity_sides
 		side;

@@ -147,7 +147,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 {
 
 	vec3d
-		*position;
+		*position = nullptr;
 
 	float
 		velocity,
