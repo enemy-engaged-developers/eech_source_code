@@ -71,6 +71,7 @@ struct WEAPON_DATA
 	const char
 		*hud_name,
 		*mfd_name,
+		*abbrev,
 		*weapon_loading_list_name,
 		*weapon_loading_name_text;
 

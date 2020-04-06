@@ -467,7 +467,6 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("power profile     				= %f", MT_FLOAT, &current_flight_dynamics->power_profile.value);
 	debug_watch ("power parasite    				= %f", MT_FLOAT, &current_flight_dynamics->power_parasite.value);
 	debug_watch ("power surplus     				= %f", MT_FLOAT, &current_flight_dynamics->power_surplus.value);
-	debug_watch ("G force                           = %f", MT_FLOAT, &current_flight_dynamics->g_force.value);
 #endif
 }
 

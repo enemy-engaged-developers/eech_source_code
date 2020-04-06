@@ -323,6 +323,10 @@ void draw_ka50_virtual_cockpit_instruments (void)
 	object_3d_sub_object_search_data
 		search;
 
+	float
+		fwd_fuel_value,
+		aft_fuel_value;
+
 	ASSERT (get_gunship_entity ());
 
 	ASSERT (current_flight_dynamics);
@@ -849,19 +853,40 @@ void draw_ka50_virtual_cockpit_instruments (void)
 	//
 	////////////////////////////////////////
 
+	if (current_flight_dynamics->fuel_weight.value > 40.0) {
+		fwd_fuel_value = (current_flight_dynamics->fuel_weight.value - 40.0) / 2;
+		aft_fuel_value = (current_flight_dynamics->fuel_weight.value - 40.0) / 2 + 40.0;
+	} else {
+		fwd_fuel_value = 0.0;
+		aft_fuel_value = current_flight_dynamics->fuel_weight.value;
+	}
+
+	// Forward Fuel Tank
+
 	search.search_depth = 0;
 	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_FUEL_GUAGE;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_FWD_FUEL_NEEDLE;
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		float
-			fuel_value;
+		fwd_fuel_value = bound(fwd_fuel_value, 0.0, 705.0); // FWD tank holds 705kgs
+		fwd_fuel_value *= rad (304.0) / 800.0;
 
-		fuel_value = bound((current_flight_dynamics->fuel_weight.value), 0.0, 100.0);
-		fuel_value *= rad (320.0) / 100.0;
+		search.result_sub_object->relative_roll = -fwd_fuel_value;
+	}
 
-		search.result_sub_object->relative_roll = -fuel_value;
+	// Rear Fuel Tank
+
+	search.search_depth = 0;
+	search.search_object = virtual_cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_BLACKSHARK_AFT_FUEL_NEEDLE;
+
+	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		aft_fuel_value = bound(aft_fuel_value, 0.0, 745.0); // AFT tank holds 745kgs
+		aft_fuel_value *= rad (304.0) / 800.0;
+
+		search.result_sub_object->relative_roll = -aft_fuel_value;
 	}
 
 	////////////////////////////////////////
