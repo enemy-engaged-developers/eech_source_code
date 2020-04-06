@@ -275,7 +275,7 @@ void add_dynamic_force (const char *name, float force, float duration, vec3d *po
 			#if DEBUG_MODULE
 
 			//if ((get_current_dynamics_options (DYNAMICS_OPTIONS_DRAW_FLIGHT_PATH)) && (debug))
-			if (debug)
+			if (debug || DEBUG_MODULE > 1)
 			{
 
 				current_flight_dynamics->dynamic_forces [index].name = (char *) malloc_heap_mem (sizeof (char) * (strlen (name) + 1));
@@ -338,7 +338,7 @@ void update_dynamic_forces (void)
 
 				current_flight_dynamics->number_of_dynamic_forces --;
 
-				#if DEBUG_MODULE > 1
+				#if DEBUG_MODULE > 2
 
 				if (current_flight_dynamics->dynamic_forces [index].name)
 				{
@@ -574,7 +574,7 @@ void resolve_dynamic_forces (void)
 					alt_error_1,
 					der_error,
 					PID_output,
-					Bias= 90,	//  Bias the center of the PID output
+					Bias= 90.0,	//  Bias the center of the PID output
 					Kp = 3.0,	//  PID loop Proportional constant  
 					Kd = 7.0;	//  PID loop Derivative constant,  (handles up to about a 100m height correction smoothly)
 								//  the Ki Integral term is not being used
@@ -582,24 +582,17 @@ void resolve_dynamic_forces (void)
 					alt_error_0 = 0.0;
 
 				const float
-					output_min = 55,	//  Limit the throttle adjustment range to 85% +- 30
-					output_max = 120;	//  Extra lift is needed for moving upwards because of gravity
+					output_min = 55.0,	//  Limit the throttle adjustment range to 85% +- 30
+					output_max = 120.0;	//  Extra lift is needed for moving upwards because of gravity
 
-							//                                                altitude.max = target net altitude
-			alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
-
-			der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
-
-			PID_output = Bias -(Kp * alt_error_1) -(Kd * der_error);
-
-//debug_log ("HOVER:  Altitude: %f Setting: %f PID_out: %f", current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min, current_flight_dynamics->altitude.max, PID_output);
-
-			PID_output = bound (PID_output, output_min, output_max);
-
-		current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
-
-			alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
-
+				//altitude.max = target net altitude
+				alt_error_1 = current_flight_dynamics->radar_altitude.value - current_flight_dynamics->altitude.max;
+				der_error = (alt_error_1 - alt_error_0) / get_model_delta_time();
+				PID_output = Bias - (Kp * alt_error_1) - (Kd * der_error);
+	//debug_log ("HOVER:  Altitude: %f Setting: %f PID_out: %f", current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min, current_flight_dynamics->altitude.max, PID_output);
+				PID_output = bound (PID_output, output_min, output_max);
+				current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
+				alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
 
 				// wash velocity out to zero
 				// level out helicopter
@@ -608,11 +601,13 @@ void resolve_dynamic_forces (void)
 				current_flight_dynamics->input_data.cyclic_x.value = bound(-current_flight_dynamics->roll.value / rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_x.min, current_flight_dynamics->input_data.cyclic_x.max);
 				current_flight_dynamics->input_data.cyclic_y.value = bound((current_flight_dynamics->pitch.value - rad(5.0))/ rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_y.min, current_flight_dynamics->input_data.cyclic_y.max);
 
-				current_flight_dynamics->model_acceleration_vector.x = -(10.0 * get_model_delta_time ()) * current_flight_dynamics->model_motion_vector.x;
+				current_flight_dynamics->model_acceleration_vector.x = - 10.0 * get_model_delta_time () * current_flight_dynamics->model_motion_vector.x;
 				current_flight_dynamics->model_acceleration_vector.y = resultant_vertically;
-				current_flight_dynamics->model_acceleration_vector.z = -(10.0 * get_model_delta_time ()) * current_flight_dynamics->model_motion_vector.z;
+				current_flight_dynamics->model_acceleration_vector.z = - 10.0 * get_model_delta_time () * current_flight_dynamics->model_motion_vector.z;
 
-				current_flight_dynamics->angular_heading_velocity.value =-(10.0 * get_model_delta_time ()) * current_flight_dynamics->angular_heading_velocity.value;  //  Javelin  7/19
+				/* cause uncontrollable heading.delta /thealx/
+				current_flight_dynamics->angular_heading_velocity.value = - 10.0 * get_model_delta_time () * current_flight_dynamics->angular_heading_velocity.value;  //  Javelin  7/19
+				 */
 
 				break;
 			}
@@ -645,33 +640,32 @@ void resolve_dynamic_forces (void)
 					output_max = 120;	//  Extra lift is needed for moving upwards to counter gravity
 
 
-			if (current_flight_dynamics->altitude.max < 200)  //  Use the radar altitude for Nap-of-the-Earth
-			{
-				alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
-			}
-			else		//  Use the Barometric Altitude (not ground following)
-			{
-				alt_error_1 = (current_flight_dynamics->barometric_altitude.value) - current_flight_dynamics->altitude.max;
-
-				  //  debug_log("Dynamics: Barometric Alt = %f  Target Alt = %f", current_flight_dynamics->barometric_altitude.value, current_flight_dynamics->altitude.max);
-
-				if (current_flight_dynamics->radar_altitude.value < 100)
+				if (current_flight_dynamics->altitude.max < 200)  //  Use the radar altitude for Nap-of-the-Earth
 				{
-															//  Reset to avoid hitting a mountain
-					current_flight_dynamics->altitude.max = current_flight_dynamics->radar_altitude.value - 50;  
+					alt_error_1 = (current_flight_dynamics->radar_altitude.value) - current_flight_dynamics->altitude.max;
 				}
-			}
+				else		//  Use the Barometric Altitude (not ground following)
+				{
+					alt_error_1 = (current_flight_dynamics->barometric_altitude.value) - current_flight_dynamics->altitude.max;
 
-			der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
+					//  debug_log("Dynamics: Barometric Alt = %f  Target Alt = %f", current_flight_dynamics->barometric_altitude.value, current_flight_dynamics->altitude.max);
 
-			PID_output = Bias -(Kp * alt_error_1) -(Kd * der_error);
+					if (current_flight_dynamics->radar_altitude.value < 100)
+					{
+						//  Reset to avoid hitting a mountain
+						current_flight_dynamics->altitude.max = current_flight_dynamics->radar_altitude.value - 50;  
+					}
+				}
 
-			PID_output = bound (PID_output, output_min, output_max);
+				der_error = (alt_error_1 - alt_error_0)/get_model_delta_time();
 
-		current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
+				PID_output = Bias -(Kp * alt_error_1) -(Kd * der_error);
 
-			alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
-			 
+				PID_output = bound (PID_output, output_min, output_max);
+
+				current_flight_dynamics->input_data.collective.value = PID_output;	//  set the collective-throttle
+
+				alt_error_0 = alt_error_1;  //  save the current altitude error for the next round
 
 				//  Speed Controls using Nose Angle
 				AAA = knots(current_flight_dynamics->velocity_z.value);
@@ -689,30 +683,20 @@ void resolve_dynamic_forces (void)
 
 				AAA = knots(current_flight_dynamics->velocity_z.value) - 100;
 				if (AAA < 0) AAA = 0.0;
-				else AAA = AAA /125.0 *90.0;  //  Really pull the Nose up if over 100 knots
-         switch (get_global_gunship_type ())
-         {
-			case GUNSHIP_TYPE_VIPER:
-			{
-				ABias += -2 -AAA;  //  Pull the nose up, the AH-1's are all nose heavy
-				break;
-			}
-		 }
-		switch (current_flight_dynamics->sub_type)
-		{
-			case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
-			{
-				ABias += -2 -AAA;  //  Pull the nose up
-				break;
-			}
-			case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
-			{
-				ABias += -2 -AAA;  //  Pull the nose up
-				break;
-			}
-		}
-			
-			////////////////////////////////  Original Razorworks Code  ////////////////////////////////////////////////////////
+				else AAA = AAA / 125.0 * 90.0;  //  Really pull the Nose up if over 100 knots
+
+				switch (current_flight_dynamics->sub_type)
+				{
+					case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+					case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+					case ENTITY_SUB_TYPE_AIRCRAFT_AH1Z_VIPER:
+					{
+						ABias -= 2 + AAA;  //  Pull the nose up
+						break;
+					}
+				}
+
+				////////////////////////////////  Original Razorworks Code  ////////////////////////////////////////////////////////
 
 				look_ahead_distance = 10.0 * current_flight_dynamics->velocity_z.value;  //  10 seconds straight ahead
 
@@ -729,7 +713,7 @@ void resolve_dynamic_forces (void)
 
 //debug_log ("HOVER: Ground Altitude: %f   10-sec-ahead: %f", current_flight_dynamics->altitude.min, look_ahead_position.y);  
 		
-			////////////////////////////////  End Original Razorworks Code  ////////////////////////////////////////////////////
+				////////////////////////////////  End Original Razorworks Code  ////////////////////////////////////////////////////
 
 				//  Next, Kick the nose up or down to follow the slope of the ground, looking ahead
 				alt_error_1 = (current_flight_dynamics->altitude.value - look_ahead_position.y) - current_flight_dynamics->altitude.max;
@@ -744,7 +728,7 @@ void resolve_dynamic_forces (void)
 				Angl_output = bound (Angl_output, -55, 15);  //   limit the cyclic correction angle: Allow more nose up(-) than down
 
 				//  Trim is being used so the pilot can still over-ride the automated controls
-		current_flight_dynamics->input_data.cyclic_y_trim.value = Angl_output;   //  Set the Collective pitch angle
+				current_flight_dynamics->input_data.cyclic_y_trim.value = Angl_output;   //  Set the Collective pitch angle
 			
 
 				current_flight_dynamics->model_acceleration_vector.x = resultant_laterally;
