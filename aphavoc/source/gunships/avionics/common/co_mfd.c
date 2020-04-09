@@ -452,3 +452,32 @@ void eo_3d_texture_merge (screen *eo_3d_texture_screen, screen *eo_3d_texture_sc
 	set_3d_render_target (video_screen);
 #endif
 }
+
+void draw_mfd_automatics_marks (int draw_large_mfd, int eo_ground_stabilised) {
+	float y_adjust, width;
+
+	if (flight_dynamics_autopilot_heading && flight_dynamics_autopilot_heading_active || eo_ground_stabilised) {
+		if (draw_large_mfd)
+		{
+			y_adjust = -38.0;
+		}
+		else
+		{
+			y_adjust = -19.0;
+		}
+
+		width = get_mono_font_string_width ("S");
+
+		if (eo_ground_stabilised) {
+			set_2d_mono_font_position (1.0, -1.0);
+			set_mono_font_rel_position (-width, y_adjust);
+			print_mono_font_string ("S");
+		}
+
+		if (flight_dynamics_autopilot_heading && flight_dynamics_autopilot_heading_active) {
+			set_2d_mono_font_position (1.0, -1.0);
+			set_mono_font_rel_position (- 2.2 * width, y_adjust);
+			print_mono_font_string ("H");
+		}
+	}
+}

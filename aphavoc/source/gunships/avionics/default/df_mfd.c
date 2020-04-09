@@ -3722,25 +3722,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// draw an indication if ground stablisation is enabled
 	//
 
-	if (eo_ground_stabilised)
-	{
-		if (draw_large_mfd) // Jabberwock 031107 Designated targets - moved the stab indicator one line up, sorry!
-		{
-			y_adjust = -38.0;
-		}
-		else
-		{
-			y_adjust = -19.0;
-		}
-
-		width = get_mono_font_string_width ("S");
-
-		set_2d_mono_font_position (1.0, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string ("S");
-	}
+	draw_mfd_automatics_marks(draw_large_mfd, eo_ground_stabilised);
 
 	draw_high_action_display (target, TRUE);
 

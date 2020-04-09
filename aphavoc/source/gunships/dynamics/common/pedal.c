@@ -316,6 +316,53 @@ void update_pedal_pressure_inputs (void)
 			}
 		}
 
+	if (flight_dynamics_autopilot_heading) {
+		flight_dynamics_autopilot_heading_active = FALSE;
+
+		if (current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL ||
+			current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE) {
+
+			entity *target;
+			vec3d *target_pos = NULL, *gunship_position;
+			float heading, command_heading, bearing, dx, dz;
+
+			target = get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET);
+
+			if (target) // LOCKED TARGET
+			{
+				target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			}
+			else { // LOCKED TERRAIN POINT
+				target_pos = get_eo_tracking_point();
+			}
+
+			if (target_pos)
+			{
+				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+				heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
+
+				dx = target_pos->x - gunship_position->x;
+				dz = target_pos->z - gunship_position->z;
+				
+				bearing = atan2 (dx, dz);
+				command_heading = bearing - heading;
+				if (command_heading > rad (180.0))
+					command_heading -= rad (360.0);
+				else if (command_heading < rad (-180.0))
+					command_heading += rad (360.0);
+
+				heading = sign(command_heading) * bound (current_flight_dynamics->input_data.pedal.max * pow(command_heading / rad (360.0) / 4.0, 2.0),
+						current_flight_dynamics->input_data.pedal.min, current_flight_dynamics->input_data.pedal.max);
+				current_flight_dynamics->input_data.pedal.value += heading;
+				
+				flight_dynamics_autopilot_heading_active = TRUE;
+			}
+		}
+		/*else if (current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK) {
+			
+		}*/
+	}
+	
 	current_flight_dynamics->input_data.pedal.value = bound (current_flight_dynamics->input_data.pedal.value,
 												current_flight_dynamics->input_data.pedal.min,
 												current_flight_dynamics->input_data.pedal.max);

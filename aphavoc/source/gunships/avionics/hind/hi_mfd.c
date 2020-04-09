@@ -1203,18 +1203,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// draw an indication if ground stablisation is enabled
 	//
 
-	if (eo_ground_stabilised)
-	{
-		y_adjust = -38.0;
+	draw_mfd_automatics_marks(TRUE, eo_ground_stabilised);
 
-		width = get_mono_font_string_width ("S");
-
-		set_2d_mono_font_position (1.0, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string ("S");
-	}
 	////////////////////////////////////////
 	//
 	// line graphics

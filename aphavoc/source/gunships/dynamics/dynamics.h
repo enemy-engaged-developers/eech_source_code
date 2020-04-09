@@ -602,6 +602,8 @@ extern void flight_dynamics_decrease_altitude_lock (event *ev);
 
 extern void flight_dynamics_increase_altitude_lock (event *ev);
 
+extern void flight_dynamics_toggle_autopilot_heading (event *ev);
+
 extern void create_rotor_vibration(float force);
 extern void create_advanced_rotor_vibration(float force, int damaged);
 
@@ -623,7 +625,9 @@ extern void debug_dynamics_event4(event* ev);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
-	flight_dynamics_lock_position_flag;
+	flight_dynamics_lock_position_flag,
+	flight_dynamics_autopilot_heading,
+	flight_dynamics_autopilot_heading_active;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,6 +656,8 @@ typedef enum DYNAMICS_HOVER_HOLD_TYPES dynamics_hover_hold_types;
 #define get_current_flight_dynamics() (current_flight_dynamics)
 
 #define set_current_flight_dynamics_lock_position(FLAG) (flight_dynamics_lock_position_flag = (FLAG))
+
+#define toggle_flight_dynamics_autopilot_heading() (flight_dynamics_autopilot_heading = !flight_dynamics_autopilot_heading)
 
 #define get_current_flight_dynamics_wheel_brake() (current_flight_dynamics->wheel_brake)
 

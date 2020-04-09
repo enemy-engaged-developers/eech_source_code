@@ -245,6 +245,7 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_H, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_auto_hover);
 		set_event (DIK_H, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, flight_dynamics_toggle_auto_hover);
 		set_event (DIK_H, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, flight_dynamics_toggle_altitude_lock);
+		set_event (DIK_H, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, flight_dynamics_toggle_autopilot_heading);
 		set_event (DIK_J, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, flight_dynamics_decrease_altitude_lock);
 		set_event (DIK_K, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, flight_dynamics_increase_altitude_lock);
 		set_event (DIK_G, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_auto_pilot);

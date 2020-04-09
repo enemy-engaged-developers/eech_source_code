@@ -2560,25 +2560,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// draw an indication if ground stablisation is enabled
 	//
 
-	if (eo_ground_stabilised)
-	{
-		if (draw_large_mfd) // Jabberwock 031107 Designated targets - moved the stab indicator one line up, sorry!
-		{
-			y_adjust = -38.0;
-		}
-		else
-		{
-			y_adjust = -19.0;
-		}
-
-		width = get_mono_font_string_width ("S");
-
-		set_2d_mono_font_position (1.0, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string ("S");
-	}
+	draw_mfd_automatics_marks(draw_large_mfd, eo_ground_stabilised);
 
 	////////////////////////////////////////
 	//
@@ -2862,13 +2844,19 @@ static void draw_adv_2d_eo_display (eo_params *eo, target_acquisition_systems sy
 
 	// gyro stabilization
 
+	draw_2d_box(0.96, -0.83, 0.76, -0.89, TRUE, FALSE, MFD_COLOUR_LGREY);
+
 	if (eo_ground_stabilised)
 	{
 		set_2d_mono_font_position (0.78, -0.84);
 		set_mono_font_rel_position (0.0, 0.0);
-		draw_2d_box(0.96, -0.83, 0.76, -0.89, TRUE, FALSE, MFD_COLOUR_LGREY);
-
 		print_mono_font_string ("GS");
+	}
+
+	if (flight_dynamics_autopilot_heading && flight_dynamics_autopilot_heading_active) {
+		set_2d_mono_font_position (0.92, -0.84);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string ("H");
 	}
 
 	// azimuth
