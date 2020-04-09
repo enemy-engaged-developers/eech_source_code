@@ -115,19 +115,19 @@ void play_music (music_types music_type, int force)
 	switch (music_type)
 	{
 		case MUSIC_TYPE_INTRO:
-			if (command_line_no_intro_music)
+			if (!command_line_intro_music)
 				return;
 			break;
 		case MUSIC_TYPE_INGAME:
-			if (command_line_no_ingame_music)
+			if (!command_line_ingame_music)
 				return;
 			break;
 		case MUSIC_TYPE_ACTION:
-			if (command_line_no_action_music)
+			if (!command_line_action_music)
 				return;
 			break;					
 		case MUSIC_TYPE_MISSION_COMPLETE:
-			if (command_line_no_mission_complete_music)
+			if (!command_line_mission_complete_music)
 				return;
 			break;
 		default:

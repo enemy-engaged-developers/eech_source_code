@@ -2606,10 +2606,10 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 							if ( application_sound_samples[count].name )
 							{
 								// SKIP DISABLED MUSIC TYPES TO SAVE MEMORY
-								if (count == SOUND_SAMPLE_INDEX_MUSIC_INTRO && command_line_no_intro_music ||
-									count >= SOUND_SAMPLE_INDEX_MUSIC_INGAME1 && count <= SOUND_SAMPLE_INDEX_MUSIC_INGAME3 && command_line_no_ingame_music ||
-									count >= SOUND_SAMPLE_INDEX_MUSIC_ACTION1 && count <= SOUND_SAMPLE_INDEX_MUSIC_ACTION3 && command_line_no_action_music ||
-									count >= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE1 && count <= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3 && command_line_no_mission_complete_music) {
+								if (count == SOUND_SAMPLE_INDEX_MUSIC_INTRO && !command_line_intro_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_INGAME1 && count <= SOUND_SAMPLE_INDEX_MUSIC_INGAME3 && !command_line_ingame_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_ACTION1 && count <= SOUND_SAMPLE_INDEX_MUSIC_ACTION3 && !command_line_action_music ||
+									count >= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE1 && count <= SOUND_SAMPLE_INDEX_MUSIC_MISSION_COMPLETE3 && !command_line_mission_complete_music) {
 									sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[SOUND_SAMPLE_INDEX_MUSIC_INVALID].name );
 								}
 								else {

@@ -161,10 +161,10 @@ int
 	command_line_max_smoke_time								= 30,
 	command_line_smoke_optimization							= 1,
 	command_line_cloud_puffs								= 1, // Casm 20MAY2012
-	command_line_no_mission_complete_music					= FALSE,
-	command_line_no_intro_music								= FALSE,
-	command_line_no_ingame_music							= FALSE,
-	command_line_no_action_music							= FALSE,
+	command_line_mission_complete_music					= TRUE,
+	command_line_intro_music							= TRUE,
+	command_line_ingame_music							= TRUE,
+	command_line_action_music							= TRUE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
 	command_line_mouse_look_speed								= 15,		// Retro 030317
 	command_line_min_fov											= 20,		// Retro 030318
