@@ -205,7 +205,8 @@ extern world_map_data
 )
 
 #define point_below_ground(POS)																		\
-(																												\
+(																							\
+	(point_inside_map_area(POS) == FALSE) || 										\
 	((POS)->y < get_terrain_3d_point_sector_max_elevation ((POS)->x, (POS)->z)) &&	\
 	((POS)->y < get_3d_terrain_elevation ((POS)->x, (POS)->z))								\
 )

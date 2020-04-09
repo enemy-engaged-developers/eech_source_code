@@ -1651,7 +1651,7 @@ float get_terrain_3d_point_sector_max_elevation ( float x, float z )
 	if ( ( x < terrain_3d_min_map_x ) || ( x > terrain_3d_max_map_x ) || ( z < terrain_3d_min_map_z ) || ( z > terrain_3d_max_map_z ) )
 	{
 
-		debug_fatal ( "Sector minimum terrain elevation off map: %f, %f", x, z );
+		debug_fatal ( "Sector maximum terrain elevation off map: %f, %f", x, z );
 	}
 
 	get_terrain_3d_sector ( x, z, &sector_x, &sector_z );
@@ -1676,7 +1676,7 @@ float get_terrain_3d_point_sector_average_elevation ( float x, float z )
 	if ( ( x < terrain_3d_min_map_x ) || ( x > terrain_3d_max_map_x ) || ( z < terrain_3d_min_map_z ) || ( z > terrain_3d_max_map_z ) )
 	{
 
-		debug_fatal ( "Sector minimum terrain elevation off map: %f, %f", x, z );
+		debug_fatal ( "Sector average terrain elevation off map: %f, %f", x, z );
 	}
 
 	get_terrain_3d_sector ( x, z, &sector_x, &sector_z );

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.16.0</title>
+<title>EECH Community Release Version 1.16.1</title>
 <style>
 <!--
 a {
@@ -55,6 +55,10 @@ h4 {
 .style51 {color: #000066}
 .style52 {font-size: 14px}
 -->
+dt {
+    margin: 10px -10px;
+    font-weight: bold;
+}
 </style>
 </head>
 <body class="Normal">
@@ -73,7 +77,7 @@ h4 {
       </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by thealx: 24.02.2016
+      italic;'>Last edited by thealx: 11.04.2020
       </p>
 
 
@@ -91,34 +95,122 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.16.0?</h2>
+      <h2>What's NEW in EECH 1.16.1</h2>
       <ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
-	<li>Now using Direct3D9!
-	<li>Single file installer - upgrade stock game in one step
-	<li>Using OpenAL-Soft for sound system by default
-	<li>WAV sounds instead of PCM
-	<li>Multiplayer system minor improvements and fixes
-	<li>Joystic axis state indication at Controls page
-	<li>Infantry patrols and more complicated insertion missions
-	<li>New way of stealth factor calculation for helicopters
-	<li>Airfields mod (WIP, by Soczkien)
-	<li>Jets Replace mod v1.0 (by Soczkien), Su-34 Fullback presented as Multy-role Fighter
-	<li>New Skins for Russian helicopters mod (WIP, by ignarik)
-	<li>New US helicopters skins mod (WIP, by rapota)
-	<li>New High Detailed Trees mod v1.2 (by Soczkien)
-	<li>New Sea Water mod (by Soczkien)
-	<li>New Winter Terrain textures (by Soczkien)
-	  </dt>
-	  <dd>Bug fixes</dd>
-	  <dt>
-	<li>Helicopter overspeed issues
-	<li>Pilot static hand visibility problems in wideview mode
-	<li>Helicopters has wrong heading angle relative to HESCO barriers
-    <li>Russian translation and fonts issues
-      </dt>
+	  <dt>Mi-28 cockpit instruments</dt>
+	  <dd>
+
+    <li>Havoc cockpit now has working needles for instruments
+    <li>Left/Right Engine RPM shown in Rotor RPM gauge
+    <li>Status Panel Lamps working
+    <li>Threat Warning Display working (needs reworked as using Hind threat warning)
+    <li>Warning Panel Lamps working
+    <li>Master Alarm lamp working
+    <li>Chaff/Flare lamps now working (including damaged state)
+    <li>Weapon panel lamps now working (including damaged state)
+
+      </dd>
+	  <dt>Ka-50 cockpit instruments</dt>
+	  <dd>
+
+    <li>Remodel of the cockpit, by Viper
+    <li>Re-texture of the cockpit, by Viper
+    <li>Additional switches, by Banita
+    <li>Instrument needles for working gauges
+    <li>Hud lens is now transparent
+    <li>Wiper position is fixed
+    <li>Collective lever animation and position fixed
+    <li>Rudder pedals position fixed
+    <li>Cyclic position fixed
+    <li>Eject camera view fixed
+    <li>EKRAN display added
+    <li>Working weapon panel
+    <li>Lamps added
+
+      </dd>
+	  <dt>Overall fixes</dt>
+	  <dd>
+
+    <li>Wut text on startup screen moved
+    <li>Menu screen title font changed to help it scale better
+    <li>The MFD Export fixes
+    <li>Ka-50N Night Shark upgrade with FLIR, the MFD video contrast upgrade
+    <li>The joystick Deadband fix
+
+      </dd>
+	  <dt>Flight model improvements</dt>
+	  <dd>
+
+    <li>An air density fix so you aren't flying above 10,000 ft all the time.
+    <li>Hover-Hold "H" / Stable-Hover-Hold "SHFT-H" (Requirements: speed less than 40 knots and LET GO OF THE JOYSTICK to engage it)
+    <li>Use "ALT-J" to lower the Hover Height and "ALT-K" to raise it (10 ft or 5 meters)
+    <li>Altitude-Hold "ALT-H" (no restrictions on engaging it) Basically a Helicopter cruise control, this is for nap-of-the-earth flying, but it switches to barometric altitude above about 300 feet (100 m). It also includes a speed cruise control, between 50 and 110.
+    <li>A new Pop-Up maneuver "SHFT-P" (Toggles, Up 20 meters on the first press, down 20 meters on the second keypress)
+    <li>Realistic Physics Settings for all of the flyable helicopters (these have been adjusted and all are correct now)
+    <li>Heading dampener into the Hover modes, since there is no joystick deadband now.
+
+      </dd>
+	  <dt>Gameplay changes</dt>
+	  <dd>
+
+    <li>New masterserver ini value 2 "Private game"
+    <li>Simple realism restrictions removed (radars and EO can be used)
+    <li>Manual cockpit light in 3D cockpits (Ctrl + V shortcut)
+    <li>Loading different FARP object for each side (Reds - FARP_MAT_GREY.EES, Blues - FARP_MAT.EES)
+    <li>SAM radar scan floor changed to cone (higher at far distance, lower in close range), scan range decreased for some units
+    <li>Weapons added: Mi-6 12.7mm gun, Ka-29 GSH23L 23MM cannon pods
+    <li>Static objects added for airfields  CIS_STATICVEHICLE_01-10, US_STATICVEHICLE_01-10, HESCO_01-10
+    <li>Helicopter fuel amount calculation after mission started (amount of fuel, required to complete waypoints route + 25% reserve). If you are planning to spent more time in the air, increase amount of fuel clicking fuel indicator on Payload page before take off.
+    <li>Difficulty and realism adjustments (check http://eechcentral.simhq.com/index.php?title=Realism)
+    <li>Blade stall event replacement (no rotor damage, helicopter flip instead). No difference between helicopter types, just a simple way to prevent overspeed. If blade stall is disabled - only small shaking will appear.
+    <li>old air density calculation function returned for helicopters FM
+    <li>New ini variable dyad (global air density modifier, 0.5 - increase dynamics ceiling, 2.0 - decrease)
+    <li>Eject event require Alt + E pressed twice. To stop eject process after single shortcut press - any camera button can be pressed, like F1
+    <li>Key guide updated with new shortcuts
+    <li>Power steering for CH-46 / CH-47
+    <li>New ini variable unbind_jbuttons (disable default events for joystick buttons)
+
+      </dd>
+	  <dt>Fixed issues</dt>
+	  <dd>
+
+    <li>Wrong helicopters weapon angles
+    <li>FARP object damage tail rotor (FARP collision box became larger)
+    <li>Wrong MFD export screen height
+    <li>Masterserver connection error
+    <li>AI helicopters does not consume fuel
+    <li>Mouse does not work for view control while TrackIR is connected but disabled (TIR_idle INI varialbe)
+    <li>Forest trees appear as a wall because of same visibility distance
+    <li>Kiowa unstable engine torque
+    <li>Engine over-torque does no cause engine damage
+    <li>No rain effect in AH-64D
+    <li>Wrong fuel indication in large helicopters with default cockpit
+    <li>Controller Autoconfigure feature does not work
+    <li>Clouds pass through without opacity effects (textures flickering still happen)
+    <li>Helicopter explode right after hovering mode is disabled
+    <li>Camera position changed after Esc pressed in Hind
+
+      </dd>
+	  <dt>Game music (optional, still in testing stage)</dt>
+	  <dd>
+
+    <li>new ini values: noitm, noigmm, noam which along with nomcm disable music types
+    <li>one of 3 in-game tracks started when player's helicopter get in the air (if noigmm=0), looped
+    <li>one of 3 action tracks started when player became target (if noam=0), looped
+    <li>one of 3 mission success tracks played once (if nomcm=0)
+    <li>volume can be changed with System Warning notifications level option (temporary)
+    <li>when no music files installed, Music option in settings became disabled and inactive; if you install any music pack after that - this option should be enabled manually
+
+      </dd>
+	  <dt>Music limitations:</dt>
+	  <dd>
+
+    <li>track length limited to 5 minutes (temporary)
+    <li>intro track does not work yet
+    <li>game crashes possible; if so, you can: disable one or several ini options, disable music in game settings (front screen, not in-game settings where you can adjust volume), remove /cohokum/audio/MUSIC folder manually
+	
+      </dd>
       </ul>
 
 
@@ -540,13 +632,13 @@ lang=EN-GB><a href="#top">[top ^]</a></span> </p>
 lang=EN-GB>http://www.icculus.org/homepages/yem/licence.php</span></a>
       </p>
       
-      <p>The source code for the community release is in a Git repo at <a href="https://eech.codebasehq.com/"><span
-lang=EN-GB>https://eech.codebasehq.com/</span></a> an account is currently required to get read access.
+      <p>The source code for the community release is in a private Git repo at <a href="https://github.com"><span
+lang=EN-GB>https://github.com</span></a> an account is currently required to get read access.
       </p>
       
       <p>More info on how to set up the Watcom compiler using DX libraries can be found at <a
 href="http://eechcentral.simhq.com/index.php?title=Development"><span lang=EN-GB>related eechcentral page</span></a><span lang=EN-GB>. </span></p>
-      <p><span lang=EN-GB>If you find any bugs/odd behaviour please report it at <a href="http://bugs.enemyengaged.net/view_all_bug_page.php">EECH issue tracker</a> or at the SimHQ forum:<br>
+      <p><span lang=EN-GB>If you find any bugs/odd behaviour please report it at the SimHQ forum:<br>
         </span><a href="http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html"><span
 lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</span></a><br>
       </p>
@@ -555,6 +647,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       <ul type=disc>
         <li><a href="http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html" target="_blank"><span lang=EN-GB>Sim HQ: Enemy Engaged: Comanche vs. Hokum forum</span></a><span lang=EN-GB> - everything you always wanted to know...</span></li>
         <li><a href="http://eechcentral.simhq.com" target="_blank"><span lang=EN-GB>http://eechcentral.simhq.com/</span></a><span lang=EN-GB> - All resources!</span></li>
+        <li><a href="http://eech.online" target="_blank"><span lang=EN-GB>http://eech.online</span></a><span lang=EN-GB> - mods database and masterserver stats</span></li>		
         <li><a href="http://web.archive.org/web/20050208132400/http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB> - old resources (e.g. original textures)</span></li>
         <li><a href="http://web.archive.org/web/20100309204453/http://home.planet.nl/~ek000114/gotcha/" target="_blank"><span lang=EN-GB>Gotcha's EECH goodies</span></a><span
      lang=EN-GB> - resources: exe downloads, texture packs, GWUT and lots of mod info.</span></li>
@@ -568,12 +661,42 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 
 
       <h3><a name="history"></a>Version history</h3>
- 
+
+      <h4>1.16.0</h4>
+      <ul>
+	<dl>
+	  <dt>Features</dt>
+	  <dd>
+	<li>Now using Direct3D9!
+	<li>Single file installer - upgrade stock game in one step
+	<li>Using OpenAL-Soft for sound system by default
+	<li>WAV sounds instead of PCM
+	<li>Multiplayer system minor improvements and fixes
+	<li>Joystic axis state indication at Controls page
+	<li>Infantry patrols and more complicated insertion missions
+	<li>New way of stealth factor calculation for helicopters
+	<li>Airfields mod (WIP, by Soczkien)
+	<li>Jets Replace mod v1.0 (by Soczkien), Su-34 Fullback presented as Multy-role Fighter
+	<li>New Skins for Russian helicopters mod (WIP, by ignarik)
+	<li>New US helicopters skins mod (WIP, by rapota)
+	<li>New High Detailed Trees mod v1.2 (by Soczkien)
+	<li>New Sea Water mod (by Soczkien)
+	<li>New Winter Terrain textures (by Soczkien)
+	  </dd>
+	  <dt>Bug fixes</dt>
+	  <dd>
+	<li>Helicopter overspeed issues
+	<li>Pilot static hand visibility problems in wideview mode
+	<li>Helicopters has wrong heading angle relative to HESCO barriers
+    <li>Russian translation and fonts issues
+      </dd>
+      </ul>
+	  
       <h4>1.15.2</h2>
       <ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	<li>Precise external ballistics calculations
 	<li>Complete suspension for all helicopters
 	<li>Tweaked smokes (by Zackin5)
@@ -583,9 +706,9 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	<li>US pilots camo skins (by SKIP2008)
 	<li>Additional campaigns - Cuba Libre, Cuba Libre 2, Border War (by ricnunes)
 	<li>US ATC voice pack (by LazerPotatoe)
-	  </dt>
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  </dd>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Europe tree's texture alpha layer missed 
 	<li>Helicopter models without proper LODs 
 	<li>Ballistics calculations problem 
@@ -599,7 +722,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	<li>Continuously repeated "This is ground control. Requesting support at grid" radio message 
 	<li>Rear rotor sinking 
 	<li>Heli can slip from a carrier
-      </dt>
+      </dd>
       </ul>
 
 
@@ -608,11 +731,11 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       </strong>
 
 
-      <h4>Fixes/features in 1.15.0</h2>
+      <h4>1.15.0</h2>
       <ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	<li>OH-58D Kiowa Warrior cockpit and external (by Soczkien)
 	<li>AH-1Z Viper cockpit (by dfang)
 	<li>UH-60 Blackhawk external (by Soczkien)
@@ -625,33 +748,33 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	<li>Additional UI screens (by dfang)
 	<li>Added support of WAV files (mono PCM, 8 and 16 bits, any sane frequency)
 	<li>Improved explosions import
-	  </dt>
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  </dd>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Fixed payload for Blackhawk
 	<li>No crush while displaying destroyed Yak or Falcon
 	<li>Preserving proportions of background screens for wide displays
 	<li>No test of video modes on enumeration
-	  </dt>
+	  </dd>
       </ul>
-      <h4>Fixes/features in 1.14.1?</h4>
+      <h4>1.14.1</h4>
       <ul>
 	<dl>
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Fixed opaque winter Hind windshield (by dfang)
 	<li>Changed suspension data for Apache Longbow, Havoc, Hokum-B and Comanche (by dfang)
 	<li>Fixed CTD on exit with custom EXPLOS.CSV
 	<li>Fixed compass and ADI in Apache Longbow cockpit
 	<li>Fixed ADI in Apache and default cockpits
 	<li>Fixed GWUT: None if the specified gwut file is absent
-	  </dt>
+	  </dd>
       </ul>
-      <h4>Fixes/features in 1.14.0?</h4>
+      <h4>1.14.0</h4>
       <ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	<li>Previously missing Hokum, Comanche, Apache, Havoc cockpit textures (by Mapi)
 	<li>Remapped and retextured (camo) military hardware (by Pesanur, Soczkien, dfang).
 	<li>Added rotating wheels for player-controllable Apache-D, Hind, Havoc, Comanche (by dfang).
@@ -662,38 +785,38 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	<li>Speech can be redirected to headphones while all environment sound is played in speakers.
 	<li>Added support of TGA textures.
 	<li>Added export/import of smoke, meta smoke and explosion databases.
-	  </dt>
+	  </dd>
 
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Fixed constant ratio for FOV change
 	<li>Fixed "upgrade" process from players2.bin to playersv.bin
 	<li>With proper season always loading -W textures for winter, -D for desert (even for non-camo).
-	  </dt>
+	  </dd>
       </ul>
-      <h4>Fixes/features in 1.13.0?</h4>
+      <h4>1.13.0</h4>
 	<ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	  <li>Viper is a new and flyable helicopter (by dfang)
 		<li>Improved data export (UDP- and SIOC-compatible ways)
 		<li>In-cockpit sound volumes are adjusted (by Colonel_Kurtz)
-	  </dt>
+	  </dd>
 
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Fixed low frame rate in Hind cockpit with the map enabled (map is not moving again)
 	<li>Textures are unloaded always now.
 	<li>Returned "heading follow mode" for chase camera.
 	<li>Added MFD, HUD and arming screen names for TOWs.
-	  </dt>
+	  </dd>
       </ul>
-      <h4>Fixes/features in 1.12.3?</h4>
+      <h4>1.12.3</h4>
 	<ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	  <li>Added OpenAL support. Multiple (5.1) speakers may produce surrounding sound.
 		<li>Improved loadout for Hind. Loadout is displayed correctly now (by dfang).
 		Hind may carry
@@ -722,63 +845,63 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 			<li>bound(x,y,z) produces y if x less than y, or z, if x greater than z, or x otherwise
 		 </ul>
 		 Check canopy_sounds_amp in Sounds section of EECH.INI
-	  </dt>
+	  </dd>
 
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Turned on cgs (comms guaranteed send) by default
 	<li>Removed demand for slash for command-line arguments
-	  </dt>
+	  </dd>
       </ul>
-      <h4>Fixes/features in 1.12.2?</h4>
+      <h4>1.12.2</h4>
 	<ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	  <li>Added control over variable weather (see Random weather
 	  parameters in EECH.INI)
 	  <li>No cockpit view for some helicopter has MFDs with adjustable
 	  size (Alt-F11)
 	  <li>Added two visual themes: one for Apache and one for Hind
-	  </dt>
+	  </dd>
 
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Fixed CTD with "flyable" A-10s and Harriers
-	  </dt>
+	  </dd>
       </dl>
 		 </ul>
-      <h4>Fixes/features in 1.12.1?</h4>
+      <h4>1.12.1</h4>
 	<ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	  <li>Added two visual themes: one for Apache and one for Hind
 	  (by GCsDriver). Don't forget to set themes=2 in EECH.INI.
 	  <li>Added different maxfov settings for different cockpits in EECH.INI.
-	  </dt>
+	  </dd>
 
-	  <dd>Suspension fix</dd>
-	  <dt>
+	  <dt>Suspension fix</dt>
+	  <dd>
 	  <li>Player-controllable Comanche, Apache, Blackhawk, Havoc
 	and Hokum-B won't stand above or below surface (by W4chund).
-	  </dt>
+	  </dd>
 
-	  <dd>Bug fixes</dd>
-	  <dt>
+	  <dt>Bug fixes</dt>
+	  <dd>
 	<li>Restored respecting of season for loaded saves.
 	<li>Restored broken Alt-F3/F4 support.
-	  </dt>
+	  </dd>
 	</dl>
  </ul>
-      <h4>Fixes/features in 1.12?</h4>
+      <h4>1.12</h4>
       Note that some of these changes requires that you use the new
       GWUT file (gwut1120.csv.  If you're upgrading open eech.ini and
       change the line with wut= to say wut=gwut1120.csv).
       <ul>
 	<dl>
-	  <dd>Features</dd>
-	  <dt>
+	  <dt>Features</dt>
+	  <dd>
 	  <li>Added support for generating log files
 	  for <a href="http://lomac.strasoftware.com/tacview-en.php">Tacview</a>
 	  analysis.
@@ -791,10 +914,10 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	  will not "spoil" the campaign for you if you don't want to
 	  know where all enemy units are.
 	    The logs can be found in the directory cohokum/tacview-logs.
-	  </dt>
+	  </dd>
 
-	  <dd>AI fixes</dd>
-	  <dt>
+	  <dt>AI fixes</dt>
+	  <dd>
 	<li>Surface launched missiles will now fire with a slight
 	climb angle to avoid hitting the ground or surrounding
 	vehicles immediately.
@@ -805,10 +928,10 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	because they didn't adjust for projectile drop
 	<li>Fixed problem where helicopters would miss with rockets
 	because of very sloppy aiming (fixed in gwut file)
-	  </dt>
+	  </dd>
 
-	  <dd>Weapon loadout changes</dd>
-	  <dt>
+	  <dt>Weapon loadout changes</dt>
+	  <dd>
 	<li>Changed Su-33 to carry R-73(AA-11) short range missiles instead
 	of R-60(AA-8)
 	<li>Gave A-10 and Harrier AGM-65 Mavericks (and fewer rocket
@@ -826,10 +949,10 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	  rockets are much less accurate now, and aircraft flying
 	  round and firing two rockets at a time will spend a lot of
 	  time over the target.
-	  </dt>
+	  </dd>
       </ul>
 
-      <h4>Fixes/features in 1.11.1?</h2>
+      <h4>1.11.1</h2>
       <ul>
         <li>Fix for zbuffers in dx9.  Fixes problem with newer ATI and
       NVidia cards.  Also fixes white flashes for some.(fix by Bodhammer)
@@ -866,7 +989,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       </ul>
 
 
-      <h4>Fixes/features in 1.11.0?</h4>
+      <h4>1.11.0</h4>
 
       <dl>
         <dt>Cockpit/avionics changes
@@ -943,7 +1066,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	  </ul>
       </dl>
 
-      <h4>Fixes/features in 1.11.0?</h4>
+      <h4>1.11.0</h4>
 
       <dl>
         <dt>Cockpit/avionics changes
@@ -1020,7 +1143,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	  </ul>
       </dl>
 
-      <h4>Fixes/features in 1.10.2</h4>
+      <h4>1.10.2</h4>
       <ul>
         <li>Added option for co-pilot to search for and report any
 	targets he finds.  Option found in realism menu.
@@ -1040,14 +1163,14 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       texture/terrain, just the ones for the current map
       </ul>
 
-      <h4>Fixes/features in 1.10.1</h4>
+      <h4>1.10.1</h4>
          <ul>
            <li>Fixed crash when locking target with EO
            <li>Fixed so leaning forward in pilot's cockpit doesn't
 	   enter ORT view.  Only co-pilot has ORT.
          </ul>
 
-      <h4>Fixes/features in 1.10</h4>
+      <h4>1.10</h4>
       <dl>
       <dt>Avionics changes
       <dd>
@@ -1135,7 +1258,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
      </dl>
 
 
-      <h4>Fixes/features in 1.9</h4>
+      <h4>1.9</h4>
       <dl>
       <dt>Weapons modelling
       <dd>
@@ -1236,7 +1359,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       </dl>
 
 
-      <h4>Fixes/features in 1.8.6:</h4>
+      <h4>1.8.6:</h4>
       <ul>
         <li>Fix for save games and multiplayer crashing in 1.8.5.
 	<li>Export also the upfront display/ekran data to shared
@@ -1244,7 +1367,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       </ul>
 
 
-      <h4>Fixes/features in 1.8.5:</h4>
+      <h4>1.8.5:</h4>
       <ul>
         <li>Added arrow keys as fine adjustment of trim.  Useful in
 	when helicopter is mostly trimmed, but just
@@ -1259,7 +1382,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	Richard Evans for all the crash fixes).
       </ul>
 
-      <h4>Fixes/features in 1.8.4:</h4>
+      <h4>1.8.4:</h4>
       <ul>
         <li>Fixed Hind's flight model which caused it to be suddently
 	do violent manouvers and crash.
@@ -1274,7 +1397,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	and Havoc cockpit textures).
       </ul>
 
-      <h4>Fixes/features in 1.8.3:</h4>
+      <h4>1.8.3:</h4>
       <ul>
         <li>Fixed bug where save games would come up as invalid even
 	if saved with same version.
@@ -1282,7 +1405,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	it solved.
       </ul>
 
-      <h4>Fixes/features in 1.8.2:</h4>
+      <h4>1.8.2:</h4>
      <ul>
         <li>Several changes to guided missile flight model
 	  <ul>
@@ -1409,7 +1532,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       </ul>
 
 
-      <h4>Fixes/features in 1.8.1:</h4>
+      <h4>1.8.1:</h4>
       <ul>
 	<li>Longbow's threat warning MFD page (ASE) has got
 	colours.  SAM sites have RED rings, AAA yellow.  IR missiles
@@ -1435,7 +1558,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	TRNGL (for triangulation) when laser is off.
       </ul>
 
-      <h4>Fixes/features in 1.8.0:</h4>
+      <h4>1.8.0:</h4>
       <ul>
         <li>Avionics changes
         <ol>
@@ -1535,7 +1658,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 	</ol>
       </ul>
 
-      <h4>Fixes/features in 1.7.2:</h4>
+      <h4>1.7.2:</h4>
       <ul>
         <li>New high-resolution HUD for the Mi-28 (similar to new Ka-52 HUD)
 	<li>Track-IR and G-forces can now move head position also in Mi-28
@@ -1548,13 +1671,13 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       counteract torque with cross coupling disabled.
       </ul>
 
-      <h4>Fixes/features in 1.7.1:</h4>
+      <h4>1.7.1:</h4>
       <ul>
         <li>Fixed version number used for checking multiplayer compatability
       </ul>
 
 
-      <h4>Fixes/features in 1.7:</h4>
+      <h4>1.7:</h4>
 
       <dl>
       <dt>Flight model changes</dt>
@@ -1668,7 +1791,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
 
 
 
-      <h4>Fixes/features in 1.6.2W3:</h4>
+      <h4>1.6.2W3:</h4>
 
       <ul class="style44">
         <li>Add custom warzones without changing the code and custom
@@ -1707,7 +1830,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
       <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
       </ul>
 
-      <h4>Fixes/features in 1.6.2W2:</h4>
+      <h4>1.6.2W2:</h4>
       <ul class="style47">
         <li>In multiplayer the WUT file information is sent from the
            host to the client, so there is no need anymore to have the
@@ -1730,7 +1853,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li>Numerous bug fixes and code cleaning
       </ul>
 
-      <h4>Fixes/features in 1.6.1W5:</h4>
+      <h4>1.6.1W5:</h4>
       <ul class="style44">
         <li>Texture colour mod, with special texture packs </li>
         <li>Wideview: pilot's head pitch is added </li>
@@ -1741,7 +1864,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li>Outside view zoom with mousewheel enabled.</li>
       </ul>
 
-      <h4>Fixes/features in 1.6.1W4:</h4>
+      <h4>1.6.1W4:</h4>
       <ul>
         <li>Saitek X52 controller fix </li>
         <li>Apache havoc maps can be read without owning EEAH </li>
@@ -1753,7 +1876,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li>Cannon tracking boresight </li>
       </ul>
 
-      <h4>Fixes/features in 1.6.1W3:</h4>
+      <h4>1.6.1W3:</h4>
       <ul class="style44">
         <li>NSIS installer that should help making the install process a bit easier
         <li>Fixed deadzones for controllers. All axis except collective  and FLIR zoom  now have a 1% deadzone to avoid &quot;drifting&quot;.
@@ -1767,7 +1890,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li>Added new string file that enables localization of the new controller UI. This can be found in \common\data\language\TLATE6.DAT. Volunteers for german, french, spanish, italian translations are welcome. I am not sure how and if this will work with polish/russian translations. </li>
       </ul>
 
-      <h4>Fixes/features in 1.6.1W1,2,3:</h4>
+      <h4>1.6.1W1,2,3:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Fly_Any_Aircraft error when using GWUT-files fixed</span></li>
         <li><span lang=EN-GB>MP-changes in the following files:</span></li>
@@ -1780,13 +1903,13 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>Possible to reverse pedal axis</span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W15:</h4>
+      <h4>1.6.0W15:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Default values of cpac, cgs, cpds changed</span></li>
         <li><span lang=EN-GB>Comanche loadout-error in GWUT fixed</span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W14:</h4>
+      <h4>1.6.0W14:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Some bugs of 1.6.0W13 fixed </span></li>
         <li><span lang=EN-GB>Advanced flight model, should bring the helicopter closer to (assumed) reality :)</span></li>
@@ -1794,7 +1917,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>Able to read new style WUT files (Gotcha's GWUT tool) </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W13:</h4>
+      <h4>1.6.0W13:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>More changes in the MP-code</span></li>
         <li><span lang=EN-GB>Session filter, if active it will suppress any host that runs a map &nbsp;you don't have</span></li>
@@ -1802,7 +1925,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>Satellite view inactive</span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W12: </h4>
+      <h4>1.6.0W12: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Changes in the MP server code </span></li>
         <li><span lang=EN-GB>Full TrackIR support </span></li>
@@ -1816,7 +1939,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>AH64-A and KA50 added as configurable choppers. Install the payload screens (see above) </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W10,11: </h4>
+      <h4>1.6.0W10,11: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select and off you go (you can't choose it from the mission or group list since it has no task). </span></li>
         <li><span lang=EN-GB>Blackhawk and Hind flyable, regardless of the faa-setting in eech.ini. </span></li>
@@ -1824,7 +1947,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>W11 is possibly more stable in MP. </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W9: </h4>
+      <h4>1.6.0W9: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>In-game multiplayer server browser </span></li>
         <li><span lang=EN-GB>Ability to limit the number of players in a multiplayer game (default is 4) </span></li>
@@ -1836,14 +1959,14 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>&quot;tab-2&quot; CTD fix </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W8: </h4>
+      <h4>1.6.0W8: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>TrackIR included </span></li>
         <li><span lang=EN-GB>Joystick mappable, rudder pedals included </span></li>
         <li><span lang=EN-GB>Multiplayer more or less stable </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W7: </h4>
+      <h4>1.6.0W7: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Multiplayer is sort of stable </span></li>
         <li><span lang=EN-GB>downwash fixes, and a hack that allows multiplayer at the cost of the client's downwash effect </span></li>
@@ -1854,7 +1977,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>Please reset your .INI file if you created one. </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W6: </h4>
+      <h4>1.6.0W6: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>random task assignments that mess up the gameplay fixed </span></li>
         <li><span lang=EN-GB>small eech.ini fixes that caused crashes (please remake eech.ini) </span></li>
@@ -1863,7 +1986,7 @@ lang=EN-GB>http://simhq.com/forum/ubbthreads.php/forums/13/1/EECH_EEAH.html</spa
         <li><span lang=EN-GB>multiplayer buggy </span></li>
       </ul>
 
-      <h4>Fixes/features in 1.6.0W5: </h4>
+      <h4>1.6.0W5: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>&quot;eech.ini&quot; use included </span></li>
         <li><span lang=EN-GB>downwash effect included </span></li>

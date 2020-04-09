@@ -525,5 +525,55 @@ ITALIAN Helicopters lost
 SPANISH Helicopters lost
 RUSSIAN Вертолетов потеряно
 
+:TRANSLATION Rearming, refueling and repairing
+ENGLISH Rearming, refueling and repairing
+FRENCH Rearming, refueling and repairing
+GERMAN Rearming, refueling and repairing
+ITALIAN Rearming, refueling and repairing
+SPANISH Rearming, refueling and repairing
+RUSSIAN Перезарядка, заправка, восстановление
+POLISH Rearming, refueling and repairing
+
+:TRANSLATION OCA Sweep
+ENGLISH OCA Sweep
+FRENCH OCA Sweep
+GERMAN OCA Sweep
+ITALIAN OCA Sweep
+SPANISH OCA Sweep
+RUSSIAN OCA Sweep
+POLISH OCA Sweep
+
+
+:TRANSLATION Simple
+ENGLISH Simple
+FRENCH Simple
+GERMAN Simple
+ITALIAN Simple
+SPANISH Simple
+RUSSIAN Упрощенная
+POLISH Simple
+
+
+:TRANSLATION Advanced
+ENGLISH Advanced
+FRENCH Advanced
+GERMAN Advanced
+ITALIAN Advanced
+SPANISH Advanced
+RUSSIAN Продвинутая
+POLISH Advanced
+
+
+:TRANSLATION NDB freq
+ENGLISH NDB freq
+FRENCH NDB freq
+GERMAN NDB freq
+ITALIAN NDB freq
+SPANISH NDB freq
+RUSSIAN Частота привода
+POLISH NDB freq
+
+
 
 :END
+
