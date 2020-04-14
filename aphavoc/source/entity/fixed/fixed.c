@@ -178,6 +178,11 @@ void restore_local_fixed_entity (entity *en)
 
 	ASSERT (get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) > 0);
 
+	if (get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) <= 0) {
+		kill_local_entity(en);
+		return;
+	}
+
 	//
 	// Keysite strength
 	//

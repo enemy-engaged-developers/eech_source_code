@@ -2561,7 +2561,7 @@ static void draw_adv_2d_eo_display (eo_params_dynamic_move *eo, target_acquisiti
 	}
 
 	if (flight_dynamics_autopilot_heading && flight_dynamics_autopilot_heading_active) {
-		draw_2d_mono_sprite (na_symbol, 0.12, 0.27, MFD_COLOUR2);
+		draw_2d_mono_sprite (na_symbol, 0.07, 0.27, MFD_COLOUR2);
 	}
 
 	// warnings
