@@ -737,9 +737,8 @@ void draw_ka50_virtual_cockpit (void)
 			insert_light_3d_source_into_3d_scene (display_backlight);
 		}
 
-		if (electrical_system_active() || cockpit_light_color_array[cockpit_light_color_index[0]] == COCKPIT_LIGHT_NONE)
 		{
-			light_colour cockpit_light_color = cockpit_light_color_table[cockpit_light_color_array[cockpit_light_color_index[0]]];
+			light_colour cockpit_light_color = electrical_system_active() ? cockpit_light_color_table[cockpit_light_color_array[cockpit_light_color_index[0]]] : cockpit_light_color_table[COCKPIT_LIGHT_NONE];
 			direction = get_cockpit_light_direction();
 			cockpit_light = create_light_3d_source (LIGHT_3D_TYPE_DIRECTIONAL, FALSE, &direction, 0, cockpit_light_color.red, cockpit_light_color.green, cockpit_light_color.blue);
 			insert_light_3d_source_into_3d_scene (cockpit_light);
@@ -764,11 +763,8 @@ void draw_ka50_virtual_cockpit (void)
 			destroy_light_3d_source (display_backlight);
 		}
 
-		if (electrical_system_active() || cockpit_light_color_array[cockpit_light_color_index[0]] == COCKPIT_LIGHT_NONE)
-		{
-			remove_light_3d_source_from_3d_scene (cockpit_light);
-			destroy_light_3d_source (cockpit_light);
-		}
+		remove_light_3d_source_from_3d_scene (cockpit_light);
+		destroy_light_3d_source (cockpit_light);
 
 		disable_normals_specularity = FALSE;
 	}
