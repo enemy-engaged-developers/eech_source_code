@@ -73,8 +73,11 @@
 float
 	eo_ground_stabilisation_value_heading,
  	eo_ground_stabilisation_value_pitch,
-	pitch,
-	roll;
+	pitch = 0.0,
+	roll = 0.0,
+	heading = 0.0;
+matrix3x3
+	old_attitude;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +112,7 @@ void toggle_ground_stabilisation (void)
 }
 
 
-void handle_ground_stabilisation (void)
+void handle_ground_stabilisation (int digital)
 {
 
 	// loke 030322
@@ -124,7 +127,7 @@ void handle_ground_stabilisation (void)
 		float
 			delta_pitch,
 			delta_roll,
-			heading,
+			delta_heading,
 			anglex,
 			angley,
 			correctionx;
@@ -135,6 +138,7 @@ void handle_ground_stabilisation (void)
 						
 		get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
+		delta_heading = heading - atan2 (attitude [2][0], attitude [2][2]);
 		heading = atan2 (attitude [2][0], attitude [2][2]);
 
 		delta_pitch = pitch - asin (attitude [2][1]);
@@ -143,81 +147,109 @@ void handle_ground_stabilisation (void)
 		delta_roll = roll - atan2 (-attitude [0][1], attitude [1][1]);
 		roll = atan2 (-attitude [0][1], attitude [1][1]);
 
-		if (eo_azimuth > (PI / 2))
-		{
-			anglex = PI - eo_azimuth;
-			correctionx = - cos (anglex);
-		}
-		else if (eo_azimuth < (- PI / 2))
-		{
-			anglex = - PI - eo_azimuth;
-			correctionx = - cos (anglex);
-		}
-		else
-		{
-			anglex = eo_azimuth;
-			correctionx = cos (anglex);
+		if (fabs(delta_heading) > PI * get_delta_time() || fabs(delta_pitch) > PI * get_delta_time() || fabs(delta_roll) > PI * get_delta_time()) {
+			memcpy(old_attitude, attitude, sizeof(matrix3x3));
+			return;
 		}
 
-		angley = eo_elevation;				
-				 
-		// GCsDriver start 180 deg. bug workaround
+		if (digital || get_global_avionics_realism_level () < AVIONICS_REALISM_LEVEL_REALISTIC) {
 
-		// problem :
-		// when crossing 180 deg stabilised view switches focus to 109 or 250 deg
-		// crossing 0 / 360 deg is fine
+			matrix3x3
+				current_eo_attitude,
+				new_eo_attitude,
+				global_eo_attitude,
+				inverse_attitude;
 
-		// solution : ?
-		// sth like this should do but what`s the C equivalent ?
-		// horizontal_pan_offset = mod((eo_ground_stabilisation_value_heading - heading), 2*pi);
+			get_3d_transformation_matrix(current_eo_attitude, eo_azimuth, eo_elevation, 0.0);
+			multiply_matrix3x3_matrix3x3(global_eo_attitude, current_eo_attitude, old_attitude);
 
-		// workaround :
-		// if we cross border we have to invert the rad
-		// this gives just a little "glitch" when crossing 180 AND 0/360 deg
-		// glitch width depends on turn rate (and distance centered point to 180/0 line)
+			get_inverse_matrix(inverse_attitude, attitude);
+			multiply_matrix3x3_matrix3x3(new_eo_attitude, global_eo_attitude, inverse_attitude);
 
-		if ((eo_ground_stabilisation_value_heading > 0)&&(heading < 0))
-		{
-			eo_ground_stabilisation_value_heading *= -1;
-			anglex *= -1;
- 		}
-		else if ((eo_ground_stabilisation_value_heading < 0)&&(heading > 0))
-		{
-			eo_ground_stabilisation_value_heading *= -1;
-			anglex *= -1;
+			horizontal_pan_offset = get_heading_from_attitude_matrix(new_eo_attitude) - eo_azimuth;
+			vertical_pan_offset = get_pitch_from_attitude_matrix(new_eo_attitude) - eo_elevation;
+
+		} else {
+
+			if (eo_azimuth > (PI / 2))
+			{
+				anglex = PI - eo_azimuth;
+				correctionx = - cos (anglex);
+			}
+			else if (eo_azimuth < (- PI / 2))
+			{
+				anglex = - PI - eo_azimuth;
+				correctionx = - cos (anglex);
+			}
+			else
+			{
+				anglex = eo_azimuth;
+				correctionx = cos (anglex);
+			}
+
+			angley = eo_elevation;
+
+			// GCsDriver start 180 deg. bug workaround
+
+			// problem :
+			// when crossing 180 deg stabilised view switches focus to 109 or 250 deg
+			// crossing 0 / 360 deg is fine
+
+			// solution : ?
+			// sth like this should do but what`s the C equivalent ?
+			// horizontal_pan_offset = mod((eo_ground_stabilisation_value_heading - heading), 2*pi);
+
+			// workaround :
+			// if we cross border we have to invert the rad
+			// this gives just a little "glitch" when crossing 180 AND 0/360 deg
+			// glitch width depends on turn rate (and distance centered point to 180/0 line)
+
+			if ((eo_ground_stabilisation_value_heading > 0)&&(heading < 0))
+			{
+				eo_ground_stabilisation_value_heading *= -1;
+				anglex *= -1;
+			}
+			else if ((eo_ground_stabilisation_value_heading < 0)&&(heading > 0))
+			{
+				eo_ground_stabilisation_value_heading *= -1;
+				anglex *= -1;
+			}
+
+			// GCsDriver end 180 deg. bug workaround
+
+			horizontal_pan_offset = (eo_ground_stabilisation_value_heading - heading) * cos(angley) + delta_roll * sin(angley) * correctionx + sin(anglex) * sin(delta_pitch) * eo_elevation;
+
+			vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex);
+
 		}
-				
-		// GCsDriver end 180 deg. bug workaround
-					
-		horizontal_pan_offset = (eo_ground_stabilisation_value_heading - heading) * cos(angley) + delta_roll * sin(angley) * correctionx + sin(anglex) * sin(delta_pitch) * eo_elevation;
-		
-		vertical_pan_offset = (eo_ground_stabilisation_value_pitch - pitch) * correctionx - delta_roll * sin(anglex);
 
 		eo_azimuth +=  horizontal_pan_offset;
 
-		if (eo_azimuth > 0)
+		if (eo_azimuth > 0.0)
 		{
-			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth - 0.01);
 		}
 		else
 		{
-			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth + 0.01);
 		}
 				
 		eo_elevation += vertical_pan_offset;
 
-		if (vertical_pan_offset > 0)
+		if (eo_elevation > 0.0)
 		{
-			eo_elevation = min (eo_elevation, eo_max_elevation);
+			eo_elevation = min (eo_elevation, eo_max_elevation - 0.01);
 		}
 		else
 		{
-			eo_elevation = max (eo_elevation, eo_min_elevation);
+			eo_elevation = max (eo_elevation, eo_min_elevation + 0.01);
 		}
 
 		eo_ground_stabilisation_value_heading = heading;
 
 		eo_ground_stabilisation_value_pitch = pitch;
+
+		memcpy(old_attitude, attitude, sizeof(matrix3x3));		
 	}
 }
 

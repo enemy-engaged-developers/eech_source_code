@@ -385,7 +385,7 @@ void update_havoc_eo (eo_params *eo)
 
 	if (eo_ground_stabilised)
 	{
-		handle_ground_stabilisation();
+		handle_ground_stabilisation(FALSE);
 	}
 
 	////////////////////////////////////////

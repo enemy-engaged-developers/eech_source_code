@@ -467,7 +467,7 @@ void update_kiowa_eo (eo_params_dynamic_move *eo)
 
 	if (eo_ground_stabilised)
 	{
-		handle_ground_stabilisation();
+		handle_ground_stabilisation(TRUE);
 	}
 
 	////////////////////////////////////////
