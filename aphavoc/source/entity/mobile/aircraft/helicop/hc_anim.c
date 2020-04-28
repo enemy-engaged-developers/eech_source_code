@@ -206,7 +206,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 	}
 
 	main_rotor_direction = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_DIRECTION);
-	main_rotor_rpm = bound (main_rotor_rpm * (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) != OPERATIONAL_STATE_DEAD), 0.0, 100.0); // stop spinning if heli destroyed
+	main_rotor_rpm = bound (main_rotor_rpm * (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) != OPERATIONAL_STATE_DEAD ? 1.0 : 0.0), 0.0, 100.0); // stop spinning if heli destroyed
 	main_rotor_blade_coning_angle = max (0.5f * main_rotor_blade_coning_angle, 0.0f);
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 	main_rotor_roll = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_ROLL);
@@ -277,7 +277,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	main_rotor_delta_heading = min(real_rotor_rpm * PI2 * main_rotor_rpm / 6000 * get_delta_time (), PI2 / quantity_of_roots[subtype] * quantity_of_shafts[subtype] / 3.75f);
 
-	main_rotor_blade_droop_angle *= max (1.0f - main_rotor_rpm / 60, - 0.1f);
+	main_rotor_blade_droop_angle *= max (1.0f - main_rotor_rpm / 60.0f, - 0.1f);
 
 	// stop rotors from spinning if paused ( but must still switch the correct objects on and off )
 
@@ -305,8 +305,8 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 			{
 				// set pitch and bank
 
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = main_rotor_pitch * main_rotor_rpm / 100;
-				search_main_rotor_pitch_bank_null.result_sub_object->relative_roll = main_rotor_roll * main_rotor_rpm / 100;
+				search_main_rotor_pitch_bank_null.result_sub_object->relative_pitch = main_rotor_pitch * main_rotor_rpm / 100.0f;
+				search_main_rotor_pitch_bank_null.result_sub_object->relative_roll = main_rotor_roll * main_rotor_rpm / 100.0f;
 
 				// locate heading null
 
@@ -317,7 +317,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 				{
 					// set heading
 
-					search_main_rotor_heading_null.result_sub_object->relative_heading = wrap_angle (search_main_rotor_heading_null.result_sub_object->relative_heading + (main_rotor_delta_heading * main_rotor_direction));
+					search_main_rotor_heading_null.result_sub_object->relative_heading = wrap_angle (search_main_rotor_heading_null.result_sub_object->relative_heading + main_rotor_delta_heading * main_rotor_direction);
 
 					// adjust moving blades and static blade roots
 
@@ -326,20 +326,25 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 					while (TRUE)
 					{
+						float blade_pitch = main_rotor_rpm / 5000.0 + main_rotor_blade_coning_angle;
+						float blade_roll = 0.0;
+
 						search_main_rotor_blade_moving.search_depth = search_main_rotor_blade_moving_depth;
 						search_main_rotor_blade_moving.sub_object_index = OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_BLADE_MOVING;
 
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_moving) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
 							blade_heading = search_main_rotor_blade_moving.result_sub_object->relative_heading;
-							search_main_rotor_blade_moving.result_sub_object->relative_pitch = main_rotor_rpm / 5000 + main_rotor_blade_coning_angle;
-							search_main_rotor_blade_moving.result_sub_object->relative_roll = 2 * main_rotor_direction * bound(- cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch +
-									sin(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_roll + main_rotor_blade_coning_angle, rad(-10), rad(10));
+							blade_roll = 2.0f * main_rotor_direction * bound(-cos(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_pitch +
+								sin(blade_heading + search_main_rotor_heading_null.result_sub_object->relative_heading) * main_rotor_roll + main_rotor_blade_coning_angle, rad(-10.0), rad(10.0));
+
+							search_main_rotor_blade_moving.result_sub_object->relative_pitch = blade_pitch;
+							search_main_rotor_blade_moving.result_sub_object->relative_roll = 0.0;
 							if ((get_time_acceleration () == TIME_ACCELERATION_PAUSE && !command_line_blurred_rotor_blades) || ejected) // hide moving blades
 								search_main_rotor_blade_moving.result_sub_object->visible_object = last_moving_blade_state = 0;
 							else
-								search_main_rotor_blade_moving.result_sub_object->visible_object = (main_rotor_rpm >= 50);
-							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50) / 100, 0.0f);
+								search_main_rotor_blade_moving.result_sub_object->visible_object = (main_rotor_rpm >= 50.0);
+							search_main_rotor_blade_moving.result_sub_object->relative_scale.x = (1.0 + command_line_blurred_rotor_blades) * max((main_rotor_rpm - 50.0f) / 100.0f, 0.0f);
 							search_main_rotor_blade_moving.result_sub_object->relative_scale.y = 0.1;
 							if (search_main_rotor_blade_moving.result_sub_object->visible_object < last_moving_blade_state)
 								start_wind_down_sound = TRUE;
@@ -352,8 +357,8 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 						if (find_object_3d_sub_object_from_sub_object (&search_main_rotor_heading_null, &search_main_rotor_blade_root_static) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
 							search_main_rotor_blade_root_static.result_sub_object->visible_object = !ejected;
-							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = search_main_rotor_blade_moving.result_sub_object->relative_pitch + main_rotor_blade_droop_angle;
-							search_main_rotor_blade_root_static.result_sub_object->relative_roll = search_main_rotor_blade_moving.result_sub_object->relative_roll;
+							search_main_rotor_blade_root_static.result_sub_object->relative_pitch = blade_pitch + main_rotor_blade_droop_angle;
+							search_main_rotor_blade_root_static.result_sub_object->relative_roll = blade_roll;
 #ifndef OGRE_EE
 							search_main_rotor_blade_root_static.result_sub_object->object_dissolve_value = blades_dissolve;
 #endif

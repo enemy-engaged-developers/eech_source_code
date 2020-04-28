@@ -508,7 +508,7 @@ void create_reaction_to_recon_task_completed (entity *task)
 			}
 			else
 			{
-				sprintf (s, "%s %s %s",
+				sprintf (s, "%s %s %s %s",
 										get_local_entity_string (task, STRING_TYPE_FULL_NAME),
 										get_trans ("revealed"),
 										get_local_entity_string (objective, STRING_TYPE_FULL_NAME),

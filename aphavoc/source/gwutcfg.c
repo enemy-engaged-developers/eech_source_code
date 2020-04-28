@@ -473,7 +473,7 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%g,",deg(acos(weapon_database[i].max_seeker_limit)));
 		fprintf(fout,"%g,",weapon_database[i].detonation_radius);
 		fprintf(fout,"%g,",weapon_database[i].tracer_fire_time);
-		fprintf(fout,"%g,",weapon_database[i].tracer_color);
+		fprintf(fout,"%d,",weapon_database[i].tracer_color);
 		fprintf(fout,"%g",weapon_database[i].max_altitude);
 		fputs("\n", fout);
 	}

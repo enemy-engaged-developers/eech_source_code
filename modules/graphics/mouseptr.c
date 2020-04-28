@@ -115,7 +115,7 @@ void initialise_mouse_pointer ( rgb_data *pointer )
 void initialise_mouse_pointer ( void )
 #endif
 {
-	int
+	unsigned
 		mouse_pointer_width,
 		mouse_pointer_height;
 
@@ -130,7 +130,8 @@ void initialise_mouse_pointer ( void )
 		unsigned int
 			*ptr = nullptr;
 		int
-			pitch,
+			pitch;
+		unsigned
 			x,
 			y;
 		rgb_colour

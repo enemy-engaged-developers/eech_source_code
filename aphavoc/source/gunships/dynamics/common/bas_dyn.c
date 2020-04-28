@@ -501,7 +501,10 @@ void update_basic_main_rotor_coning_angle (void)
 	cm = current_flight_dynamics->main_rotor_coning_angle.min;
 	rpm = current_flight_dynamics->main_rotor_rpm.value;
 
-	coning_angle = ((cx - cm) / rx) * rpm + cm;
+	if (current_flight_dynamics->main_rotor_rpm.value > 0.0)
+		coning_angle = ((cx - cm) / rx) * rpm + cm;
+	else
+		coning_angle = current_flight_dynamics->main_rotor_coning_angle.min;
 
 	current_flight_dynamics->main_rotor_coning_angle.value += (coning_angle - current_flight_dynamics->main_rotor_coning_angle.value) * get_delta_time ();
 

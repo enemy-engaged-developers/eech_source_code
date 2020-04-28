@@ -1123,7 +1123,10 @@ void update_main_rotor_coning_angle (void)
 	lift = current_flight_dynamics->lift.value;
 
 	// arneh - multiply with inverse rotor rpm, as high rotor rpm creates centrifugal force to counteract the lift
-	coning_angle = (((cx - cm) / rx) * lift + cm) * 100.0 / current_flight_dynamics->main_rotor_rpm.value;
+	if (current_flight_dynamics->main_rotor_rpm.value > 0.0)
+		coning_angle = (((cx - cm) / rx) * lift + cm) * 100.0f / current_flight_dynamics->main_rotor_rpm.value;
+	else
+		coning_angle = current_flight_dynamics->main_rotor_coning_angle.min;
 
 	current_flight_dynamics->main_rotor_coning_angle.value += (coning_angle - current_flight_dynamics->main_rotor_coning_angle.value) * get_model_delta_time ();
 

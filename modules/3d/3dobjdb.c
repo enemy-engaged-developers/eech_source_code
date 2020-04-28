@@ -2923,8 +2923,8 @@ void dump_object(object_3d_instance* obj, FILE* output)
 
 	for (i=0; i < scene->number_of_sub_object_indices; i++)
 	{
-		fprintf(output, "sub object index array: %d\n", scene->scene_sub_object_indices_array[i]);
-		fprintf(output, "sub object index: %d\n", scene->sub_object_indices[i]);
+		fprintf(output, "sub object index array: %d\n", scene->scene_sub_object_indices_array[i].sub_object_index);
+		fprintf(output, "sub object index: %d\n", scene->sub_object_indices[i].sub_object_index);
 	}
 
 	for (i=0; i < scene->total_number_of_sub_objects; i++)

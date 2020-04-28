@@ -238,11 +238,11 @@ void notify_show_graphics_page (void)
 	{
 		set_ui_object_highlightable (card_selection_button, FALSE);
 
-		set_ui_object_colour_end (card_selection_title_graphic_area, 255, 255, 255, 127);
+		set_ui_object_colour_end (card_selection_title_graphic_area, (unsigned char)255, (unsigned char)255, (unsigned char)255, (unsigned char)127);
 
 		set_ui_object_font_colour_end (card_selection_title_text, ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 127);
 
-		set_ui_object_colour_end (card_selection_button_graphic, 255, 255, 255, 127);
+		set_ui_object_colour_end (card_selection_button_graphic, (unsigned char)255, (unsigned char)255, (unsigned char)255, (unsigned char)127);
 
 		set_ui_object_font_colour_end (card_selection_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 127);
 
@@ -252,11 +252,11 @@ void notify_show_graphics_page (void)
 	{
 		set_ui_object_highlightable (card_selection_button, TRUE);
 
-		set_ui_object_colour_end (card_selection_title_graphic_area, 255, 255, 255, 255);
+		set_ui_object_colour_end (card_selection_title_graphic_area, (unsigned char)255, (unsigned char)255, (unsigned char)255, (unsigned char)255);
 
 		set_ui_object_font_colour_end (card_selection_title_text, ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255);
 
-		set_ui_object_colour_end (card_selection_button_graphic, 255, 255, 255, 255);
+		set_ui_object_colour_end (card_selection_button_graphic, (unsigned char)255, (unsigned char)255, (unsigned char)255, (unsigned char)255);
 
 		set_ui_object_font_colour_end (card_selection_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255);
 

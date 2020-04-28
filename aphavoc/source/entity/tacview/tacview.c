@@ -142,7 +142,7 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 {
 	char
 		cleaned_variable[256],
-		byte_order_mark[] = {0xEF, 0xBB, 0xBF, 0};
+		byte_order_mark[] = {(char)0xEF, (char)0xBB, (char)0xBF, 0};
 
 	int
 		tod = get_system_time_of_day(),

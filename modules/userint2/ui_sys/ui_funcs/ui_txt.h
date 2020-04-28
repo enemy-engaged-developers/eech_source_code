@@ -82,9 +82,9 @@ extern void (*fn_set_ui_object_font_type [NUM_UI_TYPES]) (ui_object *obj, font_t
 extern font_types (*fn_get_ui_object_font_type [NUM_UI_TYPES]) (ui_object *obj);
 
 
-extern void (*fn_set_ui_object_font_colour [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
+extern void (*fn_set_ui_object_font_colour [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour (*fn_get_ui_object_font_colour [NUM_UI_TYPES]) (ui_object *obj);
 extern rgb_colour (*fn_get_ui_object_font_colour_end [NUM_UI_TYPES]) (ui_object *obj);
@@ -96,9 +96,9 @@ extern void (*fn_set_ui_object_highlighted_font_type [NUM_UI_TYPES]) (ui_object 
 extern font_types (*fn_get_ui_object_highlighted_font_type [NUM_UI_TYPES]) (ui_object *obj);
 
 
-extern void (*fn_set_ui_object_highlighted_font_colour [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_highlighted_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_highlighted_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
+extern void (*fn_set_ui_object_highlighted_font_colour [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_highlighted_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_highlighted_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour (*fn_get_ui_object_highlighted_font_colour [NUM_UI_TYPES]) (ui_object *obj);
 extern rgb_colour (*fn_get_ui_object_highlighted_font_colour_end [NUM_UI_TYPES]) (ui_object *obj);
@@ -110,9 +110,9 @@ extern void (*fn_set_ui_object_selected_font_type [NUM_UI_TYPES]) (ui_object *ob
 extern font_types (*fn_get_ui_object_selected_font_type [NUM_UI_TYPES]) (ui_object *obj);
 
 
-extern void (*fn_set_ui_object_selected_font_colour [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_selected_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
-extern void (*fn_set_ui_object_selected_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, char red, char green, char blue, char alpha);
+extern void (*fn_set_ui_object_selected_font_colour [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_selected_font_colour_end [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void (*fn_set_ui_object_selected_font_colour_start [NUM_UI_TYPES]) (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour (*fn_get_ui_object_selected_font_colour [NUM_UI_TYPES]) (ui_object *obj);
 extern rgb_colour (*fn_get_ui_object_selected_font_colour_end [NUM_UI_TYPES]) (ui_object *obj);
@@ -145,9 +145,9 @@ extern void default_set_ui_object_font_type (ui_object *obj, font_types font_id)
 extern font_types default_get_ui_object_font_type (ui_object *obj);
 
 
-extern void default_set_ui_object_font_colour (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha);
+extern void default_set_ui_object_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour default_get_ui_object_font_colour (ui_object *obj);
 extern rgb_colour default_get_ui_object_font_colour_end (ui_object *obj);
@@ -158,9 +158,9 @@ extern void default_set_ui_object_highlighted_font_type (ui_object *obj, font_ty
 
 extern font_types default_get_ui_object_highlighted_font_type (ui_object *obj);
 
-extern void default_set_ui_object_highlighted_font_colour (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_highlighted_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_highlighted_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha);
+extern void default_set_ui_object_highlighted_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_highlighted_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_highlighted_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour default_get_ui_object_highlighted_font_colour (ui_object *obj);
 extern rgb_colour default_get_ui_object_highlighted_font_colour_end (ui_object *obj);
@@ -171,9 +171,9 @@ extern void default_set_ui_object_selected_font_type (ui_object *obj, font_types
 
 extern font_types default_get_ui_object_selected_font_type (ui_object *obj);
 
-extern void default_set_ui_object_selected_font_colour (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_selected_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha);
-extern void default_set_ui_object_selected_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha);
+extern void default_set_ui_object_selected_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_selected_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+extern void default_set_ui_object_selected_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 extern rgb_colour default_get_ui_object_selected_font_colour (ui_object *obj);
 extern rgb_colour default_get_ui_object_selected_font_colour_end (ui_object *obj);

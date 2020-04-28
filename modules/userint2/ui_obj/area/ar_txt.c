@@ -249,7 +249,7 @@ static font_types get_area_ui_object_font_type (ui_object *obj)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_font_colour (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -272,7 +272,7 @@ static void set_area_ui_object_font_colour (ui_object *obj, char red, char green
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -290,7 +290,7 @@ static void set_area_ui_object_font_colour_end (ui_object *obj, char red, char g
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -417,7 +417,7 @@ static font_types get_area_ui_object_highlighted_font_type (ui_object *obj)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_highlighted_font_colour (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_highlighted_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -440,7 +440,7 @@ static void set_area_ui_object_highlighted_font_colour (ui_object *obj, char red
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_highlighted_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_highlighted_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -458,7 +458,7 @@ static void set_area_ui_object_highlighted_font_colour_end (ui_object *obj, char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_highlighted_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_highlighted_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -592,7 +592,7 @@ static font_types get_area_ui_object_selected_font_type (ui_object *obj)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_selected_font_colour (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_selected_font_colour (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -615,7 +615,7 @@ static void set_area_ui_object_selected_font_colour (ui_object *obj, char red, c
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_selected_font_colour_end (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_selected_font_colour_end (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object
@@ -633,7 +633,7 @@ static void set_area_ui_object_selected_font_colour_end (ui_object *obj, char re
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_selected_font_colour_start (ui_object *obj, char red, char green, char blue, char alpha)
+static void set_area_ui_object_selected_font_colour_start (ui_object *obj, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 
 	area_ui_object

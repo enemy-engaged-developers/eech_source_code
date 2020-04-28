@@ -1040,7 +1040,8 @@ void rotate_helicopter_wheels(object_3d_instance* inst3d)
 
 void debug_adjust_damper_stiffness (event *ev)
 {
-	int i, sign;
+	unsigned i;
+	int sign;
 	
 	if (!get_gunship_entity())
 		return;

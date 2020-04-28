@@ -446,14 +446,14 @@ void initialise_utf8_conversion_table(void)
 
 	for (chr = utf8_start; chr <= 191; chr++)
 	{
-		conversion_table[chr - utf8_start].utf8[0] = 0xc2;
-		conversion_table[chr - utf8_start].utf8[1] = 0xa1 + (chr-utf8_start);
+		conversion_table[chr - utf8_start].utf8[0] = (char)0xc2;
+		conversion_table[chr - utf8_start].utf8[1] = (char)0xa1 + (chr-utf8_start);
 	}
 
 	for (chr = 192; chr <= 255; chr++) // D4rthCoffee 94 is a buffer overrun (255-161)
 	{
-		conversion_table[chr - utf8_start].utf8[0] = 0xc3;
-		conversion_table[chr - utf8_start].utf8[1] = 0x80 + (chr-192);
+		conversion_table[chr - utf8_start].utf8[0] = (char)0xc3;
+		conversion_table[chr - utf8_start].utf8[1] = (char)0x80 + (chr-192);
 	}
 }
 
