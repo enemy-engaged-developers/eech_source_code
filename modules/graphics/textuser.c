@@ -184,8 +184,8 @@ struct TEXTURE_NAME_HASH_ENTRY
 {
 
 	int
-		hash,
-		texture_index;
+		hash = 0,
+		texture_index = 0;
 
 	struct TEXTURE_NAME_HASH_ENTRY
 		*succ = nullptr;
@@ -2072,9 +2072,17 @@ void restore_default_textures ( void )
 #if DEBUG_MODULE
 		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
 #endif
+		f3d_texture_release(system_texture_info[count].texture_screen);
+
+		system_texture_info[count].texture_screen->used = FALSE;
+
+		// restore pointer to original textures
+		system_textures[count] = backup_system_textures[count];
 
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 	}
+
+	memset(backup_system_textures, 0, sizeof(backup_system_textures));
 
 	clear_texture_override_names();
 
@@ -2289,7 +2297,7 @@ void load_texture_water( void )
 
 	char
 		buf[256],
-		filename[128];
+		filename[256];
 
 	char *p, *q;
 
@@ -2382,7 +2390,7 @@ void load_texture_water( void )
 	for (i = 0; i < 3; i++)
 	{
 		int rivernr = 0;
-		placenr = add_new_texture(current_map_info.water_info[i].name_top, "textuser.c");
+		//placenr = add_new_texture(current_map_info.water_info[i].name_top, "textuser.c");
 		current_map_info.water_info[i].placenr = placenr;
 		// read the bottom texture
 		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, current_map_info.water_info[i].name_top);
@@ -2793,7 +2801,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	int
 		type,
 		width, height,
-		buffer_size,
+		buffer_size = 0,
 		x, y, mipmap, temp = 0;
 
 	//static

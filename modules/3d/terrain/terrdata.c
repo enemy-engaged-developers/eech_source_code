@@ -81,7 +81,7 @@
 terrain_3d_sector
 	**terrain_sectors,
 	*terrain_sector_memory = nullptr,
-	*terrain_sector_approximations = NULL;
+	*terrain_sector_approximations = nullptr;
 
 terrain_3d_tree_sector
 	**terrain_tree_sectors;
