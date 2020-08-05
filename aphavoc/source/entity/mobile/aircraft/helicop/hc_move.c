@@ -230,6 +230,11 @@ void helicopter_movement (entity *en)
 	// calcualte max_vel
 	max_vel = aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 
+	// OUT OF FUEL HANDICAP
+	if (raw->fuel_supply_level <= 10.0) {
+		max_vel /= 5.0;
+	}
+
 	switch (get_local_entity_int_value(wp, INT_TYPE_ENTITY_SUB_TYPE))
 	{
 	case ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION:

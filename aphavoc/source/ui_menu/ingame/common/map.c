@@ -68,6 +68,7 @@
 
 #include "ai/taskgen/croute.h"
 #include "ai/ai_misc/ai_dbase.h"
+#include "ai/taskgen/assign.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2160,6 +2161,13 @@ void map_pop_move_waypoint_events (event *ev)
 						set_client_server_entity_float_value (map_dimensions->selected_entity, FLOAT_TYPE_FLIGHT_TIME, flight_time);
 
 						debug_log ("CA_MAP: setting flight time for waypoint %s to %f", get_local_entity_string (map_dimensions->selected_entity, STRING_TYPE_FULL_NAME), flight_time);
+
+						// UPDATE FUEL IF LANDED
+						while (member)
+						{
+							set_helicopter_fuel_level(member, task);
+							member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
+						}
 					}
 				}
 			}

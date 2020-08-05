@@ -118,17 +118,19 @@ static void update_fuel_weight (entity *en)
 
 	fuel_economy = get_local_entity_float_value (en, FLOAT_TYPE_FUEL_ECONOMY);
 	fuel_delta = fuel_economy / 60.0 * get_delta_time ();
-	fuel_delta *= raw->main_rotor_rpm / 50.0;
+	fuel_delta *= raw->main_rotor_rpm / 125.0;
 
 	raw->fuel_supply_level -= fuel_delta;
 
-	// OUT OF FUEL, TAKE HELICOPTER DOWN
-	if (raw->fuel_supply_level <= 0.0) {
-		kill_client_server_entity (en);
+	// OUT OF FUEL
+	// TODO: MAKE REALISTIC AUTOROTATION LANDING
+	if (raw->fuel_supply_level <= 10.0) {
+		raw->fuel_supply_level = 10.0;
+		/*kill_client_server_entity (en);
 
 		#if DEBUG_MODULE || DEBUG_SUPPLY
 		debug_log ("HC_UPDT: %s out of fuel", get_local_entity_string (en, STRING_TYPE_FULL_NAME));
-		#endif
+		#endif*/
 	}
 	
 	// 20 MINS FUEL RESERVE RETURN HOME

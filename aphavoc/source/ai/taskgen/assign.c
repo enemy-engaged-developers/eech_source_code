@@ -979,7 +979,8 @@ int assign_task_to_group_members (entity *group, entity *guide, unsigned int val
 			notify_local_entity (ENTITY_MESSAGE_TASK_ASSIGNED, member, task);
 
 			if (get_local_entity_type (member) == ENTITY_TYPE_HELICOPTER) {
-				prepare_helicopter_for_task(member, task, group, guide);
+				prepare_helicopter_for_task(member, task, group);
+				set_helicopter_fuel_level(member, task);
 			}
 		}
 		
@@ -1305,31 +1306,12 @@ int check_group_members_awake (entity *group)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void prepare_helicopter_for_task(entity *en, entity *task, entity *group, entity *guide) {
-	helicopter
-		*raw;
-	waypoint
-		*wp_object;
-	entity
-		*wp;
-	vec3d
-	   *wp_pos,
-		*last_pos = NULL,
-		temp_pos;
-	float
-		range = 0,
-		time,
-		fuel_amount,
-		fuel_level,
-		fuel_supply;
-		
-	raw = (helicopter *) get_local_entity_data (en);
-			
+// PLACE TROOPS INSIDE HELICOPTER
+void prepare_helicopter_for_task(entity *en, entity *task, entity *group) {
 	#if DEBUG_MODULE || DEBUG_SUPPLY
 	debug_log ("task assigned to helicopter: %s", get_local_entity_string (task, STRING_TYPE_FULL_NAME));
 	#endif
 
-	// PLACE TROOPS INSIDE HELICOPTER
 	if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_TROOP_INSERTION)
 	{
 		int troops = group_database[get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].ai_stats.troop_space;
@@ -1338,29 +1320,21 @@ void prepare_helicopter_for_task(entity *en, entity *task, entity *group, entity
 
 		set_client_server_entity_int_value (en, INT_TYPE_TROOPS_ONBOARD, troops);
 	}
-	
-	// CALCULATE AMOUNT OF FUEL
-	if (get_local_entity_int_value (en, INT_TYPE_LANDED)) {
-		wp = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
+}
 
-		while (wp) {
-			wp_object = (waypoint *) get_local_entity_data (wp);
-			wp_pos = get_local_entity_vec3d_ptr (wp, VEC3D_TYPE_POSITION);
-			if (wp_object->position_type != POSITION_TYPE_RELATIVE && last_pos) {
-				range += get_point_to_point_distance(&temp_pos, wp_pos, last_pos);
-			}
-			else if (wp_object->position_type == POSITION_TYPE_RELATIVE) {
-				range += get_3d_vector_magnitude (wp_pos);
-			}
-			
-			if (wp_object->position_type != POSITION_TYPE_RELATIVE)
-				last_pos = wp_pos;
-
-			wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
-		}
+// CALCULATE AMOUNT OF REQUIRED FUEL
+void set_helicopter_fuel_level(entity *en, entity *task) {
+	float
+		time = 0,
+		fuel_amount,
+		fuel_level,
+		fuel_supply;
 		
-		if (range > 10 && range < 999999) {
-			time = range / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY) / 60.0 + 15.0;
+	if (get_local_entity_int_value (en, INT_TYPE_LANDED)) {
+		time = get_task_estimated_route_duration(task) / 60.0; // IN MINUTES
+
+		if (time > 0.0 && time < 500.0) {
+			time = 1.25 * time + 20.0; // ADD SOME EXTRA
 			fuel_amount = time * get_local_entity_float_value (en, FLOAT_TYPE_FUEL_ECONOMY);
 			fuel_level = fuel_amount / get_local_entity_float_value (en, FLOAT_TYPE_FUEL_DEFAULT_WEIGHT);
 			fuel_level = bound(ceil(fuel_level * 4.0) / 4.0, 0.5, 1.0);
@@ -1369,14 +1343,15 @@ void prepare_helicopter_for_task(entity *en, entity *task, entity *group, entity
 			ASSERT(fuel_supply > 1.0);
 			
 			#if DEBUG_SUPPLY || DEBUG_MODULE
-			debug_log ("Required amount of fuel for %s: %f (%f m), fuel level: %f / %f", get_local_entity_string (en, STRING_TYPE_FULL_NAME), fuel_amount, range, fuel_supply, raw->fuel_supply_level);
+			debug_log ("Required amount of fuel for %s: %fkg (%fmin %feco), fuel level: %f / %f", get_local_entity_string (en, STRING_TYPE_FULL_NAME),
+					fuel_amount, time, get_local_entity_float_value (en, FLOAT_TYPE_FUEL_ECONOMY), fuel_supply, get_local_entity_float_value (en, FLOAT_TYPE_FUEL_DEFAULT_WEIGHT));
 			#endif
 
-			raw->fuel_supply_level = fuel_supply;
+			set_client_server_entity_float_value (en, FLOAT_TYPE_FUEL_SUPPLY_LEVEL, fuel_supply);
 		}
 	}
 }
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,7 +84,9 @@ extern void respond_to_player_task_assign_request (entity *pilot, entity *task, 
 
 extern int check_group_members_awake (entity *group);
 
-extern void prepare_helicopter_for_task(entity *member, entity *task, entity *group, entity *guide);
+extern void prepare_helicopter_for_task(entity *en, entity *task, entity *group);
+
+extern void set_helicopter_fuel_level(entity *en, entity *task);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
