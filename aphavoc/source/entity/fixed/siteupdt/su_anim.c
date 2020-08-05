@@ -208,6 +208,7 @@ void update_site_radar( entity *en )
 {
 	site_updatable
 		*raw;
+	float multiplier;
 
 	//
 	// updates the radar rotation ( regardless of whether the site is drawn or not )
@@ -217,7 +218,9 @@ void update_site_radar( entity *en )
 
 	raw = (site_updatable *) get_local_entity_data( en );
 
-	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, (0.9 + 0.2 * frand1()) * 0.16666 );
+	multiplier = 0.16666 * bound(command_line_keysite_anim_multiplier, 0.0f, 1.0f);
+
+	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, (0.9 + 0.2 * frand1()) * multiplier );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
