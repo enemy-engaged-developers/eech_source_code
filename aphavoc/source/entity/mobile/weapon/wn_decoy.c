@@ -237,7 +237,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 		case WEAPON_DECOY_TYPE_CHAFF:
 		////////////////////////////////////////
 		{
-			locked = frand1 () < pow(0.1, coefficient * (1.5 - bound(command_line_chaff_effectiveness, 0.0f, 1.0f)));
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_chaff_effectiveness);
 
 			break;
 		}
@@ -245,7 +245,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 		case WEAPON_DECOY_TYPE_FLARE:
 		////////////////////////////////////////
 		{
-			locked = frand1 () < pow(0.1, coefficient * (1.5 - bound(command_line_flare_effectiveness, 0.0f, 1.0f)));
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_flare_effectiveness);
 
 			break;
 		}
@@ -253,7 +253,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type, entity *sender)
 		case WEAPON_DECOY_TYPE_SMOKE_GRENADE:
 		////////////////////////////////////////
 		{
-			locked = frand1 () < pow(0.5, coefficient * (1.5 - bound(command_line_smoke_effectiveness, 0.0f, 1.0f)));
+			locked = frand1 () < (pow(0.2, coefficient) * command_line_smoke_effectiveness);
 
 			break;
 		}

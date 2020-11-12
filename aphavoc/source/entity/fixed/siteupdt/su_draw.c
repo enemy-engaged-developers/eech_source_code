@@ -98,8 +98,7 @@ static void draw_local_3d_object (entity *en, float range)
 	{
 		if (raw->fix.alive)
 		{
-			if (command_line_keysite_anim_multiplier > 0.0)
-				animate_site_radar (en, inst3d);
+			animate_site_radar (en, inst3d);
 
 			animate_site_loading_doors (en, inst3d);
 

@@ -292,7 +292,6 @@ extern float
 	command_line_g_force_head_movment_modifier,
 	command_line_cockpit_vibrations,
 	command_line_flyby_timer_multiplier,
-	command_line_keysite_anim_multiplier,
 	global_night_light_level, //VJ 060920 night light levels (0-1)
 	global_hud_size2, // VJ 050126 hud mod: size
 	global_mfd_size;

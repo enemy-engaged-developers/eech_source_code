@@ -88,8 +88,7 @@ static void update_server (entity *en)
 
 	update_site_loading_doors (en);
 
-	if (command_line_keysite_anim_multiplier > 0.0)
-		update_site_radar (en);
+	update_site_radar (en);
 
 	update_ground_crew (en);
 
@@ -123,8 +122,7 @@ static void update_client (entity *en)
 	
 	update_site_loading_doors (en);
 
-	if (command_line_keysite_anim_multiplier > 0.0)
-		update_site_radar (en);
+	update_site_radar (en);
 
 	update_ground_crew (en);
 }

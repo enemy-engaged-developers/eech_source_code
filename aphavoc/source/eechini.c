@@ -904,11 +904,11 @@ static const struct config_option options[] =
 
 	{ NULL, "25", "[Gameplay]",
 		NONE },
-	{ "chaff", "", "effectiveness of chaff  (0.0 = less effective, 1.0 = more effective) (def = 0.5)",
+	{ "chaff", "", "effectiveness of chaff  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 0.5)",
 		FLOAT(command_line_chaff_effectiveness) },
-	{ "flare", "", "effectiveness of flares (0.0 = less effective, 1.0 = more effective) (def = 0.5)",
+	{ "flare", "", "effectiveness of flares (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 0.5)",
 		FLOAT(command_line_flare_effectiveness) },
-	{ "smoke", "", "effectiveness of smoke  (0.0 = less effective, 1.0 = more effective) (def = 1.0)",
+	{ "smoke", "", "effectiveness of smoke  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 1.0)",
 		FLOAT(command_line_smoke_effectiveness) },
 	{ "fog", "", "sets reshroud time for \"fog of war\" (n = seconds) (def = 14400 (4 hours))",
 		FLOAT(command_line_fog_of_war_maximum_value) },
@@ -1064,8 +1064,6 @@ static const struct config_option options[] =
 		INT(command_line_disable_message_text) },
 	{ "cheats_on", "", "game cheats (0 = disabled, 1 = enabled) (def = 1)",
 		INT(command_line_cheats_on) },
-	{ "keysite_anim_multiplier", "", "Animation multiplier for keysite objects (0 = off, 1.0 = fast) (def = 1.0)",
-		FLOAT(command_line_keysite_anim_multiplier) },		
 	{ NULL, "41", "",
 		NONE },
 
